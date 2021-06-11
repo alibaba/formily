@@ -282,6 +282,16 @@ const SpaceLocale = {
   wrap: '自动换行',
 }
 
+const FormTabLocale = {
+  animated: '启用动画过渡',
+  centered: '标签居中',
+  tab: '选项名称',
+  tabsTypeEnum: [
+    { label: '线框', value: 'line' },
+    { label: '卡片', value: 'card' },
+  ],
+}
+
 const ComponentLocale = {
   ...FormLayoutLocale,
   ...InputLocale,
@@ -300,6 +310,7 @@ const ComponentLocale = {
   ...UploadLocale,
   ...FormGridLocale,
   ...SpaceLocale,
+  ...FormTabLocale,
 }
 
 const FieldLocale = {
@@ -312,7 +323,8 @@ const FieldLocale = {
   style: StyleLocale,
   'x-display': {
     title: '展示状态',
-    dataSource: ['显示', '隐藏(保留值)', '隐藏(不保留值)'],
+    tooltip: '半隐藏只会隐藏UI，全隐藏会删除数据',
+    dataSource: ['显示', '半隐藏', '全隐藏'],
   },
   'x-pattern': {
     title: 'UI形态',
@@ -361,11 +373,14 @@ export default {
       TreeSelect: '树选择',
       Upload: { title: '上传', Dragger: '拖拽上传' },
       Switch: '开关',
+      FormTab: { title: '选项卡布局', TabPane: '面板' },
+      FormCollapse: { title: '手风琴布局', CollapsePanel: '面板' },
     },
     settings: {
       ...FieldLocale,
       ...ComponentLocale,
     },
     droppable: '可以拖入组件',
+    addTabPane: '添加选项卡',
   },
 }

@@ -53,7 +53,7 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
           return (
             <RecursionField
               schema={schema}
-              key={index}
+              key={`${index}-${name}`}
               name={name}
               basePath={base}
             />

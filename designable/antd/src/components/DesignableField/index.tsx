@@ -33,14 +33,16 @@ import {
   Upload,
   FormGrid,
   FormLayout,
+  FormTab,
 } from '@formily/antd'
+import { clone } from '@formily/shared'
 import * as defaultSchema from '../../schemas'
 import { Card, Slider, Rate } from 'antd'
 import { createFormContainer } from '../FormContainer'
 import { FormItemSwitcher } from '../FormItemSwitcher'
+import { FormTab as DesignableFormTab } from '../FormTab'
 
 Schema.silent()
-Schema.skipObservable(false)
 
 const transformPath = (path = '') => {
   return String(path).replace(/\./g, '_o_')
@@ -57,9 +59,12 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
     name: 'DesignableField',
     ...options,
     components: {
-      FormItem,
+      ...options.components,
+      Space: createFormContainer(Space, true),
       FormGrid: createFormContainer(FormGrid, true),
       FormLayout: createFormContainer(FormLayout),
+      FormTab: DesignableFormTab,
+      FormItem,
       DatePicker,
       Checkbox,
       Cascader,
@@ -72,7 +77,6 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       Radio,
       Reset,
       Select,
-      Space: createFormContainer(Space, true),
       Submit,
       TimePicker,
       Transfer,
@@ -81,16 +85,18 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       Card,
       Slider,
       Rate,
-      ...options.components,
     },
   }
+
+  const tabs = {}
+
   const DesignableField: React.FC<ISchema> = observer((props) => {
     const designer = useDesigner()
     const node = useTreeNode()
     if (!node) return null
 
     const getFieldProps = () => {
-      const base = new Schema(props).compile()
+      const base = new Schema(clone(props)).compile()
       const fieldProps = base.toFieldProps({
         components: realOptions.components,
       })
@@ -140,6 +146,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
     const componentSchema =
       realOptions.propsSchemas?.[component] || defaultSchema[component]
     const TabSchema = (key: string, schema: ISchema) => {
+      tabs[key] = tabs[key] || FormTab.createFormTab()
       return {
         type: 'object',
         properties: {
@@ -147,6 +154,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
             type: 'void',
             'x-component': 'FormTab',
             'x-component-props': {
+              formTab: tabs[key],
               style: {
                 overflow: 'visible',
               },
@@ -200,34 +208,25 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
           'x-component': 'Input.TextArea',
           'x-index': 2,
         },
-
-        'x-validator': {
-          'x-component': 'ValidatorSetter',
-          'x-index': 6,
-        },
-        'x-reactions': {
-          'x-component': 'ReactionsSetter',
-          'x-index': 7,
-        },
         'x-display': {
           type: 'string',
           enum: ['visible', 'hidden', 'none'],
           'x-decorator': 'FormItem',
           'x-component': 'Select',
-          'x-index': 8,
+          'x-component-props': {
+            defaultValue: 'visible',
+          },
+          'x-index': 3,
         },
         'x-pattern': {
           type: 'string',
           enum: ['editable', 'disabled', 'readOnly', 'readPretty'],
           'x-decorator': 'FormItem',
           'x-component': 'Select',
-          'x-index': 9,
-        },
-        'x-decorator': {
-          type: 'string',
-          'x-decorator': 'FormItem',
-          'x-component': FormItemSwitcher,
-          'x-index': 10,
+          'x-component-props': {
+            defaultValue: 'editable',
+          },
+          'x-index': 4,
         },
         'x-component-props':
           componentSchema && TabSchema('x-component-props', componentSchema),
@@ -236,30 +235,55 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       },
     }
 
-    if (node.props.type !== 'void') {
-      return {
-        ...base,
-        properties: {
-          ...base.properties,
-          default: {
-            'x-decorator': 'FormItem',
-            'x-component': 'ValueInput',
-            'x-index': 3,
-          },
-          enum: {
-            type: 'array',
-            'x-component': 'DataSourceSetter',
-            'x-index': 4,
-          },
-          required: {
-            type: 'boolean',
-            'x-decorator': 'FormItem',
-            'x-component': 'Switch',
-            'x-index': 5,
+    if (node.props.type === 'void') {
+      Object.assign(base.properties, {
+        'x-decorator': {
+          type: 'string',
+          'x-decorator': 'FormItem',
+          'x-component': FormItemSwitcher,
+          'x-index': 10,
+          'x-reactions': {
+            target: '*(title,description)',
+            fulfill: {
+              state: {
+                hidden: '{{$self.value !== "FormItem"}}',
+              },
+            },
           },
         },
-      }
+      })
+    } else {
+      Object.assign(base.properties, {
+        default: {
+          'x-decorator': 'FormItem',
+          'x-component': 'ValueInput',
+          'x-index': 5,
+        },
+        enum: {
+          type: 'array',
+          'x-decorator': 'FormItem',
+          //  'x-component': 'DataSourceSetter',
+          'x-index': 6,
+        },
+        'x-validator': {
+          'x-decorator': 'FormItem',
+          // 'x-component': 'ValidatorSetter',
+          'x-index': 7,
+        },
+        'x-reactions': {
+          'x-decorator': 'FormItem',
+          // 'x-component': 'ReactionsSetter',
+          'x-index': 8,
+        },
+        required: {
+          type: 'boolean',
+          'x-decorator': 'FormItem',
+          'x-component': 'Switch',
+          'x-index': 9,
+        },
+      })
     }
+
     return base
   }
 
@@ -273,6 +297,10 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
         title: typeof message === 'string' ? message : message?.title,
         draggable: true,
         droppable: true,
+        selfRenderChildren:
+          node.props.type === 'array' ||
+          componentName === 'FormTab' ||
+          componentName === 'FormCollapse',
         inlineChildrenLayout:
           componentName === 'FormGrid' || componentName === 'Space',
         allowAppend(node) {

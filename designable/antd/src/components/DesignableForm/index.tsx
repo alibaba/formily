@@ -38,12 +38,7 @@ export const createDesignableForm = (options: IDesignableFormProps = {}) => {
       []
     )
     return (
-      <FormComponent
-        {...props}
-        feedbackLayout="terse"
-        className={prefix}
-        form={form}
-      >
+      <FormComponent {...props} className={prefix} form={form}>
         {props.children}
       </FormComponent>
     )

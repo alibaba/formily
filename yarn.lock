@@ -1155,12 +1155,12 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.0.tgz#c3c5ae543c897caa9c2a68630bed355be5f9990f"
   integrity sha512-JZButFdZ1+/xAfpguQHoabIXkcqRRKpMrWKBkpEZZyxfY9C1DpADFB8PEqGSTeFr135SaTRfKqGKx5xSCLI7ZQ==
 
-"@designable/core@0.1.27", "@designable/core@^0.1.27":
-  version "0.1.27"
-  resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.1.27.tgz#2160d2576f98e7e953986708148f220a8358eaed"
-  integrity sha512-7XrziSTx/wV3luBJDc6WERB+HSek8UnZum4xyneb+q++3r+yy4erqWMzK0V4KmM/2p7t/+PXRt5bqAve6HUouQ==
+"@designable/core@0.1.30", "@designable/core@^0.1.30":
+  version "0.1.30"
+  resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.1.30.tgz#952a3cdcc0b0ae36a7ce4a042c07bd3ed49e251c"
+  integrity sha512-vR+W8h/a8LBEPvaMzz0IIW+KAj5ZHTyViyHAOeDGup/9gMglc1lVtZtQHHW5Gsrxq46k2A92wheeQKBjFV2+7A==
   dependencies:
-    "@designable/shared" "0.1.27"
+    "@designable/shared" "0.1.30"
     "@formily/json-schema" "^2.0.0-beta.50"
     "@formily/path" "^2.0.0-beta.50"
     "@formily/reactive" "^2.0.0-beta.50"
@@ -1176,14 +1176,14 @@
     "@formily/reactive" "^2.0.0-beta.50"
     "@juggle/resize-observer" "^3.3.1"
 
-"@designable/react-settings-form@^0.1.27":
-  version "0.1.27"
-  resolved "https://registry.yarnpkg.com/@designable/react-settings-form/-/react-settings-form-0.1.27.tgz#10c4ede37c6578eabeb6e67e84907e4eb5f7d123"
-  integrity sha512-6KsHObHYtzbGGP6bUBoJf4LxBWF9jk5eviaeKpR+igZtdkLxqWwIxMYKn/QszODwjhTJmt356B1OrrsGGNqJeg==
+"@designable/react-settings-form@^0.1.30":
+  version "0.1.30"
+  resolved "https://registry.yarnpkg.com/@designable/react-settings-form/-/react-settings-form-0.1.30.tgz#d0f084c9b531d1aa3547b8b05535f01d3003f2f1"
+  integrity sha512-tdmAjxHkoeVA6Toz3KfFAioj5/fzUcps1N57Ri8wsiFGXM6gg1+xNFPmtwEpUsxcQSBrlyvoVHl6rBcdVDjQGw==
   dependencies:
-    "@designable/core" "0.1.27"
-    "@designable/react" "0.1.27"
-    "@designable/shared" "0.1.27"
+    "@designable/core" "0.1.30"
+    "@designable/react" "0.1.30"
+    "@designable/shared" "0.1.30"
     "@formily/antd" "^2.0.0-beta.50"
     "@formily/core" "^2.0.0-beta.50"
     "@formily/react" "^2.0.0-beta.50"
@@ -1191,13 +1191,13 @@
     "@formily/reactive-react" "^2.0.0-beta.50"
     react-color "^2.19.3"
 
-"@designable/react@0.1.27", "@designable/react@^0.1.27":
-  version "0.1.27"
-  resolved "https://registry.yarnpkg.com/@designable/react/-/react-0.1.27.tgz#10df63b3485d5fb05c6c90395000ec01ebc02381"
-  integrity sha512-JcfRF8qp+OAKP+E++83a2jG2bXftqDiLmi8/DMubb5QqbuYt24c8GnkC9igM/ybOzPszwe8qe3belBKdtTEvvA==
+"@designable/react@0.1.30", "@designable/react@^0.1.30":
+  version "0.1.30"
+  resolved "https://registry.yarnpkg.com/@designable/react/-/react-0.1.30.tgz#235dcf102ab581caacba15e749ade89d536d1131"
+  integrity sha512-EJWGWWVB9rSZTE1FRtpDyfbOoAIOl9Z9i3k2AB08dQ7+3sqXP5gasSw8CgFbWUH0NqL8lnOdY381cexD6Ne56Q==
   dependencies:
-    "@designable/core" "0.1.27"
-    "@designable/shared" "0.1.27"
+    "@designable/core" "0.1.30"
+    "@designable/shared" "0.1.30"
     "@formily/reactive" "^2.0.0-beta.50"
     "@formily/reactive-react" "^2.0.0-beta.50"
     "@juggle/resize-observer" "^3.3.1"
@@ -1209,10 +1209,10 @@
   dependencies:
     requestidlecallback "^0.3.0"
 
-"@designable/shared@0.1.27":
-  version "0.1.27"
-  resolved "https://registry.yarnpkg.com/@designable/shared/-/shared-0.1.27.tgz#fffd19017171b20178e03d5dac0869a2c0df4b81"
-  integrity sha512-6ZzioIhcGv4uVkM5Oldrr8XQfECvX/Xacmwyfl6fzdT7vfbWDojibdw/69Ga164WxQKcHmhiHAR9U1JOOUwhcA==
+"@designable/shared@0.1.30":
+  version "0.1.30"
+  resolved "https://registry.yarnpkg.com/@designable/shared/-/shared-0.1.30.tgz#cd0c76994b6f7d2c036ff948848fac7714da65e4"
+  integrity sha512-mkJ9Nf6bTgQTPBkaDKvRe78PIGQgEV83zyOPMBOUztzoMS/yAadRPjyxvT1UUqk2eE37rdmDFKuQZaQn9BOkyQ==
   dependencies:
     requestidlecallback "^0.3.0"
 

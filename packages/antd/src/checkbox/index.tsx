@@ -23,7 +23,9 @@ Checkbox.Group = connect(
   mapProps({
     dataSource: 'options',
   }),
-  mapReadPretty(PreviewText.Select)
+  mapReadPretty(PreviewText.Select, {
+    mode: 'tags',
+  })
 )
 
 export default Checkbox

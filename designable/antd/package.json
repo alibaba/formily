@@ -26,10 +26,11 @@
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
     "build:umd": "rollup --config",
+    "build:playground": "webpack-cli --config playground/webpack.prod.ts",
     "start": "webpack-dev-server --config playground/webpack.dev.ts"
   },
   "devDependencies": {
-    "@designable/react-settings-form": "^0.1.28",
+    "@designable/react-settings-form": "^0.1.30",
     "file-loader": "^5.0.2",
     "fs-extra": "^8.1.0",
     "html-webpack-plugin": "^3.2.0",
@@ -52,8 +53,9 @@
     "react-is": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
-    "@designable/core": "^0.1.28",
-    "@designable/react": "^0.1.28",
+    "@designable/core": "^0.1.30",
+    "@designable/react": "^0.1.30",
+    "@formily/shared": "2.0.0-beta.64",
     "@formily/antd": "2.0.0-beta.64",
     "@formily/core": "2.0.0-beta.64",
     "@formily/react": "2.0.0-beta.64"

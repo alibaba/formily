@@ -308,7 +308,10 @@ export const FormItem: ComposeFormItem = connect(
   mapProps(
     { validateStatus: true, title: 'label', required: true },
     (props, field) => {
-      if (isVoidField(field)) return props
+      if (isVoidField(field))
+        return {
+          extra: props.extra || field.description,
+        }
       if (!field) return props
       const takeMessage = () => {
         const split = (messages: any[]) => {

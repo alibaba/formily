@@ -45,18 +45,20 @@ export function mapProps<T extends JSXComponent>(
 }
 
 export function mapReadPretty<T extends JSXComponent, C extends JSXComponent>(
-  component: C
+  component: C,
+  readPrettyProps?: React.ComponentProps<C>
 ) {
   return (target: T) => {
     return observer(
       (props) => {
         const field = useField()
-        return React.createElement(
-          !isVoidField(field) && field?.pattern === 'readPretty'
-            ? component
-            : target,
-          props
-        )
+        if (!isVoidField(field) && field?.pattern === 'readPretty') {
+          return React.createElement(component, {
+            ...readPrettyProps,
+            ...props,
+          })
+        }
+        return React.createElement(target, props)
       },
       {
         forwardRef: true,

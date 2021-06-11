@@ -7,8 +7,8 @@
 ## 签名
 
 ```ts
-interface mapReadPretty {
-  (component: React.FC): React.FC
+interface mapReadPretty<Target extends React.FC> {
+  (component: Target, readPrettyProps?: React.ComponentProps<Target>): React.FC
 }
 ```
 

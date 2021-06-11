@@ -54,6 +54,7 @@ export const FormLayout: ISchema = {
       'x-decorator': 'FormItem',
       'x-component': 'Radio.Group',
       'x-component-props': {
+        defaultValue: 'horizontal',
         optionType: 'button',
       },
     },
