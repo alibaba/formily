@@ -264,6 +264,24 @@ const UploadLocale = {
   method: '方法',
 }
 
+const FormGridLocale = {
+  minWidth: '最小宽度',
+  minColumns: '最小列数',
+  maxWidth: '最大宽度',
+  maxColumns: '最大宽度',
+  breakpoints: '响应式断点',
+  columnGap: '列间距',
+  rowGap: '行间距',
+  colWrap: '自动换行',
+}
+
+const SpaceLocale = {
+  align: '对齐',
+  direction: { title: '方向', dataSource: ['垂直', '水平'] },
+  split: '分割内容',
+  wrap: '自动换行',
+}
+
 const ComponentLocale = {
   ...FormLayoutLocale,
   ...InputLocale,
@@ -280,6 +298,8 @@ const ComponentLocale = {
   ...TreeSelectLocale,
   ...TransferLocale,
   ...UploadLocale,
+  ...FormGridLocale,
+  ...SpaceLocale,
 }
 
 const FieldLocale = {

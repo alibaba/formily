@@ -41,7 +41,7 @@
     "webpack-bundle-analyzer": "^3.9.0",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1",
-    "@designable/react-settings-form": "^0.1.27"
+    "@designable/react-settings-form": "^0.1.28"
   },
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",
@@ -55,8 +55,8 @@
     "@formily/core": "2.0.0-beta.63",
     "@formily/react": "2.0.0-beta.63",
     "@formily/antd": "2.0.0-beta.63",
-    "@designable/core": "^0.1.27",
-    "@designable/react": "^0.1.27"
+    "@designable/core": "^0.1.28",
+    "@designable/react": "^0.1.28"
   },
   "publishConfig": {
     "access": "public"
