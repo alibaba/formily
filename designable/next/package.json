@@ -1,6 +1,6 @@
 {
   "name": "@formily/designable-next",
-  "version": "2.0.0-beta.51",
+  "version": "2.0.0-beta.64",
   "private": true,
   "license": "MIT",
   "main": "lib",
@@ -30,20 +30,19 @@
     "build:docs": "dumi build"
   },
   "devDependencies": {
+    "@designable/core": "^0.1.10",
     "@umijs/plugin-sass": "^1.1.1",
-    "dumi": "^1.1.0-rc.8",
-    "@designable/core": "^0.1.10"
+    "dumi": "^1.1.0-rc.8"
   },
   "peerDependencies": {
     "@alifd/next": "^1.19.0",
+    "@designable/core": "^0.1.10",
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
     "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0",
-    "react-is": ">=16.8.0 || >=17.0.0",
-    "@designable/core": "^0.1.10"
+    "react-is": ">=16.8.0 || >=17.0.0"
   },
-  "dependencies": {},
   "publishConfig": {
     "access": "public"
   },

@@ -1,5 +1,31 @@
 # Changelog
 
+## v2.0.0-beta.63(2021-06-10)
+
+### :tada: Enhancements
+
+1. [Merge branch 'feat_designable' into formily_next](https://github.com/alibaba/formily/commit/5032b4cb) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [feat(antd/next): add tree-shaking support for antd/next (#1544)](https://github.com/alibaba/formily/commit/6835f6d2) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+### :beetle: Bug Fixes
+
+1. [fix(antd/next): fix dumi lost style due to treeshaking (#1549)](https://github.com/alibaba/formily/commit/20d6b4f2) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+1. [fix: add defaultLanguage & doc: update setValidateLanguage (#1548)](https://github.com/alibaba/formily/commit/b2777527) :point_right: ( [zkylearner](https://github.com/zkylearner) )
+
+1. [fix(react): fix SchemaField missing props scope (#1543)](https://github.com/alibaba/formily/commit/2293d4b7) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+### :memo: Documents Changes
+
+1. [fix: add defaultLanguage & doc: update setValidateLanguage (#1548)](https://github.com/alibaba/formily/commit/b2777527) :point_right: ( [zkylearner](https://github.com/zkylearner) )
+
+1. [docs(project): add designable links](https://github.com/alibaba/formily/commit/4e6d14ef) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(designable): formily designable progress 50%](https://github.com/alibaba/formily/commit/00603f53) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.62(2021-06-02)
 
 ### No Change Log
@@ -1011,33 +1037,3 @@
 1. [feat(core): change visible behavior to fix array list delete auto assign value not work (#725)](https://github.com/alibaba/formily/commit/366047e6) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix x-index order algorithm (#724)](https://github.com/alibaba/formily/commit/17ae9ddb) :point_right: ( [JerryLyu](https://github.com/JerryLyu) )
-
-## v1.0.6(2020-03-14)
-
-### :tada: Enhancements
-
-1. [feat(prject): access unified log module (#723)](https://github.com/alibaba/formily/commit/750ef0af) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(core): Support form state modified property (#717)](https://github.com/alibaba/formily/commit/68e395f8) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(shared): support BigData (#708)](https://github.com/alibaba/formily/commit/7343b960) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :beetle: Bug Fixes
-
-1. [perf(core): fix nested path update performance (#722)](https://github.com/alibaba/formily/commit/130feeae) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(schema-renderer): fix datepicker showTime.defaultValue will throw Errors (#719)](https://github.com/alibaba/formily/commit/d8ad19c6) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix typings (#718)](https://github.com/alibaba/formily/commit/6000f714) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd/next): fix layout can not pass FormItem attributes (#715)](https://github.com/alibaba/formily/commit/e6be51c8) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(schema-renderer): fix linkages (#713)](https://github.com/alibaba/formily/commit/63121e40) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :memo: Documents Changes
-
-1. [[WIP]doc: develope array-items (#720)](https://github.com/alibaba/formily/commit/ffdfdc27) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-### :rocket: Improve Performance
-
-1. [perf(core): fix nested path update performance (#722)](https://github.com/alibaba/formily/commit/130feeae) :point_right: ( [Janry](https://github.com/Janry) )
