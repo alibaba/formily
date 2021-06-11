@@ -21,7 +21,6 @@ import { createDesigner } from '@designable/core'
 import { Space, Button } from 'antd'
 import { GithubOutlined } from '@ant-design/icons'
 import { createDesignableField, createDesignableForm } from '../src'
-import './sources'
 import 'antd/dist/antd.less'
 
 const DesignableForm = createDesignableForm({

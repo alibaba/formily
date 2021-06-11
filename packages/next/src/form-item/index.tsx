@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import cls from 'classnames'
 import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
@@ -87,7 +87,6 @@ const ICON_MAP = {
 export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const { children, ...others } = props
   const [active, setActice] = useState(false)
-  const popoverContainerRef = useRef()
   const gridSpan = useGridSpan(props.gridSpan)
   const formLayout = useFormItemLayout(others)
   const {
@@ -144,7 +143,6 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         needAdjust
         align="t"
         closable={false}
-        popupContainer={() => popoverContainerRef.current}
         trigger={children}
         visible={!!feedbackText}
       >
@@ -177,7 +175,6 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   return (
     <div
       {...pickDataProps(props)}
-      ref={popoverContainerRef}
       style={{
         ...style,
         ...gridStyles,
@@ -223,23 +220,15 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
           style={labelStyle}
         >
           {tooltipLayout === 'text' ? (
-            <Balloon.Tooltip
-              align="t"
-              trigger={labelChildren}
-              popupContainer={() => popoverContainerRef.current}
-            >
+            <Balloon.Tooltip align="t" trigger={labelChildren}>
               {tooltip}
             </Balloon.Tooltip>
           ) : (
             labelChildren
           )}
           {tooltip && tooltipLayout === 'icon' && (
-            <span className={cls(`${prefixCls}-label-tooltip`)}>
-              <Balloon.Tooltip
-                align="t"
-                trigger={<QuestionCircleOutlined />}
-                popupContainer={() => popoverContainerRef.current}
-              >
+            <span className={cls(`${prefixCls}-label-tooltip-icon`)}>
+              <Balloon.Tooltip align="t" trigger={<QuestionCircleOutlined />}>
                 {tooltip}
               </Balloon.Tooltip>
             </span>

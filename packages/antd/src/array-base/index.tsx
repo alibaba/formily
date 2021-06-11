@@ -18,6 +18,7 @@ import cls from 'classnames'
 export interface IArrayBaseAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
+  defaultValue?: any
 }
 
 export interface IArrayBaseContext {

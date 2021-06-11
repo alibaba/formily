@@ -5,10 +5,11 @@ export const Select: ISchema = {
   properties: {
     mode: {
       type: 'string',
-      enum: ['multiple', 'tags'],
+      enum: ['multiple', 'tags', ''],
       'x-decorator': 'FormItem',
       'x-component': 'Radio.Group',
       'x-component-props': {
+        defaultValue: '',
         optionType: 'button',
       },
     },
@@ -21,6 +22,17 @@ export const Select: ISchema = {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      'x-component-props': {
+        defaultChecked: true,
+      },
+    },
+    dropdownMatchSelectWidth: {
+      type: 'boolean',
+      'x-decorator': 'FormItem',
+      'x-component': 'Switch',
+      'x-component-props': {
+        defaultChecked: true,
+      },
     },
     autoFocus: {
       type: 'boolean',
@@ -31,11 +43,17 @@ export const Select: ISchema = {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      'x-component-props': {
+        defaultChecked: true,
+      },
     },
     defaultActiveFirstOption: {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      'x-component-props': {
+        defaultChecked: true,
+      },
     },
     defaultOpen: {
       type: 'boolean',
@@ -61,6 +79,9 @@ export const Select: ISchema = {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      'x-component-props': {
+        defaultValue: true,
+      },
     },
     filterOption: {
       type: 'boolean',
@@ -82,6 +103,9 @@ export const Select: ISchema = {
       type: 'number',
       'x-decorator': 'FormItem',
       'x-component': 'NumberPicker',
+      'x-component-props': {
+        defaultValue: 256,
+      },
     },
     maxTagCount: {
       type: 'number',
@@ -102,6 +126,9 @@ export const Select: ISchema = {
       type: 'string',
       'x-decorator': 'FormItem',
       'x-component': 'Input',
+      'x-component-props': {
+        defaultValue: 'Not Found',
+      },
     },
     placeholder: {
       type: 'string',
@@ -111,9 +138,13 @@ export const Select: ISchema = {
 
     size: {
       type: 'string',
-      enum: ['large', 'small', 'default'],
+      enum: ['large', 'small', 'middle'],
       'x-decorator': 'FormItem',
-      'x-component': 'Select',
+      'x-component': 'Radio.Group',
+      'x-component-props': {
+        defaultValue: 'middle',
+        optionType: 'button',
+      },
     },
   },
 }

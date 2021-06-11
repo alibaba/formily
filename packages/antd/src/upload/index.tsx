@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { connect, mapProps, useField } from '@formily/react'
-import { Upload as AntdUpload } from 'antd'
+import { Upload as AntdUpload, Button } from 'antd'
 import {
   UploadChangeParam,
   UploadProps as AntdUploadProps,
   DraggerProps as AntdDraggerProps,
 } from 'antd/lib/upload'
+import { InboxOutlined, UploadOutlined } from '@ant-design/icons'
 import { reaction } from '@formily/reactive'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { isArr, toArr } from '@formily/shared'
@@ -13,11 +14,13 @@ import { UPLOAD_PLACEHOLDER } from './placeholder'
 import { usePrefixCls } from '../__builtins__'
 
 type UploadProps = Omit<AntdUploadProps, 'onChange'> & {
+  textContent?: React.ReactNode
   onChange?: (fileList: UploadFile[]) => void
   serviceErrorMessage?: string
 }
 
 type DraggerProps = Omit<AntdDraggerProps, 'onChange'> & {
+  textContent?: React.ReactNode
   onChange?: (fileList: UploadFile[]) => void
   serviceErrorMessage?: string
 }
@@ -157,9 +160,25 @@ function useUploadProps<T extends IUploadProps = UploadProps>({
   }
 }
 
+const getPlaceholder = (props: UploadProps) => {
+  if (props.listType !== 'picture-card') {
+    return (
+      <Button>
+        <UploadOutlined />
+        {props.textContent}
+      </Button>
+    )
+  }
+  return <UploadOutlined style={{ fontSize: 20 }} />
+}
+
 export const Upload: ComposedUpload = connect(
-  (props: UploadProps) => {
-    return <AntdUpload {...useUploadProps(props)} />
+  (props: React.PropsWithChildren<UploadProps>) => {
+    return (
+      <AntdUpload {...useUploadProps(props)}>
+        {props.children || getPlaceholder(props)}
+      </AntdUpload>
+    )
   },
   mapProps({
     value: 'fileList',
@@ -167,10 +186,21 @@ export const Upload: ComposedUpload = connect(
 )
 
 const Dragger = connect(
-  (props: DraggerProps) => {
+  (props: React.PropsWithChildren<DraggerProps>) => {
     return (
       <div className={usePrefixCls('upload-dragger')}>
-        <AntdUpload.Dragger {...useUploadProps(props)} />
+        <AntdUpload.Dragger {...useUploadProps(props)}>
+          {props.children || (
+            <React.Fragment>
+              <p className="ant-upload-drag-icon">
+                <InboxOutlined />
+              </p>
+              {props.textContent && (
+                <p className="ant-upload-text">{props.textContent}</p>
+              )}
+            </React.Fragment>
+          )}
+        </AntdUpload.Dragger>
       </div>
     )
   },

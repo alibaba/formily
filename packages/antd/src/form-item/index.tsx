@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import cls from 'classnames'
 import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
@@ -87,7 +87,6 @@ const ICON_MAP = {
 export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const { children, ...others } = props
   const [active, setActice] = useState(false)
-  const popoverContainerRef = useRef()
   const formLayout = useFormItemLayout(others)
   const gridSpan = useGridSpan(props.gridSpan)
   const {
@@ -142,7 +141,6 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       <Popover
         autoAdjustOverflow
         placement="top"
-        getPopupContainer={() => popoverContainerRef.current}
         content={
           <div
             className={cls({
@@ -177,7 +175,6 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   return (
     <div
       {...pickDataProps(props)}
-      ref={popoverContainerRef}
       style={{
         ...style,
         ...gridStyles,
@@ -226,7 +223,6 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
               placement="top"
               align={{ offset: [0, 10] }}
               title={tooltip}
-              getPopupContainer={() => popoverContainerRef.current}
             >
               {labelChildren}
             </Tooltip>
@@ -234,12 +230,11 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
             labelChildren
           )}
           {tooltip && tooltipLayout === 'icon' && (
-            <span className={cls(`${prefixCls}-label-tooltip`)}>
+            <span className={cls(`${prefixCls}-label-tooltip-icon`)}>
               <Tooltip
                 placement="top"
                 align={{ offset: [0, 2] }}
                 title={tooltip}
-                getPopupContainer={() => popoverContainerRef.current}
               >
                 <QuestionCircleOutlined />
               </Tooltip>

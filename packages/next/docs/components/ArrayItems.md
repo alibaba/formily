@@ -715,10 +715,11 @@ export default () => {
 
 扩展属性
 
-| 属性名 | 类型                  | 描述     | 默认值   |
-| ------ | --------------------- | -------- | -------- |
-| title  | ReactText             | 文案     |          |
-| method | `'push' \| 'unshift'` | 添加方式 | `'push'` |
+| 属性名       | 类型                  | 描述     | 默认值   |
+| ------------ | --------------------- | -------- | -------- |
+| title        | ReactText             | 文案     |          |
+| method       | `'push' \| 'unshift'` | 添加方式 | `'push'` |
+| defaultValue | `any`                 | 默认值   |          |
 
 其余参考 https://fusion.design/pc/component/basic/button
 

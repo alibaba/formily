@@ -40,6 +40,9 @@ export const FormItem: ISchema = {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      'x-component-props': {
+        defaultChecked: true,
+      },
     },
     asterisk: {
       type: 'boolean',
@@ -51,41 +54,64 @@ export const FormItem: ISchema = {
       'x-decorator': 'FormItem',
       'x-component': 'NumberPicker',
     },
-    size: {
-      type: 'string',
-      enum: ['large', 'small', 'default'],
-      'x-decorator': 'FormItem',
-      'x-component': 'Select',
-    },
-    layout: {
-      type: 'string',
-      enum: ['vertical', 'horizontal', 'inline'],
-      'x-decorator': 'FormItem',
-      'x-component': 'Select',
-    },
     feedbackLayout: {
       type: 'string',
       enum: ['loose', 'terse', 'popover', 'none'],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
+      'x-component-props': {
+        defaultValue: 'loose',
+      },
     },
+    size: {
+      type: 'string',
+      enum: ['large', 'small', 'default'],
+      'x-decorator': 'FormItem',
+      'x-component': 'Radio.Group',
+      'x-component-props': {
+        defaultValue: 'default',
+        optionType: 'button',
+      },
+    },
+    layout: {
+      type: 'string',
+      enum: ['vertical', 'horizontal', 'inline'],
+      'x-decorator': 'FormItem',
+      'x-component': 'Radio.Group',
+      'x-component-props': {
+        optionType: 'button',
+      },
+    },
+
     tooltipLayout: {
       type: 'string',
       enum: ['icon', 'text'],
       'x-decorator': 'FormItem',
-      'x-component': 'Select',
+      'x-component': 'Radio.Group',
+      'x-component-props': {
+        defaultValue: 'icon',
+        optionType: 'button',
+      },
     },
     labelAlign: {
       type: 'string',
       enum: ['left', 'right'],
       'x-decorator': 'FormItem',
-      'x-component': 'Select',
+      'x-component': 'Radio.Group',
+      'x-component-props': {
+        defaultValue: 'right',
+        optionType: 'button',
+      },
     },
     wrapperAlign: {
       type: 'string',
       enum: ['left', 'right'],
       'x-decorator': 'FormItem',
-      'x-component': 'Select',
+      'x-component': 'Radio.Group',
+      'x-component-props': {
+        defaultValue: 'left',
+        optionType: 'button',
+      },
     },
     labelWrap: {
       type: 'boolean',
@@ -111,6 +137,9 @@ export const FormItem: ISchema = {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      'x-component-props': {
+        defaultChecked: true,
+      },
     },
   },
 }

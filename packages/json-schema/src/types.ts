@@ -244,11 +244,11 @@ export type ISchema<
   //校验器
   ['x-validator']?: Validator
   //装饰器
-  ['x-decorator']?: Decorator | (string & {})
+  ['x-decorator']?: Decorator | (string & {}) | ((...args: any[]) => any)
   //装饰器属性
   ['x-decorator-props']?: DecoratorProps
   //组件
-  ['x-component']?: Component | (string & {})
+  ['x-component']?: Component | (string & {}) | ((...args: any[]) => any)
   //组件属性
   ['x-component-props']?: ComponentProps
   //组件响应器

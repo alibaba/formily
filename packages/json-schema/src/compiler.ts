@@ -6,6 +6,7 @@ const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/
 const actionsSymbol = Symbol.for('__REVA_ACTIONS')
 const ENVS = {
   silent: false,
+  skipObservable: true,
   compile(expression: string, scope: any) {
     const vars = Object.keys(scope || {})
     const params = vars.map((key) => scope[key])
@@ -21,6 +22,10 @@ const ENVS = {
 
 export const silent = (value = true) => {
   ENVS.silent = !!value
+}
+
+export const skipObservable = (value = true) => {
+  ENVS.skipObservable = !!value
 }
 
 export const registerCompiler = (
@@ -74,7 +79,7 @@ export const compile = <Source = any, Scope = any>(
       if (isFn(source['toJSON'])) {
         return source
       }
-      if (isObservable(source)) {
+      if (ENVS.skipObservable && isObservable(source)) {
         return source
       }
       if (seenObjects.get(source)) {

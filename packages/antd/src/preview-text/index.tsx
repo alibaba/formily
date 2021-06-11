@@ -14,7 +14,7 @@ import { Tag, Space } from 'antd'
 import cls from 'classnames'
 import { formatMomentValue, usePrefixCls } from '../__builtins__'
 
-const PlaceholderContext = createContext<string>('N/A')
+const PlaceholderContext = createContext<React.ReactNode>('N/A')
 
 const Placeholder = PlaceholderContext.Provider
 

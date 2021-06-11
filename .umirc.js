@@ -323,7 +323,7 @@ export default {
         title: '场景案例',
         children: [
           {
-            title: '登陆注册',
+            title: '登录注册',
             path: '/zh-CN/guide/scenes/login-register',
           },
           {

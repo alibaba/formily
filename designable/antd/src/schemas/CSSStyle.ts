@@ -37,5 +37,15 @@ export const CSSStyle: ISchema = {
     border: {
       'x-component': 'BorderStyleSetter',
     },
+    opacity: {
+      'x-decorator': 'FormItem',
+      'x-component': 'Slider',
+      'x-component-props': {
+        defaultValue: 1,
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
+    },
   },
 }

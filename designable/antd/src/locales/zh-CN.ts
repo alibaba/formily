@@ -9,6 +9,7 @@ const StyleLocale = {
   padding: '内边距',
   borderRadius: '圆角',
   border: '边框',
+  opacity: '透明度',
 }
 
 const FormLayoutLocale = {
@@ -44,6 +45,12 @@ const InputLocale = {
   prefix: '前缀',
   suffix: '后缀',
   placeholder: '占位提示',
+  autoSize: {
+    title: '自适应高度',
+    tooltip: '可设置为 true | false 或对象：{ minRows: 2, maxRows: 6 }',
+  },
+  showCount: '是否展示字数',
+  checkStrength: '检测强度',
 }
 
 const FormItemLocale = {
@@ -55,7 +62,7 @@ const FormItemLocale = {
 const SelectLocale = {
   mode: {
     title: '模式',
-    dataSource: ['多选', '标签'],
+    dataSource: ['多选', '标签', '单选'],
   },
   autoClearSearchValue: {
     title: '选中自动清除',
@@ -65,6 +72,11 @@ const SelectLocale = {
   defaultActiveFirstOption: {
     title: '默认高亮',
     tooltip: '默认高亮第一个选项',
+  },
+  dropdownMatchSelectWidth: {
+    title: '下拉菜单和选择器同宽',
+    tooltip:
+      '下拉菜单和选择器同宽。默认将设置 min-width，当值小于选择框宽度时会被忽略。false 时会关闭虚拟滚动',
   },
   defaultOpen: '默认展开',
   filterOption: '选项筛选器',
@@ -90,14 +102,188 @@ const SelectLocale = {
   virtual: '开启虚拟滚动',
 }
 
+const CardLocale = {
+  type: '类型',
+  title: '标题',
+  extra: '右侧扩展',
+  cardTypes: [
+    { label: '内置', value: 'inner' },
+    { label: '默认', value: '' },
+  ],
+}
+
+const CascaderLocale = {
+  changeOnSelect: {
+    title: '选择时触发',
+    tooltip: '点选每级菜单选项值都会发生变化',
+  },
+  displayRender: {
+    title: '渲染函数',
+    tooltip: '选择后展示的渲染函数，默认为label => label.join("/")	',
+  },
+  fieldNames: {
+    title: '自定义字段名',
+    tooltip: '默认值：{ label: "label", value: "value", children: "children" }',
+  },
+}
+
+const RadioLocale = {
+  buttonStyle: { title: '按钮风格', dataSource: ['空心', '实心'] },
+  optionType: { title: '选项类型', dataSource: ['默认', '按钮'] },
+}
+
+const DatePickerLocale = {
+  disabledDate: {
+    title: '不可选日期',
+    tooltip: '格式 (currentDate: moment) => boolean',
+  },
+  disabledTime: {
+    title: '不可选时间',
+    tooltip: '格式 (currentDate: moment) => boolean',
+  },
+  inputReadOnly: '输入框只读',
+  format: '格式',
+  picker: {
+    title: '选择器类型',
+    dataSource: ['时间', '日期', '月份', '年', '财年'],
+  },
+  showNow: '显示此刻',
+  showTime: '时间选择',
+  showToday: '显示今天',
+}
+
+const NumberPickerLocale = {
+  formatter: {
+    title: '格式转换器',
+    tooltip: '格式：function(value: number | string): string',
+  },
+  keyboard: '启用快捷键',
+  parser: {
+    title: '格式解析器',
+    tooltip:
+      '指定从 格式转换器 里转换回数字的方式，和 格式转换器 搭配使用,格式：function(string): number',
+  },
+  decimalSeparator: '小数点',
+  precision: '数字精度',
+  max: '最大值',
+  min: '最小值',
+  step: '步长',
+  stringMode: {
+    title: '字符串格式',
+    tooltip: '开启后支持高精度小数。同时 onChange 将返回 string 类型',
+  },
+}
+
+const RateLocale = {
+  allowHalf: '允许半选',
+  tooltips: { title: '提示信息', tooltip: '格式：string[]' },
+  count: '总数',
+}
+
+const SliderLocale = {
+  sliderDots: '刻度固定',
+  sliderRange: '双滑块',
+  sliderReverse: '反向坐标系',
+  vertical: '垂直布局',
+  tooltipPlacement: {
+    title: '提示位置',
+    tooltip: '设置 提示 展示位置。参考 Tooltip',
+  },
+  tooltipVisible: {
+    title: '提示显示',
+    tooltip: '开启时，提示 将会始终显示；否则始终不显示，哪怕在拖拽及移入时',
+  },
+  marks: '刻度标签',
+}
+
+const TimePickerLocale = {
+  clearText: '清除提示',
+  disabledHours: '禁止小时',
+  disabledMinutes: '禁止分钟',
+  disabledSeconds: '禁止秒',
+  hideDisabledOptions: '隐藏禁止选项',
+  hourStep: '小时间隔',
+  minuteStep: '分钟间隔',
+  secondStep: '秒间隔',
+  use12Hours: '12小时制',
+}
+
+const TreeSelectLocale = {
+  dropdownMatchSelectWidth: {
+    title: '下拉选择器同宽',
+    tooltip:
+      '默认将设置 min-width，当值小于选择框宽度时会被忽略。false 时会关闭虚拟滚动',
+  },
+  showCheckedStrategy: {
+    title: '复选回显策略',
+    tooltip:
+      '配置 treeCheckable 时，定义选中项回填的方式。TreeSelect.SHOW_ALL: 显示所有选中节点(包括父节点)。TreeSelect.SHOW_PARENT: 只显示父节点(当父节点下所有子节点都选中时)。 默认只显示子节点',
+    dataSource: ['显示所有', '显示父节点', '显示子节点'],
+  },
+  treeCheckable: '开启复选',
+  treeDefaultExpandAll: '默认展开所有',
+  treeDefaultExpandedKeys: {
+    title: '默认展开选项',
+    tooltip: '格式：Array<string | number>',
+  },
+  treeNodeFilterProp: {
+    title: '节点过滤属性',
+    tooltip: '输入项过滤对应的 treeNode 属性',
+  },
+  treeDataSimpleMode: {
+    title: '使用简单数据结构',
+    tooltip: `使用简单格式的 treeData，具体设置参考可设置的类型 (此时 treeData 应变为这样的数据结构: [{id:1, pId:0, value:'1', title:"test1",...},...]， pId 是父节点的 id)`,
+  },
+  treeNodeLabelProp: { title: '标签显示名称', tooltip: '默认为title' },
+  filterTreeNode: '节点过滤器',
+}
+
+const TransferLocale = {
+  oneWay: '单向展示',
+  operations: { title: '操作文案集合', tooltip: '格式：string[]' },
+  titles: { title: '标题集合', tooltip: '格式：string[]' },
+  showSearchAll: '支持全选',
+}
+
+const UploadLocale = {
+  accept: '可接受类型',
+  action: '上传地址',
+  data: '数据/参数',
+  directory: '支持上传目录',
+  headers: '请求头',
+  listType: { title: '列表类型', dataSource: ['文本', '图片', '卡片'] },
+  multiple: '多选模式',
+  name: '字段标识',
+  openFileDialogOnClick: {
+    title: '点击打开文件对话框',
+    tooltip: '点击打开文件对话框',
+  },
+  showUploadList: '是否展示文件列表',
+  withCredentials: '携带Cookie',
+  maxCount: '最大数量',
+  method: '方法',
+}
+
 const ComponentLocale = {
   ...FormLayoutLocale,
   ...InputLocale,
   ...FormItemLocale,
   ...SelectLocale,
+  ...CardLocale,
+  ...CascaderLocale,
+  ...RadioLocale,
+  ...DatePickerLocale,
+  ...NumberPickerLocale,
+  ...RateLocale,
+  ...SliderLocale,
+  ...TimePickerLocale,
+  ...TreeSelectLocale,
+  ...TransferLocale,
+  ...UploadLocale,
 }
 
 const FieldLocale = {
+  name: '字段标识',
   title: '标题',
   required: '必填',
   description: '描述',
@@ -132,18 +318,28 @@ export default {
       Root: '根组件',
       DesignableForm: '表单',
       DesignableField: '字段',
-      Input: '输入框',
+      Input: { title: '输入框', TextArea: '多行文本' },
       Select: '选择框',
       Radio: { title: '单选框', Group: '单选框组' },
       Checkbox: {
         title: '复选框',
         Group: '复选框组',
       },
-      Card: '卡片',
+      Card: '卡片布局',
       FormGrid: '网格布局',
       FormLayout: '表单布局',
-      Slider: '滑动输入条',
+      Slider: '滑动条',
       Rate: '评分器',
+      Cascader: '联级选择',
+      Space: '弹性间距',
+      DatePicker: { title: '日期选择', RangePicker: '日期范围' },
+      TimePicker: { title: '时间选择', RangePicker: '时间范围' },
+      NumberPicker: '数字输入',
+      Password: '密码输入',
+      Transfer: '穿梭框',
+      TreeSelect: '树选择',
+      Upload: { title: '上传', Dragger: '拖拽上传' },
+      Switch: '开关',
     },
     settings: {
       ...FieldLocale,

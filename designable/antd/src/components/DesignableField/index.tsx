@@ -37,8 +37,14 @@ import {
 import * as defaultSchema from '../../schemas'
 import { Card, Slider, Rate } from 'antd'
 import { createFormContainer } from '../FormContainer'
+import { FormItemSwitcher } from '../FormItemSwitcher'
 
 Schema.silent()
+Schema.skipObservable(false)
+
+const transformPath = (path = '') => {
+  return String(path).replace(/\./g, '_o_')
+}
 
 export interface IDesignableFieldProps {
   name?: string
@@ -66,7 +72,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       Radio,
       Reset,
       Select,
-      Space,
+      Space: createFormContainer(Space, true),
       Submit,
       TimePicker,
       Transfer,
@@ -81,7 +87,6 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
   const DesignableField: React.FC<ISchema> = observer((props) => {
     const designer = useDesigner()
     const node = useTreeNode()
-
     if (!node) return null
 
     const getFieldProps = () => {
@@ -128,12 +133,12 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
   })
 
   const createFieldSchema = (node: TreeNode): ISchema => {
+    const decorator = transformPath(node.props['x-decorator'])
+    const component = transformPath(node.props['x-component'])
     const decoratorSchema =
-      realOptions.propsSchemas?.[node.props['x-decorator']] ||
-      defaultSchema[node.props['x-decorator']]
+      realOptions.propsSchemas?.[decorator] || defaultSchema[decorator]
     const componentSchema =
-      realOptions.propsSchemas?.[node.props['x-component']] ||
-      defaultSchema[node.props['x-component']]
+      realOptions.propsSchemas?.[component] || defaultSchema[component]
     const TabSchema = (key: string, schema: ISchema) => {
       return {
         type: 'object',
@@ -177,27 +182,51 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
     const base = {
       type: 'object',
       properties: {
+        name: {
+          type: 'string',
+          'x-decorator': 'FormItem',
+          'x-component': 'Input',
+          'x-index': 0,
+        },
+        title: {
+          type: 'string',
+          'x-decorator': 'FormItem',
+          'x-component': 'Input',
+          'x-index': 1,
+        },
+        description: {
+          type: 'string',
+          'x-decorator': 'FormItem',
+          'x-component': 'Input.TextArea',
+          'x-index': 2,
+        },
+        'x-decorator': {
+          type: 'string',
+          'x-decorator': 'FormItem',
+          'x-component': FormItemSwitcher,
+          'x-index': 3,
+        },
         'x-validator': {
           'x-component': 'ValidatorSetter',
-          'x-index': 5,
+          'x-index': 7,
         },
         'x-reactions': {
           'x-component': 'ReactionsSetter',
-          'x-index': 6,
+          'x-index': 8,
         },
         'x-display': {
           type: 'string',
           enum: ['visible', 'hidden', 'none'],
           'x-decorator': 'FormItem',
           'x-component': 'Select',
-          'x-index': 7,
+          'x-index': 9,
         },
         'x-pattern': {
           type: 'string',
           enum: ['editable', 'disabled', 'readOnly', 'readPretty'],
           'x-decorator': 'FormItem',
           'x-component': 'Select',
-          'x-index': 8,
+          'x-index': 10,
         },
         'x-component-props':
           componentSchema && TabSchema('x-component-props', componentSchema),
@@ -211,33 +240,21 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
         ...base,
         properties: {
           ...base.properties,
-          title: {
-            type: 'string',
-            'x-decorator': 'FormItem',
-            'x-component': 'Input',
-            'x-index': 0,
-          },
-          description: {
-            type: 'string',
-            'x-decorator': 'FormItem',
-            'x-component': 'Input.TextArea',
-            'x-index': 1,
-          },
           default: {
             'x-decorator': 'FormItem',
             'x-component': 'ValueInput',
-            'x-index': 2,
+            'x-index': 4,
           },
           enum: {
             type: 'array',
             'x-component': 'DataSourceSetter',
-            'x-index': 3,
+            'x-index': 5,
           },
           required: {
             type: 'boolean',
             'x-decorator': 'FormItem',
             'x-component': 'Switch',
-            'x-index': 4,
+            'x-index': 6,
           },
         },
       }

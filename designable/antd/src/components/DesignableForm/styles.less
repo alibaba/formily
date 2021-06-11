@@ -2,8 +2,17 @@
 
 .dn-designable-form {
   .@{ant-prefix}-input,
+  .@{ant-prefix}-input-number,
   .@{ant-prefix}-input-affix-wrapper,
-  .@{ant-prefix}-select {
+  .@{ant-prefix}-cascader-picker,
+  .@{ant-prefix}-picker-input,
+  .@{ant-prefix}-picker,
+  .@{ant-prefix}-cascader-picker-label,
+  .@{ant-prefix}-select,
+  .@{ant-prefix}-select-selector {
     pointer-events: none !important;
+    input {
+      pointer-events: none !important;
+    }
   }
 }

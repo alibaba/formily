@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { IDesignerProps, GlobalRegistry } from '@designable/core'
-import { createForm, onFieldUnmount } from '@formily/core'
+import { createForm } from '@formily/core'
 import { Form } from '@formily/antd'
 import { usePrefix } from '@designable/react'
 import { Form as FormPropsSchema } from '../../schemas'
@@ -34,11 +34,6 @@ export const createDesignableForm = (options: IDesignableFormProps = {}) => {
       () =>
         createForm({
           designable: true,
-          effects(form) {
-            onFieldUnmount('*', (field) => {
-              delete form.fields[field.address.toString()]
-            })
-          },
         }),
       []
     )

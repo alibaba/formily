@@ -189,7 +189,7 @@ const findComponent = (
   options: ISchemaFieldFactoryOptions,
   state: Formily.Core.Types.IFieldState
 ) => {
-  if (path) {
+  if (FormPath.isPathPattern(path)) {
     const component =
       FormPath.getIn(options?.components, path) || state?.[type]?.[0]
     if (component) {
@@ -202,6 +202,7 @@ const findComponent = (
       )
     }
   }
+  if (isFn(path)) return path
   return state?.[type]?.[0]
 }
 
