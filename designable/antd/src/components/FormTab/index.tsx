@@ -33,20 +33,21 @@ export const FormTab: React.FC<TabsProps> & {
       const { source, target } = event.data
       if (Array.isArray(target)) return
       if (!Array.isArray(source)) return
-      if (target.props['x-component'] === 'FormTab' && source.length === 1) {
+      if (target.props['x-component'] === 'FormTab') {
         if (
-          source[0].props['x-component'] !== 'FormTab.TabPane' &&
-          target.children.length === 1
-        ) {
-          source[0].wrapNode(
-            new TreeNode({
-              componentName: 'DesignableField',
-              props: {
-                type: 'void',
-                'x-component': 'FormTab.TabPane',
-              },
-            })
+          source.every(
+            (node) => node.props['x-component'] !== 'FormTab.TabPane'
           )
+        ) {
+          const paneNode = new TreeNode({
+            componentName: 'DesignableField',
+            props: {
+              type: 'void',
+              'x-component': 'FormTab.TabPane',
+            },
+          })
+          target.appendNode(paneNode)
+          paneNode.appendNode(...source)
         }
       }
     })
@@ -74,6 +75,9 @@ export const FormTab: React.FC<TabsProps> & {
               'div',
               {
                 [designer.props.nodeIdAttrName]: tab.id,
+                style: {
+                  marginBottom: 10,
+                },
               },
               tab.children.length ? (
                 <TreeNodeWidget node={tab} />

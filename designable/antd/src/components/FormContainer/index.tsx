@@ -3,17 +3,12 @@ import './styles.less'
 import { Droppable } from '../Droppable'
 
 export const createFormContainer = (
-  Target: React.JSXElementConstructor<any>,
-  inlineLayout = false
+  Target: React.JSXElementConstructor<any>
 ) => {
-  const Component = (props: any) => {
+  return (props: any) => {
     if (props.children) {
       return <Target {...props}>{props.children}</Target>
     }
-    return <Droppable />
+    return <Droppable {...props} />
   }
-  Component.designerProps = {
-    inlineChildrenLayout: inlineLayout,
-  }
-  return Component
 }
