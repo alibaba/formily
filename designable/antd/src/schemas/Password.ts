@@ -1,9 +1,9 @@
 import { ISchema } from '@formily/react'
-import { CommonInputProperties } from './Input'
+import { Input } from './Input'
 export const Password: ISchema = {
   type: 'object',
   properties: {
-    ...CommonInputProperties,
+    ...(Input.properties as any),
     checkStrength: {
       type: 'boolean',
       'x-decorator': 'FormItem',
