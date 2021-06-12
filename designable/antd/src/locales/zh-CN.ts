@@ -382,5 +382,6 @@ export default {
     },
     droppable: '可以拖入组件',
     addTabPane: '添加选项卡',
+    addCollapsePanel: '添加手风琴卡片',
   },
 }

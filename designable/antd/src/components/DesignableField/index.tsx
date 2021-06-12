@@ -41,6 +41,7 @@ import { Card, Slider, Rate } from 'antd'
 import { createFormContainer } from '../FormContainer'
 import { FormItemSwitcher } from '../FormItemSwitcher'
 import { FormTab as DesignableFormTab } from '../FormTab'
+import { FormCollapse as DesignableFormCollapse } from '../FormCollapse'
 
 Schema.silent()
 
@@ -101,6 +102,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       FormGrid: createFormContainer(FormGrid),
       FormLayout: createFormContainer(FormLayout),
       FormTab: DesignableFormTab,
+      FormCollapse: DesignableFormCollapse,
       FormItem,
       DatePicker,
       Checkbox,

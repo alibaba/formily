@@ -2,7 +2,12 @@ import React, { Fragment, useState } from 'react'
 import { observer } from '@formily/react'
 import { Tabs, Button } from 'antd'
 import { TabsProps, TabPaneProps } from 'antd/lib/tabs'
-import { useDesigner, useTreeNode, TreeNodeWidget } from '@designable/react'
+import {
+  useDesigner,
+  useNodeIdProps,
+  useTreeNode,
+  TreeNodeWidget,
+} from '@designable/react'
 import { Droppable } from '../Droppable'
 import { TreeNode, AppendNodeEvent, GlobalRegistry } from '@designable/core'
 import { PlusOutlined } from '@ant-design/icons'
@@ -27,6 +32,7 @@ export const FormTab: React.FC<TabsProps> & {
   TabPane?: React.FC<TabPaneProps>
 } = observer((props) => {
   const [activeKey, setActiveKey] = useState<string>()
+  const nodeId = useNodeIdProps()
   const node = useTreeNode()
   const designer = useDesigner((designer) => {
     designer.subscribeTo(AppendNodeEvent, (event) => {
@@ -55,59 +61,63 @@ export const FormTab: React.FC<TabsProps> & {
   if (!node.children?.length) return <Droppable {...props} />
   const tabs = parseTabs(node)
   return (
-    <Tabs
-      {...props}
-      activeKey={getCorrectActiveKey(activeKey, tabs)}
-      onChange={(id) => {
-        setActiveKey(id)
-      }}
-    >
-      {tabs.map((tab) => {
-        const props = tab.props['x-component-props'] || {}
-        return (
-          <Tabs.TabPane
-            {...props}
-            style={{ ...props.style }}
-            tab={props.tab || `Unnamed Title`}
-            key={tab.id}
-          >
-            {React.createElement(
-              'div',
-              {
-                [designer.props.nodeIdAttrName]: tab.id,
-                style: {
-                  marginBottom: 10,
+    <div {...nodeId}>
+      <Tabs
+        {...props}
+        activeKey={getCorrectActiveKey(activeKey, tabs)}
+        onChange={(id) => {
+          setActiveKey(id)
+        }}
+      >
+        {tabs.map((tab) => {
+          const props = tab.props['x-component-props'] || {}
+          return (
+            <Tabs.TabPane
+              {...props}
+              style={{ ...props.style }}
+              tab={props.tab || `Unnamed Title`}
+              key={tab.id}
+            >
+              {React.createElement(
+                'div',
+                {
+                  [designer.props.nodeIdAttrName]: tab.id,
+                  style: {
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                  },
                 },
-              },
-              tab.children.length ? (
-                <TreeNodeWidget node={tab} />
-              ) : (
-                <Droppable style={{ marginBottom: 20 }} />
-              ),
-              <Button
-                block
-                type="dashed"
-                data-click-stop-propagation="true"
-                onClick={() => {
-                  const tabPane = new TreeNode({
-                    componentName: 'DesignableField',
-                    props: {
-                      type: 'void',
-                      'x-component': 'FormTab.TabPane',
-                    },
-                  })
-                  node.appendNode(tabPane)
-                  setActiveKey(tabPane.id)
-                }}
-              >
-                <PlusOutlined />
-                {GlobalRegistry.getDesignerMessage('addTabPane')}
-              </Button>
-            )}
-          </Tabs.TabPane>
-        )
-      })}
-    </Tabs>
+                tab.children.length ? (
+                  <TreeNodeWidget node={tab} />
+                ) : (
+                  <Droppable style={{ marginBottom: 20 }} />
+                )
+              )}
+            </Tabs.TabPane>
+          )
+        })}
+      </Tabs>
+      <Button
+        block
+        type="dashed"
+        data-click-stop-propagation="true"
+        style={{ marginTop: 10 }}
+        onClick={() => {
+          const tabPane = new TreeNode({
+            componentName: 'DesignableField',
+            props: {
+              type: 'void',
+              'x-component': 'FormTab.TabPane',
+            },
+          })
+          node.appendNode(tabPane)
+          setActiveKey(tabPane.id)
+        }}
+      >
+        <PlusOutlined />
+        {GlobalRegistry.getDesignerMessage('addTabPane')}
+      </Button>
+    </div>
   )
 })
 

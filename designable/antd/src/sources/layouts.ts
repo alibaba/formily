@@ -39,4 +39,11 @@ GlobalDragSource.appendSourcesByGroup('layouts', [
       'x-component': 'FormTab',
     },
   },
+  {
+    componentName: 'DesignableField',
+    props: {
+      type: 'void',
+      'x-component': 'FormCollapse',
+    },
+  },
 ])
