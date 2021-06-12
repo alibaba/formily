@@ -1,4 +1,10 @@
-import React, { useLayoutEffect, useRef, useState, useContext } from 'react'
+import React, {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useContext,
+  useEffect,
+} from 'react'
 import { usePrefixCls, pickDataProps } from '../__builtins__'
 import cls from 'classnames'
 import { isValid, isNum, isBool, isEqual } from '@formily/shared'
@@ -71,25 +77,55 @@ const S = 720
 const MD = 1280
 const LG = 1920
 
-const useLayout = (props: ILayoutProps): ILayout => {
-  const {
+const normalizeProps = (props: IFormGridProps): ILayoutProps => {
+  const { breakpoints } = props
+
+  const intervals = breakpoints.reduce((buf, cur, index, array) => {
+    if (index === array.length - 1) {
+      return [...buf, [array[index], Infinity]]
+    }
+    if (index === 0) {
+      return [...buf, [0, cur], [cur, array[index + 1]]]
+    }
+    return [...buf, [cur, array[index + 1]]]
+  }, [])
+
+  const normalize = (prop: any) => {
+    if (isNum(prop) || isBool(prop)) {
+      return intervals.map(() => prop)
+    } else if (Array.isArray(prop)) {
+      let lastVal: number
+      return intervals.map((it, idx) => {
+        const res = isValid(prop[idx]) ? prop[idx] : lastVal
+        lastVal = isValid(prop[idx]) ? prop[idx] : lastVal
+        return res
+      })
+    } else {
+      return undefined
+    }
+  }
+
+  return {
+    ...props,
     intervals,
-    minColumns,
-    maxColumns,
-    minWidth,
-    maxWidth,
-    colWrap,
-    columnGap,
-    rowGap,
-  } = props
+    colWrap: normalize(props.colWrap),
+    minWidth: normalize(props.minWidth),
+    maxWidth: normalize(props.maxWidth),
+    minColumns: normalize(props.minColumns),
+    maxColumns: normalize(props.maxColumns),
+  }
+}
+
+const useGridLayout = (outerProps: IFormGridProps): ILayout => {
   const ref = useRef<HTMLDivElement>(null)
+  const props = useRef<ILayoutProps>()
   const formGridPrefixCls = usePrefixCls('formily-grid')
   const [layoutParams, setLayout] = useState({})
   const [styles, setStyles] = useState({})
-
+  const normalizedProps = normalizeProps(outerProps)
   const calculateSmartColumns = (target: HTMLElement) => {
     const { clientWidth } = target
-    const index = intervals.findIndex((interval) => {
+    const index = props.current.intervals.findIndex((interval) => {
       const [min, max] = interval
       if (clientWidth >= min && max > clientWidth) {
         return true
@@ -97,25 +133,28 @@ const useLayout = (props: ILayoutProps): ILayout => {
     })
 
     const takeMaxColumns = () => {
-      return maxColumns?.[index] || maxColumns
+      return props.current.maxColumns?.[index] || props.current.maxColumns
     }
 
     const takeMinColumns = () => {
-      return minColumns?.[index] || minColumns || 1
+      return props.current.minColumns?.[index] || props.current.minColumns || 1
     }
 
     const takeColwrap = (): boolean => {
-      return colWrap?.[index] || (colWrap as any) || true
+      return (
+        props.current.colWrap?.[index] || (props.current.colWrap as any) || true
+      )
     }
 
     const takeMinWidth = () => {
       const rMaxColumns = takeMaxColumns()
-      if (isValid(minWidth)) {
-        return minWidth[index] || 0
+      if (isValid(props.current.minWidth)) {
+        return props.current.minWidth[index] || 0
       } else {
         if (isValid(rMaxColumns)) {
           return Math.floor(
-            (clientWidth - (rMaxColumns - 1) * props.columnGap) / rMaxColumns
+            (clientWidth - (rMaxColumns - 1) * props.current.columnGap) /
+              rMaxColumns
           )
         } else {
           return 0
@@ -124,14 +163,14 @@ const useLayout = (props: ILayoutProps): ILayout => {
     }
 
     const takeMaxWidth = () => {
-      const rMinColumns = takeMinColumns()
-      if (isValid(maxWidth)) {
-        return maxWidth[index] || 0
+      if (isValid(props.current.maxWidth)) {
+        return props.current.maxWidth[index] || 0
       } else {
-        if (isValid(rMinColumns)) {
+        if (isValid(props.current.minColumns?.[index])) {
           const calculated = Math.floor(
-            (clientWidth - (minColumns[index] - 1) * props.columnGap) /
-              minColumns[index]
+            (clientWidth -
+              (props.current.minColumns[index] - 1) * props.current.columnGap) /
+              props.current.minColumns[index]
           )
           if (Infinity === calculated) {
             return clientWidth
@@ -154,14 +193,36 @@ const useLayout = (props: ILayoutProps): ILayout => {
     }
   }
 
+  const updateUI = () => {
+    const params = calculateSmartColumns(ref.current)
+    setLayout(params)
+    const style = getStyle({
+      columnGap: props.current.columnGap,
+      rowGap: props.current.rowGap,
+      layoutParams: params,
+      ref,
+    })
+    if (!isEqual(style, styles)) {
+      setStyles(style)
+    }
+  }
+
+  props.current = normalizedProps
+
+  useEffect(() => {
+    updateUI()
+  }, [
+    outerProps.minWidth,
+    outerProps.maxWidth,
+    outerProps.minColumns,
+    outerProps.maxColumns,
+    outerProps.columnGap,
+    outerProps.rowGap,
+  ])
+
   useLayoutEffect(() => {
     const observer = () => {
-      const params = calculateSmartColumns(ref.current)
-      setLayout(params)
-      const style = getStyle({ columnGap, rowGap, layoutParams: params, ref })
-      if (!isEqual(style, styles)) {
-        setStyles(style)
-      }
+      updateUI()
     }
     const resizeObserver = new ResizeObserver(observer)
     const mutationObserver = new MutationObserver(observer)
@@ -278,48 +339,8 @@ export const useGridSpan = (gridSpan = 1) => {
 }
 
 export const FormGrid: ComposedFormGrid = (props) => {
-  const normalizeProps = (props: IFormGridProps): ILayoutProps => {
-    const { breakpoints } = props
-
-    const intervals = breakpoints.reduce((buf, cur, index, array) => {
-      if (index === array.length - 1) {
-        return [...buf, [array[index], Infinity]]
-      }
-      if (index === 0) {
-        return [...buf, [0, cur], [cur, array[index + 1]]]
-      }
-      return [...buf, [cur, array[index + 1]]]
-    }, [])
-
-    const normalize = (prop) => {
-      if (isNum(prop) || isBool(prop)) {
-        return intervals.map(() => prop)
-      } else if (Array.isArray(prop)) {
-        let lastVal
-        return intervals.map((it, idx) => {
-          const res = isValid(prop[idx]) ? prop[idx] : lastVal
-          lastVal = isValid(prop[idx]) ? prop[idx] : lastVal
-          return res
-        })
-      } else {
-        return undefined
-      }
-    }
-
-    return {
-      ...props,
-      intervals,
-      colWrap: normalize(props.colWrap),
-      minWidth: normalize(props.minWidth),
-      maxWidth: normalize(props.maxWidth),
-      minColumns: normalize(props.minColumns),
-      maxColumns: normalize(props.maxColumns),
-    }
-  }
   const { children } = props
-  const normalizedProps = normalizeProps(props)
-  const { ref, formGridPrefixCls, layoutParams, styles } =
-    useLayout(normalizedProps)
+  const { ref, formGridPrefixCls, layoutParams, styles } = useGridLayout(props)
   const dataProps = pickDataProps(props)
   return (
     <FormGridContext.Provider

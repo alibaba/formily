@@ -46,7 +46,7 @@ export const DesignableFormCollapse: React.FC<CollapseProps> & {
   const node = useTreeNode()
   const nodeId = useNodeIdProps()
   const designer = useDesigner((designer) => {
-    designer.subscribeTo(AppendNodeEvent, (event) => {
+    return designer.subscribeTo(AppendNodeEvent, (event) => {
       const { source, target } = event.data
       if (Array.isArray(target)) return
       if (!Array.isArray(source)) return
@@ -95,8 +95,7 @@ export const DesignableFormCollapse: React.FC<CollapseProps> & {
                 {
                   [designer.props.nodeIdAttrName]: panel.id,
                   style: {
-                    paddingTop: 10,
-                    paddingBottom: 10,
+                    padding: '10px 0',
                   },
                 },
                 panel.children.length ? (

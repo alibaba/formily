@@ -35,7 +35,7 @@ export const DesignableFormTab: React.FC<TabsProps> & {
   const nodeId = useNodeIdProps()
   const node = useTreeNode()
   const designer = useDesigner((designer) => {
-    designer.subscribeTo(AppendNodeEvent, (event) => {
+    return designer.subscribeTo(AppendNodeEvent, (event) => {
       const { source, target } = event.data
       if (Array.isArray(target)) return
       if (!Array.isArray(source)) return
@@ -83,8 +83,7 @@ export const DesignableFormTab: React.FC<TabsProps> & {
                 {
                   [designer.props.nodeIdAttrName]: tab.id,
                   style: {
-                    paddingTop: 10,
-                    paddingBottom: 10,
+                    padding: '10px 0',
                   },
                 },
                 tab.children.length ? (

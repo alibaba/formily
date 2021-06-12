@@ -60,7 +60,8 @@ export interface IDesignableFieldProps {
   dropReactionComponents?: string[]
   selfRenderChildrenComponents?: string[]
   inlineChildrenLayoutComponents?: string[]
-  restricts?: Record<string, string[]>
+  restrictChildrenComponents?: Record<string, string[]>
+  restrictParentComponents?: Record<string, string[]>
 }
 
 export const createDesignableField = (options: IDesignableFieldProps = {}) => {
@@ -93,9 +94,13 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       'FormGrid',
       'Space',
     ],
-    restricts: {
+    restrictChildrenComponents: {
       FormTab: ['FormTab.TabPane'],
-      FormCollapse: ['FormTab.CollapsePanel'],
+      FormCollapse: ['FormCollapse.CollapsePanel'],
+    },
+    restrictParentComponents: {
+      'FormTab.TabPane': ['FormTab'],
+      'FormCollapse.CollapsePanel': ['FormCollapse'],
     },
     components: {
       ...options.components,
@@ -355,10 +360,13 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
 
   const calculateRestricts = (target: TreeNode, source: TreeNode[]) => {
     const targetComponent = target.props['x-component']
-    const restricts = realOptions.restricts?.[targetComponent]
-    if (restricts) {
+    const restrictChildrenComponents =
+      realOptions.restrictChildrenComponents?.[targetComponent]
+    if (restrictChildrenComponents?.length) {
       if (
-        source.every((node) => restricts.includes(node.props['x-component'])) ||
+        source.every((node) =>
+          restrictChildrenComponents.includes(node.props['x-component'])
+        ) ||
         target.children.length === 0
       ) {
         return true
@@ -366,7 +374,24 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       return false
     }
 
-    return true
+    if (
+      targetComponent &&
+      source.every((node) => {
+        const restrictParentComponents =
+          realOptions.restrictParentComponents?.[node.props['x-component']]
+        if (restrictParentComponents?.length) {
+          if (restrictParentComponents.includes(targetComponent)) {
+            return true
+          }
+          return false
+        }
+        return true
+      })
+    ) {
+      return true
+    }
+
+    return false
   }
 
   GlobalRegistry.registerDesignerProps({
