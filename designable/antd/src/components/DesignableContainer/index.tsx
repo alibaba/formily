@@ -2,7 +2,7 @@ import React from 'react'
 import './styles.less'
 import { Droppable } from '../Droppable'
 
-export const createFormContainer = (
+export const createDesignableContainer = (
   Target: React.JSXElementConstructor<any>
 ) => {
   return (props: any) => {

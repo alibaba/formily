@@ -63,7 +63,7 @@ const App = () => {
           >
             <DragSourceWidget title="输入组件" name="inputs" />
             <DragSourceWidget title="布局组件" name="layouts" />
-            <DragSourceWidget title="数组组件" name="arrays" />
+            <DragSourceWidget title="自增列表" name="arrays" />
           </CompositePanel.Item>
           <CompositePanel.Item
             title="大纲树"

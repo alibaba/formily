@@ -6,7 +6,8 @@
   },
   "workspaces": [
     "packages/*",
-    "designable/*"
+    "designable/*",
+    "devtools/*"
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap",

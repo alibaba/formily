@@ -1,102 +1,114 @@
 import React, { Fragment, useState } from 'react'
 import { observer } from '@formily/react'
-import { Tabs, Button } from 'antd'
-import { TabsProps, TabPaneProps } from 'antd/lib/tabs'
+import { Collapse, Button } from 'antd'
+import { CollapseProps, CollapsePanelProps } from 'antd/lib/collapse'
 import {
   useDesigner,
-  useNodeIdProps,
   useTreeNode,
+  useNodeIdProps,
   TreeNodeWidget,
 } from '@designable/react'
+import { toArr } from '@formily/shared'
 import { Droppable } from '../Droppable'
 import { TreeNode, AppendNodeEvent, GlobalRegistry } from '@designable/core'
 import { PlusOutlined } from '@ant-design/icons'
 
-const parseTabs = (parent: TreeNode) => {
+const parseCollpase = (parent: TreeNode) => {
   const tabs: TreeNode[] = []
   parent.children.forEach((node) => {
-    if (node.props['x-component'] === 'FormTab.TabPane') {
+    if (node.props['x-component'] === 'FormCollapse.CollapsePanel') {
       tabs.push(node)
     }
   })
   return tabs
 }
 
-const getCorrectActiveKey = (activeKey: string, tabs: TreeNode[]) => {
-  if (tabs.length === 0) return
-  if (tabs.some((node) => node.id === activeKey)) return activeKey
+const getCorrectActiveKey = (
+  activeKey: string[] | string,
+  tabs: TreeNode[]
+) => {
+  if (tabs.length === 0 || activeKey?.length === 0) return []
+  if (
+    tabs.some((node) =>
+      Array.isArray(activeKey)
+        ? activeKey.includes(node.id)
+        : node.id === activeKey
+    )
+  )
+    return activeKey
   return tabs[tabs.length - 1].id
 }
 
-export const FormTab: React.FC<TabsProps> & {
-  TabPane?: React.FC<TabPaneProps>
+export const DesignableFormCollapse: React.FC<CollapseProps> & {
+  CollapsePanel?: React.FC<CollapsePanelProps>
 } = observer((props) => {
-  const [activeKey, setActiveKey] = useState<string>()
-  const nodeId = useNodeIdProps()
+  const [activeKey, setActiveKey] = useState<string | string[]>([])
   const node = useTreeNode()
+  const nodeId = useNodeIdProps()
   const designer = useDesigner((designer) => {
     designer.subscribeTo(AppendNodeEvent, (event) => {
       const { source, target } = event.data
       if (Array.isArray(target)) return
       if (!Array.isArray(source)) return
-      if (target.props['x-component'] === 'FormTab') {
+      if (target.props['x-component'] === 'FormCollapse') {
         if (
           source.every(
-            (node) => node.props['x-component'] !== 'FormTab.TabPane'
+            (node) => node.props['x-component'] !== 'FormCollapse.CollapsePanel'
           )
         ) {
           const paneNode = new TreeNode({
             componentName: 'DesignableField',
             props: {
               type: 'void',
-              'x-component': 'FormTab.TabPane',
+              'x-component': 'FormCollapse.CollapsePanel',
             },
           })
           target.appendNode(paneNode)
           paneNode.appendNode(...source)
+          setActiveKey(toArr(activeKey).concat(paneNode.id))
         }
       }
     })
   })
   if (!node.children?.length) return <Droppable {...props} />
-  const tabs = parseTabs(node)
+  const panels = parseCollpase(node)
   return (
     <div {...nodeId}>
-      <Tabs
+      <Collapse
         {...props}
-        activeKey={getCorrectActiveKey(activeKey, tabs)}
+        activeKey={getCorrectActiveKey(activeKey, panels)}
         onChange={(id) => {
-          setActiveKey(id)
+          setActiveKey(toArr(id))
         }}
       >
-        {tabs.map((tab) => {
-          const props = tab.props['x-component-props'] || {}
+        {panels.map((panel) => {
+          const props = panel.props['x-component-props'] || {}
           return (
-            <Tabs.TabPane
+            <Collapse.Panel
               {...props}
               style={{ ...props.style }}
-              tab={props.tab || `Unnamed Title`}
-              key={tab.id}
+              header={props.header || `Unnamed Title`}
+              key={panel.id}
             >
               {React.createElement(
                 'div',
                 {
-                  [designer.props.nodeIdAttrName]: tab.id,
+                  [designer.props.nodeIdAttrName]: panel.id,
                   style: {
                     paddingTop: 10,
                     paddingBottom: 10,
                   },
                 },
-                tab.children.length ? (
-                  <TreeNodeWidget node={tab} />
+                panel.children.length ? (
+                  <TreeNodeWidget node={panel} />
                 ) : (
                   <Droppable style={{ marginBottom: 20 }} />
                 )
               )}
-            </Tabs.TabPane>
+            </Collapse.Panel>
           )
         })}
-      </Tabs>
+      </Collapse>
       <Button
         block
         type="dashed"
@@ -107,20 +119,21 @@ export const FormTab: React.FC<TabsProps> & {
             componentName: 'DesignableField',
             props: {
               type: 'void',
-              'x-component': 'FormTab.TabPane',
+              'x-component': 'FormCollapse.CollapsePanel',
             },
           })
           node.appendNode(tabPane)
-          setActiveKey(tabPane.id)
+          const keys = toArr(activeKey)
+          setActiveKey(keys.concat(tabPane.id))
         }}
       >
         <PlusOutlined />
-        {GlobalRegistry.getDesignerMessage('addTabPane')}
+        {GlobalRegistry.getDesignerMessage('addCollapsePanel')}
       </Button>
     </div>
   )
 })
 
-FormTab.TabPane = (props) => {
+DesignableFormCollapse.CollapsePanel = (props) => {
   return <Fragment>{props.children}</Fragment>
 }

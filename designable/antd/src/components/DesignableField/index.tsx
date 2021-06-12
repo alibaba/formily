@@ -38,11 +38,11 @@ import {
 import { clone } from '@formily/shared'
 import * as defaultSchema from '../../schemas'
 import { Card, Slider, Rate } from 'antd'
-import { createFormContainer } from '../FormContainer'
+import { createDesignableContainer } from '../DesignableContainer'
 import { FormItemSwitcher } from '../FormItemSwitcher'
-import { FormTab as DesignableFormTab } from '../FormTab'
-import { FormCollapse as DesignableFormCollapse } from '../FormCollapse'
-import { EmptyObject as DesignableEmptyObject } from '../EmptyObject'
+import { DesignableFormTab } from '../DesignableFormTab'
+import { DesignableFormCollapse } from '../DesignableFormCollapse'
+import { DesignableObject } from '../DesignableObject'
 
 Schema.silent()
 
@@ -99,9 +99,9 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
     },
     components: {
       ...options.components,
-      Space: createFormContainer(Space),
-      FormGrid: createFormContainer(FormGrid),
-      FormLayout: createFormContainer(FormLayout),
+      Space: createDesignableContainer(Space),
+      FormGrid: createDesignableContainer(FormGrid),
+      FormLayout: createDesignableContainer(FormLayout),
       FormTab: DesignableFormTab,
       FormCollapse: DesignableFormCollapse,
       FormItem,
@@ -162,11 +162,11 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
     const fieldProps = getFieldProps()
     if (props.type === 'object') {
       return (
-        <DesignableEmptyObject>
+        <DesignableObject>
           <ObjectField {...fieldProps} name={node.id}>
             {props.children}
           </ObjectField>
-        </DesignableEmptyObject>
+        </DesignableObject>
       )
     } else if (props.type === 'array') {
       return <ArrayField {...fieldProps} name={node.id} />
