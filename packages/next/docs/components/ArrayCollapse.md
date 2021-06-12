@@ -39,6 +39,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="ArrayCollapse"
           x-component-props={{
+            accordion: true,
             defaultOpenPanelCount: 3,
           }}
         >

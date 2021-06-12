@@ -7,6 +7,7 @@ import {
   observer,
   ISchema,
 } from '@formily/react'
+import { toArr } from '@formily/shared'
 import cls from 'classnames'
 import ArrayBase, { ArrayBaseMixins } from '../array-base'
 import { usePrefixCls, Empty } from '../__builtins__'
@@ -109,7 +110,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
         <Collapse
           {...props}
           expandedKeys={expandKeys.map(String)}
-          onExpand={(keys: string[]) => setExpandKeys(keys.map(Number))}
+          onExpand={(keys: string[]) => setExpandKeys(toArr(keys).map(Number))}
           className={cls(`${prefixCls}-item`, props.className)}
         >
           {dataSource.map((item, index) => {

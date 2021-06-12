@@ -292,6 +292,13 @@ const FormTabLocale = {
   ],
 }
 
+const FormCollapseLocale = {
+  accordion: '手风琴模式',
+  collapsible: { title: '可折叠区域', dataSource: ['头部', '禁用'] },
+  ghost: '幽灵模式',
+  header: '头部内容',
+}
+
 const ComponentLocale = {
   ...FormLayoutLocale,
   ...InputLocale,
@@ -311,6 +318,7 @@ const ComponentLocale = {
   ...FormGridLocale,
   ...SpaceLocale,
   ...FormTabLocale,
+  ...FormCollapseLocale,
 }
 
 const FieldLocale = {
