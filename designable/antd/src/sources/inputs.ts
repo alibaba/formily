@@ -186,4 +186,10 @@ GlobalDragSource.appendSourcesByGroup('inputs', [
       'x-component': 'Switch',
     },
   },
+  {
+    componentName: 'DesignableField',
+    props: {
+      type: 'object',
+    },
+  },
 ])

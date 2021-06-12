@@ -101,7 +101,7 @@ export const FormTab: React.FC<TabsProps> & {
         block
         type="dashed"
         data-click-stop-propagation="true"
-        style={{ marginTop: 10 }}
+        style={{ marginTop: 10, marginBottom: 10 }}
         onClick={() => {
           const tabPane = new TreeNode({
             componentName: 'DesignableField',

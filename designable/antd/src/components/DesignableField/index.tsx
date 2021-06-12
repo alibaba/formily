@@ -42,6 +42,7 @@ import { createFormContainer } from '../FormContainer'
 import { FormItemSwitcher } from '../FormItemSwitcher'
 import { FormTab as DesignableFormTab } from '../FormTab'
 import { FormCollapse as DesignableFormCollapse } from '../FormCollapse'
+import { EmptyObject as DesignableEmptyObject } from '../EmptyObject'
 
 Schema.silent()
 
@@ -161,9 +162,11 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
     const fieldProps = getFieldProps()
     if (props.type === 'object') {
       return (
-        <ObjectField {...fieldProps} name={node.id}>
-          {props.children}
-        </ObjectField>
+        <DesignableEmptyObject>
+          <ObjectField {...fieldProps} name={node.id}>
+            {props.children}
+          </ObjectField>
+        </DesignableEmptyObject>
       )
     } else if (props.type === 'array') {
       return <ArrayField {...fieldProps} name={node.id} />
@@ -372,8 +375,13 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       const message = GlobalRegistry.getDesignerMessage(
         `components.${componentName}`
       )
+      const title = typeof message === 'string' ? message : message?.title
+      const nodeTitle =
+        node.props.type === 'object'
+          ? GlobalRegistry.getDesignerMessage('components.Object')
+          : title
       return {
-        title: typeof message === 'string' ? message : message?.title,
+        title: nodeTitle,
         draggable: !realOptions.notDraggableComponents.includes(componentName),
         droppable: !realOptions.notDroppableComponents.includes(componentName),
         selfRenderChildren:

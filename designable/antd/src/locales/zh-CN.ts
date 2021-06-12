@@ -383,6 +383,7 @@ export default {
       Switch: '开关',
       FormTab: { title: '选项卡布局', TabPane: '面板' },
       FormCollapse: { title: '手风琴布局', CollapsePanel: '面板' },
+      Object: '数据对象',
     },
     settings: {
       ...FieldLocale,

@@ -27,7 +27,7 @@ const getCorrectActiveKey = (
   activeKey: string[] | string,
   tabs: TreeNode[]
 ) => {
-  if (tabs.length === 0) return
+  if (tabs.length === 0 || activeKey?.length === 0) return []
   if (
     tabs.some((node) =>
       Array.isArray(activeKey)
@@ -113,7 +113,7 @@ export const FormCollapse: React.FC<CollapseProps> & {
         block
         type="dashed"
         data-click-stop-propagation="true"
-        style={{ marginTop: 10 }}
+        style={{ marginTop: 10, marginBottom: 10 }}
         onClick={() => {
           const tabPane = new TreeNode({
             componentName: 'DesignableField',

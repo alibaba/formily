@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react'
 import { IDesignerProps, GlobalRegistry } from '@designable/core'
 import { createForm } from '@formily/core'
-import { Form } from '@formily/antd'
+import { Form, IFormLayoutProps } from '@formily/antd'
+import { observer } from '@formily/react'
 import { usePrefix } from '@designable/react'
 import { Form as FormPropsSchema } from '../../schemas'
 import './styles.less'
@@ -28,7 +29,7 @@ export const createDesignableForm = (options: IDesignableFormProps = {}) => {
 
   const FormComponent = realOptions.component || Form
 
-  const DesignableForm: React.FC = (props) => {
+  const DesignableForm: React.FC<IFormLayoutProps> = observer((props) => {
     const prefix = usePrefix('designable-form')
     const form = useMemo(
       () =>
@@ -38,11 +39,16 @@ export const createDesignableForm = (options: IDesignableFormProps = {}) => {
       []
     )
     return (
-      <FormComponent {...props} className={prefix} form={form}>
+      <FormComponent
+        {...props}
+        style={{ ...props.style }}
+        className={prefix}
+        form={form}
+      >
         {props.children}
       </FormComponent>
     )
-  }
+  })
 
   realOptions.title = `components.${realOptions.name}`
 
