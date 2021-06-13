@@ -43,6 +43,7 @@ export type ArrayBaseMixins = {
 }
 
 export interface IArrayBaseProps {
+  disabled?: boolean
   onAdd?: (index: number) => void
   onRemove?: (index: number) => void
   onMoveDown?: (index: number) => void
@@ -103,7 +104,7 @@ const SortHandle = SortableHandle((props: any) => {
   return (
     <MenuOutlined
       {...props}
-      className={cls(`${prefixCls}-handle`, props.className)}
+      className={cls(`${prefixCls}-sort-handle`, props.className)}
       style={{ ...props.style }}
     />
   )
@@ -111,7 +112,8 @@ const SortHandle = SortableHandle((props: any) => {
 
 ArrayBase.SortHandle = () => {
   const array = useArray()
-  if (array.field.pattern !== 'editable') return null
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return <SortHandle />
 }
 
@@ -124,7 +126,8 @@ ArrayBase.Addition = (props) => {
   const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
-  if (array.field.pattern !== 'editable') return null
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <Button
       type="dashed"
@@ -132,13 +135,14 @@ ArrayBase.Addition = (props) => {
       {...props}
       className={cls(`${prefixCls}-addition`, props.className)}
       onClick={(e) => {
+        if (array.props?.disabled) return
         const defaultValue = getDefaultValue(props.defaultValue, array.schema)
         if (props.method === 'unshift') {
-          array?.field?.unshift?.(defaultValue)
-          array?.props?.onAdd?.(0)
+          array.field?.unshift?.(defaultValue)
+          array.props?.onAdd?.(0)
         } else {
-          array?.field?.push?.(defaultValue)
-          array?.props?.onAdd?.(array?.field?.value?.length - 1)
+          array.field?.push?.(defaultValue)
+          array.props?.onAdd?.(array?.field?.value?.length - 1)
         }
         if (props.onClick) {
           props.onClick(e)
@@ -153,18 +157,20 @@ ArrayBase.Addition = (props) => {
 
 ArrayBase.Remove = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
-  const base = useArray()
+  const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
-  if (base.field.pattern !== 'editable') return null
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <DeleteOutlined
       {...props}
       className={cls(`${prefixCls}-remove`, props.className)}
       ref={ref}
       onClick={(e) => {
+        if (array.props?.disabled) return
         e.stopPropagation()
-        base?.field?.remove?.(index)
-        base?.props?.onRemove?.(index)
+        array.field?.remove?.(index)
+        array.props?.onRemove?.(index)
         if (props.onClick) {
           props.onClick(e)
         }
@@ -175,18 +181,20 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
 
 ArrayBase.MoveDown = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
-  const base = useArray()
+  const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
-  if (base.field.pattern !== 'editable') return null
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <DownOutlined
       {...props}
       className={cls(`${prefixCls}-move-down`, props.className)}
       ref={ref}
       onClick={(e) => {
+        if (array.props?.disabled) return
         e.stopPropagation()
-        base?.field?.moveDown?.(index)
-        base?.props?.onMoveDown?.(index)
+        array.field?.moveDown?.(index)
+        array.props?.onMoveDown?.(index)
         if (props.onClick) {
           props.onClick(e)
         }
@@ -197,18 +205,20 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
 
 ArrayBase.MoveUp = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
-  const base = useArray()
+  const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
-  if (base.field.pattern !== 'editable') return null
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <UpOutlined
       {...props}
       className={cls(`${prefixCls}-move-up`, props.className)}
       ref={ref}
       onClick={(e) => {
+        if (array.props?.disabled) return
         e.stopPropagation()
-        base?.field?.moveUp(index)
-        base?.props?.onMoveUp?.(index)
+        array?.field?.moveUp(index)
+        array?.props?.onMoveUp?.(index)
         if (props.onClick) {
           props.onClick(e)
         }

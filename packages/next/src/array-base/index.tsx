@@ -33,16 +33,17 @@ export interface IArrayBaseItemProps {
 
 export type ArrayBaseMixins = {
   Addition?: React.FC<IArrayBaseAdditionProps>
-  Remove?: React.FC<AntdIconProps>
-  MoveUp?: React.FC<AntdIconProps>
-  MoveDown?: React.FC<AntdIconProps>
-  SortHandle?: React.FC<AntdIconProps>
+  Remove?: React.FC<AntdIconProps & { index?: number }>
+  MoveUp?: React.FC<AntdIconProps & { index?: number }>
+  MoveDown?: React.FC<AntdIconProps & { index?: number }>
+  SortHandle?: React.FC<AntdIconProps & { index?: number }>
   Index?: React.FC
   useArray?: () => IArrayBaseContext
   useIndex?: () => number
 }
 
 export interface IArrayBaseProps {
+  disabled?: boolean
   onAdd?: (index: number) => void
   onRemove?: (index: number) => void
   onMoveDown?: (index: number) => void
@@ -111,7 +112,8 @@ const SortHandle = SortableHandle((props: any) => {
 
 ArrayBase.SortHandle = () => {
   const array = useArray()
-  if (array.field.pattern !== 'editable') return null
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return <SortHandle />
 }
 
@@ -124,21 +126,23 @@ ArrayBase.Addition = (props) => {
   const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
-  if (array.field.pattern !== 'editable') return null
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <Button
       {...props}
       className={cls(`${prefixCls}-addition`, props.className)}
       style={{ display: 'block', width: '100%', ...props.style }}
       onClick={(e) => {
+        if (array.props?.disabled) return
         e.stopPropagation()
         const defaultValue = getDefaultValue(props.defaultValue, array.schema)
         if (props.method === 'unshift') {
-          array?.field?.unshift?.(defaultValue)
-          array?.props?.onAdd?.(0)
+          array.field?.unshift?.(defaultValue)
+          array.props?.onAdd?.(0)
         } else {
-          array?.field?.push?.(defaultValue)
-          array?.props?.onAdd?.(array?.field?.value?.length - 1)
+          array.field?.push?.(defaultValue)
+          array.props?.onAdd?.(array?.field?.value?.length - 1)
         }
         if (props.onClick) {
           props.onClick(e)
@@ -152,18 +156,21 @@ ArrayBase.Addition = (props) => {
 }
 
 ArrayBase.Remove = React.forwardRef((props, ref) => {
-  const index = useIndex()
-  const base = useArray()
+  const index = useIndex(props.index)
+  const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <DeleteOutlined
       {...props}
       className={cls(`${prefixCls}-remove`, props.className)}
       ref={ref}
       onClick={(e) => {
+        if (array.props?.disabled) return
         e.stopPropagation()
-        base?.field?.remove?.(index)
-        base?.props?.onRemove?.(index)
+        array.field?.remove?.(index)
+        array.props?.onRemove?.(index)
         if (props.onClick) {
           props.onClick(e)
         }
@@ -173,18 +180,21 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
 })
 
 ArrayBase.MoveDown = React.forwardRef((props, ref) => {
-  const index = useIndex()
-  const base = useArray()
+  const index = useIndex(props.index)
+  const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <DownOutlined
       {...props}
       className={cls(`${prefixCls}-move-down`, props.className)}
       ref={ref}
       onClick={(e) => {
+        if (array.props?.disabled) return
         e.stopPropagation()
-        base?.field?.moveDown?.(index)
-        base?.props?.onMoveDown?.(index)
+        array.field?.moveDown?.(index)
+        array.props?.onMoveDown?.(index)
         if (props.onClick) {
           props.onClick(e)
         }
@@ -194,18 +204,21 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
 })
 
 ArrayBase.MoveUp = React.forwardRef((props, ref) => {
-  const index = useIndex()
-  const base = useArray()
+  const index = useIndex(props.index)
+  const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <UpOutlined
       {...props}
       className={cls(`${prefixCls}-move-up`, props.className)}
       ref={ref}
       onClick={(e) => {
+        if (array.props?.disabled) return
         e.stopPropagation()
-        base?.field?.moveUp?.(index)
-        base?.props?.onMoveUp?.(index)
+        array?.field?.moveUp(index)
+        array?.props?.onMoveUp?.(index)
         if (props.onClick) {
           props.onClick(e)
         }
