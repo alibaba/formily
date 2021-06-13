@@ -20,6 +20,7 @@ export interface IFormItemProps {
   label?: React.ReactNode
   colon?: boolean
   tooltip?: React.ReactNode
+  layout?: 'vertical' | 'horizontal' | 'inline'
   tooltipLayout?: 'icon' | 'text'
   labelStyle?: React.CSSProperties
   labelAlign?: 'left' | 'right'
@@ -54,7 +55,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
   const layout = useFormLayout()
   return {
     ...props,
-    layout: layout.layout ?? 'horizontal',
+    layout: props.layout ?? layout.layout ?? 'horizontal',
     colon: props.colon ?? layout.colon,
     labelAlign:
       layout.layout === 'vertical'

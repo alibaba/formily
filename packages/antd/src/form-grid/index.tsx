@@ -96,7 +96,7 @@ const normalizeProps = (props: IFormGridProps): ILayoutProps => {
     } else if (Array.isArray(prop)) {
       let lastVal: number
       return intervals.map((it, idx) => {
-        const res = isValid(prop[idx]) ? prop[idx] : lastVal
+        const res = (isValid(prop[idx]) ? prop[idx] : lastVal) || 0
         lastVal = isValid(prop[idx]) ? prop[idx] : lastVal
         return res
       })

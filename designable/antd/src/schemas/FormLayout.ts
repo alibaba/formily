@@ -74,7 +74,7 @@ export const FormLayout: ISchema = {
       'x-decorator': 'FormItem',
       'x-component': 'Radio.Group',
       'x-component-props': {
-        defaultValue: 'left',
+        defaultValue: 'right',
         optionType: 'button',
       },
     },
@@ -84,7 +84,7 @@ export const FormLayout: ISchema = {
       'x-decorator': 'FormItem',
       'x-component': 'Radio.Group',
       'x-component-props': {
-        defaultValue: 'right',
+        defaultValue: 'left',
         optionType: 'button',
       },
     },
