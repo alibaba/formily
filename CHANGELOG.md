@@ -1,5 +1,29 @@
 # Changelog
 
+## v2.0.0-beta.64(2021-06-11)
+
+### :tada: Enhancements
+
+1. [feat(designable-antd): improve designable schema descriptions](https://github.com/alibaba/formily/commit/ee8cb02d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :beetle: Bug Fixes
+
+1. [fix(antd/next): fix FormItem styles](https://github.com/alibaba/formily/commit/4ca5fa4f) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(next): fix style missing due to wrong sideEffects (#1564)](https://github.com/alibaba/formily/commit/9fb8b93e) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+### :memo: Documents Changes
+
+1. [refactor(antd/next): improve docs and support x-component/x-decorator ReactComponent style](https://github.com/alibaba/formily/commit/65bfef1e) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rose: Improve code quality
+
+1. [refactor(antd/next): improve docs and support x-component/x-decorator ReactComponent style](https://github.com/alibaba/formily/commit/65bfef1e) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(readme): update readme](https://github.com/alibaba/formily/commit/692512da) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.63(2021-06-10)
 
 ### :tada: Enhancements
@@ -1025,15 +1049,3 @@
 1. [docs(practice): add manage-business.md (#733)](https://github.com/alibaba/formily/commit/24fb1ec3) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [feat(hooks): add onSubmit hook and docs (#727)](https://github.com/alibaba/formily/commit/b99be566) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-## v1.0.7(2020-03-15)
-
-### :tada: Enhancements
-
-1. [feat(core): change visible behavior to fix array list delete auto assign value not work (#725)](https://github.com/alibaba/formily/commit/366047e6) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :beetle: Bug Fixes
-
-1. [feat(core): change visible behavior to fix array list delete auto assign value not work (#725)](https://github.com/alibaba/formily/commit/366047e6) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix x-index order algorithm (#724)](https://github.com/alibaba/formily/commit/17ae9ddb) :point_right: ( [JerryLyu](https://github.com/JerryLyu) )
