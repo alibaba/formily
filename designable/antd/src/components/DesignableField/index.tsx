@@ -373,7 +373,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       }
       return false
     }
-
+    if (target.props['type'] === 'object') return true
     if (
       targetComponent &&
       source.every((node) => {
