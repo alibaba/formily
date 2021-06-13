@@ -43,7 +43,6 @@ export default {
     alias: getWorkspaceAlias(),
   },
   externals: {
-    '@formily/reactive': 'Formily.Reactive',
     react: 'React',
     'react-dom': 'ReactDOM',
     moment: 'moment',
