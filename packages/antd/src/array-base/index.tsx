@@ -150,7 +150,7 @@ ArrayBase.Addition = (props) => {
       }}
       icon={<PlusOutlined />}
     >
-      {self.title || props.title}
+      {props.title || self.title}
     </Button>
   )
 }

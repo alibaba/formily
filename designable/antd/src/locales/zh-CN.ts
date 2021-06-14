@@ -299,6 +299,19 @@ const FormCollapseLocale = {
   header: '头部内容',
 }
 
+const ArrayTableLocale = {
+  showHeader: '显示头部',
+  sticky: '吸顶',
+  align: {
+    title: '对齐',
+    dataSource: ['左', '右', '居中'],
+  },
+  colSpan: '跨列',
+  fixed: { title: '固定列', dataSource: ['左', '右', '无'] },
+  width: '宽度',
+  defaultValue: '默认值',
+}
+
 const ComponentLocale = {
   ...FormLayoutLocale,
   ...InputLocale,
@@ -319,6 +332,7 @@ const ComponentLocale = {
   ...SpaceLocale,
   ...FormTabLocale,
   ...FormCollapseLocale,
+  ...ArrayTableLocale,
 }
 
 const FieldLocale = {

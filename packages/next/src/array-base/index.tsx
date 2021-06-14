@@ -150,7 +150,7 @@ ArrayBase.Addition = (props) => {
       }}
     >
       <PlusOutlined />
-      {self.title || props.title}
+      {props.title || self.title}
     </Button>
   )
 }

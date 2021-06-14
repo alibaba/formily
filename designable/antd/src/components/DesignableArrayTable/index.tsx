@@ -148,6 +148,7 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
             size="small"
             bordered
             {...props}
+            scroll={{ x: '100%' }}
             className={cls('ant-formily-array-table', props.className)}
             style={{ marginBottom: 10, ...props.style }}
             rowKey={defaultRowKey}
@@ -181,7 +182,7 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
               return (
                 <Table.Column
                   title="Title"
-                  {...node.props}
+                  {...node.props['x-component-props']}
                   dataIndex={node.id}
                   className={`data-id:${node.id}`}
                   key={key}
@@ -206,6 +207,13 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
             {
               title: 'addTableSortHandle',
               onClick: () => {
+                if (
+                  node.find(
+                    (node) =>
+                      node.props['x-component'] === 'ArrayTable.SortHandle'
+                  )
+                )
+                  return
                 const tableColumn = new TreeNode({
                   componentName: 'DesignableField',
                   props: {
@@ -228,6 +236,12 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
             {
               title: 'addTableIndex',
               onClick: () => {
+                if (
+                  node.find(
+                    (node) => node.props['x-component'] === 'ArrayTable.Index'
+                  )
+                )
+                  return
                 const tableColumn = new TreeNode({
                   componentName: 'DesignableField',
                   props: {
@@ -250,6 +264,7 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
             {
               title: 'addTableColumn',
               onClick: () => {
+                const lastColumn = columns[columns.length - 1]
                 const tableColumn = new TreeNode({
                   componentName: 'DesignableField',
                   props: {
@@ -257,7 +272,14 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                     'x-component': 'ArrayTable.Column',
                   },
                 })
-                node.appendNode(tableColumn)
+                if (
+                  lastColumn &&
+                  lastColumn.props?.['x-component-props']?.['data-is-operation']
+                ) {
+                  lastColumn.insertBefore(tableColumn)
+                } else {
+                  node.appendNode(tableColumn)
+                }
               },
             },
             {
@@ -276,6 +298,9 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                   props: {
                     type: 'void',
                     'x-component': 'ArrayTable.Column',
+                    'x-component-props': {
+                      'data-is-operation': true,
+                    },
                   },
                   children: [
                     {
@@ -301,6 +326,16 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                     },
                   ],
                 })
+
+                if (
+                  node.find(
+                    (node) =>
+                      node.props['x-component'] === 'ArrayTable.Addition'
+                  )
+                ) {
+                  node.appendNode(operationNode)
+                  return
+                }
                 node.appendNode(additionNode, operationNode)
               },
             },
