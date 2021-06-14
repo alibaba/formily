@@ -49,7 +49,7 @@ export const Input: ISchema = {
   },
 }
 
-export const Input_o_TextArea: ISchema = {
+Input.TextArea = {
   type: 'object',
   properties: {
     bordered: {

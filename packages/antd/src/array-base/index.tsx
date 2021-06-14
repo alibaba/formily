@@ -110,16 +110,16 @@ const SortHandle = SortableHandle((props: any) => {
   )
 }) as any
 
-ArrayBase.SortHandle = () => {
+ArrayBase.SortHandle = (props) => {
   const array = useArray()
   if (!array) return null
   if (array.field?.pattern !== 'editable') return null
-  return <SortHandle />
+  return <SortHandle {...props} />
 }
 
-ArrayBase.Index = () => {
+ArrayBase.Index = (props) => {
   const index = useIndex()
-  return <span>#{index + 1}.</span>
+  return <span {...props}>#{index + 1}.</span>
 }
 
 ArrayBase.Addition = (props) => {

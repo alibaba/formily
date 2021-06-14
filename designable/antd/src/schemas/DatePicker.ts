@@ -96,7 +96,7 @@ export const DatePicker: ISchema = {
   },
 }
 
-export const DatePicker_o_RangePicker: ISchema = {
+DatePicker.RangePicker = {
   type: 'object',
   properties: {
     picker: {

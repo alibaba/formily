@@ -37,7 +37,7 @@ export const FormTab: ISchema = {
   },
 }
 
-export const FormTab_o_TabPane: ISchema = {
+FormTab.TabPane = {
   type: 'object',
   properties: {
     tab: {

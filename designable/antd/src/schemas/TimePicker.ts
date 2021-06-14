@@ -121,7 +121,7 @@ export const TimePicker: ISchema = {
   properties: CommonTimePickerAPI,
 }
 
-export const TimePicker_o_RangePicker = {
+TimePicker.RangePicker = {
   type: 'object',
   properties: CommonTimePickerAPI,
 }

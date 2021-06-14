@@ -11,187 +11,32 @@ import {
   Schema,
   ISchema,
 } from '@formily/react'
-import {
-  FormItem,
-  DatePicker,
-  Checkbox,
-  Cascader,
-  Editable,
-  Input,
-  NumberPicker,
-  Switch,
-  Password,
-  PreviewText,
-  Radio,
-  Reset,
-  Select,
-  Space,
-  Submit,
-  TimePicker,
-  Transfer,
-  TreeSelect,
-  Upload,
-  FormGrid,
-  FormLayout,
-  FormTab,
-} from '@formily/antd'
+import { FormTab } from '@formily/antd'
 import { clone } from '@formily/shared'
-import * as defaultSchema from '../../schemas'
-import { Card, Slider, Rate } from 'antd'
-import { createDesignableContainer } from '../DesignableContainer'
 import { FormItemSwitcher } from '../FormItemSwitcher'
-import { DesignableFormTab } from '../DesignableFormTab'
-import { DesignableFormCollapse } from '../DesignableFormCollapse'
 import { DesignableObject } from '../DesignableObject'
+import { createOptions } from './options'
+import { IDesignableFieldProps } from './types'
+import * as defaultSchemas from '../../schemas'
 
 Schema.silent()
 
-const transformPath = (path = '') => {
-  return String(path).replace(/\./g, '_o_')
-}
-
-export interface IDesignableFieldProps {
-  name?: string
-  components?: Record<string, React.JSXElementConstructor<unknown>>
-  componentsPropsSchema?: Record<string, ISchema>
-  notDraggableComponents?: string[]
-  notDroppableComponents?: string[]
-  dropFormItemComponents?: string[]
-  dropReactionComponents?: string[]
-  selfRenderChildrenComponents?: string[]
-  inlineChildrenLayoutComponents?: string[]
-  restrictChildrenComponents?: Record<string, string[]>
-  restrictParentComponents?: Record<string, string[]>
-}
-
 export const createDesignableField = (options: IDesignableFieldProps = {}) => {
-  const realOptions: IDesignableFieldProps = {
-    name: 'DesignableField',
-    ...options,
-    notDraggableComponents: [
-      ...(options.notDraggableComponents || []),
-      'FormTab.TabPane',
-      'FormCollapse.CollapsePanel',
-    ],
-    notDroppableComponents: options.notDroppableComponents || [],
-    dropFormItemComponents: [
-      ...(options.dropFormItemComponents || []),
-      'FormTab.TabPane',
-      'FormCollapse.CollapsePanel',
-    ],
-    dropReactionComponents: [
-      ...(options.dropReactionComponents || []),
-      'FormTab.TabPane',
-      'FormCollapse.CollapsePanel',
-    ],
-    selfRenderChildrenComponents: [
-      ...(options.selfRenderChildrenComponents || []),
-      'FormTab',
-      'FormCollapse',
-    ],
-    inlineChildrenLayoutComponents: [
-      ...(options.inlineChildrenLayoutComponents || []),
-      'FormGrid',
-      'Space',
-    ],
-    restrictChildrenComponents: {
-      FormTab: ['FormTab.TabPane'],
-      FormCollapse: ['FormCollapse.CollapsePanel'],
-    },
-    restrictParentComponents: {
-      'FormTab.TabPane': ['FormTab'],
-      'FormCollapse.CollapsePanel': ['FormCollapse'],
-    },
-    components: {
-      ...options.components,
-      Space: createDesignableContainer(Space),
-      FormGrid: createDesignableContainer(FormGrid),
-      FormLayout: createDesignableContainer(FormLayout),
-      FormTab: DesignableFormTab,
-      FormCollapse: DesignableFormCollapse,
-      FormItem,
-      DatePicker,
-      Checkbox,
-      Cascader,
-      Editable,
-      Input,
-      NumberPicker,
-      Switch,
-      Password,
-      PreviewText,
-      Radio,
-      Reset,
-      Select,
-      Submit,
-      TimePicker,
-      Transfer,
-      TreeSelect,
-      Upload,
-      Card,
-      Slider,
-      Rate,
-    },
-  }
+  const realOptions = createOptions(options)
 
   const tabs = {}
 
-  const DesignableField: React.FC<ISchema> = observer((props) => {
-    const designer = useDesigner()
-    const node = useTreeNode()
-    if (!node) return null
-
-    const getFieldProps = () => {
-      const base = new Schema(clone(props)).compile()
-      const fieldProps = base.toFieldProps({
-        components: realOptions.components,
-      })
-      if (fieldProps.decorator?.[0]) {
-        fieldProps.decorator[1] = fieldProps.decorator[1] || {}
-        FormPath.setIn(
-          fieldProps.decorator[1],
-          designer.props.nodeIdAttrName,
-          node.id
-        )
-      } else if (fieldProps.component?.[0]) {
-        fieldProps.component[1] = fieldProps.component[1] || {}
-        FormPath.setIn(
-          fieldProps.component[1],
-          designer.props.nodeIdAttrName,
-          node.id
-        )
-      }
-      fieldProps.value = fieldProps.initialValue
-      return fieldProps as any
-    }
-
-    const fieldProps = getFieldProps()
-    if (props.type === 'object') {
-      return (
-        <DesignableObject>
-          <ObjectField {...fieldProps} name={node.id}>
-            {props.children}
-          </ObjectField>
-        </DesignableObject>
-      )
-    } else if (props.type === 'array') {
-      return <ArrayField {...fieldProps} name={node.id} />
-    } else if (node.props.type === 'void') {
-      return (
-        <VoidField {...fieldProps} name={node.id}>
-          {props.children}
-        </VoidField>
-      )
-    }
-    return <Field {...fieldProps} name={node.id} />
-  })
-
-  const getComponentSchema = (node: TreeNode): ISchema => {
-    const decorator = transformPath(node.props['x-decorator'])
-    const component = transformPath(node.props['x-component'])
+  const getFieldPropsSchema = (node: TreeNode): ISchema => {
+    const decorator = node.props['x-decorator']
+    const component = node.props['x-component']
     const decoratorSchema =
-      realOptions.componentsPropsSchema?.[decorator] || defaultSchema[decorator]
+      decorator &&
+      (FormPath.getIn(realOptions.componentsPropsSchema, decorator) ||
+        FormPath.getIn(defaultSchemas, decorator))
     const componentSchema =
-      realOptions.componentsPropsSchema?.[component] || defaultSchema[component]
+      component &&
+      (FormPath.getIn(realOptions.componentsPropsSchema, component) ||
+        FormPath.getIn(defaultSchemas, component))
     const TabSchema = (key: string, schema: ISchema) => {
       tabs[key] = tabs[key] || FormTab.createFormTab()
       return {
@@ -226,7 +71,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
                   ),
                 },
                 properties: {
-                  style: defaultSchema.CSSStyle,
+                  style: defaultSchemas.CSSStyle,
                 },
               },
             },
@@ -412,6 +257,8 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
         selfRenderChildren:
           node.props.type === 'array' ||
           realOptions.selfRenderChildrenComponents.includes(componentName),
+        inlineLayout:
+          realOptions.inlineLayoutComponents.includes(componentName),
         inlineChildrenLayout:
           realOptions.inlineChildrenLayoutComponents.includes(componentName),
         allowAppend(target, source) {
@@ -422,9 +269,59 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
             calculateRestricts(target, source)
           )
         },
-        propsSchema: getComponentSchema(node),
+        propsSchema: getFieldPropsSchema(node),
       }
     },
+  })
+
+  const DesignableField: React.FC<ISchema> = observer((props) => {
+    const designer = useDesigner()
+    const node = useTreeNode()
+    if (!node) return null
+
+    const getFieldProps = () => {
+      const base = new Schema(clone(props)).compile()
+      const fieldProps = base.toFieldProps({
+        components: realOptions.components,
+      })
+      if (fieldProps.decorator?.[0]) {
+        fieldProps.decorator[1] = fieldProps.decorator[1] || {}
+        FormPath.setIn(
+          fieldProps.decorator[1],
+          designer.props.nodeIdAttrName,
+          node.id
+        )
+      } else if (fieldProps.component?.[0]) {
+        fieldProps.component[1] = fieldProps.component[1] || {}
+        FormPath.setIn(
+          fieldProps.component[1],
+          designer.props.nodeIdAttrName,
+          node.id
+        )
+      }
+      fieldProps.value = fieldProps.initialValue
+      return fieldProps as any
+    }
+
+    const fieldProps = getFieldProps()
+    if (props.type === 'object') {
+      return (
+        <DesignableObject>
+          <ObjectField {...fieldProps} name={node.id}>
+            {props.children}
+          </ObjectField>
+        </DesignableObject>
+      )
+    } else if (props.type === 'array') {
+      return <ArrayField {...fieldProps} name={node.id} />
+    } else if (node.props.type === 'void') {
+      return (
+        <VoidField {...fieldProps} name={node.id}>
+          {props.children}
+        </VoidField>
+      )
+    }
+    return <Field {...fieldProps} name={node.id} />
   })
 
   return DesignableField

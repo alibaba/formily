@@ -94,4 +94,4 @@ export const Upload: ISchema = {
   },
 }
 
-export const Upload_o_Dragger: ISchema = Upload
+Upload.Dragger = Upload

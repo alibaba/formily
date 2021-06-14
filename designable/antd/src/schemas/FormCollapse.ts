@@ -34,7 +34,7 @@ export const FormCollapse: ISchema = {
   },
 }
 
-export const FormCollapse_o_CollapsePanel: ISchema = {
+FormCollapse.CollapsePanel = {
   type: 'object',
   properties: {
     collapsible: {

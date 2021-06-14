@@ -8,7 +8,7 @@ export const Radio: ISchema = {
   },
 }
 
-export const Radio_o_Group: ISchema = {
+Radio.Group = {
   type: 'object',
   properties: {
     optionType: {

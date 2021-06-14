@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react'
 import { observer } from '@formily/react'
-import { Collapse, Button } from 'antd'
+import { Collapse } from 'antd'
 import { CollapseProps, CollapsePanelProps } from 'antd/lib/collapse'
 import {
   useDesigner,
@@ -10,8 +10,8 @@ import {
 } from '@designable/react'
 import { toArr } from '@formily/shared'
 import { Droppable } from '../Droppable'
-import { TreeNode, AppendNodeEvent, GlobalRegistry } from '@designable/core'
-import { PlusOutlined } from '@ant-design/icons'
+import { TreeNode, AppendNodeEvent } from '@designable/core'
+import { LoadTemplate } from '../LoadTemplate'
 
 const parseCollpase = (parent: TreeNode) => {
   const tabs: TreeNode[] = []
@@ -70,10 +70,10 @@ export const DesignableFormCollapse: React.FC<CollapseProps> & {
       }
     })
   })
-  if (!node.children?.length) return <Droppable {...props} />
   const panels = parseCollpase(node)
-  return (
-    <div {...nodeId}>
+  const renderCollapse = () => {
+    if (!node.children?.length) return <Droppable {...props} />
+    return (
       <Collapse
         {...props}
         activeKey={getCorrectActiveKey(activeKey, panels)}
@@ -94,41 +94,41 @@ export const DesignableFormCollapse: React.FC<CollapseProps> & {
                 'div',
                 {
                   [designer.props.nodeIdAttrName]: panel.id,
-                  style: {
-                    padding: '10px 0',
-                  },
                 },
                 panel.children.length ? (
                   <TreeNodeWidget node={panel} />
                 ) : (
-                  <Droppable style={{ marginBottom: 20 }} />
+                  <Droppable />
                 )
               )}
             </Collapse.Panel>
           )
         })}
       </Collapse>
-      <Button
-        block
-        type="dashed"
-        data-click-stop-propagation="true"
-        style={{ marginTop: 10, marginBottom: 10 }}
-        onClick={() => {
-          const tabPane = new TreeNode({
-            componentName: 'DesignableField',
-            props: {
-              type: 'void',
-              'x-component': 'FormCollapse.CollapsePanel',
+    )
+  }
+  return (
+    <div {...nodeId}>
+      {renderCollapse()}
+      <LoadTemplate
+        actions={[
+          {
+            title: 'addCollapsePanel',
+            onClick: () => {
+              const tabPane = new TreeNode({
+                componentName: 'DesignableField',
+                props: {
+                  type: 'void',
+                  'x-component': 'FormCollapse.CollapsePanel',
+                },
+              })
+              node.appendNode(tabPane)
+              const keys = toArr(activeKey)
+              setActiveKey(keys.concat(tabPane.id))
             },
-          })
-          node.appendNode(tabPane)
-          const keys = toArr(activeKey)
-          setActiveKey(keys.concat(tabPane.id))
-        }}
-      >
-        <PlusOutlined />
-        {GlobalRegistry.getDesignerMessage('addCollapsePanel')}
-      </Button>
+          },
+        ]}
+      />
     </div>
   )
 })

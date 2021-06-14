@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react'
 import { observer } from '@formily/react'
-import { Tabs, Button } from 'antd'
+import { Tabs } from 'antd'
 import { TabsProps, TabPaneProps } from 'antd/lib/tabs'
 import {
   useDesigner,
@@ -9,8 +9,8 @@ import {
   TreeNodeWidget,
 } from '@designable/react'
 import { Droppable } from '../Droppable'
-import { TreeNode, AppendNodeEvent, GlobalRegistry } from '@designable/core'
-import { PlusOutlined } from '@ant-design/icons'
+import { TreeNode, AppendNodeEvent } from '@designable/core'
+import { LoadTemplate } from '../LoadTemplate'
 
 const parseTabs = (parent: TreeNode) => {
   const tabs: TreeNode[] = []
@@ -58,10 +58,10 @@ export const DesignableFormTab: React.FC<TabsProps> & {
       }
     })
   })
-  if (!node.children?.length) return <Droppable {...props} />
   const tabs = parseTabs(node)
-  return (
-    <div {...nodeId}>
+  const renderTabs = () => {
+    if (!node.children?.length) return <Droppable />
+    return (
       <Tabs
         {...props}
         activeKey={getCorrectActiveKey(activeKey, tabs)}
@@ -82,40 +82,40 @@ export const DesignableFormTab: React.FC<TabsProps> & {
                 'div',
                 {
                   [designer.props.nodeIdAttrName]: tab.id,
-                  style: {
-                    padding: '10px 0',
-                  },
                 },
                 tab.children.length ? (
                   <TreeNodeWidget node={tab} />
                 ) : (
-                  <Droppable style={{ marginBottom: 20 }} />
+                  <Droppable />
                 )
               )}
             </Tabs.TabPane>
           )
         })}
       </Tabs>
-      <Button
-        block
-        type="dashed"
-        data-click-stop-propagation="true"
-        style={{ marginTop: 10, marginBottom: 10 }}
-        onClick={() => {
-          const tabPane = new TreeNode({
-            componentName: 'DesignableField',
-            props: {
-              type: 'void',
-              'x-component': 'FormTab.TabPane',
+    )
+  }
+  return (
+    <div {...nodeId}>
+      {renderTabs()}
+      <LoadTemplate
+        actions={[
+          {
+            title: 'addTabPane',
+            onClick: () => {
+              const tabPane = new TreeNode({
+                componentName: 'DesignableField',
+                props: {
+                  type: 'void',
+                  'x-component': 'FormTab.TabPane',
+                },
+              })
+              node.appendNode(tabPane)
+              setActiveKey(tabPane.id)
             },
-          })
-          node.appendNode(tabPane)
-          setActiveKey(tabPane.id)
-        }}
-      >
-        <PlusOutlined />
-        {GlobalRegistry.getDesignerMessage('addTabPane')}
-      </Button>
+          },
+        ]}
+      />
     </div>
   )
 })
