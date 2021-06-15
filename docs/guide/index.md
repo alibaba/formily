@@ -81,7 +81,7 @@ Although the value management achieves accurate rendering, when the verification
 
 ### Domain Model
 
-As mentioned in the previous question, the linkage of forms is very complicated, including various relationships between fields. Let’s imagine that most form linkages are basically linkages triggered based on the values of certain fields. However, actual business requirements may be disgusting. It is not only necessary to trigger linkage based on certain field values, but also based on other side-effect values, such as application status, server data status, page URL, internal data of a UI component of a field, and current Other data status of the field itself, some special asynchronous events, etc. Use a picture to describe:
+As mentioned in the previous question, the linkage of forms is very complicated, including various relationships between fields. Let’s imagine that most form linkages are basically linkages triggered based on the values of certain fields. However, actual business requirements may be sophisticated. It is not only necessary to trigger linkage based on certain field values, but also based on other side-effect values, such as application status, server data status, page URL, internal data of a UI component of a field, and current Other data status of the field itself, some special asynchronous events, etc. Use a picture to describe:
 
 ![image-20210202081316031](//img.alicdn.com/imgextra/i3/O1CN01LWjBSt251w5BtGHW2_!!6000000007467-55-tps-1100-432.svg)
 
