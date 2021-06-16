@@ -38,7 +38,7 @@ export default observer(
               }
             } else {
               const decorator = field.decorator[0] as VueComponent
-              const decoratorData = field.decorator[1] || {}
+              const decoratorData = clone(field.decorator[1]) || {}
               return {
                 default: () =>
                   h(
