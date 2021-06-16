@@ -14,9 +14,7 @@ ${files
   .map((path) => {
     return `import '${path}'\n`
   })
-  .join('')}    
-    
-`,
+  .join('')}\n`,
       'utf8'
     )
   }

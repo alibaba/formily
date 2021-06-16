@@ -366,7 +366,7 @@ describe('clone and compare', () => {
 describe('deprecate', () => {
   test('deprecate', () => {
     const test = jest.fn(() => {
-      console.log('### deprecated function called ###')
+      console.info('### deprecated function called ###')
     })
     const deprecatedFn = jest.fn(
       deprecate(test, 'Some.Deprecated.Api', 'some deprecated error')
@@ -416,13 +416,17 @@ describe('isEmpty', () => {
     // val - function
     const emptyFunc = function () {}
     const nonEmptyFunc = function (payload) {
-      console.log(payload)
+      console.info(payload)
     }
     expect(isEmpty(emptyFunc)).toBeTruthy()
     expect(isEmpty(nonEmptyFunc)).toBeFalsy()
 
     // val - arrays
     expect(isEmpty([])).toBeTruthy()
+    expect(isEmpty([0])).toBeTruthy()
+    expect(isEmpty([''])).toBeTruthy()
+    expect(isEmpty([''], true)).toBeFalsy()
+    expect(isEmpty([0], true)).toBeFalsy()
     expect(isEmpty([1, 2, 3, 4, 5])).toBeFalsy()
     expect(isEmpty([0, undefined, null, ''])).toBeTruthy()
 
@@ -486,7 +490,7 @@ describe('shared Subscribable', () => {
     // subscribable with custom notify
     const objWithCustomNotify = new Subscribable()
     const customNotify = jest.fn((payload) => {
-      console.log(payload)
+      console.info(payload)
       return false
     })
     objWithCustomNotify.subscription = {

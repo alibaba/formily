@@ -357,7 +357,7 @@ export const exchangeArrayState = (
 
 export const isEmptyWithField = (field: GeneralField, value: any) => {
   if (isArrayField(field) || isObjectField(field)) {
-    return isEmpty(value)
+    return isEmpty(value, true)
   }
   return !isValid(value)
 }
