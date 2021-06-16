@@ -2,20 +2,17 @@ import React, { Fragment, useState } from 'react'
 import { observer } from '@formily/react'
 import { Tabs } from 'antd'
 import { TabsProps, TabPaneProps } from 'antd/lib/tabs'
-import {
-  useDesigner,
-  useNodeIdProps,
-  useTreeNode,
-  TreeNodeWidget,
-} from '@designable/react'
+import { useNodeIdProps, useTreeNode, TreeNodeWidget } from '@designable/react'
 import { Droppable } from '../Droppable'
-import { TreeNode, AppendNodeEvent } from '@designable/core'
+import { TreeNode } from '@designable/core'
 import { LoadTemplate } from '../LoadTemplate'
+import { useDropTemplate } from '../../hooks'
+import { matchComponent } from '../../shared'
 
 const parseTabs = (parent: TreeNode) => {
   const tabs: TreeNode[] = []
   parent.children.forEach((node) => {
-    if (node.props['x-component'] === 'FormTab.TabPane') {
+    if (matchComponent(node, 'FormTab.TabPane')) {
       tabs.push(node)
     }
   })
@@ -34,29 +31,17 @@ export const DesignableFormTab: React.FC<TabsProps> & {
   const [activeKey, setActiveKey] = useState<string>()
   const nodeId = useNodeIdProps()
   const node = useTreeNode()
-  const designer = useDesigner((designer) => {
-    return designer.subscribeTo(AppendNodeEvent, (event) => {
-      const { source, target } = event.data
-      if (Array.isArray(target)) return
-      if (!Array.isArray(source)) return
-      if (target.props['x-component'] === 'FormTab') {
-        if (
-          source.every(
-            (node) => node.props['x-component'] !== 'FormTab.TabPane'
-          )
-        ) {
-          const paneNode = new TreeNode({
-            componentName: 'DesignableField',
-            props: {
-              type: 'void',
-              'x-component': 'FormTab.TabPane',
-            },
-          })
-          target.appendNode(paneNode)
-          paneNode.appendNode(...source)
-        }
-      }
-    })
+  const designer = useDropTemplate('FormTab', (source) => {
+    return [
+      new TreeNode({
+        componentName: 'DesignableField',
+        props: {
+          type: 'void',
+          'x-component': 'FormTab.TabPane',
+        },
+        children: source,
+      }),
+    ]
   })
   const tabs = parseTabs(node)
   const renderTabs = () => {

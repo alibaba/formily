@@ -2,21 +2,18 @@ import React, { Fragment, useState } from 'react'
 import { observer } from '@formily/react'
 import { Collapse } from 'antd'
 import { CollapseProps, CollapsePanelProps } from 'antd/lib/collapse'
-import {
-  useDesigner,
-  useTreeNode,
-  useNodeIdProps,
-  TreeNodeWidget,
-} from '@designable/react'
+import { useTreeNode, useNodeIdProps, TreeNodeWidget } from '@designable/react'
 import { toArr } from '@formily/shared'
 import { Droppable } from '../Droppable'
-import { TreeNode, AppendNodeEvent } from '@designable/core'
+import { TreeNode } from '@designable/core'
 import { LoadTemplate } from '../LoadTemplate'
+import { useDropTemplate } from '../../hooks'
+import { matchComponent } from '../../shared'
 
 const parseCollpase = (parent: TreeNode) => {
   const tabs: TreeNode[] = []
   parent.children.forEach((node) => {
-    if (node.props['x-component'] === 'FormCollapse.CollapsePanel') {
+    if (matchComponent(node, 'FormCollapse.CollapsePanel')) {
       tabs.push(node)
     }
   })
@@ -45,30 +42,18 @@ export const DesignableFormCollapse: React.FC<CollapseProps> & {
   const [activeKey, setActiveKey] = useState<string | string[]>([])
   const node = useTreeNode()
   const nodeId = useNodeIdProps()
-  const designer = useDesigner((designer) => {
-    return designer.subscribeTo(AppendNodeEvent, (event) => {
-      const { source, target } = event.data
-      if (Array.isArray(target)) return
-      if (!Array.isArray(source)) return
-      if (target.props['x-component'] === 'FormCollapse') {
-        if (
-          source.every(
-            (node) => node.props['x-component'] !== 'FormCollapse.CollapsePanel'
-          )
-        ) {
-          const paneNode = new TreeNode({
-            componentName: 'DesignableField',
-            props: {
-              type: 'void',
-              'x-component': 'FormCollapse.CollapsePanel',
-            },
-          })
-          target.appendNode(paneNode)
-          paneNode.appendNode(...source)
-          setActiveKey(toArr(activeKey).concat(paneNode.id))
-        }
-      }
+  const designer = useDropTemplate('FormCollapse', (source) => {
+    const panelNode = new TreeNode({
+      componentName: 'DesignableField',
+      props: {
+        type: 'void',
+        'x-component': 'FormCollapse.CollapsePanel',
+      },
+      children: source,
     })
+
+    setActiveKey(toArr(activeKey).concat(panelNode.id))
+    return [panelNode]
   })
   const panels = parseCollpase(node)
   const renderCollapse = () => {

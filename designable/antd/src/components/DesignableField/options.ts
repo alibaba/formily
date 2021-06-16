@@ -27,6 +27,38 @@ import { createDesignableContainer } from '../DesignableContainer'
 import { DesignableFormTab } from '../DesignableFormTab'
 import { DesignableFormCollapse } from '../DesignableFormCollapse'
 import { DesignableArrayTable } from '../DesignableArrayTable'
+import { DesignableArrayCards } from '../DesignableArrayCards'
+import { TreeNode } from '@designable/core'
+
+const isChildrenComponents =
+  (parentName: string, names?: string[]) => (name: string) =>
+    Array.isArray(names) && names.length > 0
+      ? names.some((key) => {
+          return `${parentName}.${key}` === name
+        })
+      : name.indexOf(`${parentName}.`) > -1
+
+const InlineArrayChildren = [
+  'Index',
+  'SortHandle',
+  'Remove',
+  'MoveDown',
+  'MoveUp',
+]
+
+const isFormTabChildren = isChildrenComponents('FormTab')
+const isFormCollapseChildren = isChildrenComponents('FormCollapse')
+const isArrayTableInlineChildren = isChildrenComponents(
+  'ArrayTable',
+  InlineArrayChildren
+)
+const isArrayCardsInlineChildren = isChildrenComponents(
+  'ArrayCards',
+  InlineArrayChildren
+)
+const isObjectNode = (name: string, node: TreeNode) => {
+  return node.props['type'] === 'object'
+}
 
 export const createOptions = (
   options: IDesignableFieldProps = {}
@@ -36,26 +68,23 @@ export const createOptions = (
     ...options,
     notDraggableComponents: [
       ...(options.notDraggableComponents || []),
-      'FormTab.TabPane',
-      'FormCollapse.CollapsePanel',
+      isFormTabChildren,
+      isFormCollapseChildren,
     ],
     notDroppableComponents: [
       ...(options.notDroppableComponents || []),
-      'ArrayTable.SortHandle',
-      'ArrayTable.Index',
-      'ArrayTable.Remove',
-      'ArrayTable.MoveDown',
-      'ArrayTable.MoveUp',
+      isChildrenComponents('ArrayTable', [...InlineArrayChildren, 'Addition']),
+      isChildrenComponents('ArrayCards'),
     ],
     dropFormItemComponents: [
       ...(options.dropFormItemComponents || []),
-      'FormTab.TabPane',
-      'FormCollapse.CollapsePanel',
+      isFormTabChildren,
+      isFormCollapseChildren,
     ],
     dropReactionComponents: [
       ...(options.dropReactionComponents || []),
-      'FormTab.TabPane',
-      'FormCollapse.CollapsePanel',
+      isFormTabChildren,
+      isFormCollapseChildren,
     ],
     selfRenderChildrenComponents: [
       ...(options.selfRenderChildrenComponents || []),
@@ -70,24 +99,14 @@ export const createOptions = (
     ],
     inlineLayoutComponents: [
       ...(options.inlineLayoutComponents || []),
-      'ArrayTable.Column',
-      'ArrayTable.SortHandle',
-      'ArrayTable.Index',
-      'ArrayTable.Remove',
-      'ArrayTable.MoveDown',
-      'ArrayTable.MoveUp',
+      isArrayTableInlineChildren,
+      isArrayCardsInlineChildren,
     ],
 
     restrictChildrenComponents: {
       FormTab: ['FormTab.TabPane'],
       FormCollapse: ['FormCollapse.CollapsePanel'],
-      ArrayTable: ['ArrayTable.Column', 'ArrayTable.Addition'],
-    },
-    restrictParentComponents: {
-      'FormTab.TabPane': ['FormTab'],
-      'FormCollapse.CollapsePanel': ['FormCollapse'],
-      'ArrayTable.Column': ['ArrayTable'],
-      'ArrayTable.Addition': ['ArrayTable'],
+      ArrayTable: [isObjectNode, 'ArrayTable.Addition'],
     },
     components: {
       ...options.components,
@@ -97,6 +116,7 @@ export const createOptions = (
       FormTab: DesignableFormTab,
       FormCollapse: DesignableFormCollapse,
       ArrayTable: DesignableArrayTable,
+      ArrayCards: DesignableArrayCards,
       FormItem,
       DatePicker,
       Checkbox,

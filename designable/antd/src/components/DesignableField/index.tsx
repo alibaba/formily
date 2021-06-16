@@ -17,6 +17,7 @@ import { FormItemSwitcher } from '../FormItemSwitcher'
 import { DesignableObject } from '../DesignableObject'
 import { createOptions } from './options'
 import { IDesignableFieldProps } from './types'
+import { includesComponent } from '../../shared'
 import * as defaultSchemas from '../../schemas'
 
 Schema.silent()
@@ -128,9 +129,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
     }
 
     if (node.props.type === 'void') {
-      if (
-        !realOptions.dropReactionComponents.includes(node.props['x-component'])
-      ) {
+      if (!includesComponent(node, realOptions.dropReactionComponents)) {
         Object.assign(base.properties, {
           'x-reactions': {
             'x-decorator': 'FormItem',
@@ -139,9 +138,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
           },
         })
       }
-      if (
-        !realOptions.dropFormItemComponents.includes(node.props['x-component'])
-      ) {
+      if (!includesComponent(node, realOptions.dropFormItemComponents)) {
         Object.assign(base.properties, {
           'x-decorator': {
             type: 'string',
@@ -163,9 +160,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
         delete base.properties.description
       }
     } else {
-      if (
-        !realOptions.dropReactionComponents.includes(node.props['x-component'])
-      ) {
+      if (!includesComponent(node, realOptions.dropReactionComponents)) {
         Object.assign(base.properties, {
           'x-reactions': {
             'x-decorator': 'FormItem',
@@ -210,7 +205,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
     if (restrictChildrenComponents?.length) {
       if (
         source.every((node) =>
-          restrictChildrenComponents.includes(node.props['x-component'])
+          includesComponent(node, restrictChildrenComponents)
         ) ||
         target.children.length === 0
       ) {
@@ -218,25 +213,7 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       }
       return false
     }
-    if (target.props['type'] === 'object') return true
-    if (
-      targetComponent &&
-      source.every((node) => {
-        const restrictParentComponents =
-          realOptions.restrictParentComponents?.[node.props['x-component']]
-        if (restrictParentComponents?.length) {
-          if (restrictParentComponents.includes(targetComponent)) {
-            return true
-          }
-          return false
-        }
-        return true
-      })
-    ) {
-      return true
-    }
-
-    return false
+    return true
   }
 
   GlobalRegistry.registerDesignerProps({
@@ -245,22 +222,36 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
       const message = GlobalRegistry.getDesignerMessage(
         `components.${componentName}`
       )
+      const isObjectNode = node.props.type === 'object'
+      const isArrayNode = node.props.type === 'array'
+      const isVoidNode = node.props.type === 'void'
       const title = typeof message === 'string' ? message : message?.title
       const nodeTitle =
-        node.props.type === 'object'
+        title ||
+        (isObjectNode
           ? GlobalRegistry.getDesignerMessage('components.Object')
-          : title
+          : isVoidNode
+          ? GlobalRegistry.getDesignerMessage('components.Void')
+          : '')
+
       return {
         title: nodeTitle,
-        draggable: !realOptions.notDraggableComponents.includes(componentName),
-        droppable: !realOptions.notDroppableComponents.includes(componentName),
+        draggable: !includesComponent(node, realOptions.notDraggableComponents),
+        droppable:
+          isObjectNode ||
+          isArrayNode ||
+          !includesComponent(node, realOptions.notDroppableComponents),
         selfRenderChildren:
-          node.props.type === 'array' ||
-          realOptions.selfRenderChildrenComponents.includes(componentName),
-        inlineLayout:
-          realOptions.inlineLayoutComponents.includes(componentName),
-        inlineChildrenLayout:
-          realOptions.inlineChildrenLayoutComponents.includes(componentName),
+          isArrayNode ||
+          includesComponent(node, realOptions.selfRenderChildrenComponents),
+        inlineLayout: includesComponent(
+          node,
+          realOptions.inlineLayoutComponents
+        ),
+        inlineChildrenLayout: includesComponent(
+          node,
+          realOptions.inlineChildrenLayoutComponents
+        ),
         allowAppend(target, source) {
           return (
             (target.props.type === 'void' ||

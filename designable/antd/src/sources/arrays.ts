@@ -9,4 +9,12 @@ GlobalDragSource.appendSourcesByGroup('arrays', [
       'x-component': 'ArrayTable',
     },
   },
+  {
+    componentName: 'DesignableField',
+    props: {
+      type: 'array',
+      'x-decorator': 'FormItem',
+      'x-component': 'ArrayCards',
+    },
+  },
 ])

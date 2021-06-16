@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs-extra'
 import { GlobSync } from 'glob'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import autoprefixer from 'autoprefixer'
 //import { getThemeVariables } from 'antd/dist/theme'
 
 const getWorkspaceAlias = () => {
@@ -70,6 +71,12 @@ export default {
         use: [
           MiniCssExtractPlugin.loader,
           { loader: 'css-loader' },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => autoprefixer(),
+            },
+          },
           {
             loader: 'less-loader',
             options: {

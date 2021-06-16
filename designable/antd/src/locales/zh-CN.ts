@@ -367,6 +367,15 @@ const FieldLocale = {
   },
 }
 
+const ArrayOperationsLocale = {
+  Index: '索引',
+  SortHandle: '排序手柄',
+  Addition: '新增按钮',
+  Remove: '删除按钮',
+  MoveDown: '下移按钮',
+  MoveUp: '上移按钮',
+}
+
 export default {
   'zh-CN': {
     components: {
@@ -398,15 +407,23 @@ export default {
       FormTab: { title: '选项卡布局', TabPane: '选项卡面板' },
       FormCollapse: { title: '手风琴布局', CollapsePanel: '手风琴面板' },
       Object: '数据对象',
+      Void: '虚拟容器',
       ArrayTable: {
         title: '自增表格',
         Column: '表格列',
-        Index: '索引',
-        SortHandle: '排序手柄',
-        Addition: '新增按钮',
-        Remove: '删除按钮',
-        MoveDown: '下移按钮',
-        MoveUp: '上移按钮',
+        ...ArrayOperationsLocale,
+      },
+      ArrayCards: {
+        title: '自增卡片',
+        ...ArrayOperationsLocale,
+      },
+      ArrayTabs: {
+        title: '自增选项卡',
+        ...ArrayOperationsLocale,
+      },
+      ArrayCollapse: {
+        title: '自增手风琴',
+        ...ArrayOperationsLocale,
       },
       FormItem: '表单项容器',
     },
@@ -419,7 +436,7 @@ export default {
     addCollapsePanel: '添加手风琴卡片',
     addTableColumn: '添加表格列',
     addTableSortHandle: '添加排序',
-    addTableIndex: '添加索引',
+    addIndex: '添加索引',
     addOperation: '添加操作',
   },
 }
