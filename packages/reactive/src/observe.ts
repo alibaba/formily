@@ -37,7 +37,9 @@ export const observe = (
       }
     }
     return () => {
-      listener?.unobserve()
+      if (listener.unobserve) {
+        listener.unobserve()
+      }
     }
   }
   if (target && typeof target !== 'object')

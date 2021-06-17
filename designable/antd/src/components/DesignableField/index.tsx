@@ -205,9 +205,8 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
     if (restrictChildrenComponents?.length) {
       if (
         source.every((node) =>
-          includesComponent(node, restrictChildrenComponents)
-        ) ||
-        target.children.length === 0
+          includesComponent(node, restrictChildrenComponents, target)
+        )
       ) {
         return true
       }
@@ -233,14 +232,10 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
           : isVoidNode
           ? GlobalRegistry.getDesignerMessage('components.Void')
           : '')
-
       return {
         title: nodeTitle,
-        draggable: !includesComponent(node, realOptions.notDraggableComponents),
-        droppable:
-          isObjectNode ||
-          isArrayNode ||
-          !includesComponent(node, realOptions.notDroppableComponents),
+        draggable: true,
+        droppable: isObjectNode || isArrayNode || isVoidNode,
         selfRenderChildren:
           isArrayNode ||
           includesComponent(node, realOptions.selfRenderChildrenComponents),

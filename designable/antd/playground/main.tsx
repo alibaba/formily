@@ -107,7 +107,7 @@ const App = () => {
               </Button.Group>
             </ToolbarPanel>
             <ViewportPanel>
-              {view === 'json' && <div>JSON 输入</div>}
+              {view === 'json' && <div>JSON Schema</div>}
               {view === 'design' && (
                 <Viewport>
                   <ComponentTreeWidget
