@@ -5,7 +5,7 @@ const toString = Object.prototype.toString
 
 export const isValid = (val: any) => val !== undefined && val !== null
 
-export function isEmpty(val: any): boolean {
+export function isEmpty(val: any, strict = false): boolean {
   // Null and Undefined...
   if (val == null) {
     return true
@@ -37,13 +37,19 @@ export function isEmpty(val: any): boolean {
       return true
     }
     for (let i = 0; i < val.length; i++) {
-      if (
-        val[i] !== undefined &&
-        val[i] !== null &&
-        val[i] !== '' &&
-        val[i] !== 0
-      ) {
-        return false
+      if (strict) {
+        if (val[i] !== undefined && val[i] !== null) {
+          return false
+        }
+      } else {
+        if (
+          val[i] !== undefined &&
+          val[i] !== null &&
+          val[i] !== '' &&
+          val[i] !== 0
+        ) {
+          return false
+        }
       }
     }
     return true

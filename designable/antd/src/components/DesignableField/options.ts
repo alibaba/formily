@@ -39,6 +39,7 @@ const isChildrenComponents =
       : name.indexOf(`${parentName}.`) > -1
 
 const InlineArrayChildren = [
+  'Column',
   'Index',
   'SortHandle',
   'Remove',
@@ -60,22 +61,21 @@ const isObjectNode = (name: string, node: TreeNode) => {
   return node.props['type'] === 'object'
 }
 
+const isNotArrayColumn = (name: string, node: TreeNode) => {
+  return node.props['x-component'] !== 'ArrayTable.Column'
+}
+
+const allowDropWithEmpty = (name: string, node: TreeNode, target: TreeNode) => {
+  if (target) return target.children.length === 0
+  return false
+}
+
 export const createOptions = (
   options: IDesignableFieldProps = {}
 ): IDesignableFieldProps => {
   return {
     name: 'DesignableField',
     ...options,
-    notDraggableComponents: [
-      ...(options.notDraggableComponents || []),
-      isFormTabChildren,
-      isFormCollapseChildren,
-    ],
-    notDroppableComponents: [
-      ...(options.notDroppableComponents || []),
-      isChildrenComponents('ArrayTable', [...InlineArrayChildren, 'Addition']),
-      isChildrenComponents('ArrayCards'),
-    ],
     dropFormItemComponents: [
       ...(options.dropFormItemComponents || []),
       isFormTabChildren,
@@ -104,9 +104,10 @@ export const createOptions = (
     ],
 
     restrictChildrenComponents: {
-      FormTab: ['FormTab.TabPane'],
-      FormCollapse: ['FormCollapse.CollapsePanel'],
-      ArrayTable: [isObjectNode, 'ArrayTable.Addition'],
+      FormTab: [allowDropWithEmpty, 'FormTab.TabPane'],
+      FormCollapse: [allowDropWithEmpty, 'FormCollapse.CollapsePanel'],
+      ArrayTable: [allowDropWithEmpty, isObjectNode, 'ArrayTable.Addition'],
+      'ArrayTable.Column': [isNotArrayColumn],
     },
     components: {
       ...options.components,

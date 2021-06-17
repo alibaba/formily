@@ -32,8 +32,8 @@ const DesignableField = createDesignableField()
 const Logo: React.FC = () => (
   <div style={{ display: 'flex', alignItems: 'center', fontSize: 14 }}>
     <img
-      src="//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg"
-      style={{ margin: 10, height: 18, width: 'auto' }}
+      src="//img.alicdn.com/imgextra/i2/O1CN01fLfasn23ZFgoqt7Id_!!6000000007269-55-tps-1141-150.svg"
+      style={{ margin: '0 8px', height: 24, width: 'auto' }}
     />
   </div>
 )
@@ -107,7 +107,7 @@ const App = () => {
               </Button.Group>
             </ToolbarPanel>
             <ViewportPanel>
-              {view === 'json' && <div>JSON 输入</div>}
+              {view === 'json' && <div>JSON Schema</div>}
               {view === 'design' && (
                 <Viewport>
                   <ComponentTreeWidget

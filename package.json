@@ -24,6 +24,7 @@
     "test:schema": "jest packages/json-schema/src/__tests__/*.spec.ts",
     "test:schema:watch": "npm run test:schema --- --watch",
     "test:react": "jest packages/react/src/__tests__/*.spec.tsx",
+    "test:shared": "jest packages/shared/src/__tests__/*.spec.ts",
     "test:path": "jest packages/path/src/__tests__/*.spec.ts",
     "test:react:watch": "npm run test:react --- --watch",
     "test:react-schema": "jest packages/react-schema-field/src/__tests__/*.spec.tsx",

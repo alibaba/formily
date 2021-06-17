@@ -601,12 +601,13 @@ export class Form<ValueType extends object = any> {
   }
 
   onUnmount = () => {
-    this.disposers.forEach((dispose) => dispose())
+    this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     this.query('*').forEach((field) => field.dispose())
+    this.disposers.forEach((dispose) => dispose())
     this.unmounted = true
     this.fields = {}
     this.indexes.clear()
-    this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
+    this.heart.clear()
     if (globalThisPolyfill[DEV_TOOLS_HOOK] && !this.props.designable) {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)
     }

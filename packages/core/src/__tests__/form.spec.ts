@@ -968,3 +968,37 @@ test('remove property of form values with undefined value', () => {
   field.setValue(undefined)
   expect(form.values.hasOwnProperty('aaa')).toBeTruthy()
 })
+
+test('empty array initialValues', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        aa: [0],
+        bb: [''],
+        cc: [],
+        dd: [null],
+        ee: [undefined],
+      },
+    })
+  )
+  form.createArrayField({
+    name: 'aa',
+  })
+  form.createArrayField({
+    name: 'bb',
+  })
+  form.createArrayField({
+    name: 'cc',
+  })
+  form.createArrayField({
+    name: 'dd',
+  })
+  form.createArrayField({
+    name: 'ee',
+  })
+  expect(form.values.aa).toEqual([0])
+  expect(form.values.bb).toEqual([''])
+  expect(form.values.cc).toEqual([])
+  expect(form.values.dd).toEqual([])
+  expect(form.values.ee).toEqual([])
+})

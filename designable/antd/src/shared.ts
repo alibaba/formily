@@ -3,21 +3,27 @@ import { TreeNode, Engine } from '@designable/core'
 export type ComponentNameMatcher =
   | string
   | string[]
-  | ((name: string, node: TreeNode) => boolean)
+  | ((name: string, node: TreeNode, context?: any) => boolean)
 
-export const matchComponent = (node: TreeNode, name: ComponentNameMatcher) => {
+export const matchComponent = (
+  node: TreeNode,
+  name: ComponentNameMatcher,
+  context?: any
+) => {
   if (name === '*') return true
   const componentName = node?.props?.['x-component']
-  if (typeof name === 'function') return name(componentName || '', node)
+  if (typeof name === 'function')
+    return name(componentName || '', node, context)
   if (Array.isArray(name)) return name.includes(componentName)
   return componentName === name
 }
 
 export const includesComponent = (
   node: TreeNode,
-  names: ComponentNameMatcher[]
+  names: ComponentNameMatcher[],
+  target?: TreeNode
 ) => {
-  return names.some((name) => matchComponent(node, name))
+  return names.some((name) => matchComponent(node, name, target))
 }
 
 export const queryNodesByComponentPath = (
@@ -77,7 +83,11 @@ export const createNodeId = (designer: Engine, id: string) => {
 
 export const createEnsureTypeItemsNode = (type: string) => (node: TreeNode) => {
   const objectNode = node.children.find((child) => child.props['type'] === type)
-  if (objectNode && objectNode.designerProps.droppable) {
+  if (
+    objectNode &&
+    objectNode.designerProps.droppable &&
+    !objectNode.props['x-component']
+  ) {
     return objectNode
   } else {
     const newObjectNode = new TreeNode({

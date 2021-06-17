@@ -516,7 +516,9 @@ export class Schema<
     return this
   }
 
-  toJSON = (): ISchema<
+  toJSON = (
+    recursion = true
+  ): ISchema<
     Decorator,
     Component,
     DecoratorProps,
@@ -535,10 +537,13 @@ export class Schema<
       )
         return
       if (key === 'properties' || key === 'patternProperties') {
+        if (!recursion) return
         results[key] = map(value, (item) => item?.toJSON?.())
       } else if (key === 'additionalProperties' || key === 'additionalItems') {
+        if (!recursion) return
         results[key] = value?.toJSON?.()
       } else if (key === 'items') {
+        if (!recursion) return
         if (Array.isArray(value)) {
           results[key] = value.map((item) => item?.toJSON?.())
         } else {
