@@ -10,6 +10,7 @@ export interface FormProps
   form: Formily.Core.Models.Form
   component?: Formily.React.Types.JSXComponent
   onAutoSubmit?: (values: any) => any
+  onAutoSubmitFailed?: (feedbacks: Formily.Core.Types.IFormFeedback[]) => void
   previewTextPlaceholder?: React.ReactNode
 }
 
@@ -17,6 +18,7 @@ export const Form: React.FC<FormProps> = ({
   form,
   component,
   onAutoSubmit,
+  onAutoSubmitFailed,
   previewTextPlaceholder,
   ...props
 }) => {
@@ -36,7 +38,7 @@ export const Form: React.FC<FormProps> = ({
               onSubmit(e: React.FormEvent) {
                 e?.stopPropagation?.()
                 e?.preventDefault?.()
-                form.submit(onAutoSubmit)
+                form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
               },
             },
             props.children
