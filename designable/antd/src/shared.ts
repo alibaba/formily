@@ -77,7 +77,11 @@ export const createNodeId = (designer: Engine, id: string) => {
 
 export const createEnsureTypeItemsNode = (type: string) => (node: TreeNode) => {
   const objectNode = node.children.find((child) => child.props['type'] === type)
-  if (objectNode && objectNode.designerProps.droppable) {
+  if (
+    objectNode &&
+    objectNode.designerProps.droppable &&
+    !objectNode.props['x-component']
+  ) {
     return objectNode
   } else {
     const newObjectNode = new TreeNode({
