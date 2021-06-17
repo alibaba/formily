@@ -5,10 +5,11 @@ import { useForm, observer } from '@formily/react'
 
 export interface ISubmitProps extends ButtonProps {
   onSubmit?: (values: any) => Promise<any> | any
+  onSubmitFailed?: (feedbacks: Formily.Core.Types.IFormFeedback[]) => void
 }
 
 export const Submit: React.FC<ISubmitProps> = observer(
-  ({ onSubmit, ...props }: ISubmitProps) => {
+  ({ onSubmit, onSubmitFailed, ...props }: ISubmitProps) => {
     const form = useForm()
     return (
       <Button
@@ -21,7 +22,7 @@ export const Submit: React.FC<ISubmitProps> = observer(
             props.onClick(e)
           }
           if (onSubmit) {
-            form.submit(onSubmit)
+            form.submit(onSubmit).catch(onSubmitFailed)
           }
         }}
       >
