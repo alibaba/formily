@@ -5,6 +5,7 @@ export type ValidatorFormats =
   | 'ipv4'
   | 'idcard'
   | 'qq'
+  | 'number'
   | 'phone'
   | 'money'
   | 'zh'
