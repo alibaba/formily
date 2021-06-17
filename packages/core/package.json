@@ -1,6 +1,6 @@
 {
   "name": "@formily/core",
-  "version": "2.0.0-beta.65",
+  "version": "2.0.0-beta.66",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -32,9 +32,9 @@
     "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
-    "@formily/reactive": "2.0.0-beta.65",
-    "@formily/shared": "2.0.0-beta.65",
-    "@formily/validator": "2.0.0-beta.65"
+    "@formily/reactive": "2.0.0-beta.66",
+    "@formily/shared": "2.0.0-beta.66",
+    "@formily/validator": "2.0.0-beta.66"
   },
   "publishConfig": {
     "access": "public"

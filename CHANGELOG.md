@@ -1,5 +1,27 @@
 # Changelog
 
+## v2.0.0-beta.65(2021-06-14)
+
+### :tada: Enhancements
+
+1. [feat(antd/next): support disabled to ArrayBase](https://github.com/alibaba/formily/commit/cb342e70) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix createForm memory leak](https://github.com/alibaba/formily/commit/5f11459b) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(project): fix ci](https://github.com/alibaba/formily/commit/61627825) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(antd/next): fix FormGrid can't support controlled mode](https://github.com/alibaba/formily/commit/88f379c3) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rose: Improve code quality
+
+1. [refactor(desingbale-antd): improve dir name](https://github.com/alibaba/formily/commit/ceb8a8d5) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(designable-antd): upgrade designable](https://github.com/alibaba/formily/commit/ffce36c7) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.64(2021-06-11)
 
 ### :tada: Enhancements
@@ -1017,35 +1039,3 @@
 ### :rocket: Improve Performance
 
 1. [perf(core): improve validate perf (#755)](https://github.com/alibaba/formily/commit/3ea64169) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v1.0.9(2020-03-22)
-
-### :tada: Enhancements
-
-1. [feat: add recursive-render doc and fix some bugs (#736)](https://github.com/alibaba/formily/commit/d7199d82) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(hooks): add onSubmit hook and docs (#727)](https://github.com/alibaba/formily/commit/b99be566) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [feat(core): support pass FormPathPattern to createMutators, and fix some typings (#728)](https://github.com/alibaba/formily/commit/c0798c6d) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :beetle: Bug Fixes
-
-1. [feat: add recursive-render doc and fix some bugs (#736)](https://github.com/alibaba/formily/commit/d7199d82) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(core): support pass FormPathPattern to createMutators, and fix some typings (#728)](https://github.com/alibaba/formily/commit/c0798c6d) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(schema-renderer): fix linkage can not access expressionScope (#726)](https://github.com/alibaba/formily/commit/27de669a) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix field notify](https://github.com/alibaba/formily/commit/ead72847) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :memo: Documents Changes
-
-1. [docs : add complex-field-component.md (#737)](https://github.com/alibaba/formily/commit/1235a11a) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: add recursive-render doc and fix some bugs (#736)](https://github.com/alibaba/formily/commit/d7199d82) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [doc(next/antd): add document of array items (#731)](https://github.com/alibaba/formily/commit/fb0cd9d2) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [docs(practice): add manage-business.md (#733)](https://github.com/alibaba/formily/commit/24fb1ec3) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(hooks): add onSubmit hook and docs (#727)](https://github.com/alibaba/formily/commit/b99be566) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
