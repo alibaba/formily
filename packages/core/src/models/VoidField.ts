@@ -25,7 +25,7 @@ import {
   modelStateGetter,
   modelStateSetter,
   initFieldUpdate,
-} from '../shared'
+} from '../shared/internals'
 import { Form } from './Form'
 import { Query } from './Query'
 

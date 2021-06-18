@@ -1,4 +1,4 @@
-import { isStr, isArr, Subscribable, each } from '@formily/shared'
+import { isStr, isArr, Subscribable } from '@formily/shared'
 import { LifeCycle } from './LifeCycle'
 import { IHeartProps } from '../types'
 export class Heart<Payload = any, Context = any> extends Subscribable {

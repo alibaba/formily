@@ -1,5 +1,4 @@
 export * from '@formily/json-schema'
-export * from './global'
 export * from './components'
 export * from './shared'
 export * from './hooks'

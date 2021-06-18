@@ -55,9 +55,8 @@ import {
   modelStateGetter,
   isHTMLInputEvent,
   initFieldValue,
-  isArrayField,
-  isObjectField,
-} from '../shared'
+} from '../shared/internals'
+import { isArrayField, isObjectField } from '../shared/checkers'
 import { Query } from './Query'
 
 const RESPONSE_REQUEST_DURATION = 100

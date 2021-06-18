@@ -8,7 +8,7 @@ import {
   DataField,
   IFieldState,
 } from '../types'
-import { createEffectHook, useEffectForm } from '../shared'
+import { createEffectHook, useEffectForm } from '../shared/effectbox'
 import { onFormUnmount } from './onFormEffects'
 
 function createFieldEffect<Result extends GeneralField = GeneralField>(

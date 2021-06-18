@@ -1,6 +1,6 @@
 import { isArr } from '@formily/shared'
 import { batch } from '@formily/reactive'
-import { spliceArrayState, exchangeArrayState } from '../shared'
+import { spliceArrayState, exchangeArrayState } from '../shared/internals'
 import { Field } from './Field'
 import { Form } from './Form'
 import { JSXComponent, IFieldProps, FormPathPattern } from '../types'

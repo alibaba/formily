@@ -43,14 +43,14 @@ import {
   IFormMergeStrategy,
 } from '../types'
 import {
-  isVoidField,
-  runEffects,
   modelStateGetter,
   modelStateSetter,
   createFieldStateSetter,
   createFieldStateGetter,
   applyValuesPatch,
-} from '../shared'
+} from '../shared/internals'
+import { isVoidField } from '../shared/checkers'
+import { runEffects } from '../shared/effectbox'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
 import { VoidField } from './VoidField'
