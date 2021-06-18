@@ -1,5 +1,29 @@
 # Changelog
 
+## v2.0.0-beta.67(2021-06-18)
+
+### :tada: Enhancements
+
+1. [feat(antd/next): add Form and Submit components submitFailed callback events (#1597)](https://github.com/alibaba/formily/commit/2517f807) :point_right: ( [后浪](https://github.com/后浪) )
+
+### :beetle: Bug Fixes
+
+1. [fix(project): fix typings](https://github.com/alibaba/formily/commit/c8aff09b) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [refactor(reactive): fix #1598 and support #1586 and super performance optimization](https://github.com/alibaba/formily/commit/a1e72006) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :memo: Documents Changes
+
+1. [docs(core): add Type number and integer for ValidatorFormats (#1599)](https://github.com/alibaba/formily/commit/03591144) :point_right: ( [codetyphon](https://github.com/codetyphon) )
+
+### :rose: Improve code quality
+
+1. [refactor(reactive): fix #1598 and support #1586 and super performance optimization](https://github.com/alibaba/formily/commit/a1e72006) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rocket: Improve Performance
+
+1. [refactor(reactive): fix #1598 and support #1586 and super performance optimization](https://github.com/alibaba/formily/commit/a1e72006) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.66(2021-06-17)
 
 ### :tada: Enhancements
@@ -999,29 +1023,3 @@
 ### :tada: Enhancements
 
 1. [feat(schema-renderer): support relative target path (#779)](https://github.com/alibaba/formily/commit/f5fe4061) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v1.0.11(2020-04-04)
-
-### :beetle: Bug Fixes
-
-1. [fix(next): add onPageSizeChange (#777)](https://github.com/alibaba/formily/commit/b2df2d40) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): add lifecycle buffer gc (#773)](https://github.com/alibaba/formily/commit/360c2110) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd/next-components): fix array items (#769)](https://github.com/alibaba/formily/commit/0d9c6715) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix initialValues validate (#770)](https://github.com/alibaba/formily/commit/ce2e2fc8) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): Fix the wrong publishing sequence of initialization events (#772)](https://github.com/alibaba/formily/commit/e2af6a71) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix typings (#762)](https://github.com/alibaba/formily/commit/e5ef40b4) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(share): fix toArr if param is a proxy (#760)](https://github.com/alibaba/formily/commit/fca3890e) :point_right: ( [林法鑫](https://github.com/林法鑫) )
-
-### :memo: Documents Changes
-
-1. [docs: formatted with prettier (#768)](https://github.com/alibaba/formily/commit/cb7f095d) :point_right: ( [kenve](https://github.com/kenve) )
-
-### :rocket: Improve Performance
-
-1. [Fix devtools perf (#776)](https://github.com/alibaba/formily/commit/0c7272d9) :point_right: ( [Janry](https://github.com/Janry) )
