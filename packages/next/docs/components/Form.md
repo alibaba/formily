@@ -26,6 +26,7 @@ export default () => (
     layout="vertical"
     feedbackLayout="terse"
     onAutoSubmit={console.log}
+    onAutoSubmitFailed={console.log}
   >
     <FormGrid maxColumns={4}>
       <Field
@@ -47,6 +48,7 @@ export default () => (
       <Field
         name="bb"
         title="输入框"
+        required
         decorator={[FormItem]}
         component={[Input]}
       />
@@ -128,9 +130,10 @@ export default () => (
 
 布局相关的 API 属性，我们参考 [FormLayout](./form-layout)即可，剩下是 Form 组件独有的 API 属性
 
-| 属性名                 | 类型                                               | 描述                               | 默认值 |
-| ---------------------- | -------------------------------------------------- | ---------------------------------- | ------ |
-| form                   | [Form](https://core.formilyjs.org/api/models/form) | Form 实例                          | -      |
-| component              | string                                             | 渲染组件，可以指定为自定义组件渲染 | `form` |
-| previewTextPlaceholder | ReactNode                                          | 预览态占位符                       | `N/A`  |
-| onAutoSubmit           | `(values:any)=>any`                                | 回车提交事件回调                   | -      |
+| 属性名                 | 类型                                                                                             | 描述                               | 默认值 |
+| ---------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------- | ------ |
+| form                   | [Form](https://core.formilyjs.org/api/models/form)                                               | Form 实例                          | -      |
+| component              | string                                                                                           | 渲染组件，可以指定为自定义组件渲染 | `form` |
+| previewTextPlaceholder | ReactNode                                                                                        | 预览态占位符                       | `N/A`  |
+| onAutoSubmit           | `(values:any)=>any`                                                                              | 回车提交事件回调                   | -      |
+| onAutoSubmitFailed     | (feedbacks: [IFormFeedback](https://core.formilyjs.org/api/models/form#iformfeedback)[]) => void | 回车提交校验失败事件回调           | -      |

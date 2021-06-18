@@ -91,6 +91,7 @@ export default () => (
             }, 2000)
           })
         }}
+        onSubmitFailed={console.log}
       >
         提交
       </Submit>
@@ -101,4 +102,9 @@ export default () => (
 
 ## API
 
-参考 https://ant.design/components/button-cn/
+按钮相关的 API 属性，我们参考 https://ant.design/components/button-cn/ 即可，剩下是 Submit 组件独有的 API 属性
+
+| 属性名         | 类型                                                                                             | 描述                 | 默认值 |
+| -------------- | ------------------------------------------------------------------------------------------------ | -------------------- | ------ |
+| onSubmit       | `(values: any) => Promise<any> \| any`                                                           | 提交事件回调         | -      |
+| onSubmitFailed | (feedbacks: [IFormFeedback](https://core.formilyjs.org/api/models/form#iformfeedback)[]) => void | 提交校验失败事件回调 | -      |
