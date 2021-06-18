@@ -7,11 +7,9 @@ import {
   PendingReactions,
   BatchCount,
   UntrackCount,
-  ProxyRaw,
-  RawNode,
   BatchScope,
+  ObserverListeners,
 } from './environment'
-import { concat } from './concat'
 
 const ITERATION_KEY = Symbol('iteration key')
 
@@ -38,7 +36,7 @@ const addRawReactionsMap = (
   }
 }
 
-const addReactionsMaptoReaction = (
+const addReactionsMapToReaction = (
   reaction: Reaction,
   reactionsMap: ReactionsMap
 ) => {
@@ -55,20 +53,24 @@ const addReactionsMaptoReaction = (
 
 const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
   const reactionsMap = RawReactionsMap.get(target)
-  const reactions = new Set<Reaction>()
+  const reactions = []
   if (reactionsMap) {
-    reactionsMap.get(key)?.forEach((reaction) => {
-      if (!reactions.has(reaction)) {
-        reactions.add(reaction)
-      }
-    })
+    const map = reactionsMap.get(key)
+    if (map) {
+      map.forEach((reaction) => {
+        if (reactions.indexOf(reaction) === -1) {
+          reactions.push(reaction)
+        }
+      })
+    }
   }
   return reactions
 }
 
 const runReactions = (target: any, key: PropertyKey) => {
   const reactions = getReactionsFromTargetKey(target, key)
-  reactions.forEach((reaction) => {
+  for (let i = 0, len = reactions.length; i < len; i++) {
+    const reaction = reactions[i]
     if (reaction._isComputed) {
       reaction._scheduler(reaction)
     } else if (isScopeBatching()) {
@@ -86,51 +88,11 @@ const runReactions = (target: any, key: PropertyKey) => {
         reaction()
       }
     }
-  })
+  }
 }
 
 const notifyObservers = (operation: IOperation) => {
-  const targetNode = RawNode.get(
-    ProxyRaw.get(operation.target) || operation.target
-  )
-  const oldValueNode = RawNode.get(
-    ProxyRaw.get(operation.oldValue) || operation.oldValue
-  )
-  const newValueNode = RawNode.get(
-    ProxyRaw.get(operation.value) || operation.value
-  )
-  if (targetNode) {
-    const getChange = () => {
-      return {
-        get path() {
-          return concat(targetNode.path, operation.key)
-        },
-        type: operation.type,
-        key: operation.key,
-        value: operation.value,
-        oldValue: operation.oldValue,
-      }
-    }
-    if (oldValueNode && operation.type === 'set') {
-      oldValueNode.observers.forEach((fn) => fn(getChange()))
-      oldValueNode.deepObservers.forEach((fn) => fn(getChange()))
-      if (newValueNode) {
-        newValueNode.observers = oldValueNode.observers
-        newValueNode.deepObservers = oldValueNode.deepObservers
-      }
-    }
-    if (oldValueNode && operation.type === 'delete') {
-      oldValueNode.observers = []
-      oldValueNode.deepObservers = []
-    }
-    targetNode.observers.forEach((fn) => fn(getChange()))
-    targetNode.deepObservers.forEach((fn) => fn(getChange()))
-    let parent = targetNode.parent
-    while (!!parent) {
-      parent.deepObservers.forEach((fn) => fn(getChange()))
-      parent = parent.parent
-    }
-  }
+  ObserverListeners.forEach((fn) => fn(operation))
 }
 
 export const bindTargetKeyWithCurrentReaction = (operation: IOperation) => {
@@ -142,7 +104,7 @@ export const bindTargetKeyWithCurrentReaction = (operation: IOperation) => {
   const current = ReactionStack[ReactionStack.length - 1]
   if (isUntracking()) return
   if (current) {
-    addReactionsMaptoReaction(current, addRawReactionsMap(target, key, current))
+    addReactionsMapToReaction(current, addRawReactionsMap(target, key, current))
   }
 }
 
@@ -170,7 +132,7 @@ export const suspendComputedReactions = (reaction: Reaction) => {
         reaction._context,
         reaction._property
       )
-      if (reactions.size === 0) {
+      if (reactions.length === 0) {
         disposeBindingReactions(reaction)
         reaction._dirty = true
       }
@@ -189,8 +151,8 @@ export const runReactionsFromTargetKey = (operation: IOperation) => {
     runReactions(target, key)
   }
   if (type === 'add' || type === 'delete' || type === 'clear') {
-    key = Array.isArray(target) ? 'length' : ITERATION_KEY
-    runReactions(target, key)
+    const newKey = Array.isArray(target) ? 'length' : ITERATION_KEY
+    runReactions(target, newKey)
   }
 }
 

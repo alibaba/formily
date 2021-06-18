@@ -9,7 +9,7 @@ import {
 
 test('is support observable', () => {
   const obs = observable<any>({ aa: 111 })
-  expect(isSupportObservable(obs)).toBeFalsy()
+  expect(isSupportObservable(obs)).toBeTruthy()
   expect(isSupportObservable(null)).toBeFalsy()
   expect(isSupportObservable([])).toBeTruthy()
   expect(isSupportObservable({})).toBeTruthy()

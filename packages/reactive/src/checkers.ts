@@ -15,3 +15,6 @@ export const isCollectionType = (target: any) => {
     isMap(target) || isWeakMap(target) || isSet(target) || isWeakSet(target)
   )
 }
+export const isNormalType = (target: any) => {
+  return isPlainObj(target) || isArr(target)
+}

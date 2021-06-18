@@ -24,7 +24,6 @@ export const isAnnotation = (target: any): target is Annotation => {
 }
 
 export const isSupportObservable = (target: any) => {
-  if (isObservable(target)) return false
   if (!isValid(target)) return false
   if (isArr(target)) return true
   if (isPlainObj(target)) {

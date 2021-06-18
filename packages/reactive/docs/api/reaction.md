@@ -10,6 +10,7 @@
 interface IReactionOptions<T> {
   name?: string
   equals?: (oldValue: T, newValue: T) => boolean //脏检查
+  fireImmediately?: boolean //是否第一次默认触发，绕过脏检查
 }
 
 interface reaction<T> {

@@ -26,13 +26,6 @@ export interface IChange {
   type?: OperationType
 }
 
-export interface IRawNode {
-  path?: ObservablePath
-  parent?: IRawNode
-  observers?: ObservableListener[]
-  deepObservers?: ObservableListener[]
-}
-
 export interface IVisitor<Value = any, Target = any> {
   target?: Target
   key?: PropertyKey
@@ -65,4 +58,5 @@ export type ReactionsMap = Map<PropertyKey, Set<Reaction>>
 export interface IReactionOptions<T> {
   name?: string
   equals?: (oldValue: T, newValue: T) => boolean
+  fireImmediately?: boolean
 }
