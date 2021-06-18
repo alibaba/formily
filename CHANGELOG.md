@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.0.0-beta.66(2021-06-17)
+
+### :tada: Enhancements
+
+1. [feat(designable-antd): add DesignableArrayCards](https://github.com/alibaba/formily/commit/8a7a788d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix array initialValue empty side case](https://github.com/alibaba/formily/commit/0a7b32a4) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(vue): add deep copy to decorator props (#1587)](https://github.com/alibaba/formily/commit/710f5e1b) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :blush: Other Changes
+
+1. [chore(designable-antd): improve ui](https://github.com/alibaba/formily/commit/b994bccc) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore: replace 'disgusting' with 'sophisticated' (#1574)](https://github.com/alibaba/formily/commit/d14c042e) :point_right: ( [Riting LIU](https://github.com/Riting LIU) )
+
 ## v2.0.0-beta.65(2021-06-14)
 
 ### :tada: Enhancements
@@ -1007,35 +1025,3 @@
 ### :rocket: Improve Performance
 
 1. [Fix devtools perf (#776)](https://github.com/alibaba/formily/commit/0c7272d9) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v1.0.10(2020-03-28)
-
-### :tada: Enhancements
-
-1. [feat(docs): add service worker cache (#745)](https://github.com/alibaba/formily/commit/a5879b72) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :beetle: Bug Fixes
-
-1. [fix(antd): fix error auto scroll is not work for antd4 (#750)](https://github.com/alibaba/formily/commit/9d0f2196) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(schema-renderer): fix onBlur/onFocus (#748)](https://github.com/alibaba/formily/commit/1907ed2d) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix unmount onChange trigger and x-linkages array merge (#742)](https://github.com/alibaba/formily/commit/b928dc3a) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :memo: Documents Changes
-
-1. [docs(antd-components): update import package name (#758)](https://github.com/alibaba/formily/commit/c038dbdd) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [docs: add introduction and support FormTab and support FieldState. unmountRemoveValue (#752)](https://github.com/alibaba/formily/commit/bfaa3ed7) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [doc(next/antd): array item docs optimization (#749)](https://github.com/alibaba/formily/commit/b12bce24) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [Update docs.js](https://github.com/alibaba/formily/commit/6b741096) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [Feat docs sw (#747)](https://github.com/alibaba/formily/commit/12f30057) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(docs): add service worker cache (#745)](https://github.com/alibaba/formily/commit/a5879b72) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :rocket: Improve Performance
-
-1. [perf(core): improve validate perf (#755)](https://github.com/alibaba/formily/commit/3ea64169) :point_right: ( [Janry](https://github.com/Janry) )

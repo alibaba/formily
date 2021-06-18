@@ -1,5 +1,5 @@
 import { createForm } from '../'
-import { isVoidField } from '../shared'
+import { isVoidField } from '../shared/checkers'
 import { attach } from './shared'
 
 test('getGraph/setGraph', () => {

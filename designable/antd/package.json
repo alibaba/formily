@@ -1,6 +1,6 @@
 {
   "name": "@formily/designable-antd",
-  "version": "2.0.0-beta.66",
+  "version": "2.0.0-beta.67",
   "private": true,
   "license": "MIT",
   "main": "lib",
@@ -56,10 +56,10 @@
   "dependencies": {
     "@designable/core": "^0.2.0",
     "@designable/react": "^0.2.0",
-    "@formily/antd": "2.0.0-beta.66",
-    "@formily/core": "2.0.0-beta.66",
-    "@formily/react": "2.0.0-beta.66",
-    "@formily/shared": "2.0.0-beta.66"
+    "@formily/antd": "2.0.0-beta.67",
+    "@formily/core": "2.0.0-beta.67",
+    "@formily/react": "2.0.0-beta.67",
+    "@formily/shared": "2.0.0-beta.67"
   },
   "publishConfig": {
     "access": "public"
