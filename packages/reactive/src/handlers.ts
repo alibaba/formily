@@ -165,7 +165,7 @@ export const collectionHandlers = {
 
 export const baseHandlers: ProxyHandler<any> = {
   get(target, key, receiver) {
-    const result = Reflect.get(target, key, receiver)
+    const result = target[key] // use Reflect.get is too slow
     if (typeof key === 'symbol' && wellKnownSymbols.has(key)) {
       return result
     }
@@ -198,7 +198,7 @@ export const baseHandlers: ProxyHandler<any> = {
     const hadKey = hasOwnProperty.call(target, key)
     const newValue = createObservable(target, key, value)
     const oldValue = target[key]
-    target[key] = newValue
+    target[key] = newValue // use Reflect.set is too slow
     if (!hadKey) {
       runReactionsFromTargetKey({
         target,

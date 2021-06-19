@@ -48,6 +48,9 @@ export const DesignableFormCollapse: React.FC<CollapseProps> & {
       props: {
         type: 'void',
         'x-component': 'FormCollapse.CollapsePanel',
+        'x-component-props': {
+          header: `Unnamed Title`,
+        },
       },
       children: source,
     })
@@ -72,7 +75,7 @@ export const DesignableFormCollapse: React.FC<CollapseProps> & {
             <Collapse.Panel
               {...props}
               style={{ ...props.style }}
-              header={props.header || `Unnamed Title`}
+              header={props.header}
               key={panel.id}
             >
               {React.createElement(
@@ -105,6 +108,9 @@ export const DesignableFormCollapse: React.FC<CollapseProps> & {
                 props: {
                   type: 'void',
                   'x-component': 'FormCollapse.CollapsePanel',
+                  'x-component-props': {
+                    header: `Unnamed Title`,
+                  },
                 },
               })
               node.appendNode(tabPane)

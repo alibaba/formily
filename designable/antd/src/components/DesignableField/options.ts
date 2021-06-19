@@ -71,10 +71,9 @@ const allowDropWithEmpty = (name: string, node: TreeNode, target: TreeNode) => {
 }
 
 export const createOptions = (
-  options: IDesignableFieldProps = {}
+  options: IDesignableFieldProps
 ): IDesignableFieldProps => {
   return {
-    name: 'DesignableField',
     ...options,
     dropFormItemComponents: [
       ...(options.dropFormItemComponents || []),

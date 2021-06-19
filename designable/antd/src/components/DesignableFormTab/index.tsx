@@ -38,6 +38,9 @@ export const DesignableFormTab: React.FC<TabsProps> & {
         props: {
           type: 'void',
           'x-component': 'FormTab.TabPane',
+          'x-component-props': {
+            tab: `Unnamed Title`,
+          },
         },
         children: source,
       }),
@@ -60,7 +63,7 @@ export const DesignableFormTab: React.FC<TabsProps> & {
             <Tabs.TabPane
               {...props}
               style={{ ...props.style }}
-              tab={props.tab || `Unnamed Title`}
+              tab={props.tab}
               key={tab.id}
             >
               {React.createElement(
@@ -93,6 +96,9 @@ export const DesignableFormTab: React.FC<TabsProps> & {
                 props: {
                   type: 'void',
                   'x-component': 'FormTab.TabPane',
+                  'x-component-props': {
+                    tab: `Unnamed Title`,
+                  },
                 },
               })
               node.appendNode(tabPane)

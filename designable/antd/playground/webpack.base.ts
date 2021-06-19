@@ -89,6 +89,10 @@ export default {
         ],
       },
       {
+        test: /\.(woff|woff2|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: ['url-loader'],
+      },
+      {
         test: /\.html?$/,
         loader: require.resolve('file-loader'),
         options: {

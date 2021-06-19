@@ -15,6 +15,9 @@ GlobalDragSource.appendSourcesByGroup('arrays', [
       type: 'array',
       'x-decorator': 'FormItem',
       'x-component': 'ArrayCards',
+      'x-component-props': {
+        title: `Title`,
+      },
     },
   },
 ])

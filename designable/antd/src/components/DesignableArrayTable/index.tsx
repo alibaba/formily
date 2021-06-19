@@ -28,6 +28,9 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
         props: {
           type: 'void',
           'x-component': 'ArrayTable.Column',
+          'x-component-props': {
+            title: `Title`,
+          },
         },
         children: [
           {
@@ -44,6 +47,9 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
         props: {
           type: 'void',
           'x-component': 'ArrayTable.Column',
+          'x-component-props': {
+            title: `Title`,
+          },
         },
         children: [
           {
@@ -60,6 +66,9 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
         props: {
           type: 'void',
           'x-component': 'ArrayTable.Column',
+          'x-component-props': {
+            title: `Title`,
+          },
         },
         children: source.map((node) => {
           node.props.title = undefined
@@ -72,6 +81,9 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
         props: {
           type: 'void',
           'x-component': 'ArrayTable.Column',
+          'x-component-props': {
+            title: `Title`,
+          },
         },
         children: [
           {
@@ -180,7 +192,6 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
               })
               return (
                 <Table.Column
-                  title="Title"
                   {...node.props['x-component-props']}
                   dataIndex={node.id}
                   className={`data-id:${node.id}`}
@@ -222,6 +233,9 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                   props: {
                     type: 'void',
                     'x-component': 'ArrayTable.Column',
+                    'x-component-props': {
+                      title: `Title`,
+                    },
                   },
                   children: [
                     {
@@ -253,6 +267,9 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                   props: {
                     type: 'void',
                     'x-component': 'ArrayTable.Column',
+                    'x-component-props': {
+                      title: `Title`,
+                    },
                   },
                   children: [
                     {
@@ -297,6 +314,9 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                   props: {
                     type: 'void',
                     'x-component': 'ArrayTable.Column',
+                    'x-component-props': {
+                      title: `Title`,
+                    },
                   },
                 })
                 if (operationNpde) {
@@ -331,6 +351,9 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                     props: {
                       type: 'void',
                       'x-component': 'ArrayTable.Column',
+                      'x-component-props': {
+                        title: `Title`,
+                      },
                     },
                     children: [
                       {

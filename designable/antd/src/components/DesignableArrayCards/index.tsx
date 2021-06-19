@@ -107,7 +107,7 @@ export const DesignableArrayCards: React.FC<CardProps> = observer((props) => {
                 {indexes.map((node, key) => (
                   <TreeNodeWidget key={key} node={node} />
                 ))}
-                {props.title || 'Title'}
+                {props.title}
               </span>
             }
             className={cls('ant-formily-array-cards-item', props.className)}

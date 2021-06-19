@@ -22,7 +22,7 @@ import * as defaultSchemas from '../../schemas'
 
 Schema.silent()
 
-export const createDesignableField = (options: IDesignableFieldProps = {}) => {
+export const createDesignableField = (options: IDesignableFieldProps) => {
   const realOptions = createOptions(options)
 
   const tabs = {}
@@ -176,7 +176,6 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
           'x-index': 5,
         },
         enum: {
-          type: 'array',
           'x-decorator': 'FormItem',
           //  'x-component': 'DataSourceSetter',
           'x-index': 6,
@@ -215,8 +214,10 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
     return true
   }
 
+  if (!realOptions.registryName) throw new Error('Can not found registryName')
+
   GlobalRegistry.registerDesignerProps({
-    [realOptions.name]: (node) => {
+    [realOptions.registryName]: (node) => {
       const componentName = node.props?.['x-component']
       const message = GlobalRegistry.getDesignerMessage(
         `components.${componentName}`

@@ -1,43 +1,43 @@
 import { ISchema } from '@formily/react'
 
 export const CSSStyle: ISchema = {
-  type: 'object',
+  type: 'void',
   properties: {
-    width: {
+    'style.width': {
       type: 'string',
       'x-decorator': 'FormItem',
       'x-component': 'SizeInput',
     },
-    height: {
+    'style.height': {
       type: 'string',
       'x-decorator': 'FormItem',
       'x-component': 'SizeInput',
     },
-    display: {
+    'style.display': {
       'x-component': 'DisplayStyleSetter',
     },
-    background: {
+    'style.background': {
       'x-component': 'BackgroundStyleSetter',
     },
-    boxShadow: {
+    'style.boxShadow': {
       'x-component': 'BoxShadowStyleSetter',
     },
-    font: {
+    'style.font': {
       'x-component': 'FontStyleSetter',
     },
-    margin: {
+    'style.margin': {
       'x-component': 'BoxStyleSetter',
     },
-    padding: {
+    'style.padding': {
       'x-component': 'BoxStyleSetter',
     },
-    borderRadius: {
+    'style.borderRadius': {
       'x-component': 'BorderRadiusStyleSetter',
     },
-    border: {
+    'style.border': {
       'x-component': 'BorderStyleSetter',
     },
-    opacity: {
+    'style.opacity': {
       'x-decorator': 'FormItem',
       'x-component': 'Slider',
       'x-component-props': {

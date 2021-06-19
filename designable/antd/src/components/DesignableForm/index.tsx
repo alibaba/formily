@@ -8,13 +8,12 @@ import { Form as FormPropsSchema } from '../../schemas'
 import './styles.less'
 
 export interface IDesignableFormProps extends IDesignerProps {
-  name?: string
+  registryName: string
   component?: React.JSXElementConstructor<unknown>
 }
 
-export const createDesignableForm = (options: IDesignableFormProps = {}) => {
+export const createDesignableForm = (options: IDesignableFormProps) => {
   const realOptions: IDesignableFormProps = {
-    name: 'DesignableForm',
     component: Form,
     droppable: true,
     draggable: false,
@@ -50,10 +49,12 @@ export const createDesignableForm = (options: IDesignableFormProps = {}) => {
     )
   })
 
-  realOptions.title = `components.${realOptions.name}`
+  if (!realOptions.registryName) throw new Error('Can not found registryName')
+
+  realOptions.title = `components.${realOptions.registryName}`
 
   GlobalRegistry.registerDesignerProps({
-    [realOptions.name]: realOptions,
+    [realOptions.registryName]: realOptions,
   })
 
   return DesignableForm

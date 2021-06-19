@@ -1162,15 +1162,15 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.0.tgz#c3c5ae543c897caa9c2a68630bed355be5f9990f"
   integrity sha512-JZButFdZ1+/xAfpguQHoabIXkcqRRKpMrWKBkpEZZyxfY9C1DpADFB8PEqGSTeFr135SaTRfKqGKx5xSCLI7ZQ==
 
-"@designable/core@0.2.0", "@designable/core@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.2.0.tgz#dca2e8e32876f9e93cd61a4982795a8661f76dae"
-  integrity sha512-RRWlm2BH6AQ4Lltwu88ACzp/GOfuqM0/0CrCTTD0efoeE0Zw+dlaMEMUGsMplNPI0njQoNJzEdFk+r4iByJKPQ==
+"@designable/core@0.3.0-beta.12", "@designable/core@^0.3.0-beta.12":
+  version "0.3.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.3.0-beta.12.tgz#9e7698da90dde11ea01a1ea42d59105840cebded"
+  integrity sha512-0YG/bZzCHlH9DgcDPdDzu7t23zIYpetQmH9Ofpr3+EZrxLH5aR8iIm3D59y8VUQTi9lk+A66AzeUPhqA39BUAg==
   dependencies:
-    "@designable/shared" "0.2.0"
-    "@formily/json-schema" "^2.0.0-beta.50"
-    "@formily/path" "^2.0.0-beta.50"
-    "@formily/reactive" "^2.0.0-beta.50"
+    "@designable/shared" "0.3.0-beta.12"
+    "@formily/json-schema" "^2.0.0-beta.68"
+    "@formily/path" "^2.0.0-beta.68"
+    "@formily/reactive" "^2.0.0-beta.68"
     "@juggle/resize-observer" "^3.3.1"
 
 "@designable/core@^0.1.10":
@@ -1183,30 +1183,40 @@
     "@formily/reactive" "^2.0.0-beta.50"
     "@juggle/resize-observer" "^3.3.1"
 
-"@designable/react-settings-form@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@designable/react-settings-form/-/react-settings-form-0.2.0.tgz#5acc698c8729c2e0c582855cb9e5b62130355ab8"
-  integrity sha512-2gMfq6LfMroNKDYti6+OpcHOWdhErm4i97YFzXQ2h4DtY5IJjJjFZ5MnBMVyMKMnP2g9Rxt9Ng+HcNYn5IJLQg==
+"@designable/formily@^0.3.0-beta.12":
+  version "0.3.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@designable/formily/-/formily-0.3.0-beta.12.tgz#5ee81af3aa451fd01d697e73c8d5db1f9a1d085d"
+  integrity sha512-Z42/6L+FZ9i5JTVXvBXLc+n5MXYialf+3eU0SCLPM1s7d4A8fuyVoekbXzTwhPMXz2z7WEFyfanaBrdtc+fMJQ==
   dependencies:
-    "@designable/core" "0.2.0"
-    "@designable/react" "0.2.0"
-    "@designable/shared" "0.2.0"
-    "@formily/antd" "^2.0.0-beta.50"
-    "@formily/core" "^2.0.0-beta.50"
-    "@formily/react" "^2.0.0-beta.50"
-    "@formily/reactive" "^2.0.0-beta.50"
-    "@formily/reactive-react" "^2.0.0-beta.50"
+    "@designable/core" "0.3.0-beta.12"
+    "@designable/shared" "0.3.0-beta.12"
+    "@formily/core" "^2.0.0-beta.68"
+    "@formily/json-schema" "^2.0.0-beta.68"
+
+"@designable/react-settings-form@^0.3.0-beta.12":
+  version "0.3.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@designable/react-settings-form/-/react-settings-form-0.3.0-beta.12.tgz#91e0e4bbb3120c2f4a23b304335d3e5f35a58e78"
+  integrity sha512-fJIxhyXRh8De7f67XxDCgR4Q+3RTAwC3xM20DHE/fgTiIQQqc4whz3A0LV6N2TIOPU0jN8KxHx+lxOlefap25Q==
+  dependencies:
+    "@designable/core" "0.3.0-beta.12"
+    "@designable/react" "0.3.0-beta.12"
+    "@designable/shared" "0.3.0-beta.12"
+    "@formily/antd" "^2.0.0-beta.68"
+    "@formily/core" "^2.0.0-beta.68"
+    "@formily/react" "^2.0.0-beta.68"
+    "@formily/reactive" "^2.0.0-beta.68"
+    "@formily/reactive-react" "^2.0.0-beta.68"
     react-color "^2.19.3"
 
-"@designable/react@0.2.0", "@designable/react@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@designable/react/-/react-0.2.0.tgz#8ad67ee2cd9182dc3fc1284f45638c07f2ee14ae"
-  integrity sha512-q3WkWJbUcrCQwILRzEtfdBhBrdCLDRBu6VuYR3xU6dQbVui1cVMVB/EzwYbVdssRZhiFbNAgkptzZi0p4VESvg==
+"@designable/react@0.3.0-beta.12", "@designable/react@^0.3.0-beta.12":
+  version "0.3.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@designable/react/-/react-0.3.0-beta.12.tgz#cd261465adbc3adabb88883bbb7d79349a3e787c"
+  integrity sha512-KDXXDpU2fWRWa1obMybCHZxfGhq0bsR/0Sd46Ycxpae2M49fw1ZEUgcvSkw8lXYnu2GTaHYfgfTwnE65GJfURQ==
   dependencies:
-    "@designable/core" "0.2.0"
-    "@designable/shared" "0.2.0"
-    "@formily/reactive" "^2.0.0-beta.50"
-    "@formily/reactive-react" "^2.0.0-beta.50"
+    "@designable/core" "0.3.0-beta.12"
+    "@designable/shared" "0.3.0-beta.12"
+    "@formily/reactive" "^2.0.0-beta.68"
+    "@formily/reactive-react" "^2.0.0-beta.68"
     "@juggle/resize-observer" "^3.3.1"
 
 "@designable/shared@0.1.10":
@@ -1216,10 +1226,10 @@
   dependencies:
     requestidlecallback "^0.3.0"
 
-"@designable/shared@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@designable/shared/-/shared-0.2.0.tgz#2d0d498ce0ed8aeb1143b10dd955d5ab2dd4f539"
-  integrity sha512-7X+qW1F/N8IBx3QkVYniRYVBW1qmhOY+x2JsM39Cr/VmJ/lfIRcDEYfXz0GqcuKJHyio/b0CeUTQc7TDy3Un1A==
+"@designable/shared@0.3.0-beta.12":
+  version "0.3.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@designable/shared/-/shared-0.3.0-beta.12.tgz#003c5ac64426d4d81895b9dba74897eb37a860f3"
+  integrity sha512-zN7X0quhakaUShWn7gx2aJp1ZE6r9GZdmRseW717CtNP5Ni8iv4NuiyQNLilfWM8pliEOcwb+Wi2pk8faXwVQw==
   dependencies:
     requestidlecallback "^0.3.0"
 
@@ -12437,6 +12447,18 @@ moment@^2.21.0, moment@^2.24.0, moment@^2.25.3:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
+monaco-editor-webpack-plugin@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/monaco-editor-webpack-plugin/-/monaco-editor-webpack-plugin-4.0.0.tgz#95be3f48f4220999b909266a9997727f0deab947"
+  integrity sha512-4BT9XDRQXraMQjxEUjR+uuubRe3RIPkvVoGw8zwWG++s7wq6TAiXaSOMdkdS9TrjCREgSnygCOlVzY6MS8RPuA==
+  dependencies:
+    loader-utils "^2.0.0"
+
+monaco-editor@*:
+  version "0.25.2"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.25.2.tgz#119e2b15bbd968a1a99c03cac9c329316d7c37e9"
+  integrity sha512-5iylzSJevCnzJn9UVsW8yOZ3yHjmAs4TfvH3zsbftKiFKmHG0xirGN6DK9Kk04VSWxYCZZAIafYJoNJJMAU1KA==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -15408,6 +15430,14 @@ react-mde@^11.5.0:
   version "11.5.0"
   resolved "https://registry.yarnpkg.com/react-mde/-/react-mde-11.5.0.tgz#3e81a505071aa80287fb23a1c0ce5e8b34c82055"
   integrity sha512-CH/VK6d+tpVjJ8rTXfh1dDt6GWedTgCU0668p8toqhAc3vy0Lu872O2RKYDSpkUrlbHI08fjUPTl++nExp6gag==
+
+react-monaco-editor@^0.43.0:
+  version "0.43.0"
+  resolved "https://registry.yarnpkg.com/react-monaco-editor/-/react-monaco-editor-0.43.0.tgz#495578470db7b27ab306af813b31f206a6bf9d1c"
+  integrity sha512-2PXSDwOzjUDlwdsK8psrmezSB2lPnjLQ/SRNwqoRF2+TAB2n4Q+Bs1wGlWOZbU8WI7s6Wnni0+3PdT9nSPtzRA==
+  dependencies:
+    monaco-editor "*"
+    prop-types "^15.7.2"
 
 react-refresh@0.9.0:
   version "0.9.0"
