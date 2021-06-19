@@ -400,9 +400,9 @@ export interface IFieldStateSetter {
 }
 
 export interface IFieldStateGetter {
-  <Getter extends (state: IFieldState) => any>(
+  <Getter extends (state: IGeneralFieldState) => any>(
     pattern: FieldMatchPattern,
     getter: Getter
   ): ReturnType<Getter>
-  (pattern: FieldMatchPattern): IFieldState
+  (pattern: FieldMatchPattern): IGeneralFieldState
 }
