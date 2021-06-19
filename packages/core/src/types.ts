@@ -397,7 +397,6 @@ export type FieldMatchPattern = FormPathPattern | Query | GeneralField
 export interface IFieldStateSetter {
   (pattern: FieldMatchPattern, setter: (state: IFieldState) => void): void
   (pattern: FieldMatchPattern, setter: Partial<IFieldState>): void
-  (pattern: FieldMatchPattern): void
 }
 
 export interface IFieldStateGetter {
