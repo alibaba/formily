@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import MonacoEditor from 'react-monaco-editor'
+import monacoEditor from 'monaco-editor/esm/vs/editor/editor.api'
 import { transformToSchema, transformToTreeNode } from '@designable/formily'
 import { TreeNode, ITreeNode } from '@designable/core'
 import { notification, Button } from 'antd'
@@ -20,6 +21,8 @@ export const SchemaEditorWidget: React.FC<ISchemaEditorWidgetProps> = (
   const [value, setValue] = useState('')
   const [saved, setSaved] = useState(false)
   const valueRef = useRef('')
+  const containerRef = useRef<HTMLDivElement>()
+  const editorRef = useRef<monacoEditor.editor.IStandaloneCodeEditor>()
   const propsValue = JSON.stringify(
     transformToSchema(props.tree, Parser),
     null,
@@ -44,10 +47,24 @@ export const SchemaEditorWidget: React.FC<ISchemaEditorWidgetProps> = (
     setValue(propsValue)
   }, [propsValue])
 
+  useEffect(() => {
+    if (containerRef.current) {
+      const observer = new ResizeObserver(() => {
+        editorRef.current.layout()
+      })
+      observer.observe(containerRef.current)
+      return () => {
+        observer.unobserve(containerRef.current)
+        observer.disconnect()
+      }
+    }
+  }, [])
+
   valueRef.current = value
 
   return (
     <div
+      ref={containerRef}
       style={{
         height: '100%',
         overflow: 'hidden',
@@ -66,6 +83,7 @@ export const SchemaEditorWidget: React.FC<ISchemaEditorWidgetProps> = (
               onSave()
             }
           )
+          editorRef.current = editor
         }}
         onChange={(value: string) => {
           setValue(value)
