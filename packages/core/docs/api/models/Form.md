@@ -578,8 +578,8 @@ IFormState 参考 [IFormState](#iformstate)
 
 ```ts
 interface setFieldState {
-  (pattern: FormPathPattern, state: IGeneralFieldState): void
-  (callback: (state: IGeneralFieldState) => void): void
+  (pattern: FormPathPattern, setter: (state: IGeneralFieldState) => void): void
+  (pattern: FormPathPattern, setter: IGeneralFieldState): void
 }
 ```
 
