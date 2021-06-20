@@ -87,30 +87,27 @@ export const FormItem: ISchema = {
       type: 'string',
       enum: ['icon', 'text', ''],
       'x-decorator': 'FormItem',
-      'x-component': 'Radio.Group',
+      'x-component': 'Select',
       'x-component-props': {
         defaultValue: 'icon',
-        optionType: 'button',
       },
     },
     labelAlign: {
       type: 'string',
       enum: ['left', 'right', ''],
       'x-decorator': 'FormItem',
-      'x-component': 'Radio.Group',
+      'x-component': 'Select',
       'x-component-props': {
         defaultValue: 'right',
-        optionType: 'button',
       },
     },
     wrapperAlign: {
       type: 'string',
       enum: ['left', 'right', ''],
       'x-decorator': 'FormItem',
-      'x-component': 'Radio.Group',
+      'x-component': 'Select',
       'x-component-props': {
         defaultValue: 'left',
-        optionType: 'button',
       },
     },
     labelWrap: {
