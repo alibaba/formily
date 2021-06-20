@@ -16,8 +16,14 @@ const FormLayoutLocale = {
   labelCol: 'Label Col',
   wrapperCol: 'Wrapper Col',
   colon: 'Colon',
-  labelAlign: { title: 'Label Align', dataSource: ['@Left', '@Right'] },
-  wrapperAlign: { title: 'Wrapper Align', dataSource: ['@Left', '@Right'] },
+  labelAlign: {
+    title: 'Label Align',
+    dataSource: ['Left', 'Right', 'Inherit'],
+  },
+  wrapperAlign: {
+    title: 'Wrapper Align',
+    dataSource: ['Left', 'Right', 'Inherit'],
+  },
   labelWrap: 'Label Wrap',
   wrapperWrap: 'Wrapper Wrap',
   labelWidth: 'Label Width',
@@ -26,16 +32,19 @@ const FormLayoutLocale = {
   inset: 'Inset',
   shallow: 'Shallow',
   bordered: 'Bordered',
-  size: { title: 'Size', dataSource: ['@FontSize:Large', '@Text:Small', '--'] },
+  size: { title: 'Size', dataSource: ['Large', 'Small', 'Default', 'Inherit'] },
   layout: {
     title: 'Layout',
-    dataSource: ['@AxisY:Vertical', '@AxisX:Horizontal', '@DisplayInline'],
+    dataSource: ['Vertical', 'Horizontal', 'Inline', 'Inherit'],
   },
   feedbackLayout: {
     title: 'Feedback Layout',
-    dataSource: ['Loose', 'Terse', 'Popup', 'None'],
+    dataSource: ['Loose', 'Terse', 'Popup', 'None', 'Inherit'],
   },
-  tooltipLayout: { title: 'Tooltip Layout', dataSource: ['Icon', 'Text'] },
+  tooltipLayout: {
+    title: 'Tooltip Layout',
+    dataSource: ['Icon', 'Text', 'Inherit'],
+  },
 }
 
 const InputLocale = {
@@ -341,11 +350,11 @@ const FieldLocale = {
     title: 'Display State',
     tooltip:
       'When the display value is "None", the data will be "Hidden" and deleted. When the display value is hidden, only the UI will be hidden',
-    dataSource: ['Visible', 'Hidden', 'None'],
+    dataSource: ['Visible', 'Hidden', 'None', 'Inherit'],
   },
   'x-pattern': {
     title: 'UI Pattern',
-    dataSource: ['Editable', 'Disabled', 'ReadOnly', 'ReadPretty'],
+    dataSource: ['Editable', 'Disabled', 'ReadOnly', 'ReadPretty', 'Inherit'],
   },
   'x-validator': 'Validator',
   'x-reactions': 'Reactions',

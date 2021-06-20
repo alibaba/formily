@@ -16,8 +16,8 @@ const FormLayoutLocale = {
   labelCol: '标签网格宽度',
   wrapperCol: '组件网格宽度',
   colon: '是否有冒号',
-  labelAlign: { title: '标签对齐', dataSource: ['左对齐', '右对齐'] },
-  wrapperAlign: { title: '组件对齐', dataSource: ['左对齐', '右对齐'] },
+  labelAlign: { title: '标签对齐', dataSource: ['左对齐', '右对齐', '继承'] },
+  wrapperAlign: { title: '组件对齐', dataSource: ['左对齐', '右对齐', '继承'] },
   labelWrap: '标签换行',
   wrapperWrap: '组件换行',
   labelWidth: '标签宽度',
@@ -26,13 +26,13 @@ const FormLayoutLocale = {
   inset: '内联布局',
   shallow: '是否浅传递',
   bordered: '是否有边框',
-  size: { title: '尺寸', dataSource: ['大', '小', '默认'] },
-  layout: { title: '布局', dataSource: ['垂直', '水平', '内联'] },
+  size: { title: '尺寸', dataSource: ['大', '小', '默认', '继承'] },
+  layout: { title: '布局', dataSource: ['垂直', '水平', '内联', '继承'] },
   feedbackLayout: {
     title: '反馈布局',
-    dataSource: ['宽松', '紧凑', '弹层', '无'],
+    dataSource: ['宽松', '紧凑', '弹层', '无', '继承'],
   },
-  tooltipLayout: { title: '提示布局', dataSource: ['图标', '文本'] },
+  tooltipLayout: { title: '提示布局', dataSource: ['图标', '文本', '继承'] },
 }
 
 const InputLocale = {
@@ -343,11 +343,11 @@ const FieldLocale = {
   'x-display': {
     title: '展示状态',
     tooltip: '半隐藏只会隐藏UI，全隐藏会删除数据',
-    dataSource: ['显示', '半隐藏', '全隐藏'],
+    dataSource: ['显示', '半隐藏', '全隐藏', '继承'],
   },
   'x-pattern': {
     title: 'UI形态',
-    dataSource: ['可编辑', '禁用', '只读', '阅读'],
+    dataSource: ['可编辑', '禁用', '只读', '阅读', '继承'],
   },
   'x-validator': '校验规则',
   'x-reactions': '响应器规则',

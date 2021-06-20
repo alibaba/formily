@@ -103,7 +103,7 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
         },
         'x-display': {
           type: 'string',
-          enum: ['visible', 'hidden', 'none'],
+          enum: ['visible', 'hidden', 'none', ''],
           'x-decorator': 'FormItem',
           'x-component': 'Select',
           'x-component-props': {
@@ -113,7 +113,7 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
         },
         'x-pattern': {
           type: 'string',
-          enum: ['editable', 'disabled', 'readOnly', 'readPretty'],
+          enum: ['editable', 'disabled', 'readOnly', 'readPretty', ''],
           'x-decorator': 'FormItem',
           'x-component': 'Select',
           'x-component-props': {

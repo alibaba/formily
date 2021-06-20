@@ -16,12 +16,11 @@ export const FormTab: ISchema = {
     },
     size: {
       type: 'string',
-      enum: ['large', 'small', 'default'],
+      enum: ['large', 'small', 'default', ''],
       'x-decorator': 'FormItem',
-      'x-component': 'Radio.Group',
+      'x-component': 'Select',
       'x-component-props': {
         defaultValue: 'default',
-        optionType: 'button',
       },
     },
     type: {

@@ -352,13 +352,13 @@ export class Field<
 
   get display(): FieldDisplayTypes {
     const parentDisplay = this.parent?.display
-    if (isValid(this.selfDisplay)) return this.selfDisplay
+    if (this.selfDisplay) return this.selfDisplay
     return parentDisplay || this.form.display || 'visible'
   }
 
   get pattern(): FieldPatternTypes {
     const parentPattern = this.parent?.pattern
-    if (isValid(this.selfPattern)) return this.selfPattern
+    if (this.selfPattern) return this.selfPattern
     return parentPattern || this.form.pattern || 'editable'
   }
 

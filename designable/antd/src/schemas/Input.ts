@@ -48,12 +48,11 @@ export const Input: ISchema = {
     },
     size: {
       type: 'string',
-      enum: ['large', 'small', 'middle'],
+      enum: ['large', 'small', 'middle', ''],
       'x-decorator': 'FormItem',
-      'x-component': 'Radio.Group',
+      'x-component': 'Select',
       'x-component-props': {
         defaultValue: 'middle',
-        optionType: 'button',
       },
     },
   },
