@@ -64,7 +64,7 @@ const usePanels = () => {
 
 const createFormCollapse = (defaultActiveKeys?: ActiveKeys) => {
   const formCollapse = model({
-    activeKeys: defaultActiveKeys || [],
+    activeKeys: defaultActiveKeys,
     setActiveKeys(keys: ActiveKeys) {
       formCollapse.activeKeys = keys
     },
@@ -110,7 +110,13 @@ export const FormCollapse: ComposedFormCollapse = observer(
     const _formCollapse = useMemo(() => {
       return formCollapse ? formCollapse : createFormCollapse()
     }, [])
-    const expandedKeys = props.expandedKeys || _formCollapse?.activeKeys
+
+    const takeExpandedKeys = () => {
+      if (props.expandedKeys) return props.expandedKeys
+      if (_formCollapse?.activeKeys) return _formCollapse?.activeKeys
+      if (props.accordion) return panels[0]?.name
+      return panels.map((item) => item.name)
+    }
 
     const badgedHeader = (key: SchemaKey, props: any) => {
       const errors = field.form.queryFeedbacks({
@@ -130,10 +136,10 @@ export const FormCollapse: ComposedFormCollapse = observer(
       <Collapse
         {...props}
         className={cls(prefixCls, props.className)}
-        expandedKeys={expandedKeys as any}
+        expandedKeys={takeExpandedKeys()}
         onExpand={(keys) => {
           props?.onExpand?.(keys)
-          formCollapse?.setActiveKeys?.(keys)
+          _formCollapse?.setActiveKeys?.(keys)
         }}
       >
         {panels.map(({ props, schema, name }, index) => (
