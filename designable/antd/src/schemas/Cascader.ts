@@ -67,10 +67,9 @@ export const Cascader: ISchema = {
       type: 'string',
       enum: ['large', 'small', 'middle', ''],
       'x-decorator': 'FormItem',
-      'x-component': 'Radio.Group',
+      'x-component': 'Select',
       'x-component-props': {
         defaultValue: 'middle',
-        optionType: 'button',
       },
     },
   },

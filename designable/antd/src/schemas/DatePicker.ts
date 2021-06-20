@@ -50,9 +50,9 @@ const CommonDatePickerAPI = {
     type: 'string',
     enum: ['large', 'small', 'middle', ''],
     'x-decorator': 'FormItem',
-    'x-component': 'Radio.Group',
+    'x-component': 'Select',
     'x-component-props': {
-      optionType: 'button',
+      defaultValue: 'middle',
     },
   },
   format: {

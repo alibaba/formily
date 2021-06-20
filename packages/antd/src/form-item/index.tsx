@@ -154,16 +154,19 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   let enableCol = false
   if (labelWidth || wrapperWidth) {
     if (labelWidth) {
-      labelStyle.width = labelWidth
-      labelStyle.maxWidth = labelWidth
+      labelStyle.width = labelWidth === 'auto' ? undefined : labelWidth
+      labelStyle.maxWidth = labelWidth === 'auto' ? undefined : labelWidth
     }
     if (wrapperWidth) {
-      wrapperStyle.width = wrapperWidth
-      wrapperStyle.maxWidth = wrapperWidth
+      wrapperStyle.width = wrapperWidth === 'auto' ? undefined : wrapperWidth
+      wrapperStyle.maxWidth = wrapperWidth === 'auto' ? undefined : wrapperWidth
     }
     // 栅格模式
-  } else if (labelCol || wrapperCol) {
-    enableCol = true
+  }
+  if (labelCol || wrapperCol) {
+    if (!labelStyle.width && !wrapperStyle.width) {
+      enableCol = true
+    }
   }
 
   const prefixCls = usePrefixCls('formily-item', props)

@@ -67,10 +67,9 @@ export const FormItem: ISchema = {
       type: 'string',
       enum: ['large', 'small', 'default', ''],
       'x-decorator': 'FormItem',
-      'x-component': 'Radio.Group',
+      'x-component': 'Select',
       'x-component-props': {
         defaultValue: 'default',
-        optionType: 'button',
       },
     },
     layout: {
