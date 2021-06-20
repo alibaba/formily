@@ -18,7 +18,7 @@ import {
   ComponentTreeWidget,
 } from '@designable/react'
 import { SettingsForm } from '@designable/react-settings-form'
-import { createDesigner } from '@designable/core'
+import { createDesigner, GlobalRegistry } from '@designable/core'
 import { createDesignableField, createDesignableForm } from '../src'
 import {
   LogoWidget,
@@ -27,6 +27,23 @@ import {
   SchemaEditorWidget,
 } from './widgets'
 import 'antd/dist/antd.less'
+
+GlobalRegistry.registerDesignerLocales({
+  'zh-CN': {
+    sources: {
+      Inputs: '输入控件',
+      Layouts: '布局组件',
+      Arrays: '自增组件',
+    },
+  },
+  'en-US': {
+    sources: {
+      Inputs: 'Inputs',
+      Layouts: 'Layouts',
+      Arrays: 'Arrays',
+    },
+  },
+})
 
 const Root = createDesignableForm({
   registryName: 'Root',
@@ -44,15 +61,15 @@ const App = () => {
       <MainPanel logo={<LogoWidget />} actions={<ActionsWidget />}>
         <CompositePanel>
           <CompositePanel.Item
-            title="组件"
+            title="panels.Component"
             icon={<IconWidget infer="Component" />}
           >
-            <DragSourceWidget title="输入组件" name="inputs" />
-            <DragSourceWidget title="布局组件" name="layouts" />
-            <DragSourceWidget title="自增列表" name="arrays" />
+            <DragSourceWidget title="sources.Inputs" name="inputs" />
+            <DragSourceWidget title="sources.Layouts" name="layouts" />
+            <DragSourceWidget title="sources.Arrays" name="arrays" />
           </CompositePanel.Item>
           <CompositePanel.Item
-            title="大纲树"
+            title="panels.OutlinedTree"
             icon={<IconWidget infer="Outline" />}
           >
             <OutlineTreeWidget />
@@ -86,7 +103,7 @@ const App = () => {
             </ViewportPanel>
           </WorkspacePanel>
         </Workspace>
-        <SettingsPanel title="属性配置">
+        <SettingsPanel title="panels.PropertySettings">
           <SettingsForm uploadAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" />
         </SettingsPanel>
       </MainPanel>

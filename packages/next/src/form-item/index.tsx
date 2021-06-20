@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useLayoutEffect } from 'react'
 import cls from 'classnames'
 import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
@@ -79,6 +79,34 @@ const useFormItemLayout = (props: IFormItemProps) => {
   }
 }
 
+function useOverflow<
+  Container extends HTMLElement,
+  Content extends HTMLElement
+>() {
+  const [overflow, setOverflow] = useState(false)
+  const containerRef = useRef<Container>()
+  const contentRef = useRef<Content>()
+
+  useLayoutEffect(() => {
+    if (containerRef.current && contentRef.current) {
+      if (
+        contentRef.current.getBoundingClientRect().width >
+        containerRef.current.getBoundingClientRect().width
+      ) {
+        if (!overflow) setOverflow(true)
+      } else {
+        if (overflow) setOverflow(false)
+      }
+    }
+  }, [])
+
+  return {
+    overflow,
+    containerRef,
+    contentRef,
+  }
+}
+
 const ICON_MAP = {
   error: <CloseCircleOutlined />,
   success: <CheckCircleOutlined />,
@@ -90,6 +118,8 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const [active, setActice] = useState(false)
   const gridSpan = useGridSpan(props.gridSpan)
   const formLayout = useFormItemLayout(others)
+  const { containerRef, contentRef, overflow } =
+    useOverflow<HTMLDivElement, HTMLLabelElement>()
   const {
     label,
     style,
@@ -160,17 +190,73 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       children
     )
 
-  const labelChildren = (
-    <div className={cls(`${prefixCls}-label-content`)}>
-      {asterisk && <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>}
-      <label>{label}</label>
-    </div>
-  )
-
   const gridStyles: React.CSSProperties = {}
 
   if (gridSpan) {
     gridStyles.gridColumnStart = `span ${gridSpan}`
+  }
+
+  const getOverflowTooltip = () => {
+    if (overflow) {
+      return (
+        <div>
+          <div>{label}</div>
+          <div>{tooltip}</div>
+        </div>
+      )
+    }
+    return tooltip
+  }
+
+  const renderLabelText = () => {
+    const labelChildren = (
+      <div className={cls(`${prefixCls}-label-content`)} ref={containerRef}>
+        {asterisk && (
+          <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>
+        )}
+        <label ref={contentRef}>{label}</label>
+      </div>
+    )
+
+    if ((tooltipLayout === 'text' && tooltip) || overflow) {
+      return (
+        <Balloon.Tooltip align="t" trigger={labelChildren}>
+          {getOverflowTooltip()}
+        </Balloon.Tooltip>
+      )
+    }
+    return labelChildren
+  }
+
+  const renderTooltipIcon = () => {
+    if (tooltip && tooltipLayout === 'icon' && !overflow) {
+      return (
+        <span className={cls(`${prefixCls}-label-tooltip-icon`)}>
+          <Balloon.Tooltip align="t" trigger={<QuestionCircleOutlined />}>
+            {tooltip}
+          </Balloon.Tooltip>
+        </span>
+      )
+    }
+  }
+
+  const renderLabel = () => {
+    if (!label) return null
+    return (
+      <div
+        className={cls({
+          [`${prefixCls}-label`]: true,
+          [`${prefixCls}-label-tooltip`]:
+            (tooltip && tooltipLayout === 'text') || overflow,
+          [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
+        })}
+        style={labelStyle}
+      >
+        {renderLabelText()}
+        {renderTooltipIcon()}
+        <span className={cls(`${prefixCls}-colon`)}>{colon ? ':' : ''}</span>
+      </div>
+    )
   }
 
   return (
@@ -211,37 +297,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         }
       }}
     >
-      {label && (
-        <div
-          className={cls({
-            [`${prefixCls}-label`]: true,
-            [`${prefixCls}-label-tooltip`]: tooltip && tooltipLayout === 'text',
-            [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
-          })}
-          style={labelStyle}
-        >
-          {tooltipLayout === 'text' ? (
-            <Balloon.Tooltip align="t" trigger={labelChildren}>
-              {tooltip}
-            </Balloon.Tooltip>
-          ) : (
-            labelChildren
-          )}
-          {tooltip && tooltipLayout === 'icon' && (
-            <span className={cls(`${prefixCls}-label-tooltip-icon`)}>
-              <Balloon.Tooltip align="t" trigger={<QuestionCircleOutlined />}>
-                {tooltip}
-              </Balloon.Tooltip>
-            </span>
-          )}
-          {colon && (
-            <span className={cls(`${prefixCls}-colon`)}>
-              {colon ? ':' : ''}
-            </span>
-          )}
-        </div>
-      )}
-
+      {renderLabel()}
       <div
         className={cls({
           [`${prefixCls}-control`]: true,

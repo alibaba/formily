@@ -69,14 +69,11 @@ const SelectLocale = {
     tooltip: '仅在多选或者标签模式下支持',
   },
   autoFocus: '自动获取焦点',
-  defaultActiveFirstOption: {
-    title: '默认高亮',
-    tooltip: '默认高亮第一个选项',
-  },
+  defaultActiveFirstOption: '默认高亮第一个选项',
   dropdownMatchSelectWidth: {
     title: '下拉菜单和选择器同宽',
     tooltip:
-      '下拉菜单和选择器同宽。默认将设置 min-width，当值小于选择框宽度时会被忽略。false 时会关闭虚拟滚动',
+      '默认将设置 min-width，当值小于选择框宽度时会被忽略。false 时会关闭虚拟滚动',
   },
   defaultOpen: '默认展开',
   filterOption: '选项筛选器',
@@ -145,7 +142,7 @@ const DatePickerLocale = {
   format: '格式',
   picker: {
     title: '选择器类型',
-    dataSource: ['时间', '日期', '月份', '年', '财年'],
+    dataSource: ['时间', '日期', '月份', '年', '季度'],
   },
   showNow: '显示此刻',
   showTime: '时间选择',

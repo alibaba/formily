@@ -3,6 +3,7 @@ import MonacoEditor from 'react-monaco-editor'
 import monacoEditor from 'monaco-editor/esm/vs/editor/editor.api'
 import { transformToSchema, transformToTreeNode } from '@designable/formily'
 import { TreeNode, ITreeNode } from '@designable/core'
+import { TextWidget } from '@designable/react'
 import { notification, Button } from 'antd'
 
 export interface ISchemaEditorWidgetProps {
@@ -54,7 +55,6 @@ export const SchemaEditorWidget: React.FC<ISchemaEditorWidgetProps> = (
       })
       observer.observe(containerRef.current)
       return () => {
-        observer.unobserve(containerRef.current)
         observer.disconnect()
       }
     }
@@ -107,7 +107,9 @@ export const SchemaEditorWidget: React.FC<ISchemaEditorWidgetProps> = (
           width: '100%',
         }}
       >
-        <Button onClick={onSave}>保存</Button>
+        <Button onClick={onSave}>
+          <TextWidget>Save</TextWidget>
+        </Button>
       </div>
     </div>
   )
