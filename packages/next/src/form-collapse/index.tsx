@@ -136,7 +136,7 @@ export const FormCollapse: ComposedFormCollapse = observer(
       <Collapse
         {...props}
         className={cls(prefixCls, props.className)}
-        expandedKeys={takeExpandedKeys()}
+        expandedKeys={takeExpandedKeys() as any}
         onExpand={(keys) => {
           props?.onExpand?.(keys)
           _formCollapse?.setActiveKeys?.(keys)
