@@ -191,6 +191,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
             return (
               <Collapse.Panel
                 {...props}
+                {...panelProps}
                 forceRender
                 key={index}
                 header={header()}

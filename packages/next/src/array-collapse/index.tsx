@@ -181,7 +181,12 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
               />
             )
             return (
-              <Collapse.Panel {...props} key={index} title={title()}>
+              <Collapse.Panel
+                {...props}
+                {...panelProps}
+                key={index}
+                title={title()}
+              >
                 <ArrayBase.Item index={index} key={index}>
                   {content}
                 </ArrayBase.Item>
