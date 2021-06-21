@@ -71,10 +71,10 @@ export const Reset: React.FC<IResetProps> = ({
             {...props}
             onClick={async (e) => {
               try {
-                await form.reset({ forceClear, validate })
                 if (props.onClick) {
                   props.onClick(e)
                 }
+                await form.reset({ forceClear, validate })
               } catch (e) {
                 // do nothing...
               }
