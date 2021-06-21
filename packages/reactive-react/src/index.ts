@@ -1,7 +1,7 @@
-import React, { forwardRef, memo } from 'react'
+import React, { forwardRef, memo, Fragment } from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import { useObserver } from './hooks'
-import { IObserverOptions } from './types'
+import { IObserverOptions, IObserverProps } from './types'
 
 export function observer<P, Options extends IObserverOptions>(
   component: React.FunctionComponent<P>,
@@ -38,3 +38,9 @@ export function observer<P, Options extends IObserverOptions>(
 
   return memoComponent
 }
+
+export const Observer = observer((props: IObserverProps) => {
+  const children =
+    typeof props.children === 'function' ? props.children() : props.children
+  return React.createElement(Fragment, {}, children)
+})

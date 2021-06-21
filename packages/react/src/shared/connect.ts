@@ -1,7 +1,7 @@
 import React from 'react'
 import { isFn, isStr, FormPath, each, isValid } from '@formily/shared'
 import { isVoidField } from '@formily/core'
-import { observer } from '@formily/reactive-react'
+import { observer, Observer } from '@formily/reactive-react'
 import { JSXComponent, IComponentMapper, IStateMapper } from '../types'
 import { useField } from '../hooks'
 import hoistNonReactStatics from 'hoist-non-react-statics'
@@ -86,4 +86,4 @@ export function connect<T extends JSXComponent>(
   return Destination
 }
 
-export { observer }
+export { observer, Observer }
