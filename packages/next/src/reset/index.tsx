@@ -3,11 +3,21 @@ import { Button } from '@alifd/next'
 import { ButtonProps } from '@alifd/next/lib/button'
 import { useForm } from '@formily/react'
 
-export type IResetProps = Formily.Core.Types.IFieldResetOptions & ButtonProps
+export interface IResetProps
+  extends Formily.Core.Types.IFieldResetOptions,
+    ButtonProps {
+  onClick?: (e: React.MouseEvent<Element, MouseEvent>) => boolean | void
+  onResetValidateSuccess?: (payload: any) => void
+  onResetValidateFailed?: (
+    feedbacks: Formily.Core.Types.IFormFeedback[]
+  ) => void
+}
 
 export const Reset: React.FC<IResetProps> = ({
   forceClear,
   validate,
+  onResetValidateFailed,
+  onResetValidateSuccess,
   ...props
 }: IResetProps) => {
   const form = useForm()
@@ -16,12 +26,15 @@ export const Reset: React.FC<IResetProps> = ({
       {...props}
       onClick={(e) => {
         if (props.onClick) {
-          props.onClick(e)
+          if (props.onClick(e) === false) return
         }
-        form.reset('*', {
-          forceClear,
-          validate,
-        })
+        form
+          .reset('*', {
+            forceClear,
+            validate,
+          })
+          .then(onResetValidateSuccess)
+          .catch(onResetValidateFailed)
       }}
     >
       {props.children}
