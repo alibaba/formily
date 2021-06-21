@@ -1,4 +1,4 @@
-import { onBeforeMount, onMounted, Ref, shallowRef, watch } from 'vue-demi'
+import { onBeforeUnmount, onMounted, Ref, shallowRef, watch } from 'vue-demi'
 
 interface IRecycleTarget {
   onMount: () => void
@@ -17,21 +17,24 @@ export const useAttach = <T extends IRecycleTarget>(
     target.onMount()
   })
 
-  onBeforeMount(() => {
+  onBeforeUnmount(() => {
     oldTargetRef.value?.onUnmount()
   })
 
   watch(dependencies, (cur, prev, onInvalidate) => {
     const target = creator()
-    if (oldTargetRef.value && target !== oldTargetRef.value) {
-      oldTargetRef.value.onUnmount()
-    }
-    oldTargetRef.value = target
-    target.onMount()
 
-    onInvalidate(() => {
-      oldTargetRef.value?.onUnmount()
-    })
+    if (target !== oldTargetRef.value) {
+      if (oldTargetRef.value) {
+        oldTargetRef.value.onUnmount()
+      }
+      oldTargetRef.value = target
+      target.onMount()
+
+      onInvalidate(() => {
+        oldTargetRef.value?.onUnmount()
+      })
+    }
   })
 
   return oldTargetRef
