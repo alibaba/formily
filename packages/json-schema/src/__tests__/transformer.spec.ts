@@ -215,14 +215,12 @@ describe('transform component', () => {
   test('findComponent', () => {
     const Input = () => null
     const Number = () => null
-    const Textarea = () => null
 
     Input.Number = Number
 
     const options = {
       components: {
         Input,
-        'Test.Textarea': Textarea,
       },
     }
 
@@ -241,10 +239,6 @@ describe('transform component', () => {
           type: 'string',
           'x-component': 'Input.Number',
         },
-        d: {
-          type: 'string',
-          'x-component': 'Test.Textarea',
-        },
         e: {
           type: 'string',
           'x-component': 'Test',
@@ -258,9 +252,6 @@ describe('transform component', () => {
     )
     expect(schema.properties.c.toFieldProps(options).component[0]).toEqual(
       Number
-    )
-    expect(schema.properties.d.toFieldProps(options).component[0]).toEqual(
-      Textarea
     )
     expect(schema.properties.e.toFieldProps(options).component).toBeUndefined()
   })

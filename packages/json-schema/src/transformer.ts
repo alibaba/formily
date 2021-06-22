@@ -192,9 +192,7 @@ const findComponent = (
   let component: any = state?.[type]?.[0]
 
   if (path && options?.components) {
-    if (isStr(path) && options.components[path]) {
-      component = options.components[path]
-    } else if (FormPath.isPathPattern(path)) {
+    if (FormPath.isPathPattern(path)) {
       component = FormPath.getIn(options.components, path)
     }
     if (!component) {
