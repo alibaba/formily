@@ -210,7 +210,7 @@ export default () => {
             (value) => {
               return /\/\/(codesandbox\.io|github)/.test(value)
                 ? ''
-                : '必须是 Codesandbox 链接获取 Github 仓库地址'
+                : '必须是 Codesandbox 链接或者 Github 仓库地址'
             },
           ]}
           description={
