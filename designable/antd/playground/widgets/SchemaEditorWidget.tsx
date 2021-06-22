@@ -96,7 +96,7 @@ export const SchemaEditorWidget: React.FC<ISchemaEditorWidgetProps> = (
           position: 'absolute',
           zIndex: 2,
           left: 0,
-          bottom: value === propsValue || saved ? -20 : 0,
+          top: value === propsValue || saved ? -20 : 0,
           opacity: value === propsValue || saved ? 0 : 1,
           transition: 'all 0.3s ease-in-out',
           display: 'flex',
