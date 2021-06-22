@@ -199,6 +199,7 @@ export default () => {
           decorator={[FormItem]}
           component={[Select, { showSearch: true }]}
         />
+
         <Field
           title="Link to minimal reproduction"
           name="reproduceLink"
@@ -213,6 +214,91 @@ export default () => {
                 : 'Must Be Codesandbox Link'
             },
           ]}
+          description={
+            <div>
+              This is Codesandbox templates.If you are:
+              <ul>
+                <li>
+                  React + Antd User:
+                  <ul>
+                    <li>
+                      <a href="https://codesandbox.io/s/7ql5g" target="_blank">
+                        Pure JSX
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://codesandbox.io/s/pxqz2" target="_blank">
+                        Markup Schema
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://codesandbox.io/s/jcpnx" target="_blank">
+                        JSON Schema
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  React + Fusion User:
+                  <ul>
+                    <li>
+                      <a
+                        href="https://codesandbox.io/s/festive-austin-mkiuc"
+                        target="_blank"
+                      >
+                        Pure JSX
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://codesandbox.io/s/quirky-roentgen-jwsdh"
+                        target="_blank"
+                      >
+                        Markup Schema
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://codesandbox.io/s/ancient-https-w2i7v"
+                        target="_blank"
+                      >
+                        JSON Schema
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Vue3 + ant-design-vue User:
+                  <ul>
+                    <li>
+                      <a
+                        href="https://codesandbox.io/s/quizzical-fermi-mbt2x"
+                        target="_blank"
+                      >
+                        Pure JSX
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://codesandbox.io/s/dreamy-fermi-7pftm"
+                        target="_blank"
+                      >
+                        Markup Schema
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://codesandbox.io/s/interesting-faraday-0iu5c"
+                        target="_blank"
+                      >
+                        JSON Schema
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          }
         />
         <Field
           title="Step to reproduce"
@@ -255,12 +341,12 @@ export default () => {
                 feature?
               </p>
               <p>
-                An important design goal of Formily is keeping the API
-                surface small and straightforward. In general, we only consider
-                adding new features that solve a problem that cannot be easily
-                dealt with using existing APIs (i.e. not just an alternative way
-                of doing things that can already be done). The problem should
-                also be common enough to justify the addition.
+                An important design goal of Formily is keeping the API surface
+                small and straightforward. In general, we only consider adding
+                new features that solve a problem that cannot be easily dealt
+                with using existing APIs (i.e. not just an alternative way of
+                doing things that can already be done). The problem should also
+                be common enough to justify the addition.
               </p>
             </div>
           }
