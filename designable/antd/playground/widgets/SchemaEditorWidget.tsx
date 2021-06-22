@@ -19,16 +19,16 @@ const Parser = {
 export const SchemaEditorWidget: React.FC<ISchemaEditorWidgetProps> = (
   props
 ) => {
-  const [value, setValue] = useState('')
-  const [saved, setSaved] = useState(false)
-  const valueRef = useRef('')
-  const containerRef = useRef<HTMLDivElement>()
-  const editorRef = useRef<monacoEditor.editor.IStandaloneCodeEditor>()
   const propsValue = JSON.stringify(
     transformToSchema(props.tree, Parser),
     null,
     2
   )
+  const [value, setValue] = useState(propsValue)
+  const [saved, setSaved] = useState(false)
+  const valueRef = useRef('')
+  const containerRef = useRef<HTMLDivElement>()
+  const editorRef = useRef<monacoEditor.editor.IStandaloneCodeEditor>()
 
   const onSave = () => {
     try {
@@ -92,19 +92,20 @@ export const SchemaEditorWidget: React.FC<ISchemaEditorWidgetProps> = (
       />
       <div
         style={{
-          height: 40,
+          height: 50,
           position: 'absolute',
           zIndex: 2,
           left: 0,
-          top: value === propsValue || saved ? -20 : 0,
+          bottom: value === propsValue || saved ? -20 : 0,
           opacity: value === propsValue || saved ? 0 : 1,
           transition: 'all 0.3s ease-in-out',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           borderTop: '1px solid #eee',
-          background: '#fafafa',
+          background: '#fff',
           width: '100%',
+          boxShadow: '0 0 10px #cacaca',
         }}
       >
         <Button onClick={onSave}>
