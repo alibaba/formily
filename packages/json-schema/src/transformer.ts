@@ -189,21 +189,23 @@ const findComponent = (
   options: ISchemaFieldFactoryOptions,
   state: Formily.Core.Types.IFieldState
 ) => {
-  if (FormPath.isPathPattern(path)) {
-    const component =
-      FormPath.getIn(options?.components, path) || state?.[type]?.[0]
-    if (component) {
-      return component
+  let component: any = state?.[type]?.[0]
+
+  if (path && options?.components) {
+    if (FormPath.isPathPattern(path)) {
+      component = FormPath.getIn(options.components, path)
     }
-    if (options?.components) {
+    if (!component) {
       //Todo: need to use __DEV__ keyword
       console.error(
         `[Formily JSON Schema]: Cannot find the '${path}' component mapped by Schema.x-${type}`
       )
     }
   }
-  if (isFn(path)) return path
-  return state?.[type]?.[0]
+  if (isFn(path)) {
+    return path
+  }
+  return component
 }
 
 const getBaseProps = (
