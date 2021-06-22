@@ -243,7 +243,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   }
 
   const renderLabel = () => {
-    if (!label) return null
+    if (!label || label === ' ') return null
     return (
       <div
         className={cls({
