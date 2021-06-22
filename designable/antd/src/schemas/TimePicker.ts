@@ -99,7 +99,7 @@ export const CommonTimePickerAPI = {
   },
   size: {
     type: 'string',
-    enum: ['large', 'small', 'middle', ''],
+    enum: ['large', 'small', 'middle', null],
     'x-decorator': 'FormItem',
     'x-component': 'Select',
   },

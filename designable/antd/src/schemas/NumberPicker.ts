@@ -35,7 +35,7 @@ export const NumberPicker: ISchema = {
     },
     size: {
       type: 'string',
-      enum: ['large', 'small', 'middle', ''],
+      enum: ['large', 'small', 'middle', null],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
       'x-component-props': {

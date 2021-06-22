@@ -55,27 +55,27 @@ const useFormItemLayout = (props: IFormItemProps) => {
   const layout = useFormLayout()
   return {
     ...props,
-    layout: props.layout || layout.layout || 'horizontal',
-    colon: props.colon || layout.colon,
+    layout: props.layout ?? layout.layout ?? 'horizontal',
+    colon: props.colon ?? layout.colon,
     labelAlign:
       layout.layout === 'vertical'
-        ? props.labelAlign || layout.labelAlign || 'left'
-        : props.labelAlign || layout.labelAlign || 'right',
-    labelWrap: props.labelWrap || layout.labelWrap,
-    labelWidth: props.labelWidth || layout.labelWidth,
-    wrapperWidth: props.wrapperWidth || layout.wrapperWidth,
-    labelCol: props.labelCol || layout.labelCol,
-    wrapperCol: props.wrapperCol || layout.wrapperCol,
-    wrapperAlign: props.wrapperAlign || layout.wrapperAlign,
-    wrapperWrap: props.wrapperWrap || layout.wrapperWrap,
-    fullness: props.fullness || layout.fullness,
-    size: props.size || layout.size,
-    inset: props.inset || layout.inset,
+        ? props.labelAlign ?? layout.labelAlign ?? 'left'
+        : props.labelAlign ?? layout.labelAlign ?? 'right',
+    labelWrap: props.labelWrap ?? layout.labelWrap,
+    labelWidth: props.labelWidth ?? layout.labelWidth,
+    wrapperWidth: props.wrapperWidth ?? layout.wrapperWidth,
+    labelCol: props.labelCol ?? layout.labelCol,
+    wrapperCol: props.wrapperCol ?? layout.wrapperCol,
+    wrapperAlign: props.wrapperAlign ?? layout.wrapperAlign,
+    wrapperWrap: props.wrapperWrap ?? layout.wrapperWrap,
+    fullness: props.fullness ?? layout.fullness,
+    size: props.size ?? layout.size,
+    inset: props.inset ?? layout.inset,
     asterisk: props.asterisk,
-    bordered: props.bordered || layout.bordered,
+    bordered: props.bordered ?? layout.bordered,
     feedbackIcon: props.feedbackIcon,
-    feedbackLayout: props.feedbackLayout || layout.feedbackLayout || 'loose',
-    tooltipLayout: props.tooltipLayout || layout.tooltipLayout || 'icon',
+    feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
+    tooltipLayout: props.tooltipLayout ?? layout.tooltipLayout ?? 'icon',
   }
 }
 
@@ -248,7 +248,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   }
 
   const renderLabel = () => {
-    if (!label || label === ' ') return null
+    if (!label) return null
     return (
       <div
         className={cls({
@@ -261,7 +261,9 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       >
         {renderLabelText()}
         {renderTooltipIcon()}
-        <span className={cls(`${prefixCls}-colon`)}>{colon ? ':' : ''}</span>
+        {label !== ' ' && (
+          <span className={cls(`${prefixCls}-colon`)}>{colon ? ':' : ''}</span>
+        )}
       </div>
     )
   }
