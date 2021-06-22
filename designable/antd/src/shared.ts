@@ -18,6 +18,19 @@ export const matchComponent = (
   return componentName === name
 }
 
+export const matchChildComponent = (
+  node: TreeNode,
+  name: ComponentNameMatcher,
+  context?: any
+) => {
+  if (name === '*') return true
+  const componentName = node?.props?.['x-component']
+  if (typeof name === 'function')
+    return name(componentName || '', node, context)
+  if (Array.isArray(name)) return name.includes(componentName)
+  return componentName.indexOf(`${name}.`) > -1
+}
+
 export const includesComponent = (
   node: TreeNode,
   names: ComponentNameMatcher[],
