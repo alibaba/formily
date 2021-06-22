@@ -208,9 +208,9 @@ export default () => {
           validator={[
             'url',
             (value) => {
-              return /\/\/codesandbox\.io/.test(value)
+              return /\/\/(codesandbox\.io|github)/.test(value)
                 ? ''
-                : '必须是Codesandbox链接'
+                : '必须是 Codesandbox 链接获取 Github 仓库地址'
             },
           ]}
           description={

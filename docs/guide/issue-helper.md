@@ -209,9 +209,9 @@ export default () => {
           validator={[
             'url',
             (value) => {
-              return /\/\/codesandbox\.io/.test(value)
+              return /\/\/(codesandbox\.io|github)/.test(value)
                 ? ''
-                : 'Must Be Codesandbox Link'
+                : 'Must Be Codesandbox Link or Github Repo'
             },
           ]}
           description={
