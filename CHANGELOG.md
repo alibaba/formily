@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.0-beta.68(2021-06-18)
+
+### :beetle: Bug Fixes
+
+1. [fix(types): fix global.d.ts](https://github.com/alibaba/formily/commit/df8561d6) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.67(2021-06-18)
 
 ### :tada: Enhancements
@@ -1017,9 +1023,3 @@
 ### :rocket: Improve Performance
 
 1. [perf(core): improve initialize performance](https://github.com/alibaba/formily/commit/0c06596d) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v1.1.0(2020-04-05)
-
-### :tada: Enhancements
-
-1. [feat(schema-renderer): support relative target path (#779)](https://github.com/alibaba/formily/commit/f5fe4061) :point_right: ( [Janry](https://github.com/Janry) )

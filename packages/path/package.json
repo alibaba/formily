@@ -1,6 +1,6 @@
 {
   "name": "@formily/path",
-  "version": "2.0.0-beta.68",
+  "version": "2.0.0-beta.69",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -30,8 +30,8 @@
     "benchmark": "ts-node ./benchmark"
   },
   "devDependencies": {
-    "dumi": "^1.1.0-rc.8",
-    "benny": "^3.6.15"
+    "benny": "^3.6.15",
+    "dumi": "^1.1.0-rc.8"
   },
   "publishConfig": {
     "access": "public"
