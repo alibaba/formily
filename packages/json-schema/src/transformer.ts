@@ -194,12 +194,12 @@ const findComponent = (
   if (path && options?.components) {
     if (FormPath.isPathPattern(path)) {
       component = FormPath.getIn(options.components, path)
-    }
-    if (!component) {
-      //Todo: need to use __DEV__ keyword
-      console.error(
-        `[Formily JSON Schema]: Cannot find the '${path}' component mapped by Schema.x-${type}`
-      )
+      if (!component) {
+        //Todo: need to use __DEV__ keyword
+        console.error(
+          `[Formily JSON Schema]: Cannot find the '${path}' component mapped by Schema.x-${type}`
+        )
+      }
     }
   }
   if (isFn(path)) {
