@@ -210,3 +210,49 @@ describe('transform validator', () => {
     expect(props.validator.length).toEqual(1)
   })
 })
+
+describe('transform component', () => {
+  test('findComponent', () => {
+    const Input = () => null
+    const Number = () => null
+
+    Input.Number = Number
+
+    const options = {
+      components: {
+        Input,
+      },
+    }
+
+    const schema = new Schema({
+      type: 'object',
+      properties: {
+        a: {
+          type: 'string',
+          'x-component': '',
+        },
+        b: {
+          type: 'string',
+          'x-component': 'Input',
+        },
+        c: {
+          type: 'string',
+          'x-component': 'Input.Number',
+        },
+        e: {
+          type: 'string',
+          'x-component': 'Test',
+        },
+      },
+    })
+
+    expect(schema.properties.a.toFieldProps(options).component).toBeUndefined()
+    expect(schema.properties.b.toFieldProps(options).component[0]).toEqual(
+      Input
+    )
+    expect(schema.properties.c.toFieldProps(options).component[0]).toEqual(
+      Number
+    )
+    expect(schema.properties.e.toFieldProps(options).component).toBeUndefined()
+  })
+})

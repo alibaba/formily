@@ -31,7 +31,7 @@ export const FormLayout: ISchema = {
     },
     feedbackLayout: {
       type: 'string',
-      enum: ['loose', 'terse', 'popover', 'none', ''],
+      enum: ['loose', 'terse', 'popover', 'none', null],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
       'x-component-props': {
@@ -40,7 +40,7 @@ export const FormLayout: ISchema = {
     },
     size: {
       type: 'string',
-      enum: ['large', 'small', 'default', ''],
+      enum: ['large', 'small', 'default', null],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
       'x-component-props': {
@@ -49,7 +49,7 @@ export const FormLayout: ISchema = {
     },
     layout: {
       type: 'string',
-      enum: ['vertical', 'horizontal', 'inline', ''],
+      enum: ['vertical', 'horizontal', 'inline', null],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
       'x-component-props': {
@@ -58,7 +58,7 @@ export const FormLayout: ISchema = {
     },
     tooltipLayout: {
       type: 'string',
-      enum: ['icon', 'text', ''],
+      enum: ['icon', 'text', null],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
       'x-component-props': {
@@ -67,7 +67,7 @@ export const FormLayout: ISchema = {
     },
     labelAlign: {
       type: 'string',
-      enum: ['left', 'right', ''],
+      enum: ['left', 'right', null],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
       'x-component-props': {
@@ -76,7 +76,7 @@ export const FormLayout: ISchema = {
     },
     wrapperAlign: {
       type: 'string',
-      enum: ['left', 'right', ''],
+      enum: ['left', 'right', null],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
       'x-component-props': {

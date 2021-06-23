@@ -1,5 +1,41 @@
 # Changelog
 
+## v2.0.0-beta.69(2021-06-22)
+
+### :tada: Enhancements
+
+1. [feat(reactive-react): support Observer Component like vue slot](https://github.com/alibaba/formily/commit/a49ee263) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [feat(antd/next): improve Submit/Reset API](https://github.com/alibaba/formily/commit/4eb2af01) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [feat(antd/next): support inherit mode to FormItem](https://github.com/alibaba/formily/commit/da7423d4) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [feat(designable-antd): support code editor and preview runner](https://github.com/alibaba/formily/commit/81f2cf2b) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :beetle: Bug Fixes
+
+1. [fix(antd): fix DatePicker week formatting errors (#1614)](https://github.com/alibaba/formily/commit/dbdd1984) :point_right: ( [sun](https://github.com/sun) )
+
+1. [fix(antd/next): fix array collapse can not reactive panel props](https://github.com/alibaba/formily/commit/0967b134) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(vue): fix unmount a field in a wrong lifecycle function.(#1609) (#1611)](https://github.com/alibaba/formily/commit/26896482) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+1. [fix(next): fix ci](https://github.com/alibaba/formily/commit/3fefd585) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(designable-antd): fix collapse styles](https://github.com/alibaba/formily/commit/1025aeb8) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs(core): fix Type declaration errors in the document and code of setFieldState method (#1605)](https://github.com/alibaba/formily/commit/bb4f175f) :point_right: ( [后浪](https://github.com/后浪) )
+
+### :memo: Documents Changes
+
+1. [docs(core): fix Type declaration errors in the document and code of setFieldState method (#1605)](https://github.com/alibaba/formily/commit/bb4f175f) :point_right: ( [后浪](https://github.com/后浪) )
+
+### :blush: Other Changes
+
+1. [chore(path): add benchmark case](https://github.com/alibaba/formily/commit/9533e049) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable-antd): upgrade designable](https://github.com/alibaba/formily/commit/31803367) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.68(2021-06-18)
 
 ### :beetle: Bug Fixes
@@ -993,33 +1029,3 @@
 ### :memo: Documents Changes
 
 1. [feat: add formily-meet documents (#797)](https://github.com/alibaba/formily/commit/03bbd0b7) :point_right: ( [DarK-AleX-alibaba](https://github.com/DarK-AleX-alibaba) )
-
-## v1.1.1(2020-04-14)
-
-### :tada: Enhancements
-
-1. [feat(core): remove initializeLazySyncState](https://github.com/alibaba/formily/commit/70094beb) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :beetle: Bug Fixes
-
-1. [fix(core): fix ci](https://github.com/alibaba/formily/commit/a09bb071) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(project): fix #788 #789 #790 #792 (#793)](https://github.com/alibaba/formily/commit/890b64eb) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [docs: fix spelling (#791)](https://github.com/alibaba/formily/commit/f27a66ba) :point_right: ( [kenve](https://github.com/kenve) )
-
-1. [fix: Add default export for the antd (#787)](https://github.com/alibaba/formily/commit/5f5d4190) :point_right: ( [Rex Guo](https://github.com/Rex Guo) )
-
-1. [fix(react-schema-editor): improve SchemaEditor types (#786)](https://github.com/alibaba/formily/commit/944b6f7a) :point_right: ( [kenve](https://github.com/kenve) )
-
-1. [fix: readme typo (#785)](https://github.com/alibaba/formily/commit/56ef8829) :point_right: ( [WanTong](https://github.com/WanTong) )
-
-1. [fix(antd): fix FormItem type definition (#784)](https://github.com/alibaba/formily/commit/a53b46a7) :point_right: ( [kenve](https://github.com/kenve) )
-
-### :memo: Documents Changes
-
-1. [docs: fix spelling (#791)](https://github.com/alibaba/formily/commit/f27a66ba) :point_right: ( [kenve](https://github.com/kenve) )
-
-### :rocket: Improve Performance
-
-1. [perf(core): improve initialize performance](https://github.com/alibaba/formily/commit/0c06596d) :point_right: ( [janrywang](https://github.com/janrywang) )
