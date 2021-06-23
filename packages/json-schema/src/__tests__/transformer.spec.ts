@@ -253,6 +253,8 @@ describe('transform component', () => {
     expect(schema.properties.c.toFieldProps(options).component[0]).toEqual(
       Number
     )
-    expect(schema.properties.e.toFieldProps(options).component).toBeUndefined()
+    expect(() => {
+      schema.properties.e.toFieldProps(options)
+    }).toThrowError()
   })
 })
