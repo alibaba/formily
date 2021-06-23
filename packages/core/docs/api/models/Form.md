@@ -104,7 +104,7 @@ interface createVoidField {
 
 #### 描述
 
-设置表单值，可以设置合并策略 [IFormMergeStrategy](#IFormMergeStrategy)
+设置表单值，可以设置合并策略 [IFormMergeStrategy](#iformmergestrategy)
 
 #### 签名
 
@@ -298,7 +298,7 @@ interface setDisplay {
 }
 ```
 
-函数入参请参考[FormDisplayTypes](#Formdisplaytypes)
+函数入参请参考[FormDisplayTypes](#formdisplaytypes)
 
 ### setPattern
 
@@ -314,7 +314,7 @@ interface setPattern {
 }
 ```
 
-函数入参请参考[FormPatternTypes](#Formpatterntypes)
+函数入参请参考[FormPatternTypes](#formpatterntypes)
 
 ### addEffects
 
