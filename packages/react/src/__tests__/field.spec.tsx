@@ -17,6 +17,7 @@ import {
 import { ReactiveField } from '../components/ReactiveField'
 import { expectThrowError } from './shared'
 import { isField, isVoidField, onFieldChange } from '@formily/core'
+import { act } from 'react-dom/test-utils'
 type InputProps = {
   value?: string
   onChange?: (...args: any) => void
@@ -152,27 +153,30 @@ test('useFormEffects', async () => {
     })
     return <div data-testid="custom-value">{field.value}</div>
   })
-  const { queryByTestId, rerender } = render(
-    <FormProvider form={form}>
-      <Field name="aa" decorator={[Decorator]} component={[Input]} />
-      <Field name="bb" component={[CustomField, { tag: 'xxx' }]} />
-    </FormProvider>
-  )
-  expect(queryByTestId('custom-value').textContent).toEqual('')
-  form.query('aa').take((aa) => {
-    if (isField(aa)) {
-      aa.setValue('123')
-    }
+  act(async () => {
+    const { queryByTestId, rerender } = render(
+      <FormProvider form={form}>
+        <Field name="aa" decorator={[Decorator]} component={[Input]} />
+        <Field name="bb" component={[CustomField, { tag: 'xxx' }]} />
+      </FormProvider>
+    )
+
+    expect(queryByTestId('custom-value').textContent).toEqual('')
+    form.query('aa').take((aa) => {
+      if (isField(aa)) {
+        aa.setValue('123')
+      }
+    })
+    await waitFor(() => {
+      expect(queryByTestId('custom-value').textContent).toEqual('123')
+    })
+    rerender(
+      <FormProvider form={form}>
+        <Field name="aa" decorator={[Decorator]} component={[Input]} />
+        <Field name="bb" component={[CustomField, { tag: 'yyy' }]} />
+      </FormProvider>
+    )
   })
-  await waitFor(() => {
-    expect(queryByTestId('custom-value').textContent).toEqual('123')
-  })
-  rerender(
-    <FormProvider form={form}>
-      <Field name="aa" decorator={[Decorator]} component={[Input]} />
-      <Field name="bb" component={[CustomField, { tag: 'yyy' }]} />
-    </FormProvider>
-  )
 })
 
 test('connect', async () => {
