@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.0.0-beta.70(2021-06-22)
+
+### :beetle: Bug Fixes
+
+1. [fix(antd/next): fix FormItem inherit priority #1624](https://github.com/alibaba/formily/commit/ee4fc5f8) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(designable-antd): fix useDropTemplate](https://github.com/alibaba/formily/commit/18307597) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :memo: Documents Changes
+
+1. [docs: issue helper add codesandbox template (#1623)](https://github.com/alibaba/formily/commit/a7d2726c) :point_right: ( [liuwei](https://github.com/liuwei) )
+
 ## v2.0.0-beta.69(2021-06-22)
 
 ### :tada: Enhancements
@@ -1011,21 +1023,3 @@
 ### :rose: Improve code quality
 
 1. [refactor(react): improve form-spy (#824)](https://github.com/alibaba/formily/commit/c4dc2144) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v1.1.2(2020-04-19)
-
-### :tada: Enhancements
-
-1. [feat: add formily-meet documents (#797)](https://github.com/alibaba/formily/commit/03bbd0b7) :point_right: ( [DarK-AleX-alibaba](https://github.com/DarK-AleX-alibaba) )
-
-### :beetle: Bug Fixes
-
-1. [fix(core): fix destruction default value is not work and fix typings (#808)](https://github.com/alibaba/formily/commit/e032d4e4) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix typo (#804)](https://github.com/alibaba/formily/commit/ef102752) :point_right: ( [Robot](https://github.com/Robot) )
-
-1. [fix: FormTab components parseDefaultActiveKey (#802)](https://github.com/alibaba/formily/commit/2fb128b0) :point_right: ( [xiaowanzi](https://github.com/xiaowanzi) )
-
-### :memo: Documents Changes
-
-1. [feat: add formily-meet documents (#797)](https://github.com/alibaba/formily/commit/03bbd0b7) :point_right: ( [DarK-AleX-alibaba](https://github.com/DarK-AleX-alibaba) )
