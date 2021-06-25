@@ -2,7 +2,7 @@
 
 <p align="center">
 <img src="https://img.alicdn.com/tfs/TB1DIpUu7L0gK0jSZFxXXXWHVXa-2500-1200.png">
-<img src="https://img.shields.io/npm/dy/@formily/core"/>
+<img src="https://img.shields.io/npm/dt/@formily/core"/>
 <a href="https://www.npmjs.com/package/@formily/core"><img src="https://img.shields.io/npm/v/@formily/core.svg"></a>
 <a href="https://www.npmjs.com/package/@formily/react"><img src="https://img.shields.io/npm/v/@formily/react.svg"></a>
 <a href="https://travis-ci.com/alibaba/formily"><img src="https://travis-ci.com/alibaba/formily.svg?branch=master"></a>
@@ -18,11 +18,16 @@
 
 ## 特性
 
+- 🖼 可设计，借助 Form Builder 可以快速搭建表单
 - 🚀 高性能，字段分布式渲染，大大减轻 React 渲染压力
 - 💡 支持 Ant Design/Fusion Next 组件体系
 - 🎨 JSX 标签化写法/JSON Schema 数据驱动方案无缝迁移过渡
 - 🏅 副作用逻辑独立管理，涵盖各种复杂联动校验逻辑
 - 🌯 支持各种表单复杂布局方案
+
+## Form Builder
+
+![https://designable-antd.formilyjs.org/](https://img.alicdn.com/imgextra/i3/O1CN01xAJj1y1wcGzXYc1Uq_!!6000000006328-2-tps-2980-1740.png)
 
 ## 官网
 
