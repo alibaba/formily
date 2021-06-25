@@ -684,6 +684,7 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
+import './index.less'
 
 const form = createForm({
   validateFirst: true,
@@ -1650,7 +1651,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-
 import './index.less'
 
 const form = createForm({

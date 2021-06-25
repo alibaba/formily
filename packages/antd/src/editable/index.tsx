@@ -187,3 +187,5 @@ Editable.Popover = observer((props) => {
     </Popover>
   )
 })
+
+export default Editable

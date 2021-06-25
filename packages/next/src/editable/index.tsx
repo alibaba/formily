@@ -1,13 +1,11 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { isVoidField } from '@formily/core'
 import { useField, observer } from '@formily/react'
-import { Form, Balloon } from '@alifd/next'
+import { Balloon } from '@alifd/next'
 import { EditOutlined, CloseOutlined, MessageOutlined } from '@ant-design/icons'
 import { BalloonProps as PopoverProps } from '@alifd/next/lib/balloon'
 import { BaseItem, IFormItemProps } from '../form-item'
 import { useClickAway, usePrefixCls } from '../__builtins__'
-import { Space } from '../space'
-import cls from 'classnames'
 /**
  * 默认Inline展示
  */
@@ -189,3 +187,5 @@ Editable.Popover = observer(({ ...props }) => {
     </Balloon>
   )
 })
+
+export default Editable
