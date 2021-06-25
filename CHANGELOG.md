@@ -1,5 +1,29 @@
 # Changelog
 
+## v2.0.0-beta.71(2021-06-24)
+
+### :beetle: Bug Fixes
+
+1. [docs(core): fix HTML Anchor jump link (#1639)](https://github.com/alibaba/formily/commit/3feaf906) :point_right: ( [后浪](https://github.com/后浪) )
+
+1. [fix(json-schema): fix throw timing for schema error](https://github.com/alibaba/formily/commit/c9e12f5a) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(json-schema): fix findComponent return unexpected result (#1625)](https://github.com/alibaba/formily/commit/3453c69d) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+### :memo: Documents Changes
+
+1. [docs(core): fix HTML Anchor jump link (#1639)](https://github.com/alibaba/formily/commit/3feaf906) :point_right: ( [后浪](https://github.com/后浪) )
+
+1. [docs(json-schema): update json-schema docs](https://github.com/alibaba/formily/commit/d669fd9e) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :construction: Add/Update Test Cases
+
+1. [test: update jest config (#1634)](https://github.com/alibaba/formily/commit/f228a405) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+### :blush: Other Changes
+
+1. [chore(designable-antd): improve playgroun ui](https://github.com/alibaba/formily/commit/2d07630c) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.70(2021-06-22)
 
 ### :beetle: Bug Fixes
@@ -989,37 +1013,3 @@
 ### :memo: Documents Changes
 
 1. [docs(antd): fix registerVirtualBox demo (#834)](https://github.com/alibaba/formily/commit/02fcd0d4) :point_right: ( [kenve](https://github.com/kenve) )
-
-## v1.1.3(2020-04-27)
-
-### :tada: Enhancements
-
-1. [feat(antd/next): improve useFormTableQuery (#821)](https://github.com/alibaba/formily/commit/2de71a36) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(docs): add antd TimePicker.RangePicker demo. (#811)](https://github.com/alibaba/formily/commit/fab22309) :point_right: ( [ShiCheng](https://github.com/ShiCheng) )
-
-1. [feat(antd-components): add default export (#810)](https://github.com/alibaba/formily/commit/0b4e64da) :point_right: ( [kenve](https://github.com/kenve) )
-
-### :beetle: Bug Fixes
-
-1. [fix(react-schema-renderer): fix x-linkages typings (#823)](https://github.com/alibaba/formily/commit/06c1a310) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd): fix labelCol and wrapperCol type (#822)](https://github.com/alibaba/formily/commit/d0e1d980) :point_right: ( [kenve](https://github.com/kenve) )
-
-1. [fix(array-table): remove min-width style property (#820)](https://github.com/alibaba/formily/commit/22d03df2) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix immer autoFreeze and reset Native Object (#816)](https://github.com/alibaba/formily/commit/aff23189) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [docs(antd/component): fix labelAlign type and remove labelTextAlign (#817)](https://github.com/alibaba/formily/commit/3704873c) :point_right: ( [kenve](https://github.com/kenve) )
-
-1. [fix: arrayTable style (#813)](https://github.com/alibaba/formily/commit/fe913dd9) :point_right: ( [xiaowanzi](https://github.com/xiaowanzi) )
-
-### :memo: Documents Changes
-
-1. [docs(antd/component): fix labelAlign type and remove labelTextAlign (#817)](https://github.com/alibaba/formily/commit/3704873c) :point_right: ( [kenve](https://github.com/kenve) )
-
-1. [feat(docs): add antd TimePicker.RangePicker demo. (#811)](https://github.com/alibaba/formily/commit/fab22309) :point_right: ( [ShiCheng](https://github.com/ShiCheng) )
-
-### :rose: Improve code quality
-
-1. [refactor(react): improve form-spy (#824)](https://github.com/alibaba/formily/commit/c4dc2144) :point_right: ( [Janry](https://github.com/Janry) )
