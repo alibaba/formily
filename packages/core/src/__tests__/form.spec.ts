@@ -122,6 +122,34 @@ test('setValues/setInitialValues', () => {
   expect(form.values.aa).toBeUndefined()
 })
 
+test('setValues with null', () => {
+  const form = attach(createForm())
+  form.setInitialValues({
+    'object-1': {
+      'array-1': null,
+    },
+    'object-2': {
+      'array-2': null,
+    },
+  })
+  form.setValues({
+    'object-1': {
+      'array-1': null,
+    },
+    'object-2': {
+      'array-2': null,
+    },
+  })
+  expect(form.values).toEqual({
+    'object-1': {
+      'array-1': null,
+    },
+    'object-2': {
+      'array-2': null,
+    },
+  })
+})
+
 test('observable values/initialValues', () => {
   const values: any = observable({
     aa: 123,
