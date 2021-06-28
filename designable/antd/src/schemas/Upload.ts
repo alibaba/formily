@@ -1,6 +1,6 @@
 import { ISchema } from '@formily/react'
 
-export const Upload: ISchema = {
+export const Upload: ISchema & { Dragger?: ISchema } = {
   type: 'object',
   properties: {
     accept: {
