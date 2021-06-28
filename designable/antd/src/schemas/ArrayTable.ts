@@ -1,6 +1,6 @@
 import { ISchema } from '@formily/react'
 
-export const ArrayTable: ISchema & { Addition?: ISchema } = {
+export const ArrayTable: ISchema & { Addition?: ISchema; Column?: ISchema } = {
   type: 'object',
   properties: {
     bordered: {
