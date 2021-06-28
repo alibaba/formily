@@ -65,7 +65,7 @@ const CommonDatePickerAPI = {
   },
 }
 
-export const DatePicker: ISchema = {
+export const DatePicker: ISchema & { RangePicker?: ISchema } = {
   type: 'object',
   properties: {
     picker: {

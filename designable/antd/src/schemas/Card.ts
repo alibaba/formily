@@ -1,7 +1,7 @@
 import { GlobalRegistry } from '@designable/core'
 import { ISchema } from '@formily/react'
 
-export const Card: ISchema = {
+export const Card: ISchema & { Addition?: ISchema } = {
   type: 'object',
   properties: {
     title: {

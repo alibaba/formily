@@ -1,7 +1,7 @@
 import { GlobalRegistry } from '@designable/core'
 import { ISchema } from '@formily/react'
 
-export const FormTab: ISchema = {
+export const FormTab: ISchema & { TabPane?: ISchema } = {
   type: 'object',
   properties: {
     animated: {
