@@ -4,8 +4,8 @@ import { ButtonProps } from '@alifd/next/lib/button'
 import { useForm, observer } from '@formily/react'
 
 interface ISubmitProps extends ButtonProps {
-  onClick?: (e: React.MouseEvent<Element, MouseEvent>) => boolean | void
-  onSubmit?: (values: any) => Promise<any> | any
+  onClick?: (e: React.MouseEvent<Element, MouseEvent>) => any
+  onSubmit?: (values: any) => any
   onSubmitSuccess?: (payload: any) => void
   onSubmitFailed?: (feedbacks: Formily.Core.Types.IFormFeedback[]) => void
 }
