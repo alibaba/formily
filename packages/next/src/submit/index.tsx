@@ -4,24 +4,27 @@ import { ButtonProps } from '@alifd/next/lib/button'
 import { useForm, observer } from '@formily/react'
 
 interface ISubmitProps extends ButtonProps {
+  onClick?: (e: React.MouseEvent<Element, MouseEvent>) => boolean | void
   onSubmit?: (values: any) => Promise<any> | any
+  onSubmitSuccess?: (payload: any) => void
+  onSubmitFailed?: (feedbacks: Formily.Core.Types.IFormFeedback[]) => void
 }
 
 export const Submit: React.FC<ISubmitProps> = observer(
-  (props: ISubmitProps) => {
+  ({ onSubmit, onSubmitFailed, onSubmitSuccess, ...props }: ISubmitProps) => {
     const form = useForm()
     return (
       <Button
-        htmlType={props.onSubmit ? 'button' : 'submit'}
+        htmlType={onSubmit ? 'button' : 'submit'}
         type="primary"
         {...props}
         loading={props.loading !== undefined ? props.loading : form.submitting}
         onClick={(e) => {
           if (props.onClick) {
-            props.onClick(e)
+            if (props.onClick(e) === false) return
           }
-          if (props.onSubmit) {
-            form.submit(props.onSubmit)
+          if (onSubmit) {
+            form.submit(onSubmit).then(onSubmitSuccess).catch(onSubmitFailed)
           }
         }}
       >

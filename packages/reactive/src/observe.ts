@@ -1,35 +1,39 @@
-import { IChange } from './types'
-import { RawNode, ProxyRaw } from './environment'
-import { isFn } from '@formily/shared'
+import { IOperation } from './types'
+import { RawNode, ProxyRaw, ObserverListeners } from './environment'
+import { isFn } from './checkers'
+import { DataChange } from './datatree'
 
 export const observe = (
   target: object,
-  observer?: (change: IChange) => void,
+  observer?: (change: DataChange) => void,
   deep = true
 ) => {
-  const listener = (change: IChange) => {
-    if (isFn(observer)) {
-      observer(change)
-    }
-  }
-
   const addListener = (target: any) => {
     const raw = ProxyRaw.get(target) || target
     const node = RawNode.get(raw)
-    if (node) {
+
+    const listener = (operation: IOperation) => {
+      const targetRaw = ProxyRaw.get(operation.target) || operation.target
+      const targetNode = RawNode.get(targetRaw)
       if (deep) {
-        node.deepObservers.add(listener)
-      } else {
-        node.observers.add(listener)
+        if (node.contains(targetNode)) {
+          observer(new DataChange(operation, targetNode))
+          return
+        }
+      }
+      if (
+        node === targetNode ||
+        (node.targetRaw === targetRaw && node.key === operation.key)
+      ) {
+        observer(new DataChange(operation, targetNode))
       }
     }
+
+    if (node && isFn(observer)) {
+      ObserverListeners.add(listener)
+    }
     return () => {
-      const raw = ProxyRaw.get(target) || target
-      const node = RawNode.get(raw)
-      if (node) {
-        node.deepObservers.delete(listener)
-        node.observers.delete(listener)
-      }
+      ObserverListeners.delete(listener)
     }
   }
   if (target && typeof target !== 'object')

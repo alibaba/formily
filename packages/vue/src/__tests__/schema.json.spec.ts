@@ -9,16 +9,16 @@ Vue.component('FormProvider', FormProvider)
 const Input: FunctionalComponentOptions = {
   functional: true,
   render(h, context) {
-    return h('input', { 
+    return h('input', {
       attrs: {
         value: context.props.value,
-        'data-testid': 'input'
+        'data-testid': 'input',
       },
       on: {
-        input: context.listeners.change
-      }
+        input: context.listeners.change,
+      },
     })
-  }
+  },
 }
 
 describe('json schema field', () => {
@@ -31,14 +31,14 @@ describe('json schema field', () => {
     })
     const { queryByTestId } = render({
       components: { SchemaField },
-      data () {
+      data() {
         return {
           form,
           schema: new Schema({
             type: 'string',
             default: '123',
             'x-component': 'Input',
-          })
+          }),
         }
       },
       template: `<FormProvider :form="form">
@@ -46,7 +46,7 @@ describe('json schema field', () => {
           name="string"
           :schema="schema"
         />
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryByTestId('input')).toBeVisible()
     expect(queryByTestId('input').getAttribute('value')).toEqual('123')
@@ -61,7 +61,7 @@ describe('json schema field', () => {
     })
     const { queryByTestId } = render({
       components: { SchemaField },
-      data () {
+      data() {
         return {
           form,
           schema: new Schema({
@@ -72,7 +72,7 @@ describe('json schema field', () => {
                 'x-component': 'Input',
               },
             },
-          })
+          }),
         }
       },
       template: `<FormProvider :form="form">
@@ -80,7 +80,7 @@ describe('json schema field', () => {
           name="string"
           :schema="schema"
         />
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryByTestId('input')).toBeVisible()
   })

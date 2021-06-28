@@ -11,11 +11,7 @@ export interface IObservable {
 export const observable: IObservable = createAnnotation(
   ({ target, key, value }) => {
     const store = {
-      value: createObservable({
-        target,
-        key,
-        value: target ? target[key] : value,
-      }),
+      value: createObservable(target, key, target ? target[key] : value),
     }
 
     function get() {
@@ -29,13 +25,9 @@ export const observable: IObservable = createAnnotation(
 
     function set(value: any) {
       const oldValue = store.value
-      value = createObservable({
-        target: target,
-        key: key,
-        value,
-      })
+      value = createObservable(target, key, value)
       store.value = value
-      if(oldValue === value) return
+      if (oldValue === value) return
       runReactionsFromTargetKey({
         target: target,
         key: key,

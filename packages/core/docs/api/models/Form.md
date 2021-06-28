@@ -104,13 +104,13 @@ interface createVoidField {
 
 #### 描述
 
-设置表单值
+设置表单值，可以设置合并策略 [IFormMergeStrategy](#iformmergestrategy)
 
 #### 签名
 
 ```ts
 interface setValues {
-  (values: object): void
+  (values: object, strategy: IFormMergeStrategy = 'merge'): void
 }
 ```
 
@@ -118,13 +118,13 @@ interface setValues {
 
 #### 描述
 
-设置表单默认值
+设置表单默认值，可以设置合并策略
 
 #### 签名
 
 ```ts
 interface setInitialValues {
-  (initialValues: object): void
+  (initialValues: object, strategy: IFormMergeStrategy = 'merge'): void
 }
 ```
 
@@ -142,7 +142,7 @@ interface setValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### setInitialValuesIn
 
@@ -158,7 +158,7 @@ interface setInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### existValuesIn
 
@@ -174,7 +174,7 @@ interface existValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### existInitialValuesIn
 
@@ -190,13 +190,13 @@ interface existInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### getValuesIn
 
 #### 描述
 
-根据指定路径获取表单值是
+根据指定路径获取表单值
 
 #### 签名
 
@@ -206,13 +206,13 @@ interface getValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### getInitialValuesIn
 
 #### 描述
 
-根据指定路径获取表单默认值是
+根据指定路径获取表单默认值
 
 #### 签名
 
@@ -222,7 +222,7 @@ interface getInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### deleteValuesIn
 
@@ -238,7 +238,7 @@ interface deleteValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### deleteIntialValuesIn
 
@@ -254,7 +254,7 @@ interface deleteInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### setSubmitting
 
@@ -298,7 +298,7 @@ interface setDisplay {
 }
 ```
 
-函数入参请参考[FormDisplayTypes](#Formdisplaytypes)
+函数入参请参考[FormDisplayTypes](#formdisplaytypes)
 
 ### setPattern
 
@@ -309,12 +309,12 @@ interface setDisplay {
 #### 签名
 
 ```ts
-interface setPatter {
+interface setPattern {
   (pattern: FormPatternTypes): void
 }
 ```
 
-函数入参请参考[FormPatternTypes](#Formpatterntypes)
+函数入参请参考[FormPatternTypes](#formpatterntypes)
 
 ### addEffects
 
@@ -372,7 +372,7 @@ interface clearErrors {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### clearWarnings
 
@@ -388,7 +388,7 @@ interface clearWarnings {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### clearSuccesses
 
@@ -404,7 +404,7 @@ interface clearSuccesses {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### query
 
@@ -420,7 +420,7 @@ interface query {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 Query 对象 API 参考 [Query](/api/models/query)
 
@@ -547,7 +547,7 @@ IFormState 参考 [IFormState](#iformstate)
 
 #### 描述
 
-设置表单状态
+获取表单状态
 
 #### 签名
 
@@ -578,12 +578,12 @@ IFormState 参考 [IFormState](#iformstate)
 
 ```ts
 interface setFieldState {
-  (pattern: FormPathPattern, state: IGeneralFieldState): void
-  (callback: (state: IGeneralFieldState) => void): void
+  (pattern: FormPathPattern, setter: (state: IGeneralFieldState) => void): void
+  (pattern: FormPathPattern, setter: IGeneralFieldState): void
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 IGeneralFieldState 参考 [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
 
@@ -602,7 +602,7 @@ interface getFieldState<T> {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 IGeneralFieldState 参考 [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
 
@@ -674,7 +674,8 @@ interface validate {
 
 ```ts
 interface submit<T> {
-  (onSubmit?: (values: any) => Promise<T> | void): Promise<T>
+  (): Promise<Form['values']>
+  (onSubmit?: (values: Form['values']) => Promise<T> | void): Promise<T>
 }
 ```
 
@@ -692,7 +693,7 @@ interface reset {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 IFieldResetOptions 参考 [IFieldResetOptions](/api/models/field/#ifieldresetoptions)
 
@@ -761,6 +762,12 @@ interface IFormState {
 }
 ```
 
+### IFormMergeStrategy
+
+```ts
+type IFormMergeStrategy = 'overwrite' | 'merge' | 'deepMerge' | 'shallowMerge'
+```
+
 ### IFieldFactoryProps
 
 ```ts
@@ -783,11 +790,13 @@ interface IFieldFactoryProps {
   dataSource?: any[] //字段数据源
   validateFirst?: boolean //字段校验是否只校验第一个非法规则
   validator?: FieldValidator //字段校验器
-  decorator?: any //字段装饰器
-  component?: any //字段组件
+  decorator?: any[] //字段装饰器，第一个元素代表组件引用，第二个元素代表组件属性
+  component?: any[] //字段组件，第一个元素代表组件引用，第二个元素代表组件属性
   reactions?: FieldReaction[] | FieldReaction //字段响应器
 }
 ```
+
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 FieldValidator 参考 [FieldValidator](/api/models/field#fieldvalidator)
 
@@ -810,11 +819,13 @@ interface IFieldFactoryProps {
   disabled?: boolean //字段是否禁用
   readOnly?: boolean //字段是否只读
   readPretty?: boolean //字段是否为阅读态
-  decorator?: any //字段装饰器
-  component?: any //字段组件
+  decorator?: any[] //字段装饰器，第一个元素代表组件引用，第二个元素代表组件属性
+  component?: any[] //字段组件，第一个元素代表组件引用，第二个元素代表组件属性
   reactions?: FieldReaction[] | FieldReaction //字段响应器
 }
 ```
+
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 FieldReaction 参考 [FieldReaction](/api/models/field#fieldreaction)
 

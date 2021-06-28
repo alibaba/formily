@@ -1,5 +1,8 @@
-const isType = <T>(type: string) => (obj: unknown): obj is T =>
-  obj != null && Object.prototype.toString.call(obj) === `[object ${type}]`
+const toString = Object.prototype.toString
+const isType =
+  <T>(type: string) =>
+  (obj: unknown): obj is T =>
+    toString.call(obj) === `[object ${type}]`
 export const isFn = isType<(...args: any[]) => any>('Function')
 export const isArr = Array.isArray || isType<unknown[]>('Array')
 export const isPlainObj = isType<object>('Object')
@@ -17,7 +20,9 @@ const hasProp = Object.prototype.hasOwnProperty
 
 export const toArr = <T>(val: T | T[]): T[] =>
   Array.isArray(val) ? val : val !== undefined ? [val] : []
-
+export const isAssignable = (val: any) => {
+  return typeof val === 'object' || typeof val === 'function'
+}
 export const isEqual = (a: any, b: any) => {
   if (a === b) {
     return true

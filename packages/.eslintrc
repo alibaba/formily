@@ -9,12 +9,7 @@
   "env": {
     "node": true
   },
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "prettier",
-    "markdown"
-  ],
+  "plugins": ["@typescript-eslint", "react", "prettier", "markdown"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 10,
@@ -46,36 +41,30 @@
     "@typescript-eslint/array-type": 0,
     "@typescript-eslint/no-object-literal-type-assertion": 0,
     "@typescript-eslint/no-use-before-define": 0,
-    "@typescript-eslint/no-unused-vars": 0,
+    "@typescript-eslint/no-unused-vars": 1,
     "@typescript-eslint/no-namespace": 0,
     "@typescript-eslint/ban-types": 0,
+    "@typescript-eslint/adjacent-overload-signatures": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/triple-slash-reference": 0,
     "@typescript-eslint/no-empty-function": 0,
     "no-console": [
       "error",
       {
-        "allow": [
-          "warn",
-          "error",
-          "info"
-        ]
+        "allow": ["warn", "error", "info"]
       }
     ],
-    "prefer-const": 1,
+    "prefer-const": 0,
     "no-var": 1,
-    "prefer-rest-params": 1
+    "prefer-rest-params": 0
   },
   "overrides": [
     {
-      "files": [
-        "**/*.md"
-      ],
+      "files": ["**/*.md"],
       "processor": "markdown/markdown"
     },
     {
-      "files": [
-        "**/*.md/*.{jsx,tsx}"
-      ],
+      "files": ["**/*.md/*.{jsx,tsx}"],
       "rules": {
         "@typescript-eslint/no-unused-vars": "error",
         "no-unused-vars": "error",

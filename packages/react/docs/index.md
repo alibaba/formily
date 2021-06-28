@@ -54,8 +54,6 @@ import {
   observer,
 } from '@formily/react'
 import { Input, Form } from 'antd'
-import 'antd/lib/input/style'
-import 'antd/lib/form/style'
 
 // FormItem UI组件
 const FormItem = observer(({ children }) => {

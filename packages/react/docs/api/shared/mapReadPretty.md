@@ -7,8 +7,8 @@
 ## 签名
 
 ```ts
-interface mapReadPretty {
-  (component: React.FC): React.FC
+interface mapReadPretty<Target extends React.FC> {
+  (component: Target, readPrettyProps?: React.ComponentProps<Target>): React.FC
 }
 ```
 
@@ -25,8 +25,6 @@ import {
   mapReadPretty,
 } from '@formily/react'
 import { Input as AntdInput, Form } from 'antd'
-import 'antd/lib/input/style'
-import 'antd/lib/form/style'
 
 // FormItem UI组件
 const FormItem = connect(

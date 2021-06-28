@@ -20,7 +20,6 @@ Schema 参考[Schema](/api/shared/schema)
 import React from 'react'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField, useFieldSchema } from '@formily/react'
-import 'antd/lib/input/style'
 
 const form = createForm()
 

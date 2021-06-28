@@ -8,12 +8,7 @@ import { IObservable } from './observable'
 export const shallow: IObservable = createAnnotation(
   ({ target, key, value }) => {
     const store = {
-      value: createObservable({
-        target,
-        key,
-        value: target ? target[key] : value,
-        shallow: true,
-      }),
+      value: createObservable(target, key, target ? target[key] : value, true),
     }
 
     function get() {
@@ -27,14 +22,9 @@ export const shallow: IObservable = createAnnotation(
 
     function set(value: any) {
       const oldValue = store.value
-      value = createObservable({
-        target: target,
-        key: key,
-        value,
-        shallow: true,
-      })
+      value = createObservable(target, key, value, true)
       store.value = value
-      if(oldValue === value) return
+      if (oldValue === value) return
       runReactionsFromTargetKey({
         target: target,
         key: key,

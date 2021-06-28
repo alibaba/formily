@@ -25,13 +25,12 @@ import React from 'react'
 import { createForm } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
 import { Input } from 'antd'
-import 'antd/lib/input/style'
 
 const form = createForm()
 
 export default () => (
   <FormProvider form={form}>
-    <Field name="input" component={[Input]} />
+    <Field name="input" component={[Input, { placeholder: 'Please Input' }]} />
   </FormProvider>
 )
 ```

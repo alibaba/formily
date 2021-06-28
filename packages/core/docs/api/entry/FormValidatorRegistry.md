@@ -13,7 +13,7 @@ order: 6
 #### 签名
 
 ```ts
-interface setValidationLanguage {
+interface setValidateLanguage{
   (language: string): void
 }
 ```
@@ -21,7 +21,7 @@ interface setValidationLanguage {
 #### 用例
 
 ```ts
-import { setValidationLanguage } from '@formily/core'
+import { setValidateLanguage} from '@formily/core'
 
 setValidationLanguage('en-US')
 
@@ -138,4 +138,28 @@ registerValidateRules({
     return value > 100 ? 'error' : ''
   },
 })
+```
+
+## getValidateLocaleIOSCode
+
+#### 描述
+
+获取内置存在的 ISO Code
+
+#### 签名
+
+```ts
+interface getValidateLocaleIOSCode {
+  (language: string): string | undefined
+}
+```
+
+#### 用例
+
+```ts
+import { getValidateLocaleIOSCode } from '@formily/core'
+
+getValidateLocaleIOSCode('en')
+
+// ==>  en_US
 ```

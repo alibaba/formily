@@ -1,10 +1,11 @@
 import { useLayoutEffect, useRef } from 'react'
+import { immediate } from '../shared'
 
 export const useDidUpdate = (callback?: () => void) => {
-  const timer = useRef(null)
-  timer.current = setTimeout(callback)
+  const request = useRef(null)
+  request.current = immediate(callback)
   useLayoutEffect(() => {
-    clearTimeout(timer.current)
+    request.current()
     callback()
   })
 }

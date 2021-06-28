@@ -1325,13 +1325,13 @@ actions.getFieldValue('username').then((val) => console.log(val))
 **签名**
 
 ```typescript
-const setValidationLanguage = (lang: string) => void;
+const setValidateLanguage= (lang: string) => void;
 ```
 
 **用法**
 
 ```tsx
-import { setValidationLanguage } from '@formily/next'
+import { setValidateLanguage} from '@formily/next'
 setValidationLanguage('zh')
 ```
 

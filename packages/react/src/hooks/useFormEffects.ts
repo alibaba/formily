@@ -1,20 +1,23 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useLayoutEffect, useMemo } from 'react'
 import { uid } from '@formily/shared'
 import { useForm } from './useForm'
 
 export const useFormEffects = (
   effects?: (form: Formily.Core.Models.Form) => void
 ) => {
-  const ref = useRef(null)
   const form = useForm()
-  ref.current = useMemo(() => {
+  const ref = useMemo(() => {
     const id = uid()
     form.addEffects(id, effects)
-    return id
+    const request = setTimeout(() => {
+      form.removeEffects(id)
+    }, 100)
+    return { id, request }
   }, [])
-  useEffect(() => {
+  useLayoutEffect(() => {
+    clearTimeout(ref.request)
     return () => {
-      form.removeEffects(ref.current)
+      form.removeEffects(ref.id)
     }
   }, [])
 }

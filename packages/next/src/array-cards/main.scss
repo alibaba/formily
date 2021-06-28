@@ -1,6 +1,6 @@
 @import '~@alifd/next/lib/core/index-noreset.scss';
 
-$array-cards-prefix-cls: $css-prefix+"formily-array-cards";
+$array-cards-prefix-cls: '#{$css-prefix}formily-array-cards';
 
 .#{$css-prefix}empty {
   display: flex;

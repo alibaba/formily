@@ -13,9 +13,10 @@ import {
   Submit,
   Reset,
   FormButtonGroup,
+  FormLayout,
 } from '@formily/next'
 import { createSchemaField } from '@formily/react'
-import { Button, Form } from '@alifd/next'
+import { Button } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -30,7 +31,7 @@ export default () => {
       onClick={() => {
         FormDrawer('抽屉表单', (resolve) => {
           return (
-            <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+            <FormLayout labelCol={6} wrapperCol={14}>
               <SchemaField>
                 <SchemaField.String
                   name="aaa"
@@ -67,7 +68,7 @@ export default () => {
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
-            </Form>
+            </FormLayout>
           )
         })
           .open({
@@ -95,9 +96,10 @@ import {
   Submit,
   Reset,
   FormButtonGroup,
+  FormLayout,
 } from '@formily/next'
 import { createSchemaField } from '@formily/react'
-import { Button, Form } from '@alifd/next'
+import { Button } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -146,7 +148,7 @@ export default () => {
       onClick={() => {
         FormDrawer('弹窗表单', (resolve) => {
           return (
-            <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+            <FormLayout labelCol={6} wrapperCol={14}>
               <SchemaField schema={schema} />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
@@ -154,7 +156,7 @@ export default () => {
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
-            </Form>
+            </FormLayout>
           )
         })
           .open({
@@ -182,9 +184,10 @@ import {
   Submit,
   Reset,
   FormButtonGroup,
+  FormLayout,
 } from '@formily/next'
 import { Field } from '@formily/react'
-import { Button, Form } from '@alifd/next'
+import { Button } from '@alifd/next'
 
 export default () => {
   return (
@@ -192,7 +195,7 @@ export default () => {
       onClick={() => {
         FormDrawer('弹窗表单', (resolve) => {
           return (
-            <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+            <FormLayout labelCol={6} wrapperCol={14}>
               <Field
                 name="aaa"
                 required
@@ -227,7 +230,7 @@ export default () => {
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
-            </Form>
+            </FormLayout>
           )
         })
           .open({
@@ -240,6 +243,86 @@ export default () => {
     >
       点我打开表单
     </Button>
+  )
+}
+```
+
+## 使用 Fusion Context
+
+```tsx
+import React from 'react'
+import {
+  FormDrawer,
+  FormItem,
+  Input,
+  Submit,
+  Reset,
+  FormButtonGroup,
+  FormLayout,
+} from '@formily/next'
+import { Field } from '@formily/react'
+import { Button, ConfigProvider } from '@alifd/next'
+
+export default () => {
+  return (
+    <ConfigProvider
+      defaultPropsConfig={{
+        Drawer: {},
+      }}
+    >
+      <Button
+        onClick={() => {
+          FormDrawer('弹窗表单', (resolve) => {
+            return (
+              <FormLayout labelCol={6} wrapperCol={14}>
+                <Field
+                  name="aaa"
+                  required
+                  title="输入框1"
+                  decorator={[FormItem]}
+                  component={[Input]}
+                />
+                <Field
+                  name="bbb"
+                  required
+                  title="输入框2"
+                  decorator={[FormItem]}
+                  component={[Input]}
+                />
+                <Field
+                  name="ccc"
+                  required
+                  title="输入框3"
+                  decorator={[FormItem]}
+                  component={[Input]}
+                />
+                <Field
+                  name="ddd"
+                  required
+                  title="输入框4"
+                  decorator={[FormItem]}
+                  component={[Input]}
+                />
+                <FormDrawer.Footer>
+                  <FormButtonGroup align="right">
+                    <Submit onClick={resolve}>提交</Submit>
+                    <Reset>重置</Reset>
+                  </FormButtonGroup>
+                </FormDrawer.Footer>
+              </FormLayout>
+            )
+          })
+            .open({
+              initialValues: {
+                aaa: '123',
+              },
+            })
+            .then(console.log)
+        }}
+      >
+        点我打开表单
+      </Button>
+    </ConfigProvider>
   )
 }
 ```

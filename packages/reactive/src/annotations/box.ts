@@ -1,6 +1,6 @@
 import { ProxyRaw, RawProxy } from '../environment'
 import { createAnnotation } from '../internals'
-import { buildTreeNode } from '../traverse'
+import { buildDataTree } from '../datatree'
 import {
   bindTargetKeyWithCurrentReaction,
   runReactionsFromTargetKey,
@@ -23,11 +23,7 @@ export const box: IBox = createAnnotation(({ target, key, value }) => {
   ProxyRaw.set(proxy, store)
   RawProxy.set(store, proxy)
 
-  buildTreeNode({
-    target,
-    key,
-    value: store,
-  })
+  buildDataTree(target, key, store)
 
   function get() {
     bindTargetKeyWithCurrentReaction({

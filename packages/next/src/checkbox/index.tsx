@@ -30,7 +30,9 @@ Checkbox.Group = connect(
     },
     mapSize
   ),
-  mapReadPretty(PreviewText.Select)
+  mapReadPretty(PreviewText.Select, {
+    mode: 'multiple',
+  })
 )
 
 export default Checkbox

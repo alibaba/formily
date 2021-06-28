@@ -213,6 +213,7 @@ export default () => {
           x-decorator-props={{
             labelWidth: 300,
             tooltip: '提示提示',
+            tooltipLayout: 'text',
           }}
         />
         <SchemaField.String
@@ -375,7 +376,7 @@ export default () => {
 
 ## 无边框案例
 
-设置去除组件边框，仅限 antd 表单组件
+设置去除组件边框
 
 ```tsx
 import React from 'react'
@@ -971,14 +972,28 @@ export default () => {
             required
           />
           <SchemaField.String
-            name="Select"
-            title="Select"
+            name="select1"
+            title="Multiple Select"
             x-decorator="FormItem"
             x-component="Select"
+            enum={[
+              {
+                label: '选项1',
+                value: 1,
+              },
+              {
+                label: '选项2',
+                value: 2,
+              },
+            ]}
+            x-component-props={{
+              mode: 'multiple',
+              placeholder: '请选择',
+            }}
             required
           />
           <SchemaField.String
-            name="Select"
+            name="select2"
             title="Select"
             x-decorator="FormItem"
             x-component="Select"
@@ -992,6 +1007,9 @@ export default () => {
                 value: 2,
               },
             ]}
+            x-component-props={{
+              placeholder: '请选择',
+            }}
             required
           />
           <SchemaField.String
@@ -1049,10 +1067,11 @@ export default () => {
 | className      | string                                                 | 组件样式类名                                | -         |
 | colon          | boolean                                                | 冒号                                        | true      |
 | tooltip        | ReactNode                                              | 问号提示                                    | -         |
+| tooltipLayout  | `"icon" \| "text"`                                     | 问提示布局                                  | `"icon"`  |
 | labelAlign     | `"left"` \| `"right"`                                  | 标签文本对齐方式                            | `"right"` |
 | labelWrap      | boolean                                                | 标签换⾏，否则出现省略号，hover 有 tooltip  | false     |
-| labelWidth     | number                                                 | 标签固定宽度                                | -         |
-| wrapperWidth   | number                                                 | 内容固定宽度                                | -         |
+| labelWidth     | `number \| string`                                     | 标签固定宽度                                | -         |
+| wrapperWidth   | `number \| string`                                     | 内容固定宽度                                | -         |
 | labelCol       | number                                                 | 标签⽹格所占列数，和内容列数加起来总和为 24 | -         |
 | wrapperCol     | number                                                 | 内容⽹格所占列数，和标签列数加起来总和为 24 | -         |
 | wrapperAlign   | `"left"` \| `"right"`                                  | 内容文本对齐方式⻬                          | `"left"`  |

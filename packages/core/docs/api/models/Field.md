@@ -174,7 +174,7 @@ interface setWarning {
 
 #### 描述
 
-设置字段成功信息，这里是以 EffectWarning 为 code 的 feedback 更新，主要是防止污染校验器结果，如果希望强制覆盖，则可以使用 setFeedback
+设置字段成功信息，这里是以 EffectSuccess 为 code 的 feedback 更新，主要是防止污染校验器结果，如果希望强制覆盖，则可以使用 setFeedback
 
 #### 签名
 
@@ -532,7 +532,7 @@ interface query {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 Query 对象 API 参考 [Query](/api/models/query)
 
@@ -582,7 +582,7 @@ interface match {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ## 类型
 
@@ -601,6 +601,8 @@ type ValidatorFormats =
   | 'email'
   | 'ipv6'
   | 'ipv4'
+  | 'number'
+  | 'integer'
   | 'idcard'
   | 'qq'
   | 'phone'
@@ -818,6 +820,15 @@ type IGeneralFieldState = IFieldState & IVoidFieldState
 ```
 
 IVoidFieldState 参考 [IVoidFieldState](/api/models/void-field#ivoidfieldstate)
+
+### IFieldResetOptions
+
+```ts
+interface IFieldResetOptions {
+  forceClear?: boolean //是否强制清除
+  validate?: boolean //是否校验
+}
+```
 
 ### IValidateResults
 

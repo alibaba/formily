@@ -7,14 +7,29 @@ import {
   SchemaKey,
   ISchemaTransformerOptions,
 } from './types'
-import { map, each, isFn, instOf } from '@formily/shared'
-import { compile, shallowCompile, registerCompiler } from './compiler'
+import { map, each, isFn, instOf, FormPath, isStr } from '@formily/shared'
+import { compile, silent, shallowCompile, registerCompiler } from './compiler'
 import { transformSchemaToFieldProps } from './transformer'
-import { reducePatches, registerPatches } from './patches'
+import {
+  reducePatches,
+  registerPatches,
+  registerPolyfills,
+  enablePolyfills,
+} from './patches'
 import {
   registerVoidComponents,
   registerTypeDefaultComponents,
 } from './polyfills'
+
+const ShallowCompileKeys = [
+  'properties',
+  'patternProperties',
+  'additionalProperties',
+  'items',
+  'additionalItems',
+  'x-linkages',
+  'x-reactions',
+]
 export class Schema<
   Decorator = any,
   Component = any,
@@ -25,8 +40,10 @@ export class Schema<
   Validator = any,
   Message = any,
   ReactionField = any
-> implements ISchema {
+> implements ISchema
+{
   parent?: Schema
+  root?: Schema
   name?: SchemaKey
   title?: Message
   description?: Message
@@ -52,6 +69,19 @@ export class Schema<
   required?: string[] | boolean | string
   format?: string
   /** nested json schema spec **/
+  definitions?: Record<
+    string,
+    Schema<
+      Decorator,
+      Component,
+      DecoratorProps,
+      ComponentProps,
+      Pattern,
+      Display,
+      Validator,
+      Message
+    >
+  >
   properties?: Record<
     string,
     Schema<
@@ -172,6 +202,9 @@ export class Schema<
   ) {
     if (parent) {
       this.parent = parent
+      this.root = parent.root
+    } else {
+      this.root = this
     }
     return this.fromJSON(json)
   }
@@ -330,6 +363,12 @@ export class Schema<
     return this.additionalItems
   }
 
+  findDefinitions = (ref: string) => {
+    if (!ref || !this.root || !isStr(ref)) return
+    if (ref.indexOf('#/') !== 0) return
+    return FormPath.getIn(this.root, ref.substring(2).split('/'))
+  }
+
   mapProperties = <T>(
     callback?: (
       schema: Schema<
@@ -429,24 +468,17 @@ export class Schema<
   }
 
   compile = (scope?: any) => {
-    const shallows = [
-      'properties',
-      'patternProperties',
-      'additionalProperties',
-      'items',
-      'additionalItems',
-      'x-linkages',
-      'x-reactions',
-    ]
+    const schema = new Schema({}, this.parent)
     each(this, (value, key) => {
-      if (isFn(value)) return
-      if (!shallows.includes(key)) {
-        this[key] = value ? compile(value, scope) : value
+      if (isFn(value) && !key.includes('x-')) return
+      if (key === 'parent' || key === 'root') return
+      if (!ShallowCompileKeys.includes(key)) {
+        schema[key] = value ? compile(value, scope) : value
       } else {
-        this[key] = value ? shallowCompile(value, scope) : value
+        schema[key] = value ? shallowCompile(value, scope) : value
       }
     })
-    return this
+    return schema
   }
 
   fromJSON = (
@@ -475,6 +507,8 @@ export class Schema<
         this.setItems(value)
       } else if (key === 'additionalItems') {
         this.setAdditionalItems(value)
+      } else if (key === '$ref') {
+        this.fromJSON(this.findDefinitions(value))
       } else {
         this[key] = value
       }
@@ -482,7 +516,9 @@ export class Schema<
     return this
   }
 
-  toJSON = (): ISchema<
+  toJSON = (
+    recursion = true
+  ): ISchema<
     Decorator,
     Component,
     DecoratorProps,
@@ -494,12 +530,20 @@ export class Schema<
   > => {
     const results = {}
     each(this, (value: any, key) => {
-      if (isFn(value) || key === 'parent') return
+      if (
+        (isFn(value) && !key.includes('x-')) ||
+        key === 'parent' ||
+        key === 'root'
+      )
+        return
       if (key === 'properties' || key === 'patternProperties') {
+        if (!recursion) return
         results[key] = map(value, (item) => item?.toJSON?.())
       } else if (key === 'additionalProperties' || key === 'additionalItems') {
+        if (!recursion) return
         results[key] = value?.toJSON?.()
       } else if (key === 'items') {
+        if (!recursion) return
         if (Array.isArray(value)) {
           results[key] = value.map((item) => item?.toJSON?.())
         } else {
@@ -555,4 +599,10 @@ export class Schema<
   static registerVoidComponents = registerVoidComponents
 
   static registerTypeDefaultComponents = registerTypeDefaultComponents
+
+  static registerPolyfills = registerPolyfills
+
+  static enablePolyfills = enablePolyfills
+
+  static silent = silent
 }

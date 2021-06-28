@@ -5,11 +5,22 @@ import { Schema } from './schema'
 const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/
 const actionsSymbol = Symbol.for('__REVA_ACTIONS')
 const ENVS = {
+  silent: false,
   compile(expression: string, scope: any) {
     const vars = Object.keys(scope || {})
     const params = vars.map((key) => scope[key])
-    return new Function(...vars, `return (${expression});`)(...params)
+    if (ENVS.silent) {
+      try {
+        return new Function(...vars, `return (${expression});`)(...params)
+      } catch {}
+    } else {
+      return new Function(...vars, `return (${expression});`)(...params)
+    }
   },
+}
+
+export const silent = (value = true) => {
+  ENVS.silent = !!value
 }
 
 export const registerCompiler = (

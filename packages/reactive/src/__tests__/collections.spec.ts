@@ -285,5 +285,4 @@ describe('Map', () => {
     expect(dummy).toEqual(1)
     expect(mapSpy).toBeCalledTimes(2)
   })
-
 })

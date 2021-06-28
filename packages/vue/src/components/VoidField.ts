@@ -1,5 +1,4 @@
-import { provide, defineComponent } from 'vue-demi'
-import { observer, useObserver } from '@formily/reactive-vue'
+import { provide, defineComponent, DefineComponent } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IVoidFieldProps } from '../types'
@@ -8,9 +7,8 @@ import { FieldSymbol } from '../shared/context'
 import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
 
-export default observer(defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
+export default defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
   name: 'VoidField',
-  components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
   /* eslint-disable vue/require-default-prop */
   props: {
@@ -24,56 +22,66 @@ export default observer(defineComponent<IVoidFieldProps<VueComponent, VueCompone
     pattern: String,
     hidden: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     visible: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     editable: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     disabled: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     readOnly: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     readPretty: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     reactions: [Array, Function],
   },
-  setup(props, { slots }) {
-    const { track } = useObserver()
+  setup(props: IVoidFieldProps<VueComponent, VueComponent>, { slots }) {
+    // const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()
-    const basePath = props.basePath !== undefined ? props.basePath : parentRef?.value?.address
-    const fieldRef = useAttach(() => formRef.value.createVoidField({
-      ...props,
-      basePath,
-      ...getRawComponent(props)
-    }), [() => props.name, formRef])
+    const basePath =
+      props.basePath !== undefined ? props.basePath : parentRef?.value?.address
+    const fieldRef = useAttach(
+      () =>
+        formRef.value.createVoidField({
+          ...props,
+          basePath,
+          ...getRawComponent(props),
+        }),
+      [() => props.name, formRef]
+    )
 
     provide(FieldSymbol, fieldRef)
 
-    return () => h(
-      ReactiveField, 
-      {
+    return () => {
+      const field = fieldRef.value
+      const componentData = {
         props: {
-          field: fieldRef.value
-        }
-      },
-      {
-        default: track(() => slots.default && slots.default({
-          field: fieldRef.value,
-          form: fieldRef.value.form
-        }))
+          field,
+        },
       }
-    )
-  }
-}))
+      const children = {
+        ...slots,
+      }
+      if (slots.default) {
+        children.default = () =>
+          slots.default({
+            field: field,
+            form: field.form,
+          })
+      }
+      return h(ReactiveField, componentData, children)
+    }
+  },
+}) as unknown as DefineComponent<IVoidFieldProps<VueComponent, VueComponent>>

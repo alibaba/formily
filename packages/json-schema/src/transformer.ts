@@ -12,6 +12,7 @@ import {
   isPlainObj,
   reduce,
   isEmpty,
+  FormPathPattern,
 } from '@formily/shared'
 import { getValidateLocale } from '@formily/validator'
 import { Schema } from './schema'
@@ -33,7 +34,6 @@ import {
   onFieldValidateFailed,
   onFieldValidateSuccess,
 } from '@formily/core'
-import { IFieldState } from '@formily/core/esm/types'
 
 const FieldEffects = {
   onFieldInit,
@@ -48,9 +48,7 @@ const FieldEffects = {
   onFieldValidateSuccess,
 }
 
-const getValidatorBySchema = (
-  schema: Schema
-): Formily.Core.Types.FieldValidator => {
+const getValidator = (schema: Schema): Formily.Core.Types.FieldValidator => {
   let rules = []
   if (schema.format) {
     rules.push({ format: schema.format })
@@ -170,7 +168,7 @@ const getValidatorBySchema = (
   if (rules.length) return rules
 }
 
-const getFieldDataSourceBySchema = (schema: Schema) => {
+const getDataSource = (schema: Schema) => {
   if (isArr(schema['enum'])) {
     return schema['enum'].map((item) => {
       if (typeof item === 'object') {
@@ -185,61 +183,133 @@ const getFieldDataSourceBySchema = (schema: Schema) => {
   }
 }
 
-const omitInvalid = (target: any) => {
-  return reduce(
-    target,
-    (buf, value, key) => {
-      if (!isEmpty(value)) {
-        buf[key] = value
+const findComponent = (
+  type: 'component' | 'decorator',
+  path: Formily.Core.Types.FormPathPattern,
+  options: ISchemaFieldFactoryOptions,
+  state: Formily.Core.Types.IFieldState
+) => {
+  let component: any = state?.[type]?.[0]
+
+  if (path && options?.components) {
+    if (FormPath.isPathPattern(path)) {
+      component = FormPath.getIn(options.components, path)
+      if (!component) {
+        //Todo: need to use __DEV__ keyword
+        console.error(
+          `[Formily JSON Schema]: Cannot find the '${path}' component mapped by Schema.x-${type}`
+        )
       }
-      return buf
-    },
-    {}
-  )
+    }
+  }
+  if (isFn(path)) {
+    return path
+  }
+  return component
 }
 
-const getStateFromSchema = (
+const getBaseProps = (
   schema: Schema,
   options: ISchemaFieldFactoryOptions,
-  state?: IFieldState
+  state?: Formily.Core.Types.IFieldState
 ) => {
-  return omitInvalid({
-    validator: getValidatorBySchema(schema),
-    dataSource: getFieldDataSourceBySchema(schema),
-    required: isBool(schema.required) ? schema.required : undefined,
-    initialValue: schema.default,
-    title: schema.title,
-    description: schema.description,
-    disabled: schema['x-disabled'],
-    editable: isValid(schema['x-editable'])
-      ? schema['x-editable']
-      : schema['writeOnly'],
-    readOnly: isValid(schema['x-read-only'])
-      ? schema['x-read-only']
-      : schema['readOnly'],
-    readPretty: schema['x-read-pretty'],
-    visible: schema['x-visible'],
-    hidden: schema['x-hidden'],
-    display: schema['x-display'],
-    pattern: schema['x-pattern'],
-    decorator: [
-      (schema['x-decorator'] &&
-        FormPath.getIn(options?.components, schema['x-decorator'])) ||
-        state?.decorator?.[0],
-      schema['x-decorator-props'] || state?.decorator?.[1],
-    ],
-    component: [
-      (schema['x-component'] &&
-        FormPath.getIn(options?.components, schema['x-component'])) ||
-        state?.component?.[0],
-      schema['x-component-props'] || state?.component?.[1],
-    ],
-  })
+  const props: Partial<Formily.Core.Types.IFieldFactoryProps<any, any>> = {}
+
+  const validator = getValidator(schema)
+
+  const dataSource = getDataSource(schema)
+
+  const editable = isValid(schema['x-editable'])
+    ? schema['x-editable']
+    : schema['writeOnly']
+
+  const readOnly = isValid(schema['x-read-only'])
+    ? schema['x-read-only']
+    : schema['readOnly']
+
+  const decoratorType = findComponent(
+    'decorator',
+    schema['x-decorator'],
+    options,
+    state
+  )
+
+  const decoratorProps = schema['x-decorator-props'] || state?.decorator?.[1]
+
+  const componentType = findComponent(
+    'component',
+    schema['x-component'],
+    options,
+    state
+  )
+  const componentProps = schema['x-component-props'] || state?.component?.[1]
+
+  if (isValid(schema.default)) {
+    props.initialValue = schema.default
+  }
+
+  if (isValid(schema.title)) {
+    props.title = schema.title
+  }
+
+  if (isValid(schema.description)) {
+    props.description = schema.description
+  }
+
+  if (isValid(schema['x-disabled'])) {
+    props.disabled = schema['x-disabled']
+  }
+
+  if (isValid(schema['x-read-pretty'])) {
+    props.readPretty = schema['x-read-pretty']
+  }
+
+  if (isValid(schema['x-visible'])) {
+    props.visible = schema['x-visible']
+  }
+
+  if (isValid(schema['x-hidden'])) {
+    props.hidden = schema['x-hidden']
+  }
+
+  if (isValid(schema['x-display'])) {
+    props.display = schema['x-display']
+  }
+
+  if (isValid(schema['x-pattern'])) {
+    props.pattern = schema['x-pattern']
+  }
+
+  if (isValid(validator)) {
+    props.validator = validator
+  }
+
+  if (isValid(dataSource)) {
+    props.dataSource = dataSource
+  }
+
+  if (!isValid(editable)) {
+    props.editable = editable
+  }
+
+  if (isValid(readOnly)) {
+    props.readOnly = readOnly
+  }
+
+  if (isValid(decoratorType)) {
+    props.decorator = [decoratorType, decoratorProps]
+  }
+
+  if (isValid(componentType)) {
+    props.component = [componentType, componentProps]
+  }
+
+  return props
 }
 
 const patchState = (state: any, target: any) => {
   const patch = (target: any, path: string[]) => {
-    if (isArr(target) || isPlainObj(target)) {
+    if (isPlainObj(target)) {
       each(target, (value, key) => {
         patch(value, path.concat(key))
       })
@@ -253,7 +323,7 @@ const patchState = (state: any, target: any) => {
   return state
 }
 
-const getSchemaFieldRequired = (schema: Schema) => {
+const getRequired = (schema: Schema) => {
   if (isBool(schema.required)) {
     return schema.required
   }
@@ -275,10 +345,7 @@ const getSchemaFieldRequired = (schema: Schema) => {
   return undefined
 }
 
-const getSchemaFieldReactions = (
-  schema: ISchema,
-  options: ISchemaFieldFactoryOptions
-) => {
+const getReactions = (schema: ISchema, options: ISchemaFieldFactoryOptions) => {
   const setSchemaFieldState = (
     field: Formily.Core.Types.GeneralField,
     request: ISchemaFieldUpdateRequest,
@@ -292,8 +359,30 @@ const getSchemaFieldReactions = (
       field.setState((state) =>
         patchState(
           state,
-          getStateFromSchema(
-            patchState({}, compile(request.schema)),
+          getBaseProps(patchState({}, compile(request.schema)), options, state)
+        )
+      )
+    }
+  }
+
+  const setSchemaFieldStateByTarget = (
+    form: Formily.Core.Models.Form,
+    target: FormPathPattern,
+    request: ISchemaFieldUpdateRequest,
+    compile: (expression: any, state?: any) => any
+  ) => {
+    if (!request) return
+    if (request.state) {
+      form.setFieldState(target, (state) =>
+        patchState(state, compile(request.state, state))
+      )
+    }
+    if (request.schema) {
+      form.setFieldState(target, (state) =>
+        patchState(
+          state,
+          getBaseProps(
+            patchState({}, compile(request.schema, state)),
             options,
             state
           )
@@ -302,15 +391,26 @@ const getSchemaFieldReactions = (
     }
   }
 
+  const queryDepdency = (field: Formily.Core.Models.Field, pattern: string) => {
+    const [target, path] = String(pattern).split(/\s*#\s*/)
+    return field.query(target).getIn(path || 'value')
+  }
+
   const parseDependencies = (
     field: Formily.Core.Models.Field,
-    dependencies: string[]
+    dependencies: string[] | object
   ) => {
     if (isArr(dependencies)) {
-      return dependencies.map((pattern) => {
-        const [target, path] = String(pattern).split(/\s*#\s*/)
-        return field.query(target).getIn(path || 'value')
-      })
+      return dependencies.map((pattern) => queryDepdency(field, pattern))
+    } else if (isPlainObj(dependencies)) {
+      return reduce(
+        dependencies,
+        (buf, pattern, key) => {
+          buf[key] = queryDepdency(field, pattern)
+          return buf
+        },
+        {}
+      )
     }
     return []
   }
@@ -335,29 +435,36 @@ const getSchemaFieldReactions = (
           $deps,
           $dependencies,
         }
-        const compile = (expression: any) => {
+        const compile = (expression: any, target?: any) => {
+          if (target) {
+            scope.$target = target
+          }
           return Schema.compile(expression, scope)
         }
         const when = Schema.compile(reaction?.when, scope)
         const condition = isValid(reaction?.when) ? when : true
         if (condition) {
           if (reaction.target) {
-            field.query(reaction.target).forEach((field) => {
-              scope.$target = field
-              setSchemaFieldState(field, reaction.fullfill, compile)
-            })
+            setSchemaFieldStateByTarget(
+              field.form,
+              reaction.target,
+              reaction.fulfill,
+              compile
+            )
           } else {
-            setSchemaFieldState(field, reaction.fullfill, compile)
+            setSchemaFieldState(field, reaction.fulfill, compile)
           }
-          if (isStr(reaction.fullfill?.run)) {
-            compile(`{{async function(){${reaction.fullfill?.run}}}}`)()
+          if (isStr(reaction.fulfill?.run)) {
+            compile(`{{async function(){${reaction.fulfill?.run}}}}`)()
           }
         } else {
           if (reaction.target) {
-            field.query(reaction.target).forEach((field) => {
-              scope.$target = field
-              setSchemaFieldState(field, reaction.otherwise, compile)
-            })
+            setSchemaFieldStateByTarget(
+              field.form,
+              reaction.target,
+              reaction.otherwise,
+              compile
+            )
           } else {
             setSchemaFieldState(field, reaction.otherwise, compile)
           }
@@ -365,6 +472,11 @@ const getSchemaFieldReactions = (
             compile(`{{async function(){${reaction.otherwise?.run}}}}`)()
           }
         }
+      }
+      if (reaction.target) {
+        reaction.effects = reaction.effects?.length
+          ? reaction.effects
+          : ['onFieldInit', 'onFieldValueChange']
       }
       if (reaction.effects) {
         each(reaction.effects, (type) => {
@@ -384,14 +496,14 @@ const getSchemaFieldReactions = (
 export const transformSchemaToFieldProps = (
   schema: Schema,
   options: ISchemaFieldFactoryOptions
-) => {
-  const required = getSchemaFieldRequired(schema)
-  const reactions = getSchemaFieldReactions(schema, options)
-  const props = getStateFromSchema(schema, options)
-  return {
-    ...props,
-    required,
-    name: schema.name,
-    reactions: [reactions],
-  }
+): Formily.Core.Types.IFieldFactoryProps<any, any> => {
+  const required = getRequired(schema)
+  const reactions = getReactions(schema, options)
+  const props = getBaseProps(schema, options)
+
+  props.required = required
+  props.name = schema.name
+  props.reactions = [reactions]
+
+  return props as any
 }

@@ -10,49 +10,57 @@ import {
 import { isValid } from '@formily/shared'
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from '@alifd/next/lib/button'
-import { useField, useFieldSchema } from '@formily/react'
-import { Schema } from 'packages/json-schema'
+import { useField, useFieldSchema, Schema } from '@formily/react'
 import { SortableHandle } from 'react-sortable-hoc'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 
-interface IAdditionProps extends ButtonProps {
+export interface IArrayBaseAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
   defaultValue?: any
 }
 
-interface IContext {
+export interface IArrayBaseContext {
+  props: IArrayBaseProps
   field: Formily.Core.Models.ArrayField
   schema: Schema
 }
 
-interface IItemProps {
+export interface IArrayBaseItemProps {
   index: number
 }
 
 export type ArrayBaseMixins = {
-  Addition?: React.FC<IAdditionProps>
-  Remove?: React.FC<AntdIconProps>
-  MoveUp?: React.FC<AntdIconProps>
-  MoveDown?: React.FC<AntdIconProps>
-  SortHandle?: React.FC<AntdIconProps>
+  Addition?: React.FC<IArrayBaseAdditionProps>
+  Remove?: React.FC<AntdIconProps & { index?: number }>
+  MoveUp?: React.FC<AntdIconProps & { index?: number }>
+  MoveDown?: React.FC<AntdIconProps & { index?: number }>
+  SortHandle?: React.FC<AntdIconProps & { index?: number }>
   Index?: React.FC
-  useArray?: () => IContext
+  useArray?: () => IArrayBaseContext
   useIndex?: () => number
 }
 
-type ComposedArrayBase = React.FC &
+export interface IArrayBaseProps {
+  disabled?: boolean
+  onAdd?: (index: number) => void
+  onRemove?: (index: number) => void
+  onMoveDown?: (index: number) => void
+  onMoveUp?: (index: number) => void
+}
+
+type ComposedArrayBase = React.FC<IArrayBaseProps> &
   ArrayBaseMixins & {
-    Item?: React.FC<IItemProps>
+    Item?: React.FC<IArrayBaseItemProps>
     mixin?: <T extends Formily.React.Types.JSXComponent>(
       target: T
     ) => T & ArrayBaseMixins
   }
 
-const ArrayBaseContext = createContext<IContext>(null)
+const ArrayBaseContext = createContext<IArrayBaseContext>(null)
 
-const ItemContext = createContext<IItemProps>(null)
+const ItemContext = createContext<IArrayBaseItemProps>(null)
 
 const useArray = () => {
   return useContext(ArrayBaseContext)
@@ -81,7 +89,7 @@ export const ArrayBase: ComposedArrayBase = (props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useFieldSchema()
   return (
-    <ArrayBaseContext.Provider value={{ field, schema }}>
+    <ArrayBaseContext.Provider value={{ field, schema, props }}>
       {props.children}
     </ArrayBaseContext.Provider>
   )
@@ -104,7 +112,8 @@ const SortHandle = SortableHandle((props: any) => {
 
 ArrayBase.SortHandle = () => {
   const array = useArray()
-  if (array.field.pattern !== 'editable') return null
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return <SortHandle />
 }
 
@@ -117,70 +126,102 @@ ArrayBase.Addition = (props) => {
   const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
-  if (array.field.pattern !== 'editable') return null
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <Button
       {...props}
       className={cls(`${prefixCls}-addition`, props.className)}
       style={{ display: 'block', width: '100%', ...props.style }}
-      onClick={() => {
+      onClick={(e) => {
+        if (array.props?.disabled) return
+        e.stopPropagation()
         const defaultValue = getDefaultValue(props.defaultValue, array.schema)
         if (props.method === 'unshift') {
-          array?.field?.unshift(defaultValue)
+          array.field?.unshift?.(defaultValue)
+          array.props?.onAdd?.(0)
         } else {
-          array?.field?.push(defaultValue)
+          array.field?.push?.(defaultValue)
+          array.props?.onAdd?.(array?.field?.value?.length - 1)
+        }
+        if (props.onClick) {
+          props.onClick(e)
         }
       }}
     >
       <PlusOutlined />
-      {self.title || props.title}
+      {props.title || self.title}
     </Button>
   )
 }
 
 ArrayBase.Remove = React.forwardRef((props, ref) => {
-  const index = useIndex()
-  const base = useArray()
+  const index = useIndex(props.index)
+  const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <DeleteOutlined
       {...props}
       className={cls(`${prefixCls}-remove`, props.className)}
       ref={ref}
       onClick={(e) => {
-        base?.field.remove(index)
+        if (array.props?.disabled) return
+        e.stopPropagation()
+        array.field?.remove?.(index)
+        array.props?.onRemove?.(index)
+        if (props.onClick) {
+          props.onClick(e)
+        }
       }}
     />
   )
 })
 
 ArrayBase.MoveDown = React.forwardRef((props, ref) => {
-  const index = useIndex()
-  const base = useArray()
+  const index = useIndex(props.index)
+  const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <DownOutlined
       {...props}
       className={cls(`${prefixCls}-move-down`, props.className)}
       ref={ref}
       onClick={(e) => {
-        base?.field.moveDown(index)
+        if (array.props?.disabled) return
+        e.stopPropagation()
+        array.field?.moveDown?.(index)
+        array.props?.onMoveDown?.(index)
+        if (props.onClick) {
+          props.onClick(e)
+        }
       }}
     />
   )
 })
 
 ArrayBase.MoveUp = React.forwardRef((props, ref) => {
-  const index = useIndex()
-  const base = useArray()
+  const index = useIndex(props.index)
+  const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
   return (
     <UpOutlined
       {...props}
       className={cls(`${prefixCls}-move-up`, props.className)}
       ref={ref}
       onClick={(e) => {
-        base?.field?.moveUp(index)
+        if (array.props?.disabled) return
+        e.stopPropagation()
+        array?.field?.moveUp(index)
+        array?.props?.onMoveUp?.(index)
+        if (props.onClick) {
+          props.onClick(e)
+        }
       }}
     />
   )

@@ -1,4 +1,4 @@
-import { isArr, isObj, isStr } from './types'
+import { isArr, isObj, isStr } from './checkers'
 
 type EachArrayIterator<T> = (currentValue: T, key: number) => void | boolean
 type EachStringIterator = (currentValue: string, key: number) => void | boolean
@@ -277,5 +277,5 @@ export function includes<T>(
 ): boolean
 export function includes(val: any, searchElement: any, revert?: boolean) {
   if (isStr(val)) return val.includes(searchElement)
-  return some(val, item => item === searchElement, revert)
+  return some(val, (item) => item === searchElement, revert)
 }

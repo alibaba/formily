@@ -6,7 +6,7 @@ export default {
   title: 'Formily',
   hash: true,
   favicon:
-    '//img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg',
+    'https://img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg',
   outputPath: './doc-site',
   navs: [
     {
@@ -19,11 +19,11 @@ export default {
     },
     {
       title: '主站',
-      path: '//formilyjs.org',
+      path: 'https://v2.formilyjs.org',
     },
     {
       title: 'GITHUB',
-      path: '//github.com/alibaba/formily',
+      path: 'https://github.com/alibaba/formily',
     },
   ],
   styles: [

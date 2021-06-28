@@ -1,6 +1,6 @@
 import { ProxyRaw, RawProxy } from '../environment'
 import { createAnnotation } from '../internals'
-import { buildTreeNode } from '../traverse'
+import { buildDataTree } from '../datatree'
 import {
   bindTargetKeyWithCurrentReaction,
   runReactionsFromTargetKey,
@@ -15,23 +15,12 @@ export const ref: IRef = createAnnotation(({ target, key, value }) => {
     value: target ? target[key] : value,
   }
 
-  const proxy = {
-    set value(value) {
-      set(value)
-    },
-    get value() {
-      return get()
-    },
-  }
+  const proxy = {}
 
   const context = target ? target : store
   const property = target ? key : 'value'
 
-  buildTreeNode({
-    target,
-    key,
-    value: store,
-  })
+  buildDataTree(target, key, store)
 
   ProxyRaw.set(proxy, store)
   RawProxy.set(store, proxy)
@@ -66,6 +55,11 @@ export const ref: IRef = createAnnotation(({ target, key, value }) => {
       configurable: false,
     })
     return target
+  } else {
+    Object.defineProperty(proxy, 'value', {
+      set,
+      get,
+    })
   }
   return proxy
 })

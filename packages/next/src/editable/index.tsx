@@ -1,18 +1,16 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { isVoidField } from '@formily/core'
 import { useField, observer } from '@formily/react'
-import { Form, Balloon } from '@alifd/next'
+import { Balloon } from '@alifd/next'
 import { EditOutlined, CloseOutlined, MessageOutlined } from '@ant-design/icons'
 import { BalloonProps as PopoverProps } from '@alifd/next/lib/balloon'
 import { BaseItem, IFormItemProps } from '../form-item'
 import { useClickAway, usePrefixCls } from '../__builtins__'
-import { Space } from '../space'
-import cls from 'classnames'
 /**
  * 默认Inline展示
  */
 
-interface IPopoverProps extends PopoverProps {}
+type IPopoverProps = PopoverProps
 
 type ComposedEditable = React.FC<IFormItemProps> & {
   Popover?: React.FC<IPopoverProps & { title?: React.ReactNode }>
@@ -137,13 +135,16 @@ Editable.Popover = observer(({ ...props }) => {
   const [visible, setVisible] = useState(false)
   const prefixCls = usePrefixCls('formily-editable')
   const closePopover = async () => {
-    await field.form.validate(`${field.address}.*`)
-    const errors = field.form.queryFeedbacks({
-      type: 'error',
-      address: `${field.address}.*`,
-    })
-    if (errors?.length) return
-    setVisible(false)
+    try {
+      await field.form.validate(`${field.address}.*`)
+    } finally {
+      const errors = field.form.queryFeedbacks({
+        type: 'error',
+        address: `${field.address}.*`,
+      })
+      if (errors?.length) return
+      setVisible(false)
+    }
   }
   const openPopover = () => {
     setVisible(true)
@@ -186,3 +187,5 @@ Editable.Popover = observer(({ ...props }) => {
     </Balloon>
   )
 })
+
+export default Editable

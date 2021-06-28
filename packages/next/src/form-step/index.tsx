@@ -16,7 +16,7 @@ import { Schema, SchemaKey } from '@formily/json-schema'
 import { Step as Steps } from '@alifd/next'
 import { usePrefixCls } from '../__builtins__'
 
-interface IFormStep {
+export interface IFormStep {
   connect: (steps: SchemaStep[], field: Formily.Core.Models.VoidField) => void
   current: number
   allowNext: boolean
@@ -27,7 +27,7 @@ interface IFormStep {
   back(): void
 }
 
-interface IFormStepProps extends StepsProps {
+export interface IFormStepProps extends StepsProps {
   formStep?: IFormStep
 }
 

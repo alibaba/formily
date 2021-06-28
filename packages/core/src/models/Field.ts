@@ -55,8 +55,11 @@ import {
   modelStateGetter,
   isHTMLInputEvent,
   initFieldValue,
-} from '../shared'
+} from '../shared/internals'
+import { isArrayField, isObjectField } from '../shared/checkers'
 import { Query } from './Query'
+
+const RESPONSE_REQUEST_DURATION = 100
 
 export class Field<
   Decorator extends JSXComponent = any,
@@ -99,13 +102,14 @@ export class Field<
   constructor(
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component, TextType, ValueType>,
-    form: Form
+    form: Form,
+    designable: boolean
   ) {
     this.initialize(props, form)
     this.makeIndexes(address)
-    this.makeObservable()
-    this.makeReactive()
-    this.onInit()
+    this.makeObservable(designable)
+    this.makeReactive(designable)
+    this.onInit(designable)
   }
 
   protected makeIndexes(address: FormPathPattern) {
@@ -146,7 +150,8 @@ export class Field<
     this.component = toArr(this.props.component)
   }
 
-  protected makeObservable() {
+  protected makeObservable(designable: boolean) {
+    if (designable) return
     define(this, {
       title: observable.ref,
       description: observable.ref,
@@ -167,8 +172,8 @@ export class Field<
       componentType: observable.ref,
       decoratorProps: observable,
       componentProps: observable,
-      validator: observable,
-      feedbacks: observable,
+      validator: observable.shallow,
+      feedbacks: observable.shallow,
       component: observable.computed,
       decorator: observable.computed,
       errors: observable.computed,
@@ -217,12 +222,16 @@ export class Field<
     })
   }
 
-  protected makeReactive() {
+  protected makeReactive(designable: boolean) {
+    if (designable) return
     this.disposers.push(
       reaction(
         () => this.value,
-        () => {
+        (value) => {
           this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
+          if (isValid(value) && this.modified && !this.caches.inputing) {
+            this.validate()
+          }
         }
       ),
       reaction(
@@ -234,13 +243,15 @@ export class Field<
       reaction(
         () => this.display,
         (display) => {
-          if (display === 'none') {
-            this.caches.value = toJS(this.value)
-            this.setValue()
-          } else if (display === 'visible') {
+          if (display === 'visible') {
             if (isEmpty(this.value)) {
               this.setValue(this.caches.value)
               this.caches.value = undefined
+            }
+          } else {
+            this.caches.value = toJS(this.value)
+            if (display === 'none') {
+              this.form.deleteValuesIn(this.path)
             }
           }
           if (display === 'none' || display === 'hidden') {
@@ -341,13 +352,13 @@ export class Field<
 
   get display(): FieldDisplayTypes {
     const parentDisplay = this.parent?.display
-    if (isValid(this.selfDisplay)) return this.selfDisplay
+    if (this.selfDisplay) return this.selfDisplay
     return parentDisplay || this.form.display || 'visible'
   }
 
   get pattern(): FieldPatternTypes {
     const parentPattern = this.parent?.pattern
-    if (isValid(this.selfPattern)) return this.selfPattern
+    if (this.selfPattern) return this.selfPattern
     return parentPattern || this.form.pattern || 'editable'
   }
 
@@ -576,26 +587,28 @@ export class Field<
   }
 
   setLoading = (loading?: boolean) => {
-    clearTimeout(this.requests.loader)
+    clearTimeout(this.requests.loading)
     if (loading) {
-      this.requests.loader = setTimeout(() => {
+      this.requests.loading = setTimeout(() => {
         batch(() => {
           this.loading = loading
+          this.form.notify(LifeCycleTypes.ON_FIELD_LOADING, this)
         })
-      }, 100)
+      }, RESPONSE_REQUEST_DURATION)
     } else if (this.loading !== loading) {
       this.loading = loading
     }
   }
 
   setValidating = (validating?: boolean) => {
-    clearTimeout(this.requests.validate)
+    clearTimeout(this.requests.validating)
     if (validating) {
-      this.requests.validate = setTimeout(() => {
+      this.requests.validating = setTimeout(() => {
         batch(() => {
           this.validating = validating
+          this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATING, this)
         })
-      }, 100)
+      }, RESPONSE_REQUEST_DURATION)
     } else if (this.validating !== validating) {
       this.validating = validating
     }
@@ -649,10 +662,14 @@ export class Field<
 
   getState: IModelGetter<IFieldState> = modelStateGetter(this)
 
-  onInit = () => {
+  onInit = (designable: boolean) => {
     this.initialized = true
-    initFieldValue(this)
-    initFieldUpdate(this)
+    batch.scope(() => {
+      initFieldValue(this, designable)
+    })
+    batch.scope(() => {
+      initFieldUpdate(this)
+    })
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
   }
 
@@ -674,6 +691,7 @@ export class Field<
     }
     const values = getValuesFromEvent(args)
     const value = values[0]
+    this.caches.inputing = true
     this.inputValue = value
     this.inputValues = values
     this.value = value
@@ -682,6 +700,7 @@ export class Field<
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     await this.validate('onInput')
+    this.caches.inputing = false
   }
 
   onFocus = async (...args: any[]) => {
@@ -743,9 +762,15 @@ export class Field<
     this.inputValue = undefined
     this.inputValues = []
     if (options?.forceClear) {
-      this.value = undefined
-    } else {
-      this.value = this.initialValue
+      if (isArrayField(this)) {
+        this.value = [] as any
+      } else if (isObjectField(this)) {
+        this.value = {} as any
+      } else {
+        this.value = undefined
+      }
+    } else if (isValid(this.value)) {
+      this.value = toJS(this.initialValue)
     }
     this.form.notify(LifeCycleTypes.ON_FIELD_RESET, this)
 

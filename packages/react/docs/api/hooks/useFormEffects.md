@@ -23,8 +23,6 @@ import React from 'react'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, Field, useFormEffects } from '@formily/react'
 import { Input, Form } from 'antd'
-import 'antd/lib/input/style'
-import 'antd/lib/form/style'
 
 const form = createForm({
   effects() {

@@ -200,10 +200,11 @@ test('getIn with a.b.c.[aaa,bbb]', () => {
 
 test('setIn with a.b.c.[aaa,bbb] source has extra property', () => {
   expect(
-    Path.setIn({ a: { b: { c: { kkk: 'ddd' } } } }, 'a.b.c.[aaa,bbb]', [
-      123,
-      321,
-    ])
+    Path.setIn(
+      { a: { b: { c: { kkk: 'ddd' } } } },
+      'a.b.c.[aaa,bbb]',
+      [123, 321]
+    )
   ).toEqual({ a: { b: { c: { aaa: 123, bbb: 321, kkk: 'ddd' } } } })
 })
 

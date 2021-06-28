@@ -12,29 +12,25 @@ All lines are wrapped at 100 characters !
 
 **Allowed `<type>`**
 
-- feat (A new feature)
-- fix (A bug fix)
-- docs (Documentation only changes)
-- style (Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc))
-- perf (A code change that improves performance)
-- refactor (A code change that neither fixes a bug nor adds a feature)
-- test (Adding missing tests or correcting existing tests)
-- build (Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm))
-- ci (Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs))
-- chore (Other changes that don't modify src or test files)
-- revert (Reverts a previous commit)
+- breaking --- Breaking Change,
+- feat --- A new feature,
+- bugfix --- Bug Fix,
+- doc --- Documentation,
+- refactor --- Some Code Change,
+- test --- Update Test Cases,
+- perf --- Improve Performace,
+- build --- Update Workflow Scripts,
+- chore --- Improve Some Code
 
 **Allowed `<scope>`**
 Scope could be anything specifying place of the commit change.
 
 For example $location, $browser, compiler, scope, ng:href, etc...
 
-
 **Breaking changes**
 All breaking changes have to be mentioned in message body, on separated line:
-​	_Breaks removed $browser.setUrl() method (use $browser.url(newUrl))_
-​	_Breaks ng: repeat option is no longer supported on selects (use ng:options)_
-
+​ _Breaks removed $browser.setUrl() method (use $browser.url(newUrl))_
+​ _Breaks ng: repeat option is no longer supported on selects (use ng:options)_
 
 **Message body**
 

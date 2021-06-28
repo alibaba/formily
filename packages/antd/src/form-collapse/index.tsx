@@ -16,7 +16,7 @@ import { toArr } from '@formily/shared'
 type ActiveKeys = string | number | Array<string | number>
 
 type ActiveKey = string | number
-interface IFormCollapse {
+export interface IFormCollapse {
   activeKeys: ActiveKeys
   hasActiveKey(key: ActiveKey): boolean
   setActiveKeys(key: ActiveKeys): void
@@ -25,7 +25,7 @@ interface IFormCollapse {
   toggleActiveKey(key: ActiveKey): void
 }
 
-interface IFormCollapseProps extends CollapseProps {
+export interface IFormCollapseProps extends CollapseProps {
   formCollapse?: IFormCollapse
 }
 
@@ -57,7 +57,7 @@ const usePanels = () => {
 
 const createFormCollapse = (defaultActiveKeys?: ActiveKeys) => {
   const formCollapse = model({
-    activeKeys: defaultActiveKeys || [],
+    activeKeys: defaultActiveKeys,
     setActiveKeys(keys: ActiveKeys) {
       formCollapse.activeKeys = keys
     },
@@ -103,7 +103,13 @@ export const FormCollapse: ComposedFormCollapse = observer(
     const _formCollapse = useMemo(() => {
       return formCollapse ? formCollapse : createFormCollapse()
     }, [])
-    const activeKey = props.activeKey || _formCollapse?.activeKeys
+
+    const takeActiveKeys = () => {
+      if (props.activeKey) return props.activeKey
+      if (_formCollapse?.activeKeys) return _formCollapse?.activeKeys
+      if (props.accordion) return panels[0]?.name
+      return panels.map((item) => item.name)
+    }
 
     const badgedHeader = (key: SchemaKey, props: any) => {
       const errors = field.form.queryFeedbacks({
@@ -123,14 +129,15 @@ export const FormCollapse: ComposedFormCollapse = observer(
       <Collapse
         {...props}
         className={cls(prefixCls, props.className)}
-        activeKey={activeKey}
+        activeKey={takeActiveKeys()}
         onChange={(key) => {
           props?.onChange?.(key)
-          formCollapse?.setActiveKeys?.(key)
+          _formCollapse?.setActiveKeys?.(key)
         }}
       >
-        {panels.map(({ props, schema, name }) => (
+        {panels.map(({ props, schema, name }, index) => (
           <Collapse.Panel
+            key={index}
             {...props}
             header={badgedHeader(name, props)}
             forceRender

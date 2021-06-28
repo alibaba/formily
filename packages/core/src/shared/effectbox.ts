@@ -2,13 +2,7 @@ import { isFn, isValid } from '@formily/shared'
 import { LifeCycle, Form } from '../models'
 import { AnyFunction } from '../types'
 import { isForm } from './checkers'
-
-const FormEffectState = {
-  lifecycles: [],
-  context: [],
-  effectStart: false,
-  effectEnd: false,
-}
+import { GlobalState } from './constants'
 
 export const createEffectHook = <
   F extends (payload: any, ...ctxs: any[]) => AnyFunction
@@ -17,11 +11,11 @@ export const createEffectHook = <
   callback?: F
 ) => {
   return (...args: Parameters<ReturnType<F>>) => {
-    if (FormEffectState.effectStart) {
-      FormEffectState.lifecycles.push(
+    if (GlobalState.effectStart) {
+      GlobalState.lifecycles.push(
         new LifeCycle(type, (payload, ctx) => {
           if (isFn(callback)) {
-            callback(payload, ctx, ...FormEffectState.context)(...args)
+            callback(payload, ctx, ...GlobalState.context)(...args)
           }
         })
       )
@@ -37,9 +31,9 @@ export const createEffectContext = <T = any>(defaultValue?: T) => {
   let index: number
   return {
     provide(value?: T) {
-      if (FormEffectState.effectStart) {
-        index = FormEffectState.context.length
-        FormEffectState.context[index] = isValid(value) ? value : defaultValue
+      if (GlobalState.effectStart) {
+        index = GlobalState.context.length
+        GlobalState.context[index] = isValid(value) ? value : defaultValue
       } else {
         throw new Error(
           'Provide method cannot be used in asynchronous function body'
@@ -47,12 +41,12 @@ export const createEffectContext = <T = any>(defaultValue?: T) => {
       }
     },
     consume(): T {
-      if (!FormEffectState.effectStart) {
+      if (!GlobalState.effectStart) {
         throw new Error(
           'Consume method cannot be used in asynchronous function body'
         )
       }
-      return FormEffectState.context[index]
+      return GlobalState.context[index]
     },
   }
 }
@@ -65,10 +59,10 @@ export const runEffects = <Context>(
   context?: Context,
   ...args: ((context: Context) => void)[]
 ): LifeCycle[] => {
-  FormEffectState.lifecycles = []
-  FormEffectState.context = []
-  FormEffectState.effectStart = true
-  FormEffectState.effectEnd = false
+  GlobalState.lifecycles = []
+  GlobalState.context = []
+  GlobalState.effectStart = true
+  GlobalState.effectEnd = false
   if (isForm(context)) {
     FormEffectContext.provide(context)
   }
@@ -77,8 +71,8 @@ export const runEffects = <Context>(
       effects(context)
     }
   })
-  FormEffectState.context = []
-  FormEffectState.effectStart = false
-  FormEffectState.effectEnd = true
-  return FormEffectState.lifecycles
+  GlobalState.context = []
+  GlobalState.effectStart = false
+  GlobalState.effectEnd = true
+  return GlobalState.lifecycles
 }

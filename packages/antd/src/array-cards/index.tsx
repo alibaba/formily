@@ -99,6 +99,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
         <ArrayBase.Item key={index} index={index}>
           <Card
             {...props}
+            onChange={() => {}}
             className={cls(`${prefixCls}-item`, props.className)}
             title={title}
             extra={extra}
@@ -124,6 +125,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
     return (
       <Card
         {...props}
+        onChange={() => {}}
         className={cls(`${prefixCls}-item`, props.className)}
         title={props.title || field.title}
       >

@@ -19,7 +19,6 @@ import {
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { Button, Alert } from 'antd'
-import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
   components: {
@@ -548,7 +547,7 @@ const schema = {
               {
                 dependencies: ['hideFirstColumn'],
                 when: '{{$deps[0]}}',
-                fullfill: {
+                fulfill: {
                   schema: {
                     'x-visible': false,
                   },
@@ -570,7 +569,7 @@ const schema = {
                   {
                     dependencies: ['.a1', 'hideFirstColumn'],
                     when: '{{$deps[1] || $deps[0]}}',
-                    fullfill: {
+                    fulfill: {
                       schema: {
                         'x-visible': false,
                       },
@@ -679,10 +678,11 @@ export default () => {
 
 扩展属性
 
-| 属性名 | 类型                  | 描述     | 默认值   |
-| ------ | --------------------- | -------- | -------- |
-| title  | ReactText             | 文案     |          |
-| method | `'push' \| 'unshift'` | 添加方式 | `'push'` |
+| 属性名       | 类型                  | 描述     | 默认值   |
+| ------------ | --------------------- | -------- | -------- |
+| title        | ReactText             | 文案     |          |
+| method       | `'push' \| 'unshift'` | 添加方式 | `'push'` |
+| defaultValue | `any`                 | 默认值   |          |
 
 其余参考 https://ant.design/components/button-cn/
 
@@ -729,3 +729,7 @@ export default () => {
 > 索引渲染器
 
 无属性
+
+### ArrayItems.useIndex
+
+> 读取当前渲染行索引的 React Hook

@@ -1,6 +1,6 @@
 # FormItem
 
-> 全新的 FormItem 组件，相比于 Antd 的 FormItem，它支持的功能更多，同时它的定位是纯样式组件，不管理表单状态，所以也会更轻量，更方便定制
+> 全新的 FormItem 组件，相比于 Fusion Next 的 FormItem，它支持的功能更多，同时它的定位是纯样式组件，不管理表单状态，所以也会更轻量，更方便定制
 
 ## Markup Schema 案例
 
@@ -42,7 +42,7 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import { Input, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import { Input, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -213,6 +213,7 @@ export default () => {
           x-decorator-props={{
             labelWidth: 300,
             tooltip: '提示提示',
+            tooltipLayout: 'text',
           }}
         />
         <SchemaField.String
@@ -375,7 +376,7 @@ export default () => {
 
 ## 无边框案例
 
-设置去除组件边框，仅限 antd 表单组件
+设置去除组件边框
 
 ```tsx
 import React from 'react'
@@ -1049,10 +1050,11 @@ export default () => {
 | className      | string                                                 | 组件样式类名                                | -         |
 | colon          | boolean                                                | 冒号                                        | true      |
 | tooltip        | ReactNode                                              | 问号提示                                    | -         |
+| tooltipLayout  | `"icon" \| "text"`                                     | 问提示布局                                  | `"icon"`  |
 | labelAlign     | `"left"` \| `"right"`                                  | 标签文本对齐方式                            | `"right"` |
 | labelWrap      | boolean                                                | 标签换⾏，否则出现省略号，hover 有 tooltip  | false     |
-| labelWidth     | number                                                 | 标签固定宽度                                | -         |
-| wrapperWidth   | number                                                 | 内容固定宽度                                | -         |
+| labelWidth     | `number \| string`                                     | 标签固定宽度                                | -         |
+| wrapperWidth   | `number \| string`                                     | 内容固定宽度                                | -         |
 | labelCol       | number                                                 | 标签⽹格所占列数，和内容列数加起来总和为 24 | -         |
 | wrapperCol     | number                                                 | 内容⽹格所占列数，和标签列数加起来总和为 24 | -         |
 | wrapperAlign   | `"left"` \| `"right"`                                  | 内容文本对齐方式⻬                          | `"left"`  |

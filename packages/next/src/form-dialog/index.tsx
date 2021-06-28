@@ -3,7 +3,7 @@ import ReactDOM, { createPortal } from 'react-dom'
 import { createForm } from '@formily/core'
 import { FormProvider } from '@formily/react'
 import { isNum, isStr, isBool, isFn } from '@formily/shared'
-import { Dialog } from '@alifd/next'
+import { Dialog, ConfigProvider } from '@alifd/next'
 import { DialogProps } from '@alifd/next/lib/dialog'
 import { usePrefixCls } from '../__builtins__'
 
@@ -54,6 +54,13 @@ export function FormDialog(title: any, content: any): IFormDialog {
     form: null,
     promise: null,
   }
+
+  let contextProps = {}
+  try {
+    // @ts-ignore
+    contextProps = ConfigProvider.getContext()
+  } catch (e) {}
+
   const props = getModelProps(title)
   const modal = {
     ...props,
@@ -79,30 +86,32 @@ export function FormDialog(title: any, content: any): IFormDialog {
   }
   const render = (visible = true, resolve?: () => any, reject?: () => any) => {
     ReactDOM.render(
-      <Dialog
-        {...modal}
-        visible={visible}
-        onClose={(trigger, e) => {
-          modal?.onClose?.(trigger, e)
-          formDialog.close()
-        }}
-        onCancel={(e) => {
-          modal?.onCancel?.(e)
-          formDialog.close()
-        }}
-        onOk={async (e) => {
-          modal?.onOk?.(e)
-          resolve()
-        }}
-      >
-        <FormProvider form={env.form}>
-          {React.createElement(component, {
-            content,
-            resolve,
-            reject,
-          })}
-        </FormProvider>
-      </Dialog>,
+      <ConfigProvider {...contextProps}>
+        <Dialog
+          {...modal}
+          visible={visible}
+          onClose={(trigger, e) => {
+            modal?.onClose?.(trigger, e)
+            formDialog.close()
+          }}
+          onCancel={(e) => {
+            modal?.onCancel?.(e)
+            formDialog.close()
+          }}
+          onOk={async (e) => {
+            modal?.onOk?.(e)
+            resolve()
+          }}
+        >
+          <FormProvider form={env.form}>
+            {React.createElement(component, {
+              content,
+              resolve,
+              reject,
+            })}
+          </FormProvider>
+        </Dialog>
+      </ConfigProvider>,
       env.root
     )
   }

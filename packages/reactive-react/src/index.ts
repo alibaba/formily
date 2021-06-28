@@ -1,61 +1,36 @@
-import React, { memo, forwardRef } from 'react'
+import React, { forwardRef, memo, Fragment } from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import { useObserver } from './hooks'
-import { IObserverOptions } from './types'
+import { IObserverOptions, IObserverProps } from './types'
 
-export function observer<P extends object, TRef = {}>(
-  baseComponent: React.ForwardRefRenderFunction<TRef, P>,
-  options: IObserverOptions & { forwardRef: true }
-): React.MemoExoticComponent<
-  React.ForwardRefExoticComponent<
-    React.PropsWithoutRef<P> & React.RefAttributes<TRef>
-  >
->
-
-export function observer<P extends object>(
-  baseComponent: React.FunctionComponent<P>,
-  options?: IObserverOptions
-): React.FunctionComponent<P>
-
-export function observer<
-  C extends React.FunctionComponent<any> | React.ForwardRefRenderFunction<any>,
-  Options extends IObserverOptions
->(
-  baseComponent: C,
+export function observer<P, Options extends IObserverOptions>(
+  component: React.FunctionComponent<P>,
   options?: Options
-): Options extends { forwardRef: true }
-  ? C extends React.ForwardRefRenderFunction<infer P, infer TRef>
-    ? C &
-        React.MemoExoticComponent<
-          React.ForwardRefExoticComponent<
-            React.PropsWithoutRef<P> & React.RefAttributes<TRef>
-          >
-        >
-    : never /* forwardRef set for a non forwarding component */
-  : C & { displayName: string }
-
-export function observer<P extends object, TRef = {}>(
-  baseComponent:
-    | React.ForwardRefRenderFunction<TRef, P>
-    | React.FunctionComponent<P>,
-  options?: IObserverOptions
-) {
+): React.MemoExoticComponent<
+  React.FunctionComponent<
+    Options extends { forwardRef: true }
+      ? P & {
+          ref?: 'ref' extends keyof P ? P['ref'] : React.RefAttributes<any>
+        }
+      : React.PropsWithoutRef<P>
+  >
+> {
   const realOptions = {
     forwardRef: false,
     ...options,
   }
-  const wrappedComponent = (props: P, ref: React.Ref<TRef>) => {
-    //eslint-disable-next-line
-    return useObserver(() => baseComponent(props, ref))
-  }
-  let memoComponent: any
-  if (realOptions.forwardRef) {
-    memoComponent = memo(forwardRef(wrappedComponent))
-  } else {
-    memoComponent = memo(wrappedComponent)
-  }
 
-  hoistNonReactStatics(memoComponent, baseComponent)
+  const wrappedComponent = realOptions.forwardRef
+    ? forwardRef((props: any, ref: any) => {
+        return useObserver(() => component({ ...props, ref }), realOptions)
+      })
+    : (props: any) => {
+        return useObserver(() => component(props), realOptions)
+      }
+
+  const memoComponent = memo(wrappedComponent)
+
+  hoistNonReactStatics(memoComponent, component)
 
   if (realOptions.displayName) {
     memoComponent.displayName = realOptions.displayName
@@ -63,3 +38,9 @@ export function observer<P extends object, TRef = {}>(
 
   return memoComponent
 }
+
+export const Observer = observer((props: IObserverProps) => {
+  const children =
+    typeof props.children === 'function' ? props.children() : props.children
+  return React.createElement(Fragment, {}, children)
+})

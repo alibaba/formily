@@ -25,7 +25,7 @@ import {
   modelStateGetter,
   modelStateSetter,
   initFieldUpdate,
-} from '../shared'
+} from '../shared/internals'
 import { Form } from './Form'
 import { Query } from './Query'
 
@@ -56,12 +56,13 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   constructor(
     address: FormPathPattern,
     props: IVoidFieldProps<Decorator, Component>,
-    form: Form
+    form: Form,
+    designable: boolean
   ) {
     this.initialize(props, form)
     this.makeIndexes(address)
-    this.makeObservable()
-    this.makeReactive()
+    this.makeObservable(designable)
+    this.makeReactive(designable)
     this.onInit()
   }
 
@@ -92,7 +93,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     this.component = toArr(this.props.component)
   }
 
-  protected makeObservable() {
+  protected makeObservable(designable: boolean) {
+    if (designable) return
     define(this, {
       title: observable.ref,
       description: observable.ref,
@@ -130,7 +132,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     })
   }
 
-  protected makeReactive() {
+  protected makeReactive(designable: boolean) {
+    if (designable) return
     this.form.addEffects(this, () => {
       toArr(this.props.reactions).forEach((reaction) => {
         if (isFn(reaction)) {
@@ -335,7 +338,9 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
 
   onInit = () => {
     this.initialized = true
-    initFieldUpdate(this)
+    batch.scope(() => {
+      initFieldUpdate(this)
+    })
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
   }
 

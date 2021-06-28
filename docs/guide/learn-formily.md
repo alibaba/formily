@@ -1,46 +1,48 @@
-# 如何学习 Formily
+# How to learn Formily
 
-## 学习建议
+## Study Suggestion
 
-Formily 用一句话来描述，它就是一个抽象了表单领域模型的 MVVM 表单解决方案，所以，如果你想深入使用 Formily，那必须学习并了解 Formily 的领域模型到底是咋样的，它到底解决了哪些问题，了解完领域模型之后，其实就是如何消费这个领域模型的视图层了，这一层就只需要看具体组件的文档即可了。
+To describe Formily in one sentence, it is an MVVM form solution that abstracts the form domain model. Therefore, if you want to use Formily in depth, you must learn and understand what Formily's domain model is like and what problems does it solve. After understanding the domain model, it is actually how to consume the view layer of this domain model. This layer only needs to look at the documentation of the specific components.
 
-## 关于文档
+## About the documentation
 
-因为 Formily 的学习成本还是比较高的，想要快速了解 Formily 的全貌，最重要的还是看文档，只是文档怎么看，从哪里看会比较重要，下面我们针对不同用户给出了不同的文档学习路线。
+Because Formily’s learning costs are still relatively high, if you want to quickly understand the full picture of Formily, the most important thing is to read the documentation. It's just how to look at the document and where it will be more important. Below we give different document learning routes for different users.
 
-### 入门级用户
+### Entry-level user
 
-- 引言介绍，因为你要了解 Formily 的核心思路，是否适合你的业务场景。
-- 快速开始，从最简单的例子学习实际 Formily 使用都是怎么使用的。
-- 组件文档/核心库文档，因为 Formily 为你已经封装好了大多数开箱即用的组件，遇到组件相关的问题，就像查字典一样的去查看组件文档即可。
-- 场景案例，从具体的场景出发，看看什么才是这个场景下的最佳实践。
+- Introduction, because you need to understand Formily's core ideas and whether it is suitable for your business scenario.
+- Quick start, learn how to use Formily in practice from the simplest example.
+- Component documentation/core library documentation, because Formily has already encapsulated most of the out-of-the-box components for you. If you encounter component-related problems, you can just check the component documentation just like looking up a dictionary.
+- Scenario case, starting from the specific scenario, see what is the best practice in this scenario.
 
-### 进阶级用户
+### Advanced users
 
-- 仔细消化核心概念，更深入的理解 Formily
-- 进阶指南，主要学习更高级的使用方式，比如自定义组件，从简单自定义组件到超复杂自定义组件
-- 随时查阅组件文档/核心库文档，加深记忆
-- 对于自定义组件开发上的细节问题，最佳实践，推荐直接看@formily/antd 或者@formily/next 的源码，因为这就是样板代码，跟实际业务场景息息相关。
+- Digest the core concepts carefully and have a deeper understanding of Formily. 
+- Advanced guide, mainly to learn more advanced usage methods, such as custom components, from simple custom components to super complex custom components. 
+- Read component documents/core library documents at any time to deepen memory
+- For the details and best practices of custom component development, it is recommended to look directly at the source code of @formily/antd or @formily/next, because this is the boilerplate code and is closely related to the actual business scenario.
 
-### 源码共建者
+### Source code co-builder
 
-- 贡献指南，了解最基本的贡献姿势
-- 阅读文档，如果发现文档有缺陷，可以提 PR 修复
-- 阅读单元测试，了解每个测试用例所对应的实现细节，如果发现有遗漏测试用例，可以提 PR
-- 阅读源码，如果发现源码有 Bug，可以提 PR
+- Contribution guide, understand the most basic contribution posture. 
+- Read the document, if you find that the document is defective, you can submit a PR to fix it. 
+- Read the unit test to understand the implementation details corresponding to each test case. If you find that there are missing test cases, you can submit a PR.
+- Read the source code, if you find a bug in the source code, you can raise a PR.
 
 <Alert type="error">
-注意修改源码，必须要带上单元测试
+Pay attention to modify the source code, you must bring unit tests
 </Alert>
 
-## 关于提问
+## About the question
 
-如果在开发的过程中遇到问题，推荐使用文档上方的搜索功能快速搜索文档内容，快速解决，如果搜索不到的，推荐到 [论坛](https://github.com/alibaba/formily/discussions) 中提问，这里方便记录，如果遇到非常紧急的问题，可以在钉钉群里 @白玄 帮忙解决。**非常不推荐文档都不看，就直接问各种基础问题，这样很低效**
+If you encounter problems during the development process, it is recommended to use the search function at the top of the document to quickly search for the content of the document and solve it quickly. If you can’t find it, I recommend you to ask questions in the [forum](https://github.com/alibaba/formily/discussions). It is convenient to record. If you encounter a very urgent problem, you can help solve it in the Dingding group @白玄. **It is not recommended to ask various basic questions directly without reading the document, which is very inefficient**
 
-## 关于 Bug
+## About the bug
 
-如果在开发过程中发现不符合预期的行为，并能够以最小案例复现的，可以给 Formily 提[Issue](https://github.com/alibaba/formily/issues) ，非常不推荐将问题记录在 issue 里，会打乱 Issue 的信息流，同时一定注意，**提 Issue 的时候要带上最小可复现的链接地址**，方便开发者快速定位问题，快速修复，而不是在一堆代码里找 Bug。
+If you find behaviors that do not meet expectations during the development process and can be reproduced in the smallest case, you can submit an [issue](https://github.com/alibaba/formily/issues) to Formily
+It is strongly not recommended to record the problem in the issue, which will disrupt the information flow of Issue. At the same time, **be sure to bring the smallest reproducible link address when mentioning Issue**, so that developers can quickly locate the problem and fix it quickly, instead of Find bugs in a bunch of codes. 
 
-## 关于 Feature Request
+## About Feature Request
 
-如果在开发过程中发现 Formily 的某些设计很不好，或者可以改进的更好的，则可以在 [论坛](https://github.com/alibaba/formily/discussions) 中提交自己的想法。
+If during the development process you find that some of Formily's designs are not good, or can be improved better, you can submit your own ideas in the [forum](https://github.com/alibaba/formily/discussions)
+

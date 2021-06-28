@@ -1,81 +1,82 @@
-import { isFn } from '@formily/shared'
-import {
-  IOperation,
-  IChange,
-  KeysReactions,
-  Reaction,
-  PropertyKey,
-} from './types'
+import { isFn } from './checkers'
+import { IOperation, ReactionsMap, Reaction, PropertyKey } from './types'
 import {
   ReactionStack,
-  TargetKeysReactions,
-  ReactionKeysReactions,
+  PendingScopeReactions,
+  RawReactionsMap,
   PendingReactions,
-  ReactionComputeds,
   BatchCount,
   UntrackCount,
-  ProxyRaw,
-  RawNode,
+  BatchScope,
+  ObserverListeners,
 } from './environment'
 
 const ITERATION_KEY = Symbol('iteration key')
 
-const addTargetKeysReactions = (
+const addRawReactionsMap = (
   target: any,
   key: PropertyKey,
   reaction: Reaction
 ) => {
-  const keysReactions = TargetKeysReactions.get(target)
-  if (keysReactions) {
-    const reactions = keysReactions.get(key)
+  const reactionsMap = RawReactionsMap.get(target)
+  if (reactionsMap) {
+    const reactions = reactionsMap.get(key)
     if (reactions) {
       if (!reactions.has(reaction)) {
         reactions.add(reaction)
       }
     } else {
-      keysReactions.set(key, new Set([reaction]))
+      reactionsMap.set(key, new Set([reaction]))
     }
-    return keysReactions
+    return reactionsMap
   } else {
-    const keysReactions: KeysReactions = new Map([[key, new Set([reaction])]])
-    TargetKeysReactions.set(target, keysReactions)
-    return keysReactions
+    const reactionsMap: ReactionsMap = new Map([[key, new Set([reaction])]])
+    RawReactionsMap.set(target, reactionsMap)
+    return reactionsMap
   }
 }
 
-const addReactionTargetKeys = (
+const addReactionsMapToReaction = (
   reaction: Reaction,
-  keysReactions: KeysReactions
+  reactionsMap: ReactionsMap
 ) => {
-  const bindSet = ReactionKeysReactions.get(reaction)
+  const bindSet = reaction._reactionsSet
   if (bindSet) {
-    if (!bindSet.has(keysReactions)) {
-      bindSet.add(keysReactions)
+    if (!bindSet.has(reactionsMap)) {
+      bindSet.add(reactionsMap)
     }
   } else {
-    ReactionKeysReactions.set(reaction, new Set([keysReactions]))
+    reaction._reactionsSet = new Set([reactionsMap])
   }
   return bindSet
 }
 
 const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
-  const keysReactions = TargetKeysReactions.get(target)
-  const reactions = new Set<Reaction>()
-  if (keysReactions) {
-    keysReactions.get(key)?.forEach((reaction) => {
-      if (!reactions.has(reaction)) {
-        reactions.add(reaction)
-      }
-    })
+  const reactionsMap = RawReactionsMap.get(target)
+  const reactions = []
+  if (reactionsMap) {
+    const map = reactionsMap.get(key)
+    if (map) {
+      map.forEach((reaction) => {
+        if (reactions.indexOf(reaction) === -1) {
+          reactions.push(reaction)
+        }
+      })
+    }
   }
   return reactions
 }
 
 const runReactions = (target: any, key: PropertyKey) => {
   const reactions = getReactionsFromTargetKey(target, key)
-  reactions.forEach((reaction) => {
+  for (let i = 0, len = reactions.length; i < len; i++) {
+    const reaction = reactions[i]
     if (reaction._isComputed) {
       reaction._scheduler(reaction)
+    } else if (isScopeBatching()) {
+      if (!PendingScopeReactions.has(reaction)) {
+        PendingScopeReactions.add(reaction)
+      }
     } else if (isBatching()) {
       if (!PendingReactions.has(reaction)) {
         PendingReactions.add(reaction)
@@ -87,47 +88,11 @@ const runReactions = (target: any, key: PropertyKey) => {
         reaction()
       }
     }
-  })
+  }
 }
 
 const notifyObservers = (operation: IOperation) => {
-  const targetNode = RawNode.get(
-    ProxyRaw.get(operation.target) || operation.target
-  )
-  const oldValueNode = RawNode.get(
-    ProxyRaw.get(operation.oldValue) || operation.oldValue
-  )
-  const newValueNode = RawNode.get(
-    ProxyRaw.get(operation.value) || operation.value
-  )
-  if (targetNode) {
-    const change: IChange = {
-      path: targetNode.path.concat(operation.key as any),
-      type: operation.type,
-      key: operation.key,
-      value: operation.value,
-      oldValue: operation.oldValue,
-    }
-    if (oldValueNode && operation.type === 'set') {
-      oldValueNode.observers.forEach((fn) => fn(change))
-      oldValueNode.deepObservers.forEach((fn) => fn(change))
-      if (newValueNode) {
-        newValueNode.observers = oldValueNode.observers
-        newValueNode.deepObservers = oldValueNode.deepObservers
-      }
-    }
-    if (oldValueNode && operation.type === 'delete') {
-      oldValueNode.observers = new Set()
-      oldValueNode.deepObservers = new Set()
-    }
-    targetNode.observers.forEach((fn) => fn(change))
-    targetNode.deepObservers.forEach((fn) => fn(change))
-    let parent = targetNode.parent
-    while (!!parent) {
-      parent.deepObservers.forEach((fn) => fn(change))
-      parent = parent.parent
-    }
-  }
+  ObserverListeners.forEach((fn) => fn(operation))
 }
 
 export const bindTargetKeyWithCurrentReaction = (operation: IOperation) => {
@@ -139,7 +104,7 @@ export const bindTargetKeyWithCurrentReaction = (operation: IOperation) => {
   const current = ReactionStack[ReactionStack.length - 1]
   if (isUntracking()) return
   if (current) {
-    addReactionTargetKeys(current, addTargetKeysReactions(target, key, current))
+    addReactionsMapToReaction(current, addRawReactionsMap(target, key, current))
   }
 }
 
@@ -147,27 +112,27 @@ export const bindComputedReactions = (reaction: Reaction) => {
   if (isFn(reaction)) {
     const current = ReactionStack[ReactionStack.length - 1]
     if (current) {
-      const computeds = ReactionComputeds.get(current)
+      const computeds = current._computedsSet
       if (computeds) {
         if (!computeds.has(reaction)) {
           computeds.add(reaction)
         }
       } else {
-        ReactionComputeds.set(current, new Set([reaction]))
+        current._computedsSet = new Set([reaction])
       }
     }
   }
 }
 
 export const suspendComputedReactions = (reaction: Reaction) => {
-  const computeds = ReactionComputeds.get(reaction)
+  const computeds = reaction._computedsSet
   if (computeds) {
     computeds.forEach((reaction) => {
       const reactions = getReactionsFromTargetKey(
         reaction._context,
         reaction._property
       )
-      if (reactions.size === 0) {
+      if (reactions.length === 0) {
         disposeBindingReactions(reaction)
         reaction._dirty = true
       }
@@ -186,8 +151,8 @@ export const runReactionsFromTargetKey = (operation: IOperation) => {
     runReactions(target, key)
   }
   if (type === 'add' || type === 'delete' || type === 'clear') {
-    key = Array.isArray(target) ? 'length' : ITERATION_KEY
-    runReactions(target, key)
+    const newKey = Array.isArray(target) ? 'length' : ITERATION_KEY
+    runReactions(target, newKey)
   }
 }
 
@@ -196,15 +161,15 @@ export const hasRunningReaction = () => {
 }
 
 export const releaseBindingReactions = (reaction: Reaction) => {
-  const bindingSet = ReactionKeysReactions.get(reaction)
+  const bindingSet = reaction._reactionsSet
   if (bindingSet) {
-    bindingSet.forEach((keysReactions) => {
-      keysReactions.forEach((reactions) => {
+    bindingSet.forEach((reactionsMap) => {
+      reactionsMap.forEach((reactions) => {
         reactions.delete(reaction)
       })
     })
   }
-  ReactionKeysReactions.delete(reaction)
+  delete reaction._reactionsSet
 }
 
 export const disposeBindingReactions = (reaction: Reaction) => {
@@ -223,6 +188,22 @@ export const batchEnd = () => {
   }
 }
 
+export const batchScopeStart = () => {
+  BatchScope.value = true
+}
+
+export const batchScopeEnd = () => {
+  BatchScope.value = false
+  PendingScopeReactions.forEach((reaction) => {
+    PendingScopeReactions.delete(reaction)
+    if (isFn(reaction._scheduler)) {
+      reaction._scheduler(reaction)
+    } else {
+      reaction()
+    }
+  })
+}
+
 export const untrackStart = () => {
   UntrackCount.value++
 }
@@ -232,6 +213,8 @@ export const untrackEnd = () => {
 }
 
 export const isBatching = () => BatchCount.value > 0
+
+export const isScopeBatching = () => BatchScope.value
 
 export const isUntracking = () => UntrackCount.value > 0
 

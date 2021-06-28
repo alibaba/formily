@@ -1,6 +1,6 @@
 import { isArr } from '@formily/shared'
 import { batch } from '@formily/reactive'
-import { spliceArrayState, exchangeArrayState } from '../shared'
+import { spliceArrayState, exchangeArrayState } from '../shared/internals'
 import { Field } from './Field'
 import { Form } from './Form'
 import { JSXComponent, IFieldProps, FormPathPattern } from '../types'
@@ -14,7 +14,8 @@ export class ArrayField<
   constructor(
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component>,
-    form: Form
+    form: Form,
+    designable: boolean
   ) {
     super(
       address,
@@ -22,7 +23,8 @@ export class ArrayField<
         ...props,
         value: isArr(props.value) ? props.value : [],
       },
-      form
+      form,
+      designable
     )
   }
 

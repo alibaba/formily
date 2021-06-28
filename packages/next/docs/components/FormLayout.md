@@ -171,4 +171,5 @@ export default () => (
 | inset          | boolean                                     | 内联布局                | false      |
 | shallow        | boolean                                     | 上下文浅层传递          | true       |
 | feedbackLayout | `'loose' \| 'terse' \| 'popover' \| 'none'` | 反馈布局                | true       |
+| tooltipLayout  | `"icon" \| "text"`                          | 问提示布局              | `"icon"`   |
 | bordered       | boolean                                     | 是否有边框              | true       |

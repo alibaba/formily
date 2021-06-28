@@ -9,6 +9,7 @@ import {
   isArr,
   isPlainObj,
   toArr,
+  isNumberLike,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { action, batch, toJS } from '@formily/reactive'
@@ -25,10 +26,13 @@ import {
   FieldMatchPattern,
 } from '../types'
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
-import { ReservedProperties } from './constants'
+import { ReservedProperties, GlobalState } from './constants'
+import { isObjectField } from './checkers'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
+    if (isValid(event.target.value) || isValid(event.target.checked))
+      return true
     if (
       event.target.tagName &&
       event.target.tagName !== 'INPUT' &&
@@ -60,15 +64,20 @@ export const buildFieldPath = (field: GeneralField) => {
     const currentPath = path.concat([key])
     const currentAddress = field.address.slice(0, index + 1)
     const current = field.form.fields[currentAddress.toString()]
+    if (prevArray) {
+      prevArray = false
+      return path
+    }
     if (index >= field.address.length - 1) {
       if (isVoidField(field)) {
         return currentPath
       }
-      if (prevArray) return path
       return currentPath
     }
     if (isVoidField(current)) {
-      if (isArrayField(current.parent)) {
+      const parentAddress = field.address.slice(0, index)
+      const parent = field.form.fields[parentAddress.toString()]
+      if (isArrayField(parent) && isNumberLike(key)) {
         prevArray = true
         return currentPath
       }
@@ -346,19 +355,43 @@ export const exchangeArrayState = (
   field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
 }
 
-export const initFieldValue = (field: Field) => {
-  if (isEmpty(field.initialValue)) {
+export const isEmptyWithField = (field: GeneralField, value: any) => {
+  if (isArrayField(field) || isObjectField(field)) {
+    return isEmpty(value, true)
+  }
+  return !isValid(value)
+}
+
+export const initFieldValue = (field: Field, designable: boolean) => {
+  GlobalState.initializing = true
+  if (isEmptyWithField(field, field.initialValue)) {
     if (isValid(field.props.initialValue)) {
       field.initialValue = field.props.initialValue
     }
   }
-  if (isEmpty(field.value)) {
-    if (isValid(field.props.value)) {
+  if (isEmptyWithField(field, field.value)) {
+    const isEmptyValue = isEmptyWithField(field, field.props.value)
+    const isEmptyInitialValue = isEmptyWithField(
+      field,
+      field.props.initialValue
+    )
+    if (isEmptyValue && !isEmptyInitialValue) {
+      field.value = field.props.initialValue
+    } else if (isValid(field.props.value)) {
       field.value = field.props.value
-    } else if (!isEmpty(field.initialValue)) {
-      field.value = field.initialValue
+    } else if (isValid(field.props.initialValue)) {
+      field.value = field.props.initialValue
     }
   }
+  if (designable) {
+    if (isValid(field.props.initialValue)) {
+      field.initialValue = field.props.initialValue
+    }
+    if (isValid(field.props.value)) {
+      field.value = field.props.value
+    }
+  }
+  GlobalState.initializing = false
 }
 
 export const initFieldUpdate = (field: GeneralField) => {
@@ -533,7 +566,7 @@ export const applyValuesPatch = (
     if (path.length) {
       form.setValuesIn(path, toJS(source))
     } else {
-      Object.assign(form.values, source)
+      Object.assign(form.values, toJS(source))
     }
   }
 
@@ -564,5 +597,6 @@ export const applyValuesPatch = (
       }
     }
   }
+  if (GlobalState.initializing) return
   patch(source, path)
 }

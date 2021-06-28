@@ -11,7 +11,8 @@ export class ObjectField<
   constructor(
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component>,
-    form: Form
+    form: Form,
+    designable: boolean
   ) {
     super(
       address,
@@ -19,7 +20,8 @@ export class ObjectField<
         ...props,
         value: isObj(props.value) ? props.value : {},
       },
-      form
+      form,
+      designable
     )
   }
 

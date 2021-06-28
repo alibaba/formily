@@ -382,7 +382,7 @@ const schema = {
               {
                 dependencies: ['.aa'],
                 when: "{{$deps[0] != '123'}}",
-                fullfill: {
+                fulfill: {
                   schema: {
                     title: 'BB',
                     'x-disabled': true,
@@ -446,10 +446,11 @@ export default () => {
 
 扩展属性
 
-| 属性名 | 类型                  | 描述     | 默认值   |
-| ------ | --------------------- | -------- | -------- |
-| title  | ReactText             | 文案     |          |
-| method | `'push' \| 'unshift'` | 添加方式 | `'push'` |
+| 属性名       | 类型                  | 描述     | 默认值   |
+| ------------ | --------------------- | -------- | -------- |
+| title        | ReactText             | 文案     |          |
+| method       | `'push' \| 'unshift'` | 添加方式 | `'push'` |
+| defaultValue | `any`                 | 默认值   |          |
 
 其余参考 https://ant.design/components/button-cn/
 
@@ -496,3 +497,7 @@ export default () => {
 > 索引渲染器
 
 无属性
+
+### ArrayItems.useIndex
+
+> 读取当前渲染行索引的 React Hook

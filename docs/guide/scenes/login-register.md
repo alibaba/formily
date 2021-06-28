@@ -1,8 +1,8 @@
-# 登陆注册
+# Log in&Sign up
 
-## 登陆
+## Log in
 
-#### Markup Schema 案例
+#### Markup Schema Cases
 
 ```tsx
 import React from 'react'
@@ -12,8 +12,6 @@ import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
 import { Tabs, Card } from 'antd'
 import * as ICONS from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const normalForm = createForm({
   validateFirst: true,
@@ -49,7 +47,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="账密登陆">
+          <Tabs.TabPane key="1" tab="Password Login">
             <Form
               form={normalForm}
               layout="vertical"
@@ -59,7 +57,7 @@ export default () => {
               <SchemaField>
                 <SchemaField.String
                   name="username"
-                  title="用户名"
+                  title="Username"
                   required
                   x-decorator="FormItem"
                   x-component="Input"
@@ -72,7 +70,7 @@ export default () => {
                 />
                 <SchemaField.String
                   name="password"
-                  title="密码"
+                  title="Password"
                   required
                   x-decorator="FormItem"
                   x-component="Input"
@@ -82,11 +80,11 @@ export default () => {
                 />
               </SchemaField>
               <Submit block size="large">
-                登陆
+                Log in
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="手机登陆">
+          <Tabs.TabPane key="2" tab="Mobile Login">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -96,7 +94,7 @@ export default () => {
               <SchemaField>
                 <SchemaField.String
                   name="phone"
-                  title="手机号"
+                  title="Phone Number"
                   required
                   x-validator="phone"
                   x-decorator="FormItem"
@@ -107,7 +105,7 @@ export default () => {
                 />
                 <SchemaField.String
                   name="verifyCode"
-                  title="验证码"
+                  title="Verification Code"
                   required
                   x-decorator="FormItem"
                   x-component="VerifyCode"
@@ -117,7 +115,7 @@ export default () => {
                   x-reactions={[
                     {
                       dependencies: ['.phone#value', '.phone#valid'],
-                      fullfill: {
+                      fulfill: {
                         state: {
                           'component[1].readyPost': '{{$deps[0] && $deps[1]}}',
                           'component[1].phoneNumber': '{{$deps[0]}}',
@@ -128,7 +126,7 @@ export default () => {
                 />
               </SchemaField>
               <Submit block size="large">
-                登陆
+                Log in
               </Submit>
             </Form>
           </Tabs.TabPane>
@@ -139,8 +137,8 @@ export default () => {
             justifyContent: 'space-between',
           }}
         >
-          <a href="#新用户注册">新用户注册</a>
-          <a href="#忘记密码">忘记密码?</a>
+          <a href="#Sign up">Sign up</a>
+          <a href="#Forgot password">Forgot password?</a>
         </div>
       </Card>
     </div>
@@ -148,7 +146,7 @@ export default () => {
 }
 ```
 
-#### JSON Schema 案例
+#### JSON Schema Cases
 
 ```tsx
 import React from 'react'
@@ -158,8 +156,6 @@ import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
 import { Tabs, Card } from 'antd'
 import * as ICONS from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const normalForm = createForm({
   validateFirst: true,
@@ -188,7 +184,7 @@ const normalSchema = {
   properties: {
     username: {
       type: 'string',
-      title: '用户名',
+      title: 'Username',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
@@ -198,7 +194,7 @@ const normalSchema = {
     },
     password: {
       type: 'string',
-      title: '密码',
+      title: 'Password',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
@@ -214,7 +210,7 @@ const phoneSchema = {
   properties: {
     phone: {
       type: 'string',
-      title: '手机号',
+      title: 'Phone Number',
       required: true,
       'x-validator': 'phone',
       'x-decorator': 'FormItem',
@@ -225,7 +221,7 @@ const phoneSchema = {
     },
     verifyCode: {
       type: 'string',
-      title: '验证码',
+      title: 'Verification Code',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'VerifyCode',
@@ -235,7 +231,7 @@ const phoneSchema = {
       'x-reactions': [
         {
           dependencies: ['.phone#value', '.phone#valid'],
-          fullfill: {
+          fulfill: {
             state: {
               'component[1].readyPost': '{{$deps[0] && $deps[1]}}',
               'component[1].phoneNumber': '{{$deps[0]}}',
@@ -259,7 +255,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="账密登陆">
+          <Tabs.TabPane key="1" tab="Password Login">
             <Form
               form={normalForm}
               layout="vertical"
@@ -268,11 +264,11 @@ export default () => {
             >
               <SchemaField schema={normalSchema} />
               <Submit block size="large">
-                登陆
+                Log in
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="手机登陆">
+          <Tabs.TabPane key="2" tab="Mobile Login">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -281,7 +277,7 @@ export default () => {
             >
               <SchemaField schema={phoneSchema} />
               <Submit block size="large">
-                登陆
+                Log in
               </Submit>
             </Form>
           </Tabs.TabPane>
@@ -292,8 +288,8 @@ export default () => {
             justifyContent: 'space-between',
           }}
         >
-          <a href="#新用户注册">新用户注册</a>
-          <a href="#忘记密码">忘记密码?</a>
+          <a href="#Sign up">Sign up</a>
+          <a href="#Forgot password">Forgot password?</a>
         </div>
       </Card>
     </div>
@@ -301,7 +297,7 @@ export default () => {
 }
 ```
 
-#### 纯 JSX 案例
+#### Pure JSX Cases
 
 ```tsx
 import React from 'react'
@@ -311,8 +307,6 @@ import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
 import { Tabs, Card } from 'antd'
 import { UserOutlined, LockOutlined, PhoneOutlined } from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const normalForm = createForm({
   validateFirst: true,
@@ -334,7 +328,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="账密登陆">
+          <Tabs.TabPane key="1" tab="Password Login">
             <Form
               form={normalForm}
               layout="vertical"
@@ -343,7 +337,7 @@ export default () => {
             >
               <Field
                 name="username"
-                title="用户名"
+                title="Username"
                 required
                 decorator={[FormItem]}
                 component={[
@@ -355,7 +349,7 @@ export default () => {
               />
               <Field
                 name="password"
-                title="密码"
+                title="Password"
                 required
                 decorator={[FormItem]}
                 component={[
@@ -366,11 +360,11 @@ export default () => {
                 ]}
               />
               <Submit block size="large">
-                登陆
+                Log in
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="手机登陆">
+          <Tabs.TabPane key="2" tab="Mobile Login">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -379,7 +373,7 @@ export default () => {
             >
               <Field
                 name="phone"
-                title="手机号"
+                title="Phone Number"
                 required
                 validator="phone"
                 decorator={[FormItem]}
@@ -392,7 +386,7 @@ export default () => {
               />
               <Field
                 name="verifyCode"
-                title="验证码"
+                title="Verification Code"
                 required
                 reactions={(field) => {
                   const phone = field.query('.phone')
@@ -410,7 +404,7 @@ export default () => {
                 ]}
               />
               <Submit block size="large">
-                登陆
+                Log in
               </Submit>
             </Form>
           </Tabs.TabPane>
@@ -421,8 +415,8 @@ export default () => {
             justifyContent: 'space-between',
           }}
         >
-          <a href="#新用户注册">新用户注册</a>
-          <a href="#忘记密码">忘记密码?</a>
+          <a href="#Sign up">Sign up</a>
+          <a href="#Forgot password">Forgot password?</a>
         </div>
       </Card>
     </div>
@@ -430,9 +424,9 @@ export default () => {
 }
 ```
 
-## 新用户注册
+## Sign up
 
-#### Markup Schema 案例
+#### Markup Schema Cases
 
 ```tsx
 import React from 'react'
@@ -458,8 +452,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -474,7 +466,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <Button icon={<UploadOutlined />}>上传复印件</Button>
+      <Button icon={<UploadOutlined />}>Upload a copy</Button>
     </Upload>
   )
 }
@@ -541,7 +533,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="新用户注册" style={{ width: 620 }}>
+      <Card title="Sign up" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -551,14 +543,14 @@ export default () => {
           <SchemaField>
             <SchemaField.String
               name="username"
-              title="用户名"
+              title="Username"
               required
               x-decorator="FormItem"
               x-component="Input"
             />
             <SchemaField.String
               name="password"
-              title="密码"
+              title="Password"
               required
               x-decorator="FormItem"
               x-component="Password"
@@ -568,10 +560,10 @@ export default () => {
               x-reactions={[
                 {
                   dependencies: ['.confirm_password'],
-                  fullfill: {
+                  fulfill: {
                     state: {
                       errors:
-                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
+                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
                     },
                   },
                 },
@@ -579,7 +571,7 @@ export default () => {
             />
             <SchemaField.String
               name="confirm_password"
-              title="确认密码"
+              title="Confirm Password"
               required
               x-decorator="FormItem"
               x-component="Password"
@@ -589,17 +581,17 @@ export default () => {
               x-reactions={[
                 {
                   dependencies: ['.password'],
-                  fullfill: {
+                  fulfill: {
                     state: {
                       errors:
-                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
+                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
                     },
                   },
                 },
               ]}
             />
             <SchemaField.Void
-              title="姓名"
+              title="name"
               x-decorator="FormItem"
               x-decorator-props={{
                 asterisk: true,
@@ -612,7 +604,7 @@ export default () => {
                 x-decorator="FormItem"
                 x-component="Input"
                 x-component-props={{
-                  placeholder: '姓',
+                  placeholder: 'firstname',
                 }}
                 required
               />
@@ -621,14 +613,14 @@ export default () => {
                 x-decorator="FormItem"
                 x-component="Input"
                 x-component-props={{
-                  placeholder: '名',
+                  placeholder: 'lastname',
                 }}
                 required
               />
             </SchemaField.Void>
             <SchemaField.String
               name="email"
-              title="邮箱"
+              title="Email"
               required
               x-validator="email"
               x-decorator="FormItem"
@@ -636,20 +628,20 @@ export default () => {
             />
             <SchemaField.String
               name="gender"
-              title="性别"
+              title="Gender"
               x-decorator="FormItem"
               x-component="Select"
               enum={[
                 {
-                  label: '男',
+                  label: 'male',
                   value: 1,
                 },
                 {
-                  label: '女',
+                  label: 'female',
                   value: 2,
                 },
                 {
-                  label: '第三性别',
+                  label: 'third gender',
                   value: 3,
                 },
               ]}
@@ -657,14 +649,14 @@ export default () => {
             />
             <SchemaField.String
               name="birthday"
-              title="生日"
+              title="Birthday"
               required
               x-decorator="FormItem"
               x-component="DatePicker"
             />
             <SchemaField.String
               name="address"
-              title="地址"
+              title="Address"
               required
               x-decorator="FormItem"
               x-component="Cascader"
@@ -672,14 +664,14 @@ export default () => {
             />
             <SchemaField.String
               name="idCard"
-              title="身份证复印件"
+              title="ID"
               required
               x-decorator="FormItem"
               x-component="IDUpload"
             />
             <SchemaField.Array
               name="contacts"
-              title="联系人信息"
+              title="Contacts"
               required
               x-decorator="FormItem"
               x-component="ArrayItems"
@@ -691,7 +683,7 @@ export default () => {
                 />
                 <SchemaField.Void
                   name="popover"
-                  title="维护联系人信息"
+                  title="Contact Information"
                   x-decorator="Editable.Popover"
                   x-component="FormLayout"
                   x-component-props={{
@@ -700,7 +692,7 @@ export default () => {
                   x-reactions={[
                     {
                       dependencies: ['.popover.name'],
-                      fullfill: {
+                      fulfill: {
                         schema: {
                           title: '{{$deps[0]}}',
                         },
@@ -711,7 +703,7 @@ export default () => {
                   <SchemaField.String
                     name="name"
                     required
-                    title="姓名"
+                    title="Name"
                     x-decorator="FormItem"
                     x-component="Input"
                     x-component-props={{
@@ -722,7 +714,7 @@ export default () => {
                   />
                   <SchemaField.String
                     name="email"
-                    title="邮箱"
+                    title="Email"
                     x-validator={[{ required: true }, 'email']}
                     x-decorator="FormItem"
                     x-component="Input"
@@ -735,7 +727,7 @@ export default () => {
                   <SchemaField.String
                     name="phone"
                     required
-                    title="手机号"
+                    title="Phone Number"
                     x-validator="phone"
                     x-decorator="FormItem"
                     x-component="Input"
@@ -753,13 +745,13 @@ export default () => {
               </SchemaField.Object>
               <SchemaField.Void
                 x-component="ArrayItems.Addition"
-                title="新增联系人"
+                title="Add Contact"
               />
             </SchemaField.Array>
           </SchemaField>
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              注册
+              Sign up
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>
@@ -769,7 +761,7 @@ export default () => {
 }
 ```
 
-#### JSON Schema 案例
+#### JSON Schema Cases
 
 ```tsx
 import React from 'react'
@@ -795,8 +787,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -873,14 +863,14 @@ const schema = {
   properties: {
     username: {
       type: 'string',
-      title: '用户名',
+      title: 'Username',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     password: {
       type: 'string',
-      title: '密码',
+      title: 'Password',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
@@ -890,10 +880,10 @@ const schema = {
       'x-reactions': [
         {
           dependencies: ['.confirm_password'],
-          fullfill: {
+          fulfill: {
             state: {
               errors:
-                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
+                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认password不匹配" : ""}}',
             },
           },
         },
@@ -901,7 +891,7 @@ const schema = {
     },
     confirm_password: {
       type: 'string',
-      title: '确认密码',
+      title: 'Confirm Password',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
@@ -911,10 +901,10 @@ const schema = {
       'x-reactions': [
         {
           dependencies: ['.password'],
-          fullfill: {
+          fulfill: {
             state: {
               errors:
-                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
+                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
             },
           },
         },
@@ -922,7 +912,7 @@ const schema = {
     },
     name: {
       type: 'void',
-      title: '姓名',
+      title: 'name',
       'x-decorator': 'FormItem',
       'x-decorator-props': {
         asterisk: true,
@@ -936,7 +926,7 @@ const schema = {
           'x-decorator': 'FormItem',
           'x-component': 'Input',
           'x-component-props': {
-            placeholder: '姓',
+            placeholder: 'firstname',
           },
         },
         lastName: {
@@ -945,14 +935,14 @@ const schema = {
           'x-decorator': 'FormItem',
           'x-component': 'Input',
           'x-component-props': {
-            placeholder: '名',
+            placeholder: 'lastname',
           },
         },
       },
     },
     email: {
       type: 'string',
-      title: '邮箱',
+      title: 'Email',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
@@ -960,18 +950,18 @@ const schema = {
     },
     gender: {
       type: 'string',
-      title: '性别',
+      title: 'Gender',
       enum: [
         {
-          label: '男',
+          label: 'male',
           value: 1,
         },
         {
-          label: '女',
+          label: 'female',
           value: 2,
         },
         {
-          label: '第三性别',
+          label: 'third gender',
           value: 3,
         },
       ],
@@ -981,14 +971,14 @@ const schema = {
     birthday: {
       type: 'string',
       required: true,
-      title: '生日',
+      title: 'Birthday',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker',
     },
     address: {
       type: 'string',
       required: true,
-      title: '地址',
+      title: 'Address',
       'x-decorator': 'FormItem',
       'x-component': 'Cascader',
       'x-reactions': '{{fetchAddress}}',
@@ -996,14 +986,14 @@ const schema = {
     idCard: {
       type: 'string',
       required: true,
-      title: '身份证复印件',
+      title: 'ID',
       'x-decorator': 'FormItem',
       'x-component': 'IDUpload',
     },
     contacts: {
       type: 'array',
       required: true,
-      title: '联系人信息',
+      title: 'Contacts',
       'x-decorator': 'FormItem',
       'x-component': 'ArrayItems',
       items: {
@@ -1017,7 +1007,7 @@ const schema = {
           },
           popover: {
             type: 'void',
-            title: '完善联系人信息',
+            title: 'improve contact information',
             'x-decorator': 'Editable.Popover',
             'x-component': 'FormLayout',
             'x-component-props': {
@@ -1026,7 +1016,7 @@ const schema = {
             'x-reactions': [
               {
                 dependencies: ['.popover.name'],
-                fullfill: {
+                fulfill: {
                   schema: {
                     title: '{{$deps[0]}}',
                   },
@@ -1036,7 +1026,7 @@ const schema = {
             properties: {
               name: {
                 type: 'string',
-                title: '姓名',
+                title: 'Name',
                 required: true,
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
@@ -1048,7 +1038,7 @@ const schema = {
               },
               email: {
                 type: 'string',
-                title: '邮箱',
+                title: 'Email',
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
                 'x-validator': [{ required: true }, 'email'],
@@ -1060,7 +1050,7 @@ const schema = {
               },
               phone: {
                 type: 'string',
-                title: '手机号',
+                title: 'Phone Number',
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
                 'x-validator': [{ required: true }, 'phone'],
@@ -1082,7 +1072,7 @@ const schema = {
       properties: {
         addition: {
           type: 'void',
-          title: '新增联系人',
+          title: 'Add Contact',
           'x-component': 'ArrayItems.Addition',
         },
       },
@@ -1100,7 +1090,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="新用户注册" style={{ width: 620 }}>
+      <Card title="Sign up" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1110,7 +1100,7 @@ export default () => {
           <SchemaField schema={schema} />
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              注册
+              Sign up
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>
@@ -1120,7 +1110,7 @@ export default () => {
 }
 ```
 
-#### 纯 JSX 案例
+#### Pure JSX Cases
 
 ```tsx
 import React from 'react'
@@ -1142,8 +1132,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1158,7 +1146,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <Button icon={<UploadOutlined />}>上传复印件</Button>
+      <Button icon={<UploadOutlined />}>Upload a copy</Button>
     </Upload>
   )
 }
@@ -1173,7 +1161,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="新用户注册" style={{ width: 620 }}>
+      <Card title="Sign up" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1182,14 +1170,14 @@ export default () => {
         >
           <Field
             name="username"
-            title="用户名"
+            title="Username"
             required
             decorator={[FormItem]}
             component={[Input]}
           />
           <Field
             name="password"
-            title="密码"
+            title="Password"
             required
             decorator={[FormItem]}
             component={[
@@ -1204,13 +1192,13 @@ export default () => {
                 confirm.get('value') &&
                 field.value &&
                 field.value !== confirm.get('value')
-                  ? '确认密码不匹配'
+                  ? 'Confirm that the password does not match'
                   : ''
             }}
           />
           <Field
             name="confirm_password"
-            title="确认密码"
+            title="Confirm Password"
             required
             decorator={[FormItem]}
             component={[
@@ -1225,13 +1213,13 @@ export default () => {
                 password.get('value') &&
                 field.value &&
                 field.value !== password.get('value')
-                  ? '确认密码不匹配'
+                  ? 'Confirm that the password does not match'
                   : ''
             }}
           />
           <VoidField
             name="name"
-            title="姓名"
+            title="Name"
             decorator={[
               FormItem,
               {
@@ -1247,7 +1235,7 @@ export default () => {
               component={[
                 Input,
                 {
-                  placeholder: '姓',
+                  placeholder: 'firstname',
                 },
               ]}
               required
@@ -1258,7 +1246,7 @@ export default () => {
               component={[
                 Input,
                 {
-                  placeholder: '名',
+                  placeholder: 'lastname',
                 },
               ]}
               required
@@ -1266,7 +1254,7 @@ export default () => {
           </VoidField>
           <Field
             name="email"
-            title="邮箱"
+            title="Email"
             required
             validator="email"
             decorator={[FormItem]}
@@ -1274,20 +1262,20 @@ export default () => {
           />
           <Field
             name="gender"
-            title="性别"
+            title="Gender"
             decorator={[FormItem]}
             component={[Select]}
             dataSource={[
               {
-                label: '男',
+                label: 'male',
                 value: 1,
               },
               {
-                label: '女',
+                label: 'female',
                 value: 2,
               },
               {
-                label: '第三性别',
+                label: 'third gender',
                 value: 3,
               },
             ]}
@@ -1295,14 +1283,14 @@ export default () => {
           />
           <Field
             name="birthday"
-            title="生日"
+            title="Birthday"
             required
             decorator={[FormItem]}
             component={[DatePicker]}
           />
           <Field
             name="address"
-            title="地址"
+            title="Address"
             required
             decorator={[FormItem]}
             component={[Cascader]}
@@ -1342,14 +1330,14 @@ export default () => {
           />
           <Field
             name="idCard"
-            title="身份证复印件"
+            title="ID"
             required
             decorator={[FormItem]}
             component={[IDUpload]}
           />
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              注册
+              Sign up
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>
@@ -1359,9 +1347,9 @@ export default () => {
 }
 ```
 
-## 忘记密码
+## Forgot password
 
-#### Markup Schema 案例
+#### Markup Schema Cases
 
 ```tsx
 import React from 'react'
@@ -1376,7 +1364,6 @@ import {
   FormButtonGroup,
 } from '@formily/antd'
 import { Card } from 'antd'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1400,7 +1387,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="变更密码" style={{ width: 620 }}>
+      <Card title="change password" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1410,14 +1397,14 @@ export default () => {
           <SchemaField>
             <SchemaField.String
               name="username"
-              title="用户名"
+              title="Username"
               required
               x-decorator="FormItem"
               x-component="Input"
             />
             <SchemaField.String
               name="email"
-              title="邮箱"
+              title="Email"
               required
               x-validator="email"
               x-decorator="FormItem"
@@ -1425,14 +1412,14 @@ export default () => {
             />
             <SchemaField.String
               name="old_password"
-              title="原始密码"
+              title="Old Password"
               required
               x-decorator="FormItem"
               x-component="Password"
             />
             <SchemaField.String
               name="password"
-              title="新密码"
+              title="New Password"
               required
               x-decorator="FormItem"
               x-component="Password"
@@ -1442,10 +1429,10 @@ export default () => {
               x-reactions={[
                 {
                   dependencies: ['.confirm_password'],
-                  fullfill: {
+                  fulfill: {
                     state: {
                       errors:
-                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
+                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
                     },
                   },
                 },
@@ -1453,7 +1440,7 @@ export default () => {
             />
             <SchemaField.String
               name="confirm_password"
-              title="确认密码"
+              title="Confirm Password"
               required
               x-decorator="FormItem"
               x-component="Password"
@@ -1463,10 +1450,10 @@ export default () => {
               x-reactions={[
                 {
                   dependencies: ['.password'],
-                  fullfill: {
+                  fulfill: {
                     state: {
                       errors:
-                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
+                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
                     },
                   },
                 },
@@ -1475,7 +1462,7 @@ export default () => {
           </SchemaField>
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              确认变更
+              Confirm
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>
@@ -1485,7 +1472,7 @@ export default () => {
 }
 ```
 
-#### JSON Schema 案例
+#### JSON Schema Cases
 
 ```tsx
 import React from 'react'
@@ -1500,7 +1487,6 @@ import {
   FormButtonGroup,
 } from '@formily/antd'
 import { Card } from 'antd'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1519,14 +1505,14 @@ const schema = {
   properties: {
     username: {
       type: 'string',
-      title: '用户名',
+      title: 'Username',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     email: {
       type: 'string',
-      title: '邮箱',
+      title: 'Email',
       required: true,
       'x-validator': 'email',
       'x-decorator': 'FormItem',
@@ -1534,14 +1520,14 @@ const schema = {
     },
     oldPassword: {
       type: 'string',
-      title: '原始密码',
+      title: 'Old Password',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
     },
     password: {
       type: 'string',
-      title: '新密码',
+      title: 'New Password',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
@@ -1551,10 +1537,10 @@ const schema = {
       'x-reactions': [
         {
           dependencies: ['.confirm_password'],
-          fullfill: {
+          fulfill: {
             state: {
               errors:
-                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
+                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
             },
           },
         },
@@ -1562,7 +1548,7 @@ const schema = {
     },
     confirm_password: {
       type: 'string',
-      title: '确认密码',
+      title: 'Confirm Password',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
@@ -1572,10 +1558,10 @@ const schema = {
       'x-reactions': [
         {
           dependencies: ['.password'],
-          fullfill: {
+          fulfill: {
             state: {
               errors:
-                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
+                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
             },
           },
         },
@@ -1594,7 +1580,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="变更密码" style={{ width: 620 }}>
+      <Card title="change password" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1604,7 +1590,7 @@ export default () => {
           <SchemaField schema={schema} />
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              确认变更
+              Confirm
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>
@@ -1614,7 +1600,7 @@ export default () => {
 }
 ```
 
-#### 纯 JSX 案例
+#### Pure JSX Cases
 
 ```tsx
 import React from 'react'
@@ -1629,7 +1615,6 @@ import {
   FormButtonGroup,
 } from '@formily/antd'
 import { Card } from 'antd'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1645,7 +1630,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="变更密码" style={{ width: 620 }}>
+      <Card title="change password" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1654,14 +1639,14 @@ export default () => {
         >
           <Field
             name="username"
-            title="用户名"
+            title="Username"
             required
             decorator={[FormItem]}
             component={[Input]}
           />
           <Field
             name="email"
-            title="邮箱"
+            title="Email"
             required
             validator="email"
             decorator={[FormItem]}
@@ -1669,14 +1654,14 @@ export default () => {
           />
           <Field
             name="old_password"
-            title="原始密码"
+            title="Old Password"
             required
             decorator={[FormItem]}
             component={[Password]}
           />
           <Field
             name="password"
-            title="新密码"
+            title="New Password"
             required
             decorator={[FormItem]}
             component={[
@@ -1691,13 +1676,13 @@ export default () => {
                 confirm.get('value') &&
                 field.value &&
                 field.value !== confirm.get('value')
-                  ? '确认密码不匹配'
+                  ? 'Confirm that the password does not match'
                   : ''
             }}
           />
           <Field
             name="confirm_password"
-            title="确认密码"
+            title="Confirm Password"
             required
             decorator={[FormItem]}
             component={[
@@ -1712,13 +1697,13 @@ export default () => {
                 confirm.get('value') &&
                 field.value &&
                 field.value !== confirm.get('value')
-                  ? '确认密码不匹配'
+                  ? 'Confirm that the password does not match'
                   : ''
             }}
           />
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              确认变更
+              Confirm change
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>

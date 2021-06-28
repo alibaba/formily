@@ -5,7 +5,7 @@ import {
   releaseBindingReactions,
 } from './reaction'
 import { untracked } from './untracked'
-import { isFn } from '@formily/shared'
+import { isFn } from './checkers'
 import { ReactionStack } from './environment'
 import { Reaction, IReactionOptions } from './types'
 
@@ -64,7 +64,10 @@ export const reaction = <T>(
   return autorun(() => {
     value.currentValue = tracker()
     dirty.current = dirtyCheck()
-    if (dirty.current && tracked.current) {
+    if (
+      (dirty.current && tracked.current) ||
+      (!tracked.current && realOptions.fireImmediately)
+    ) {
       untracked(() => {
         if (isFn(subscriber)) subscriber(value.currentValue)
       })

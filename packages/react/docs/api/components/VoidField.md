@@ -25,7 +25,6 @@ import React from 'react'
 import { createForm } from '@formily/core'
 import { FormProvider, FormConsumer, Field, VoidField } from '@formily/react'
 import { Input, Button, Space } from 'antd'
-import 'antd/lib/input/style'
 
 const form = createForm()
 

@@ -42,6 +42,7 @@ export const VerifyCode = ({
         {lastTime === 0 && (
           <Button
             disabled={!readyPost}
+            block
             onClick={() => {
               if (phoneNumber) {
                 console.log(`post code by phone number ${phoneNumber}`)

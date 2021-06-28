@@ -1,4 +1,4 @@
-import { registerPatches } from '../patches'
+import { registerPolyfills } from '../patches'
 import { toArr, isArr, isStr, lowerCase, isValid } from '@formily/shared'
 import { ISchema } from '../types'
 
@@ -30,7 +30,7 @@ const transformXLinkage = (linkages: any[]) => {
         return buf.concat({
           target: item.target,
           when: transformCondition(item.condition),
-          fullfill: {
+          fulfill: {
             state: {
               visible: true,
             },
@@ -45,7 +45,7 @@ const transformXLinkage = (linkages: any[]) => {
         return buf.concat({
           target: item.target,
           when: transformCondition(item.condition),
-          fullfill: {
+          fulfill: {
             schema: SpecificationV1Polyfill({ version: '1.0', ...item.schema }),
           },
           otherwise: {
@@ -59,7 +59,7 @@ const transformXLinkage = (linkages: any[]) => {
         return buf.concat({
           target: item.target,
           when: transformCondition(item.condition),
-          fullfill: {
+          fulfill: {
             state: item.state,
           },
           otherwise: {
@@ -125,7 +125,7 @@ const SpecificationV1Polyfill = (schema: ISchema) => {
   return schema
 }
 
-registerPatches(SpecificationV1Polyfill)
+registerPolyfills('1.0', SpecificationV1Polyfill)
 
 export const registerVoidComponents = (components: string[]) => {
   VOID_COMPONENTS.push(...components)

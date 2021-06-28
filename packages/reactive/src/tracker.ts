@@ -1,4 +1,5 @@
 import { ReactionStack } from './environment'
+import { isFn } from './checkers'
 import { Reaction } from './types'
 import {
   batchEnd,
@@ -6,7 +7,6 @@ import {
   disposeBindingReactions,
   releaseBindingReactions,
 } from './reaction'
-import { isFn } from '@formily/shared'
 
 export class Tracker {
   private results: any

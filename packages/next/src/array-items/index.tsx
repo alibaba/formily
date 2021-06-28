@@ -99,7 +99,11 @@ ArrayItems.displayName = 'ArrayItems'
 ArrayItems.Item = (props) => {
   const prefixCls = usePrefixCls('formily-array-items')
   return (
-    <div {...props} className={cls(`${prefixCls}-card`, props.className)}>
+    <div
+      {...props}
+      onChange={() => {}}
+      className={cls(`${prefixCls}-card`, props.className)}
+    >
       {props.children}
     </div>
   )

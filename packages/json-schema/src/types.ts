@@ -1,6 +1,7 @@
 export type SchemaEnum<Message> = Array<
   | string
   | number
+  | boolean
   | { label: Message; value: any; [key: string]: any }
   | { key: any; title: Message; [key: string]: any }
 >
@@ -57,20 +58,21 @@ export type SchemaEffectTypes =
 
 export type SchemaReaction<Field = any> =
   | {
-      dependencies?: string[]
+      dependencies?: string[] | Record<string, string>
       when?: string | boolean
       target?: string
       effects?: SchemaEffectTypes[]
-      fullfill?: {
-        state?: Formily.Core.Types.IGeneralFieldState
+      fulfill?: {
+        state?: Stringify<Formily.Core.Types.IGeneralFieldState>
         schema?: ISchema
         run?: string
       }
       otherwise?: {
-        state?: Formily.Core.Types.IGeneralFieldState
+        state?: Stringify<Formily.Core.Types.IGeneralFieldState>
         schema?: ISchema
         run?: string
       }
+      [key: string]: any
     }
   | ((field: Field) => void)
 
@@ -119,7 +121,7 @@ export interface ISchemaFieldFactoryOptions<
 }
 
 export interface ISchemaFieldUpdateRequest {
-  state?: Formily.Core.Types.IFieldState
+  state?: Stringify<Formily.Core.Types.IFieldState>
   schema?: ISchema
   run?: string
 }
@@ -129,7 +131,10 @@ export interface ISchemaTransformerOptions extends ISchemaFieldFactoryOptions {
 }
 
 export type Stringify<P extends { [key: string]: any }> = {
-  [key in keyof P]?: P[key] | string
+  /**
+   * Use `string & {}` instead of string to keep Literal Type for ISchema#component and ISchema#decorator
+   */
+  [key in keyof P]?: P[key] | (string & {})
 }
 
 export type ISchema<
@@ -168,7 +173,18 @@ export type ISchema<
   minProperties?: number
   required?: string[] | boolean | string
   format?: string
+  $ref?: string
   /** nested json schema spec **/
+  definitions?: SchemaProperties<
+    Decorator,
+    Component,
+    DecoratorProps,
+    ComponentProps,
+    Pattern,
+    Display,
+    Validator,
+    Message
+  >
   properties?: SchemaProperties<
     Decorator,
     Component,
@@ -229,11 +245,11 @@ export type ISchema<
   //校验器
   ['x-validator']?: Validator
   //装饰器
-  ['x-decorator']?: Decorator | (string & {})
+  ['x-decorator']?: Decorator | (string & {}) | ((...args: any[]) => any)
   //装饰器属性
   ['x-decorator-props']?: DecoratorProps
   //组件
-  ['x-component']?: Component | (string & {})
+  ['x-component']?: Component | (string & {}) | ((...args: any[]) => any)
   //组件属性
   ['x-component-props']?: ComponentProps
   //组件响应器

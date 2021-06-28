@@ -6,22 +6,16 @@
  * @since 2018-05-22 16:39
  */
 import { Tracker } from '@formily/reactive'
-import VueType, { ComponentOptions } from 'vue'
 import collectDataForVue from './collectData'
-import { Vue2 } from 'vue-demi'
-
-export type VueClass<V> = (new (...args: any[]) => V & VueType) & typeof VueType
+import { Vue2 as Vue } from 'vue-demi'
+import { IObserverOptions } from '../types'
 
 const noop = () => {}
 const disposerSymbol = Symbol('disposerSymbol')
 
-function observer<VC extends VueClass<VueType>>(
-  Component: VC | ComponentOptions<VueType>
-): VC
-function observer<VC extends VueClass<VueType>>(
-  Component: VC | ComponentOptions<VueType>
-) {
+function observer(Component: any, observerOptions?: IObserverOptions): any {
   const name =
+    observerOptions?.name ||
     (Component as any).name ||
     (Component as any)._componentTag ||
     (Component.constructor && Component.constructor.name) ||
@@ -34,7 +28,7 @@ function observer<VC extends VueClass<VueType>>(
   const options = {
     name,
     ...originalOptions,
-    data(vm: VueType) {
+    data(vm: any) {
       return collectDataForVue(vm || this, dataDefinition)
     },
     // overrider the cached constructor to avoid extending skip
@@ -47,7 +41,7 @@ function observer<VC extends VueClass<VueType>>(
     typeof Component === 'function' &&
     Object.getPrototypeOf(Component.prototype)
   const Super =
-    superProto instanceof (Vue2 as any) ? superProto.constructor : Vue2
+    superProto instanceof (Vue as any) ? superProto.constructor : Vue
   const ExtendedComponent = Super.extend(options)
 
   const { $mount, $destroy } = ExtendedComponent.prototype
@@ -82,7 +76,7 @@ function observer<VC extends VueClass<VueType>>(
     return reactiveRender()
   }
 
-  ExtendedComponent.prototype.$destroy = function (this: VueType) {
+  ExtendedComponent.prototype.$destroy = function (this: any) {
     ;(this as any)[disposerSymbol]()
     $destroy.apply(this)
   }

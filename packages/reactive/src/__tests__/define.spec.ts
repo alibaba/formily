@@ -1,4 +1,4 @@
-import { define, observable, autorun } from '..'
+import { define, model, observable, autorun } from '..'
 import { observe } from '../observe'
 import { FormPath } from '@formily/shared'
 import { batch } from '../batch'
@@ -131,4 +131,16 @@ describe('makeObservable', () => {
     expect(target.cc).toEqual(44)
     expect(handler).toBeCalledTimes(2)
   })
+})
+
+test('define model', () => {
+  const obs = model({
+    aa: 1,
+    action() {
+      this.aa++
+    },
+  })
+  const { action } = obs
+  action()
+  expect(obs.aa).toEqual(2)
 })

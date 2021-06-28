@@ -1,7 +1,6 @@
 import React from 'react'
 import { Tracker } from '@formily/reactive'
-import { isFn } from '@formily/shared'
-import { GarbageCollector } from '../gc'
+import { GarbageCollector } from '../shared'
 import { IObserverOptions } from '../types'
 import { useForceUpdate } from './useForceUpdate'
 
@@ -17,12 +16,12 @@ export const useObserver = <T extends () => any>(
 
   const tracker = React.useMemo(() => {
     return new Tracker(() => {
-      if (isFn(options?.scheduler)) {
+      if (typeof options?.scheduler === 'function') {
         options.scheduler(forceUpdate)
       } else {
         forceUpdate()
       }
-    })
+    }, options?.displayName)
   }, [])
 
   //StrictMode/ConcurrentMode会导致组件无法正确触发Unmount，所以只能自己做垃圾回收

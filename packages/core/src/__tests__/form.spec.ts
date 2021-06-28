@@ -122,6 +122,34 @@ test('setValues/setInitialValues', () => {
   expect(form.values.aa).toBeUndefined()
 })
 
+test('setValues with null', () => {
+  const form = attach(createForm())
+  form.setInitialValues({
+    'object-1': {
+      'array-1': null,
+    },
+    'object-2': {
+      'array-2': null,
+    },
+  })
+  form.setValues({
+    'object-1': {
+      'array-1': null,
+    },
+    'object-2': {
+      'array-2': null,
+    },
+  })
+  expect(form.values).toEqual({
+    'object-1': {
+      'array-1': null,
+    },
+    'object-2': {
+      'array-2': null,
+    },
+  })
+})
+
 test('observable values/initialValues', () => {
   const values: any = observable({
     aa: 123,
@@ -853,4 +881,152 @@ test('devtools', () => {
   }
   const form = attach(createForm())
   form.onUnmount()
+})
+
+test('reset array field', async () => {
+  const form = attach(
+    createForm({
+      values: {
+        array: [{ value: 123 }],
+      },
+    })
+  )
+  attach(
+    form.createArrayField({
+      name: 'array',
+      required: true,
+    })
+  )
+  expect(form.values).toEqual({
+    array: [{ value: 123 }],
+  })
+  await form.reset('*', {
+    forceClear: true,
+  })
+  expect(form.values).toEqual({
+    array: [],
+  })
+})
+
+test('reset object field', async () => {
+  const form = attach(
+    createForm({
+      values: {
+        object: { value: 123 },
+      },
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'object',
+      required: true,
+    })
+  )
+  expect(form.values).toEqual({
+    object: { value: 123 },
+  })
+  await form.reset('*', {
+    forceClear: true,
+  })
+  expect(form.values).toEqual({
+    object: {},
+  })
+})
+
+test('initialValues merge values before create field', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+
+  form.values.array = [{ aa: '321' }]
+  const arr_0_aa = attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'array.0',
+      initialValue: '123',
+    })
+  )
+  expect(array.value).toEqual([{ aa: '321' }])
+  expect(arr_0_aa.value).toEqual('321')
+})
+
+test('initialValues merge values after create field', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createArrayField({
+      name: 'aa',
+      initialValue: '111',
+    })
+  )
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  const arr_0_aa = attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'array.0',
+      initialValue: '123',
+    })
+  )
+  form.values.aa = '222'
+  form.values.array = [{ aa: '321' }]
+  expect(array.value).toEqual([{ aa: '321' }])
+  expect(arr_0_aa.value).toEqual('321')
+  expect(aa.value).toEqual('222')
+})
+
+test('remove property of form values with undefined value', () => {
+  const form = attach(createForm())
+  const field = attach(
+    form.createField({
+      name: 'aaa',
+      initialValue: 123,
+    })
+  )
+  expect(form.values).toMatchObject({ aaa: 123 })
+  field.display = 'none'
+  expect(form.values.hasOwnProperty('aaa')).toBeFalsy()
+  field.display = 'visible'
+  expect(form.values.hasOwnProperty('aaa')).toBeTruthy()
+  field.setValue(undefined)
+  expect(form.values.hasOwnProperty('aaa')).toBeTruthy()
+})
+
+test('empty array initialValues', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        aa: [0],
+        bb: [''],
+        cc: [],
+        dd: [null],
+        ee: [undefined],
+      },
+    })
+  )
+  form.createArrayField({
+    name: 'aa',
+  })
+  form.createArrayField({
+    name: 'bb',
+  })
+  form.createArrayField({
+    name: 'cc',
+  })
+  form.createArrayField({
+    name: 'dd',
+  })
+  form.createArrayField({
+    name: 'ee',
+  })
+  expect(form.values.aa).toEqual([0])
+  expect(form.values.bb).toEqual([''])
+  expect(form.values.cc).toEqual([])
+  expect(form.values.dd).toEqual([])
+  expect(form.values.ee).toEqual([])
 })

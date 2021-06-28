@@ -1,4 +1,4 @@
-import { isFn } from '@formily/shared'
+import { isFn } from './checkers'
 import { untrackStart, untrackEnd } from './reaction'
 
 export const untracked = <T extends () => any>(

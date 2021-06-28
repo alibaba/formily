@@ -1,7 +1,7 @@
 import { observable, action, model } from '../'
 import { autorun, reaction } from '../autorun'
 import { observe } from '../observe'
-import { isObservable } from '../shared'
+import { isObservable } from '../externals'
 
 test('observable annotation', () => {
   const obs = observable<any>({
