@@ -4,4 +4,4 @@
 
 接入现成组件库的话，我们主要使用 connect/mapProps/mapReadPretty API
 
-如果想要实现一些更复杂的自定义组件，我们强烈推荐直接看[@formily/antd](https://github.com/alibaba/formily/tree/master/packages/antd/src)或 [@formily/next](https://github.com/alibaba/formily/tree/master/packages/next/src)的源码
+如果想要实现一些更复杂的自定义组件，我们强烈推荐直接看[@formily/antd](https://github.com/alibaba/formily/tree/formily_next/packages/antd/src)或 [@formily/next](https://github.com/alibaba/formily/tree/formily_next/packages/next/src)的源码
