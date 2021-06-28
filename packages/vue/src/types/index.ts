@@ -128,9 +128,9 @@ export type ISchemaMarkupFieldProps<
 >
 
 export type ISchemaTypeFieldProps<
-  Components extends SchemaComponents,
-  Decorator extends ComponentPath<Components>,
-  Component extends ComponentPath<Components>
+  Components extends SchemaComponents = SchemaComponents,
+  Decorator extends ComponentPath<Components> = ComponentPath<Components>,
+  Component extends ComponentPath<Components> = ComponentPath<Components>
 > = Omit<ISchemaMarkupFieldProps<Components, Decorator, Component>, 'type'>
 
 export interface ISchemaTransformerOptions extends ISchemaFieldFactoryOptions {

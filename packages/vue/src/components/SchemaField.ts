@@ -20,6 +20,7 @@ import {
   SchemaComponents,
   ISchemaFieldProps,
   ISchemaMarkupFieldProps,
+  ISchemaTypeFieldProps,
 } from '../types'
 import { resolveSchemaProps } from '../utils/resolveSchemaProps'
 import { h } from '../shared/h'
@@ -116,14 +117,14 @@ const markupProps = {
 type SchemaFieldComponents = {
   SchemaField: DefineComponent<ISchemaFieldProps>
   SchemaMarkupField: DefineComponent<ISchemaMarkupFieldProps>
-  SchemaStringField: DefineComponent<ISchemaMarkupFieldProps>
-  SchemaObjectField: DefineComponent<ISchemaMarkupFieldProps>
-  SchemaArrayField: DefineComponent<ISchemaMarkupFieldProps>
-  SchemaBooleanField: DefineComponent<ISchemaMarkupFieldProps>
-  SchemaDateField: DefineComponent<ISchemaMarkupFieldProps>
-  SchemaDateTimeField: DefineComponent<ISchemaMarkupFieldProps>
-  SchemaVoidField: DefineComponent<ISchemaMarkupFieldProps>
-  SchemaNumberField: DefineComponent<ISchemaMarkupFieldProps>
+  SchemaStringField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaObjectField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaArrayField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaBooleanField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaDateField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaDateTimeField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaVoidField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaNumberField: DefineComponent<ISchemaTypeFieldProps>
 }
 
 export function createSchemaField<

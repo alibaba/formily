@@ -1,5 +1,4 @@
-import { VueComponent } from '../types'
-import { defineComponent, DefineComponent } from 'vue-demi'
+import { defineComponent } from 'vue-demi'
 import { isVoidField } from '@formily/core'
 import { clone } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
@@ -8,9 +7,11 @@ import { toJS } from '@formily/reactive'
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
 
-interface IReactiveFieldProps {
-  field: Formily.Core.Types.GeneralField
-}
+import type {
+  IReactiveFieldProps,
+  VueComponent,
+  DefineComponent,
+} from '../types'
 
 export default observer(
   defineComponent<IReactiveFieldProps>({
