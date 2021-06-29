@@ -9,7 +9,7 @@
     "noUnusedLocals": false,
     "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "declaration": true,
     "experimentalDecorators": true,
     "downlevelIteration": true,
