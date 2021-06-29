@@ -297,7 +297,7 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
             {
               title: 'addTableColumn',
               onClick: () => {
-                const operationNpde = findNodeByComponentPath(node, [
+                const operationNode = findNodeByComponentPath(node, [
                   'ArrayTable',
                   '*',
                   'ArrayTable.Column',
@@ -319,8 +319,8 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                     },
                   },
                 })
-                if (operationNpde) {
-                  operationNpde.parent.insertBefore(tableColumn)
+                if (operationNode) {
+                  operationNode.parent.insertBefore(tableColumn)
                 } else {
                   ensureObjectItemsNode(node).appendNode(tableColumn)
                 }
