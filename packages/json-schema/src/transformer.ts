@@ -288,7 +288,7 @@ const getBaseProps = (
     props.dataSource = dataSource
   }
 
-  if (!isValid(editable)) {
+  if (isValid(editable)) {
     props.editable = editable
   }
 
