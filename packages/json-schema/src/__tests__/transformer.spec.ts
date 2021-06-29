@@ -5,6 +5,38 @@ test('transform field props', () => {
     type: 'string',
   })
   expect(schema.toFieldProps()).not.toBeUndefined()
+  const schema2 = new Schema({
+    type: 'object',
+    properties: {
+      writeOnly: {
+        type: 'string',
+        writeOnly: true,
+      },
+      'x-editable': {
+        type: 'string',
+        'x-editable': true,
+      },
+      readOnly: {
+        type: 'string',
+        readOnly: true,
+      },
+      'x-read-only': {
+        type: 'string',
+        'x-read-only': true,
+      },
+      'x-read-pretty': {
+        type: 'string',
+        'x-read-pretty': true,
+      },
+    },
+  })
+  expect(schema2.properties['writeOnly'].toFieldProps().editable).toBeTruthy()
+  expect(schema2.properties['x-editable'].toFieldProps().editable).toBeTruthy()
+  expect(schema2.properties['readOnly'].toFieldProps().readOnly).toBeTruthy()
+  expect(schema2.properties['x-read-only'].toFieldProps().readOnly).toBeTruthy()
+  expect(
+    schema2.properties['x-read-pretty'].toFieldProps().readPretty
+  ).toBeTruthy()
 })
 
 test('transform required', () => {
