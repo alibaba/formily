@@ -1,8 +1,10 @@
-import { defineComponent, DefineComponent } from 'vue-demi'
+import { defineComponent } from 'vue-demi'
 import { observer } from '@formily/reactive-vue'
 import { useForm } from '../hooks'
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
+
+import type { DefineComponent } from '../types'
 
 export default observer(
   defineComponent({

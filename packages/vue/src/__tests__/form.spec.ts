@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import { render } from '@testing-library/vue'
 import { createForm } from '@formily/core'
-import { FormProvider } from '../'
-import { FormConsumer } from '../components'
+import { FormProvider, FormConsumer } from '../vue2-components'
 
 Vue.component('FormProvider', FormProvider)
 Vue.component('FormConsumer', FormConsumer)

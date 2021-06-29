@@ -6,7 +6,6 @@ import {
   shallowRef,
   watch,
 } from 'vue-demi'
-import type { DefineComponent } from 'vue-demi'
 import { ISchema, Schema, SchemaTypes } from '@formily/json-schema'
 import { RecursionField } from '../components'
 import {
@@ -21,10 +20,13 @@ import {
   SchemaComponents,
   ISchemaFieldProps,
   ISchemaMarkupFieldProps,
+  ISchemaTypeFieldProps,
 } from '../types'
 import { resolveSchemaProps } from '../utils/resolveSchemaProps'
 import { h } from '../shared/h'
 import { Fragment } from '../shared/fragment'
+
+import type { DefineComponent } from '../types'
 
 const env = {
   nonameId: 0,
@@ -112,78 +114,22 @@ const markupProps = {
   },
 }
 
-type SchemaFieldComponents<Components extends SchemaComponents> = {
-  SchemaField: DefineComponent<ISchemaFieldProps<VueComponent, VueComponent>>
-  SchemaMarkupField: DefineComponent<
-    ISchemaMarkupFieldProps<
-      Components,
-      ComponentPath<Components>,
-      ComponentPath<Components>
-    >
-  >
-  SchemaStringField: DefineComponent<
-    ISchemaMarkupFieldProps<
-      Components,
-      ComponentPath<Components>,
-      ComponentPath<Components>
-    >
-  >
-  SchemaObjectField: DefineComponent<
-    ISchemaMarkupFieldProps<
-      Components,
-      ComponentPath<Components>,
-      ComponentPath<Components>
-    >
-  >
-  SchemaArrayField: DefineComponent<
-    ISchemaMarkupFieldProps<
-      Components,
-      ComponentPath<Components>,
-      ComponentPath<Components>
-    >
-  >
-  SchemaBooleanField: DefineComponent<
-    ISchemaMarkupFieldProps<
-      Components,
-      ComponentPath<Components>,
-      ComponentPath<Components>
-    >
-  >
-  SchemaDateField: DefineComponent<
-    ISchemaMarkupFieldProps<
-      Components,
-      ComponentPath<Components>,
-      ComponentPath<Components>
-    >
-  >
-  SchemaDateTimeField: DefineComponent<
-    ISchemaMarkupFieldProps<
-      Components,
-      ComponentPath<Components>,
-      ComponentPath<Components>
-    >
-  >
-  SchemaVoidField: DefineComponent<
-    ISchemaMarkupFieldProps<
-      Components,
-      ComponentPath<Components>,
-      ComponentPath<Components>
-    >
-  >
-  SchemaNumberField: DefineComponent<
-    ISchemaMarkupFieldProps<
-      Components,
-      ComponentPath<Components>,
-      ComponentPath<Components>
-    >
-  >
+type SchemaFieldComponents = {
+  SchemaField: DefineComponent<ISchemaFieldProps>
+  SchemaMarkupField: DefineComponent<ISchemaMarkupFieldProps>
+  SchemaStringField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaObjectField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaArrayField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaBooleanField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaDateField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaDateTimeField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaVoidField: DefineComponent<ISchemaTypeFieldProps>
+  SchemaNumberField: DefineComponent<ISchemaTypeFieldProps>
 }
 
 export function createSchemaField<
   Components extends SchemaComponents = SchemaComponents
->(
-  options: ISchemaFieldFactoryOptions<Components>
-): SchemaFieldComponents<Components> {
+>(options: ISchemaFieldFactoryOptions<Components>): SchemaFieldComponents {
   const SchemaField = defineComponent<
     ISchemaFieldProps<VueComponent, VueComponent>
   >({
@@ -192,6 +138,7 @@ export function createSchemaField<
     props: {
       schema: {},
       scope: {},
+      components: {},
       basePath: {},
       title: {},
       description: {},
@@ -248,10 +195,21 @@ export function createSchemaField<
             })
       )
 
-      const scopeRef = computed(() => props.scope)
+      const scopeRef = computed(() => ({
+        ...options.scope,
+        ...props.scope,
+      }))
+
+      const optionsRef = computed(() => ({
+        ...options,
+        components: {
+          ...options.components,
+          ...props.components,
+        },
+      }))
 
       provide(SchemaMarkupSymbol, schemaRef)
-      provide(SchemaOptionsSymbol, options)
+      provide(SchemaOptionsSymbol, optionsRef)
       provide(SchemaExpressionScopeSymbol, scopeRef)
 
       return () => {

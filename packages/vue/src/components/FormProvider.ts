@@ -1,9 +1,11 @@
-import { provide, defineComponent, toRaw, DefineComponent } from 'vue-demi'
+import { provide, defineComponent, toRaw } from 'vue-demi'
 import { FormSymbol } from '../shared/context'
 import { IProviderProps } from '../types'
 import { useAttach } from '../hooks/useAttach'
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
+
+import type { DefineComponent } from '../types'
 
 export default defineComponent<IProviderProps>({
   name: 'FormProvider',

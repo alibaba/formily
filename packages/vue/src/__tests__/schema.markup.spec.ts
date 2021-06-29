@@ -1,12 +1,10 @@
 import { createForm } from '@formily/core'
+import { useFieldSchema, useField, Schema } from '../'
 import {
   FormProvider,
-  createSchemaField,
-  useFieldSchema,
-  useField,
   RecursionField,
-  Schema,
-} from '../index'
+  createSchemaField,
+} from '../vue2-components'
 import { render } from '@testing-library/vue'
 import { mount, createLocalVue } from '@vue/test-utils'
 import Vue, { CreateElement } from 'vue'
