@@ -78,6 +78,7 @@ export default (filename, targetName, ...plugins) => [
       format: 'umd',
       file: `dist/${filename}.umd.development.js`,
       name: targetName,
+      sourcemap: true,
       amd: {
         id: filename,
       },
@@ -91,6 +92,7 @@ export default (filename, targetName, ...plugins) => [
       format: 'umd',
       file: `dist/${filename}.umd.production.js`,
       name: targetName,
+      sourcemap: true,
       amd: {
         id: filename,
       },
