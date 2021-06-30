@@ -1,13 +1,14 @@
-import { provide, defineComponent, DefineComponent } from 'vue-demi'
+import { provide, defineComponent } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
-import { VueComponent, IVoidFieldProps } from '../types'
 import ReactiveField from './ReactiveField'
 import { FieldSymbol } from '../shared/context'
 import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
 
-export default defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
+import type { IVoidFieldProps, DefineComponent } from '../types'
+
+export default defineComponent<IVoidFieldProps>({
   name: 'VoidField',
   /* eslint-disable vue/require-prop-types  */
   /* eslint-disable vue/require-default-prop */
@@ -46,8 +47,7 @@ export default defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
     },
     reactions: [Array, Function],
   },
-  setup(props: IVoidFieldProps<VueComponent, VueComponent>, { slots }) {
-    // const { track } = useObserver()
+  setup(props: IVoidFieldProps, { slots }) {
     const formRef = useForm()
     const parentRef = useField()
     const basePath =
@@ -84,4 +84,4 @@ export default defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
       return h(ReactiveField, componentData, children)
     }
   },
-}) as unknown as DefineComponent<IVoidFieldProps<VueComponent, VueComponent>>
+}) as unknown as DefineComponent<IVoidFieldProps>

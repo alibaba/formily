@@ -11,5 +11,6 @@ export const SchemaSymbol: InjectionKey<Ref<Schema>> = Symbol('schema')
 export const SchemaExpressionScopeSymbol: InjectionKey<
   Ref<Record<string, any>>
 > = Symbol('schemaExpression')
-export const SchemaOptionsSymbol: InjectionKey<ISchemaFieldFactoryOptions> =
-  Symbol('schemaOptions')
+export const SchemaOptionsSymbol: InjectionKey<
+  Ref<ISchemaFieldFactoryOptions>
+> = Symbol('schemaOptions')

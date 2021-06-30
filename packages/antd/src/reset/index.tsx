@@ -6,7 +6,7 @@ import { useForm } from '@formily/react'
 export interface IResetProps
   extends Formily.Core.Types.IFieldResetOptions,
     ButtonProps {
-  onClick?: (e: React.MouseEvent<Element, MouseEvent>) => boolean | void
+  onClick?: (e: React.MouseEvent<Element, MouseEvent>) => any
   onResetValidateSuccess?: (payload: any) => void
   onResetValidateFailed?: (
     feedbacks: Formily.Core.Types.IFormFeedback[]

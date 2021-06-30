@@ -42,6 +42,7 @@
     "@formily/shared": "2.0.0-beta.72",
     "@formily/validator": "2.0.0-beta.72",
     "@type-helper/vue3": "npm:vue@3",
+    "@type-helper/vue2": "npm:vue@2",
     "vue-demi": "^0.9.0",
     "vue-frag": "^1.1.4"
   },
