@@ -24,7 +24,6 @@ import {
 import { Form } from './Form'
 import {
   JSXComponent,
-  JSXComponenntProps,
   LifeCycleTypes,
   IFieldFeedback,
   FeedbackMessage,
@@ -229,7 +228,7 @@ export class Field<
         () => this.value,
         (value) => {
           this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
-          if (isValid(value) && this.modified && !this.caches.inputing) {
+          if (isValid(value) && this.modified && !this.caches.inputting) {
             this.validate()
           }
         }
@@ -614,9 +613,9 @@ export class Field<
     }
   }
 
-  setComponent = <C extends JSXComponent>(
+  setComponent = <C extends JSXComponent, ComponentProps extends object = {}>(
     component?: C,
-    props?: JSXComponenntProps<C>
+    props?: ComponentProps
   ) => {
     if (component) {
       this.componentType = component as any
@@ -627,8 +626,8 @@ export class Field<
     }
   }
 
-  setComponentProps = <C extends JSXComponent = Component>(
-    props?: JSXComponenntProps<C>
+  setComponentProps = <ComponentProps extends object = {}>(
+    props?: ComponentProps
   ) => {
     if (props) {
       this.componentProps = this.componentProps || {}
@@ -636,9 +635,9 @@ export class Field<
     }
   }
 
-  setDecorator = <D extends JSXComponent>(
+  setDecorator = <D extends JSXComponent, ComponentProps extends object = {}>(
     component?: D,
-    props?: JSXComponenntProps<D>
+    props?: ComponentProps
   ) => {
     if (component) {
       this.decoratorType = component as any
@@ -649,8 +648,8 @@ export class Field<
     }
   }
 
-  setDecoratorProps = <D extends JSXComponent = Decorator>(
-    props?: JSXComponenntProps<D>
+  setDecoratorProps = <ComponentProps extends object = {}>(
+    props?: ComponentProps
   ) => {
     if (props) {
       this.decoratorProps = this.decoratorProps || {}
@@ -691,7 +690,7 @@ export class Field<
     }
     const values = getValuesFromEvent(args)
     const value = values[0]
-    this.caches.inputing = true
+    this.caches.inputting = true
     this.inputValue = value
     this.inputValues = values
     this.value = value
@@ -700,7 +699,7 @@ export class Field<
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     await this.validate('onInput')
-    this.caches.inputing = false
+    this.caches.inputting = false
   }
 
   onFocus = async (...args: any[]) => {

@@ -65,6 +65,9 @@ export default (filename, targetName, ...plugins) => [
       format: 'umd',
       file: `dist/${filename}.umd.development.js`,
       name: targetName,
+      amd: {
+        id: filename,
+      },
     },
     plugins: [...presets(filename, targetName), ...plugins],
   },
@@ -74,6 +77,9 @@ export default (filename, targetName, ...plugins) => [
       format: 'umd',
       file: `dist/${filename}.umd.production.js`,
       name: targetName,
+      amd: {
+        id: filename,
+      },
     },
     plugins: [...presets(filename, targetName), terser(), ...plugins],
   },
