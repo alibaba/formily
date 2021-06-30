@@ -243,6 +243,11 @@ test('fault tolerance', () => {
 
 test('array field move api with children', async () => {
   const form = attach(createForm())
+  attach(
+    form.createField({
+      name: 'other',
+    })
+  )
   const array = attach(
     form.createArrayField({
       name: 'array',

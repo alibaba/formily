@@ -304,7 +304,7 @@ export const exchangeArrayState = (
     )
   }
 
-  const isStartAndEndNode = (identifier: string) => {
+  const isFromOrToNode = (identifier: string) => {
     const afterStr = identifier.slice(address.length)
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return false
@@ -330,7 +330,7 @@ export const exchangeArrayState = (
   batch(() => {
     each(fields, (field, identifier) => {
       if (isArrayChildren(identifier)) {
-        if (isStartAndEndNode(identifier)) {
+        if (isFromOrToNode(identifier)) {
           const newIdentifier = moveIndex(identifier)
           fieldPatches.push({
             type: 'update',
