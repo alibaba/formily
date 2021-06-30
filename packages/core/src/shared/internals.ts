@@ -303,16 +303,15 @@ export const exchangeArrayState = (
       identifier.indexOf(address) === 0 && identifier.length > address.length
     )
   }
-  const isCrossNode = (identifier: string) => {
+
+  const isFromOrToNode = (identifier: string) => {
     const afterStr = identifier.slice(address.length)
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return false
     const index = Number(number)
-    return (
-      (index <= toIndex && index >= fromIndex) ||
-      (index >= toIndex && index <= fromIndex)
-    )
+    return index === toIndex || index === fromIndex
   }
+
   const moveIndex = (identifier: string) => {
     const preStr = identifier.slice(0, address.length)
     const afterStr = identifier.slice(address.length)
@@ -322,19 +321,16 @@ export const exchangeArrayState = (
     if (index === fromIndex) {
       index = toIndex
     } else {
-      if (fromIndex < toIndex) {
-        index--
-      } else {
-        index++
-      }
+      index = fromIndex
     }
 
     return `${preStr}${afterStr.replace(/^\.\d+/, `.${index}`)}`
   }
+
   batch(() => {
     each(fields, (field, identifier) => {
       if (isArrayChildren(identifier)) {
-        if (isCrossNode(identifier)) {
+        if (isFromOrToNode(identifier)) {
           const newIdentifier = moveIndex(identifier)
           fieldPatches.push({
             type: 'update',
@@ -344,7 +340,7 @@ export const exchangeArrayState = (
           if (!fields[newIdentifier]) {
             fieldPatches.push({
               type: 'remove',
-              address: moveIndex(newIdentifier),
+              address: identifier,
             })
           }
         }

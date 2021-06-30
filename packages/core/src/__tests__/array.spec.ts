@@ -240,3 +240,44 @@ test('fault tolerance', () => {
   array2.moveDown(1)
   array2.moveDown(2)
 })
+
+test('array field move api with children', async () => {
+  const form = attach(createForm())
+  attach(
+    form.createField({
+      name: 'other',
+    })
+  )
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createArrayField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createArrayField({
+      name: '1',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createArrayField({
+      name: '2',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createArrayField({
+      name: 'name',
+      basePath: 'array.2',
+    })
+  )
+  await array.move(0, 2)
+  expect(form.fields['array.0.name']).not.toBeUndefined()
+  expect(form.fields['array.2.name']).toBeUndefined()
+})
