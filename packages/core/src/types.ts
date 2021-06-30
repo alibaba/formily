@@ -20,8 +20,6 @@ export type AnyFunction = (...args: any[]) => any
 
 export type JSXComponent = any
 
-export type JSXComponenntProps<P> = Record<string, any>
-
 export type LifeCycleHandler<T> = (payload: T, context: any) => void
 
 export type LifeCyclePayload<T> = (
@@ -266,7 +264,7 @@ export interface IFieldCaches {
   value?: any
   initialValue?: any
   feedbacks?: IFieldFeedback[]
-  inputing?: boolean
+  inputting?: boolean
 }
 
 export type FieldDisplayTypes = 'none' | 'hidden' | 'visible' | ({} & string)
@@ -290,17 +288,15 @@ export type FieldDataSource = {
   [key: string]: any
 }[]
 
-export type FieldComponent<Component extends JSXComponent> =
-  | [Component]
-  | [Component, JSXComponenntProps<Component>]
-  | boolean
-  | any[]
+export type FieldComponent<
+  Component extends JSXComponent,
+  ComponentProps = any
+> = [Component] | [Component, ComponentProps] | boolean | any[]
 
-export type FieldDecorator<Decorator extends JSXComponent> =
-  | [Decorator]
-  | [Decorator, JSXComponenntProps<Decorator>]
-  | boolean
-  | any[]
+export type FieldDecorator<
+  Decorator extends JSXComponent,
+  ComponentProps = any
+> = [Decorator] | [Decorator, ComponentProps] | boolean | any[]
 
 export type FieldReaction = (field: Field) => void
 export interface IFieldProps<

@@ -1,5 +1,4 @@
-import { VueComponent } from '../types'
-import { defineComponent, DefineComponent } from 'vue-demi'
+import { defineComponent } from 'vue-demi'
 import { isVoidField } from '@formily/core'
 import { clone } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
@@ -8,9 +7,11 @@ import { toJS } from '@formily/reactive'
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
 
-interface IReactiveFieldProps {
-  field: Formily.Core.Types.GeneralField
-}
+import type {
+  IReactiveFieldProps,
+  VueComponent,
+  DefineComponent,
+} from '../types'
 
 export default observer(
   defineComponent<IReactiveFieldProps>({
@@ -18,7 +19,6 @@ export default observer(
     // eslint-disable-next-line vue/require-prop-types
     props: ['field'],
     setup(props: IReactiveFieldProps, { slots }) {
-      // const { track } = useObserver()
       const key = Math.floor(Date.now() * Math.random()).toString(16)
       return () => {
         const field = props.field
@@ -39,11 +39,16 @@ export default observer(
             } else {
               const decorator = field.decorator[0] as VueComponent
               const decoratorData = clone(field.decorator[1]) || {}
+              const style = decoratorData?.style
+              delete decoratorData.style
               return {
                 default: () =>
                   h(
                     decorator,
-                    { attrs: decoratorData },
+                    {
+                      style,
+                      attrs: decoratorData,
+                    },
                     {
                       default: () => childNodes,
                     }
@@ -59,8 +64,7 @@ export default observer(
                 {},
                 {
                   default: () =>
-                    slots.default &&
-                    slots.default({
+                    slots.default?.({
                       field: props.field,
                       form: props.field.form,
                     }),
@@ -104,6 +108,9 @@ export default observer(
               if (!isVoidField(field)) field.onBlur(...args)
               originBlur?.(...args)
             }
+
+            const style = originData?.style
+            delete originData?.style
             const attrs = {
               disabled: !isVoidField(field)
                 ? field.pattern === 'disabled' || field.pattern === 'readPretty'
@@ -116,21 +123,22 @@ export default observer(
               value: !isVoidField(field) ? toJS(field.value) : undefined,
             }
             const componentData = {
-              attrs: attrs,
+              attrs,
+              style,
               on: events,
             }
-            const children = {
+            const componentChildren = {
               ...slots,
             }
             if (slots.default) {
-              children.default = () =>
+              componentChildren.default = () =>
                 slots.default({
                   field: props.field,
                   form: props.field.form,
                 })
             }
 
-            return h(component, componentData, children)
+            return h(component, componentData, componentChildren)
           }
 
           children = renderDecorator([renderComponent()])

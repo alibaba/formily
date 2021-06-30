@@ -1,17 +1,20 @@
 /* eslint-disable vue/one-component-per-file */
 import { Vue2Component } from '../types/vue2'
-import { isVue2, markRaw, defineComponent, DefineComponent } from 'vue-demi'
+import { isVue2, markRaw, defineComponent } from 'vue-demi'
 import { isFn, isStr, FormPath, each } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
-import {
+
+import { useField } from '../hooks/useField'
+import h from './h'
+
+import type {
   VueComponent,
   IComponentMapper,
   IStateMapper,
   VueComponentProps,
+  DefineComponent,
 } from '../types'
-import { useField } from '../hooks/useField'
-import h from './h'
 
 export function mapProps<T extends VueComponent = VueComponent>(
   ...args: IStateMapper<VueComponentProps<T>>[]

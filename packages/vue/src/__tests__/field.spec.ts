@@ -2,18 +2,14 @@ import Vue, { FunctionalComponentOptions } from 'vue'
 import { render, fireEvent, waitFor } from '@testing-library/vue'
 import { defineComponent, h } from '@vue/composition-api'
 import { createForm } from '@formily/core'
+import { useField, useFormEffects, connect, mapProps, mapReadPretty } from '../'
 import {
   FormProvider,
   ArrayField,
   ObjectField,
   VoidField,
   Field,
-  useField,
-  useFormEffects,
-  connect,
-  mapProps,
-  mapReadPretty,
-} from '../'
+} from '../vue2-components'
 import ReactiveField from '../components/ReactiveField'
 // import { expectThrowError } from './shared'
 import { isField, isVoidField, onFieldChange } from '@formily/core'
@@ -23,7 +19,7 @@ Vue.component('ArrayField', ArrayField)
 Vue.component('ObjectField', ObjectField)
 Vue.component('VoidField', VoidField)
 Vue.component('Field', Field)
-Vue.component('ReactiveField', ReactiveField)
+Vue.component('ReactiveField', ReactiveField as unknown as Vue)
 
 const Decorator: FunctionalComponentOptions = {
   functional: true,
