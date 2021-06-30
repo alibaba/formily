@@ -3,6 +3,7 @@ import typescript from 'rollup-plugin-typescript2'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import externalGlobals from 'rollup-plugin-external-globals'
+import injectProcessEnv from 'rollup-plugin-inject-process-env'
 import { terser } from 'rollup-plugin-terser'
 
 const presets = () => {
@@ -45,6 +46,18 @@ const presets = () => {
   ]
 }
 
+const createEnvPlugin = (env) => {
+  return injectProcessEnv(
+    {
+      NODE_ENV: env,
+    },
+    {
+      exclude: '**/*.{css,less,sass,scss}',
+      verbose: false,
+    }
+  )
+}
+
 const inputFilePath = path.join(process.cwd(), 'src/index.ts')
 export const removeImportStyleFromInputFilePlugin = () => ({
   name: 'remove-import-style-from-input-file',
@@ -69,7 +82,8 @@ export default (filename, targetName, ...plugins) => [
         id: filename,
       },
     },
-    plugins: [...presets(filename, targetName), ...plugins],
+    external: ['react', 'react-dom', 'react-is'],
+    plugins: [...presets(), ...plugins, createEnvPlugin('development')],
   },
   {
     input: 'src/index.ts',
@@ -81,6 +95,12 @@ export default (filename, targetName, ...plugins) => [
         id: filename,
       },
     },
-    plugins: [...presets(filename, targetName), terser(), ...plugins],
+    external: ['react', 'react-dom', 'react-is'],
+    plugins: [
+      ...presets(),
+      terser(),
+      ...plugins,
+      createEnvPlugin('production'),
+    ],
   },
 ]

@@ -3,6 +3,8 @@ import {
   batchStart,
   disposeBindingReactions,
   releaseBindingReactions,
+  untrackEnd,
+  untrackStart,
 } from './reaction'
 import { untracked } from './untracked'
 import { isFn } from './checkers'
@@ -24,15 +26,23 @@ interface IDirty {
 
 export const autorun = (tracker: Reaction, name = 'AutoRun') => {
   const reaction = () => {
+    if (!isFn(tracker)) return
     if (ReactionStack.indexOf(reaction) === -1) {
       releaseBindingReactions(reaction)
       try {
         ReactionStack.push(reaction)
         batchStart()
-        if (isFn(tracker)) tracker()
+        tracker()
       } finally {
         batchEnd()
         ReactionStack.pop()
+      }
+    } else {
+      try {
+        untrackStart()
+        tracker()
+      } finally {
+        untrackEnd()
       }
     }
   }

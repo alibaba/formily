@@ -9,6 +9,8 @@ import {
   isUntracking,
   batchStart,
   batchEnd,
+  untrackStart,
+  untrackEnd,
 } from '../reaction'
 
 interface IValue<T = any> {
@@ -60,6 +62,13 @@ export const computed: IComputed = createAnnotation(
           compute()
         } finally {
           ReactionStack.pop()
+        }
+      } else {
+        try {
+          untrackStart()
+          compute()
+        } finally {
+          untrackEnd()
         }
       }
     }
