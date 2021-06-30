@@ -173,7 +173,10 @@ test('observable values/initialValues', () => {
 
 test('deleteValuesIn/deleteInitialValuesIn', () => {
   const form = attach(
-    createForm({
+    createForm<{
+      aa?: number
+      bb?: number
+    }>({
       values: {
         aa: 123,
       },
@@ -791,7 +794,10 @@ test('submit', async () => {
 
 test('reset', async () => {
   const form = attach(
-    createForm({
+    createForm<{
+      aa?: number
+      bb?: number
+    }>({
       values: {
         bb: 123,
       },
