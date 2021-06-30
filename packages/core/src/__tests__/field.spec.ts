@@ -1079,3 +1079,37 @@ test('array path calculation with void index and void wrapper', async () => {
   )
   expect(input.path.toString()).toEqual('array_in_layout.0')
 })
+
+test('reaction in reaction', () => {
+  const form = attach(createForm())
+  const void_ = attach(
+    form.createVoidField({
+      name: 'void',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'field1',
+      basePath: 'void',
+      initialValue: 123,
+    })
+  )
+  const field2 = attach(
+    form.createField({
+      name: 'field2',
+      basePath: 'void',
+      initialValue: 456,
+      reactions: (field) => {
+        const f1 = field.query('field1')
+        if (f1.get('value') === 123) {
+          field.display = 'visible'
+        } else {
+          field.display = 'none'
+        }
+      },
+    })
+  )
+  void_.setDisplay('none')
+  expect(field2.value).toEqual(undefined)
+  expect(field2.display).toEqual('none')
+})
