@@ -84,4 +84,18 @@ test('reaction dirty check', () => {
   expect(handler).toBeCalledTimes(0)
 })
 
-test('action in reaction', () => {})
+test('reaction in reaction', () => {
+  const obs1 = observable<any>({})
+  const obs2 = observable<any>({})
+  const fn = jest.fn()
+  autorun(() => {
+    if (!obs1.value) {
+      obs1.value = '111'
+      return
+    }
+    fn(obs1.value, obs2.value)
+  })
+  obs2.value = '222'
+  expect(fn).toHaveBeenCalledWith('111', undefined)
+  expect(fn).toHaveBeenCalledWith('111', '222')
+})

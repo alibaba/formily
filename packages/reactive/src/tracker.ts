@@ -6,8 +6,6 @@ import {
   batchStart,
   disposeBindingReactions,
   releaseBindingReactions,
-  untrackEnd,
-  untrackStart,
 } from './reaction'
 
 export class Tracker {
@@ -22,7 +20,8 @@ export class Tracker {
 
   track: Reaction = (tracker: Reaction) => {
     if (!isFn(tracker)) return this.results
-    if (ReactionStack.indexOf(this.track) === -1) {
+    const reactionIndex = ReactionStack.indexOf(this.track)
+    if (reactionIndex === -1) {
       releaseBindingReactions(this.track)
       try {
         ReactionStack.push(this.track)
@@ -33,12 +32,8 @@ export class Tracker {
         ReactionStack.pop()
       }
     } else {
-      try {
-        untrackStart()
-        this.results = tracker()
-      } finally {
-        untrackEnd()
-      }
+      ReactionStack.splice(reactionIndex, 1)
+      this.track()
     }
     return this.results
   }

@@ -9,8 +9,6 @@ import {
   isUntracking,
   batchStart,
   batchEnd,
-  untrackStart,
-  untrackEnd,
 } from '../reaction'
 
 interface IValue<T = any> {
@@ -56,7 +54,8 @@ export const computed: IComputed = createAnnotation(
       store.value = getter?.call?.(context)
     }
     function reaction() {
-      if (ReactionStack.indexOf(reaction) === -1) {
+      const reactionIndex = ReactionStack.indexOf(reaction)
+      if (reactionIndex === -1) {
         try {
           ReactionStack.push(reaction)
           compute()
@@ -64,12 +63,8 @@ export const computed: IComputed = createAnnotation(
           ReactionStack.pop()
         }
       } else {
-        try {
-          untrackStart()
-          compute()
-        } finally {
-          untrackEnd()
-        }
+        ReactionStack.splice(reactionIndex, 1)
+        reaction()
       }
     }
     reaction._name = 'ComputedReaction'
