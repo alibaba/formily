@@ -1,3 +1,5 @@
+export * from './datatree'
+
 export type PropertyKey = string | number | symbol
 
 export type OperationType =
