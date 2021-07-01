@@ -383,6 +383,11 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.14.2.tgz#0c1680aa44ad4605b16cbdcc5c341a61bde9c746"
   integrity sha512-IoVDIHpsgE/fu7eXBeRWt8zLbDrSvD7H1gpomOkPpBoEN8KCruCqSDdqo8dddwQQrui30KSvQBaMUOJiuFu6QQ==
 
+"@babel/parser@^7.14.7":
+  version "7.14.7"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.14.7.tgz#6099720c8839ca865a2637e6c85852ead0bdb595"
+  integrity sha512-X67Z5y+VBJuHB/RjwECp8kSl5uYi0BvRbNeWqkaJCVh+LiTPl19WBUfG627psSgp9rSf6ojuXghQM3ha6qHHdA==
+
 "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@^7.13.12":
   version "7.13.12"
   resolved "https://registry.yarnpkg.com/@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining/-/plugin-bugfix-v8-spread-parameters-in-optional-chaining-7.13.12.tgz#a3484d84d0b549f3fc916b99ee4783f26fabad2a"
@@ -1162,12 +1167,12 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.0.tgz#c3c5ae543c897caa9c2a68630bed355be5f9990f"
   integrity sha512-JZButFdZ1+/xAfpguQHoabIXkcqRRKpMrWKBkpEZZyxfY9C1DpADFB8PEqGSTeFr135SaTRfKqGKx5xSCLI7ZQ==
 
-"@designable/core@0.3.15", "@designable/core@^0.3.15":
-  version "0.3.15"
-  resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.3.15.tgz#9b5e7ca0c9bc9f12292133f758a92b42e2a0fedd"
-  integrity sha512-62Gsk4FgsDmvOI0dKhr67X0XgFBHe9z5+zDP/pInEAjjDJvkCuxGpBMYx03IQCLYYyER5CbCOOjQwUdKwwOngQ==
+"@designable/core@0.3.21", "@designable/core@^0.3.21":
+  version "0.3.21"
+  resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.3.21.tgz#452abaf499360e14fcc260df6ad2b4f6951af38e"
+  integrity sha512-66PkOLwFcSDhWnwK3oU/tdawnPVGh2QXGjRg9ubJF1o8XQiB2ANWE0z1zIJwd2E0ULxLvtBlVDOUei6IB29TXA==
   dependencies:
-    "@designable/shared" "0.3.15"
+    "@designable/shared" "0.3.21"
     "@formily/json-schema" "^2.0.0-beta.68"
     "@formily/path" "^2.0.0-beta.68"
     "@formily/reactive" "^2.0.0-beta.68"
@@ -1183,38 +1188,43 @@
     "@formily/reactive" "^2.0.0-beta.50"
     "@juggle/resize-observer" "^3.3.1"
 
-"@designable/formily@^0.3.15":
-  version "0.3.15"
-  resolved "https://registry.yarnpkg.com/@designable/formily/-/formily-0.3.15.tgz#ade47e54a40afc2c2ab91c681547f3bfe2db745b"
-  integrity sha512-EWHzCPw70r1VK4pRUrG8j2xWNMqwXAHRhMUJM06v7OBJGpbDjGNucFsNWI9JSeBTFMsHRx9f2HzQwqnS00jBvA==
+"@designable/formily@^0.3.21":
+  version "0.3.21"
+  resolved "https://registry.yarnpkg.com/@designable/formily/-/formily-0.3.21.tgz#3671856d7a525e7f325dedf880dfe35567f37a38"
+  integrity sha512-DmqGQo8Zo3psxVOjAscV0M8mx6TPr96L4yPZbIp8p9TXhlDYLe8baQDrxO6PbJNYWTbT9AqIk1h5zHup/avswg==
   dependencies:
-    "@designable/core" "0.3.15"
-    "@designable/shared" "0.3.15"
+    "@designable/core" "0.3.21"
+    "@designable/shared" "0.3.21"
     "@formily/core" "^2.0.0-beta.68"
     "@formily/json-schema" "^2.0.0-beta.68"
 
-"@designable/react-settings-form@^0.3.15":
-  version "0.3.15"
-  resolved "https://registry.yarnpkg.com/@designable/react-settings-form/-/react-settings-form-0.3.15.tgz#c2fcf11aba59728d931f44bbcaccda6b6cf0503b"
-  integrity sha512-6CHfwldyXtZzyp66IptCLLqiQtkbkAl3C178s3o8pac26Unzywd63saTsiGEY+6ZVVLunPG0KOqt/JWR3pOBNg==
+"@designable/react-settings-form@^0.3.21":
+  version "0.3.21"
+  resolved "https://registry.yarnpkg.com/@designable/react-settings-form/-/react-settings-form-0.3.21.tgz#d1ef052b55a83a4e765f226a9511af0fc9c8e9c1"
+  integrity sha512-Nq/J8CFV9XPmUtWylHgrb8qCkYhGm307/qfznuOoKm1MYPVSwENx0alJPl0ELdzgK89itx7PGtXrwfwsmonnPg==
   dependencies:
-    "@designable/core" "0.3.15"
-    "@designable/react" "0.3.15"
-    "@designable/shared" "0.3.15"
+    "@babel/parser" "^7.14.7"
+    "@designable/core" "0.3.21"
+    "@designable/react" "0.3.21"
+    "@designable/shared" "0.3.21"
     "@formily/antd" "^2.0.0-beta.68"
     "@formily/core" "^2.0.0-beta.68"
     "@formily/react" "^2.0.0-beta.68"
     "@formily/reactive" "^2.0.0-beta.68"
     "@formily/reactive-react" "^2.0.0-beta.68"
+    "@formily/shared" "^2.0.0-beta.68"
+    "@monaco-editor/react" "^4.2.1"
+    monaco-editor "^0.25.2"
+    prettier "^2.3.2"
     react-color "^2.19.3"
 
-"@designable/react@0.3.15", "@designable/react@^0.3.15":
-  version "0.3.15"
-  resolved "https://registry.yarnpkg.com/@designable/react/-/react-0.3.15.tgz#d3ce06fc06ca916f7941d837ef74d5c601337309"
-  integrity sha512-XICF6H3SYHugx/85gYMYd4x3meZ8OVbOPjyqt4bq4n3LrjOOA2PqSPR1CAQwesSHt4md1B0aa+l+mfZecqDgvQ==
+"@designable/react@0.3.21", "@designable/react@^0.3.21":
+  version "0.3.21"
+  resolved "https://registry.yarnpkg.com/@designable/react/-/react-0.3.21.tgz#3f41790fe46c026c3b70be530e06a107e79ea7cc"
+  integrity sha512-hp2q8+U6mkoeMuBcIDjRpkNx7tUZ7SSgdKblD2CRj7AgFbGTCC0I+YtJs92irUAKVeV1SSxO+Zx/qVa2XSu3Dg==
   dependencies:
-    "@designable/core" "0.3.15"
-    "@designable/shared" "0.3.15"
+    "@designable/core" "0.3.21"
+    "@designable/shared" "0.3.21"
     "@formily/reactive" "^2.0.0-beta.68"
     "@formily/reactive-react" "^2.0.0-beta.68"
     "@juggle/resize-observer" "^3.3.1"
@@ -1226,10 +1236,10 @@
   dependencies:
     requestidlecallback "^0.3.0"
 
-"@designable/shared@0.3.15":
-  version "0.3.15"
-  resolved "https://registry.yarnpkg.com/@designable/shared/-/shared-0.3.15.tgz#94668262e115182014cb1b6dd4a3c2a67d4b296a"
-  integrity sha512-r9yWDyR45Uc/BFj5YKZKhg6Jh5DvgwVaCvkTxk9z/U22mJUKqA2imfZS32WDPkPdAuZ/ZpcSk4dE79CW2NVv7w==
+"@designable/shared@0.3.21":
+  version "0.3.21"
+  resolved "https://registry.yarnpkg.com/@designable/shared/-/shared-0.3.21.tgz#ed7f29c5dca33ff0a7957e022eecbf077d89212f"
+  integrity sha512-97oXQsfIU2PGQCIjrPpFB36eifsTveQ5oaFcBNUzDaAbscNX134lCPmukshOorgp2ZQeXod8ftpbmQoQJR+2/A==
   dependencies:
     requestidlecallback "^0.3.0"
 
@@ -2239,6 +2249,22 @@
     react-attr-converter "^0.3.1"
     stringify-entities "^3.0.1"
     stringify-object "^3.3.0"
+
+"@monaco-editor/loader@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@monaco-editor/loader/-/loader-1.1.1.tgz#37db648c81a86946d0febd391de00df9c28a0a3d"
+  integrity sha512-mkT4r4xDjIyOG9o9M6rJDSzEIeonwF80sYErxEvAAL4LncFVdcbNli8Qv6NDqF6nyv6sunuKkDzo4iFjxPL+uQ==
+  dependencies:
+    state-local "^1.0.6"
+
+"@monaco-editor/react@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@monaco-editor/react/-/react-4.2.1.tgz#75cb6e85e3640e05887a14005c370e46bd71256b"
+  integrity sha512-yN8qVY0PyFIbqPjfrZ5TbR/wrcfeiwoys8+0QkmyfiOzG74vXxSBOPIUxk7Ly+qCj7qWHPq1uDJskzFGaIqaPA==
+  dependencies:
+    "@monaco-editor/loader" "^1.1.1"
+    prop-types "^15.7.2"
+    state-local "^1.0.7"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -12459,7 +12485,7 @@ monaco-editor-webpack-plugin@^4.0.0:
   dependencies:
     loader-utils "^2.0.0"
 
-monaco-editor@*:
+monaco-editor@*, monaco-editor@^0.25.2:
   version "0.25.2"
   resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.25.2.tgz#119e2b15bbd968a1a99c03cac9c329316d7c37e9"
   integrity sha512-5iylzSJevCnzJn9UVsW8yOZ3yHjmAs4TfvH3zsbftKiFKmHG0xirGN6DK9Kk04VSWxYCZZAIafYJoNJJMAU1KA==
@@ -14568,6 +14594,11 @@ prettier@^2.1.2, prettier@^2.2.1:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.0.tgz#b6a5bf1284026ae640f17f7ff5658a7567fc0d18"
   integrity sha512-kXtO4s0Lz/DW/IJ9QdWhAf7/NmPWQXkFr/r/WkR3vyI+0v8amTDxiaQSLzs8NBlytfLWX/7uQUMIW677yLKl4w==
+
+prettier@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.2.tgz#ef280a05ec253712e486233db5c6f23441e7342d"
+  integrity sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==
 
 pretty-error@^2.0.2:
   version "2.1.2"
@@ -17161,6 +17192,11 @@ staged-git-files@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/staged-git-files/-/staged-git-files-1.2.0.tgz#05b43f4fcec6d4799ac41c826ecd17c0bd53ce82"
   integrity sha512-MYK3aDsO8XAXkv2ASsrznObxVDlocYm7gc/cMk/hB4vbJZeEqOO7H1mZR7EY2C5q3YgKOBo3Tmu0D30h7RjdWg==
+
+state-local@^1.0.6, state-local@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/state-local/-/state-local-1.0.7.tgz#da50211d07f05748d53009bee46307a37db386d5"
+  integrity sha512-HTEHMNieakEnoe33shBYcZ7NX83ACUjCu8c40iOGEZsngj9zRnkqS9j1pqQPXwobB0ZcVTk27REb7COQ0UR59w==
 
 state-toggle@^1.0.0:
   version "1.0.3"

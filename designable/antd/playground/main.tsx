@@ -25,6 +25,7 @@ import {
   ActionsWidget,
   PreviewWidget,
   SchemaEditorWidget,
+  MarkupSchemaWidget,
 } from './widgets'
 import 'antd/dist/antd.less'
 
@@ -79,7 +80,9 @@ const App = () => {
           <WorkspacePanel>
             <ToolbarPanel>
               <DesignerToolsWidget />
-              <ViewToolsWidget />
+              <ViewToolsWidget
+                use={['DESIGNABLE', 'JSONTREE', 'MARKUP', 'PREVIEW']}
+              />
             </ToolbarPanel>
             <ViewportPanel>
               <ViewPanel type="DESIGNABLE">
@@ -92,10 +95,13 @@ const App = () => {
                   />
                 )}
               </ViewPanel>
-              <ViewPanel type="JSONTREE">
+              <ViewPanel type="JSONTREE" scrollable={false}>
                 {(tree, onChange) => (
                   <SchemaEditorWidget tree={tree} onChange={onChange} />
                 )}
+              </ViewPanel>
+              <ViewPanel type="MARKUP" scrollable={false}>
+                {(tree) => <MarkupSchemaWidget tree={tree} />}
               </ViewPanel>
               <ViewPanel type="PREVIEW">
                 {(tree) => <PreviewWidget tree={tree} />}
