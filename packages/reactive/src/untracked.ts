@@ -15,14 +15,3 @@ export const untracked = <T extends () => any>(
     return res
   }
 }
-
-untracked.create = () => {
-  untrackStart()
-  let completed = false
-  return () => {
-    if (!completed) {
-      untrackEnd()
-      completed = true
-    }
-  }
-}
