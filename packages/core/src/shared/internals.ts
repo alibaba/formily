@@ -596,3 +596,24 @@ export const applyValuesPatch = (
   if (GlobalState.initializing) return
   patch(source, path)
 }
+
+export const triggerFormInitialValuesChange = (
+  form: Form,
+  change: Formily.Reactive.Types.DataChange
+) => {
+  if (change.path[0] === 'initialValues') {
+    if (change.type === 'add' || change.type === 'set') {
+      applyValuesPatch(form, change.path.slice(1), change.value)
+    }
+    form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+  }
+}
+
+export const triggerFormValuesChange = (
+  form: Form,
+  change: Formily.Reactive.Types.DataChange
+) => {
+  if (change.path[0] === 'values') {
+    form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
+  }
+}

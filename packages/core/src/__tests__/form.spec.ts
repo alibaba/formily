@@ -1,5 +1,9 @@
 import { createForm } from '../'
-import { onFieldValueChange } from '../effects'
+import {
+  onFieldValueChange,
+  onFormInitialValuesChange,
+  onFormValuesChange,
+} from '../effects'
 import { attach, sleep } from './shared'
 import { LifeCycleTypes } from '../types'
 import { observable, batch } from '@formily/reactive'
@@ -173,7 +177,10 @@ test('observable values/initialValues', () => {
 
 test('deleteValuesIn/deleteInitialValuesIn', () => {
   const form = attach(
-    createForm({
+    createForm<{
+      aa?: number
+      bb?: number
+    }>({
       values: {
         aa: 123,
       },
@@ -791,7 +798,10 @@ test('submit', async () => {
 
 test('reset', async () => {
   const form = attach(
-    createForm({
+    createForm<{
+      aa?: number
+      bb?: number
+    }>({
       values: {
         bb: 123,
       },
@@ -1029,4 +1039,56 @@ test('empty array initialValues', () => {
   expect(form.values.cc).toEqual([])
   expect(form.values.dd).toEqual([])
   expect(form.values.ee).toEqual([])
+})
+
+test('form lifecycle can be triggered after call form.setXXX', () => {
+  let initialValuesTriggerNum = 0
+  let valuesTriggerNum = 0
+
+  const form = attach(
+    createForm<{
+      aa?: number
+      bb?: number
+    }>({
+      initialValues: {
+        aa: 1,
+      },
+      values: {
+        bb: 1,
+      },
+    })
+  )
+
+  form.setEffects(() => {
+    onFormInitialValuesChange(() => {
+      initialValuesTriggerNum++
+    })
+
+    onFormValuesChange(() => {
+      valuesTriggerNum++
+    })
+  })
+
+  expect(initialValuesTriggerNum).toEqual(0)
+  expect(valuesTriggerNum).toEqual(0)
+
+  form.initialValues.aa = 2
+  form.values.bb = 2
+
+  expect(initialValuesTriggerNum).toEqual(1)
+  // initialValues 会通过 applyValuesPatch 改变 values，导致 onFormValuesChange 多触发一次
+  expect(valuesTriggerNum).toEqual(2)
+
+  form.setInitialValues({ aa: 3 })
+  form.setValues({ bb: 3 })
+
+  expect(initialValuesTriggerNum).toEqual(2)
+  expect(valuesTriggerNum).toEqual(4)
+
+  // 测试 form.setXXX 之后还能正常触发：https://github.com/alibaba/formily/issues/1675
+  form.initialValues.aa = 4
+  form.values.bb = 4
+
+  expect(initialValuesTriggerNum).toEqual(3)
+  expect(valuesTriggerNum).toEqual(6)
 })

@@ -21,9 +21,12 @@ export class DataNode {
 
   key: PropertyKey
 
-  constructor(target: any, key: PropertyKey) {
+  value: any
+
+  constructor(target: any, key: PropertyKey, value: any) {
     this.target = target
     this.key = key
+    this.value = value
   }
 
   get path() {
@@ -41,7 +44,10 @@ export class DataNode {
   }
 
   isEqual(node: DataNode) {
-    return node.targetRaw === this.targetRaw && node.key === this.key
+    if (this.key) {
+      return node.targetRaw === this.targetRaw && node.key === this.key
+    }
+    return node.value === this.value
   }
 
   contains(node: DataNode) {
@@ -58,5 +64,5 @@ export class DataNode {
 export const buildDataTree = (target: any, key: PropertyKey, value: any) => {
   const currentNode = RawNode.get(ProxyRaw.get(value) || value)
   if (currentNode) return currentNode
-  RawNode.set(value, new DataNode(target, key))
+  RawNode.set(value, new DataNode(target, key, value))
 }
