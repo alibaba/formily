@@ -48,6 +48,8 @@ import {
   createFieldStateSetter,
   createFieldStateGetter,
   applyValuesPatch,
+  triggerFormInitialValuesChange,
+  triggerFormValuesChange,
 } from '../shared/internals'
 import { isVoidField } from '../shared/checkers'
 import { runEffects } from '../shared/effectbox'
@@ -173,29 +175,12 @@ export class Form<ValueType extends object = any> {
       observe(
         this,
         (change) => {
-          this.triggerFormInitialValuesChange(change)
-          this.triggerFormValuesChange(change)
+          triggerFormInitialValuesChange(this, change)
+          triggerFormValuesChange(this, change)
         },
         true
       )
     )
-  }
-
-  protected triggerFormInitialValuesChange(
-    change: Formily.Reactive.Types.DataChange
-  ) {
-    if (change.path.indexOf('initialValues') === 0) {
-      if (change.type === 'add' || change.type === 'set') {
-        applyValuesPatch(this, change.path.slice(1), change.value)
-      }
-      this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
-    }
-  }
-
-  protected triggerFormValuesChange(change: Formily.Reactive.Types.DataChange) {
-    if (change.path.indexOf('values') === 0) {
-      this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
-    }
   }
 
   get valid() {
