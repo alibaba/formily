@@ -33,7 +33,7 @@ export class Tracker {
       }
     } else {
       ReactionStack.splice(reactionIndex, 1)
-      this.track()
+      this.track(tracker)
     }
     return this.results
   }
