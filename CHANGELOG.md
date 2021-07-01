@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.0.0-beta.72(2021-06-25)
+
+### :tada: Enhancements
+
+1. [feat(antd): improve Submit API (#1640)](https://github.com/alibaba/formily/commit/6b33ec9c) :point_right: ( [后浪](https://github.com/后浪) )
+
+### :beetle: Bug Fixes
+
+1. [fix(antd/next): fix Editable is not work with babel-import-plugin #1645](https://github.com/alibaba/formily/commit/cf93945d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.71(2021-06-24)
 
 ### :beetle: Bug Fixes
@@ -985,31 +995,3 @@
 1. [fix: remove warning of addon before (#863)](https://github.com/alibaba/formily/commit/110238c6) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
 
 1. [fix(react): fix useField/useVirtualField props assign (#858)](https://github.com/alibaba/formily/commit/e71e527a) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v1.1.4(2020-05-18)
-
-### :beetle: Bug Fixes
-
-1. [fix(react): fix useFormEffects typings (#856)](https://github.com/alibaba/formily/commit/9b35275e) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(schema-editor): fix dependencies (#857)](https://github.com/alibaba/formily/commit/78f02c38) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd/next): fix button-group typings (#855)](https://github.com/alibaba/formily/commit/08077729) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(react): fix formSpy conflict with parent SchemaForm (#854)](https://github.com/alibaba/formily/commit/e122c9d9) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd/next): fix FormTextBox doesnot support className (#851)](https://github.com/alibaba/formily/commit/e40bdf2b) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd): fix labelCol/wrapperCol can not be overwriten (#850)](https://github.com/alibaba/formily/commit/4f87465c) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix unmounteRemoveValue property is not work #827 (#847)](https://github.com/alibaba/formily/commit/f53d02ae) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(schema-renderer): fix onBlur throw errors #839 (#849)](https://github.com/alibaba/formily/commit/46f08395) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(next): fix throw error when use previewPlaceholder (#846)](https://github.com/alibaba/formily/commit/460309f5) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [docs(antd): fix registerVirtualBox demo (#834)](https://github.com/alibaba/formily/commit/02fcd0d4) :point_right: ( [kenve](https://github.com/kenve) )
-
-### :memo: Documents Changes
-
-1. [docs(antd): fix registerVirtualBox demo (#834)](https://github.com/alibaba/formily/commit/02fcd0d4) :point_right: ( [kenve](https://github.com/kenve) )
