@@ -39,6 +39,7 @@ module.exports = {
         'array-table',
         'space',
         'select',
+        'upload',
       ],
     },
     lastUpdated: 'Last Updated',

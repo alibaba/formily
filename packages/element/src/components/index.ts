@@ -24,17 +24,7 @@ export * from './date-panel'
 export * from './cascader'
 export * from './input-number'
 export * from './transfer'
-
-export * from './form'
-export * from './form-layout'
-export * from './form-item'
-export * from './form-grid'
-export * from './form-button-group'
-export * from './submit'
-export * from './reset'
-export * from './space'
-export * from './array-base'
-export * from './array-table'
+export * from './upload'
 
 import { FormLayout } from './form-layout'
 import { FormItem } from './form-item'
@@ -64,6 +54,7 @@ import { DatePanel } from './date-panel'
 import { Cascader } from './cascader'
 import { InputNumber } from './input-number'
 import { Transfer } from './transfer'
+import { Upload } from './upload'
 
 export const components = {
   ArrayAddition,
@@ -94,4 +85,5 @@ export const components = {
   Switch,
   TimePicker,
   Transfer,
+  Upload,
 }
