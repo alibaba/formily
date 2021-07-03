@@ -25,22 +25,22 @@ interface IDirty {
 export const autorun = (tracker: Reaction, name = 'AutoRun') => {
   const reaction = () => {
     if (!isFn(tracker)) return
-    const reactionIndex = ReactionStack.indexOf(reaction)
-    if (reactionIndex === -1) {
+    if (reaction._boundary > 0) return
+    if (ReactionStack.indexOf(reaction) === -1) {
       releaseBindingReactions(reaction)
       try {
-        ReactionStack.push(reaction)
         batchStart()
+        ReactionStack.push(reaction)
         tracker()
       } finally {
-        batchEnd()
         ReactionStack.pop()
+        reaction._boundary++
+        batchEnd()
+        reaction._boundary = 0
       }
-    } else {
-      ReactionStack.splice(reactionIndex, 1)
-      reaction()
     }
   }
+  reaction._boundary = 0
   reaction._name = name
   reaction()
   return () => {

@@ -22,9 +22,7 @@ const addRawReactionsMap = (
   if (reactionsMap) {
     const reactions = reactionsMap.get(key)
     if (reactions) {
-      if (!reactions.has(reaction)) {
-        reactions.add(reaction)
-      }
+      reactions.add(reaction)
     } else {
       reactionsMap.set(key, new Set([reaction]))
     }
@@ -42,9 +40,7 @@ const addReactionsMapToReaction = (
 ) => {
   const bindSet = reaction._reactionsSet
   if (bindSet) {
-    if (!bindSet.has(reactionsMap)) {
-      bindSet.add(reactionsMap)
-    }
+    bindSet.add(reactionsMap)
   } else {
     reaction._reactionsSet = new Set([reactionsMap])
   }
@@ -74,13 +70,9 @@ const runReactions = (target: any, key: PropertyKey) => {
     if (reaction._isComputed) {
       reaction._scheduler(reaction)
     } else if (isScopeBatching()) {
-      if (!PendingScopeReactions.has(reaction)) {
-        PendingScopeReactions.add(reaction)
-      }
+      PendingScopeReactions.add(reaction)
     } else if (isBatching()) {
-      if (!PendingReactions.has(reaction)) {
-        PendingReactions.add(reaction)
-      }
+      PendingReactions.add(reaction)
     } else {
       if (isFn(reaction._scheduler)) {
         reaction._scheduler(reaction)
@@ -112,22 +104,20 @@ export const bindComputedReactions = (reaction: Reaction) => {
   if (isFn(reaction)) {
     const current = ReactionStack[ReactionStack.length - 1]
     if (current) {
-      const computeds = current._computedsSet
-      if (computeds) {
-        if (!computeds.has(reaction)) {
-          computeds.add(reaction)
-        }
+      const computes = current._computesSet
+      if (computes) {
+        computes.add(reaction)
       } else {
-        current._computedsSet = new Set([reaction])
+        current._computesSet = new Set([reaction])
       }
     }
   }
 }
 
 export const suspendComputedReactions = (reaction: Reaction) => {
-  const computeds = reaction._computedsSet
-  if (computeds) {
-    computeds.forEach((reaction) => {
+  const computes = reaction._computesSet
+  if (computes) {
+    computes.forEach((reaction) => {
       const reactions = getReactionsFromTargetKey(
         reaction._context,
         reaction._property
