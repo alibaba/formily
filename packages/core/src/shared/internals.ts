@@ -195,15 +195,23 @@ export const validateToFeedbacks = async (
     validateFirst: field.props.validateFirst || field.form.props.validateFirst,
     context: this,
   })
-  const shouldSkipValidate =
-    field.display !== 'visible' || field.pattern !== 'editable'
+  const takeSkipCondition = () => {
+    if (field.display !== 'visible') return true
+    if (field.parent?.display) {
+      if (field.parent.display !== 'visible') return true
+    }
+    if (field.pattern !== 'editable') return true
+
+    return false
+  }
+
   batch(() => {
     each(results, (messages, type) => {
       field.setFeedback({
         triggerType,
         type,
         code: pascalCase(`validate-${type}`),
-        messages: shouldSkipValidate ? [] : messages,
+        messages: takeSkipCondition() ? [] : messages,
       } as any)
     })
   })
