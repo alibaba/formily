@@ -175,6 +175,11 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
 
   get display(): FieldDisplayTypes {
     const parentDisplay = this.parent?.display
+    if (parentDisplay && parentDisplay !== 'visible') {
+      if (this.selfDisplay && this.selfDisplay !== 'visible')
+        return this.selfDisplay
+      return parentDisplay
+    }
     if (isValid(this.selfDisplay)) return this.selfDisplay
     return parentDisplay || this.form.display || 'visible'
   }

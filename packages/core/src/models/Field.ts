@@ -351,6 +351,11 @@ export class Field<
 
   get display(): FieldDisplayTypes {
     const parentDisplay = this.parent?.display
+    if (parentDisplay && parentDisplay !== 'visible') {
+      if (this.selfDisplay && this.selfDisplay !== 'visible')
+        return this.selfDisplay
+      return parentDisplay
+    }
     if (this.selfDisplay) return this.selfDisplay
     return parentDisplay || this.form.display || 'visible'
   }
