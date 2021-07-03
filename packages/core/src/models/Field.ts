@@ -242,25 +242,23 @@ export class Field<
       reaction(
         () => this.display,
         (display) => {
-          batch.scope(() => {
-            if (display === 'visible') {
-              if (isEmpty(this.value)) {
-                this.setValue(this.caches.value)
-                this.caches.value = undefined
-              }
-            } else {
-              this.caches.value = toJS(this.value)
-              if (display === 'none') {
-                this.form.deleteValuesIn(this.path)
-              }
+          if (display === 'visible') {
+            if (isEmpty(this.value)) {
+              this.setValue(this.caches.value)
+              this.caches.value = undefined
             }
-            if (display === 'none' || display === 'hidden') {
-              this.setFeedback({
-                type: 'error',
-                messages: [],
-              })
+          } else {
+            this.caches.value = toJS(this.value)
+            if (display === 'none') {
+              this.form.deleteValuesIn(this.path)
             }
-          })
+          }
+          if (display === 'none' || display === 'hidden') {
+            this.setFeedback({
+              type: 'error',
+              messages: [],
+            })
+          }
         }
       ),
       reaction(

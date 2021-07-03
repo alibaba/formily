@@ -1,10 +1,11 @@
 import {
   batchEnd,
   batchStart,
+  untrackEnd,
+  untrackStart,
   disposeBindingReactions,
   releaseBindingReactions,
 } from './reaction'
-import { untracked } from './untracked'
 import { isFn } from './checkers'
 import { ReactionStack } from './environment'
 import { Reaction, IReactionOptions } from './types'
@@ -14,7 +15,7 @@ interface IValue {
   oldValue?: any
 }
 
-interface ITracked {
+interface IInitialized {
   current?: boolean
 }
 
@@ -58,7 +59,7 @@ export const reaction = <T>(
     ...options,
   }
   const value: IValue = {}
-  const tracked: ITracked = {}
+  const initialized: IInitialized = {}
   const dirty: IDirty = {}
   const dirtyCheck = () => {
     if (isFn(realOptions.equals))
@@ -66,18 +67,40 @@ export const reaction = <T>(
     return value.oldValue !== value.currentValue
   }
 
-  return autorun(() => {
-    value.currentValue = tracker()
-    dirty.current = dirtyCheck()
-    if (
-      (dirty.current && tracked.current) ||
-      (!tracked.current && realOptions.fireImmediately)
-    ) {
-      untracked(() => {
-        if (isFn(subscriber)) subscriber(value.currentValue)
-      })
+  const reaction = () => {
+    if (ReactionStack.indexOf(reaction) === -1) {
+      releaseBindingReactions(reaction)
+      try {
+        ReactionStack.push(reaction)
+        value.currentValue = tracker()
+        dirty.current = dirtyCheck()
+      } finally {
+        ReactionStack.pop()
+      }
     }
+
+    if (
+      (dirty.current && initialized.current) ||
+      (!initialized.current && realOptions.fireImmediately)
+    ) {
+      try {
+        batchStart()
+        untrackStart()
+        if (isFn(subscriber)) subscriber(value.currentValue)
+      } finally {
+        untrackEnd()
+        batchEnd()
+      }
+    }
+
     value.oldValue = value.currentValue
-    tracked.current = true
-  }, realOptions.name)
+    initialized.current = true
+  }
+
+  reaction._name = realOptions.name
+  reaction()
+
+  return () => {
+    disposeBindingReactions(reaction)
+  }
 }
