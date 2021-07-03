@@ -197,11 +197,7 @@ export const validateToFeedbacks = async (
   })
   const takeSkipCondition = () => {
     if (field.display !== 'visible') return true
-    if (field.parent?.display) {
-      if (field.parent.display !== 'visible') return true
-    }
     if (field.pattern !== 'editable') return true
-
     return false
   }
 
