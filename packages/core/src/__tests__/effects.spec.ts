@@ -304,7 +304,7 @@ test('onFieldChange', async () => {
   field.setPattern('disabled')
   expect(fieldChange).toBeCalledTimes(5)
   field.setDisplay('none')
-  expect(fieldChange).toBeCalledTimes(6)
+  expect(fieldChange).toBeCalledTimes(7)
   form.onUnmount()
   expect(valueChange).toBeCalledTimes(4)
   expect(valueChange2).toBeCalledTimes(4)
