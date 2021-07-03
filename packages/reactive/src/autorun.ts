@@ -1,10 +1,11 @@
 import {
   batchEnd,
   batchStart,
+  untrackEnd,
+  untrackStart,
   disposeBindingReactions,
   releaseBindingReactions,
 } from './reaction'
-import { untracked } from './untracked'
 import { isFn } from './checkers'
 import { ReactionStack } from './environment'
 import { Reaction, IReactionOptions } from './types'
@@ -14,7 +15,7 @@ interface IValue {
   oldValue?: any
 }
 
-interface ITracked {
+interface IInitialized {
   current?: boolean
 }
 
@@ -25,22 +26,22 @@ interface IDirty {
 export const autorun = (tracker: Reaction, name = 'AutoRun') => {
   const reaction = () => {
     if (!isFn(tracker)) return
-    const reactionIndex = ReactionStack.indexOf(reaction)
-    if (reactionIndex === -1) {
+    if (reaction._boundary > 0) return
+    if (ReactionStack.indexOf(reaction) === -1) {
       releaseBindingReactions(reaction)
       try {
-        ReactionStack.push(reaction)
         batchStart()
+        ReactionStack.push(reaction)
         tracker()
       } finally {
-        batchEnd()
         ReactionStack.pop()
+        reaction._boundary++
+        batchEnd()
+        reaction._boundary = 0
       }
-    } else {
-      ReactionStack.splice(reactionIndex, 1)
-      reaction()
     }
   }
+  reaction._boundary = 0
   reaction._name = name
   reaction()
   return () => {
@@ -58,7 +59,7 @@ export const reaction = <T>(
     ...options,
   }
   const value: IValue = {}
-  const tracked: ITracked = {}
+  const initialized: IInitialized = {}
   const dirty: IDirty = {}
   const dirtyCheck = () => {
     if (isFn(realOptions.equals))
@@ -66,18 +67,40 @@ export const reaction = <T>(
     return value.oldValue !== value.currentValue
   }
 
-  return autorun(() => {
-    value.currentValue = tracker()
-    dirty.current = dirtyCheck()
-    if (
-      (dirty.current && tracked.current) ||
-      (!tracked.current && realOptions.fireImmediately)
-    ) {
-      untracked(() => {
-        if (isFn(subscriber)) subscriber(value.currentValue)
-      })
+  const reaction = () => {
+    if (ReactionStack.indexOf(reaction) === -1) {
+      releaseBindingReactions(reaction)
+      try {
+        ReactionStack.push(reaction)
+        value.currentValue = tracker()
+        dirty.current = dirtyCheck()
+      } finally {
+        ReactionStack.pop()
+      }
     }
+
+    if (
+      (dirty.current && initialized.current) ||
+      (!initialized.current && realOptions.fireImmediately)
+    ) {
+      try {
+        batchStart()
+        untrackStart()
+        if (isFn(subscriber)) subscriber(value.currentValue)
+      } finally {
+        untrackEnd()
+        batchEnd()
+      }
+    }
+
     value.oldValue = value.currentValue
-    tracked.current = true
-  }, realOptions.name)
+    initialized.current = true
+  }
+
+  reaction._name = realOptions.name
+  reaction()
+
+  return () => {
+    disposeBindingReactions(reaction)
+  }
 }

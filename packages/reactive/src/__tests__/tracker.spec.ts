@@ -34,6 +34,6 @@ test('nested tracker', () => {
   obs.value = 123
   expect(fn).toBeCalledWith(321)
   expect(fn).toBeCalledWith(123)
-  expect(fn).toBeCalledTimes(3)
+  expect(fn).toBeCalledTimes(2)
   tracker.dispose()
 })

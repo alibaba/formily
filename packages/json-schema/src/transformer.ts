@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { untracked } from '@formily/reactive'
 import {
   isBool,
@@ -391,7 +392,10 @@ const getReactions = (schema: ISchema, options: ISchemaFieldFactoryOptions) => {
     }
   }
 
-  const queryDepdency = (field: Formily.Core.Models.Field, pattern: string) => {
+  const queryDependency = (
+    field: Formily.Core.Models.Field,
+    pattern: string
+  ) => {
     const [target, path] = String(pattern).split(/\s*#\s*/)
     return field.query(target).getIn(path || 'value')
   }
@@ -401,12 +405,12 @@ const getReactions = (schema: ISchema, options: ISchemaFieldFactoryOptions) => {
     dependencies: string[] | object
   ) => {
     if (isArr(dependencies)) {
-      return dependencies.map((pattern) => queryDepdency(field, pattern))
+      return dependencies.map((pattern) => queryDependency(field, pattern))
     } else if (isPlainObj(dependencies)) {
       return reduce(
         dependencies,
         (buf, pattern, key) => {
-          buf[key] = queryDepdency(field, pattern)
+          buf[key] = queryDependency(field, pattern)
           return buf
         },
         {}
