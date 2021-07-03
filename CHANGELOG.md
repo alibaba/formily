@@ -1,5 +1,27 @@
 # Changelog
 
+## v2.0.0-beta.74(2021-07-03)
+
+### :tada: Enhancements
+
+1. [feat(core): skip validate when parent.visible is equal hidden/none (#1712)](https://github.com/alibaba/formily/commit/0076ef7d) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [feat(designable-antd): support markup schema view](https://github.com/alibaba/formily/commit/2acb1033) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :beetle: Bug Fixes
+
+1. [fix(reactive): fix tracker recursive react (#1709)](https://github.com/alibaba/formily/commit/3de82d58) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(json-schema): fix typo about transformer](https://github.com/alibaba/formily/commit/498d3119) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :hammer_and_wrench: Update Workflow Scripts
+
+1. [build: fix git message sort incorrect (#1708)](https://github.com/alibaba/formily/commit/617ce88c) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+### :blush: Other Changes
+
+1. [chore(designable-antd): upgrade designable](https://github.com/alibaba/formily/commit/e6fd58eb) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.73(2021-07-01)
 
 ### :tada: Enhancements
@@ -925,19 +947,3 @@
 ### :rose: Improve code quality
 
 1. [refactor(pkg): update pkg deps version](https://github.com/alibaba/formily/commit/de009c51) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v1.1.6(2020-05-25)
-
-### :tada: Enhancements
-
-1. [feat: compile expression for array-table column title (#868)](https://github.com/alibaba/formily/commit/48fbcf0f) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-### :beetle: Bug Fixes
-
-1. [fix: megalayout columns (#871)](https://github.com/alibaba/formily/commit/9bff1f29) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix(schema-renderer): fix virtual box can not receive visible ant display (#869)](https://github.com/alibaba/formily/commit/1d7d94e6) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :memo: Documents Changes
-
-1. [doc: fix typos (#870)](https://github.com/alibaba/formily/commit/fa206e29) :point_right: ( [Plortinus](https://github.com/Plortinus) )
