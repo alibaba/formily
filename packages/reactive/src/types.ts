@@ -45,12 +45,13 @@ export type ObservableListener = (operation: IOperation) => void
 export type ObservablePath = Array<string | number>
 
 export type Reaction = ((...args: any[]) => any) & {
+  _boundary?: number
   _name?: string
   _isComputed?: boolean
   _dirty?: boolean
   _context?: any
   _property?: PropertyKey
-  _computedsSet?: Set<Reaction>
+  _computesSet?: Set<Reaction>
   _reactionsSet?: Set<ReactionsMap>
   _scheduler?: (reaction: Reaction) => void
 }

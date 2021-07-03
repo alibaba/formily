@@ -16,24 +16,24 @@ export class Tracker {
   ) {
     this.track._scheduler = scheduler
     this.track._name = name
+    this.track._boundary = 0
   }
 
   track: Reaction = (tracker: Reaction) => {
     if (!isFn(tracker)) return this.results
-    const reactionIndex = ReactionStack.indexOf(this.track)
-    if (reactionIndex === -1) {
+    if (this.track._boundary > 0) return
+    if (ReactionStack.indexOf(this.track) === -1) {
       releaseBindingReactions(this.track)
       try {
-        ReactionStack.push(this.track)
         batchStart()
+        ReactionStack.push(this.track)
         this.results = tracker()
       } finally {
-        batchEnd()
         ReactionStack.pop()
+        this.track._boundary++
+        batchEnd()
+        this.track._boundary = 0
       }
-    } else {
-      ReactionStack.splice(reactionIndex, 1)
-      this.track(tracker)
     }
     return this.results
   }

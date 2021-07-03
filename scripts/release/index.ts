@@ -55,7 +55,7 @@ const getGroupChanges = (from = lastTag(), to = 'HEAD') => {
   ])
   changes.forEach(({ summary, author, sha }) => {
     for (const [group, value] of CommitGroupBy) {
-      if (value.some((target) => new RegExp(target).test(summary))) {
+      if (value.some((target) => summary.indexOf(target) === 0)) {
         results.forEach((item) => {
           if (item[0] === group) {
             item[1].push(
