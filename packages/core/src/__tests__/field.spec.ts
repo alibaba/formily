@@ -1113,3 +1113,33 @@ test('reaction in reaction', () => {
   expect(field2.value).toEqual(undefined)
   expect(field2.display).toEqual('none')
 })
+
+test('nested fields hidden and validate', async () => {
+  const form = attach(createForm())
+  const parent = attach(
+    form.createVoidField({
+      name: 'parent',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'parent',
+      required: true,
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      basePath: 'parent',
+      required: true,
+    })
+  )
+  try {
+    await form.validate()
+  } catch {}
+  expect(form.invalid).toBeTruthy()
+  parent.display = 'hidden'
+  await form.validate()
+  expect(form.invalid).toBeFalsy()
+})
