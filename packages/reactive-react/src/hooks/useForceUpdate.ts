@@ -6,23 +6,26 @@ const RENDER_COUNT = { value: 0 }
 const RENDER_QUEUE = new Set<() => void>()
 
 export function useForceUpdate() {
-  const [, setTick] = useState(0)
-  const unmountRef = useRef(false)
+  const [, setState] = useState([])
+  const unMountRef = useRef(false)
+
+  useEffect(() => {
+    unMountRef.current = false
+    return () => {
+      unMountRef.current = true
+    }
+  }, EMPTY_ARRAY)
 
   const update = useCallback(() => {
-    if (unmountRef.current) return
-    setTick((tick) => {
-      return tick + 1
-    })
+    if (unMountRef.current) return
+    setState([])
   }, EMPTY_ARRAY)
 
   const scheduler = useCallback(() => {
     if (RENDER_COUNT.value === 0) {
       update()
     } else {
-      if (!RENDER_QUEUE.has(update)) {
-        RENDER_QUEUE.add(update)
-      }
+      RENDER_QUEUE.add(update)
     }
   }, EMPTY_ARRAY)
 
@@ -31,20 +34,12 @@ export function useForceUpdate() {
   useDidUpdate(() => {
     RENDER_COUNT.value--
     if (RENDER_COUNT.value === 0) {
-      if (unmountRef.current) return
       RENDER_QUEUE.forEach((update) => {
         RENDER_QUEUE.delete(update)
         update()
       })
     }
   })
-
-  useEffect(() => {
-    unmountRef.current = false
-    return () => {
-      unmountRef.current = true
-    }
-  }, [])
 
   return scheduler
 }

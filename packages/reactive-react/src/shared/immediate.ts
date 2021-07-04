@@ -1,10 +1,13 @@
 export const immediate = (callback?: () => void) => {
-  let desposed = false
+  let disposed = false
   Promise.resolve(0).then(() => {
-    if (desposed) return
+    if (disposed) {
+      disposed = false
+      return
+    }
     callback()
   })
   return () => {
-    desposed = true
+    disposed = true
   }
 }
