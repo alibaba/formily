@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.0-beta.75(2021-07-03)
+
+### :blush: Other Changes
+
+1. [chore(core): improve display model (#1713)](https://github.com/alibaba/formily/commit/bad483da) :point_right: ( [Janry](https://github.com/Janry) )
+
 ## v2.0.0-beta.74(2021-07-03)
 
 ### :tada: Enhancements
@@ -925,25 +931,3 @@
 1. [fix(core): fix types of errors/warnings in IFormState (#898)](https://github.com/alibaba/formily/commit/b6bb1daa) :point_right: ( [Xianming Zhong](https://github.com/Xianming Zhong) )
 
 1. [fix(core): fix array list mutators (#888)](https://github.com/alibaba/formily/commit/50f4e9e5) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v1.1.7(2020-06-09)
-
-### :beetle: Bug Fixes
-
-1. [fix(next/components): incorrect size #884 (#885)](https://github.com/alibaba/formily/commit/c930e27d) :point_right: ( [锦此](https://github.com/锦此) )
-
-1. [fix(react-schema-renderer): fix typos (#883)](https://github.com/alibaba/formily/commit/2bd76e79) :point_right: ( [KyLeo](https://github.com/KyLeo) )
-
-1. [fix(components): fix datepicker format and checkbox editable style (#881)](https://github.com/alibaba/formily/commit/99ad146f) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix intialValues sync (#875)](https://github.com/alibaba/formily/commit/9847f7ea) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :memo: Documents Changes
-
-1. [docs(antd): mardown special symbol escape (#882)](https://github.com/alibaba/formily/commit/9c969cc9) :point_right: ( [kromalee](https://github.com/kromalee) )
-
-1. [docs: add type definition of x-linkages and x-mega-props (#876)](https://github.com/alibaba/formily/commit/c93b5171) :point_right: ( [Empireo](https://github.com/Empireo) )
-
-### :rose: Improve code quality
-
-1. [refactor(pkg): update pkg deps version](https://github.com/alibaba/formily/commit/de009c51) :point_right: ( [janrywang](https://github.com/janrywang) )
