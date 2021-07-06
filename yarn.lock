@@ -1360,6 +1360,92 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@formily/antd@2.0.0-beta.74":
+  version "2.0.0-beta.74"
+  resolved "https://registry.yarnpkg.com/@formily/antd/-/antd-2.0.0-beta.74.tgz#dd4656212abf959c744c1003cfca10e47e3bd651"
+  integrity sha512-+BmL71bR8k/yg1WtlM8jOnc+/VDu4XOZl2X1ppKUWhuj/fQQk95uBHKKd3mRUcwDaRWl2OFBQp/M2i6p8sTpcg==
+  dependencies:
+    "@ant-design/icons" "^4.0.0"
+    "@formily/core" "2.0.0-beta.74"
+    "@formily/json-schema" "2.0.0-beta.74"
+    "@formily/react" "2.0.0-beta.74"
+    "@formily/reactive" "2.0.0-beta.74"
+    "@formily/reactive-react" "2.0.0-beta.74"
+    "@formily/shared" "2.0.0-beta.74"
+    "@juggle/resize-observer" "^3.3.1"
+    classnames "^2.2.6"
+    react-sortable-hoc "^1.11.0"
+    react-sticky-box "^0.9.3"
+
+"@formily/core@2.0.0-beta.74":
+  version "2.0.0-beta.74"
+  resolved "https://registry.yarnpkg.com/@formily/core/-/core-2.0.0-beta.74.tgz#2721735804c8c56ae91a04105541abed3d6a13be"
+  integrity sha512-lpEzN0nXJBNG4280fTDv7y6CtkpDWPCUXaWHpEb/J6sTHUSooMMix3NjqGOQJXi1pAI0PvpSy4brDkk030vCTA==
+  dependencies:
+    "@formily/reactive" "2.0.0-beta.74"
+    "@formily/shared" "2.0.0-beta.74"
+    "@formily/validator" "2.0.0-beta.74"
+
+"@formily/json-schema@2.0.0-beta.74":
+  version "2.0.0-beta.74"
+  resolved "https://registry.yarnpkg.com/@formily/json-schema/-/json-schema-2.0.0-beta.74.tgz#faf0f0b3bf1c1172fb5e4511d1f37815178f5cbd"
+  integrity sha512-FwlZvaficqUKoFt3+foaO8RSRRUilj5E85tMtp5u3Hej7p3VXQLAQpB9pudwLfykuIdKLxjg5fDuWuDPl8AFbA==
+  dependencies:
+    "@formily/core" "2.0.0-beta.74"
+    "@formily/reactive" "2.0.0-beta.74"
+    "@formily/shared" "2.0.0-beta.74"
+
+"@formily/path@2.0.0-beta.74":
+  version "2.0.0-beta.74"
+  resolved "https://registry.yarnpkg.com/@formily/path/-/path-2.0.0-beta.74.tgz#0abcd99db5ce10f104ea7556cd71272167b983b4"
+  integrity sha512-DkbZOuJmLmeye4qKeN6KTcgSqJlkW1BZYkcuh6/PTGbCCyefF46xT/bG5iBoNSLbzjckA4/GGurIZaXRHOf6qQ==
+
+"@formily/react@2.0.0-beta.74":
+  version "2.0.0-beta.74"
+  resolved "https://registry.yarnpkg.com/@formily/react/-/react-2.0.0-beta.74.tgz#79485b6d7c95c2f692ad64456a631258dca80afd"
+  integrity sha512-uEho9iKfZow5C8HIwYlJCO9kf44oPxe22VmW+zjh9LuSiHTTtlrqrpVNfSt0xLSLIDCah8hrBpYBSI8D9YnLmg==
+  dependencies:
+    "@formily/core" "2.0.0-beta.74"
+    "@formily/json-schema" "2.0.0-beta.74"
+    "@formily/reactive" "2.0.0-beta.74"
+    "@formily/reactive-react" "2.0.0-beta.74"
+    "@formily/shared" "2.0.0-beta.74"
+    "@formily/validator" "2.0.0-beta.74"
+    hoist-non-react-statics "^3.3.2"
+
+"@formily/reactive-react@2.0.0-beta.74":
+  version "2.0.0-beta.74"
+  resolved "https://registry.yarnpkg.com/@formily/reactive-react/-/reactive-react-2.0.0-beta.74.tgz#9c69049e62d2ac96e79261655f1364c8cce5eb73"
+  integrity sha512-e9P4x6HAdTT641JWsfsyx/SufQze2mR08o7MC5ExbmKxFzu+Xi3qRRGQ5PVvMzvCEnywyiUWFu8u449POlUsJQ==
+  dependencies:
+    "@formily/reactive" "2.0.0-beta.74"
+    hoist-non-react-statics "^3.3.2"
+
+"@formily/reactive@2.0.0-beta.74":
+  version "2.0.0-beta.74"
+  resolved "https://registry.yarnpkg.com/@formily/reactive/-/reactive-2.0.0-beta.74.tgz#d8a0df0738ca4952fb4a991524bf3813aede8c92"
+  integrity sha512-C+fKkKPwVvycfA3RwFZ5Jlf64odz6rvpKR+ofGotW3nzlOkDzn8KcLrqqhtd6bX7CtmC6vbfkDCx1XLqZyeN3g==
+
+"@formily/shared@2.0.0-beta.74":
+  version "2.0.0-beta.74"
+  resolved "https://registry.yarnpkg.com/@formily/shared/-/shared-2.0.0-beta.74.tgz#9ae7adcc7db73dc8cc2c390b12520249a78d9b40"
+  integrity sha512-AeOFYTFHygmePcKFi50WZDAxc/rlOdAgrBjTe7DNziOUZIaNyULyPums5T0lFmzugRd7iDMoukstOCJ6a2Q9TA==
+  dependencies:
+    "@formily/path" "2.0.0-beta.74"
+    camel-case "^4.1.1"
+    lower-case "^2.0.1"
+    no-case "^3.0.4"
+    param-case "^3.0.4"
+    pascal-case "^3.1.1"
+    upper-case "^2.0.1"
+
+"@formily/validator@2.0.0-beta.74":
+  version "2.0.0-beta.74"
+  resolved "https://registry.yarnpkg.com/@formily/validator/-/validator-2.0.0-beta.74.tgz#0fb7f7d53b2332d1afe620bd9e5a947d44a21033"
+  integrity sha512-4GfLvPvszt9JUGW1d0Nz4/RATI4nLYknneXWxK0jvyWzG9S7SZRJlO+lIKyCIFRBsFCAPbC6ZmR8PKrAqcrclA==
+  dependencies:
+    "@formily/shared" "2.0.0-beta.74"
+
 "@icons/material@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
