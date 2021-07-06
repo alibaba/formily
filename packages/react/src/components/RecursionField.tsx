@@ -32,6 +32,8 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
     return props.basePath || parent?.address
   }
   const basePath = getBasePath()
+  const children =
+    fieldSchema['x-content'] || fieldSchema['x-component-props']?.['children']
   const renderProperties = (field?: Formily.Core.Types.GeneralField) => {
     if (props.onlyRenderSelf) return
     return (
@@ -59,7 +61,7 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
             />
           )
         })}
-        {fieldSchema['x-content']}
+        {children}
       </Fragment>
     )
   }
@@ -75,7 +77,9 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
       )
     } else if (fieldSchema.type === 'array') {
       return (
-        <ArrayField {...fieldProps} name={props.name} basePath={basePath} />
+        <ArrayField {...fieldProps} name={props.name} basePath={basePath}>
+          {children}
+        </ArrayField>
       )
     } else if (fieldSchema.type === 'void') {
       if (props.onlyRenderProperties) return renderProperties()
@@ -87,8 +91,7 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
     }
     return (
       <Field {...fieldProps} name={props.name} basePath={basePath}>
-        {fieldSchema['x-content'] ||
-          fieldSchema['x-component-props']?.['children']}
+        {children}
       </Field>
     )
   }
