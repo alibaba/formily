@@ -246,15 +246,40 @@ test('connect', async () => {
     })
   )
 
+  const CustomFormItem = connect(
+    {
+      functional: true,
+      render(h, context) {
+        return h('div', context.data, context.children)
+      },
+    },
+    mapProps(),
+    mapReadPretty({
+      render(h) {
+        return h('div', 'read pretty')
+      },
+    })
+  )
+
   const form = createForm()
   const { queryByText, getByTestId } = render({
+    components: {
+      CustomFormItem,
+    },
     data() {
-      return { form, Decorator, CustomField, CustomField2, CustomField3 }
+      return {
+        form,
+        Decorator,
+        CustomField,
+        CustomField2,
+        CustomField3,
+      }
     },
     template: `<FormProvider :form="form">
       <Field name="aa" :decorator="[Decorator]" :component="[CustomField]" />
       <Field name="bb" :decorator="[Decorator]" :component="[CustomField2]" />
       <Field name="cc" :decorator="[Decorator]" :component="[CustomField3]" />
+      <CustomFormItem>dd</CustomFormItem>
     </FormProvider>`,
   })
   form.query('aa').take((field) => {
@@ -262,6 +287,8 @@ test('connect', async () => {
       state.value = '123'
     })
   })
+
+  expect(queryByText('dd')).toBeVisible()
   await waitFor(() => {
     expect(queryByText('123')).toBeVisible()
   })
