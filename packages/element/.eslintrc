@@ -48,6 +48,13 @@
     "prefer-const": 1,
     "no-var": 1,
     "@typescript-eslint/no-empty-function": 1,
+    "@typescript-eslint/ban-ts-comment": [
+      "error",
+      {
+        "ts-ignore": "allow-with-description",
+        "ts-check": true
+      }
+    ],
     "prefer-rest-params": 1,
     "vue/html-self-closing": 0,
     "vue/max-attributes-per-line": [
@@ -60,6 +67,7 @@
         }
       }
     ],
-    "react-hooks/rules-of-hooks": 0
+    "react-hooks/rules-of-hooks": 0,
+    "vue/one-component-per-file": 0
   }
 }

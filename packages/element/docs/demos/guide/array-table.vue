@@ -95,9 +95,30 @@
 <script>
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/vue'
-import { Submit, components } from '@formily/element'
+import {
+  Submit,
+  FormItem,
+  ArrayTable,
+  ArrayTableColumn,
+  ArrayAddition,
+  ArrayMoveDown,
+  ArrayMoveUp,
+  ArrayRemove,
+  Input,
+} from '@formily/element'
 
-const fields = createSchemaField({ components })
+const fields = createSchemaField({
+  components: {
+    FormItem,
+    ArrayTable,
+    ArrayTableColumn,
+    ArrayAddition,
+    ArrayMoveDown,
+    ArrayMoveUp,
+    ArrayRemove,
+    Input,
+  },
+})
 
 export default {
   components: { FormProvider, Submit, ...fields },

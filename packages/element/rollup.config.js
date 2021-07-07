@@ -1,3 +1,9 @@
-import baseConfig from '../../scripts/rollup.base'
+import baseConfig, {
+  removeImportStyleFromInputFilePlugin,
+} from '../../scripts/rollup.base.js'
 
-export default baseConfig('formily.element', 'Formily.Element')
+export default baseConfig(
+  'formily.element',
+  'Formily.Element',
+  removeImportStyleFromInputFilePlugin()
+)

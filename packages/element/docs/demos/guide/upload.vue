@@ -18,6 +18,7 @@ import {
   Submit,
   FormButtonGroup,
 } from '@formily/element'
+import { Button } from 'element-ui'
 
 const schema = {
   type: 'object',

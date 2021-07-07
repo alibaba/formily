@@ -22,10 +22,10 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, components } from '@formily/element'
+import { Form, Input, Select, FormItem } from '@formily/element'
 
 const form = createForm()
-const fields = createSchemaField({ components })
+const fields = createSchemaField({ components: { Input, Select, FormItem } })
 
 export default {
   components: { Form, ...fields },

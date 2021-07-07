@@ -89,7 +89,7 @@ export default {
 
   data() {
     return {
-      collapsed: false,
+      collapsed: true,
       copied: false,
       timerId: null,
       demoStr: '',

@@ -12,9 +12,18 @@
   "engines": {
     "npm": ">=3.0.0"
   },
+  "sideEffects": [
+    "dist/*",
+    "esm/*.js",
+    "lib/*.js",
+    "src/*.ts",
+    "*.scss"
+  ],
   "scripts": {
     "start": "vuepress dev docs",
-    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
+    "build": "rimraf -rf lib esm dist && npm run create:style && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:style",
+    "create:style": "ts-node create-style",
+    "build:style": "ts-node build-style",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
     "build:umd": "rollup --config",
@@ -29,21 +38,22 @@
     "core-js": "^2.4.0",
     "element-ui": "^2.15.2",
     "sass": "^1.34.1",
-    "vue": "^2.6.12",
+    "vue": "^2.6.0",
     "vuepress": "^1.8.2",
     "vuepress-plugin-typescript": "^0.3.1"
   },
   "dependencies": {
-    "@formily/core": "2.0.0-beta.62",
-    "@formily/json-schema": "2.0.0-beta.62",
-    "@formily/reactive": "2.0.0-beta.62",
-    "@formily/reactive-vue": "2.0.0-beta.62",
-    "@formily/vue": "2.0.0-beta.62",
-    "@formily/shared": "2.0.0-beta.62"
+    "@formily/core": "2.0.0-beta.76",
+    "@formily/json-schema": "2.0.0-beta.76",
+    "@formily/reactive": "2.0.0-beta.76",
+    "@formily/reactive-vue": "2.0.0-beta.76",
+    "@formily/vue": "2.0.0-beta.76",
+    "@formily/shared": "2.0.0-beta.76"
   },
   "peerDependencies": {
     "@vue/composition-api": "^1.0.0-beta.1",
-    "vue": "^2.6.0 || >=3.0.0-rc.0"
+    "vue": "^2.6.0 || >=3.0.0-rc.0",
+    "element-ui": "^2.14.0"
   },
   "peerDependenciesMeta": {
     "@vue/composition-api": {

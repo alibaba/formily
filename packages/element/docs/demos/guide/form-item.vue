@@ -385,7 +385,16 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField, FormProvider } from '@formily/vue'
-import { components } from '@formily/element'
+import {
+  FormItem,
+  InputNumber,
+  Input,
+  Cascader,
+  Select,
+  DatePicker,
+  FormLayout,
+  TimePicker,
+} from '@formily/element'
 
 const SuccessIcon = {
   functional: true,
@@ -407,7 +416,14 @@ const Title = {
 const fields = createSchemaField({
   components: {
     Title,
-    ...components,
+    FormItem,
+    InputNumber,
+    Input,
+    Cascader,
+    Select,
+    DatePicker,
+    FormLayout,
+    TimePicker,
   },
 })
 

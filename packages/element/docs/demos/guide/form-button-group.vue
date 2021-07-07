@@ -31,10 +31,12 @@ import {
   Submit,
   Reset,
   FormButtonGroup,
-  components,
+  FormItem,
+  Input,
+  Select,
 } from '@formily/element'
 
-const fields = createSchemaField({ components })
+const fields = createSchemaField({ components: { FormItem, Input, Select } })
 
 export default {
   components: {
