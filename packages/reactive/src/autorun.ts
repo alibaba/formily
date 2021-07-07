@@ -51,7 +51,7 @@ export const autorun = (tracker: Reaction, name = 'AutoRun') => {
 
 export const reaction = <T>(
   tracker: () => T,
-  subscriber?: (payload: T) => void,
+  subscriber?: (value: T, oldValue: T) => void,
   options?: IReactionOptions<T>
 ) => {
   const realOptions = {
@@ -86,7 +86,7 @@ export const reaction = <T>(
       try {
         batchStart()
         untrackStart()
-        if (isFn(subscriber)) subscriber(value.currentValue)
+        if (isFn(subscriber)) subscriber(value.currentValue, value.oldValue)
       } finally {
         untrackEnd()
         batchEnd()
