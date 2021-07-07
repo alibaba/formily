@@ -1,7 +1,9 @@
-import { FormPathPattern, isObj } from '@formily/shared'
+import { FormPathPattern } from '@formily/shared'
+import { reaction } from '@formily/reactive'
 import { JSXComponent, IFieldProps } from '../types'
 import { Field } from './Field'
 import { Form } from './Form'
+import { cleanupObjectChildren } from '../shared/internals'
 export class ObjectField<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any
@@ -14,14 +16,21 @@ export class ObjectField<
     form: Form,
     designable: boolean
   ) {
-    super(
-      address,
-      {
-        ...props,
-        value: isObj(props.value) ? props.value : {},
-      },
-      form,
-      designable
+    super(address, props, form, designable)
+    this.addAutoCleaner()
+  }
+
+  protected addAutoCleaner() {
+    this.disposers.push(
+      reaction(
+        () => Object.keys(this.value || {}),
+        (newKeys, oldKeys) => {
+          cleanupObjectChildren(
+            this,
+            oldKeys.filter((key) => !newKeys.includes(key))
+          )
+        }
+      )
     )
   }
 

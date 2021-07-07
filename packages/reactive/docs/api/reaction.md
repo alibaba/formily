@@ -16,7 +16,7 @@ interface IReactionOptions<T> {
 interface reaction<T> {
   (
     tracker: () => T,
-    subscriber?: (payload: T) => void,
+    subscriber?: (newValue: T, oldValue: T) => void,
     options?: IReactionOptions<T>
   ): void
 }

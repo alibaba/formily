@@ -1,6 +1,10 @@
 import { isArr } from '@formily/shared'
-import { batch } from '@formily/reactive'
-import { spliceArrayState, exchangeArrayState } from '../shared/internals'
+import { batch, reaction } from '@formily/reactive'
+import {
+  spliceArrayState,
+  exchangeArrayState,
+  cleanupArrayChildren,
+} from '../shared/internals'
 import { Field } from './Field'
 import { Form } from './Form'
 import { JSXComponent, IFieldProps, FormPathPattern } from '../types'
@@ -17,14 +21,22 @@ export class ArrayField<
     form: Form,
     designable: boolean
   ) {
-    super(
-      address,
-      {
-        ...props,
-        value: isArr(props.value) ? props.value : [],
-      },
-      form,
-      designable
+    super(address, props, form, designable)
+    this.addAutoCleaner()
+  }
+
+  protected addAutoCleaner() {
+    this.disposers.push(
+      reaction(
+        () => this.value?.length,
+        (newLength, oldLength) => {
+          if (oldLength && !newLength) {
+            cleanupArrayChildren(this, 0)
+          } else if (newLength < oldLength) {
+            cleanupArrayChildren(this, newLength)
+          }
+        }
+      )
     )
   }
 
