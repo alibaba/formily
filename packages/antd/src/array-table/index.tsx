@@ -203,7 +203,7 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
   }
 
   useEffect(() => {
-    if (totalPage < current) {
+    if (totalPage > 0 && totalPage < current) {
       handleChange(totalPage)
     }
   }, [totalPage, current])
