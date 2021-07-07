@@ -64,7 +64,7 @@ const ObjectComponent = observer(() => {
         <Button
           onClick={() => {
             const name = form.values.propertyName
-            if (name && !form.existValuesIn(`object.${name}`)) {
+            if (name && !form.existValuesIn(`${field.path}.${name}`)) {
               field.addProperty(name, '')
               form.deleteValuesIn('propertyName')
             }
@@ -132,7 +132,7 @@ export default () => (
               <Button
                 onClick={() => {
                   const name = form.values.propertyName
-                  if (name && !form.existValuesIn(`object.${name}`)) {
+                  if (name && !form.existValuesIn(`${field.path}.${name}`)) {
                     field.addProperty(name, '')
                     form.deleteValuesIn('propertyName')
                   }
