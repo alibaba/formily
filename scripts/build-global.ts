@@ -1,10 +1,9 @@
 import fs from 'fs-extra'
-const copy = (dist = 'esm') => {
-  fs.copy('./src/global.d.ts', `./${dist}/global.d.ts`)
+const copy = async (dist = 'esm') => {
+  await fs.copy('./src/global.d.ts', `./${dist}/global.d.ts`)
 }
-fs.copy('./src/global.d.ts', './lib/global.d.ts')
-const writeRef = (dist = 'esm') => {
-  fs.writeFile(
+const writeRef = async (dist = 'esm') => {
+  await fs.writeFile(
     `./${dist}/index.d.ts`,
     `/// <reference path="global.d.ts" />\n${fs.readFileSync(
       `./${dist}/index.d.ts`,
@@ -12,7 +11,10 @@ const writeRef = (dist = 'esm') => {
     )}`
   )
 }
-copy('esm')
-copy('lib')
-writeRef('esm')
-writeRef('lib')
+
+;(async () => {
+  await copy('esm')
+  await copy('lib')
+  await writeRef('esm')
+  await writeRef('lib')
+})()
