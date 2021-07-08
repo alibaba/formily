@@ -271,6 +271,7 @@
   margin-left: 4px;
   color: #00000073;
   cursor: pointer;
+  max-height: $form-element-medium-height;
 }
 
 .#{$form-item-cls}-control-align-left {
