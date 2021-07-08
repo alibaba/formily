@@ -51,7 +51,7 @@ export function mapProps<T extends VueComponent = VueComponent>(
           return () => {
             const newAttrs = fieldRef.value
               ? transform({ ...attrs } as VueComponentProps<T>, fieldRef.value)
-              : {}
+              : { ...attrs }
             return h(
               target,
               {
@@ -105,7 +105,7 @@ export function connect<T extends VueComponent>(
   const Component = args.reduce((target: VueComponent, mapper) => {
     return mapper(target)
   }, target)
-
+  /* istanbul ignore else */
   if (isVue2) {
     const functionalComponent = {
       functional: true,

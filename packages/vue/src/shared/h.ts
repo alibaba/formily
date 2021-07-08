@@ -16,6 +16,7 @@ const compatibleCreateElement = (
   data: VNodeData,
   components: RenderChildren
 ): any => {
+  /* istanbul ignore else */
   if (isVue2) {
     const hInVue2 = h as (
       tag: Tag,

@@ -28,6 +28,7 @@ if (isVue2) {
     },
   }
 } else {
+  /* istanbul ignore next */
   FragmentComponent = defineComponent({
     name: 'Fragment',
     setup(props: Record<string, any>, { slots, attrs }) {
