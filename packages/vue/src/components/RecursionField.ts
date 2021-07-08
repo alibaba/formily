@@ -87,6 +87,43 @@ const RecursionField = observer(
       return () => {
         const basePath = getBasePath()
         const fieldProps = fieldPropsRef.value
+        const xContent = fieldSchemaRef.value['x-content']
+        const xContentMap: Record<string, any[]> = {}
+
+        if (typeof xContent === 'string') {
+          xContentMap['default'] = [xContent]
+        } else if (isVueOptions(xContent) || typeof xContent === 'function') {
+          // is vue component or functional component
+          xContentMap['default'] = [h(xContent, {}, {})]
+        } else if (xContent && typeof xContent === 'object') {
+          // for named slots
+          Object.keys(xContent).forEach((key) => {
+            const child = xContent[key]
+            if (typeof child === 'string') {
+              xContentMap[key] = [child]
+            } else if (isVueOptions(child) || typeof child === 'function') {
+              xContentMap[key] = [h(child, {}, {})]
+            }
+          })
+        }
+
+        const getSlots = (children = []) => {
+          const slots: Record<string, () => any> = {}
+
+          if (children.length > 0) {
+            slots.default = () => [...children]
+          }
+
+          Object.keys(xContentMap).forEach((key) => {
+            if (key === 'default') {
+              slots[key] = () => [...children, ...xContentMap[key]]
+            } else {
+              slots[key] = () => [...xContentMap[key]]
+            }
+          })
+
+          return slots
+        }
 
         const renderProperties = (field?: Formily.Core.Types.GeneralField) => {
           if (props.onlyRenderSelf) return
@@ -120,35 +157,7 @@ const RecursionField = observer(
             }
           )
 
-          const slots: Record<string, () => any> = {}
-
-          if (children.length > 0) {
-            slots.default = () => [...children]
-          }
-
-          const xContent = fieldSchemaRef.value['x-content']
-
-          if (typeof xContent === 'string') {
-            slots['default'] = () => [...children, xContent]
-          } else if (isVueOptions(xContent) || typeof xContent === 'function') {
-            slots['default'] = () => [...children, h(xContent, {}, {})]
-          } else if (xContent && typeof xContent === 'object') {
-            Object.keys(xContent).forEach((key) => {
-              const child = xContent[key]
-              if (key === 'default') {
-                if (typeof child === 'string') {
-                  slots[key] = () => [...children, child]
-                } else if (isVueOptions(child) || typeof child === 'function') {
-                  slots[key] = () => [...children, h(child, {}, {})]
-                }
-              }
-              if (typeof child === 'string') {
-                slots[key] = () => [child]
-              } else if (isVueOptions(child) || typeof child === 'function') {
-                slots[key] = () => [h(child, {}, {})]
-              }
-            })
-          }
+          const slots = getSlots(children)
 
           return h(Fragment, {}, slots)
         }
@@ -171,6 +180,7 @@ const RecursionField = observer(
               }
             )
           } else if (fieldSchemaRef.value.type === 'array') {
+            const slots = getSlots()
             return h(
               ArrayField,
               {
@@ -180,7 +190,7 @@ const RecursionField = observer(
                   basePath: basePath,
                 },
               },
-              {}
+              slots
             )
           } else if (fieldSchemaRef.value.type === 'void') {
             if (props.onlyRenderProperties) return renderProperties()
@@ -199,27 +209,7 @@ const RecursionField = observer(
             )
           }
 
-          const slots: Record<string, () => any> = {}
-
-          const xContent = fieldSchemaRef.value['x-content']
-
-          if (typeof xContent === 'string') {
-            slots['default'] = () => [xContent]
-          } else if (isVueOptions(xContent) || typeof xContent === 'function') {
-            // is vue component or functional component
-            slots['default'] = () => [h(xContent, {}, {})]
-          } else if (xContent && typeof xContent === 'object') {
-            // for named slots
-            Object.keys(xContent).forEach((key) => {
-              const child = xContent[key]
-              if (typeof child === 'string') {
-                slots[key] = () => [child]
-              } else if (isVueOptions(child) || typeof child === 'function') {
-                slots[key] = () => [h(child, {}, {})]
-              }
-            })
-          }
-
+          const slots = getSlots()
           return h(
             Field,
             {

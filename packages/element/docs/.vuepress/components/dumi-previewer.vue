@@ -61,7 +61,7 @@
         </div>
       </div>
 
-      <div v-show="!collapsed" class="dumi-previewer-source">
+      <div v-show="!innerCollapsed" class="dumi-previewer-source">
         <div v-html="highlightCode" class="language-vue extra-class" />
       </div>
     </section>

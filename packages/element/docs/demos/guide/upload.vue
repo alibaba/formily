@@ -20,6 +20,13 @@ import {
 } from '@formily/element'
 import { Button } from 'element-ui'
 
+const UploadButton = {
+  functional: true,
+  render(h) {
+    return h(Button, {}, '上传图片')
+  },
+}
+
 const schema = {
   type: 'object',
   properties: {
@@ -55,6 +62,17 @@ const schema = {
         textContent: '将文件拖到此处，或者点击上传',
         drag: true,
       },
+      required: true,
+    },
+    custom: {
+      type: 'array',
+      title: '自定义按钮',
+      'x-decorator': 'FormItem',
+      'x-component': 'Upload',
+      'x-component-props': {
+        action: 'https://formily-vue.free.beeceptor.com/file',
+      },
+      'x-content': UploadButton,
       required: true,
     },
   },
