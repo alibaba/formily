@@ -1,16 +1,21 @@
-import React from 'react'
-import { uid } from '@formily/shared'
+import React, { Fragment } from 'react'
 import { Tree, Button } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
+import { uid } from '@formily/shared'
 import { observer } from '@formily/reactive-react'
-import { tranverseTree } from './utils'
+import { usePrefix } from '@designable/react'
 import { Title } from './Title'
+import { Header } from './Header'
+import { tranverseTree } from './utils'
 import { ITreeDataSource, INodeItem } from './type'
 import './styles.less'
+
 export interface ITreePanelProps {
   treeDataSource: ITreeDataSource
 }
 
 export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
+  const prefix = usePrefix('data-source-setter')
   const dropHanle = (info) => {
     const dropKey = info.node?.key
     const dragKey = info.dragNode?.key
@@ -71,37 +76,49 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
     props.treeDataSource.dataSource = data
   }
   return (
-    <div style={{ width: '50%' }}>
-      <Tree
-        defaultExpandAll
-        draggable
-        showLine={{ showLeafIcon: false }}
-        treeData={props.treeDataSource.dataSource}
-        onDragEnter={() => {}}
-        onDrop={dropHanle}
-        titleRender={(titleProps: INodeItem) => (
-          <Title {...titleProps} treeDataSource={props.treeDataSource}></Title>
-        )}
-        onSelect={(selectedKeys) => {
-          if (selectedKeys[0]) {
-            props.treeDataSource.selectedkey = selectedKeys[0].toString()
-          }
-        }}
-      ></Tree>
-      <Button
-        onClick={() => {
-          const uuid = uid()
-          props.treeDataSource.dataSource =
-            props.treeDataSource.dataSource.concat({
-              key: uuid,
-              duplicateKey: uuid,
-              map: [],
-              children: [],
-            })
-        }}
-      >
-        新增节点
-      </Button>
-    </div>
+    <Fragment>
+      <Header
+        title="数据源节点树"
+        extra={
+          <Button
+            type="text"
+            onClick={() => {
+              const uuid = uid()
+              props.treeDataSource.dataSource =
+                props.treeDataSource.dataSource.concat({
+                  key: uuid,
+                  duplicateKey: uuid,
+                  map: [],
+                  children: [],
+                } as INodeItem)
+            }}
+            icon={<PlusOutlined />}
+          >
+            新增节点
+          </Button>
+        }
+      />
+      <div className={`${prefix + '-layout-item-content'}`}>
+        <Tree
+          defaultExpandAll
+          draggable
+          showLine={{ showLeafIcon: false }}
+          treeData={props.treeDataSource.dataSource}
+          onDragEnter={() => {}}
+          onDrop={dropHanle}
+          titleRender={(titleProps: INodeItem) => (
+            <Title
+              {...titleProps}
+              treeDataSource={props.treeDataSource}
+            ></Title>
+          )}
+          onSelect={(selectedKeys) => {
+            if (selectedKeys[0]) {
+              props.treeDataSource.selectedkey = selectedKeys[0].toString()
+            }
+          }}
+        ></Tree>
+      </div>
+    </Fragment>
   )
 })

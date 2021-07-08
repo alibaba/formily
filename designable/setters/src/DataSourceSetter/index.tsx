@@ -1,15 +1,15 @@
 import React, { Fragment, useMemo, useState } from 'react'
-import { usePrefix, IconWidget } from '@designable/react'
-import { uid, clone } from '@formily/shared'
+import cls from 'classnames'
 import { Modal, Button } from 'antd'
+import { uid, clone } from '@formily/shared'
 import { observable } from '@formily/reactive'
 import { observer } from '@formily/reactive-react'
+import { usePrefix, useTheme } from '@designable/react'
 import { DataSettingPanel } from './DataSettingPanel'
 import { TreePanel } from './TreePanel'
 import { tranverseTree } from './utils'
 import { IDataSourceItem, INodeItem, ITreeDataSource } from './type'
 import './styles.less'
-// 1. duplicateKey
 
 export interface IBorderStyleSetterProps {
   className?: string
@@ -19,7 +19,8 @@ export interface IBorderStyleSetterProps {
 }
 export const DataSourceSetter: React.FC<IBorderStyleSetterProps> = observer(
   (props) => {
-    const { value = [], onChange } = props
+    const { className, value = [], onChange } = props
+    const theme = useTheme()
     const prefix = usePrefix('data-source-setter')
     const [modalVisible, setModalVisible] = useState(false)
     const transformValueToData = (value: IDataSourceItem[]): INodeItem[] => {
@@ -55,7 +56,6 @@ export const DataSourceSetter: React.FC<IBorderStyleSetterProps> = observer(
         valueItem.children = dataSource[i]?.children || []
         dataSource[i] = valueItem
       })
-      // console.log('value',value);
       return value
     }
     const treeDataSource: ITreeDataSource = useMemo(
@@ -82,11 +82,19 @@ export const DataSourceSetter: React.FC<IBorderStyleSetterProps> = observer(
             closeModal()
           }}
         >
-          <div style={{ display: 'flex' }}>
-            <TreePanel treeDataSource={treeDataSource}></TreePanel>
-            <DataSettingPanel
-              treeDataSource={treeDataSource}
-            ></DataSettingPanel>
+          <div
+            className={`${cls(prefix, className)} ${prefix + '-' + theme} ${
+              prefix + '-layout'
+            }`}
+          >
+            <div className={`${prefix + '-layout-item'}`}>
+              <TreePanel treeDataSource={treeDataSource}></TreePanel>
+            </div>
+            <div className={`${prefix + '-layout-item'}`}>
+              <DataSettingPanel
+                treeDataSource={treeDataSource}
+              ></DataSettingPanel>
+            </div>
           </div>
         </Modal>
       </Fragment>

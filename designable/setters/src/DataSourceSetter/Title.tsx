@@ -1,7 +1,7 @@
 import React from 'react'
-import { IconWidget } from '@designable/react'
 import { clone } from '@formily/shared'
 import { observer } from '@formily/reactive-react'
+import { IconWidget } from '@designable/react'
 import { INodeItem, ITreeDataSource } from './type'
 import { tranverseTree } from './utils'
 import './styles.less'

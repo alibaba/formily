@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react'
-import { Input } from 'antd'
+import React, { useMemo, Fragment } from 'react'
+import { Button, Input } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 import {
   ArrayItems,
   FormItem,
@@ -9,13 +10,16 @@ import {
   Space,
   Form,
 } from '@formily/antd'
-import { ValueInput } from '@designable/react-settings-form'
 import { createForm } from '@formily/core'
 import { observer } from '@formily/reactive-react'
 import { createSchemaField } from '@formily/react'
+import { ValueInput } from '@designable/react-settings-form'
+import { usePrefix } from '@designable/react'
+import { Header } from './Header'
 import { tranverseTree } from './utils'
 import { ITreeDataSource } from './type'
 import './styles.less'
+
 const SchemaField = createSchemaField({
   components: {
     FormItem,
@@ -34,6 +38,7 @@ export interface IDataSettingPanelProps {
 }
 export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
   (props) => {
+    const prefix = usePrefix('data-source-setter')
     const form = useMemo(() => {
       let values
       tranverseTree(props.treeDataSource.dataSource, (dataItem, i) => {
@@ -46,43 +51,69 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
       })
     }, [props.treeDataSource.selectedkey])
     if (!props.treeDataSource.selectedkey)
-      return <div style={{ width: '50%' }}>请先选择左侧树节点</div>
+      return (
+        <Fragment>
+          <Header title="节点属性" extra={null} />
+          <div className={`${prefix + '-layout-item-content'}`}>
+            请先选择左侧树节点
+          </div>
+        </Fragment>
+      )
     return (
-      <div style={{ width: '50%' }}>
-        <Form form={form} labelCol={5} wrapperCol={16}>
-          <SchemaField>
-            <SchemaField.Array
-              name="map"
-              x-decorator="FormItem"
-              x-component="ArrayItems"
-              x-component-props={{ style: { width: 300 } }}
+      <Fragment>
+        <Header
+          title="节点属性"
+          extra={
+            <Button
+              type="text"
+              onClick={() => {
+                form.setFieldState('map', (state) => {
+                  state.value = state.value.concat({})
+                })
+              }}
+              icon={<PlusOutlined />}
             >
-              <SchemaField.Object x-decorator="ArrayItems.Item">
-                <SchemaField.String
-                  x-decorator="Editable"
-                  title="输入框"
-                  name="label"
-                  x-component="Input"
-                />
-                <SchemaField.String
-                  x-decorator="Editable"
-                  title="输入框"
-                  name="value"
-                  x-component="ValueInput"
-                />
-                <SchemaField.Void
-                  x-decorator="FormItem"
-                  x-component="ArrayItems.Remove"
-                />
-              </SchemaField.Object>
-              <SchemaField.Void
-                x-component="ArrayItems.Addition"
-                title="添加条目"
-              />
-            </SchemaField.Array>
-          </SchemaField>
-        </Form>
-      </div>
+              添加键值对
+            </Button>
+          }
+        />
+        <div className={`${prefix + '-layout-item-content'}`}>
+          <Form form={form}>
+            <SchemaField>
+              <SchemaField.Array
+                name="map"
+                x-decorator="FormItem"
+                x-component="ArrayItems"
+              >
+                <SchemaField.Object x-decorator="ArrayItems.Item">
+                  <SchemaField.String
+                    title="输入框"
+                    name="label"
+                    x-component="Input"
+                    x-component-props={{ style: { margin: 5 } }}
+                  />
+                  <SchemaField.String
+                    title="输入框"
+                    name="value"
+                    x-component="ValueInput"
+                  />
+                  <SchemaField.Void
+                    x-component="ArrayItems.Remove"
+                    x-component-props={{
+                      style: {
+                        margin: 5,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      },
+                    }}
+                  />
+                </SchemaField.Object>
+              </SchemaField.Array>
+            </SchemaField>
+          </Form>
+        </div>
+      </Fragment>
     )
   }
 )
