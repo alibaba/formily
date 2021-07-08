@@ -10,10 +10,6 @@
   line-height: $form-element-medium-height;
   font-size: $form-element-medium-font-size;
 
-  &-label * {
-    line-height: $form-element-medium-height;
-  }
-
   &-label-content {
     min-height: $form-element-medium-height;
   }
@@ -176,10 +172,6 @@
 .#{$form-item-cls}-size-small {
   font-size: $form-element-small-font-size;
 
-  .#{$form-item-cls}-label * {
-    line-height: $form-element-small-height;
-  }
-
   .#{$form-item-cls}-label-content {
     min-height: $form-element-small-height;
   }
@@ -224,10 +216,6 @@
 .#{$form-item-cls}-size-large {
   font-size: $form-element-large-font-size;
 
-  .#{$form-item-cls}-label * {
-    line-height: $form-element-large-height;
-  }
-
   .#{$form-item-cls}-label-content {
     min-height: $form-element-large-height;
   }
@@ -269,10 +257,6 @@
   &-layout-vertical {
     display: block;
 
-    .#{$form-item-cls}-label * {
-      line-height: $form-element-medium-height - 10 !important;
-    }
-
     .#{$form-item-cls}-label-content {
       min-height: $form-element-medium-height - 10 !important;
     }
@@ -286,8 +270,8 @@
 .#{$form-item-cls}-label-tooltip-icon {
   margin-left: 4px;
   color: #00000073;
-  height: $form-element-medium-height;
   cursor: pointer;
+  max-height: $form-element-medium-height;
 }
 
 .#{$form-item-cls}-control-align-left {

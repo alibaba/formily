@@ -14,10 +14,6 @@
   &-label {
     line-height: @height-base;
     min-height: @height-base - 2;
-
-    * {
-      line-height: @height-base;
-    }
   }
 
   textarea.@{ant-prefix}-input {
@@ -211,10 +207,6 @@
   .@{form-item-cls}-label {
     line-height: @height-sm;
     min-height: @height-sm - 2;
-
-    * {
-      line-height: @height-sm;
-    }
   }
 
   .@{form-item-cls}-control-content {
@@ -350,10 +342,6 @@
   .@{form-item-cls}-label {
     line-height: @height-lg;
     min-height: @height-lg - 2;
-
-    * {
-      line-height: @height-lg;
-    }
   }
 
   .@{form-item-cls}-control-content {
@@ -494,11 +482,6 @@
     .@{form-item-cls}-label {
       min-height: @height-base - 10;
       line-height: 1.5715;
-
-      * {
-        min-height: @height-base - 10;
-        line-height: 1.5715;
-      }
     }
   }
 }
@@ -512,7 +495,7 @@
   color: #00000073;
   display: flex;
   align-items: center;
-  height: @height-base;
+  max-height: @height-base;
 
   span {
     display: inline-flex;

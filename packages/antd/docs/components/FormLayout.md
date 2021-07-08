@@ -35,6 +35,9 @@ export default () => (
           name="input"
           title="输入框"
           x-decorator="FormItem"
+          x-decorator-props={{
+            tooltip: <div>123</div>,
+          }}
           x-component="Input"
           required
         />
@@ -77,6 +80,7 @@ const schema = {
       'x-component-props': {
         labelCol: 6,
         wrapperCol: 10,
+        layout: 'vertical',
       },
       properties: {
         input: {
@@ -84,6 +88,9 @@ const schema = {
           title: '输入框',
           required: true,
           'x-decorator': 'FormItem',
+          'x-decorator-props': {
+            tooltip: <div>123</div>,
+          },
           'x-component': 'Input',
         },
         select: {
