@@ -89,7 +89,7 @@ export const DesignableFormTab: React.FC<TabsProps> & {
       <LoadTemplate
         actions={[
           {
-            title: 'addTabPane',
+            title: 'Common.addTabPane',
             onClick: () => {
               const tabPane = new TreeNode({
                 componentName: 'DesignableField',
