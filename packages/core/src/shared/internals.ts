@@ -13,7 +13,7 @@ import {
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { action, batch, toJS } from '@formily/reactive'
-import { Field, ArrayField, Form } from '../models'
+import { Field, ArrayField, Form, ObjectField } from '../models'
 import {
   ISpliceArrayStateProps,
   IExchangeArrayStateProps,
@@ -105,6 +105,7 @@ export const applyFieldPatches = (
 ) => {
   patches.forEach(({ type, address, payload }) => {
     if (type === 'remove') {
+      target[address].dispose()
       delete target[address]
     } else if (type === 'update') {
       if (payload) {
@@ -353,6 +354,61 @@ export const exchangeArrayState = (
     applyFieldPatches(fields, fieldPatches)
   })
   field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
+}
+
+export const cleanupArrayChildren = (field: ArrayField, start: number) => {
+  const address = field.address.toString()
+  const fields = field.form.fields
+
+  const isArrayChildren = (identifier: string) => {
+    return (
+      identifier.indexOf(address) === 0 && identifier.length > address.length
+    )
+  }
+
+  const isNeedCleanup = (identifier: string) => {
+    const afterStr = identifier.slice(address.length)
+    const number = afterStr.match(/^\.(\d+)/)?.[1]
+    if (number === undefined) return false
+    const index = Number(number)
+    return index >= start
+  }
+
+  batch(() => {
+    each(fields, (field, identifier) => {
+      if (isArrayChildren(identifier) && isNeedCleanup(identifier)) {
+        field.dispose()
+        delete fields[identifier]
+      }
+    })
+  })
+}
+
+export const cleanupObjectChildren = (field: ObjectField, keys: string[]) => {
+  const address = field.address.toString()
+  const fields = field.form.fields
+
+  const isObjectChildren = (identifier: string) => {
+    return (
+      identifier.indexOf(address) === 0 && identifier.length > address.length
+    )
+  }
+
+  const isNeedCleanup = (identifier: string) => {
+    const afterStr = identifier.slice(address.length)
+    const key = afterStr.match(/^\.([^.]+)/)?.[1]
+    if (key === undefined) return false
+    return keys.includes(key)
+  }
+
+  batch(() => {
+    each(fields, (field, identifier) => {
+      if (isObjectChildren(identifier) && isNeedCleanup(identifier)) {
+        field.dispose()
+        delete fields[identifier]
+      }
+    })
+  })
 }
 
 export const isEmptyWithField = (field: GeneralField, value: any) => {

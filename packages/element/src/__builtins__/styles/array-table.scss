@@ -1,0 +1,33 @@
+$array-table-prefix-cls: '#{$formily-prefix}-form-array-table';
+
+.#{$array-table-prefix-cls} {
+  .#{$formily-prefix}-form-item:not(.#{$formily-prefix}-form-item-feedback-layout-popover) {
+    margin-bottom: 0 !important;
+  }
+
+  .#{$formily-prefix}-form-array-base-addition {
+    margin-top: 8px;
+    width: 100%;
+    border: $--border-width-base dashed $--border-color-base;
+
+    &:hover {
+      background-color: $--color-white;
+      border-color: $--border-color-hover;
+    }
+
+    &:active,
+    &:focus {
+      background-color: $--color-white;
+      border-color: $--color-primary;
+    }
+  }
+
+  .#{$formily-prefix}-form-item-feedback-layout-popover {
+    margin-bottom: 0;
+  }
+
+  &-inner-asterisk {
+    color: $--color-danger;
+    font-weight: $--font-weight-primary;
+  }
+}

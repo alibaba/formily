@@ -27,6 +27,7 @@ const presets = () => {
     '@formily/core': 'Formily.Core',
     '@formily/json-schema': 'Formily.JSONSchema',
     '@formily/react': 'Formily.React',
+    '@formily/vue': 'Formily.Vue',
   }
   return [
     typescript({

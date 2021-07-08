@@ -1,0 +1,23 @@
+@import '../__builtins__/styles/common.scss';
+
+.#{$formily-prefix}-space {
+  display: inline-flex;
+  &-vertical {
+    flex-direction: column;
+  }
+
+  &-align {
+    &-center {
+      align-items: center;
+    }
+    &-start {
+      align-items: flex-start;
+    }
+    &-end {
+      align-items: flex-end;
+    }
+    &-baseline {
+      align-items: baseline;
+    }
+  }
+}

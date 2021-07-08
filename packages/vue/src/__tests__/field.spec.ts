@@ -59,6 +59,10 @@ const Normal: FunctionalComponentOptions = {
 test('render field', async () => {
   const form = createForm()
   const onChange = jest.fn()
+  const atChange = jest.fn()
+  const atBlur = jest.fn()
+  const atFocus = jest.fn()
+
   const { getByTestId, queryByTestId, unmount } = render(
     defineComponent({
       name: 'TestComponent',
@@ -69,6 +73,9 @@ test('render field', async () => {
           Input,
           Decorator,
           onChange,
+          atChange,
+          atFocus,
+          atBlur,
         }
       },
       template: `<FormProvider :form="form">
@@ -106,6 +113,11 @@ test('render field', async () => {
         :decorator="[Decorator]"
         :component="[Input, { onChange: null }]"
       />
+      <Field
+        name="ll"
+        :decorator="[Decorator]"
+        :component="[Input, { '@change': atChange, '@focus': atFocus, '@blur': atBlur }]"
+      />
     </FormProvider>`,
     })
   )
@@ -114,9 +126,15 @@ test('render field', async () => {
   expect(form.query('bb').take().mounted).toBeTruthy()
   expect(form.query('cc').take().mounted).toBeTruthy()
   expect(form.query('dd').take().mounted).toBeTruthy()
-  fireEvent.update(getByTestId('aa'), '123')
-  fireEvent.update(getByTestId('kk'), '123')
+  await fireEvent.update(getByTestId('aa'), '123')
+  await fireEvent.update(getByTestId('kk'), '123')
+  await fireEvent.focus(getByTestId('ll'))
+  await fireEvent.blur(getByTestId('ll'))
+  await fireEvent.update(getByTestId('ll'), '123')
   expect(onChange).toBeCalledTimes(1)
+  expect(atChange).toBeCalledTimes(1)
+  expect(atFocus).toBeCalledTimes(1)
+  expect(atBlur).toBeCalledTimes(1)
   expect(getByTestId('bb-children')).not.toBeUndefined()
   expect(getByTestId('dd-children')).not.toBeUndefined()
   expect(queryByTestId('ee')).toBeNull()
@@ -246,15 +264,40 @@ test('connect', async () => {
     })
   )
 
+  const CustomFormItem = connect(
+    {
+      functional: true,
+      render(h, context) {
+        return h('div', context.data, context.children)
+      },
+    },
+    mapProps(),
+    mapReadPretty({
+      render(h) {
+        return h('div', 'read pretty')
+      },
+    })
+  )
+
   const form = createForm()
   const { queryByText, getByTestId } = render({
+    components: {
+      CustomFormItem,
+    },
     data() {
-      return { form, Decorator, CustomField, CustomField2, CustomField3 }
+      return {
+        form,
+        Decorator,
+        CustomField,
+        CustomField2,
+        CustomField3,
+      }
     },
     template: `<FormProvider :form="form">
       <Field name="aa" :decorator="[Decorator]" :component="[CustomField]" />
       <Field name="bb" :decorator="[Decorator]" :component="[CustomField2]" />
       <Field name="cc" :decorator="[Decorator]" :component="[CustomField3]" />
+      <CustomFormItem>dd</CustomFormItem>
     </FormProvider>`,
   })
   form.query('aa').take((field) => {
@@ -262,6 +305,8 @@ test('connect', async () => {
       state.value = '123'
     })
   })
+
+  expect(queryByText('dd')).toBeVisible()
   await waitFor(() => {
     expect(queryByText('123')).toBeVisible()
   })

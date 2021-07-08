@@ -50,7 +50,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   form: Form
   props: IVoidFieldProps<Decorator, Component>
 
-  private disposers: (() => void)[] = []
+  protected disposers: (() => void)[] = []
 
   constructor(
     address: FormPathPattern,

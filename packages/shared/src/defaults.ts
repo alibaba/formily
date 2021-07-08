@@ -14,7 +14,7 @@ const isUnNormalObject = (value: any) => {
   }
 }
 
-const isEnumableObject = (val: any) => {
+const isEnumerableObject = (val: any) => {
   if (isUnNormalObject(val)) {
     return false
   }
@@ -29,8 +29,8 @@ const isEnumableObject = (val: any) => {
 export const defaults = (defaults_: any, targets: any) => {
   if (
     getType(defaults_) !== getType(targets) ||
-    !isEnumableObject(defaults_) ||
-    !isEnumableObject(targets)
+    !isEnumerableObject(defaults_) ||
+    !isEnumerableObject(targets)
   ) {
     return !isEmpty(targets) ? targets : defaults_
   } else {

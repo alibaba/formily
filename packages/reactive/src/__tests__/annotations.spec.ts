@@ -79,7 +79,7 @@ test('action annotation', () => {
   }, handler)
   setData()
   expect(handler).toBeCalledTimes(1)
-  expect(handler).toBeCalledWith([123, 321])
+  expect(handler).toBeCalledWith([123, 321], [undefined, undefined])
 })
 
 test('no action annotation', () => {
@@ -94,8 +94,8 @@ test('no action annotation', () => {
   }, handler)
   setData()
   expect(handler).toBeCalledTimes(2)
-  expect(handler).toBeCalledWith([123, undefined])
-  expect(handler).toBeCalledWith([123, 321])
+  expect(handler).toBeCalledWith([123, undefined], [undefined, undefined])
+  expect(handler).toBeCalledWith([123, 321], [123, undefined])
 })
 
 test('computed annotation', () => {

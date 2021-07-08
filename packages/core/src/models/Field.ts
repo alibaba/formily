@@ -94,9 +94,9 @@ export class Field<
   form: Form
   props: IFieldProps<Decorator, Component, TextType, ValueType>
 
-  private caches: IFieldCaches = {}
-  private requests: IFieldRequests = {}
-  private disposers: (() => void)[] = []
+  protected caches: IFieldCaches = {}
+  protected requests: IFieldRequests = {}
+  protected disposers: (() => void)[] = []
 
   constructor(
     address: FormPathPattern,

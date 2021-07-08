@@ -1223,3 +1223,177 @@ test('deep nested fields hidden and validate with middle hidden', async () => {
   await form.validate()
   expect(form.invalid).toBeFalsy()
 })
+
+test('auto clean with ArrayField', () => {
+  const form = attach(createForm())
+  attach(
+    form.createArrayField({
+      name: 'array',
+      initialValue: [{}, {}],
+    })
+  )
+  attach(
+    form.createField({
+      name: '0.aa',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: '1.aa',
+      basePath: 'array',
+    })
+  )
+  const array1 = attach(
+    form.createArrayField({
+      name: 'array1',
+      initialValue: [{}, {}],
+    })
+  )
+  attach(
+    form.createField({
+      name: '0.aa',
+      basePath: 'array1',
+    })
+  )
+  attach(
+    form.createField({
+      name: '1.aa',
+      basePath: 'array1',
+    })
+  )
+  const array2 = attach(
+    form.createArrayField({
+      name: 'array2',
+      initialValue: [{}, {}],
+    })
+  )
+  attach(
+    form.createField({
+      name: '0.aa',
+      basePath: 'array2',
+    })
+  )
+  attach(
+    form.createField({
+      name: '1.aa',
+      basePath: 'array2',
+    })
+  )
+  expect(form.fields['array.1.aa']).not.toBeUndefined()
+  expect(form.values.array).toEqual([{}, {}])
+  form.setValues(
+    {
+      array: [{}],
+    },
+    'shallowMerge'
+  )
+  expect(form.values.array).toEqual([{}])
+  expect(form.fields['array.1.aa']).toBeUndefined()
+  expect(form.fields['array1.0.aa']).not.toBeUndefined()
+  expect(form.fields['array1.1.aa']).not.toBeUndefined()
+  expect(form.values.array1).toEqual([{}, {}])
+  array1.setValue([])
+  expect(form.fields['array1.0.aa']).toBeUndefined()
+  expect(form.fields['array1.1.aa']).toBeUndefined()
+  expect(form.fields['array2.0.aa']).not.toBeUndefined()
+  expect(form.fields['array2.1.aa']).not.toBeUndefined()
+  array2.setValue([])
+  expect(form.fields['array2.0.aa']).toBeUndefined()
+  expect(form.fields['array2.1.aa']).toBeUndefined()
+})
+
+test('auto clean with ObjectField', () => {
+  const form = attach(createForm())
+  attach(
+    form.createObjectField({
+      name: 'obj',
+      initialValue: {
+        aa: 'aa',
+        bb: 'bb',
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'obj',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      basePath: 'obj',
+    })
+  )
+  const obj1 = attach(
+    form.createObjectField({
+      name: 'obj1',
+      initialValue: {
+        aa: 'aa',
+        bb: 'bb',
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'obj1',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      basePath: 'obj1',
+    })
+  )
+  const obj2 = attach(
+    form.createObjectField({
+      name: 'obj2',
+      initialValue: {
+        aa: 'aa',
+        bb: 'bb',
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'obj2',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      basePath: 'obj2',
+    })
+  )
+  expect(form.fields['obj.aa']).not.toBeUndefined()
+  expect(form.fields['obj.bb']).not.toBeUndefined()
+  expect(form.values.obj).toEqual({ aa: 'aa', bb: 'bb' })
+  form.setValues(
+    {
+      obj: {
+        aa: '123',
+      },
+    },
+    'shallowMerge'
+  )
+  expect(form.values.obj).toEqual({ aa: '123' })
+  expect(form.fields['obj.aa']).not.toBeUndefined()
+  expect(form.fields['obj.bb']).toBeUndefined()
+  expect(form.fields['obj1.aa']).not.toBeUndefined()
+  expect(form.fields['obj1.bb']).not.toBeUndefined()
+  expect(form.values.obj1).toEqual({ aa: 'aa', bb: 'bb' })
+  obj1.setValue({})
+  expect(form.values.obj1).toEqual({})
+  expect(form.fields['obj1.aa']).toBeUndefined()
+  expect(form.fields['obj1.bb']).toBeUndefined()
+  expect(form.fields['obj2.aa']).not.toBeUndefined()
+  expect(form.fields['obj2.bb']).not.toBeUndefined()
+  expect(form.values.obj2).toEqual({ aa: 'aa', bb: 'bb' })
+  obj2.setValue({ aa: 'aa', bb: 'bb', cc: 'cc' })
+  expect(form.fields['obj2.aa']).not.toBeUndefined()
+  expect(form.fields['obj2.bb']).not.toBeUndefined()
+  expect(form.fields['obj2.cc']).toBeUndefined()
+})

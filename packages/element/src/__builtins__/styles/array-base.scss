@@ -1,0 +1,23 @@
+$array-base-prefix-cls: '#{$formily-prefix}-form-array-base';
+
+.#{$array-base-prefix-cls}-addition {
+  transition: $--all-transition;
+}
+
+.#{$array-base-prefix-cls}-remove {
+  i {
+    font-size: $--font-size-base;
+  }
+}
+
+.#{$array-base-prefix-cls}-move-down {
+  i {
+    font-size: $--font-size-base;
+  }
+}
+
+.#{$array-base-prefix-cls}-move-up {
+  i {
+    font-size: $--font-size-base;
+  }
+}

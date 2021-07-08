@@ -1,0 +1,72 @@
+@-webkit-keyframes antShowHelpIn {
+  0% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+
+  to {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.#{$form-item-prefix}-help-appear,
+.#{$form-item-prefix}-help-enter {
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+.#{$form-item-prefix}-help-appear.#{$form-item-prefix}-help-appear-active,
+.#{$form-item-prefix}-help-enter.#{$form-item-prefix}-help-enter-active {
+  -webkit-animation-name: antShowHelpIn;
+  animation-name: antShowHelpIn;
+  -webkit-animation-play-state: running;
+  animation-play-state: running;
+}
+
+.#{$form-item-prefix}-help-appear,
+.#{$form-item-prefix}-help-enter {
+  opacity: 0;
+}
+
+.#{$form-item-prefix}-help-appear,
+.#{$form-item-prefix}-help-enter {
+  -webkit-animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+  animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+@keyframes antShowHelpIn {
+  0% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+
+  to {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes antShowHelpOut {
+  to {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+}
+
+@keyframes antShowHelpOut {
+  to {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+}

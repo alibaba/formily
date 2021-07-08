@@ -21,5 +21,12 @@ test('render form', () => {
       <FormConsumer />
     </FormProvider>`,
   })
+
+  const errorRender = () =>
+    render({
+      template: `<FormConsumer />`,
+    })
+
   expect(form.mounted).toBeTruthy()
+  expect(errorRender).toThrow('Can not found form instance from context.')
 })

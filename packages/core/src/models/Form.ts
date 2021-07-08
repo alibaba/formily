@@ -17,6 +17,8 @@ import {
   defaults,
   clone,
   isPlainObj,
+  isArr,
+  isObj,
 } from '@formily/shared'
 import { Heart } from './Heart'
 import { Field } from './Field'
@@ -329,7 +331,10 @@ export class Form<ValueType extends object = any> {
       batch(() => {
         this.fields[identifier] = new ArrayField(
           address,
-          props,
+          {
+            ...props,
+            value: isArr(props.value) ? props.value : [],
+          },
           this,
           this.props.designable
         )
@@ -352,7 +357,10 @@ export class Form<ValueType extends object = any> {
       batch(() => {
         this.fields[identifier] = new ObjectField(
           address,
-          props,
+          {
+            ...props,
+            value: isObj(props.value) ? props.value : {},
+          },
           this,
           this.props.designable
         )
