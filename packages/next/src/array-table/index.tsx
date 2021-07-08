@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef } from 'react'
+import React, { Fragment, useState, useRef, useEffect } from 'react'
 import { Table, Pagination, Select, Badge } from '@alifd/next'
 import { PaginationProps } from '@alifd/next/lib/pagination'
 import { TableProps, ColumnProps } from '@alifd/next/lib/table'
@@ -201,6 +201,12 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = ({
   const handleChange = (current: number) => {
     setCurrent(current)
   }
+
+  useEffect(() => {
+    if (totalPage > 0 && totalPage < current) {
+      handleChange(totalPage)
+    }
+  }, [totalPage, current])
 
   const renderPagination = () => {
     if (totalPage <= 1) return
