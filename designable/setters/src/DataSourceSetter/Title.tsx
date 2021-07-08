@@ -13,9 +13,9 @@ export const Title: React.FC<ITitleProps> = observer((props) => {
   return (
     <span>
       <span style={{ marginRight: '5px' }}>
-        {((props?.map || [])?.find((item) => item.label === 'label')?.value || (
+        {(props?.map || [])?.find((item) => item.label === 'label')?.value || (
           <TextWidget token="SettingComponents.DataSourceSetter.defaultTitle" />
-        )) + ''}
+        )}
       </span>
       <IconWidget
         infer="Remove"
