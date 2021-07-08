@@ -14,7 +14,7 @@ import { Tooltip } from 'element-ui'
 
 export type FormItemProps = {
   className?: string
-  required: boolean
+  required?: boolean
   label?: string | Component
   colon?: boolean
   tooltip?: boolean
@@ -75,7 +75,7 @@ const ICON_MAP = {
   warning: () => h('i', { class: 'el-icon-warning-outline' }, {}),
 }
 
-export const BaseItem = defineComponent<FormItemProps>({
+export const FormBaseItem = defineComponent<FormItemProps>({
   name: 'FormilyFormItem',
   props: {
     className: {},
@@ -410,7 +410,7 @@ export const BaseItem = defineComponent<FormItemProps>({
 })
 
 export const FormItem = connect(
-  BaseItem,
+  FormBaseItem,
   mapProps(
     { validateStatus: true, title: 'label', required: true },
     (props, field) => {

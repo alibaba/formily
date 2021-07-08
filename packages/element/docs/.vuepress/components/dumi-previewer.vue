@@ -85,11 +85,15 @@ export default {
       type: String,
       default: '',
     },
+    collapsed: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   data() {
     return {
-      collapsed: true,
+      innerCollapsed: this.collapsed,
       copied: false,
       timerId: null,
       demoStr: '',
@@ -132,7 +136,7 @@ export default {
 
   methods: {
     handleCollapse() {
-      this.collapsed = !this.collapsed
+      this.innerCollapsed = !this.innerCollapsed
     },
 
     handleCopy() {

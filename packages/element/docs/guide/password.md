@@ -2,6 +2,8 @@
 
 > 密码输入框
 
+## 使用案例
+
 <dumi-previewer demoPath="guide/password/base" />
 
 ## API

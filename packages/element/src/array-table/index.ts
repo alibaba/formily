@@ -153,10 +153,10 @@ const getArrayTableColumns = (
               return children
             }
       return buf.concat({
+        label: title,
         ...props,
         key,
         prop: name,
-        label: title,
         asterisk: asterisk ?? required,
         render,
       })

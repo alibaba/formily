@@ -25,4 +25,4 @@ $ npm install --save @formily/core @formily/vue @vue/composition-api @formily/el
 
 ## 快速开始
 
-<dumi-previewer demoPath="index" />
+<dumi-previewer demoPath="index" :collapsed="false" />

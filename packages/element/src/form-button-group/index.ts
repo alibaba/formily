@@ -1,7 +1,7 @@
 import { h } from '@formily/vue'
 import { defineComponent } from 'vue-demi'
 import { Space, SpaceProps } from '../space'
-import { BaseItem } from '../form-item'
+import { FormBaseItem } from '../form-item'
 import { stylePrefix } from '../__builtins__/configs'
 
 export type FormButtonGroupProps = Omit<SpaceProps, 'align' | 'size'> & {
@@ -18,8 +18,11 @@ export const FormButtonGroup = defineComponent<FormButtonGroupProps>({
       type: String,
       default: 'left',
     },
-    gutter: Number,
-    direction: String,
+    className: String,
+    gutter: {
+      type: Number,
+      default: 8,
+    },
     alignFormItem: {
       type: Boolean,
       default: true,
@@ -30,7 +33,7 @@ export const FormButtonGroup = defineComponent<FormButtonGroupProps>({
     return () => {
       if (props.alignFormItem) {
         return h(
-          BaseItem,
+          FormBaseItem,
           {
             style: {
               margin: 0,

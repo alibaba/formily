@@ -2,6 +2,8 @@
 
 > 数字输入框
 
+## 使用案例
+
 <dumi-previewer demoPath="guide/input-number/base" />
 
 ## API

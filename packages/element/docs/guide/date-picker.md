@@ -2,6 +2,8 @@
 
 > 日期选择器
 
+## 使用案例
+
 <dumi-previewer demoPath="guide/date-picker/base" />
 
 ## API
