@@ -1,8 +1,7 @@
 import React from 'react'
 import { clone } from '@formily/shared'
 import { observer } from '@formily/reactive-react'
-import { GlobalRegistry } from '@designable/core'
-import { IconWidget } from '@designable/react'
+import { IconWidget, TextWidget } from '@designable/react'
 import { INodeItem, ITreeDataSource } from './types'
 import { tranverseTree } from './shared'
 import './styles.less'
@@ -14,8 +13,9 @@ export const Title: React.FC<ITitleProps> = observer((props) => {
   return (
     <span>
       <span style={{ marginRight: '5px' }}>
-        {((props?.map || [])?.find((item) => item.label === 'label')?.value ||
-          GlobalRegistry.getDesignerMessage('components.defaultTitle')) + ''}
+        {((props?.map || [])?.find((item) => item.label === 'label')?.value || (
+          <TextWidget token="SettingComponents.DataSourceSetter.defaultTitle" />
+        )) + ''}
       </span>
       <IconWidget
         infer="Remove"

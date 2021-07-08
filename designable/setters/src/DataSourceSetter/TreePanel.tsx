@@ -3,8 +3,7 @@ import { Tree, Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { uid } from '@formily/shared'
 import { observer } from '@formily/reactive-react'
-import { GlobalRegistry } from '@designable/core'
-import { usePrefix } from '@designable/react'
+import { usePrefix, TextWidget } from '@designable/react'
 import { Title } from './Title'
 import { Header } from './Header'
 import { tranverseTree } from './shared'
@@ -75,7 +74,9 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
   return (
     <Fragment>
       <Header
-        title={GlobalRegistry.getDesignerMessage('components.dataSourceTree')}
+        title={
+          <TextWidget token="SettingComponents.DataSourceSetter.dataSourceTree" />
+        }
         extra={
           <Button
             type="text"
@@ -94,7 +95,7 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
             }}
             icon={<PlusOutlined />}
           >
-            {GlobalRegistry.getDesignerMessage('components.addNode')}
+            <TextWidget token="SettingComponents.DataSourceSetter.addNode" />
           </Button>
         }
       />

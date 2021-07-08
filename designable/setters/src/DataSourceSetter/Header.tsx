@@ -5,7 +5,7 @@ import './styles.less'
 
 export interface IHeaderProps {
   extra: ReactNode | null
-  title: string
+  title: ReactNode | string
 }
 
 export const Header: React.FC<IHeaderProps> = observer(({ extra, title }) => {

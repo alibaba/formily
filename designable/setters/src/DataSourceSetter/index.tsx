@@ -3,8 +3,7 @@ import cls from 'classnames'
 import { Modal, Button } from 'antd'
 import { observable } from '@formily/reactive'
 import { observer } from '@formily/reactive-react'
-import { GlobalRegistry } from '@designable/core'
-import { usePrefix, useTheme } from '@designable/react'
+import { usePrefix, useTheme, TextWidget } from '@designable/react'
 import { DataSettingPanel } from './DataSettingPanel'
 import { TreePanel } from './TreePanel'
 import { transformDataToValue, transformValueToData } from './shared'
@@ -37,11 +36,13 @@ export const DataSourceSetter: React.FC<IBorderStyleSetterProps> = observer(
     return (
       <Fragment>
         <Button onClick={openModal}>
-          {GlobalRegistry.getDesignerMessage('components.configureDataSource')}
+          <TextWidget token="SettingComponents.DataSourceSetter.configureDataSource" />
         </Button>
         <Modal
           width={'50%'}
-          title={GlobalRegistry.getDesignerMessage('components.dataSource')}
+          title={
+            <TextWidget token="SettingComponents.DataSourceSetter.dataSource" />
+          }
           visible={modalVisible}
           onCancel={closeModal}
           onOk={() => {

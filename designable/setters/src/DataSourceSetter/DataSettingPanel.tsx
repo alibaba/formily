@@ -5,9 +5,8 @@ import { ArrayItems, Form, Input } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { observer } from '@formily/reactive-react'
 import { createSchemaField } from '@formily/react'
-import { GlobalRegistry } from '@designable/core'
 import { ValueInput } from '@designable/react-settings-form'
-import { usePrefix } from '@designable/react'
+import { usePrefix, TextWidget } from '@designable/react'
 import { Header } from './Header'
 import { tranverseTree } from './shared'
 import { ITreeDataSource } from './types'
@@ -43,18 +42,22 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
       return (
         <Fragment>
           <Header
-            title={GlobalRegistry.getDesignerMessage('components.nodeProperty')}
+            title={
+              <TextWidget token="SettingComponents.DataSourceSetter.nodeProperty" />
+            }
             extra={null}
           />
           <div className={`${prefix + '-layout-item-content'}`}>
-            {GlobalRegistry.getDesignerMessage('components.pleaseSelectNode')}
+            <TextWidget token="SettingComponents.DataSourceSetter.pleaseSelectNode" />
           </div>
         </Fragment>
       )
     return (
       <Fragment>
         <Header
-          title={GlobalRegistry.getDesignerMessage('components.nodeProperty')}
+          title={
+            <TextWidget token="SettingComponents.DataSourceSetter.nodeProperty" />
+          }
           extra={
             <Button
               type="text"
@@ -65,7 +68,7 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
               }}
               icon={<PlusOutlined />}
             >
-              {GlobalRegistry.getDesignerMessage('components.addKeyValuePair')}
+              <TextWidget token="SettingComponents.DataSourceSetter.addKeyValuePair" />
             </Button>
           }
         />
