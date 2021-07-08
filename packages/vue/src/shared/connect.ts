@@ -49,10 +49,9 @@ export function mapProps<T extends VueComponent = VueComponent>(
             }, input)
 
           return () => {
-            const newAttrs = transform(
-              { ...attrs } as VueComponentProps<T>,
-              fieldRef.value
-            )
+            const newAttrs = fieldRef.value
+              ? transform({ ...attrs } as VueComponentProps<T>, fieldRef.value)
+              : { ...attrs }
             return h(
               target,
               {
@@ -78,10 +77,10 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
       defineComponent({
         setup(props, { attrs, slots, listeners }: Record<string, any>) {
           const fieldRef = useField()
-          return () =>
-            h(
-              !isVoidField(fieldRef.value) &&
-                fieldRef.value.pattern === 'readPretty'
+          return () => {
+            const field = fieldRef.value
+            return h(
+              field && !isVoidField(field) && field.pattern === 'readPretty'
                 ? component
                 : target,
               {
@@ -92,6 +91,7 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
               },
               slots
             )
+          }
         },
       }) as unknown as DefineComponent<VueComponentProps<T>>
     )
@@ -105,7 +105,7 @@ export function connect<T extends VueComponent>(
   const Component = args.reduce((target: VueComponent, mapper) => {
     return mapper(target)
   }, target)
-
+  /* istanbul ignore else */
   if (isVue2) {
     const functionalComponent = {
       functional: true,
