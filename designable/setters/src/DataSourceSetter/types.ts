@@ -3,6 +3,7 @@ export interface IDataSourceItem {
   value?: any
   children?: any[]
 }
+
 export interface INodeItem {
   key: string
   duplicateKey?: string

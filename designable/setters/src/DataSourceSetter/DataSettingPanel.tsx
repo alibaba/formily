@@ -1,33 +1,21 @@
 import React, { useMemo, Fragment } from 'react'
-import { Button, Input } from 'antd'
+import { Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import {
-  ArrayItems,
-  FormItem,
-  Select,
-  Editable,
-  DatePicker,
-  Space,
-  Form,
-} from '@formily/antd'
+import { ArrayItems, Form, Input } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { observer } from '@formily/reactive-react'
 import { createSchemaField } from '@formily/react'
+import { GlobalRegistry } from '@designable/core'
 import { ValueInput } from '@designable/react-settings-form'
 import { usePrefix } from '@designable/react'
 import { Header } from './Header'
-import { tranverseTree } from './utils'
-import { ITreeDataSource } from './type'
+import { tranverseTree } from './shared'
+import { ITreeDataSource } from './types'
 import './styles.less'
 
 const SchemaField = createSchemaField({
   components: {
-    FormItem,
-    DatePicker,
-    Editable,
-    Space,
     Input,
-    Select,
     ArrayItems,
     ValueInput,
   },
@@ -36,6 +24,7 @@ const SchemaField = createSchemaField({
 export interface IDataSettingPanelProps {
   treeDataSource: ITreeDataSource
 }
+
 export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
   (props) => {
     const prefix = usePrefix('data-source-setter')
@@ -53,16 +42,19 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
     if (!props.treeDataSource.selectedkey)
       return (
         <Fragment>
-          <Header title="节点属性" extra={null} />
+          <Header
+            title={GlobalRegistry.getDesignerMessage('components.nodeProperty')}
+            extra={null}
+          />
           <div className={`${prefix + '-layout-item-content'}`}>
-            请先选择左侧树节点
+            {GlobalRegistry.getDesignerMessage('components.pleaseSelectNode')}
           </div>
         </Fragment>
       )
     return (
       <Fragment>
         <Header
-          title="节点属性"
+          title={GlobalRegistry.getDesignerMessage('components.nodeProperty')}
           extra={
             <Button
               type="text"
@@ -73,30 +65,21 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
               }}
               icon={<PlusOutlined />}
             >
-              添加键值对
+              {GlobalRegistry.getDesignerMessage('components.addKeyValuePair')}
             </Button>
           }
         />
         <div className={`${prefix + '-layout-item-content'}`}>
           <Form form={form}>
             <SchemaField>
-              <SchemaField.Array
-                name="map"
-                x-decorator="FormItem"
-                x-component="ArrayItems"
-              >
+              <SchemaField.Array name="map" x-component="ArrayItems">
                 <SchemaField.Object x-decorator="ArrayItems.Item">
                   <SchemaField.String
-                    title="输入框"
                     name="label"
                     x-component="Input"
                     x-component-props={{ style: { margin: 5 } }}
                   />
-                  <SchemaField.String
-                    title="输入框"
-                    name="value"
-                    x-component="ValueInput"
-                  />
+                  <SchemaField.String name="value" x-component="ValueInput" />
                   <SchemaField.Void
                     x-component="ArrayItems.Remove"
                     x-component-props={{

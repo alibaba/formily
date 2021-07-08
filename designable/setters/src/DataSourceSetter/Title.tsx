@@ -1,9 +1,10 @@
 import React from 'react'
 import { clone } from '@formily/shared'
 import { observer } from '@formily/reactive-react'
+import { GlobalRegistry } from '@designable/core'
 import { IconWidget } from '@designable/react'
-import { INodeItem, ITreeDataSource } from './type'
-import { tranverseTree } from './utils'
+import { INodeItem, ITreeDataSource } from './types'
+import { tranverseTree } from './shared'
 import './styles.less'
 export interface ITitleProps extends INodeItem {
   treeDataSource: ITreeDataSource
@@ -14,7 +15,7 @@ export const Title: React.FC<ITitleProps> = observer((props) => {
     <span>
       <span style={{ marginRight: '5px' }}>
         {((props?.map || [])?.find((item) => item.label === 'label')?.value ||
-          '默认标题') + ''}
+          GlobalRegistry.getDesignerMessage('components.defaultTitle')) + ''}
       </span>
       <IconWidget
         infer="Remove"

@@ -3,11 +3,12 @@ import { Tree, Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { uid } from '@formily/shared'
 import { observer } from '@formily/reactive-react'
+import { GlobalRegistry } from '@designable/core'
 import { usePrefix } from '@designable/react'
 import { Title } from './Title'
 import { Header } from './Header'
-import { tranverseTree } from './utils'
-import { ITreeDataSource, INodeItem } from './type'
+import { tranverseTree } from './shared'
+import { ITreeDataSource, INodeItem } from './types'
 import './styles.less'
 
 export interface ITreePanelProps {
@@ -33,17 +34,13 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
 
     if (!info.dropToGap) {
       // Drop on the content
-      tranverseTree(
-        data,
-
-        (item) => {
-          if (item.key === dropKey) {
-            item.children = item.children || []
-            // where to insert 示例添加到头部，可以是随意位置
-            item.children.unshift(dragObj)
-          }
+      tranverseTree(data, (item) => {
+        if (item.key === dropKey) {
+          item.children = item.children || []
+          // where to insert 示例添加到头部，可以是随意位置
+          item.children.unshift(dragObj)
         }
-      )
+      })
     } else if (
       (info.node.props.children || []).length > 0 && // Has children
       info.node.props.expanded && // Is expanded
@@ -78,7 +75,7 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
   return (
     <Fragment>
       <Header
-        title="数据源节点树"
+        title={GlobalRegistry.getDesignerMessage('components.dataSourceTree')}
         extra={
           <Button
             type="text"
@@ -88,13 +85,16 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
                 props.treeDataSource.dataSource.concat({
                   key: uuid,
                   duplicateKey: uuid,
-                  map: [],
+                  map: [
+                    { label: 'label', value: 'Label Text' },
+                    { label: 'value', value: 'Actual Value' },
+                  ],
                   children: [],
                 } as INodeItem)
             }}
             icon={<PlusOutlined />}
           >
-            新增节点
+            {GlobalRegistry.getDesignerMessage('components.addNode')}
           </Button>
         }
       />
