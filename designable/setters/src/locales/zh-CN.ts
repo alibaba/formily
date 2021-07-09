@@ -12,6 +12,7 @@ export default {
         addNode: '新增节点',
         label: '键名',
         value: '键值',
+        item: '选项',
       },
     },
   },

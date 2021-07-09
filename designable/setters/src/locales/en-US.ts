@@ -12,6 +12,7 @@ export default {
         addNode: 'Add Node',
         label: 'label',
         value: 'value',
+        item: 'Item',
       },
     },
   },
