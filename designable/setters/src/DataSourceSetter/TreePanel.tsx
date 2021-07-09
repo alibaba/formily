@@ -15,10 +15,6 @@ export interface ITreePanelProps {
 
 export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
   const prefix = usePrefix('data-source-setter')
-  const expandedKeys = []
-  traverseTree(props.treeDataSource.dataSource || [], (dataItem: INodeItem) => {
-    expandedKeys.push(dataItem.key)
-  })
   const dropHandler = (info: Parameters<TreeProps['onDrop']>[0]) => {
     const dropKey = info.node?.key
     const dragKey = info.dragNode?.key
@@ -34,26 +30,21 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
       }
     })
     if (!info.dropToGap) {
-      // Drop on the content
       traverseTree(data, (item) => {
         if (item.key === dropKey) {
           item.children = item.children || []
-          // where to insert 示例添加到头部，可以是随意位置
           item.children.unshift(dragObj)
         }
       })
     } else if (
-      (info.node.children || []).length > 0 && // Has children
-      info.node.expanded && // Is expanded
-      dropPosition === 1 // On the bottom gap
+      (info.node.children || []).length > 0 &&
+      info.node.expanded &&
+      dropPosition === 1
     ) {
       traverseTree(data, (item) => {
         if (item.key === dropKey) {
           item.children = item.children || []
-          // where to insert 示例添加到头部，可以是随意位置
           item.children.unshift(dragObj)
-          // in previous version, we use item.children.push(dragObj) to insert the
-          // item to the tail of the children
         }
       })
     } else {
@@ -104,8 +95,9 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
       <div className={`${prefix + '-layout-item-content'}`}>
         <Tree
           blockNode
-          expandedKeys={expandedKeys}
           draggable
+          defaultExpandAll
+          defaultExpandParent
           autoExpandParent
           showLine={{ showLeafIcon: false }}
           treeData={props.treeDataSource.dataSource}
