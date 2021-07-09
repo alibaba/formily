@@ -1,17 +1,5 @@
 @import '~antd/lib/style/themes/default.less';
 
-.dn-data-source-setter-light {
-  --dn-data-source-setter-item-border: #d9d9d9;
-  --dn-data-source-setter-item-title: #666;
-  --dn-data-source-setter-item-header-border: #f0f0f0;
-}
-
-.dn-data-source-setter-dark {
-  --dn-data-source-setter-item-border: #555;
-  --dn-data-source-setter-item-title: #aaa;
-  --dn-data-source-setter-item-header-border: #555;
-}
-
 .dn-data-source-setter {
   &-node-title {
     display: flex;
@@ -31,7 +19,7 @@
   &-layout {
     display: flex;
     justify-content: space-around;
-    border: 1px solid var(--dn-data-source-setter-item-border);
+    border: 1px solid @border-color-split;
     border-radius: 3px;
 
     .ant-tree-treenode {
@@ -50,21 +38,11 @@
 
       &.left {
         width: 40%;
+        border-right: 1px solid @border-color-split;
       }
 
       &.right {
         width: 60%;
-      }
-
-      &::after {
-        content: ''; // 必须
-        position: absolute;
-        left: 100%;
-        bottom: 0;
-        right: 0;
-        width: 1px;
-        height: 100%;
-        background-color: var(--dn-data-source-setter-item-border);
       }
 
       &-header {
@@ -74,7 +52,7 @@
         justify-content: space-between;
         height: 40px;
         padding: 8px 12px 9px;
-        border-bottom: 1px solid var(--dn-data-source-setter-item-header-border);
+        border-bottom: 1px solid @border-color-split;
         border-radius: 2px 2px 0 0;
       }
 

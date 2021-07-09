@@ -43,6 +43,7 @@ export const DataSourceSetter: React.FC<IBorderStyleSetterProps> = observer(
           title={
             <TextWidget token="SettingComponents.DataSourceSetter.configureDataSource" />
           }
+          bodyStyle={{ padding: 10 }}
           transitionName=""
           maskTransitionName=""
           visible={modalVisible}
