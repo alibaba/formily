@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react'
-import { Tree, Button } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import { Tree, Button, TreeProps } from 'antd'
 import { uid } from '@formily/shared'
 import { observer } from '@formily/reactive-react'
-import { usePrefix, TextWidget } from '@designable/react'
+import { usePrefix, TextWidget, IconWidget } from '@designable/react'
 import { Title } from './Title'
 import { Header } from './Header'
-import { tranverseTree } from './shared'
+import { traverseTree } from './shared'
 import { ITreeDataSource, INodeItem } from './types'
 import './styles.less'
 
@@ -16,24 +15,27 @@ export interface ITreePanelProps {
 
 export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
   const prefix = usePrefix('data-source-setter')
-  const dropHanle = (info) => {
+  const expandedKeys = []
+  traverseTree(props.treeDataSource.dataSource || [], (dataItem: INodeItem) => {
+    expandedKeys.push(dataItem.key)
+  })
+  const dropHandler = (info: Parameters<TreeProps['onDrop']>[0]) => {
     const dropKey = info.node?.key
     const dragKey = info.dragNode?.key
     const dropPos = info.node.pos.split('-')
     const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1])
     const data = [...props.treeDataSource.dataSource]
     // Find dragObject
-    let dragObj
-    tranverseTree(data, (item, index, arr) => {
+    let dragObj: INodeItem
+    traverseTree(data, (item, index, arr) => {
       if (arr[index].key === dragKey) {
         arr.splice(index, 1)
         dragObj = item
       }
     })
-
     if (!info.dropToGap) {
       // Drop on the content
-      tranverseTree(data, (item) => {
+      traverseTree(data, (item) => {
         if (item.key === dropKey) {
           item.children = item.children || []
           // where to insert 示例添加到头部，可以是随意位置
@@ -41,11 +43,11 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
         }
       })
     } else if (
-      (info.node.props.children || []).length > 0 && // Has children
-      info.node.props.expanded && // Is expanded
+      (info.node.children || []).length > 0 && // Has children
+      info.node.expanded && // Is expanded
       dropPosition === 1 // On the bottom gap
     ) {
-      tranverseTree(data, (item) => {
+      traverseTree(data, (item) => {
         if (item.key === dropKey) {
           item.children = item.children || []
           // where to insert 示例添加到头部，可以是随意位置
@@ -55,9 +57,9 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
         }
       })
     } else {
-      let ar
-      let i
-      tranverseTree(data, (item, index, arr) => {
+      let ar: any[]
+      let i: number
+      traverseTree(data, (item, index, arr) => {
         if (item.key === dropKey) {
           ar = arr
           i = index
@@ -91,9 +93,9 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
                     { label: 'value', value: 'Actual Value' },
                   ],
                   children: [],
-                } as INodeItem)
+                })
             }}
-            icon={<PlusOutlined />}
+            icon={<IconWidget infer="Add" />}
           >
             <TextWidget token="SettingComponents.DataSourceSetter.addNode" />
           </Button>
@@ -101,21 +103,25 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
       />
       <div className={`${prefix + '-layout-item-content'}`}>
         <Tree
-          defaultExpandAll
+          blockNode
+          expandedKeys={expandedKeys}
           draggable
+          autoExpandParent
           showLine={{ showLeafIcon: false }}
           treeData={props.treeDataSource.dataSource}
           onDragEnter={() => {}}
-          onDrop={dropHanle}
-          titleRender={(titleProps: INodeItem) => (
-            <Title
-              {...titleProps}
-              treeDataSource={props.treeDataSource}
-            ></Title>
-          )}
+          onDrop={dropHandler}
+          titleRender={(titleProps: INodeItem) => {
+            return (
+              <Title
+                {...titleProps}
+                treeDataSource={props.treeDataSource}
+              ></Title>
+            )
+          }}
           onSelect={(selectedKeys) => {
             if (selectedKeys[0]) {
-              props.treeDataSource.selectedkey = selectedKeys[0].toString()
+              props.treeDataSource.selectedKey = selectedKeys[0].toString()
             }
           }}
         ></Tree>

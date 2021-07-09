@@ -50,7 +50,8 @@
   "resolutions": {
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
-    "yargs": "^16.x"
+    "yargs": "^16.x",
+    "commander": "^6.x"
   },
   "devDependencies": {
     "@alifd/next": "^1.19.1",

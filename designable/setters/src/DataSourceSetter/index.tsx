@@ -26,23 +26,25 @@ export const DataSourceSetter: React.FC<IBorderStyleSetterProps> = observer(
       () =>
         observable({
           dataSource: transformValueToData(value),
-          selectedkey: '',
+          selectedKey: '',
         }),
-      [value]
+      [value, modalVisible]
     )
     const openModal = () => setModalVisible(true)
     const closeModal = () => setModalVisible(false)
 
     return (
       <Fragment>
-        <Button onClick={openModal}>
+        <Button block onClick={openModal}>
           <TextWidget token="SettingComponents.DataSourceSetter.configureDataSource" />
         </Button>
         <Modal
           width={'65%'}
           title={
-            <TextWidget token="SettingComponents.DataSourceSetter.dataSource" />
+            <TextWidget token="SettingComponents.DataSourceSetter.configureDataSource" />
           }
+          transitionName=""
+          maskTransitionName=""
           visible={modalVisible}
           onCancel={closeModal}
           onOk={() => {
@@ -55,10 +57,10 @@ export const DataSourceSetter: React.FC<IBorderStyleSetterProps> = observer(
               prefix + '-layout'
             }`}
           >
-            <div className={`${prefix + '-layout-item'}`}>
+            <div className={`${prefix + '-layout-item left'}`}>
               <TreePanel treeDataSource={treeDataSource}></TreePanel>
             </div>
-            <div className={`${prefix + '-layout-item'}`}>
+            <div className={`${prefix + '-layout-item right'}`}>
               <DataSettingPanel
                 treeDataSource={treeDataSource}
               ></DataSettingPanel>

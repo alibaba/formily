@@ -1156,7 +1156,7 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.0.tgz#c3c5ae543c897caa9c2a68630bed355be5f9990f"
   integrity sha512-JZButFdZ1+/xAfpguQHoabIXkcqRRKpMrWKBkpEZZyxfY9C1DpADFB8PEqGSTeFr135SaTRfKqGKx5xSCLI7ZQ==
 
-"@designable/core@0.3.26", "@designable/core@^0.3.24":
+"@designable/core@0.3.26", "@designable/core@^0.3.26":
   version "0.3.26"
   resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.3.26.tgz#4fa0a6b0aa8678ad774ad49da1627a00d01d6b17"
   integrity sha512-03JYNtHgNyNd/P5Pr1vhiAORDTRDWOJ14tJA17dvWYPCImesB7XKeRoAm0omZGYgd84pA03LzWHNmQ/QEcScnA==
@@ -1178,7 +1178,7 @@
     "@formily/reactive" "^2.0.0-beta.50"
     "@juggle/resize-observer" "^3.3.1"
 
-"@designable/formily@^0.3.24":
+"@designable/formily@^0.3.26":
   version "0.3.26"
   resolved "https://registry.yarnpkg.com/@designable/formily/-/formily-0.3.26.tgz#03dd437c84999bdc52aec71df402a89a73118388"
   integrity sha512-6L6olAAqtNHpOFp+z/zARmgFxT6OJesmt8zeuw3Q8/mgrR2ysnPhlnXdfKf0kQ4lrwRt5nMLqDLD62J+IaQdfw==
@@ -1188,7 +1188,7 @@
     "@formily/core" "^2.0.0-beta.68"
     "@formily/json-schema" "^2.0.0-beta.68"
 
-"@designable/react-settings-form@^0.3.24":
+"@designable/react-settings-form@^0.3.26":
   version "0.3.26"
   resolved "https://registry.yarnpkg.com/@designable/react-settings-form/-/react-settings-form-0.3.26.tgz#b6c0d6ea8a13c8bc5ef60fe056dce609d3fc6114"
   integrity sha512-jgx8nCmYHccV0WSHfcPqQXoj3wcK+J9Pufl82PbEb7EkGqLTDNLWmoTEv+UA9Qsr0tdfKLHM3wvwbk4NUoVDoQ==
@@ -1209,7 +1209,7 @@
     react-color "^2.19.3"
     react-tiny-popover "^6.0.5"
 
-"@designable/react@0.3.26", "@designable/react@^0.3.24":
+"@designable/react@0.3.26", "@designable/react@^0.3.26":
   version "0.3.26"
   resolved "https://registry.yarnpkg.com/@designable/react/-/react-0.3.26.tgz#a5f073d3a54e2ee6ef1a93a7ab49663aa94ec163"
   integrity sha512-V1mhTfxz3/sCK+W2eC4O3cC8C4gDwy9IhaM8Ac5jpNd5GnA6toBRF5oV9EsyQuLIaH4Q/JwWpR1/lCcVKpH2bA==
@@ -1350,92 +1350,6 @@
     js-yaml "^3.13.1"
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
-
-"@formily/antd@2.0.0-beta.74":
-  version "2.0.0-beta.74"
-  resolved "https://registry.yarnpkg.com/@formily/antd/-/antd-2.0.0-beta.74.tgz#dd4656212abf959c744c1003cfca10e47e3bd651"
-  integrity sha512-+BmL71bR8k/yg1WtlM8jOnc+/VDu4XOZl2X1ppKUWhuj/fQQk95uBHKKd3mRUcwDaRWl2OFBQp/M2i6p8sTpcg==
-  dependencies:
-    "@ant-design/icons" "^4.0.0"
-    "@formily/core" "2.0.0-beta.74"
-    "@formily/json-schema" "2.0.0-beta.74"
-    "@formily/react" "2.0.0-beta.74"
-    "@formily/reactive" "2.0.0-beta.74"
-    "@formily/reactive-react" "2.0.0-beta.74"
-    "@formily/shared" "2.0.0-beta.74"
-    "@juggle/resize-observer" "^3.3.1"
-    classnames "^2.2.6"
-    react-sortable-hoc "^1.11.0"
-    react-sticky-box "^0.9.3"
-
-"@formily/core@2.0.0-beta.74":
-  version "2.0.0-beta.74"
-  resolved "https://registry.yarnpkg.com/@formily/core/-/core-2.0.0-beta.74.tgz#2721735804c8c56ae91a04105541abed3d6a13be"
-  integrity sha512-lpEzN0nXJBNG4280fTDv7y6CtkpDWPCUXaWHpEb/J6sTHUSooMMix3NjqGOQJXi1pAI0PvpSy4brDkk030vCTA==
-  dependencies:
-    "@formily/reactive" "2.0.0-beta.74"
-    "@formily/shared" "2.0.0-beta.74"
-    "@formily/validator" "2.0.0-beta.74"
-
-"@formily/json-schema@2.0.0-beta.74":
-  version "2.0.0-beta.74"
-  resolved "https://registry.yarnpkg.com/@formily/json-schema/-/json-schema-2.0.0-beta.74.tgz#faf0f0b3bf1c1172fb5e4511d1f37815178f5cbd"
-  integrity sha512-FwlZvaficqUKoFt3+foaO8RSRRUilj5E85tMtp5u3Hej7p3VXQLAQpB9pudwLfykuIdKLxjg5fDuWuDPl8AFbA==
-  dependencies:
-    "@formily/core" "2.0.0-beta.74"
-    "@formily/reactive" "2.0.0-beta.74"
-    "@formily/shared" "2.0.0-beta.74"
-
-"@formily/path@2.0.0-beta.74":
-  version "2.0.0-beta.74"
-  resolved "https://registry.yarnpkg.com/@formily/path/-/path-2.0.0-beta.74.tgz#0abcd99db5ce10f104ea7556cd71272167b983b4"
-  integrity sha512-DkbZOuJmLmeye4qKeN6KTcgSqJlkW1BZYkcuh6/PTGbCCyefF46xT/bG5iBoNSLbzjckA4/GGurIZaXRHOf6qQ==
-
-"@formily/react@2.0.0-beta.74":
-  version "2.0.0-beta.74"
-  resolved "https://registry.yarnpkg.com/@formily/react/-/react-2.0.0-beta.74.tgz#79485b6d7c95c2f692ad64456a631258dca80afd"
-  integrity sha512-uEho9iKfZow5C8HIwYlJCO9kf44oPxe22VmW+zjh9LuSiHTTtlrqrpVNfSt0xLSLIDCah8hrBpYBSI8D9YnLmg==
-  dependencies:
-    "@formily/core" "2.0.0-beta.74"
-    "@formily/json-schema" "2.0.0-beta.74"
-    "@formily/reactive" "2.0.0-beta.74"
-    "@formily/reactive-react" "2.0.0-beta.74"
-    "@formily/shared" "2.0.0-beta.74"
-    "@formily/validator" "2.0.0-beta.74"
-    hoist-non-react-statics "^3.3.2"
-
-"@formily/reactive-react@2.0.0-beta.74":
-  version "2.0.0-beta.74"
-  resolved "https://registry.yarnpkg.com/@formily/reactive-react/-/reactive-react-2.0.0-beta.74.tgz#9c69049e62d2ac96e79261655f1364c8cce5eb73"
-  integrity sha512-e9P4x6HAdTT641JWsfsyx/SufQze2mR08o7MC5ExbmKxFzu+Xi3qRRGQ5PVvMzvCEnywyiUWFu8u449POlUsJQ==
-  dependencies:
-    "@formily/reactive" "2.0.0-beta.74"
-    hoist-non-react-statics "^3.3.2"
-
-"@formily/reactive@2.0.0-beta.74":
-  version "2.0.0-beta.74"
-  resolved "https://registry.yarnpkg.com/@formily/reactive/-/reactive-2.0.0-beta.74.tgz#d8a0df0738ca4952fb4a991524bf3813aede8c92"
-  integrity sha512-C+fKkKPwVvycfA3RwFZ5Jlf64odz6rvpKR+ofGotW3nzlOkDzn8KcLrqqhtd6bX7CtmC6vbfkDCx1XLqZyeN3g==
-
-"@formily/shared@2.0.0-beta.74":
-  version "2.0.0-beta.74"
-  resolved "https://registry.yarnpkg.com/@formily/shared/-/shared-2.0.0-beta.74.tgz#9ae7adcc7db73dc8cc2c390b12520249a78d9b40"
-  integrity sha512-AeOFYTFHygmePcKFi50WZDAxc/rlOdAgrBjTe7DNziOUZIaNyULyPums5T0lFmzugRd7iDMoukstOCJ6a2Q9TA==
-  dependencies:
-    "@formily/path" "2.0.0-beta.74"
-    camel-case "^4.1.1"
-    lower-case "^2.0.1"
-    no-case "^3.0.4"
-    param-case "^3.0.4"
-    pascal-case "^3.1.1"
-    upper-case "^2.0.1"
-
-"@formily/validator@2.0.0-beta.74":
-  version "2.0.0-beta.74"
-  resolved "https://registry.yarnpkg.com/@formily/validator/-/validator-2.0.0-beta.74.tgz#0fb7f7d53b2332d1afe620bd9e5a947d44a21033"
-  integrity sha512-4GfLvPvszt9JUGW1d0Nz4/RATI4nLYknneXWxK0jvyWzG9S7SZRJlO+lIKyCIFRBsFCAPbC6ZmR8PKrAqcrclA==
-  dependencies:
-    "@formily/shared" "2.0.0-beta.74"
 
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
@@ -5744,42 +5658,10 @@ comma-separated-tokens@^1.0.0:
   resolved "https://registry.yarnpkg.com/comma-separated-tokens/-/comma-separated-tokens-1.0.8.tgz#632b80b6117867a158f1080ad498b2fbe7e3f5ea"
   integrity sha512-GHuDRO12Sypu2cV70d1dkA2EUmXHgntrzbpvOB+Qy+49ypNfGgFQIC2fhhXbnyrJRynDCAARsT7Ou0M6hirpfw==
 
-commander@2.17.x:
-  version "2.17.1"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
-  integrity sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
-
-commander@2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.9.0.tgz#9c99094176e12240cb22d6c5146098400fe0f7d4"
-  integrity sha1-nJkJQXbhIkDLItbFFGCYQA/g99Q=
-  dependencies:
-    graceful-readlink ">= 1.0.0"
-
-commander@>=7.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-8.0.0.tgz#1da2139548caef59bd23e66d18908dfb54b02258"
-  integrity sha512-Xvf85aAtu6v22+E5hfVoLHqyul/jyxh91zvqk/ioJTQuJR7Z78n7H558vMPKanPSRgIEeZemT92I2g9Y8LPbSQ==
-
-commander@^2.14.1, commander@^2.18.0, commander@^2.19.0, commander@^2.20.0, commander@^2.9.0:
-  version "2.20.3"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
-  integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
-
-commander@^6.1.0:
+commander@2.17.x, commander@2.9.0, commander@>=7.0.0, commander@^2.14.1, commander@^2.18.0, commander@^2.19.0, commander@^2.20.0, commander@^2.9.0, commander@^6.1.0, commander@^6.x, commander@~2.1.0, commander@~2.19.0:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-6.2.1.tgz#0792eb682dfbc325999bb2b84fddddba110ac73c"
   integrity sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==
-
-commander@~2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.1.0.tgz#d121bbae860d9992a3d517ba96f56588e47c6781"
-  integrity sha1-0SG7roYNmZKj1Re6lvVliOR8Z4E=
-
-commander@~2.19.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
-  integrity sha512-6tvAOO+D6OENvRAh524Dh9jcfKTYDQAqvqezbCW82xj5X0pSrcpxtvRKHLG0yBY6SD7PSDrJaj+0AiOcKVd1Xg==
 
 commondir@^1.0.1:
   version "1.0.1"
@@ -8917,11 +8799,6 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   version "4.2.6"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
-
-"graceful-readlink@>= 1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
-  integrity sha1-TK+tdrxi8C+gObL5Tpo906ORpyU=
 
 gray-matter@^4.0.1:
   version "4.0.3"

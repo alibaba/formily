@@ -1,4 +1,4 @@
-import React, { useMemo, Fragment, useEffect } from 'react'
+import React, { useMemo, Fragment } from 'react'
 import { Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { ArrayItems, Form, Input, FormItem } from '@formily/antd'
@@ -8,7 +8,7 @@ import { createSchemaField } from '@formily/react'
 import { ValueInput } from '@designable/react-settings-form'
 import { usePrefix, TextWidget } from '@designable/react'
 import { Header } from './Header'
-import { tranverseTree } from './shared'
+import { traverseTree } from './shared'
 import { ITreeDataSource } from './types'
 import './styles.less'
 
@@ -29,17 +29,20 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
   (props) => {
     const prefix = usePrefix('data-source-setter')
     const form = useMemo(() => {
-      let values
-      tranverseTree(props.treeDataSource.dataSource, (dataItem, i) => {
-        if (dataItem.key === props.treeDataSource.selectedkey) {
+      let values: any
+      traverseTree(props.treeDataSource.dataSource, (dataItem) => {
+        if (dataItem.key === props.treeDataSource.selectedKey) {
           values = dataItem
         }
       })
       return createForm({
         values,
       })
-    }, [props.treeDataSource.selectedkey])
-    if (!props.treeDataSource.selectedkey)
+    }, [
+      props.treeDataSource.selectedKey,
+      props.treeDataSource.dataSource.length,
+    ])
+    if (!props.treeDataSource.selectedKey)
       return (
         <Fragment>
           <Header
@@ -74,10 +77,13 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
           }
         />
         <div className={`${prefix + '-layout-item-content'}`}>
-          <Form form={form}>
+          <Form form={form} labelWidth={60} wrapperWidth={160}>
             <SchemaField>
               <SchemaField.Array name="map" x-component="ArrayItems">
-                <SchemaField.Object x-decorator="ArrayItems.Item">
+                <SchemaField.Object
+                  x-decorator="ArrayItems.Item"
+                  x-decorator-props={{ type: 'divide' }}
+                >
                   <SchemaField.String
                     title={
                       <TextWidget token="SettingComponents.DataSourceSetter.label" />
