@@ -7,11 +7,11 @@ export interface IDataSourceItem {
 export interface INodeItem {
   key: string
   duplicateKey?: string
-  map: { label: string; value: any }[]
-  children: []
+  map?: { label: string; value: any }[]
+  children?: INodeItem[]
 }
 
 export interface ITreeDataSource {
   dataSource: INodeItem[]
-  selectedkey: string
+  selectedKey: string
 }

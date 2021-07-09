@@ -1,9 +1,9 @@
 import React from 'react'
-import { clone } from '@formily/shared'
+import { clone, toArr } from '@formily/shared'
 import { observer } from '@formily/reactive-react'
 import { IconWidget, TextWidget } from '@designable/react'
 import { INodeItem, ITreeDataSource } from './types'
-import { tranverseTree } from './shared'
+import { traverseTree } from './shared'
 import './styles.less'
 export interface ITitleProps extends INodeItem {
   treeDataSource: ITreeDataSource
@@ -12,11 +12,9 @@ export interface ITitleProps extends INodeItem {
 export const Title: React.FC<ITitleProps> = observer((props) => {
   const getTitleValue = (dataSource) => {
     const optionalKeys = ['label', 'title', 'header']
-    let nodeTitle
+    let nodeTitle: string
     optionalKeys.some((key) => {
-      const title = (dataSource || [])?.find(
-        (item) => item.label === key
-      )?.value
+      const title = toArr(dataSource).find((item) => item.label === key)?.value
       if (title !== undefined) {
         nodeTitle = title
         return true
@@ -24,7 +22,7 @@ export const Title: React.FC<ITitleProps> = observer((props) => {
       return false
     })
     if (nodeTitle === undefined) {
-      ;(dataSource || [])?.some((item) => {
+      toArr(dataSource || []).some((item) => {
         if (item.value && typeof item.value === 'string') {
           nodeTitle = item.value
           return true
@@ -53,8 +51,8 @@ export const Title: React.FC<ITitleProps> = observer((props) => {
         infer="Remove"
         onClick={() => {
           const newDataSource = clone(props?.treeDataSource?.dataSource)
-          tranverseTree(newDataSource || [], (dataItem, i, data) => {
-            if (data[i].key === props.duplicateKey) (data || []).splice(i, 1)
+          traverseTree(newDataSource || [], (dataItem, i, data) => {
+            if (data[i].key === props.duplicateKey) toArr(data).splice(i, 1)
           })
           props.treeDataSource.dataSource = newDataSource
         }}
