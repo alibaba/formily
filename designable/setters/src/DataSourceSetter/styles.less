@@ -12,10 +12,23 @@
   &-layout {
     display: flex;
     justify-content: space-around;
+    border: 1px solid var(--dn-data-source-setter-item-border);
+    border-radius: 3px;
     &-item {
       width: 50%;
-      border: 1px solid var(--dn-data-source-setter-item-border);
-      border-radius: 3px;
+      position: relative;
+      // border: 1px solid var(--dn-data-source-setter-item-border);
+      // border-radius: 3px;
+      &::after {
+        content: ''; // 必须
+        position: absolute;
+        left: 100%;
+        bottom: 0;
+        right: 0;
+        width: 1px;
+        height: 100%;
+        background-color: var(--dn-data-source-setter-item-border);
+      }
       &-header {
         display: flex;
         flex: none;

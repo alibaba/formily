@@ -1,7 +1,7 @@
-import React, { useMemo, Fragment } from 'react'
+import React, { useMemo, Fragment, useEffect } from 'react'
 import { Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { ArrayItems, Form, Input } from '@formily/antd'
+import { ArrayItems, Form, Input, FormItem } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { observer } from '@formily/reactive-react'
 import { createSchemaField } from '@formily/react'
@@ -14,6 +14,7 @@ import './styles.less'
 
 const SchemaField = createSchemaField({
   components: {
+    FormItem,
     Input,
     ArrayItems,
     ValueInput,
@@ -63,7 +64,7 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
               type="text"
               onClick={() => {
                 form.setFieldState('map', (state) => {
-                  state.value = state.value.concat({})
+                  state.value.push({})
                 })
               }}
               icon={<PlusOutlined />}
@@ -78,11 +79,21 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
               <SchemaField.Array name="map" x-component="ArrayItems">
                 <SchemaField.Object x-decorator="ArrayItems.Item">
                   <SchemaField.String
+                    title={
+                      <TextWidget token="SettingComponents.DataSourceSetter.label" />
+                    }
+                    x-decorator="FormItem"
                     name="label"
                     x-component="Input"
-                    x-component-props={{ style: { margin: 5 } }}
                   />
-                  <SchemaField.String name="value" x-component="ValueInput" />
+                  <SchemaField.String
+                    title={
+                      <TextWidget token="SettingComponents.DataSourceSetter.value" />
+                    }
+                    x-decorator="FormItem"
+                    name="value"
+                    x-component="ValueInput"
+                  />
                   <SchemaField.Void
                     x-component="ArrayItems.Remove"
                     x-component-props={{

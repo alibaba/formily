@@ -39,7 +39,7 @@ export const DataSourceSetter: React.FC<IBorderStyleSetterProps> = observer(
           <TextWidget token="SettingComponents.DataSourceSetter.configureDataSource" />
         </Button>
         <Modal
-          width={'50%'}
+          width={'65%'}
           title={
             <TextWidget token="SettingComponents.DataSourceSetter.dataSource" />
           }
