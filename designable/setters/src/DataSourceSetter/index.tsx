@@ -28,7 +28,7 @@ export const DataSourceSetter: React.FC<IBorderStyleSetterProps> = observer(
           dataSource: transformValueToData(value),
           selectedKey: '',
         }),
-      [value]
+      [value, modalVisible]
     )
     const openModal = () => setModalVisible(true)
     const closeModal = () => setModalVisible(false)

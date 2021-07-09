@@ -80,7 +80,10 @@ export const DataSettingPanel: React.FC<IDataSettingPanelProps> = observer(
           <Form form={form} labelWidth={60} wrapperWidth={160}>
             <SchemaField>
               <SchemaField.Array name="map" x-component="ArrayItems">
-                <SchemaField.Object x-decorator="ArrayItems.Item">
+                <SchemaField.Object
+                  x-decorator="ArrayItems.Item"
+                  x-decorator-props={{ type: 'divide' }}
+                >
                   <SchemaField.String
                     title={
                       <TextWidget token="SettingComponents.DataSourceSetter.label" />

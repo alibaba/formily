@@ -1,20 +1,17 @@
 @import '~antd/lib/style/themes/default.less';
 
-
 @array-items-prefix-cls: ~'@{ant-prefix}-formily-array-items';
-
 
 .@{array-items-prefix-cls}-item-inner {
   visibility: visible;
 }
 
-
 .@{array-items-prefix-cls}-card {
   display: flex;
-  border: 1px solid #eee;
+  border: 1px solid @border-color-split;
   margin-bottom: 10px;
   padding: 3px 6px;
-  background: #fff;
+  background: @card-background;
   justify-content: space-between;
 
   .@{ant-prefix}-formily-item:not(.@{ant-prefix}-formily-item-feedback-layout-popover) {
@@ -24,20 +21,37 @@
       position: absolute;
       font-size: 12px;
       top: 100%;
-      background: #fff;
+      background: @card-background;
       width: 100%;
       margin-top: 3px;
       padding: 3px;
       z-index: 1;
       border-radius: 3px;
-      box-shadow: 0 0 10px #eee;
+      box-shadow: 0 0 10px @border-color-split;
     }
   }
+}
 
-  transition: all .35s;
+.@{array-items-prefix-cls}-divide {
+  display: flex;
+  border-bottom: 1px solid @border-color-split;
+  padding: 10px 0;
+  justify-content: space-between;
 
-  &:hover {
-    border: 1px solid #aaa;
+  .@{ant-prefix}-formily-item:not(.@{ant-prefix}-formily-item-feedback-layout-popover) {
+    margin-bottom: 0 !important;
+
+    .@{ant-prefix}-formily-item-help {
+      position: absolute;
+      font-size: 12px;
+      top: 100%;
+      background: @card-background;
+      width: 100%;
+      margin-top: 3px;
+      padding: 3px;
+      z-index: 1;
+      border-radius: 3px;
+      box-shadow: 0 0 10px @border-color-split;
+    }
   }
-
 }

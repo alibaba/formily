@@ -1,3 +1,5 @@
+@import '~antd/lib/style/themes/default.less';
+
 .dn-data-source-setter-light {
   --dn-data-source-setter-item-border: #d9d9d9;
   --dn-data-source-setter-item-title: #666;
@@ -11,6 +13,21 @@
 }
 
 .dn-data-source-setter {
+  &-node-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &-icon {
+      transition: all 0.15s ease-in-out;
+      opacity: 0;
+
+      &:hover {
+        color: @primary-color;
+      }
+    }
+  }
+
   &-layout {
     display: flex;
     justify-content: space-around;
@@ -18,9 +35,14 @@
     border-radius: 3px;
 
     .ant-tree-treenode {
-      width: fit-content;
       padding-right: 10px;
       white-space: nowrap;
+
+      &:hover {
+        .dn-data-source-setter-node-title-icon {
+          opacity: 1;
+        }
+      }
     }
 
     &-item {

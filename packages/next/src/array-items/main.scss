@@ -1,6 +1,5 @@
 @import '~@alifd/next/lib/core/index-noreset.scss';
 
-
 $array-items-prefix-cls: '#{$css-prefix}formily-array-items';
 
 .#{$array-items-prefix-cls} {
@@ -19,17 +18,16 @@ $array-items-prefix-cls: '#{$css-prefix}formily-array-items';
   visibility: visible;
 }
 
-
 .#{$array-items-prefix-cls}-card {
   display: flex;
   border: 1px solid #eee;
   margin-bottom: 10px;
-  padding: 6px;
+  padding: 3px 6px;
   background: #fff;
   justify-content: space-between;
   align-items: center;
 
-  transition: all .35s;
+  transition: all 0.35s;
 
   .#{$css-prefix}formily-item:not(.#{$css-prefix}formily-item-feedback-layout-popover) {
     margin-bottom: 0 !important;
@@ -48,9 +46,32 @@ $array-items-prefix-cls: '#{$css-prefix}formily-array-items';
       box-shadow: 0 0 10px #eee;
     }
   }
+}
 
-  &:hover {
-    border: 1px solid #aaa;
+.#{$array-items-prefix-cls}-divide {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+  padding: 10px 0;
+  background: #fff;
+  justify-content: space-between;
+  align-items: center;
+
+  .#{$css-prefix}formily-item:not(.#{$css-prefix}formily-item-feedback-layout-popover) {
+    margin-bottom: 0 !important;
+    position: relative;
+
+    .#{$css-prefix}formily-item-help {
+      position: absolute;
+      font-size: 12px;
+      top: 100%;
+      background: #fff;
+      width: 100%;
+      margin-top: 3px;
+      padding: 3px;
+      z-index: 1;
+      border-radius: 3px;
+      box-shadow: 0 0 10px #eee;
+    }
   }
-
 }

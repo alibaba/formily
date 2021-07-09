@@ -703,6 +703,12 @@ export default () => {
 
 继承 HTMLDivElement Props
 
+扩展属性
+
+| 属性名 | 类型                 | 描述           | 默认值 |
+| ------ | -------------------- | -------------- | ------ |
+| type   | `'card' \| 'divide'` | 卡片或者分割线 |        |
+
 ### ArrayItems.SortHandle
 
 > 拖拽手柄

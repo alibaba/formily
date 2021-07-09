@@ -33,7 +33,6 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
         dragObj = item
       }
     })
-
     if (!info.dropToGap) {
       // Drop on the content
       traverseTree(data, (item) => {
@@ -44,8 +43,8 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
         }
       })
     } else if (
-      (info.node.props.children || []).length > 0 && // Has children
-      info.node.props.expanded && // Is expanded
+      (info.node.children || []).length > 0 && // Has children
+      info.node.expanded && // Is expanded
       dropPosition === 1 // On the bottom gap
     ) {
       traverseTree(data, (item) => {
@@ -104,6 +103,7 @@ export const TreePanel: React.FC<ITreePanelProps> = observer((props) => {
       />
       <div className={`${prefix + '-layout-item-content'}`}>
         <Tree
+          blockNode
           expandedKeys={expandedKeys}
           draggable
           autoExpandParent

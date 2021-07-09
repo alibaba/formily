@@ -1,7 +1,7 @@
 import React from 'react'
 import { clone, toArr } from '@formily/shared'
 import { observer } from '@formily/reactive-react'
-import { IconWidget, TextWidget } from '@designable/react'
+import { IconWidget, TextWidget, usePrefix } from '@designable/react'
 import { INodeItem, ITreeDataSource } from './types'
 import { traverseTree } from './shared'
 import './styles.less'
@@ -10,6 +10,7 @@ export interface ITitleProps extends INodeItem {
 }
 
 export const Title: React.FC<ITitleProps> = observer((props) => {
+  const prefix = usePrefix('data-source-setter-node-title')
   const getTitleValue = (dataSource) => {
     const optionalKeys = ['label', 'title', 'header']
     let nodeTitle: string
@@ -43,11 +44,12 @@ export const Title: React.FC<ITitleProps> = observer((props) => {
   }
 
   return (
-    <span>
+    <div className={prefix}>
       <span style={{ marginRight: '5px' }}>
         {renderTitle(props?.map || [])}
       </span>
       <IconWidget
+        className={prefix + '-icon'}
         infer="Remove"
         onClick={() => {
           const newDataSource = clone(props?.treeDataSource?.dataSource)
@@ -57,6 +59,6 @@ export const Title: React.FC<ITitleProps> = observer((props) => {
           props.treeDataSource.dataSource = newDataSource
         }}
       />
-    </span>
+    </div>
   )
 })
