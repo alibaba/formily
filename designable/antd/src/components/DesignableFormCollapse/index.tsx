@@ -105,7 +105,7 @@ export const DesignableFormCollapse: React.FC<CollapseProps> & {
       <LoadTemplate
         actions={[
           {
-            title: 'addCollapsePanel',
+            title: 'Common.addCollapsePanel',
             onClick: () => {
               const tabPane = new TreeNode({
                 componentName: 'DesignableField',

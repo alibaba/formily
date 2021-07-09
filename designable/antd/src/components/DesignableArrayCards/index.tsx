@@ -144,7 +144,7 @@ export const DesignableArrayCards: React.FC<CardProps> = observer((props) => {
       <LoadTemplate
         actions={[
           {
-            title: 'addIndex',
+            title: 'Common.addIndex',
             onClick: () => {
               if (
                 hasNodeByComponentPath(node, [
@@ -166,7 +166,7 @@ export const DesignableArrayCards: React.FC<CardProps> = observer((props) => {
           },
 
           {
-            title: 'addOperation',
+            title: 'Common.addOperation',
             onClick: () => {
               const oldAdditionNode = findNodeByComponentPath(node, [
                 'ArrayCards',
