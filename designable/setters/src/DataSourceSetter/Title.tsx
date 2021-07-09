@@ -5,7 +5,6 @@ import { IconWidget, TextWidget } from '@designable/react'
 import { INodeItem, ITreeDataSource } from './types'
 import { tranverseTree } from './shared'
 import './styles.less'
-import { unstable_renderSubtreeIntoContainer } from 'react-dom'
 export interface ITitleProps extends INodeItem {
   treeDataSource: ITreeDataSource
 }
