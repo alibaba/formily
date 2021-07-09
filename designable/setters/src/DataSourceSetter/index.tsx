@@ -43,6 +43,8 @@ export const DataSourceSetter: React.FC<IBorderStyleSetterProps> = observer(
           title={
             <TextWidget token="SettingComponents.DataSourceSetter.configureDataSource" />
           }
+          transitionName=""
+          maskTransitionName=""
           visible={modalVisible}
           onCancel={closeModal}
           onOk={() => {
