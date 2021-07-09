@@ -58,6 +58,10 @@ export default {
         title: 'Tools',
         children: [
           {
+            title: 'Formily Designer',
+            path: 'https://designable-antd.formilyjs.org/',
+          },
+          {
             title: 'Designable',
             path: 'https://github.com/alibaba/designable',
           },
@@ -132,6 +136,10 @@ export default {
       {
         title: '工具',
         children: [
+          {
+            title: 'Formily 设计器',
+            path: 'https://designable-antd.formilyjs.org/',
+          },
           {
             title: '通用搭建引擎',
             path: 'https://github.com/alibaba/designable',
