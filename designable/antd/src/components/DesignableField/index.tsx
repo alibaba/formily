@@ -177,7 +177,7 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
         },
         enum: {
           'x-decorator': 'FormItem',
-          //  'x-component': 'DataSourceSetter',
+          'x-component': 'DataSourceSetter',
           'x-index': 6,
         },
         'x-validator': {

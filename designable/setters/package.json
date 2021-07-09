@@ -41,15 +41,27 @@
     "webpack": "^4.41.5",
     "webpack-bundle-analyzer": "^3.9.0",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1"
+    "webpack-dev-server": "^3.10.1",
+    "antd": "^4.0.0",
+    "@ant-design/icons": "^4.0.0"
   },
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
     "antd": "^4.0.0",
+    "@ant-design/icons": "^4.0.0",
     "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0",
     "react-is": ">=16.8.0 || >=17.0.0"
+  },
+  "dependencies": {
+    "@designable/core": "^0.3.24",
+    "@designable/formily": "^0.3.24",
+    "@designable/react": "^0.3.26",
+    "@formily/antd": "2.0.0-beta.74",
+    "@formily/core": "2.0.0-beta.74",
+    "@formily/react": "2.0.0-beta.74",
+    "@formily/shared": "2.0.0-beta.74"
   },
   "publishConfig": {
     "access": "public"

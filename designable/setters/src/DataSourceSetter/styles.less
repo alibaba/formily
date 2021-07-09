@@ -1,0 +1,58 @@
+.dn-data-source-setter-light {
+  --dn-data-source-setter-item-border: #d9d9d9;
+  --dn-data-source-setter-item-title: #666;
+  --dn-data-source-setter-item-header-border: #f0f0f0;
+}
+.dn-data-source-setter-dark {
+  --dn-data-source-setter-item-border: #555;
+  --dn-data-source-setter-item-title: #aaa;
+  --dn-data-source-setter-item-header-border: #555;
+}
+.dn-data-source-setter {
+  &-layout {
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid var(--dn-data-source-setter-item-border);
+    border-radius: 3px;
+    &-item {
+      width: 50%;
+      position: relative;
+      // border: 1px solid var(--dn-data-source-setter-item-border);
+      // border-radius: 3px;
+      &::after {
+        content: ''; // 必须
+        position: absolute;
+        left: 100%;
+        bottom: 0;
+        right: 0;
+        width: 1px;
+        height: 100%;
+        background-color: var(--dn-data-source-setter-item-border);
+      }
+      &-header {
+        display: flex;
+        flex: none;
+        align-items: center;
+        justify-content: space-between;
+        height: 40px;
+        padding: 8px 12px 9px;
+        border-bottom: 1px solid var(--dn-data-source-setter-item-header-border);
+        border-radius: 2px 2px 0 0;
+      }
+      &-title {
+        // padding: 0px 7px 14px;
+        // color: var(--dn-data-source-setter-item-title);
+        // line-height: 18px;
+        // font-size: 16px;
+        // display: flex;
+        // justify-content: space-between;
+      }
+      &-content {
+        padding: 2%;
+        height: 300px;
+        max-height: 300px;
+        overflow: scroll;
+      }
+    }
+  }
+}

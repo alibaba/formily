@@ -27,8 +27,8 @@ import {
   SchemaEditorWidget,
   MarkupSchemaWidget,
 } from './widgets'
+import { DataSourceSetter } from '../../setters/src'
 import 'antd/dist/antd.less'
-
 GlobalRegistry.registerDesignerLocales({
   'zh-CN': {
     sources: {
@@ -110,7 +110,10 @@ const App = () => {
           </WorkspacePanel>
         </Workspace>
         <SettingsPanel title="panels.PropertySettings">
-          <SettingsForm uploadAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" />
+          <SettingsForm
+            components={{ DataSourceSetter }}
+            uploadAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          />
         </SettingsPanel>
       </MainPanel>
     </Designer>
