@@ -40,9 +40,9 @@
     "react-is": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
-    "@designable/core": "^0.3.33",
-    "@designable/formily": "^0.3.33",
-    "@designable/react": "^0.3.33",
+    "@designable/core": "^0.3.34",
+    "@designable/formily": "^0.3.34",
+    "@designable/react": "^0.3.34",
     "@formily/antd": "2.0.0-beta.76",
     "@formily/core": "2.0.0-beta.76",
     "@formily/react": "2.0.0-beta.76",
