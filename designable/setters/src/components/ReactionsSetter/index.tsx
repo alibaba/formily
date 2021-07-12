@@ -2,7 +2,8 @@ import React, { useMemo, useState } from 'react'
 import { clone } from '@formily/shared'
 import { createForm, isVoidField } from '@formily/core'
 import { createSchemaField } from '@formily/react'
-import { usePrefix } from '@designable/react'
+import { GlobalRegistry } from '@designable/core'
+import { usePrefix, TextWidget } from '@designable/react'
 import { MonacoInput } from '@designable/react-settings-form'
 import { Form, ArrayTable, Input, FormItem } from '@formily/antd'
 import { Modal, Card, Button } from 'antd'
@@ -42,10 +43,12 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
   return (
     <div className={prefix}>
       <Button block onClick={openModal}>
-        配置响应器
+        <TextWidget token="SettingComponents.ReactionsSetter.configureReactions" />
       </Button>
       <Modal
-        title="配置响应器"
+        title={GlobalRegistry.getDesignerMessage(
+          'SettingComponents.ReactionsSetter.configureReactions'
+        )}
         width="65%"
         bodyStyle={{ padding: 10 }}
         transitionName=""
@@ -65,7 +68,9 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
             <SchemaField.Void
               x-component="Card"
               x-component-props={{
-                title: '关联字段',
+                title: GlobalRegistry.getDesignerMessage(
+                  'SettingComponents.ReactionsSetter.relationsFields'
+                ),
                 size: 'small',
                 type: 'inner',
                 style: { marginBottom: 10 },
@@ -81,7 +86,9 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                   <SchemaField.Void
                     x-component="ArrayTable.Column"
                     x-component-props={{
-                      title: '变量名',
+                      title: GlobalRegistry.getDesignerMessage(
+                        'SettingComponents.ReactionsSetter.variableName'
+                      ),
                       width: 240,
                     }}
                   >
@@ -90,19 +97,25 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                       x-decorator="FormItem"
                       x-validator={{
                         pattern: /^[$_a-zA-Z]+[$_a-zA-Z0-9]*$/,
-                        message: '不符合变量命名规则',
+                        message: GlobalRegistry.getDesignerMessage(
+                          'SettingComponents.ReactionsSetter.variableNameValidateMessage'
+                        ),
                       }}
                       x-component="Input"
                       x-component-props={{
                         addonBefore: '$deps.',
-                        placeholder: '请输入',
+                        placeholder: GlobalRegistry.getDesignerMessage(
+                          'SettingComponents.ReactionsSetter.pleaseInput'
+                        ),
                       }}
                     />
                   </SchemaField.Void>
                   <SchemaField.Void
                     x-component="ArrayTable.Column"
                     x-component-props={{
-                      title: '来源字段',
+                      title: GlobalRegistry.getDesignerMessage(
+                        'SettingComponents.ReactionsSetter.sourceField'
+                      ),
                       width: 240,
                     }}
                   >
@@ -111,14 +124,18 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                       x-decorator="FormItem"
                       x-component="PathSelector"
                       x-component-props={{
-                        placeholder: '请选择',
+                        placeholder: GlobalRegistry.getDesignerMessage(
+                          'SettingComponents.ReactionsSetter.pleaseSelect'
+                        ),
                       }}
                     />
                   </SchemaField.Void>
                   <SchemaField.Void
                     x-component="ArrayTable.Column"
                     x-component-props={{
-                      title: '字段值类型',
+                      title: GlobalRegistry.getDesignerMessage(
+                        'SettingComponents.ReactionsSetter.fieldValueType'
+                      ),
                       width: 160,
                       align: 'center',
                     }}
@@ -143,7 +160,9 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                   <SchemaField.Void
                     x-component="ArrayTable.Column"
                     x-component-props={{
-                      title: '操作',
+                      title: GlobalRegistry.getDesignerMessage(
+                        'SettingComponents.ReactionsSetter.operations'
+                      ),
                       align: 'center',
                       width: 120,
                     }}
@@ -155,7 +174,9 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                   </SchemaField.Void>
                 </SchemaField.Object>
                 <SchemaField.Void
-                  title="新增关联字段"
+                  title={GlobalRegistry.getDesignerMessage(
+                    'SettingComponents.ReactionsSetter.addRelationField'
+                  )}
                   x-component="ArrayTable.Addition"
                 />
               </SchemaField.Array>
@@ -163,7 +184,9 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
             <SchemaField.Void
               x-component="Card"
               x-component-props={{
-                title: '属性响应',
+                title: GlobalRegistry.getDesignerMessage(
+                  'SettingComponents.ReactionsSetter.propertyReactions'
+                ),
                 size: 'small',
                 type: 'inner',
                 style: { marginBottom: 10 },
@@ -177,7 +200,9 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
             <SchemaField.Void
               x-component="Card"
               x-component-props={{
-                title: '动作响应(可选)',
+                title: GlobalRegistry.getDesignerMessage(
+                  'SettingComponents.ReactionsSetter.actionReactions'
+                ),
                 size: 'small',
                 type: 'inner',
                 style: { marginBottom: 10 },

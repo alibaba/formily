@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { usePrefix } from '@designable/react'
+import { TextWidget, usePrefix } from '@designable/react'
 import { Menu } from 'antd'
 import { MonacoInput } from '@designable/react-settings-form'
 import { reduce } from '@formily/shared'
@@ -12,6 +12,21 @@ export interface IFieldPropertySetterProps {
   value?: IFieldProperty
   onChange?: (value: IFieldProperty) => void
 }
+
+const FieldProperties = [
+  'display',
+  'pattern',
+  'title',
+  'description',
+  'value',
+  'initialValue',
+  'required',
+  'dataSource',
+  ['component[0]', 'component'],
+  ['component[1]', 'componentProps'],
+  ['decorator[0]', 'decorator'],
+  ['decorator[1]', 'decoratorProps'],
+]
 
 export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
   props
@@ -48,18 +63,22 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
           setSelectKeys(selectedKeys)
         }}
       >
-        <Menu.Item key="display">展示状态</Menu.Item>
-        <Menu.Item key="pattern">交互形态</Menu.Item>
-        <Menu.Item key="title">标题</Menu.Item>
-        <Menu.Item key="description">描述</Menu.Item>
-        <Menu.Item key="value">值</Menu.Item>
-        <Menu.Item key="required">必填</Menu.Item>
-        <Menu.Item key="initialValue">默认值</Menu.Item>
-        <Menu.Item key="dataSource">数据源</Menu.Item>
-        <Menu.Item key="component[0]">组件</Menu.Item>
-        <Menu.Item key="component[1]">组件属性</Menu.Item>
-        <Menu.Item key="decorator[0]">容器</Menu.Item>
-        <Menu.Item key="decorator[1]">容器属性</Menu.Item>
+        {FieldProperties.map((key) => {
+          if (Array.isArray(key)) {
+            return (
+              <Menu.Item key={key[0]}>
+                <TextWidget
+                  token={`SettingComponents.ReactionsSetter.${key[1]}`}
+                />
+              </Menu.Item>
+            )
+          }
+          return (
+            <Menu.Item key={key}>
+              <TextWidget token={`SettingComponents.ReactionsSetter.${key}`} />
+            </Menu.Item>
+          )
+        })}
       </Menu>
       <div className={prefix + '-coder-wrapper'}>
         <div
