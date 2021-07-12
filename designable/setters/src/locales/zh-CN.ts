@@ -38,6 +38,7 @@ export default {
         componentProps: '组件属性',
         decorator: '容器',
         decoratorProps: '容器属性',
+        pleaseSelect: '请选择',
       },
     },
   },

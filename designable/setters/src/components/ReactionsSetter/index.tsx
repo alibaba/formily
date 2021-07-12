@@ -5,7 +5,7 @@ import { createSchemaField } from '@formily/react'
 import { GlobalRegistry } from '@designable/core'
 import { usePrefix, TextWidget } from '@designable/react'
 import { MonacoInput } from '@designable/react-settings-form'
-import { Form, ArrayTable, Input, FormItem } from '@formily/antd'
+import { Form, ArrayTable, Input, FormItem, FormCollapse } from '@formily/antd'
 import { Modal, Card, Button } from 'antd'
 import { PathSelector } from './PathSelector'
 import { FieldPropertySetter } from './FieldPropertySetter'
@@ -20,6 +20,7 @@ export interface IReactionsSetterProps {
 const SchemaField = createSchemaField({
   components: {
     Card,
+    FormCollapse,
     Input,
     FormItem,
     PathSelector,
@@ -42,9 +43,14 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
   const closeModal = () => setModalVisible(false)
   useEffect(() => {
     if (modalVisible) {
-      requestIdleCallback(() => {
-        setInnerVisible(true)
-      })
+      requestIdleCallback(
+        () => {
+          setInnerVisible(true)
+        },
+        {
+          timeout: 400,
+        }
+      )
     } else {
       setInnerVisible(false)
     }
@@ -59,6 +65,7 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
           'SettingComponents.ReactionsSetter.configureReactions'
         )}
         width="65%"
+        centered
         bodyStyle={{ padding: 10 }}
         transitionName=""
         maskTransitionName=""
@@ -210,25 +217,30 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                   />
                 </SchemaField.Void>
                 <SchemaField.Void
-                  x-component="Card"
+                  x-component="FormCollapse"
                   x-component-props={{
-                    title: GlobalRegistry.getDesignerMessage(
-                      'SettingComponents.ReactionsSetter.actionReactions'
-                    ),
-                    size: 'small',
-                    type: 'inner',
                     style: { marginBottom: 10 },
                   }}
                 >
-                  <SchemaField.String
-                    name="fulfill.run"
-                    x-component="MonacoInput"
+                  <SchemaField.Void
+                    x-component="FormCollapse.CollapsePanel"
                     x-component-props={{
-                      width: '100%',
-                      height: 200,
-                      language: 'typescript',
+                      key: 'run',
+                      header: GlobalRegistry.getDesignerMessage(
+                        'SettingComponents.ReactionsSetter.actionReactions'
+                      ),
                     }}
-                  />
+                  >
+                    <SchemaField.String
+                      name="fulfill.run"
+                      x-component="MonacoInput"
+                      x-component-props={{
+                        width: '100%',
+                        height: 200,
+                        language: 'typescript',
+                      }}
+                    />
+                  </SchemaField.Void>
                 </SchemaField.Void>
               </SchemaField>
             </Form>

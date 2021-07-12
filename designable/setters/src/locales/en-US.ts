@@ -40,6 +40,7 @@ export default {
         componentProps: 'Component Props',
         decorator: 'Decorator',
         decoratorProps: 'Decorator Props',
+        pleaseSelect: 'Please Select',
       },
     },
   },

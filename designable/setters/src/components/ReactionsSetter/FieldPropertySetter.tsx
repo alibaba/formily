@@ -55,10 +55,10 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
   return (
     <div className={prefix}>
       <Menu
-        mode="inline"
+        mode="vertical"
         style={{
           width: 240,
-          height: 300,
+          height: 200,
           paddingRight: 4,
           overflowY: 'auto',
           overflowX: 'hidden',
