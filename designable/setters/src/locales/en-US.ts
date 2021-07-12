@@ -24,8 +24,10 @@ export default {
         fieldValueType: 'Field Value Type',
         operations: 'Operations',
         addRelationField: 'Add Associated Field',
-        propertyReactions: 'Property Reactions',
-        actionReactions: 'Action Reactions',
+        propertyReactions:
+          'Property Reactions(Only Support Javascript Expression)',
+        actionReactions:
+          'Action Reactions(Optional, Support Javascript Statement)',
         display: 'Display',
         pattern: 'Pattern',
         title: 'Title',

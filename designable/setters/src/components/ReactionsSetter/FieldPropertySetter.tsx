@@ -56,7 +56,13 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
     <div className={prefix}>
       <Menu
         mode="inline"
-        style={{ height: 300, width: 200, overflow: 'overlay' }}
+        style={{
+          width: 240,
+          height: 300,
+          paddingRight: 4,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+        }}
         defaultSelectedKeys={selectKeys}
         selectedKeys={selectKeys}
         onSelect={({ selectedKeys }) => {
