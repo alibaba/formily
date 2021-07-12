@@ -40,7 +40,8 @@
     "sass": "^1.34.1",
     "vue": "^2.6.0",
     "vuepress": "^1.8.2",
-    "vuepress-plugin-typescript": "^0.3.1"
+    "vuepress-plugin-typescript": "^0.3.1",
+    "axios": "^0.21.1"
   },
   "dependencies": {
     "@formily/core": "2.0.0-beta.76",
