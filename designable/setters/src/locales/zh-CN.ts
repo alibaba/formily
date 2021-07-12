@@ -16,7 +16,7 @@ export default {
       },
       ReactionsSetter: {
         configureReactions: '配置响应器',
-        relationFields: '关联字段',
+        relationsFields: '关联字段',
         variableName: '变量名',
         variableNameValidateMessage: '不符合变量命名规则',
         pleaseInput: '请输入',

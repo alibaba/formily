@@ -16,7 +16,7 @@ export default {
       },
       ReactionsSetter: {
         configureReactions: 'Configure',
-        relationFields: 'Associated Fields',
+        relationsFields: 'Associated Fields',
         variableName: 'Variable Name',
         variableNameValidateMessage: 'This is not a standard variable name',
         pleaseInput: 'Please Input',
