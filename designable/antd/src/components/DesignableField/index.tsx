@@ -165,7 +165,7 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
           'x-reactions': {
             'x-decorator': 'FormItem',
             'x-index': 8,
-            // 'x-component': 'ReactionsSetter',
+            'x-component': 'ReactionsSetter',
           },
         })
       }

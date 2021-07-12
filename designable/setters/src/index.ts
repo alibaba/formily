@@ -1,2 +1,2 @@
 import './locales'
-export * from './DataSourceSetter/index'
+export * from './components'
