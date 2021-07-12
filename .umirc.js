@@ -49,6 +49,10 @@ export default {
             path: 'https://fusion.formilyjs.org',
           },
           {
+            title: '@formily/element',
+            path: 'https://element.formilyjs.org',
+          },
+          {
             title: 'aliyun teamix',
             path: 'https://formily.dg.aliyun-inc.com/',
           },
@@ -126,6 +130,10 @@ export default {
           {
             title: '@formily/next',
             path: 'https://fusion.formilyjs.org',
+          },
+          {
+            title: '@formily/element',
+            path: 'https://element.formilyjs.org',
           },
           {
             title: 'aliyun teamix',
