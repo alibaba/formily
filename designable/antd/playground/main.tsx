@@ -27,7 +27,7 @@ import {
   SchemaEditorWidget,
   MarkupSchemaWidget,
 } from './widgets'
-import { DataSourceSetter } from '../../setters/src'
+import { DataSourceSetter, ReactionsSetter } from '@formily/designable-setters'
 import 'antd/dist/antd.less'
 GlobalRegistry.registerDesignerLocales({
   'zh-CN': {
@@ -111,7 +111,7 @@ const App = () => {
         </Workspace>
         <SettingsPanel title="panels.PropertySettings">
           <SettingsForm
-            components={{ DataSourceSetter }}
+            components={{ DataSourceSetter, ReactionsSetter }}
             uploadAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
           />
         </SettingsPanel>

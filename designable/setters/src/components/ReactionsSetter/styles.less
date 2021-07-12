@@ -1,0 +1,30 @@
+@import '~antd/lib/style/themes/default.less';
+
+.dn-reactions-setter {
+  width: 100%;
+}
+
+.dn-field-property-setter {
+  display: flex;
+  height: 300px;
+
+  &-coder-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  &-coder-title {
+    font-size: 30px;
+    color: @text-color;
+    padding-left: 68px;
+    padding-bottom: 10px;
+  }
+
+  &-coder {
+    min-width: 0;
+    flex-grow: 2;
+  }
+}
