@@ -26,6 +26,11 @@
       padding: 8px 10px !important;
       background-color: @background-color-light !important;
       border-bottom: 1px solid @border-color-split !important;
+      font-weight: 500 !important;
+
+      .@{ant-prefix}-collapse-arrow {
+        margin-right: 4px !important;
+      }
     }
 
     &-item {
@@ -49,17 +54,31 @@
   &-coder-wrapper {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    flex-grow: 2;
     height: 100%;
+    padding-left: 4px;
     position: relative;
   }
 
-  &-coder-title {
-    font-size: 26px;
+  &-coder-start {
+    font-size: 22px;
+    line-height: 30px;
+    margin-bottom: 4px;
     color: @text-color;
-    padding-left: 68px;
-    padding-bottom: 4px;
+    padding-left: 20px;
     font-weight: 300;
+    flex-grow: 0;
+    opacity: 0.8;
+  }
+
+  &-coder-end {
+    font-size: 22px;
+    color: @text-color;
+    margin-top: 4px;
+    padding-left: 20px;
+    line-height: 30px;
+    font-weight: 300;
+    flex-grow: 0;
     opacity: 0.8;
   }
 

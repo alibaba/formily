@@ -43,7 +43,7 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
   const closeModal = () => setModalVisible(false)
   useEffect(() => {
     if (modalVisible) {
-      requestIdleCallback(
+      window['requestIdleCallback'](
         () => {
           setInnerVisible(true)
         },
