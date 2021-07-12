@@ -164,7 +164,7 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
         Object.assign(base.properties, {
           'x-reactions': {
             'x-decorator': 'FormItem',
-            'x-index': 8,
+            'x-index': 7,
             'x-component': 'ReactionsSetter',
           },
         })
@@ -183,7 +183,7 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
         'x-validator': {
           'x-decorator': 'FormItem',
           // 'x-component': 'ValidatorSetter',
-          'x-index': 7,
+          'x-index': 8,
         },
         required: {
           type: 'boolean',
