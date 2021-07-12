@@ -13,6 +13,7 @@ const presets = () => {
     react: 'React',
     moment: 'moment',
     'react-is': 'ReactIs',
+    'element-ui': 'Element',
     '@alifd/next': 'Next',
     'mobx-react-lite': 'mobxReactLite',
     'react-dom': 'ReactDOM',
