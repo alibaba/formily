@@ -3,6 +3,7 @@ import { clone } from '@formily/shared'
 import { createForm, isVoidField } from '@formily/core'
 import { createSchemaField } from '@formily/react'
 import { GlobalRegistry } from '@designable/core'
+import { requestIdle } from '@designable/shared'
 import { usePrefix, TextWidget } from '@designable/react'
 import { MonacoInput } from '@designable/react-settings-form'
 import { Form, ArrayTable, Input, FormItem, FormCollapse } from '@formily/antd'
@@ -43,7 +44,7 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
   const closeModal = () => setModalVisible(false)
   useEffect(() => {
     if (modalVisible) {
-      window['requestIdleCallback'](
+      requestIdle(
         () => {
           setInnerVisible(true)
         },
