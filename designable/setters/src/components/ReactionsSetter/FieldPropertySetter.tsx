@@ -55,10 +55,10 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
   return (
     <div className={prefix}>
       <Menu
-        mode="inline"
+        mode="vertical"
         style={{
           width: 240,
-          height: 300,
+          height: 200,
           paddingRight: 4,
           overflowY: 'auto',
           overflowX: 'hidden',
@@ -88,8 +88,8 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
       </Menu>
       <div className={prefix + '-coder-wrapper'}>
         <div
-          className={prefix + '-coder-title'}
-        >{`$self.${selectKeys[0]} = `}</div>
+          className={prefix + '-coder-start'}
+        >{`$self.${selectKeys[0]} = {{`}</div>
         <div className={prefix + '-coder'}>
           <MonacoInput
             key={selectKeys[0]}
@@ -108,6 +108,7 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
             }}
           />
         </div>
+        <div className={prefix + '-coder-end'}>{`}}`}</div>
       </div>
     </div>
   )
