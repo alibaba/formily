@@ -43,6 +43,7 @@ module.exports = {
         'form-layout',
         'form-grid',
         'form-button-group',
+        'form-tab',
         'array-table',
         'space',
         'reset',
