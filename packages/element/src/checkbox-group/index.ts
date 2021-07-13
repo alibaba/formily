@@ -1,4 +1,4 @@
-import { connect, mapProps, h } from '@formily/vue'
+import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
 import { getComponentByTag } from '../__builtins__/shared'
 import { Checkbox } from '../checkbox'
 import { defineComponent } from 'vue-demi'
@@ -6,6 +6,7 @@ import { defineComponent } from 'vue-demi'
 import type { CheckboxGroup as ElCheckboxGroupProps } from 'element-ui'
 import type { CheckboxProps } from '../checkbox'
 import { CheckboxGroup as ElCheckboxGroup } from 'element-ui'
+import { PreviewSelectText } from '../preview-text'
 
 export type CheckboxGroupProps = ElCheckboxGroupProps & {
   value: any[]
@@ -59,5 +60,8 @@ const CheckboxGroupOption = defineComponent<CheckboxGroupProps>({
 
 export const CheckboxGroup = connect(
   CheckboxGroupOption,
-  mapProps({ dataSource: 'options' })
+  mapProps({ dataSource: 'options' }),
+  mapReadPretty(PreviewSelectText, {
+    multiple: true,
+  })
 )

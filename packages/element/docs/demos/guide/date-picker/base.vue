@@ -61,7 +61,7 @@ const schema = {
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker',
       'x-component-props': {
-        type: 'dateTime',
+        type: 'datetime',
       },
     },
     daterange: {

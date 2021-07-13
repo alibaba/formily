@@ -59,6 +59,7 @@ module.exports = {
         'time-picker',
         'transfer',
         'upload',
+        'preview-text',
       ],
     },
     lastUpdated: 'Last Updated',
