@@ -345,9 +345,18 @@ interface IFormDrawer {
     renderer: (resolve: () => void, reject: () => void) => React.ReactElement
   ): FormDrawerHandler
   (
-    title: ModalProps, //如果是对象，则作为DrawerProps传入
+    title: IFormDrawerProps, //如果是对象，则作为IFormDrawerProps传入
     renderer: (resolve: () => void, reject: () => void) => React.ReactElement
   ): FormDrawerHandler
+}
+```
+
+### IFormDrawerProps
+
+```ts pure
+interface IFormDrawerProps extends DrawerProps {
+  // 如果返回值是true时，点取消或确定后不会关闭drawer，如果需要关闭drawer需要手动调用FormDrawerHandler.close()
+  onClose?: (reason: string, e: React.MouseEvent) => boolean | void
 }
 ```
 
