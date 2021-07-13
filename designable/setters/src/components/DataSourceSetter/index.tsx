@@ -32,7 +32,6 @@ export const DataSourceSetter: React.FC<IDataSourceSetterProps> = observer(
     )
     const openModal = () => setModalVisible(true)
     const closeModal = () => setModalVisible(false)
-
     return (
       <Fragment>
         <Button block onClick={openModal}>

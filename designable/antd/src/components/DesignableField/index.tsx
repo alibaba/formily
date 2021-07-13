@@ -11,6 +11,7 @@ import {
   Schema,
   ISchema,
 } from '@formily/react'
+import { DataSourceSetter, ReactionsSetter } from '@formily/designable-setters'
 import { FormTab } from '@formily/antd'
 import { clone } from '@formily/shared'
 import { FormItemSwitcher } from '../FormItemSwitcher'
@@ -134,7 +135,7 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
           'x-reactions': {
             'x-decorator': 'FormItem',
             'x-index': 5,
-            // 'x-component': 'ReactionsSetter',
+            'x-component': ReactionsSetter,
           },
         })
       }
@@ -165,7 +166,7 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
           'x-reactions': {
             'x-decorator': 'FormItem',
             'x-index': 7,
-            'x-component': 'ReactionsSetter',
+            'x-component': ReactionsSetter,
           },
         })
       }
@@ -177,7 +178,7 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
         },
         enum: {
           'x-decorator': 'FormItem',
-          'x-component': 'DataSourceSetter',
+          'x-component': DataSourceSetter,
           'x-index': 6,
         },
         'x-validator': {

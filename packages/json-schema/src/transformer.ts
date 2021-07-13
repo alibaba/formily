@@ -203,7 +203,7 @@ const findComponent = (
       }
     }
   }
-  if (isFn(path)) {
+  if (isFn(path) || (path?.['$$typeof'] && isFn(path['type']))) {
     return path
   }
   return component
