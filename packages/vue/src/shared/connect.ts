@@ -69,7 +69,8 @@ export function mapProps<T extends VueComponent = VueComponent>(
 }
 
 export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
-  component: C
+  component: C,
+  readPrettyProps?: Record<string, any>
 ) {
   return (target: T) => {
     return observer(
@@ -84,6 +85,7 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
                 : target,
               {
                 attrs: {
+                  ...readPrettyProps,
                   ...attrs,
                 },
                 on: listeners,
