@@ -280,6 +280,9 @@ interface IFormDrawerProps extends DrawerProps {
 }
 ```
 
+`DrawerProps`类型定义参考ant design [Drawer API](https://ant.design/components/drawer-cn/#API)
+
+
 ### FormDrawer.Footer
 
 无属性，只接收子节点
