@@ -62,7 +62,8 @@
     "@formily/antd": "2.0.0-beta.77",
     "@formily/core": "2.0.0-beta.77",
     "@formily/react": "2.0.0-beta.77",
-    "@formily/shared": "2.0.0-beta.77"
+    "@formily/shared": "2.0.0-beta.77",
+    "@formily/designable-setters": "2.0.0-beta.77"
   },
   "publishConfig": {
     "access": "public"
