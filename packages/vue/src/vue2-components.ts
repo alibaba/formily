@@ -11,9 +11,9 @@ import type {
   IProviderProps,
   ISchemaMarkupFieldProps,
   ISchemaFieldProps,
-  ISchemaFieldFactoryOptions,
+  ISchemaFieldVueFactoryOptions,
   ISchemaTypeFieldProps,
-  SchemaComponents,
+  SchemaVueComponents,
 } from './types'
 
 const {
@@ -42,8 +42,11 @@ type SchemaFieldComponents = {
   SchemaNumberField: DefineComponent<ISchemaTypeFieldProps>
 }
 
-type CreateSchemaField<Components extends SchemaComponents = SchemaComponents> =
-  (options: ISchemaFieldFactoryOptions<Components>) => SchemaFieldComponents
+type CreateSchemaField<
+  Components extends SchemaVueComponents = SchemaVueComponents
+> = (
+  options: ISchemaFieldVueFactoryOptions<Components>
+) => SchemaFieldComponents
 
 const Field = _Field as unknown as DefineComponent<Omit<IFieldProps, 'name'>>
 const ArrayField = _ArrayField as unknown as DefineComponent<

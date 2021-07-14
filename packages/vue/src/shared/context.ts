@@ -1,6 +1,6 @@
 import { InjectionKey, Ref } from 'vue-demi'
 import { Schema } from '@formily/json-schema'
-import { ISchemaFieldFactoryOptions } from '../types'
+import { ISchemaFieldVueFactoryOptions } from '../types'
 export const FormSymbol: InjectionKey<Ref<Formily.Core.Models.Form>> =
   Symbol('form')
 export const FieldSymbol: InjectionKey<Ref<Formily.Core.Types.GeneralField>> =
@@ -12,5 +12,5 @@ export const SchemaExpressionScopeSymbol: InjectionKey<
   Ref<Record<string, any>>
 > = Symbol('schemaExpression')
 export const SchemaOptionsSymbol: InjectionKey<
-  Ref<ISchemaFieldFactoryOptions>
+  Ref<ISchemaFieldVueFactoryOptions>
 > = Symbol('schemaOptions')
