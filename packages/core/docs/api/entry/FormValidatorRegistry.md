@@ -13,7 +13,7 @@ order: 6
 #### 签名
 
 ```ts
-interface setValidateLanguage{
+interface setValidateLanguage {
   (language: string): void
 }
 ```
@@ -21,7 +21,7 @@ interface setValidateLanguage{
 #### 用例
 
 ```ts
-import { setValidateLanguage} from '@formily/core'
+import { setValidateLanguage } from '@formily/core'
 
 setValidationLanguage('en-US')
 
@@ -82,7 +82,7 @@ registerValidateLocale({
 })
 ```
 
-## registerValidateMessageTemplateEnigne
+## registerValidateMessageTemplateEngine
 
 #### 描述
 
@@ -91,7 +91,7 @@ registerValidateLocale({
 #### 签名
 
 ```ts
-interface registerValidateMessageTemplateEnigne {
+interface registerValidateMessageTemplateEngine {
   (template: (message: ValidatorFunctionResponse, context: any) => any): void
 }
 ```
@@ -99,9 +99,9 @@ interface registerValidateMessageTemplateEnigne {
 #### 用例
 
 ```ts
-import { registerValidateMessageTemplateEnigne } from '@formily/core'
+import { registerValidateMessageTemplateEngine } from '@formily/core'
 
-registerValidateMessageTemplateEnigne((message, context) => {
+registerValidateMessageTemplateEngine((message, context) => {
   return message.replace(/\<\%\s*([\w.]+)\s*\%\>/g, (_, $0) => {
     return FormPath.getIn(context, $0)
   })

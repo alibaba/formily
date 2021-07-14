@@ -1,6 +1,6 @@
 import React, { useContext, Fragment } from 'react'
 import { ISchema, Schema } from '@formily/json-schema'
-import { RecursionField } from '../components'
+import { RecursionField } from '.'
 import { render } from '../shared/render'
 import {
   SchemaMarkupContext,
@@ -10,8 +10,8 @@ import {
 import {
   ReactComponentPath,
   JSXComponent,
-  ISchemaFieldFactoryOptions,
-  SchemaComponents,
+  ISchemaFieldReactFactoryOptions,
+  SchemaReactComponents,
   ISchemaFieldProps,
   ISchemaMarkupFieldProps,
   ISchemaTypeFieldProps,
@@ -24,8 +24,8 @@ const getRandomName = () => {
   return `NO_NAME_FIELD_$${env.nonameId++}`
 }
 
-export function createSchemaField<Components extends SchemaComponents>(
-  options: ISchemaFieldFactoryOptions<Components> = {}
+export function createSchemaField<Components extends SchemaReactComponents>(
+  options: ISchemaFieldReactFactoryOptions<Components> = {}
 ) {
   function SchemaField<
     Decorator extends JSXComponent,
@@ -120,7 +120,6 @@ export function createSchemaField<Components extends SchemaComponents>(
     Decorator extends ReactComponentPath<Components>,
     Component extends ReactComponentPath<Components>
   >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
-    //@ts-ignore
     return <MarkupField {...props} type="string" />
   }
 

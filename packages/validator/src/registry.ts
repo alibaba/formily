@@ -26,7 +26,9 @@ const getBrowserlanguage = () => {
   if (!self.navigator) {
     return defaultLanguage
   }
-  return self.navigator.browserlanguage || self.navigator.language || defaultLanguage
+  return (
+    self.navigator.browserlanguage || self.navigator.language || defaultLanguage
+  )
 }
 
 const registry = {
@@ -56,7 +58,7 @@ const getISOCode = (language: string) => {
   return isoCode
 }
 
-export const getValidateLocaleIOSCode = getISOCode;
+export const getValidateLocaleIOSCode = getISOCode
 
 export const setValidateLanguage = (lang: string) => {
   registry.locales.language = lang || defaultLanguage
@@ -104,7 +106,7 @@ export const registerValidateFormats = (formats: IRegistryFormats) => {
   })
 }
 
-export const registerValidateMessageTemplateEnigne = (
+export const registerValidateMessageTemplateEngine = (
   template: (message: ValidatorFunctionResponse, context: any) => any
 ) => {
   registry.template = template

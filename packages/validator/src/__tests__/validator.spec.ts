@@ -3,7 +3,7 @@ import {
   registerValidateRules,
   registerValidateFormats,
   setValidateLanguage,
-  registerValidateMessageTemplateEnigne,
+  registerValidateMessageTemplateEngine,
 } from '../index'
 
 registerValidateRules({
@@ -328,7 +328,7 @@ test('language', async () => {
 })
 
 test('validator template', async () => {
-  registerValidateMessageTemplateEnigne((message) => {
+  registerValidateMessageTemplateEngine((message) => {
     if (typeof message !== 'string') return message
     return message.replace(/\<\<\s*([\w.]+)\s*\>\>/g, (_, $0) => {
       return { aa: 123 }[$0]
