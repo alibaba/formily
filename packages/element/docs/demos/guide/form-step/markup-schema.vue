@@ -1,47 +1,37 @@
 <template>
   <FormProvider :form="form">
     <SchemaField>
-      <SchemaVoidField
-        type="void"
-        x-component="FormTab"
-        :x-component-props="{ formTab }"
-      >
+      <SchemaVoidField x-component="FormStep" :x-component-props="{ formStep }">
         <SchemaVoidField
-          type="void"
-          name="tab1"
-          x-component="FormTabPane"
-          :x-component-props="{ label: 'A1' }"
+          x-component="FormStepPane"
+          :x-component-props="{ title: '第一步' }"
         >
           <SchemaStringField
             name="aaa"
             x-decorator="FormItem"
-            title="AAA"
             required
             x-component="Input"
           />
         </SchemaVoidField>
         <SchemaVoidField
-          name="tab2"
-          x-component="FormTabPane"
-          :x-component-props="{ label: 'A2' }"
+          x-component="FormStepPane"
+          :x-component-props="{ title: '第二步' }"
         >
           <SchemaStringField
             name="bbb"
             x-decorator="FormItem"
-            title="BBB"
             required
             x-component="Input"
           />
         </SchemaVoidField>
         <SchemaVoidField
-          name="tab3"
-          x-component="FormTabPane"
-          :x-component-props="{ label: 'A3' }"
+          type="void"
+          x-component="FormStepPane"
+          :x-component-props="{ title: '第三步' }"
         >
           <SchemaStringField
             name="ccc"
             x-decorator="FormItem"
-            title="CCC"
             required
             x-component="Input"
           />
@@ -50,26 +40,26 @@
     </SchemaField>
     <FormButtonGroup alignFormItem>
       <Button
+        :disabled="!formStep.allowBack"
         @click="
           () => {
-            form.query('tab3').take((field) => {
-              field.visible = !field.visible
-            })
+            formStep.back()
           }
         "
       >
-        显示/隐藏最后一个Tab
+        上一步
       </Button>
       <Button
+        :disabled="!formStep.allowNext"
         @click="
           () => {
-            formTab.setActiveKey('tab2')
+            formStep.next()
           }
         "
       >
-        切换第二个Tab
+        下一步
       </Button>
-      <Submit @submit="log">提交</Submit>
+      <Submit :disabled="formStep.allowNext" @submit="log">提交</Submit>
     </FormButtonGroup>
   </FormProvider>
 </template>
@@ -79,20 +69,20 @@ import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/vue'
 import {
   FormItem,
-  FormTab,
-  FormTabPane,
+  FormStep,
+  FormStepPane,
   FormButtonGroup,
   Submit,
   Input,
-  createFormTab,
+  createFormStep,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
 const SchemaField = createSchemaField({
   components: {
     FormItem,
-    FormTab,
-    FormTabPane,
+    FormStep,
+    FormStepPane,
     Input,
   },
 })
@@ -108,16 +98,16 @@ export default {
 
   data() {
     const form = createForm()
-    const formTab = createFormTab()
+    const formStep = createFormStep()
 
     return {
       form,
-      formTab,
+      formStep,
     }
   },
   methods: {
-    log(values) {
-      console.log(values)
+    log() {
+      this.formStep.submit(console.log)
     },
   },
 }

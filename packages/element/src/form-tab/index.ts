@@ -1,6 +1,6 @@
-import { defineComponent, reactive, watch } from 'vue-demi'
-import { model } from '@formily/reactive'
+import { defineComponent, reactive, computed } from 'vue-demi'
 import { observer } from '@formily/reactive-vue'
+import { model } from '@formily/reactive'
 import {
   h,
   useField,
@@ -63,21 +63,14 @@ export const FormTab = observer(
     props: ['formTab'],
     setup(props, { attrs, listeners }) {
       const field = useField().value
-
-      let _formTab = props.formTab ? props.formTab : createFormTab()
-
-      watch(
-        () => props.formTab,
-        (value) => {
-          _formTab = value
-        }
-      )
+      const formTabRef = computed(() => props.formTab ?? createFormTab())
 
       const prefixCls = `${stylePrefix}-form-tab`
 
       return () => {
+        const formTab = formTabRef.value
         const tabs = useTabs()
-        const activeKey = props.value || _formTab?.activeKey || tabs?.[0]?.name
+        const activeKey = props.value || formTab?.activeKey || tabs?.[0]?.name
         const badgedTab = (key: SchemaKey, props: any) => {
           const errors = field.form.queryFeedbacks({
             type: 'error',
@@ -143,7 +136,7 @@ export const FormTab = observer(
               ...listeners,
               input: (key) => {
                 listeners.input?.(key)
-                _formTab.setActiveKey?.(key)
+                formTab.setActiveKey?.(key)
               },
             },
           },

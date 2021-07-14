@@ -1,28 +1,28 @@
 <template>
   <FormProvider :form="form">
-    <SchemaField :schema="schema" :scope="{ formTab }" />
+    <SchemaField :schema="schema" :scope="{ formStep }" />
     <FormButtonGroup alignFormItem>
       <Button
+        :disabled="!formStep.allowBack"
         @click="
           () => {
-            form.query('tab3').take((field) => {
-              field.visible = !field.visible
-            })
+            formStep.back()
           }
         "
       >
-        显示/隐藏最后一个Tab
+        上一步
       </Button>
       <Button
+        :disabled="!formStep.allowNext"
         @click="
           () => {
-            formTab.setActiveKey('tab2')
+            formStep.next()
           }
         "
       >
-        切换第二个Tab
+        下一步
       </Button>
-      <Submit @submit="log">提交</Submit>
+      <Submit :disabled="formStep.allowNext" @submit="log">提交</Submit>
     </FormButtonGroup>
   </FormProvider>
 </template>
@@ -32,20 +32,20 @@ import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/vue'
 import {
   FormItem,
-  FormTab,
-  FormTabPane,
+  FormStep,
+  FormStepPane,
   FormButtonGroup,
   Submit,
   Input,
-  createFormTab,
+  createFormStep,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
 const { SchemaField } = createSchemaField({
   components: {
     FormItem,
-    FormTab,
-    FormTabPane,
+    FormStep,
+    FormStepPane,
     Input,
   },
 })
@@ -55,55 +55,55 @@ const schema = {
   properties: {
     collapse: {
       type: 'void',
-      'x-component': 'FormTab',
+      'x-component': 'FormStep',
       'x-component-props': {
-        formTab: '{{formTab}}',
+        formStep: '{{formStep}}',
       },
       properties: {
-        tab1: {
+        step1: {
           type: 'void',
-          'x-component': 'FormTabPane',
+          'x-component': 'FormStepPane',
           'x-component-props': {
-            label: 'A1',
+            title: '第一步',
           },
           properties: {
             aaa: {
               type: 'string',
               title: 'AAA',
-              'x-decorator': 'FormItem',
               required: true,
+              'x-decorator': 'FormItem',
               'x-component': 'Input',
             },
           },
         },
-        tab2: {
+        step2: {
           type: 'void',
-          'x-component': 'FormTabPane',
+          'x-component': 'FormStepPane',
           'x-component-props': {
-            label: 'A2',
+            title: '第二步',
           },
           properties: {
             bbb: {
               type: 'string',
-              title: 'BBB',
-              'x-decorator': 'FormItem',
+              title: 'AAA',
               required: true,
+              'x-decorator': 'FormItem',
               'x-component': 'Input',
             },
           },
         },
-        tab3: {
+        step3: {
           type: 'void',
-          'x-component': 'FormTabPane',
+          'x-component': 'FormStepPane',
           'x-component-props': {
-            label: 'A3',
+            title: '第三步',
           },
           properties: {
             ccc: {
               type: 'string',
-              title: 'CCC',
-              'x-decorator': 'FormItem',
+              title: 'AAA',
               required: true,
+              'x-decorator': 'FormItem',
               'x-component': 'Input',
             },
           },
@@ -124,17 +124,16 @@ export default {
 
   data() {
     const form = createForm()
-    const formTab = createFormTab()
-
+    const formStep = createFormStep()
     return {
       schema,
       form,
-      formTab,
+      formStep,
     }
   },
   methods: {
-    log(values) {
-      console.log(values)
+    log() {
+      this.formStep.submit(console.log)
     },
   },
 }
