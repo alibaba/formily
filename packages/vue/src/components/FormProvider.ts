@@ -17,11 +17,11 @@ export default defineComponent<IProviderProps>({
     },
   },
   setup(props: IProviderProps, { attrs, slots }) {
-    const createForm = () => props.form
-    const [formRef] = useAttach(createForm())
+    const getForm = () => props.form
+    const [formRef, checker] = useAttach(getForm())
     watch(
       () => props.form,
-      (v) => (formRef.value = v)
+      () => (formRef.value = checker(getForm()))
     )
 
     provide(FormSymbol, formRef)
