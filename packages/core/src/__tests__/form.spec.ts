@@ -192,7 +192,7 @@ test('deleteValuesIn/deleteInitialValuesIn', () => {
   expect(form.values.aa).toEqual(123)
   expect(form.values.bb).toEqual(123)
   form.deleteValuesIn('aa')
-  form.deleteIntialValuesIn('bb')
+  form.deleteInitialValuesIn('bb')
   expect(form.existValuesIn('aa')).toBeFalsy()
   expect(form.existInitialValuesIn('bb')).toBeFalsy()
 })
