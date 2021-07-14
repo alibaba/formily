@@ -240,7 +240,7 @@ interface deleteValuesIn {
 
 FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
-### deleteIntialValuesIn
+### deleteInitialValuesIn
 
 #### 描述
 

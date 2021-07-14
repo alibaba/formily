@@ -63,7 +63,7 @@ test('render field', async () => {
   const atBlur = jest.fn()
   const atFocus = jest.fn()
 
-  const { getByTestId, queryByTestId, unmount } = render(
+  const { getByTestId, queryByTestId } = render(
     defineComponent({
       name: 'TestComponent',
       setup() {
@@ -140,7 +140,6 @@ test('render field', async () => {
   expect(queryByTestId('ee')).toBeNull()
   expect(form.query('aa').get('value')).toEqual('123')
   expect(form.query('kk').get('value')).toEqual('123')
-  Vue.nextTick(() => unmount)
 })
 
 test('ReactiveField', () => {
@@ -155,25 +154,55 @@ test('ReactiveField', () => {
 })
 
 test('useAttch', async () => {
-  const form = createForm()
+  const form1 = createForm()
   const MyComponent = defineComponent({
-    props: ['name'],
+    props: ['form', 'name1', 'name2', 'name3', 'name4'],
     data() {
-      return { form, Input, Decorator }
+      return { Input, Decorator }
     },
     template: `<FormProvider :form="form">
-      <Field :name="name" :decorator="[Decorator]" :component="[Input]" />
+      <Field :name="name1" :decorator="[Decorator]" :component="[Input]" />
+      <ArrayField :name="name2" :decorator="[Decorator]" :component="[Input]" />
+      <ObjectField :name="name3" :decorator="[Decorator]" :component="[Input]" />
+      <VoidField :name="name4" :decorator="[Decorator]" :component="[Input]" />
     </FormProvider>`,
   })
   const { updateProps } = render(MyComponent, {
     props: {
-      name: 'aa',
+      form: form1,
+      name1: 'aa',
+      name2: 'bb',
+      name3: 'cc',
+      name4: 'dd',
     },
   })
-  expect(form.query('aa').take().mounted).toBeTruthy()
-  await updateProps({ name: 'bb' })
-  expect(form.query('aa').take().mounted).toBeFalsy()
-  expect(form.query('bb').take().mounted).toBeTruthy()
+  expect(form1.mounted).toBeTruthy()
+  expect(form1.query('aa').take().mounted).toBeTruthy()
+  expect(form1.query('bb').take().mounted).toBeTruthy()
+  expect(form1.query('cc').take().mounted).toBeTruthy()
+  expect(form1.query('dd').take().mounted).toBeTruthy()
+  await updateProps({
+    name1: 'aaa',
+    name2: 'bbb',
+    name3: 'ccc',
+    name4: 'ddd',
+  })
+  await Vue.nextTick()
+  expect(form1.query('aa').take().mounted).toBeFalsy()
+  expect(form1.query('bb').take().mounted).toBeFalsy()
+  expect(form1.query('cc').take().mounted).toBeFalsy()
+  expect(form1.query('dd').take().mounted).toBeFalsy()
+  expect(form1.query('aaa').take().mounted).toBeTruthy()
+  expect(form1.query('bbb').take().mounted).toBeTruthy()
+  expect(form1.query('ccc').take().mounted).toBeTruthy()
+  expect(form1.query('ddd').take().mounted).toBeTruthy()
+  const form2 = createForm()
+  await updateProps({
+    form: form2,
+  })
+  await Vue.nextTick()
+  expect(form1.unmounted).toBeTruthy()
+  expect(form2.mounted).toBeTruthy()
 })
 
 test('useFormEffects', async () => {

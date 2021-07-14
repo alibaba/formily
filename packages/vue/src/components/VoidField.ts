@@ -1,4 +1,4 @@
-import { provide, defineComponent } from 'vue-demi'
+import { provide, defineComponent, computed, watch } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import ReactiveField from './ReactiveField'
@@ -50,17 +50,23 @@ export default defineComponent<IVoidFieldProps>({
   setup(props: IVoidFieldProps, { slots }) {
     const formRef = useForm()
     const parentRef = useField()
-    const basePath =
+
+    const basePath = computed(() =>
       props.basePath !== undefined ? props.basePath : parentRef?.value?.address
-    const fieldRef = useAttach(
-      () =>
-        formRef.value.createVoidField({
-          ...props,
-          basePath,
-          ...getRawComponent(props),
-        }),
-      [() => props.name, formRef]
     )
+    const createField = () =>
+      formRef.value.createVoidField({
+        ...props,
+        basePath: basePath.value,
+        ...getRawComponent(props),
+      })
+    const [fieldRef, checker] = useAttach(createField())
+    watch(
+      () => props,
+      () => (fieldRef.value = checker(createField())),
+      { deep: true }
+    )
+    watch([formRef, parentRef], () => (fieldRef.value = checker(createField())))
 
     provide(FieldSymbol, fieldRef)
 
