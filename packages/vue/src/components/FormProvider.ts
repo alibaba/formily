@@ -1,4 +1,4 @@
-import { provide, defineComponent, toRaw } from 'vue-demi'
+import { provide, defineComponent, watch } from 'vue-demi'
 import { FormSymbol } from '../shared/context'
 import { IProviderProps } from '../types'
 import { useAttach } from '../hooks/useAttach'
@@ -17,10 +17,13 @@ export default defineComponent<IProviderProps>({
     },
   },
   setup(props: IProviderProps, { attrs, slots }) {
-    const formRef = useAttach(
-      () => toRaw(props.form),
-      () => props.form
+    const getForm = () => props.form
+    const [formRef, checker] = useAttach(getForm())
+    watch(
+      () => props.form,
+      () => (formRef.value = checker(getForm()))
     )
+
     provide(FormSymbol, formRef)
 
     return () => h(Fragment, { attrs }, slots)

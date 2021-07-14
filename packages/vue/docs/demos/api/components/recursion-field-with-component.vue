@@ -21,8 +21,8 @@ import {
   RecursionField,
   useField,
   useFieldSchema,
-  observer,
 } from '@formily/vue'
+import { observer } from '@formily/reactive-vue'
 import 'ant-design-vue/dist/antd.css'
 
 const ArrayItems = observer(
