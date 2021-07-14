@@ -8,28 +8,36 @@ import {
   ref,
 } from 'vue-demi'
 import { FragmentComponent, useField, useFieldSchema, h } from '@formily/vue'
-import { isValid, uid } from '@formily/shared'
+import { isValid } from '@formily/shared'
 import { ArrayField } from '@formily/core'
 import { stylePrefix } from '../__builtins__/configs'
 
 import type { Component } from 'vue'
-import type { Button as ElButtonProps } from 'element-ui'
-import { Button as ElButton } from 'element-ui'
+import type { Button as ButtonProps } from 'element-ui'
+import { Button } from 'element-ui'
 import type { Schema } from '@formily/json-schema'
 
-interface AdditionProps extends ElButtonProps {
+export interface IArrayBaseAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
+  defaultValue?: any
+}
+
+export interface IArrayBaseProps {
+  disabled?: boolean
+}
+
+export interface IArrayBaseItemProps {
+  index: number
 }
 
 interface Context {
   field: Ref<ArrayField>
   schema: Ref<Schema>
-  keyMap: WeakMap<any, string | number>
-}
-
-interface ItemProps {
-  index: number
+  props: IArrayBaseProps
+  listeners: {
+    [key in string]?: Function
+  }
 }
 
 const ArrayBaseSymbol: InjectionKey<Context> = Symbol('ArrayBaseContext')
@@ -41,7 +49,7 @@ export const useArray = () => {
   return inject(ArrayBaseSymbol, null)
 }
 
-const useIndex = (index?: number) => {
+export const useIndex = (index?: number) => {
   const ctx = inject(ItemSymbol, null)
   return ctx ? ctx.index : ref(index)
 }
@@ -61,20 +69,21 @@ const getDefaultValue = (defaultValue: any, schema: Schema): any => {
 }
 
 export const ArrayBase = defineComponent({
-  setup(props, { slots }) {
+  props: ['disabled'],
+  setup(props: IArrayBaseProps, { slots, listeners }) {
     const field = useField<ArrayField>()
     const schema = useFieldSchema()
-    const keyMap = new WeakMap()
-    provide(ArrayBaseSymbol, { field, schema, keyMap })
+
+    provide(ArrayBaseSymbol, { field, schema, props, listeners })
     return () => {
       return h(FragmentComponent as Component, {}, slots)
     }
   },
 })
 
-export const ArrayBaseItem = defineComponent<ItemProps>({
+export const ArrayBaseItem = defineComponent({
   props: ['index'],
-  setup(props, { slots }) {
+  setup(props: IArrayBaseItemProps, { slots }) {
     provide(ItemSymbol, toRefs(props))
     return () => {
       return h(FragmentComponent as Component, {}, slots)
@@ -82,36 +91,58 @@ export const ArrayBaseItem = defineComponent<ItemProps>({
   },
 })
 
-export const ArrayAddition = defineComponent<AdditionProps>({
-  props: ['title', 'method'],
-  setup(props, { attrs, listeners }) {
+export const ArrayIndex = defineComponent({
+  setup(props, { attrs }) {
+    const index = useIndex()
+    return () =>
+      h(
+        'span',
+        {
+          attrs,
+        },
+        {
+          default: () => [`#${index.value + 1}.`],
+        }
+      )
+  },
+})
+
+export const ArrayAddition = defineComponent({
+  props: ['title', 'method', 'defaultValue'],
+  setup(props: IArrayBaseAdditionProps, { listeners }) {
     const self = useField()
     const array = useArray()
     const prefixCls = `${stylePrefix}-form-array-base`
     return () => {
+      if (!array) return null
       if (array?.field.value.pattern !== 'editable') return null
       return h(
-        ElButton,
+        Button,
         {
           class: `${prefixCls}-addition`,
           attrs: {
             type: 'ghost',
             icon: 'qax-icon-Alone-Plus',
-            ...attrs,
+            ...props,
           },
           on: {
             ...listeners,
-            click: () => {
+            click: (e) => {
+              if (array.props?.disabled) return
               const defaultValue = getDefaultValue(
-                attrs.defaultValue,
+                props.defaultValue,
                 array?.schema.value
               )
               if (props.method === 'unshift') {
                 array?.field?.value.unshift(defaultValue)
+                array.listeners?.add?.(0)
               } else {
                 array?.field?.value.push(defaultValue)
+                array.listeners?.add?.(array?.field?.value?.value?.length - 1)
               }
-              array.keyMap.set(defaultValue, uid())
+              if (listeners.click) {
+                listeners.click(e)
+              }
             },
           },
         },
@@ -124,7 +155,7 @@ export const ArrayAddition = defineComponent<AdditionProps>({
 })
 
 export const ArrayRemove = defineComponent<
-  ElButtonProps & { title?: string; index?: number }
+  ButtonProps & { title?: string; index?: number }
 >({
   props: ['title', 'index'],
   setup(props, { attrs, listeners }) {
@@ -134,18 +165,23 @@ export const ArrayRemove = defineComponent<
     return () => {
       if (base?.field.value.pattern !== 'editable') return null
       return h(
-        ElButton,
+        Button,
         {
           class: `${prefixCls}-remove`,
           attrs: {
             type: 'text',
-            icon: props.title ? undefined : 'qax-icon-Trash',
+            icon: props.icon ? undefined : 'el-icon-delete',
             ...attrs,
           },
           on: {
             ...listeners,
-            click: () => {
+            click: (e) => {
               base?.field.value.remove(indexRef.value as number)
+              base?.listeners?.remove(indexRef.value as number)
+
+              if (listeners.click) {
+                listeners.click(e)
+              }
             },
           },
         },
@@ -158,7 +194,7 @@ export const ArrayRemove = defineComponent<
 })
 
 export const ArrayMoveDown = defineComponent<
-  ElButtonProps & { title?: string; index?: number }
+  ButtonProps & { title?: string; index?: number }
 >({
   props: ['title', 'index'],
   setup(props, { attrs, listeners }) {
@@ -168,18 +204,23 @@ export const ArrayMoveDown = defineComponent<
     return () => {
       if (base?.field.value.pattern !== 'editable') return null
       return h(
-        ElButton,
+        Button,
         {
           class: `${prefixCls}-move-down`,
           attrs: {
             type: 'text',
-            icon: props.title ? undefined : 'qax-icon-Angle-down',
+            icon: props.icon ? undefined : 'el-icon-arrow-down',
             ...attrs,
           },
           on: {
             ...listeners,
-            click: () => {
+            click: (e) => {
               base?.field.value.moveDown(indexRef.value as number)
+              base?.listeners?.moveDown(indexRef.value as number)
+
+              if (listeners.click) {
+                listeners.click(e)
+              }
             },
           },
         },
@@ -192,7 +233,7 @@ export const ArrayMoveDown = defineComponent<
 })
 
 export const ArrayMoveUp = defineComponent<
-  ElButtonProps & { title?: string; index?: number }
+  ButtonProps & { title?: string; index?: number }
 >({
   props: ['title', 'index'],
   setup(props, { attrs, listeners }) {
@@ -202,18 +243,23 @@ export const ArrayMoveUp = defineComponent<
     return () => {
       if (base?.field.value.pattern !== 'editable') return null
       return h(
-        ElButton,
+        Button,
         {
           class: `${prefixCls}-move-up`,
           attrs: {
             type: 'text',
-            icon: props.title ? undefined : 'qax-icon-Angle-up',
+            icon: props.icon ? undefined : 'el-icon-arrow-up',
             ...attrs,
           },
           on: {
             ...listeners,
-            click: () => {
+            click: (e) => {
               base?.field.value.moveUp(indexRef.value as number)
+              base?.listeners?.moveUp(indexRef.value as number)
+
+              if (listeners.click) {
+                listeners.click(e)
+              }
             },
           },
         },

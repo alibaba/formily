@@ -45,6 +45,7 @@ module.exports = {
         'form-button-group',
         'form-tab',
         'form-step',
+        'array-cards',
         'array-table',
         'space',
         'reset',
