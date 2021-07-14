@@ -460,9 +460,10 @@ import { Schema } from '@formily/react'
 Schema.registerVoidComponents(['card', 'tab', 'step'])
 ```
 
-<Alert type="warning">
+::: warning
+
   <p>注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用</p>
-</Alert>
+:::
 
 ### registerTypeDefaultComponents
 
