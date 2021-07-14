@@ -1,4 +1,4 @@
-import { provide, defineComponent, computed } from 'vue-demi'
+import { provide, defineComponent, watch, computed } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { FieldSymbol } from '../shared/context'
@@ -62,19 +62,23 @@ export default defineComponent<IFieldProps>({
   setup(props: IFieldProps, { slots }) {
     const formRef = useForm()
     const parentRef = useField()
+
     const basePath = computed(() =>
       props.basePath !== undefined ? props.basePath : parentRef?.value?.address
     )
-
-    const fieldRef = useAttach(
-      () =>
-        formRef.value.createField({
-          ...props,
-          basePath: basePath.value,
-          ...getRawComponent(props),
-        }),
-      [() => props.name, basePath, formRef]
+    const createField = () =>
+      formRef.value.createField({
+        ...props,
+        basePath: basePath.value,
+        ...getRawComponent(props),
+      })
+    const [fieldRef, checker] = useAttach(createField())
+    watch(
+      () => props,
+      () => (fieldRef.value = checker(createField())),
+      { deep: true }
     )
+    watch([formRef, parentRef], () => (fieldRef.value = checker(createField())))
 
     provide(FieldSymbol, fieldRef)
 

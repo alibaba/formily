@@ -63,7 +63,7 @@ test('render field', async () => {
   const atBlur = jest.fn()
   const atFocus = jest.fn()
 
-  const { getByTestId, queryByTestId, unmount } = render(
+  const { getByTestId, queryByTestId } = render(
     defineComponent({
       name: 'TestComponent',
       setup() {
@@ -140,7 +140,6 @@ test('render field', async () => {
   expect(queryByTestId('ee')).toBeNull()
   expect(form.query('aa').get('value')).toEqual('123')
   expect(form.query('kk').get('value')).toEqual('123')
-  Vue.nextTick(() => unmount)
 })
 
 test('ReactiveField', () => {
@@ -172,6 +171,7 @@ test('useAttch', async () => {
   })
   expect(form.query('aa').take().mounted).toBeTruthy()
   await updateProps({ name: 'bb' })
+  await Vue.nextTick()
   expect(form.query('aa').take().mounted).toBeFalsy()
   expect(form.query('bb').take().mounted).toBeTruthy()
 })
