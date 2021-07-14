@@ -16,7 +16,6 @@ import type {
 export default observer(
   defineComponent<IReactiveFieldProps>({
     name: 'ReactiveField',
-    // eslint-disable-next-line vue/require-prop-types
     props: ['field'],
     setup(props: IReactiveFieldProps, { slots }) {
       const key = Math.floor(Date.now() * Math.random()).toString(16)

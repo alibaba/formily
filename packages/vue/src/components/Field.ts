@@ -10,8 +10,6 @@ import type { IFieldProps, DefineComponent } from '../types'
 
 export default defineComponent<IFieldProps>({
   name: 'Field',
-  /* eslint-disable vue/require-prop-types  */
-  /* eslint-disable vue/require-default-prop */
   props: {
     name: {},
     title: {},

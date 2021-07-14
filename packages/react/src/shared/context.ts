@@ -1,6 +1,6 @@
 import React, { createContext } from 'react'
 import { Schema } from '@formily/json-schema'
-import { ISchemaFieldFactoryOptions } from '../types'
+import { ISchemaFieldReactFactoryOptions } from '../types'
 
 const createContextCleaner = <T>(...contexts: React.Context<T>[]) => {
   return ({ children }) => {
@@ -16,7 +16,7 @@ export const SchemaMarkupContext = createContext<Schema>(null)
 export const SchemaContext = createContext<Schema>(null)
 export const SchemaExpressionScopeContext = createContext<any>(null)
 export const SchemaOptionsContext =
-  createContext<ISchemaFieldFactoryOptions>(null)
+  createContext<ISchemaFieldReactFactoryOptions>(null)
 
 export const ContextCleaner = createContextCleaner(
   FieldContext,

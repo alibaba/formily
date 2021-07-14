@@ -12,8 +12,6 @@ import type { IObjectFieldProps, DefineComponent } from '../types'
 export default observer(
   defineComponent<IObjectFieldProps>({
     name: 'ObjectField',
-    /* eslint-disable vue/require-prop-types  */
-    /* eslint-disable vue/require-default-prop */
     props: {
       name: {},
       title: {},

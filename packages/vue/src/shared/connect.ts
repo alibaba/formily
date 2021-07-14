@@ -1,4 +1,3 @@
-/* eslint-disable vue/one-component-per-file */
 import { Vue2Component } from '../types/vue2'
 import { isVue2, markRaw, defineComponent } from 'vue-demi'
 import { isFn, isStr, FormPath, each } from '@formily/shared'

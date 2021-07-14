@@ -32,7 +32,6 @@ const RecursionField = observer(
   defineComponent<IRecursionFieldProps>({
     name: 'RecursionField',
     inheritAttrs: false,
-    // eslint-disable-next-line vue/require-prop-types
     props: {
       schema: {
         required: true,

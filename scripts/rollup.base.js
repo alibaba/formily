@@ -64,17 +64,13 @@ const createEnvPlugin = (env) => {
 
 const inputFilePath = path.join(process.cwd(), 'src/index.ts')
 
-const bundleDtsPackages = [
+const noUIDtsPackages = [
   'formily.core',
-  'formily.react',
-  'formily.vue',
   'formily.validator',
   'formily.shared',
   'formily.path',
   'formily.json-schema',
   'formily.reactive',
-  'formily.reactive-react',
-  'formily.reactive-vue',
 ]
 
 export const removeImportStyleFromInputFilePlugin = () => ({
@@ -126,7 +122,7 @@ export default (filename, targetName, ...plugins) => {
     },
   ]
 
-  if (bundleDtsPackages.includes(filename)) {
+  if (noUIDtsPackages.includes(filename)) {
     base.push({
       input: 'esm/index.d.ts',
       output: {
@@ -134,6 +130,19 @@ export default (filename, targetName, ...plugins) => {
         file: `dist/${filename}.d.ts`,
       },
       plugins: [dts(), ...plugins],
+    })
+    base.push({
+      input: 'esm/index.d.ts',
+      output: {
+        format: 'es',
+        file: `dist/${filename}.all.d.ts`,
+      },
+      plugins: [
+        dts({
+          respectExternal: true,
+        }),
+        ...plugins,
+      ],
     })
   }
 

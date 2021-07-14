@@ -47,10 +47,10 @@ export type IStateMapper<Props> =
     }
   | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)
 
-export type SchemaComponents = Record<string, JSXComponent>
+export type SchemaReactComponents = Record<string, JSXComponent>
 
-export interface ISchemaFieldFactoryOptions<
-  Components extends SchemaComponents = any
+export interface ISchemaFieldReactFactoryOptions<
+  Components extends SchemaReactComponents = any
 > {
   components?: Components
   scope?: any
@@ -71,12 +71,6 @@ export interface ISchemaFieldProps<
   scope?: any
   name?: SchemaKey
   children?: React.ReactNode
-}
-
-export interface ISchemaFieldUpdateRequest {
-  state?: Formily.Core.Types.IFieldState
-  schema?: ISchema
-  run?: string
 }
 
 export interface ISchemaMapper {
@@ -108,16 +102,18 @@ export type Path<T, Key extends keyof T = keyof T> = Key extends string
     : Key
   : never
 
-export type PathValue<T, P extends Path<T>> =
-  P extends `${infer Key}.${infer Rest}`
-    ? Key extends keyof T
-      ? Rest extends Path<T[Key]>
-        ? PathValue<T[Key], Rest>
-        : never
+export type PathValue<
+  T,
+  P extends Path<T>
+> = P extends `${infer Key}.${infer Rest}`
+  ? Key extends keyof T
+    ? Rest extends Path<T[Key]>
+      ? PathValue<T[Key], Rest>
       : never
-    : P extends keyof T
-    ? T[P]
     : never
+  : P extends keyof T
+  ? T[P]
+  : never
 
 export type KeyOfReactComponent<T> = Exclude<
   keyof T,
@@ -149,7 +145,7 @@ export type ReactComponentPropsByPathValue<
   ? React.ComponentProps<T[P]>
   : never
 export interface ISchemaMarkupFieldProps<
-  Components extends SchemaComponents,
+  Components extends SchemaReactComponents,
   Decorator extends ReactComponentPath<Components>,
   Component extends ReactComponentPath<Components>
 > extends ISchema<
@@ -167,11 +163,7 @@ export interface ISchemaMarkupFieldProps<
 }
 
 export type ISchemaTypeFieldProps<
-  Components extends SchemaComponents,
+  Components extends SchemaReactComponents,
   Decorator extends ReactComponentPath<Components>,
   Component extends ReactComponentPath<Components>
 > = Omit<ISchemaMarkupFieldProps<Components, Decorator, Component>, 'type'>
-
-export interface ISchemaTransformerOptions extends ISchemaFieldFactoryOptions {
-  required?: ISchema['required']
-}

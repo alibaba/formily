@@ -12,8 +12,6 @@ import type { IArrayFieldProps, DefineComponent } from '../types'
 export default observer(
   defineComponent<IArrayFieldProps>({
     name: 'ArrayField',
-    /* eslint-disable vue/require-prop-types  */
-    /* eslint-disable vue/require-default-prop */
     props: {
       name: {},
       title: {},

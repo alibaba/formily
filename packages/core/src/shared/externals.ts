@@ -6,7 +6,7 @@ import {
   setValidateLanguage,
   registerValidateFormats,
   registerValidateLocale,
-  registerValidateMessageTemplateEnigne,
+  registerValidateMessageTemplateEngine,
   registerValidateRules,
 } from '@formily/validator'
 import {
@@ -58,7 +58,7 @@ export {
   setValidateLanguage,
   registerValidateFormats,
   registerValidateLocale,
-  registerValidateMessageTemplateEnigne,
+  registerValidateMessageTemplateEngine,
   registerValidateRules,
   createEffectHook,
   createEffectContext,

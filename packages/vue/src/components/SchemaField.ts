@@ -16,8 +16,8 @@ import {
 import {
   ComponentPath,
   VueComponent,
-  ISchemaFieldFactoryOptions,
-  SchemaComponents,
+  ISchemaFieldVueFactoryOptions,
+  SchemaVueComponents,
   ISchemaFieldProps,
   ISchemaMarkupFieldProps,
   ISchemaTypeFieldProps,
@@ -128,8 +128,8 @@ type SchemaFieldComponents = {
 }
 
 export function createSchemaField<
-  Components extends SchemaComponents = SchemaComponents
->(options: ISchemaFieldFactoryOptions<Components>): SchemaFieldComponents {
+  Components extends SchemaVueComponents = SchemaVueComponents
+>(options: ISchemaFieldVueFactoryOptions<Components>): SchemaFieldComponents {
   const SchemaField = defineComponent<
     ISchemaFieldProps<VueComponent, VueComponent>
   >({

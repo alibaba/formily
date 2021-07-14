@@ -10,8 +10,6 @@ import type { IVoidFieldProps, DefineComponent } from '../types'
 
 export default defineComponent<IVoidFieldProps>({
   name: 'VoidField',
-  /* eslint-disable vue/require-prop-types  */
-  /* eslint-disable vue/require-default-prop */
   props: {
     name: {},
     title: {},

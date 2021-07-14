@@ -48,10 +48,10 @@ export type IStateMapper<Props> =
     }
   | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)
 
-export type SchemaComponents = Record<string, VueComponent>
+export type SchemaVueComponents = Record<string, VueComponent>
 
-export interface ISchemaFieldFactoryOptions<
-  Components extends SchemaComponents = any
+export interface ISchemaFieldVueFactoryOptions<
+  Components extends SchemaVueComponents = any
 > {
   components?: Components
   scope?: any
@@ -71,12 +71,6 @@ export interface ISchemaFieldProps<
   }
   scope?: any
   name?: SchemaKey
-}
-
-export interface ISchemaFieldUpdateRequest {
-  state?: Formily.Core.Types.IFieldState
-  schema?: ISchema
-  run?: string
 }
 
 export interface ISchemaMapper {
@@ -107,12 +101,12 @@ export type ComponentPath<
 > = Key extends string ? Key : never
 
 export type ComponentPropsByPathValue<
-  T extends SchemaComponents,
+  T extends SchemaVueComponents,
   P extends ComponentPath<T>
 > = P extends keyof T ? VueComponentProps<T[P]> : never
 
 export type ISchemaMarkupFieldProps<
-  Components extends SchemaComponents = SchemaComponents,
+  Components extends SchemaVueComponents = SchemaVueComponents,
   Decorator extends ComponentPath<Components> = ComponentPath<Components>,
   Component extends ComponentPath<Components> = ComponentPath<Components>
 > = ISchema<
@@ -128,11 +122,7 @@ export type ISchemaMarkupFieldProps<
 >
 
 export type ISchemaTypeFieldProps<
-  Components extends SchemaComponents = SchemaComponents,
+  Components extends SchemaVueComponents = SchemaVueComponents,
   Decorator extends ComponentPath<Components> = ComponentPath<Components>,
   Component extends ComponentPath<Components> = ComponentPath<Components>
 > = Omit<ISchemaMarkupFieldProps<Components, Decorator, Component>, 'type'>
-
-export interface ISchemaTransformerOptions extends ISchemaFieldFactoryOptions {
-  required?: ISchema['required']
-}
