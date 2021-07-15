@@ -40,6 +40,10 @@ export default {
         decoratorProps: '容器属性',
         pleaseSelect: '请选择',
       },
+      ValidatorSetter: {
+        addEnum: '添加',
+        edit: '编辑规则',
+      },
     },
   },
 }

@@ -42,6 +42,10 @@ export default {
         decoratorProps: 'Decorator Props',
         pleaseSelect: 'Please Select',
       },
+      ValidatorSetter: {
+        addEnum: 'Add',
+        edit: 'Edit Rule',
+      },
     },
   },
 }
