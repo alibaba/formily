@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.0.0-beta.78(2021-07-13)
+
+### :tada: Enhancements
+
+1. [feat(form-dialog): add form dialog and form drawer oncancel return value (#1791)](https://github.com/alibaba/formily/commit/f08de0dc) :point_right: ( [张威](https://github.com/张威) )
+
+1. [feat(gitignore): support ignore .history directory (#1792)](https://github.com/alibaba/formily/commit/0035e61c) :point_right: ( [张威](https://github.com/张威) )
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix onFormValuesChange does not trigger with ArrayField initialValue (#1787)](https://github.com/alibaba/formily/commit/0c771f90) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore(designable): fix build failed](https://github.com/alibaba/formily/commit/c133153e) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable): improve ReactionsSetter ui](https://github.com/alibaba/formily/commit/5dde496f) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.77(2021-07-12)
 
 ### :tada: Enhancements
@@ -917,33 +935,3 @@
 ### :rocket: Improve Performance
 
 1. [perf(validator): improve validate perf (#950)](https://github.com/alibaba/formily/commit/0162788b) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v1.2.3(2020-07-05)
-
-### :tada: Enhancements
-
-1. [feat(layout): compat antv3 and fix layout related issue (#949)](https://github.com/alibaba/formily/commit/503451f9) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [feat(components): add FormMegaLayout className (#935)](https://github.com/alibaba/formily/commit/7a2ad9e2) :point_right: ( [changfuguo](https://github.com/changfuguo) )
-
-1. [feat(core): support_disable_unmount_clear_states (#938)](https://github.com/alibaba/formily/commit/236c7812) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: add span to array-card dot for custom style (#922)](https://github.com/alibaba/formily/commit/4b2833d5) :point_right: ( [slientcloud](https://github.com/slientcloud) )
-
-### :beetle: Bug Fixes
-
-1. [fix(core): fix array list move algorithm (#947)](https://github.com/alibaba/formily/commit/f6fc0bc7) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix antd table get row key (#946)](https://github.com/alibaba/formily/commit/6bda3296) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(@formily/core): fix unmountClearStates flags is not right (#944)](https://github.com/alibaba/formily/commit/754a55f4) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-1. [fix(antd,next): fix ie.tsx ssr bug (#936)](https://github.com/alibaba/formily/commit/0d3c3810) :point_right: ( [Markey](https://github.com/Markey) )
-
-1. [fix(core): fix reset deep children (#933)](https://github.com/alibaba/formily/commit/c8dd3908) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix: issue 853 and 860 (#928)](https://github.com/alibaba/formily/commit/c1774308) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix(antd/next-components): fix form step dynamic items (#926)](https://github.com/alibaba/formily/commit/9df3eee0) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [bugfix (#920)](https://github.com/alibaba/formily/commit/4f41b564) :point_right: ( [Janry](https://github.com/Janry) )
