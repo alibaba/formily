@@ -1,5 +1,5 @@
-import { defineComponent, PropType, computed } from 'vue-demi'
-import { action, model } from '@formily/reactive'
+import { defineComponent, PropType, computed, reactive } from 'vue-demi'
+import { action } from '@formily/reactive'
 import { observer } from '@formily/reactive-vue'
 import {
   h,
@@ -56,11 +56,11 @@ const parseSteps = (schema: Schema) => {
 }
 
 export const createFormStep = (defaultCurrent = 0): IFormStep => {
-  const env: FormStepEnv = {
+  const env: FormStepEnv = reactive({
     form: null,
     field: null,
     steps: [],
-  }
+  })
 
   const setDisplay = action((target: number) => {
     const currentStep = env.steps[target]
@@ -89,7 +89,7 @@ export const createFormStep = (defaultCurrent = 0): IFormStep => {
     }
   })
 
-  const formStep: IFormStep = model({
+  const formStep: IFormStep = reactive({
     connect(steps, field) {
       env.steps = steps
       env.form = field?.form

@@ -8,7 +8,7 @@ import {
   ref,
 } from 'vue-demi'
 import { FragmentComponent, useField, useFieldSchema, h } from '@formily/vue'
-import { isValid } from '@formily/shared'
+import { isValid, uid } from '@formily/shared'
 import { ArrayField } from '@formily/core'
 import { stylePrefix } from '../__builtins__/configs'
 
@@ -31,7 +31,7 @@ export interface IArrayBaseItemProps {
   index: number
 }
 
-interface Context {
+export interface IArrayBaseContext {
   field: Ref<ArrayField>
   schema: Ref<Schema>
   props: IArrayBaseProps
@@ -40,7 +40,8 @@ interface Context {
   }
 }
 
-const ArrayBaseSymbol: InjectionKey<Context> = Symbol('ArrayBaseContext')
+const ArrayBaseSymbol: InjectionKey<IArrayBaseContext> =
+  Symbol('ArrayBaseContext')
 const ItemSymbol: InjectionKey<{
   index: Ref<number>
 }> = Symbol('ItemContext')
@@ -52,6 +53,19 @@ export const useArray = () => {
 export const useIndex = (index?: number) => {
   const ctx = inject(ItemSymbol, null)
   return ctx ? ctx.index : ref(index)
+}
+
+export const useKey = () => {
+  const keyMap = new WeakMap()
+
+  return (record: any) => {
+    record =
+      record === null || typeof record !== 'object' ? Object(record) : record
+    if (!keyMap.has(record)) {
+      keyMap.set(record, uid())
+    }
+    return keyMap.get(record)
+  }
 }
 
 const getDefaultValue = (defaultValue: any, schema: Schema): any => {
@@ -170,14 +184,16 @@ export const ArrayRemove = defineComponent<
           class: `${prefixCls}-remove`,
           attrs: {
             type: 'text',
+            size: 'mini',
             icon: props.icon ? undefined : 'el-icon-delete',
             ...attrs,
           },
           on: {
             ...listeners,
-            click: (e) => {
+            click: (e: MouseEvent) => {
+              e.stopPropagation()
               base?.field.value.remove(indexRef.value as number)
-              base?.listeners?.remove(indexRef.value as number)
+              base?.listeners?.remove?.(indexRef.value as number)
 
               if (listeners.click) {
                 listeners.click(e)
@@ -208,15 +224,17 @@ export const ArrayMoveDown = defineComponent<
         {
           class: `${prefixCls}-move-down`,
           attrs: {
+            size: 'mini',
             type: 'text',
             icon: props.icon ? undefined : 'el-icon-arrow-down',
             ...attrs,
           },
           on: {
             ...listeners,
-            click: (e) => {
+            click: (e: MouseEvent) => {
+              e.stopPropagation()
               base?.field.value.moveDown(indexRef.value as number)
-              base?.listeners?.moveDown(indexRef.value as number)
+              base?.listeners?.moveDown?.(indexRef.value as number)
 
               if (listeners.click) {
                 listeners.click(e)
@@ -247,15 +265,17 @@ export const ArrayMoveUp = defineComponent<
         {
           class: `${prefixCls}-move-up`,
           attrs: {
+            size: 'mini',
             type: 'text',
             icon: props.icon ? undefined : 'el-icon-arrow-up',
             ...attrs,
           },
           on: {
             ...listeners,
-            click: (e) => {
+            click: (e: MouseEvent) => {
+              e.stopPropagation()
               base?.field.value.moveUp(indexRef.value as number)
-              base?.listeners?.moveUp(indexRef.value as number)
+              base?.listeners?.moveUp?.(indexRef.value as number)
 
               if (listeners.click) {
                 listeners.click(e)

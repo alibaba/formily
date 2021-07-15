@@ -46,6 +46,7 @@ module.exports = {
         'form-tab',
         'form-step',
         'array-cards',
+        'array-collapse',
         'array-table',
         'space',
         'reset',

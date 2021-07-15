@@ -5,7 +5,7 @@ import { useField, useFieldSchema, RecursionField, h } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
 import { ISchema } from '@formily/json-schema'
 import { stylePrefix } from '../__builtins__/configs'
-import { ArrayBase, ArrayBaseItem } from '../array-base'
+import { ArrayBase, ArrayBaseItem, useKey } from '../array-base'
 
 const isAdditionComponent = (schema: ISchema) => {
   return schema['x-component']?.indexOf('Addition') > -1
@@ -42,6 +42,7 @@ export const ArrayCards = observer(
       const fieldRef = useField<Formily.Core.Models.ArrayField>()
       const schemaRef = useFieldSchema()
       const prefixCls = `${stylePrefix}-form-array-cards`
+      const getKey = useKey()
 
       return () => {
         const field = fieldRef.value
@@ -122,7 +123,7 @@ export const ArrayCards = observer(
             return h(
               ArrayBaseItem,
               {
-                key: index,
+                key: getKey(item),
                 props: {
                   index,
                 },

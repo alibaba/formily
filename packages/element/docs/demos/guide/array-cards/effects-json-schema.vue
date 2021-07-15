@@ -49,58 +49,11 @@ export default {
     const schema = {
       type: 'object',
       properties: {
-        string_array: {
-          type: 'array',
-          'x-component': 'ArrayCards',
-          maxItems: 3,
-          'x-decorator': 'FormItem',
-          'x-component-props': {
-            title: '字符串数组',
-          },
-          items: {
-            type: 'void',
-            properties: {
-              index: {
-                type: 'void',
-                'x-component': 'ArrayCardsIndex',
-              },
-              input: {
-                type: 'string',
-                'x-decorator': 'FormItem',
-                title: 'Input',
-                required: true,
-                'x-component': 'Input',
-              },
-              remove: {
-                type: 'void',
-                'x-component': 'ArrayCardsRemove',
-              },
-              moveUp: {
-                type: 'void',
-                'x-component': 'ArrayCardsMoveUp',
-              },
-              moveDown: {
-                type: 'void',
-                'x-component': 'ArrayCardsMoveDown',
-              },
-            },
-          },
-          properties: {
-            addition: {
-              type: 'void',
-              title: '添加条目',
-              'x-component': 'ArrayCardsAddition',
-            },
-          },
-        },
         array: {
           type: 'array',
           'x-component': 'ArrayCards',
           maxItems: 3,
-          'x-decorator': 'FormItem',
-          'x-component-props': {
-            title: '对象数组',
-          },
+          title: '对象数组',
           items: {
             type: 'object',
             properties: {
@@ -108,12 +61,38 @@ export default {
                 type: 'void',
                 'x-component': 'ArrayCardsIndex',
               },
-              input: {
+              aa: {
                 type: 'string',
                 'x-decorator': 'FormItem',
-                title: 'Input',
+                title: 'AA',
                 required: true,
                 'x-component': 'Input',
+                description: '输入123',
+              },
+              bb: {
+                type: 'string',
+                title: 'BB',
+                required: true,
+                'x-decorator': 'FormItem',
+                'x-component': 'Input',
+                'x-reactions': [
+                  {
+                    dependencies: ['.aa'],
+                    when: "{{$deps[0] != '123'}}",
+                    fulfill: {
+                      schema: {
+                        title: 'BB',
+                        'x-disabled': true,
+                      },
+                    },
+                    otherwise: {
+                      schema: {
+                        title: 'Changed',
+                        'x-disabled': false,
+                      },
+                    },
+                  },
+                ],
               },
               remove: {
                 type: 'void',

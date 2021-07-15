@@ -1,6 +1,6 @@
 @import '../__builtins__/styles/common.scss';
 
-$array-table-prefix-cls: '#{$formily-prefix}-form-array-cards';
+$array-table-prefix-cls: '#{$formily-prefix}-form-array-collapse';
 
 .#{$array-table-prefix-cls} {
   .el-card__header {
@@ -13,6 +13,10 @@ $array-table-prefix-cls: '#{$formily-prefix}-form-array-cards';
 
   .#{$array-table-prefix-cls}-item {
     margin-bottom: 10px;
+  }
+
+  .#{$array-table-prefix-cls}-errors-badge {
+    line-height: normal;
   }
 
   .#{$formily-prefix}-form-array-base-addition {
