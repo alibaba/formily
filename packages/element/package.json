@@ -49,7 +49,8 @@
     "@formily/reactive": "2.0.0-beta.79",
     "@formily/reactive-vue": "2.0.0-beta.79",
     "@formily/shared": "2.0.0-beta.79",
-    "@formily/vue": "2.0.0-beta.79"
+    "@formily/vue": "2.0.0-beta.79",
+    "vue-slicksort": "^1.2.0"
   },
   "peerDependencies": {
     "@vue/composition-api": "^1.0.0-beta.1",

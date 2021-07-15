@@ -41,7 +41,7 @@ export const ArrayCards = observer(
     setup(props, { attrs }) {
       const fieldRef = useField<Formily.Core.Models.ArrayField>()
       const schemaRef = useFieldSchema()
-      const prefixCls = `${stylePrefix}-form-array-cards`
+      const prefixCls = `${stylePrefix}-array-cards`
       const getKey = useKey()
 
       return () => {

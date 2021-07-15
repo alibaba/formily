@@ -8,8 +8,8 @@ import {
   useField,
   useFieldSchema,
   RecursionField,
-  Fragment,
   h,
+  Fragment,
 } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
 import { ISchema } from '@formily/json-schema'
@@ -92,7 +92,7 @@ export const ArrayCollapse = observer(
       const fieldRef = useField<Formily.Core.Models.ArrayField>()
       const schemaRef = useFieldSchema()
 
-      const prefixCls = `${stylePrefix}-form-array-collapse`
+      const prefixCls = `${stylePrefix}-array-collapse`
       const activeKeys: Ref<number[] | number> = ref([])
 
       watchEffect(() => {

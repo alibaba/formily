@@ -13,7 +13,7 @@ import { Space } from '../space'
 import { Tag } from 'element-ui'
 import { formatDate } from 'element-ui/src/utils/date-util'
 
-const prefixCls = `${stylePrefix}-form-text`
+const prefixCls = `${stylePrefix}-preview-text`
 const PlaceholderContext = createContext('N/A')
 
 export const usePlaceholder = (value?: any) => {

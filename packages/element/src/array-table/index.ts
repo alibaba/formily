@@ -195,7 +195,7 @@ const ArrayTableInner = observer(
     setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
-      const prefixCls = `${stylePrefix}-form-array-table-inner`
+      const prefixCls = `${stylePrefix}-array-table-inner`
       return () => {
         const field = fieldRef.value
         const sources = getArrayTableSources(fieldRef, schemaRef)
@@ -260,7 +260,7 @@ export const ArrayTable = observer(
     setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
-      const prefixCls = `${stylePrefix}-form-array-table`
+      const prefixCls = `${stylePrefix}-array-table`
       return () => {
         const sources = getArrayTableSources(fieldRef, schemaRef)
         const renderStateManager = () =>

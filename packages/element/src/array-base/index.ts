@@ -7,7 +7,13 @@ import {
   toRefs,
   ref,
 } from 'vue-demi'
-import { FragmentComponent, useField, useFieldSchema, h } from '@formily/vue'
+import {
+  FragmentComponent,
+  Fragment,
+  useField,
+  useFieldSchema,
+  h,
+} from '@formily/vue'
 import { isValid, uid } from '@formily/shared'
 import { ArrayField } from '@formily/core'
 import { stylePrefix } from '../__builtins__/configs'
@@ -16,6 +22,7 @@ import type { Component } from 'vue'
 import type { Button as ButtonProps } from 'element-ui'
 import { Button } from 'element-ui'
 import type { Schema } from '@formily/json-schema'
+import { HandleDirective } from 'vue-slicksort'
 
 export interface IArrayBaseAdditionProps extends ButtonProps {
   title?: string
@@ -90,7 +97,7 @@ export const ArrayBase = defineComponent({
 
     provide(ArrayBaseSymbol, { field, schema, props, listeners })
     return () => {
-      return h(FragmentComponent as Component, {}, slots)
+      return h(Fragment, {}, slots)
     }
   },
 })
@@ -100,7 +107,38 @@ export const ArrayBaseItem = defineComponent({
   setup(props: IArrayBaseItemProps, { slots }) {
     provide(ItemSymbol, toRefs(props))
     return () => {
-      return h(FragmentComponent as Component, {}, slots)
+      return h(Fragment, {}, slots)
+    }
+  },
+})
+
+export const ArraySortHandle = defineComponent({
+  props: ['index'],
+  directives: {
+    handle: HandleDirective,
+  },
+  setup(props, { attrs }) {
+    const array = useArray()
+    const prefixCls = `${stylePrefix}-array-base`
+
+    return () => {
+      if (!array) return null
+      if (array.field.value?.pattern !== 'editable') return null
+
+      return h(
+        Button,
+        {
+          directives: [{ name: 'handle' }],
+          class: [`${prefixCls}-sort-handle`, attrs.class],
+          attrs: {
+            size: 'mini',
+            type: 'text',
+            icon: 'el-icon-rank',
+            ...attrs,
+          },
+        },
+        {}
+      )
     }
   },
 })
@@ -126,7 +164,7 @@ export const ArrayAddition = defineComponent({
   setup(props: IArrayBaseAdditionProps, { listeners }) {
     const self = useField()
     const array = useArray()
-    const prefixCls = `${stylePrefix}-form-array-base`
+    const prefixCls = `${stylePrefix}-array-base`
     return () => {
       if (!array) return null
       if (array?.field.value.pattern !== 'editable') return null
@@ -175,7 +213,7 @@ export const ArrayRemove = defineComponent<
   setup(props, { attrs, listeners }) {
     const indexRef = useIndex(props.index)
     const base = useArray()
-    const prefixCls = `${stylePrefix}-form-array-base`
+    const prefixCls = `${stylePrefix}-array-base`
     return () => {
       if (base?.field.value.pattern !== 'editable') return null
       return h(
@@ -185,7 +223,7 @@ export const ArrayRemove = defineComponent<
           attrs: {
             type: 'text',
             size: 'mini',
-            icon: props.icon ? undefined : 'el-icon-delete',
+            icon: 'el-icon-delete',
             ...attrs,
           },
           on: {
@@ -216,7 +254,7 @@ export const ArrayMoveDown = defineComponent<
   setup(props, { attrs, listeners }) {
     const indexRef = useIndex(props.index)
     const base = useArray()
-    const prefixCls = `${stylePrefix}-form-array-base`
+    const prefixCls = `${stylePrefix}-array-base`
     return () => {
       if (base?.field.value.pattern !== 'editable') return null
       return h(
@@ -226,7 +264,7 @@ export const ArrayMoveDown = defineComponent<
           attrs: {
             size: 'mini',
             type: 'text',
-            icon: props.icon ? undefined : 'el-icon-arrow-down',
+            icon: 'el-icon-arrow-down',
             ...attrs,
           },
           on: {
@@ -257,7 +295,7 @@ export const ArrayMoveUp = defineComponent<
   setup(props, { attrs, listeners }) {
     const indexRef = useIndex(props.index)
     const base = useArray()
-    const prefixCls = `${stylePrefix}-form-array-base`
+    const prefixCls = `${stylePrefix}-array-base`
     return () => {
       if (base?.field.value.pattern !== 'editable') return null
       return h(
@@ -267,7 +305,7 @@ export const ArrayMoveUp = defineComponent<
           attrs: {
             size: 'mini',
             type: 'text',
-            icon: props.icon ? undefined : 'el-icon-arrow-up',
+            icon: 'el-icon-arrow-up',
             ...attrs,
           },
           on: {
