@@ -1227,7 +1227,7 @@
   dependencies:
     requestidlecallback "^0.3.0"
 
-"@designable/shared@0.4.8", "@designable/shared@^0.4.8":
+"@designable/shared@0.4.8":
   version "0.4.8"
   resolved "https://registry.yarnpkg.com/@designable/shared/-/shared-0.4.8.tgz#033a88d2686c8254cd8935f9ecf43176677d7b05"
   integrity sha512-7A0G8MyAqYBS4M/ZmT0szZ7CdWHIktPj5WXP05Dm9FsQ9h5VMPBjG9Moh3oKC4TdnIjtEYg8Mjt5FcPJH3f6Fg==
