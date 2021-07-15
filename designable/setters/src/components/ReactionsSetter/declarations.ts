@@ -23,7 +23,7 @@ MonacoInput.loader.init().then(async (monaco) => {
   ])
   deps?.forEach(({ name, library }) => {
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      library,
+      `declare module '${name}'{ ${library} }`,
       `file:///node_modules/${name}/index.d.ts`
     )
   })
