@@ -16,7 +16,7 @@ $array-table-prefix-cls: '#{$formily-prefix}-array-collapse';
   }
 
   .#{$array-table-prefix-cls}-errors-badge {
-    line-height: normal;
+    line-height: 1;
   }
 
   .#{$formily-prefix}-array-base-addition {

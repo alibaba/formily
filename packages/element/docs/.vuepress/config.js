@@ -49,6 +49,7 @@ module.exports = {
         'array-collapse',
         'array-items',
         'array-table',
+        'array-tabs',
         'space',
         'reset',
         'submit',
