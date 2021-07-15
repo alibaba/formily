@@ -27,4 +27,14 @@ MonacoInput.loader.init().then(async (monaco) => {
       `file:///node_modules/${name}/index.d.ts`
     )
   })
+  monaco.languages.typescript.typescriptDefaults.addExtraLib(
+    `
+    import { Form, Field } from '@formily/core'
+    declare global {
+      declare var $form : Form
+      declare var $self : Field
+    }
+    `,
+    `file:///node_modules/formily_global.d.ts`
+  )
 })

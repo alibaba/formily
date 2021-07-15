@@ -9,6 +9,7 @@ export interface IFieldProperty {
 }
 
 export interface IFieldPropertySetterProps {
+  extraLib?: string
   value?: IFieldProperty
   onChange?: (value: IFieldProperty) => void
 }
@@ -97,6 +98,7 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
             options={{
               fontSize: 14,
             }}
+            extraLib={props.extraLib}
             value={parseExpression(value[selectKeys[0]])}
             onChange={(expression) => {
               props.onChange?.(

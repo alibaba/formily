@@ -241,6 +241,19 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                         height: 200,
                         language: 'typescript',
                       }}
+                      x-reactions={(field) => {
+                        const deps = field.query('dependencies').value()
+                        if (Array.isArray(deps)) {
+                          field.componentProps.extraLib = `
+                          declare var $deps : {
+                            ${deps.map(({ name, type }) => {
+                              if (!name) return ''
+                              return `${name}?:${type || 'any'},`
+                            })}
+                          }
+                          `
+                        }
+                      }}
                     />
                   </SchemaField.Void>
                 </SchemaField.Void>
