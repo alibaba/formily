@@ -11,6 +11,7 @@ import { Modal, Card, Button } from 'antd'
 import { PathSelector } from './PathSelector'
 import { FieldPropertySetter } from './FieldPropertySetter'
 import { IReaction } from './types'
+import './declarations'
 import './styles.less'
 
 export interface IReactionsSetterProps {
