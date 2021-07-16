@@ -265,6 +265,7 @@ const UploadLocale = {
   withCredentials: 'withCredentials',
   maxCount: 'Max Count',
   method: 'Method',
+  textContent: 'Text Content',
 }
 
 const FormGridLocale = {
