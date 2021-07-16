@@ -476,7 +476,7 @@ const getReactions = (schema: ISchema, options: ISchemaFieldFactoryOptions) => {
             setSchemaFieldState(field, reaction.fulfill, compile)
           }
           if (isStr(reaction.fulfill?.run)) {
-            compile(`{{async function(){${reaction.fulfill?.run}}}}`)()
+            compile(`{{function(){${reaction.fulfill?.run}}}}`)()
           }
         } else {
           if (reaction.target) {

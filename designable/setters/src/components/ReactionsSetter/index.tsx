@@ -17,6 +17,7 @@ import {
 import { Modal, Card, Button, Tag, Tooltip } from 'antd'
 import { PathSelector } from './PathSelector'
 import { FieldPropertySetter } from './FieldPropertySetter'
+import { FulfillRunHelper } from './helpers'
 import { IReaction } from './types'
 import './declarations'
 import './styles.less'
@@ -395,6 +396,12 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                         width: '100%',
                         height: 400,
                         language: 'typescript',
+                        helpCode: FulfillRunHelper,
+                        options: {
+                          minimap: {
+                            enabled: false,
+                          },
+                        },
                       }}
                       x-reactions={(field) => {
                         const deps = field.query('dependencies').value()
