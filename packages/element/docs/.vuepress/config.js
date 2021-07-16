@@ -65,6 +65,7 @@ module.exports = {
         'time-picker',
         'transfer',
         'upload',
+        'editable',
         'preview-text',
       ],
     },
