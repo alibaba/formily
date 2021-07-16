@@ -394,15 +394,18 @@ const getReactions = (schema: ISchema, options: ISchemaFieldFactoryOptions) => {
 
   const queryDependency = (
     field: Formily.Core.Models.Field,
-    pattern: string
+    pattern: string,
+    property?: string
   ) => {
     const [target, path] = String(pattern).split(/\s*#\s*/)
-    return field.query(target).getIn(path || 'value')
+    return field.query(target).getIn(path || property || 'value')
   }
 
   const parseDependencies = (
     field: Formily.Core.Models.Field,
-    dependencies: Array<string | { name: string; source: string }> | object
+    dependencies:
+      | Array<string | { name?: string; source?: string; property?: string }>
+      | object
   ) => {
     if (isArr(dependencies)) {
       const results = []
@@ -411,7 +414,11 @@ const getReactions = (schema: ISchema, options: ISchemaFieldFactoryOptions) => {
           results.push(queryDependency(field, pattern))
         } else if (isPlainObj(pattern)) {
           if (pattern.name && pattern.source) {
-            results[pattern.name] = queryDependency(field, pattern.source)
+            results[pattern.name] = queryDependency(
+              field,
+              pattern.source,
+              pattern.property
+            )
           }
         }
       })
@@ -469,7 +476,7 @@ const getReactions = (schema: ISchema, options: ISchemaFieldFactoryOptions) => {
             setSchemaFieldState(field, reaction.fulfill, compile)
           }
           if (isStr(reaction.fulfill?.run)) {
-            compile(`{{async function(){${reaction.fulfill?.run}}}}`)()
+            compile(`{{function(){${reaction.fulfill?.run}}}}`)()
           }
         } else {
           if (reaction.target) {

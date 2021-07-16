@@ -2,36 +2,27 @@ import React, { useState } from 'react'
 import { TextWidget, usePrefix } from '@designable/react'
 import { Menu } from 'antd'
 import { MonacoInput } from '@designable/react-settings-form'
-import { reduce } from '@formily/shared'
-
+import { isPlainObj, reduce } from '@formily/shared'
+import { FieldProperties } from './properties'
 export interface IFieldProperty {
   [key: string]: string
 }
 
 export interface IFieldPropertySetterProps {
+  extraLib?: string
   value?: IFieldProperty
   onChange?: (value: IFieldProperty) => void
 }
 
-const FieldProperties = [
-  'display',
-  'pattern',
-  'title',
-  'description',
-  'value',
-  'initialValue',
-  'required',
-  'dataSource',
-  ['component[0]', 'component'],
-  ['component[1]', 'componentProps'],
-  ['decorator[0]', 'decorator'],
-  ['decorator[1]', 'decoratorProps'],
-]
+const template = (code: string) => {
+  if (!code) return
+  return code.trim()
+}
 
 export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
   props
 ) => {
-  const [selectKeys, setSelectKeys] = useState(['display'])
+  const [selectKeys, setSelectKeys] = useState(['visible'])
   const prefix = usePrefix('field-property-setter')
   const value = { ...props.value }
 
@@ -52,13 +43,17 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
     )
   }
 
+  const currentProperty = FieldProperties.find(
+    (item) => item.key === selectKeys[0]
+  )
+
   return (
     <div className={prefix}>
       <Menu
         mode="vertical"
         style={{
-          width: 240,
-          height: 200,
+          width: 200,
+          height: 300,
           paddingRight: 4,
           overflowY: 'auto',
           overflowX: 'hidden',
@@ -70,11 +65,13 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
         }}
       >
         {FieldProperties.map((key) => {
-          if (Array.isArray(key)) {
+          if (isPlainObj(key)) {
             return (
-              <Menu.Item key={key[0]}>
+              <Menu.Item key={key.key}>
                 <TextWidget
-                  token={`SettingComponents.ReactionsSetter.${key[1]}`}
+                  token={`SettingComponents.ReactionsSetter.${
+                    key.token || key.key
+                  }`}
                 />
               </Menu.Item>
             )
@@ -87,17 +84,41 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
         })}
       </Menu>
       <div className={prefix + '-coder-wrapper'}>
-        <div
-          className={prefix + '-coder-start'}
-        >{`$self.${selectKeys[0]} = {{`}</div>
+        <div className={prefix + '-coder-start'}>
+          {`$self.${selectKeys[0]} = (`}
+          <span
+            style={{
+              fontSize: 14,
+              marginLeft: 10,
+              color: '#888',
+              fontWeight: 'normal',
+            }}
+          >
+            {'//'}{' '}
+            <TextWidget token="SettingComponents.ReactionsSetter.expressionValueTypeIs" />{' '}
+            {'`'}
+            {currentProperty?.type}
+            {'`'}
+          </span>
+        </div>
         <div className={prefix + '-coder'}>
           <MonacoInput
             key={selectKeys[0]}
             language="javascript.expression"
-            options={{
-              fontSize: 14,
-            }}
+            extraLib={props.extraLib}
+            helpCode={template(currentProperty?.helpCode)}
             value={parseExpression(value[selectKeys[0]])}
+            options={{
+              lineNumbers: 'off',
+              wordWrap: 'on',
+              glyphMargin: false,
+              folding: false,
+              lineDecorationsWidth: 0,
+              lineNumbersMinChars: 0,
+              minimap: {
+                enabled: false,
+              },
+            }}
             onChange={(expression) => {
               props.onChange?.(
                 filterEmpty({
@@ -108,7 +129,7 @@ export const FieldPropertySetter: React.FC<IFieldPropertySetterProps> = (
             }}
           />
         </div>
-        <div className={prefix + '-coder-end'}>{`}}`}</div>
+        <div className={prefix + '-coder-end'}>{`)`}</div>
       </div>
     </div>
   )
