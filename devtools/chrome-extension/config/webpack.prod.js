@@ -2,13 +2,13 @@ const baseConfig = require('./webpack.base')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 
-const createPages = pages => {
+const createPages = (pages) => {
   return pages.map(({ filename, template, chunk }) => {
     return new HtmlWebpackPlugin({
       filename,
       template,
       inject: 'body',
-      chunks: [chunk]
+      chunks: [chunk],
     })
   })
 }
@@ -21,7 +21,7 @@ module.exports = {
       {
         filename: 'popup.html',
         template: path.resolve(__dirname, '../src/extension/views/popup.ejs'),
-        chunk: 'popup'
+        chunk: 'popup',
       },
       {
         filename: 'devtools.html',
@@ -29,7 +29,7 @@ module.exports = {
           __dirname,
           '../src/extension/views/devtools.ejs'
         ),
-        chunk: 'devtools'
+        chunk: 'devtools',
       },
       {
         filename: 'devpanel.html',
@@ -37,8 +37,8 @@ module.exports = {
           __dirname,
           '../src/extension/views/devpanel.ejs'
         ),
-        chunk: 'devpanel'
-      }
-    ])
-  ]
+        chunk: 'devpanel',
+      },
+    ]),
+  ],
 }

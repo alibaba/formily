@@ -252,9 +252,11 @@ export default () => {
 ### FormDrawer
 
 ```ts pure
+import { IFormProps } from '@formily/core'
+
 type FormDrawerHandler = {
   //打开弹窗，接收表单属性，可以传入initialValues/values/effects etc.
-  open(props: Formily.Core.Types.IFormProps): Promise<any> //返回表单数据
+  open(props: IFormProps): Promise<any> //返回表单数据
   //关闭弹窗
   close(): void
 }
@@ -280,8 +282,7 @@ interface IFormDrawerProps extends DrawerProps {
 }
 ```
 
-`DrawerProps`类型定义参考ant design [Drawer API](https://ant.design/components/drawer-cn/#API)
-
+`DrawerProps`类型定义参考 ant design [Drawer API](https://ant.design/components/drawer-cn/#API)
 
 ### FormDrawer.Footer
 

@@ -1,5 +1,11 @@
 import { defineComponent, Ref } from 'vue-demi'
 import {
+  GeneralField,
+  IVoidFieldFactoryProps,
+  FieldDisplayTypes,
+  ArrayField,
+} from '@formily/core'
+import {
   useField,
   useFieldSchema,
   RecursionField as _RecursionField,
@@ -17,11 +23,11 @@ import { Table as ElTable, TableColumn as ElTableColumn } from 'element-ui'
 const RecursionField = _RecursionField as unknown as Component
 
 interface ObservableColumnSource {
-  field: Formily.Core.Types.GeneralField
-  fieldProps: Formily.Core.Types.IVoidFieldFactoryProps<any, any>
+  field: GeneralField
+  fieldProps: IVoidFieldFactoryProps<any, any>
   columnProps: ElColumnProps & { title: string; asterisk: boolean }
   schema: Schema
-  display: Formily.Core.Types.FieldDisplayTypes
+  display: FieldDisplayTypes
   required: boolean
   name: string
 }
@@ -49,7 +55,7 @@ const isAdditionComponent = (schema: Schema) => {
 }
 
 const getArrayTableSources = (
-  arrayFieldRef: Ref<Formily.Core.Models.ArrayField>,
+  arrayFieldRef: Ref<ArrayField>,
   schemaRef: Ref<Schema>
 ) => {
   const arrayField = arrayFieldRef.value
@@ -187,7 +193,7 @@ const renderAddition = () => {
 const ArrayTableInner = observer(
   defineComponent({
     setup(props, { attrs }) {
-      const fieldRef = useField<Formily.Core.Models.ArrayField>()
+      const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
       const array = useArray()
       const prefixCls = `${stylePrefix}-form-array-table-inner`
@@ -256,7 +262,7 @@ const ArrayTableInner = observer(
 export const ArrayTable = observer(
   defineComponent({
     setup(props, { attrs }) {
-      const fieldRef = useField<Formily.Core.Models.ArrayField>()
+      const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
       const prefixCls = `${stylePrefix}-form-array-table`
       return () => {

@@ -587,7 +587,7 @@ FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 ## 类型
 
 <Alert>
-注意：如果要手动消费类型，直接消费全局namespace中的Formily.Core.Types中的类型即可
+注意：如果要手动消费类型，直接从包模块中导出即可
 </Alert>
 
 ### FieldValidator

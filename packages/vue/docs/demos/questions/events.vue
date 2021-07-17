@@ -12,7 +12,7 @@ import 'ant-design-vue/dist/antd.css'
 
 const { SchemaField } = createSchemaField({
   components: {
-    Input
+    Input,
   },
 })
 
@@ -24,8 +24,8 @@ const schema = {
       'x-component': 'Input',
       'x-component-props': {
         '@change': (e) => console.log(e),
-        'onFocus': (e) => console.log(e)
-      }
+        onFocus: (e) => console.log(e),
+      },
     },
   },
 }
@@ -35,8 +35,8 @@ export default {
   data() {
     return {
       form: createForm(),
-      schema
+      schema,
     }
-  }
+  },
 }
 </script>

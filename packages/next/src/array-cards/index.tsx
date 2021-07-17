@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card } from '@alifd/next'
 import { CardProps } from '@alifd/next/lib/card'
+import { ArrayField } from '@formily/core'
 import {
   useField,
   observer,
@@ -100,7 +101,7 @@ const Empty = () => {
 }
 
 export const ArrayCards: ComposedArrayCards = observer((props) => {
-  const field = useField<Formily.Core.Models.ArrayField>()
+  const field = useField<ArrayField>()
   const schema = useFieldSchema()
   const dataSource = Array.isArray(field.value) ? field.value : []
   const prefixCls = usePrefixCls('formily-array-cards', props)

@@ -5,6 +5,7 @@ import { TableProps, ColumnProps } from 'antd/lib/table'
 import { SelectProps } from 'antd/lib/select'
 import cls from 'classnames'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
+import { GeneralField, FieldDisplayTypes, ArrayField } from '@formily/core'
 import {
   useForm,
   useField,
@@ -18,10 +19,10 @@ import { usePrefixCls } from '../__builtins__'
 import { ArrayBase, ArrayBaseMixins } from '../array-base'
 
 interface ObservableColumnSource {
-  field: Formily.Core.Types.GeneralField
+  field: GeneralField
   columnProps: ColumnProps<any>
   schema: Schema
-  display: Formily.Core.Types.FieldDisplayTypes
+  display: FieldDisplayTypes
   name: string
 }
 interface IArrayTablePaginationProps extends PaginationProps {
@@ -141,7 +142,7 @@ const useAddition = () => {
 
 const StatusSelect: React.FC<IStatusSelectProps> = observer((props) => {
   const form = useForm()
-  const field = useField<Formily.Core.Models.ArrayField>()
+  const field = useField<ArrayField>()
   const prefixCls = usePrefixCls('formily-array-table')
   const errors = form.queryFeedbacks({
     type: 'error',
@@ -247,7 +248,7 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
 export const ArrayTable: ComposedArrayTable = observer(
   (props: TableProps<any>) => {
     const ref = useRef<HTMLDivElement>()
-    const field = useField<Formily.Core.Models.ArrayField>()
+    const field = useField<ArrayField>()
     const prefixCls = usePrefixCls('formily-array-table')
     const dataSource = Array.isArray(field.value) ? field.value.slice() : []
     const sources = useArrayTableSources()

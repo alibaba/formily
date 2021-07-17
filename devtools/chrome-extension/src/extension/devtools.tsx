@@ -17,15 +17,13 @@ const createPanel = () => {
         'Formily',
         'img/logo/scalable.png',
         './devpanel.html',
-        function(panel) {
-         
-        }
+        function (panel) {}
       )
     }
   )
 }
 
-const loadCheckInterval = setInterval(function() {
+const loadCheckInterval = setInterval(function () {
   createPanel()
 }, 1000)
 

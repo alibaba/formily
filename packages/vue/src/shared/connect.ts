@@ -1,7 +1,7 @@
 import { Vue2Component } from '../types/vue2'
 import { isVue2, markRaw, defineComponent } from 'vue-demi'
 import { isFn, isStr, FormPath, each } from '@formily/shared'
-import { isVoidField } from '@formily/core'
+import { isVoidField, GeneralField } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 
 import { useField } from '../hooks/useField'
@@ -27,7 +27,7 @@ export function mapProps<T extends VueComponent = VueComponent>(
 
           const transform = (
             input: VueComponentProps<T>,
-            field: Formily.Core.Types.GeneralField
+            field: GeneralField
           ) =>
             args.reduce((props, mapper) => {
               if (isFn(mapper)) {

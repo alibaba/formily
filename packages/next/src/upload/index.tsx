@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Field } from '@formily/core'
 import { useField } from '@formily/react'
 import { reaction } from '@formily/reactive'
 import { Upload as NextUpload } from '@alifd/next'
@@ -112,7 +113,7 @@ const normalizeFileList = (fileList: UploadProps['value']) => {
 }
 
 const useValidator = (validator: (value: any) => string) => {
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   useEffect(() => {
     const dispose = reaction(
       () => field.value,

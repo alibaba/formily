@@ -13,7 +13,9 @@ Form 上下文，可以获取当前 Form 实例
 #### 签名
 
 ```ts
-const FormContext = createContext<Formily.Core.Models.Form>(null)
+import { Form } from '@formily/core'
+
+const FormContext = createContext<Form>(null)
 ```
 
 ## FieldContext
@@ -25,7 +27,9 @@ const FormContext = createContext<Formily.Core.Models.Form>(null)
 #### 签名
 
 ```ts
-const FieldContext = createContext<Formily.Core.Types.GeneralField>(null)
+import { GeneralField } from '@formily/core'
+
+const FieldContext = createContext<GeneralField>(null)
 ```
 
 ## SchemaMarkupContext

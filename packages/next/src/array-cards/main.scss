@@ -11,54 +11,54 @@ $array-cards-prefix-cls: '#{$css-prefix}formily-array-cards';
     display: flex;
     justify-content: center;
     align-items: center;
-    transform: scale(.8);
+    transform: scale(0.8);
 
     .ant-empty-img-default-ellipse {
-      fill-opacity: .8;
-      fill: #f5f5f5
+      fill-opacity: 0.8;
+      fill: #f5f5f5;
     }
 
     .ant-empty-img-default-path-1 {
-      fill: #aeb8c2
+      fill: #aeb8c2;
     }
 
     .ant-empty-img-default-path-2 {
-      fill: url(#linearGradient-1)
+      fill: url(#linearGradient-1);
     }
 
     .ant-empty-img-default-path-3 {
-      fill: #f5f5f7
+      fill: #f5f5f7;
     }
 
     .ant-empty-img-default-path-4,
     .ant-empty-img-default-path-5 {
-      fill: #dce0e6
+      fill: #dce0e6;
     }
 
     .ant-empty-img-default-g {
-      fill: #fff
+      fill: #fff;
     }
 
     .ant-empty-img-simple-ellipse {
-      fill: #f5f5f5
+      fill: #f5f5f5;
     }
 
     .ant-empty-img-simple-g {
-      stroke: #d9d9d9
+      stroke: #d9d9d9;
     }
 
     .ant-empty-img-simple-path {
-      fill: #fafafa
+      fill: #fafafa;
     }
 
     .ant-empty-rtl {
-      direction: rtl
+      direction: rtl;
     }
   }
 }
 
 .#{$array-cards-prefix-cls}-remove {
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
   color: $color-text1-3;
   font-size: 16px;
   margin-left: 6px;
@@ -69,12 +69,11 @@ $array-cards-prefix-cls: '#{$css-prefix}formily-array-cards';
 }
 
 .#{$array-cards-prefix-cls}-addition {
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
 }
 
-
 .#{$array-cards-prefix-cls}-move-down {
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
   color: $color-text1-3;
   font-size: 16px;
   margin-left: 6px;
@@ -85,7 +84,7 @@ $array-cards-prefix-cls: '#{$css-prefix}formily-array-cards';
 }
 
 .#{$array-cards-prefix-cls}-move-up {
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
   color: $color-text1-3;
   font-size: 16px;
   margin-left: 6px;
@@ -94,7 +93,6 @@ $array-cards-prefix-cls: '#{$css-prefix}formily-array-cards';
     color: $color-text1-1;
   }
 }
-
 
 .#{$array-cards-prefix-cls}-item {
   margin-bottom: 10px !important;

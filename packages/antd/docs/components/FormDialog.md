@@ -219,9 +219,11 @@ export default () => {
 ### FormDialog
 
 ```ts pure
+import { IFormProps } from '@formily/core'
+
 type FormDialogHandler = {
   //打开弹窗，接收表单属性，可以传入initialValues/values/effects etc.
-  open(props: Formily.Core.Types.IFormProps): Promise<any> //返回表单数据
+  open(props: IFormProps): Promise<any> //返回表单数据
   //关闭弹窗
   close(): void
 }
@@ -247,7 +249,7 @@ interface IFormModalProps extends ModalProps {
 }
 ```
 
-`ModalProps`类型定义参考ant design [Modal API](https://ant.design/components/modal-cn/#API)
+`ModalProps`类型定义参考 ant design [Modal API](https://ant.design/components/modal-cn/#API)
 
 ### FormDialog.Footer
 

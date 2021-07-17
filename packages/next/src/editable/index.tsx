@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
-import { isVoidField } from '@formily/core'
+import { isVoidField, Field } from '@formily/core'
 import { useField, observer } from '@formily/react'
 import { Balloon } from '@alifd/next'
 import { EditOutlined, CloseOutlined, MessageOutlined } from '@ant-design/icons'
@@ -17,13 +17,13 @@ type ComposedEditable = React.FC<IFormItemProps> & {
 }
 
 const useParentPattern = () => {
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   return field?.parent?.pattern || field?.form?.pattern
 }
 
 const useEditable = (): [boolean, (payload: boolean) => void] => {
   const pattern = useParentPattern()
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   useLayoutEffect(() => {
     if (pattern === 'editable') {
       field.setPattern('readPretty')
@@ -60,7 +60,7 @@ export const Editable: ComposedEditable = observer((props) => {
   const [editable, setEditable] = useEditable()
   const pattern = useParentPattern()
   const itemProps = useFormItemProps()
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   const basePrefixCls = usePrefixCls()
   const prefixCls = usePrefixCls('formily-editable')
   const ref = useRef<boolean>()
@@ -130,7 +130,7 @@ export const Editable: ComposedEditable = observer((props) => {
 })
 
 Editable.Popover = observer(({ ...props }) => {
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   const pattern = useParentPattern()
   const [visible, setVisible] = useState(false)
   const prefixCls = usePrefixCls('formily-editable')

@@ -297,9 +297,11 @@ export default () => {
 ### FormDialog
 
 ```ts pure
+import { IFormProps } from '@formily/core'
+
 type FormDialogHandler = {
   //打开弹窗，接收表单属性，可以传入initialValues/values/effects etc.
-  open(props: Formily.Core.Types.IFormProps): Promise<any> //返回表单数据
+  open(props: IFormProps): Promise<any> //返回表单数据
   //关闭弹窗
   close(): void
 }
@@ -325,7 +327,7 @@ interface IFormDialogProps extends DialogProps {
 }
 ```
 
-`DialogProps` 类型定义参考fusion [Dialog API](https://fusion.design/pc/component/dialog?themeid=2#API)
+`DialogProps` 类型定义参考 fusion [Dialog API](https://fusion.design/pc/component/dialog?themeid=2#API)
 
 ### FormDialog.Footer
 

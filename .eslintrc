@@ -20,12 +20,7 @@
     }
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "prettier",
-    "markdown"
-  ],
+  "plugins": ["@typescript-eslint", "react", "prettier", "markdown"],
   "settings": {
     "react": {
       "version": "detect"
@@ -38,15 +33,11 @@
   },
   "overrides": [
     {
-      "files": [
-        "**/*.md"
-      ],
+      "files": ["**/*.md"],
       "processor": "markdown/markdown"
     },
     {
-      "files": [
-        "**/*.md/*.{js,tsx}"
-      ],
+      "files": ["**/*.md/*.{js,tsx}"],
       "rules": {
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-unused-vars": "error",

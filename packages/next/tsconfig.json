@@ -3,17 +3,9 @@
   "compilerOptions": {
     "outDir": "./lib",
     "paths": {
-      "@formily/*": [
-        "../*"
-      ]
+      "@formily/*": ["../*"]
     }
   },
-  "include": [
-    "./src/**/*.js",
-    "./src/**/*.ts",
-    "./src/**/*.tsx"
-  ],
-  "exclude": [
-    "./src/__tests__/*"
-  ]
+  "include": ["./src/**/*.js", "./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["./src/__tests__/*"]
 }

@@ -29,9 +29,15 @@ import 'ant-design-vue/dist/antd.css'
 // functional component in vue2
 const Custom = {
   functional: true,
-  render (h, { props }) {
-    return h(RecursionField, { props: { name: props.name, schema: props.schema, onlyRenderProperties: true } })
-  }
+  render(h, { props }) {
+    return h(RecursionField, {
+      props: {
+        name: props.name,
+        schema: props.schema,
+        onlyRenderProperties: true,
+      },
+    })
+  },
 }
 
 const { SchemaField, SchemaObjectField } = createSchemaField({
@@ -45,8 +51,8 @@ export default {
   components: { FormProvider, SchemaField, SchemaObjectField },
   data() {
     return {
-      form: createForm()
+      form: createForm(),
     }
-  }
+  },
 }
 </script>

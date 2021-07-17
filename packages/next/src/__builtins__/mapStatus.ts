@@ -1,7 +1,6 @@
-export const mapStatus = (
-  props: any,
-  field: Formily.Core.Types.GeneralField
-) => {
+import { GeneralField } from '@formily/core'
+
+export const mapStatus = (props: any, field: GeneralField) => {
   const takeStatus = () => {
     if (!field) return
     if (field['loading'] || field?.['validating']) return 'loading'

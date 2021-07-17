@@ -1093,7 +1093,12 @@ import {
 const CustomField = createControllerBox('customField', (props) => {
   const { name } = props
   const realName = props.props['x-component-props']['x-name']
-  const { form, state, props: fieldProps, mutators } = useField({
+  const {
+    form,
+    state,
+    props: fieldProps,
+    mutators,
+  } = useField({
     name: `${name}.${realName}`,
   })
 
@@ -1331,7 +1336,7 @@ const setValidateLanguage= (lang: string) => void;
 **用法**
 
 ```tsx
-import { setValidateLanguage} from '@formily/next'
+import { setValidateLanguage } from '@formily/next'
 setValidationLanguage('zh')
 ```
 
@@ -2514,17 +2519,19 @@ interface ISchemaFieldWrapper<Props = any> {
 #### ISchemaFieldComponent
 
 ```typescript
-declare type ISchemaFieldComponent = ComponentWithStyleComponent<ISchemaFieldComponentProps> & {
-  __WRAPPERS__?: ISchemaFieldWrapper[]
-}
+declare type ISchemaFieldComponent =
+  ComponentWithStyleComponent<ISchemaFieldComponentProps> & {
+    __WRAPPERS__?: ISchemaFieldWrapper[]
+  }
 ```
 
 #### ISchemaVirtualFieldComponent
 
 ```typescript
-declare type ISchemaVirtualFieldComponent = ComponentWithStyleComponent<ISchemaVirtualFieldComponentProps> & {
-  __WRAPPERS__?: ISchemaFieldWrapper[]
-}
+declare type ISchemaVirtualFieldComponent =
+  ComponentWithStyleComponent<ISchemaVirtualFieldComponentProps> & {
+    __WRAPPERS__?: ISchemaFieldWrapper[]
+  }
 ```
 
 #### ISchemaFormRegistry

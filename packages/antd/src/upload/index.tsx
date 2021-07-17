@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Field } from '@formily/core'
 import { connect, mapProps, useField } from '@formily/react'
 import { Upload as AntdUpload, Button } from 'antd'
 import {
@@ -112,7 +113,7 @@ const normalizeFileList = (fileList: UploadFile[]) => {
 }
 
 const useValidator = (validator: (value: any) => string) => {
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   useEffect(() => {
     const dispose = reaction(
       () => field.value,

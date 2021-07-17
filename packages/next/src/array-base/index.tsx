@@ -10,7 +10,8 @@ import {
 import { isValid } from '@formily/shared'
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from '@alifd/next/lib/button'
-import { useField, useFieldSchema, Schema } from '@formily/react'
+import { ArrayField } from '@formily/core'
+import { useField, useFieldSchema, Schema, JSXComponent } from '@formily/react'
 import { SortableHandle } from 'react-sortable-hoc'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
@@ -23,7 +24,7 @@ export interface IArrayBaseAdditionProps extends ButtonProps {
 
 export interface IArrayBaseContext {
   props: IArrayBaseProps
-  field: Formily.Core.Models.ArrayField
+  field: ArrayField
   schema: Schema
 }
 
@@ -53,9 +54,7 @@ export interface IArrayBaseProps {
 type ComposedArrayBase = React.FC<IArrayBaseProps> &
   ArrayBaseMixins & {
     Item?: React.FC<IArrayBaseItemProps>
-    mixin?: <T extends Formily.React.Types.JSXComponent>(
-      target: T
-    ) => T & ArrayBaseMixins
+    mixin?: <T extends JSXComponent>(target: T) => T & ArrayBaseMixins
   }
 
 const ArrayBaseContext = createContext<IArrayBaseContext>(null)
@@ -86,7 +85,7 @@ const getDefaultValue = (defaultValue: any, schema: Schema) => {
 }
 
 export const ArrayBase: ComposedArrayBase = (props) => {
-  const field = useField<Formily.Core.Models.ArrayField>()
+  const field = useField<ArrayField>()
   const schema = useFieldSchema()
   return (
     <ArrayBaseContext.Provider value={{ field, schema, props }}>

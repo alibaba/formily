@@ -242,6 +242,8 @@ export default () => {
 ### FormStep.createFormStep
 
 ```ts pure
+import { Form } from '@formily/core'
+
 interface createFormStep {
   (current?: number): IFormStep
 }
@@ -256,7 +258,7 @@ interface IFormTab {
   //设置当前索引
   setCurrent(key: number): void
   //提交表单
-  submit: Formily.Core.Models.Form['submit']
+  submit: Form['submit']
   //向后
   next(): void
   //向前

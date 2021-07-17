@@ -50,7 +50,13 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, onFieldReact, onFieldInit } from '@formily/core'
+import {
+  createForm,
+  onFieldReact,
+  onFieldInit,
+  FormPathPattern,
+  Field,
+} from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { action, observable } from '@formily/reactive'
 import { fetch } from 'mfetch'
@@ -96,10 +102,8 @@ const SchemaField = createSchemaField({
 })
 
 const useAsyncDataSource = (
-  pattern: Formily.Core.Types.FormPathPattern,
-  service: (
-    field: Formily.Core.Models.Field
-  ) => Promise<{ label: string; value: any }[]>
+  pattern: FormPathPattern,
+  service: (field: Field) => Promise<{ label: string; value: any }[]>
 ) => {
   const keyword = observable.ref('')
 
@@ -163,7 +167,7 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, onFieldReact } from '@formily/core'
+import { createForm, onFieldReact, FormPathPattern, Field } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { action } from '@formily/reactive'
 
@@ -175,10 +179,8 @@ const SchemaField = createSchemaField({
 })
 
 const useAsyncDataSource = (
-  pattern: Formily.Core.Types.FormPathPattern,
-  service: (
-    field: Formily.Core.Models.Field
-  ) => Promise<{ label: string; value: any }[]>
+  pattern: FormPathPattern,
+  service: (field: Field) => Promise<{ label: string; value: any }[]>
 ) => {
   onFieldReact(pattern, (field) => {
     field.loading = true
@@ -456,15 +458,18 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, onFieldReact } from '@formily/core'
+import {
+  createForm,
+  onFieldReact,
+  FormPathPattern,
+  Field as FieldType,
+} from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
 import { action } from '@formily/reactive'
 
 const useAsyncDataSource = (
-  pattern: Formily.Core.Types.FormPathPattern,
-  service: (
-    field: Formily.Core.Models.Field
-  ) => Promise<{ label: string; value: any }[]>
+  pattern: FormPathPattern,
+  service: (field: FieldType) => Promise<{ label: string; value: any }[]>
 ) => {
   onFieldReact(pattern, (field) => {
     field.loading = true
