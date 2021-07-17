@@ -365,6 +365,7 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                           'SettingComponents.ReactionsSetter.addRelationField'
                         )}
                         x-component="ArrayTable.Addition"
+                        x-component-props={{ style: { marginTop: 8 } }}
                       />
                     </SchemaField.Array>
                   </SchemaField.Void>
