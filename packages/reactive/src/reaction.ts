@@ -174,7 +174,7 @@ export const batchStart = () => {
 export const batchEnd = () => {
   BatchCount.value--
   if (BatchCount.value === 0) {
-    excutePendingReactions()
+    executePendingReactions()
   }
 }
 
@@ -208,7 +208,7 @@ export const isScopeBatching = () => BatchScope.value
 
 export const isUntracking = () => UntrackCount.value > 0
 
-export const excutePendingReactions = () => {
+export const executePendingReactions = () => {
   PendingReactions.forEach((reaction) => {
     PendingReactions.delete(reaction)
     if (isFn(reaction._scheduler)) {
@@ -217,4 +217,25 @@ export const excutePendingReactions = () => {
       reaction()
     }
   })
+}
+
+export const hasDepsChange = (newDeps: any[], oldDeps: any[]) => {
+  if (newDeps === oldDeps) return false
+  if (newDeps.length !== oldDeps.length) return true
+  if (newDeps.some((value, index) => value !== oldDeps[index])) return true
+  return false
+}
+
+export const disposeEffects = (reaction: Reaction) => {
+  if (reaction._effects) {
+    try {
+      batchStart()
+      reaction._effects.queue.forEach((item) => {
+        if (!item || !item.dispose) return
+        item.dispose()
+      })
+    } finally {
+      batchEnd()
+    }
+  }
 }

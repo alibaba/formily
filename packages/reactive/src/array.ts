@@ -6,3 +6,11 @@ export const concat = (array: any[], target: any) => {
   arr.push(target)
   return arr
 }
+
+export const toArray = (value: any) => {
+  return Array.isArray(value)
+    ? value
+    : value !== undefined && value !== null
+    ? [value]
+    : []
+}

@@ -13,7 +13,7 @@ The core of active linkage is based on
 - [setFieldState](https://core.formilyjs.org/api/models/form#setfieldstate)
 - [SchemaReactions](https://react.formilyjs.org/api/shared/schema#schemareactions)
 
-Realize active linkage, the advantage is that it is very convenient to realize one-to-many linkage. 
+Realize active linkage, the advantage is that it is very convenient to realize one-to-many linkage.
 
 ### One-to-One Linkage
 
@@ -1525,7 +1525,154 @@ export default () => (
 
 ### Loop Linkage
 
-Passive mode will have problems to achieve cyclic linkage, because the data changes sensed by passive mode will trigger chain linkage. Chain linkage will cause mutually exclusive linkage that cannot break the cycle, so it is recommended to use active mode to achieve cyclic linkage
+#### Effects Use Cases
+
+```tsx
+import React from 'react'
+import { createForm, onFieldReact } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, NumberPicker } from '@formily/antd'
+
+const form = createForm({
+  effects() {
+    onFieldReact('total', (field) => {
+      const count = field.query('count').value()
+      const price = field.query('price').value()
+      if (count !== undefined && price !== undefined) {
+        field.value = count * price
+      }
+    })
+    onFieldReact('price', (field) => {
+      const total = field.query('total').value()
+      const count = field.query('count').value()
+      if (total !== undefined && count > 0) {
+        field.value = total / count
+      }
+    })
+    onFieldReact('count', (field) => {
+      const total = field.query('total').value()
+      const price = field.query('price').value()
+      if (total !== undefined && price > 0) {
+        field.value = total / price
+      }
+    })
+  },
+})
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    NumberPicker,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.Number
+        name="total"
+        title="总价"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+      <SchemaField.Number
+        name="count"
+        title="数量"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+      <SchemaField.Number
+        name="price"
+        title="单价"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
+
+#### SchemaReactions Use Cases
+
+```tsx
+import React from 'react'
+import { createForm } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, NumberPicker } from '@formily/antd'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    NumberPicker,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.Number
+        name="total"
+        title="总价"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['.count', '.price'],
+          fulfill: {
+            state: {
+              value:
+                '{{$deps[0] !== undefined && $deps[1] !== undefined ? $deps[0] * $deps[1] : $self.value}}',
+            },
+          },
+        }}
+      />
+      <SchemaField.Number
+        name="count"
+        title="数量"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['.total', '.price'],
+          fulfill: {
+            state: {
+              value: '{{ $deps[1] > 0 ? $deps[0] / $deps[1] : $self.value}}',
+            },
+          },
+        }}
+      />
+      <SchemaField.Number
+        name="price"
+        title="单价"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['.total', '.count'],
+          fulfill: {
+            state: {
+              value: '{{ $deps[1] > 0 ? $deps[0] / $deps[1] : $self.value}}',
+            },
+          },
+        }}
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
 
 ### Self Linkage
 
@@ -1718,7 +1865,7 @@ const SchemaField = createSchemaField({
   scope: {
     asyncVisible(field) {
       const select = field.query('select').take()
-      if(!select) return
+      if (!select) return
       const selectValue = select.value
       select.loading = true
       if (selectValue) {
