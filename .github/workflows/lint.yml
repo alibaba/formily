@@ -23,3 +23,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: ESlint Runner Action
         uses: tinovyatkin/action-eslint@v1
+        with:
+           repo-token: ${{secrets.GITHUB_TOKEN}}
+           check-name: eslint
