@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { untracked } from '@formily/reactive'
+import { untracked, autorun, observable } from '@formily/reactive'
 import {
   isBool,
   isArr,
@@ -448,6 +448,11 @@ const getReactions = (schema: ISchema, options: ISchemaFieldFactoryOptions) => {
         const $form = field.form
         const $deps = parseDependencies(field, reaction.dependencies)
         const $dependencies = $deps
+        const $observable = (target: any, deps?: any[]) =>
+          autorun.memo(() => observable(target), deps)
+        const $props = (props: any) => field.setComponentProps(props)
+        const $effect = autorun.effect
+        const $memo = autorun.memo
         const scope = {
           ...options.scope,
           $target: null,
@@ -455,6 +460,10 @@ const getReactions = (schema: ISchema, options: ISchemaFieldFactoryOptions) => {
           $self,
           $deps,
           $dependencies,
+          $observable,
+          $effect,
+          $memo,
+          $props,
         }
         const compile = (expression: any, target?: any) => {
           if (target) {

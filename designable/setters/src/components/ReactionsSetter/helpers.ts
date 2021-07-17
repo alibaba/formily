@@ -3,17 +3,26 @@ export const GlobalHelper = `
  * You can use the built-in context variables
  * 
  * 1. \`$self\` is the current Field Model 
- * https://core.formilyjs.org/api/models/field
  * 
  * 2. \`$form\` is the current Form Model 
- * https://core.formilyjs.org/api/models/form
  * 
  * 3. \`$deps\` is the dependencies value
+ * 
+ * 4. \`$observable\` function is used to create an persistent observable state object
+ *
+ * 5. \`$memo\` function is is used to create a persistent data
+ * 
+ * 6. \`$effect\` function is used to handle side-effect logic
+ * 
+ * 7. \`$props\` function is used to set component props to current field
+ * 
+ * Document Links
+ * 
+ * https://react.formilyjs.org/api/shared/schema#%E5%86%85%E7%BD%AE%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%9C%E7%94%A8%E5%9F%9F
  **/
 `
 
 export const BooleanHelper = `
-${GlobalHelper}
 /** 
  * Example 1
  * Static Boolean
@@ -56,10 +65,10 @@ $deps.VariableName > 100
 
 !$deps.VariableName
 
+${GlobalHelper}
 `
 
 export const DisplayHelper = `
-${GlobalHelper}
 /** 
  * Example 1
  * Static Mode
@@ -101,10 +110,11 @@ $deps.VariableName > 100 ? 'visible' : 'hidden'
  **/
 
 !$deps.VariableName ? 'visible' : 'none'
+
+${GlobalHelper}
 `
 
 export const PatternHelper = `
-${GlobalHelper}
 /** 
  * Example 1
  * Static Mode
@@ -146,10 +156,11 @@ $deps.VariableName > 100 ? 'editable' : 'readOnly'
  **/
 
 !$deps.VariableName ? 'editable' : 'disabled'
+
+${GlobalHelper}
 `
 
 export const StringHelper = `
-${GlobalHelper}
 /** 
  * Example 1
  * Static String
@@ -163,10 +174,11 @@ ${GlobalHelper}
  **/
 
 $deps.VariableName === 'TARGET_VALUE' ? 'Associated String Text' : ''
+
+${GlobalHelper}
 `
 
 export const AnyHelper = `
-${GlobalHelper}
 /** 
  * Example 1
  * String Type
@@ -231,10 +243,11 @@ $deps.VariableName + 'Compose String'
  **/
 
 !$deps.VariableName
+
+${GlobalHelper}
 `
 
 export const DataSourceHelper = `
-${GlobalHelper}
 /** 
  * Example 1
  * Static DataSource
@@ -255,10 +268,11 @@ ${GlobalHelper}
   { label : "item2", value: "2" },
   ...$deps.VariableName
 ]
+
+${GlobalHelper}
 `
 
 export const ComponentPropsHelper = `
-${GlobalHelper}
 /** 
  * Example 1
  * Static Props
@@ -276,10 +290,11 @@ ${GlobalHelper}
 {
   placeholder: $deps.VariableName
 }
+
+${GlobalHelper}
 `
 
 export const DecoratorPropsHelper = `
-${GlobalHelper}
 /** 
  * Example 1
  * Static Props
@@ -297,10 +312,11 @@ ${GlobalHelper}
 {
   labelCol: $deps.VariableName
 }
+
+${GlobalHelper}
 `
 
 export const FulfillRunHelper = `
-${GlobalHelper}
 /** 
  * Example 1
  * Async Select
@@ -316,7 +332,7 @@ $effect(()=>{
     },()=>{
       $self.loading = false
     })
-})
+},[])
   
 
 /** 
@@ -372,4 +388,6 @@ $effect(()=>{
       $self.loading = false
     })
 },[ state.keyword, $deps.VariableName ])
+
+${GlobalHelper}
 `
