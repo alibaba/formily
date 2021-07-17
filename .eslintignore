@@ -8,4 +8,5 @@ website
 gh-pages
 weex
 build.ts
-docs
+packages/vue
+packages/element

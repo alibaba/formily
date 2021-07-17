@@ -11,6 +11,7 @@ With so many ways of describing logic, how should we choose? What scenarios are 
 First of all, reactions are responders used on specific field properties. They will be executed repeatedly based on the data changes that the function depends on. Its biggest advantage is that it is simple, straightforward and easy to understand, such as:
 
 ```tsx pure
+/* eslint-disable */
 <Field
   name="A"
   reactions={(field) => {

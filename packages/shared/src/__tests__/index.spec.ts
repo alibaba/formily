@@ -131,7 +131,7 @@ describe('array', () => {
     ).toBeTruthy()
     expect(
       isEqual(
-        map(obj, (item, key) => `${item}-copy`),
+        map(obj, (item) => `${item}-copy`),
         { k1: 'v1-copy', k2: 'v2-copy' }
       )
     ).toBeTruthy()

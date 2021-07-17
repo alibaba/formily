@@ -968,11 +968,11 @@ registerValidateRules({
     if (!value) return ''
     return value !== '123' ? rule.message : ''
   },
-  global_3(value, rule) {
+  global_3(value) {
     if (!value) return ''
     return value === '123'
   },
-  global_4(value, rule) {
+  global_4(value) {
     if (!value) return ''
     if (value < 10) {
       return {
@@ -1069,7 +1069,7 @@ export default () => (
         title="局部定义风格"
         required
         x-validator={{
-          validator(value, rule) {
+          validator(value) {
             if (!value) return ''
             return value === '123'
           },
@@ -1082,7 +1082,7 @@ export default () => (
         name="validator_style_4"
         title="局部定义风格"
         required
-        x-validator={(value, rule) => {
+        x-validator={(value) => {
           if (!value) return ''
           if (value < 10) {
             return {
@@ -1136,11 +1136,11 @@ registerValidateRules({
     if (!value) return ''
     return value !== '123' ? rule.message : ''
   },
-  global_3(value, rule) {
+  global_3(value) {
     if (!value) return ''
     return value === '123'
   },
-  global_4(value, rule) {
+  global_4(value) {
     if (!value) return ''
     if (value < 10) {
       return {
@@ -1293,11 +1293,11 @@ registerValidateRules({
     if (!value) return ''
     return value !== '123' ? rule.message : ''
   },
-  global_3(value, rule) {
+  global_3(value) {
     if (!value) return ''
     return value === '123'
   },
-  global_4(value, rule) {
+  global_4(value) {
     if (!value) return ''
     if (value < 10) {
       return {
@@ -1393,7 +1393,7 @@ export default () => (
       title="局部定义风格"
       required
       validator={{
-        validator(value, rule) {
+        validator(value) {
           if (!value) return ''
           return value === '123'
         },
@@ -1406,7 +1406,7 @@ export default () => (
       name="validator_style_4"
       title="局部定义风格"
       required
-      validator={(value, rule) => {
+      validator={(value) => {
         if (!value) return ''
         if (value < 10) {
           return {

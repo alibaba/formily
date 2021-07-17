@@ -3,8 +3,7 @@
   "extends": [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:markdown/recommended"
+    "prettier/@typescript-eslint"
   ],
   "env": {
     "node": true
@@ -60,7 +59,7 @@
   },
   "overrides": [
     {
-      "files": ["**/*.md"],
+      "files": ["**/*.md.{jsx,tsx}"],
       "processor": "markdown/markdown"
     },
     {
@@ -68,7 +67,19 @@
       "rules": {
         "@typescript-eslint/no-unused-vars": "error",
         "no-unused-vars": "error",
-        "no-console": "off"
+        "no-console": "off",
+        "react/display-name": "off",
+        "react/prop-types": "off"
+      }
+    },
+    {
+      "files": ["**/*.md/*.{js,ts}"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-unused-vars": "off",
+        "no-console": "off",
+        "react/display-name": "off",
+        "react/prop-types": "off"
       }
     }
   ]

@@ -39,7 +39,7 @@ const converter = new Showdown.Converter({
   tasklists: true,
 })
 
-const MdInput = ({ value, onChange, ...props }) => {
+const MdInput = ({ value, onChange }) => {
   const [selectedTab, setSelectedTab] = React.useState('write')
   return (
     <div style={{ fontSize: 12, lineHeight: 1 }}>
@@ -221,17 +221,29 @@ export default () => {
                   React + Antd User:
                   <ul>
                     <li>
-                      <a href="https://codesandbox.io/s/7ql5g" target="_blank">
+                      <a
+                        href="https://codesandbox.io/s/7ql5g"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         Pure JSX
                       </a>
                     </li>
                     <li>
-                      <a href="https://codesandbox.io/s/pxqz2" target="_blank">
+                      <a
+                        href="https://codesandbox.io/s/pxqz2"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         Markup Schema
                       </a>
                     </li>
                     <li>
-                      <a href="https://codesandbox.io/s/jcpnx" target="_blank">
+                      <a
+                        href="https://codesandbox.io/s/jcpnx"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         JSON Schema
                       </a>
                     </li>
@@ -244,6 +256,7 @@ export default () => {
                       <a
                         href="https://codesandbox.io/s/festive-austin-mkiuc"
                         target="_blank"
+                        rel="noreferrer"
                       >
                         Pure JSX
                       </a>
@@ -252,6 +265,7 @@ export default () => {
                       <a
                         href="https://codesandbox.io/s/quirky-roentgen-jwsdh"
                         target="_blank"
+                        rel="noreferrer"
                       >
                         Markup Schema
                       </a>
@@ -260,6 +274,7 @@ export default () => {
                       <a
                         href="https://codesandbox.io/s/ancient-https-w2i7v"
                         target="_blank"
+                        rel="noreferrer"
                       >
                         JSON Schema
                       </a>
@@ -273,6 +288,7 @@ export default () => {
                       <a
                         href="https://codesandbox.io/s/quizzical-fermi-mbt2x"
                         target="_blank"
+                        rel="noreferrer"
                       >
                         Pure JSX
                       </a>
@@ -281,6 +297,7 @@ export default () => {
                       <a
                         href="https://codesandbox.io/s/dreamy-fermi-7pftm"
                         target="_blank"
+                        rel="noreferrer"
                       >
                         Markup Schema
                       </a>
@@ -289,6 +306,7 @@ export default () => {
                       <a
                         href="https://codesandbox.io/s/interesting-faraday-0iu5c"
                         target="_blank"
+                        rel="noreferrer"
                       >
                         JSON Schema
                       </a>

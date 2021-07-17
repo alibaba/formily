@@ -11,6 +11,7 @@
 首先，reactions 是用在具体字段属性上的响应器，它会基于函数内依赖的数据变化而重复执行，它最大的优点就是简单直接，容易理解，比如：
 
 ```tsx pure
+/* eslint-disable */
 <Field
   name="A"
   reactions={(field) => {

@@ -35,7 +35,7 @@ import { Input, Button, Space } from 'antd'
 const form = createForm()
 
 const ArrayComponent = observer(() => {
-  const field = useField<ArrayField>()
+  const field = useField<ArrayFieldType>()
   return (
     <>
       <div>
