@@ -99,12 +99,10 @@ autorun.effect = (callback: () => void | Dispose, dependencies?: any[]) => {
   const old = effects.queue[id]
   if (!old || hasDepsChange(deps, old.deps)) {
     Promise.resolve(0).then(() => {
+      if (current._disposed) return
       const dispose = callback()
       if (isFn(dispose)) {
         effects.queue[id].dispose = dispose
-        if (current._disposed) {
-          dispose()
-        }
       }
     })
     effects.queue[id] = {

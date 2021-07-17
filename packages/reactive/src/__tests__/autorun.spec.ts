@@ -414,6 +414,32 @@ test('autorun.effect', async () => {
   expect(disposer).toBeCalledTimes(1)
 })
 
+test('autorun.effect dispose when autorun dispose', async () => {
+  const obs = observable<any>({
+    bb: 0,
+  })
+  const fn = jest.fn()
+  const effect = jest.fn()
+  const disposer = jest.fn()
+  const dispose = autorun(() => {
+    autorun.effect(() => {
+      effect()
+      return disposer
+    }, [])
+    fn(obs.bb)
+  })
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  dispose()
+  await sleep(16)
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(4)
+  expect(effect).toBeCalledTimes(0)
+  expect(disposer).toBeCalledTimes(0)
+})
+
 test('autorun.effect with deps', async () => {
   const obs = observable<any>({
     bb: 0,
