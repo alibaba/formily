@@ -2,9 +2,27 @@
 
 > 全新的 FormItem 组件，相比于 Element 的 FormItem，它支持的功能更多，同时它的定位是纯样式组件，不管理表单状态，所以也会更轻量，更方便定制
 
-## 使用案例
+## Markup Schema 案例
 
-<dumi-previewer demoPath="guide/form-item" />
+<dumi-previewer demoPath="guide/form-item/markup-schema" />
+
+## JSON Schema 案例
+
+<dumi-previewer demoPath="guide/form-item/json-schema" />
+
+## Template 案例
+
+<dumi-previewer demoPath="guide/form-item/template" />
+
+## 常用属性案例
+
+<dumi-previewer demoPath="guide/form-item/common" />
+
+## 反馈信息定制案例
+
+可通过 `feedbackIcon` 传入指定反馈的按钮
+
+<dumi-previewer demoPath="guide/form-item/feedback" />
 
 ## API
 
@@ -17,8 +35,8 @@
 | labelStyle     | CSSProperties                                          | 标签样式                                    | -         |
 | wrapperStyle   | CSSProperties                                          | 组件容器样式                                | -         |
 | className      | string                                                 | 组件样式类名                                | -         |
-| colon          | boolean                                                | 冒号                                        | true      |
-| tooltip        | boolean                                                | 问号提示                                    | -         |
+| colon          | boolean                                                | 冒号                                        | -         |
+| tooltip        | String \| Vue Component                                | 问号提示                                    | -         |
 | labelAlign     | `"left"` \| `"right"`                                  | 标签文本对齐方式                            | `"right"` |
 | labelWrap      | boolean                                                | 标签换⾏，否则出现省略号，hover 有 tooltip  | false     |
 | labelWidth     | `number`                                               | 标签固定宽度                                | -         |
@@ -35,7 +53,7 @@
 | feedbackText   | ReactNode                                              | 反馈⽂案                                    | -         |
 | feedbackLayout | `"loose"` \| `"terse"` \| `"popover" \| "none"`        | 反馈布局                                    | -         |
 | feedbackStatus | `"error"` \| `"warning"` \| `"success"` \| `"pending"` | 反馈布局                                    | -         |
-| feedbackIcon   | ReactNode                                              | 反馈图标                                    | -         |
+| feedbackIcon   | string                                                 | 反馈图标                                    | -         |
 | required       | boolean                                                | 星号提醒                                    | -         |
 | asterisk       | boolean                                                | 星号提醒                                    | -         |
 | gridSpan       | number                                                 | ⽹格布局占宽                                | -         |

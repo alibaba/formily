@@ -2,9 +2,17 @@
 
 > FormGrid 组件
 
-## 使用案例
+## Markup Schema 案例
 
-<dumi-previewer demoPath="guide/form-grid" />
+<dumi-previewer demoPath="guide/form-grid/markup-schema" />
+
+## JSON Schema 案例
+
+<dumi-previewer demoPath="guide/form-grid/json-schema" />
+
+## 原生案例
+
+<dumi-previewer demoPath="guide/form-grid/native" />
 
 ## API
 

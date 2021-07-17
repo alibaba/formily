@@ -10,7 +10,6 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { h } from '@vue/composition-api'
 import {
   Form,
   FormItem,

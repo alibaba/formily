@@ -24,7 +24,7 @@
 
 ### FormStepPane
 
-参考 [https://element.eleme.io/#/zh-CN/component/steps](https://element.eleme.io/#/zh-CN/component/steps) Steps.Step 属性
+参考 [https://element.eleme.io/#/zh-CN/component/steps](https://element.eleme.io/#/zh-CN/component/steps)
 
 ### createFormStep
 

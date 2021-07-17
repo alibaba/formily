@@ -46,15 +46,6 @@ const schema = {
         type: 'year',
       },
     },
-    dates: {
-      type: 'array',
-      title: '多个日期',
-      'x-decorator': 'FormItem',
-      'x-component': 'DatePicker',
-      'x-component-props': {
-        type: 'dates',
-      },
-    },
     dateTime: {
       type: 'string',
       title: '日期时间',
@@ -64,7 +55,16 @@ const schema = {
         type: 'datetime',
       },
     },
-    daterange: {
+    dates: {
+      type: 'array',
+      title: '多个日期',
+      'x-decorator': 'FormItem',
+      'x-component': 'DatePicker',
+      'x-component-props': {
+        type: 'dates',
+      },
+    },
+    dateRange: {
       type: 'string',
       title: '日期范围',
       'x-decorator': 'FormItem',

@@ -1,5 +1,5 @@
-import { defineComponent, PropType, computed, reactive } from 'vue-demi'
-import { action } from '@formily/reactive'
+import { defineComponent, PropType } from 'vue-demi'
+import { action, model, observable } from '@formily/reactive'
 import { observer } from '@formily/reactive-vue'
 import {
   h,
@@ -56,7 +56,7 @@ const parseSteps = (schema: Schema) => {
 }
 
 export const createFormStep = (defaultCurrent = 0): IFormStep => {
-  const env: FormStepEnv = reactive({
+  const env: FormStepEnv = observable({
     form: null,
     field: null,
     steps: [],
@@ -89,7 +89,7 @@ export const createFormStep = (defaultCurrent = 0): IFormStep => {
     }
   })
 
-  const formStep: IFormStep = reactive({
+  const formStep: IFormStep = model({
     connect(steps, field) {
       env.steps = steps
       env.form = field?.form
@@ -100,10 +100,10 @@ export const createFormStep = (defaultCurrent = 0): IFormStep => {
       formStep.current = key
     },
     get allowNext() {
-      return this.current < env.steps.length - 1
+      return formStep.current < env.steps.length - 1
     },
     get allowBack() {
-      return this.current > 0
+      return formStep.current > 0
     },
     async next() {
       try {
@@ -118,12 +118,12 @@ export const createFormStep = (defaultCurrent = 0): IFormStep => {
       return env.form?.submit?.(onSubmit)
     },
   })
-
   return formStep
 }
 
 export const FormStep = observer(
   defineComponent<IFormStepProps>({
+    name: 'FormStep',
     props: {
       formStep: {
         type: Object as PropType<IFormStep>,
@@ -137,17 +137,18 @@ export const FormStep = observer(
     setup(props, { attrs }) {
       const field = useField<Formily.Core.Models.VoidField>().value
       const prefixCls = `${stylePrefix}-form-step`
-      const schema = useFieldSchema().value
-      const steps = parseSteps(schema)
-      const renderSteps = (steps: SchemaStep[], callback) => {
-        return steps.map(callback)
-      }
+      const fieldSchemaRef = useFieldSchema()
 
-      const formStepRef = computed(() => props.formStep ?? createFormStep())
-      formStepRef.value?.connect?.(steps, field)
+      const steps = parseSteps(fieldSchemaRef.value)
+
+      props.formStep.connect?.(steps, field)
 
       return () => {
-        const current = props.active || formStepRef.value?.current || 0
+        const current = props.active || props.formStep?.current || 0
+
+        const renderSteps = (steps: SchemaStep[], callback) => {
+          return steps.map(callback)
+        }
 
         return h(
           'div',
@@ -186,6 +187,7 @@ export const FormStep = observer(
 )
 
 export const FormStepPane = defineComponent<StepProps>({
+  name: 'FormStepPane',
   setup(_props, { slots }) {
     return () => h(Fragment, {}, slots)
   },

@@ -12,6 +12,9 @@
           name="input"
           title="输入框"
           x-decorator="FormItem"
+          :x-decorator-props="{
+            tooltip: '123',
+          }"
           x-component="Input"
           :required="true"
         />

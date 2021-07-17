@@ -1,27 +1,28 @@
 <template>
-  <Form :form="form" label-align="left" :label-width="160">
+  <FormProvider :form="form">
     <SchemaField :schema="schema" />
     <Submit @submit="onSubmit">提交</Submit>
-  </Form>
+  </FormProvider>
 </template>
 
 <script>
 import { createForm } from '@formily/core'
-import { createSchemaField } from '@formily/vue'
-import { Form, FormItem, Transfer, Submit } from '@formily/element'
+import { createSchemaField, FormProvider } from '@formily/vue'
+import { FormItem, InputNumber, Submit } from '@formily/element'
 
 const schema = {
   type: 'object',
   properties: {
-    transfer: {
-      type: 'array',
-      title: '穿梭框',
-      enum: [
-        { title: '选项1', key: 1 },
-        { title: '选项2', key: 2 },
-      ],
+    inputNumber: {
+      type: 'number',
+      title: '输入框',
       'x-decorator': 'FormItem',
-      'x-component': 'Transfer',
+      'x-component': 'InputNumber',
+      'x-component-props': {
+        style: {
+          width: '240px',
+        },
+      },
     },
   },
 }
@@ -30,12 +31,12 @@ const form = createForm()
 const { SchemaField } = createSchemaField({
   components: {
     FormItem,
-    Transfer,
+    InputNumber,
   },
 })
 
 export default {
-  components: { Form, SchemaField, Submit },
+  components: { FormProvider, SchemaField, Submit },
   data() {
     return {
       form,

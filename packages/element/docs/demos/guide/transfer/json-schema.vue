@@ -8,25 +8,20 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, FormItem, TimePicker, Submit } from '@formily/element'
+import { Form, FormItem, Transfer, Submit } from '@formily/element'
 
 const schema = {
   type: 'object',
   properties: {
-    time: {
-      type: 'string',
-      title: '时间',
+    transfer: {
+      type: 'array',
+      title: '穿梭框',
+      enum: [
+        { label: '选项1', key: 1 },
+        { label: '选项2', key: 2 },
+      ],
       'x-decorator': 'FormItem',
-      'x-component': 'TimePicker',
-    },
-    '[startTime,endTime]': {
-      title: '时间范围',
-      'x-decorator': 'FormItem',
-      'x-component': 'TimePicker',
-      'x-component-props': {
-        isRange: true,
-      },
-      type: 'string',
+      'x-component': 'Transfer',
     },
   },
 }
@@ -35,7 +30,7 @@ const form = createForm()
 const { SchemaField } = createSchemaField({
   components: {
     FormItem,
-    TimePicker,
+    Transfer,
   },
 })
 
@@ -54,4 +49,3 @@ export default {
   },
 }
 </script>
-l

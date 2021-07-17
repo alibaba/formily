@@ -38,6 +38,8 @@ const isOperationComponent = (schema: ISchema) => {
 
 export const ArrayCards = observer(
   defineComponent<CardProps>({
+    name: 'ArrayCards',
+    props: [],
     setup(props, { attrs }) {
       const fieldRef = useField<Formily.Core.Models.ArrayField>()
       const schemaRef = useFieldSchema()
@@ -133,7 +135,7 @@ export const ArrayCards = observer(
                   h(
                     Card,
                     {
-                      class: [`${prefixCls}-item`, attrs.class],
+                      class: [`${prefixCls}-item`],
                       attrs: {
                         shadow: 'never',
                         ...attrs,
@@ -184,7 +186,7 @@ export const ArrayCards = observer(
           return h(
             Card,
             {
-              class: [`${prefixCls}-item`, attrs.class],
+              class: [`${prefixCls}-item`],
               attrs: {
                 shadow: 'never',
                 ...attrs,
@@ -228,10 +230,10 @@ export const ArrayCards = observer(
 )
 
 export {
-  ArrayRemove as ArrayCardsRemove,
-  ArrayMoveDown as ArrayCardsMoveDown,
-  ArrayMoveUp as ArrayCardsMoveUp,
-  ArrayAddition as ArrayCardsAddition,
-  ArrayIndex as ArrayCardsIndex,
+  ArrayBaseRemove as ArrayCardsRemove,
+  ArrayBaseMoveDown as ArrayCardsMoveDown,
+  ArrayBaseMoveUp as ArrayCardsMoveUp,
+  ArrayBaseAddition as ArrayCardsAddition,
+  ArrayBaseIndex as ArrayCardsIndex,
   useIndex as useArrayCardsIndex,
 } from '../array-base'

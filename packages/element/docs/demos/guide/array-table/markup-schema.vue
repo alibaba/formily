@@ -9,20 +9,21 @@
         <SchemaObjectField>
           <SchemaVoidField
             x-component="ArrayTableColumn"
-            :x-component-props="{ width: 80, title: 'Index', type: 'index' }"
-          />
+            :x-component-props="{ width: 80, title: 'Index' }"
+            ><SchemaVoidField
+              x-decorator="FormItem"
+              x-component="ArrayTableIndex"
+            />
+          </SchemaVoidField>
           <SchemaVoidField
             x-component="ArrayTableColumn"
             :x-component-props="{ prop: 'a1', title: 'A1', width: 200 }"
           >
             <SchemaStringField
-              x-decorator="FormItem"
+              x-decorator="Editable"
               name="a1"
               :required="true"
               x-component="Input"
-              :x-decorator-props="{
-                feedbackLayout: 'popover',
-              }"
             />
           </SchemaVoidField>
           <SchemaVoidField
@@ -34,9 +35,6 @@
               name="a2"
               :required="true"
               x-component="Input"
-              :x-decorator-props="{
-                feedbackLayout: 'popover',
-              }"
             />
           </SchemaVoidField>
           <SchemaVoidField
@@ -48,9 +46,6 @@
               :required="true"
               x-decorator="FormItem"
               x-component="Input"
-              :x-decorator-props="{
-                feedbackLayout: 'popover',
-              }"
             />
           </SchemaVoidField>
           <SchemaVoidField
@@ -63,29 +58,13 @@
             }"
           >
             <SchemaVoidField x-component="FormItem">
-              <SchemaVoidField
-                x-component="ArrayRemove"
-                :x-component-props="{
-                  title: '删除',
-                  style: 'color: #f33;',
-                }"
-              />
-              <SchemaVoidField
-                x-component="ArrayMoveUp"
-                :x-component-props="{
-                  title: '上移',
-                }"
-              />
-              <SchemaVoidField
-                x-component="ArrayMoveDown"
-                :x-component-props="{
-                  title: '下移',
-                }"
-              />
+              <SchemaVoidField x-component="ArrayTableRemove" />
+              <SchemaVoidField x-component="ArrayTableMoveUp" />
+              <SchemaVoidField x-component="ArrayTableMoveDown" />
             </SchemaVoidField>
           </SchemaVoidField>
         </SchemaObjectField>
-        <SchemaVoidField x-component="ArrayAddition" title="添加条目" />
+        <SchemaVoidField x-component="ArrayTableAddition" title="添加条目" />
       </SchemaArrayField>
     </SchemaField>
     <Submit @submit="log">提交</Submit>
@@ -100,11 +79,14 @@ import {
   FormItem,
   ArrayTable,
   ArrayTableColumn,
-  ArrayAddition,
-  ArrayMoveDown,
-  ArrayMoveUp,
-  ArrayRemove,
+  ArrayTableAddition,
+  ArrayTableMoveDown,
+  ArrayTableMoveUp,
+  ArrayTableRemove,
+  ArrayTableIndex,
+  ArrayTableSortHandle,
   Input,
+  Editable,
 } from '@formily/element'
 
 const fields = createSchemaField({
@@ -112,11 +94,14 @@ const fields = createSchemaField({
     FormItem,
     ArrayTable,
     ArrayTableColumn,
-    ArrayAddition,
-    ArrayMoveDown,
-    ArrayMoveUp,
-    ArrayRemove,
+    ArrayTableAddition,
+    ArrayTableMoveDown,
+    ArrayTableMoveUp,
+    ArrayTableRemove,
+    ArrayTableIndex,
+    ArrayTableSortHandle,
     Input,
+    Editable,
   },
 })
 

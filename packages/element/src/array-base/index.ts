@@ -7,18 +7,11 @@ import {
   toRefs,
   ref,
 } from 'vue-demi'
-import {
-  FragmentComponent,
-  Fragment,
-  useField,
-  useFieldSchema,
-  h,
-} from '@formily/vue'
+import { Fragment, useField, useFieldSchema, h } from '@formily/vue'
 import { isValid, uid } from '@formily/shared'
 import { ArrayField } from '@formily/core'
 import { stylePrefix } from '../__builtins__/configs'
 
-import type { Component } from 'vue'
 import type { Button as ButtonProps } from 'element-ui'
 import { Button } from 'element-ui'
 import type { Schema } from '@formily/json-schema'
@@ -90,6 +83,7 @@ const getDefaultValue = (defaultValue: any, schema: Schema): any => {
 }
 
 export const ArrayBase = defineComponent({
+  name: 'ArrayBase',
   props: ['disabled'],
   setup(props: IArrayBaseProps, { slots, listeners }) {
     const field = useField<ArrayField>()
@@ -103,6 +97,7 @@ export const ArrayBase = defineComponent({
 })
 
 export const ArrayBaseItem = defineComponent({
+  name: 'ArrayBaseItem',
   props: ['index'],
   setup(props: IArrayBaseItemProps, { slots }) {
     provide(ItemSymbol, toRefs(props))
@@ -112,7 +107,8 @@ export const ArrayBaseItem = defineComponent({
   },
 })
 
-export const ArraySortHandle = defineComponent({
+export const ArrayBaseSortHandle = defineComponent({
+  name: 'ArrayBaseSortHandle',
   props: ['index'],
   directives: {
     handle: HandleDirective,
@@ -129,7 +125,7 @@ export const ArraySortHandle = defineComponent({
         Button,
         {
           directives: [{ name: 'handle' }],
-          class: [`${prefixCls}-sort-handle`, attrs.class],
+          class: [`${prefixCls}-sort-handle`],
           attrs: {
             size: 'mini',
             type: 'text',
@@ -143,7 +139,8 @@ export const ArraySortHandle = defineComponent({
   },
 })
 
-export const ArrayIndex = defineComponent({
+export const ArrayBaseIndex = defineComponent({
+  name: 'ArrayBaseIndex',
   setup(props, { attrs }) {
     const index = useIndex()
     return () =>
@@ -159,7 +156,8 @@ export const ArrayIndex = defineComponent({
   },
 })
 
-export const ArrayAddition = defineComponent({
+export const ArrayBaseAddition = defineComponent({
+  name: 'ArrayBaseAddition',
   props: ['title', 'method', 'defaultValue'],
   setup(props: IArrayBaseAdditionProps, { listeners }) {
     const self = useField()
@@ -206,9 +204,10 @@ export const ArrayAddition = defineComponent({
   },
 })
 
-export const ArrayRemove = defineComponent<
+export const ArrayBaseRemove = defineComponent<
   ButtonProps & { title?: string; index?: number }
 >({
+  name: 'ArrayBaseRemove',
   props: ['title', 'index'],
   setup(props, { attrs, listeners }) {
     const indexRef = useIndex(props.index)
@@ -247,9 +246,10 @@ export const ArrayRemove = defineComponent<
   },
 })
 
-export const ArrayMoveDown = defineComponent<
+export const ArrayBaseMoveDown = defineComponent<
   ButtonProps & { title?: string; index?: number }
 >({
+  name: 'ArrayBaseMoveDown',
   props: ['title', 'index'],
   setup(props, { attrs, listeners }) {
     const indexRef = useIndex(props.index)
@@ -288,9 +288,10 @@ export const ArrayMoveDown = defineComponent<
   },
 })
 
-export const ArrayMoveUp = defineComponent<
+export const ArrayBaseMoveUp = defineComponent<
   ButtonProps & { title?: string; index?: number }
 >({
+  name: 'ArrayBaseMoveUp',
   props: ['title', 'index'],
   setup(props, { attrs, listeners }) {
     const indexRef = useIndex(props.index)

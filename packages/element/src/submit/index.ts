@@ -5,16 +5,28 @@ import { defineComponent } from 'vue-demi'
 import type { Button as ElButtonProps } from 'element-ui'
 import { Button as ElButton } from 'element-ui'
 
-export type SubmitProps = ElButtonProps
+export interface ISubmitProps extends ElButtonProps {
+  onClick?: (e: MouseEvent) => any
+  onSubmit?: (values: any) => any
+  onSubmitSuccess?: (payload: any) => void
+  onSubmitFailed?: (feedbacks: Formily.Core.Types.IFormFeedback[]) => void
+}
 
 export const Submit = observer(
-  defineComponent<SubmitProps>({
-    setup(props, context) {
+  defineComponent<ISubmitProps>({
+    name: 'Submit',
+    props: ['onClick', 'onSubmit', 'onSubmitSuccess', 'onSubmitFailed'],
+    setup(props, { attrs, slots, listeners }) {
       const formRef = useForm()
 
-      const { listeners, slots, attrs } = context
-
       return () => {
+        const {
+          onClick = listeners?.click,
+          onSubmit = listeners?.submit,
+          onSubmitSuccess = listeners?.submitSuccess,
+          onSubmitFailed = listeners?.submitFailed,
+        } = props
+
         const form = formRef?.value
         return h(
           ElButton,
@@ -29,14 +41,14 @@ export const Submit = observer(
             on: {
               ...listeners,
               click: (e: any) => {
-                if (listeners?.click) {
-                  if (listeners.click(e) === false) return
+                if (onClick) {
+                  if (onClick(e) === false) return
                 }
-                if (listeners?.submit) {
+                if (onSubmit) {
                   form
-                    ?.submit(listeners.submit as (e: any) => void)
-                    .then(listeners.submitSuccess as (e: any) => void)
-                    .catch(listeners.submitFailed as (e: any) => void)
+                    ?.submit(onSubmit as (e: any) => void)
+                    .then(onSubmitSuccess as (e: any) => void)
+                    .catch(onSubmitFailed as (e: any) => void)
                 }
               },
             },

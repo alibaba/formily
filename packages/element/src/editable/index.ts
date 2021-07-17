@@ -205,7 +205,7 @@ export const EditablePopover = observer(
         return h(
           Popover,
           {
-            class: [prefixCls, attrs.class],
+            class: [prefixCls],
             attrs: {
               ...attrs,
               title: attrs.title || field.title,

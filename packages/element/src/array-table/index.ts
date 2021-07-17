@@ -99,7 +99,7 @@ const getArrayTableSources = (
     }
   }
 
-  const parseArrayItems = (schema: Schema['items']) => {
+  const parseArrayTable = (schema: Schema['items']) => {
     const sources: ObservableColumnSource[] = []
     const items = isArr(schema) ? schema : ([schema] as Schema[])
     return items.reduce((columns, schema) => {
@@ -113,7 +113,7 @@ const getArrayTableSources = (
 
   if (!schemaRef) throw new Error('can not found schema object')
 
-  return parseArrayItems(schemaRef.value.items)
+  return parseArrayTable(schemaRef.value.items)
 }
 
 const getArrayTableColumns = (
@@ -192,6 +192,7 @@ const renderAddition = () => {
 
 const ArrayTableInner = observer(
   defineComponent({
+    name: 'ArrayTableInner',
     setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
@@ -257,6 +258,7 @@ const ArrayTableInner = observer(
 
 export const ArrayTable = observer(
   defineComponent({
+    name: 'ArrayTable',
     setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
@@ -308,3 +310,13 @@ export const ArrayTableColumn: Component = {
     return h()
   },
 }
+
+export {
+  ArrayBaseSortHandle as ArrayTableSortHandle,
+  ArrayBaseRemove as ArrayTableRemove,
+  ArrayBaseMoveDown as ArrayTableMoveDown,
+  ArrayBaseMoveUp as ArrayTableMoveUp,
+  ArrayBaseAddition as ArrayTableAddition,
+  ArrayBaseIndex as ArrayTableIndex,
+  useIndex as useArrayTableIndex,
+} from '../array-base'

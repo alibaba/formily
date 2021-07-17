@@ -23,6 +23,7 @@ const TransformElRadioGroup = getComponentByTag(ElRadioGroup, {
 })
 
 const RadioGroupOption = defineComponent<RadioGroupProps>({
+  name: 'RadioGroup',
   props: {
     options: {
       type: Array,

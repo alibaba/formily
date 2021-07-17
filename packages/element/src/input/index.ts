@@ -16,7 +16,7 @@ export const Input = connect(
   mapReadPretty(PreviewInputText)
 )
 
-export const Textarea = connect(
+export const TextArea = connect(
   Input,
   mapProps((props) => {
     return {

@@ -266,7 +266,7 @@ export const ArrayCollapse = observer(
           return h(
             Collapse,
             {
-              class: [`${prefixCls}-item`, attrs.class],
+              class: [`${prefixCls}-item`],
               attrs: {
                 ...attrs,
                 value: activeKeys.value,
@@ -304,7 +304,7 @@ export const ArrayCollapse = observer(
           return h(
             Card,
             {
-              class: [`${prefixCls}-item`, attrs.class],
+              class: [`${prefixCls}-item`],
               attrs: {
                 shadow: 'never',
                 ...attrs,
@@ -358,16 +358,17 @@ export const ArrayCollapse = observer(
 )
 
 export const ArrayCollapseItem = defineComponent<CollapseItemProps>({
+  name: 'ArrayCollapseItem',
   setup(_props, { slots }) {
     return () => h(Fragment, {}, slots)
   },
 })
 
 export {
-  ArrayRemove as ArrayCollapseRemove,
-  ArrayMoveDown as ArrayCollapseMoveDown,
-  ArrayMoveUp as ArrayCollapseMoveUp,
-  ArrayAddition as ArrayCollapseAddition,
-  ArrayIndex as ArrayCollapseIndex,
+  ArrayBaseRemove as ArrayCollapseRemove,
+  ArrayBaseMoveDown as ArrayCollapseMoveDown,
+  ArrayBaseMoveUp as ArrayCollapseMoveUp,
+  ArrayBaseAddition as ArrayCollapseAddition,
+  ArrayBaseIndex as ArrayCollapseIndex,
   useIndex as useArrayCollapseIndex,
 } from '../array-base'

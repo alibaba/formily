@@ -3,7 +3,7 @@ home: true
 heroText: FORMILY ELEMENT
 tagline: 基于 Element UI 封装的Formily2.x组件体系
 actionText: 开发指南
-actionLink: /guide/form
+actionLink: /guide/
 features:
   - title: 更易用
     details: 开箱即用，案例丰富

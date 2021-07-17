@@ -1,4 +1,10 @@
 const path = require('path')
+const utils = require('./util')
+
+const componentFiles = utils
+  .getFiles(path.resolve(__dirname, '../guide'))
+  .map((item) => item.replace(/(\.md)/g, ''))
+  .filter((item) => !['el-form', 'el-form-item', 'index'].includes(item))
 
 module.exports = {
   title: 'Formily Element',
@@ -25,7 +31,7 @@ module.exports = {
     nav: [
       {
         text: '指南',
-        link: '/guide/form',
+        link: '/guide/',
       },
       {
         text: '主站',
@@ -37,37 +43,7 @@ module.exports = {
       },
     ],
     sidebar: {
-      '/guide/': [
-        'form',
-        'form-item',
-        'form-layout',
-        'form-grid',
-        'form-button-group',
-        'form-tab',
-        'form-step',
-        'array-cards',
-        'array-collapse',
-        'array-items',
-        'array-table',
-        'array-tabs',
-        'space',
-        'reset',
-        'submit',
-        'input',
-        'input-number',
-        'password',
-        'select',
-        'cascader',
-        'checkbox',
-        'radio',
-        'switch',
-        'date-picker',
-        'time-picker',
-        'transfer',
-        'upload',
-        'editable',
-        'preview-text',
-      ],
+      '/guide/': ['', ...componentFiles],
     },
     lastUpdated: 'Last Updated',
     smoothScroll: true,

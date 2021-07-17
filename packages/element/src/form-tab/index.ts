@@ -60,6 +60,7 @@ export const createFormTab = (defaultActiveKey?: string) => {
 
 export const FormTab = observer(
   defineComponent<IFormTabProps>({
+    name: 'FormTab',
     props: ['formTab'],
     setup(props, { attrs, listeners }) {
       const field = useField().value
@@ -126,7 +127,7 @@ export const FormTab = observer(
         return h(
           Tabs,
           {
-            class: [prefixCls, attrs.class],
+            class: [prefixCls],
             style: attrs.style,
             props: {
               ...attrs,
@@ -150,6 +151,7 @@ export const FormTab = observer(
 )
 
 export const FormTabPane = defineComponent<IFormTabPaneProps>({
+  name: 'FormTabPane',
   setup(_props, { slots }) {
     return () => h(Fragment, {}, slots)
   },

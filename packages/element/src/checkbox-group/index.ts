@@ -18,6 +18,7 @@ const TransformElCheckboxGroup = getComponentByTag(ElCheckboxGroup, {
 })
 
 const CheckboxGroupOption = defineComponent<CheckboxGroupProps>({
+  name: 'CheckboxGroup',
   props: {
     options: {
       type: Array,

@@ -8,16 +8,22 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, FormItem, Switch, Submit } from '@formily/element'
+import { Form, FormItem, Input, TextArea, Submit } from '@formily/element'
 
 const schema = {
   type: 'object',
   properties: {
-    switch: {
-      type: 'number',
-      title: '开关',
+    input: {
+      type: 'string',
+      title: '输入框',
       'x-decorator': 'FormItem',
-      'x-component': 'Switch',
+      'x-component': 'Input',
+    },
+    textarea: {
+      type: 'string',
+      title: '文本框',
+      'x-decorator': 'FormItem',
+      'x-component': 'TextArea',
     },
   },
 }
@@ -26,7 +32,8 @@ const form = createForm()
 const { SchemaField } = createSchemaField({
   components: {
     FormItem,
-    Switch,
+    Input,
+    Textarea,
   },
 })
 

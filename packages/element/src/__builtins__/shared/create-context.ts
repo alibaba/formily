@@ -5,30 +5,34 @@ import {
   inject,
   readonly,
   InjectionKey,
+  ref,
+  Ref,
+  toRef,
 } from 'vue-demi'
 
 export type CreateContext<T> = {
   Provider: Component
   Consumer: Component
-  injectKey: InjectionKey<T>
+  injectKey: InjectionKey<Ref<T>>
 }
 
-export const createContext = <T>(defaultValue: T): CreateContext<T> => {
-  const injectKey: InjectionKey<T> = Symbol()
+export const createContext = <T>(defaultValue?: T): CreateContext<T> => {
+  const injectKey: InjectionKey<Ref<T>> = Symbol()
 
   return {
     Provider: defineComponent({
       name: 'ContextProvider',
       props: {
         value: {
-          type: Object,
+          type: null,
           default() {
-            return defaultValue
+            return defaultValue ?? null
           },
         },
       },
       setup(props, { slots }) {
-        provide(injectKey, readonly(props.value))
+        const value = toRef(props, 'value')
+        provide(injectKey, readonly(value))
 
         return () => slots?.default?.()
       },
@@ -46,8 +50,8 @@ export const createContext = <T>(defaultValue: T): CreateContext<T> => {
   }
 }
 
-export const useContext = <T>(context: CreateContext<T>, defaultValue?: T) => {
+export const useContext = <T>(context: CreateContext<T>) => {
   const key = context.injectKey
 
-  return inject(key, defaultValue)
+  return inject(key, ref(null))
 }

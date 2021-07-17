@@ -13,6 +13,7 @@ export type SelectProps = ElSelectProps & {
 }
 
 const SelectOption = defineComponent<SelectProps>({
+  name: 'Select',
   props: ['options'],
   setup(customProps, { attrs, slots, listeners }) {
     return () => {

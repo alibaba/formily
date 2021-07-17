@@ -1,35 +1,39 @@
 <template>
   <FormProvider :form="form">
     <SchemaField :schema="schema" :scope="{ formStep }" />
-    <FormButtonGroup alignFormItem>
-      <Button
-        :disabled="!formStep.allowBack"
-        @click="
-          () => {
-            formStep.back()
-          }
-        "
-      >
-        上一步
-      </Button>
-      <Button
-        :disabled="!formStep.allowNext"
-        @click="
-          () => {
-            formStep.next()
-          }
-        "
-      >
-        下一步
-      </Button>
-      <Submit :disabled="formStep.allowNext" @submit="log">提交</Submit>
-    </FormButtonGroup>
+    <FormConsumer>
+      <template #default>
+        <FormButtonGroup>
+          <Button
+            :disabled="!formStep.allowBack"
+            @click="
+              () => {
+                formStep.back()
+              }
+            "
+          >
+            上一步
+          </Button>
+          <Button
+            :disabled="!formStep.allowNext"
+            @click="
+              () => {
+                formStep.next()
+              }
+            "
+          >
+            下一步
+          </Button>
+          <Submit :disabled="formStep.allowNext" @submit="log">提交</Submit>
+        </FormButtonGroup>
+      </template>
+    </FormConsumer>
   </FormProvider>
 </template>
 
 <script>
 import { createForm } from '@formily/core'
-import { FormProvider, createSchemaField } from '@formily/vue'
+import { FormProvider, createSchemaField, FormConsumer } from '@formily/vue'
 import {
   FormItem,
   FormStep,
@@ -116,6 +120,7 @@ const schema = {
 export default {
   components: {
     FormProvider,
+    FormConsumer,
     FormButtonGroup,
     Button,
     Submit,

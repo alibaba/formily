@@ -115,7 +115,7 @@ export const ArrayItems = observer(
               h(
                 'div',
                 {
-                  class: [prefixCls, attrs.class],
+                  class: [prefixCls],
                   attrs,
                   on: {
                     change: () => {},
@@ -142,7 +142,7 @@ export const ArrayItemsItem = defineComponent<IArrayItemsItemProps>({
       h(
         'div',
         {
-          class: [`${prefixCls}-${props.type || 'card'}`, attrs.class],
+          class: [`${prefixCls}-${props.type || 'card'}`],
           attrs,
           on: {
             change: () => {},
@@ -154,11 +154,11 @@ export const ArrayItemsItem = defineComponent<IArrayItemsItemProps>({
 })
 
 export {
-  ArraySortHandle as ArrayItemsSortHandle,
-  ArrayRemove as ArrayItemsRemove,
-  ArrayMoveDown as ArrayItemsMoveDown,
-  ArrayMoveUp as ArrayItemsMoveUp,
-  ArrayAddition as ArrayItemsAddition,
-  ArrayIndex as ArrayItemsIndex,
+  ArrayBaseSortHandle as ArrayItemsSortHandle,
+  ArrayBaseRemove as ArrayItemsRemove,
+  ArrayBaseMoveDown as ArrayItemsMoveDown,
+  ArrayBaseMoveUp as ArrayItemsMoveUp,
+  ArrayBaseAddition as ArrayItemsAddition,
+  ArrayBaseIndex as ArrayItemsIndex,
   useIndex as useArrayItemsIndex,
 } from '../array-base'

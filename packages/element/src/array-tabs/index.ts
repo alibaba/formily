@@ -8,6 +8,8 @@ import type { Tabs as TabsProps } from 'element-ui'
 
 export const ArrayTabs = observer(
   defineComponent<TabsProps>({
+    name: 'ArrayTabs',
+    props: [],
     setup(props, { attrs }) {
       const fieldRef = useField<Formily.Core.Models.ArrayField>()
       const schemaRef = useFieldSchema()
@@ -136,7 +138,7 @@ export const ArrayTabs = observer(
         return h(
           Tabs,
           {
-            class: [prefixCls, attrs.class],
+            class: [prefixCls],
             attrs: {
               ...attrs,
               type: 'card',

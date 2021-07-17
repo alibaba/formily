@@ -1,8 +1,12 @@
-import { defineComponent } from 'vue-demi'
-import { createContext, useContext } from '../__builtins__/shared'
+import { defineComponent, computed } from 'vue-demi'
+import {
+  createContext,
+  resolveComponent,
+  useContext,
+} from '../__builtins__/shared'
 import { observer } from '@formily/reactive-vue'
 import { h, useField } from '@formily/vue'
-import { isArr, isValid } from '@formily/shared'
+import { isArr, isFn, isValid } from '@formily/shared'
 import { stylePrefix } from '../__builtins__/configs'
 import { InputProps } from '../input'
 import type { SelectProps } from '../select'
@@ -17,26 +21,33 @@ const prefixCls = `${stylePrefix}-preview-text`
 const PlaceholderContext = createContext('N/A')
 
 export const usePlaceholder = (value?: any) => {
-  const placeholder = useContext(PlaceholderContext) || 'N/A'
+  const placeholderCtx = useContext(PlaceholderContext)
+  const placeholder = computed(() => {
+    return isValid(value) && value !== ''
+      ? value
+      : resolveComponent(placeholderCtx.value) || 'N/A'
+  })
 
-  return isValid(value) && value !== '' ? value : placeholder
+  return placeholder
 }
 
 export const PreviewInputText = defineComponent<InputProps>({
+  name: 'PreviewInputText',
   props: [],
   setup(_props, { attrs, slots }) {
+    const placeholder = usePlaceholder(attrs.value)
     return () => {
       return h(
         Space,
         {
-          class: [prefixCls, attrs.class],
+          class: [prefixCls],
           style: attrs.style,
         },
         {
           default: () => [
             slots?.prepend?.(),
             slots?.prefix?.(),
-            usePlaceholder(attrs.value),
+            placeholder.value,
             slots?.suffix?.(),
             slots?.append?.(),
           ],
@@ -48,6 +59,7 @@ export const PreviewInputText = defineComponent<InputProps>({
 
 export const PreviewSelectText = observer(
   defineComponent<SelectProps>({
+    name: 'PreviewSelectText',
     props: [],
     setup(_props, { attrs }) {
       const fieldRef = useField<Formily.Core.Models.Field>()
@@ -77,7 +89,7 @@ export const PreviewSelectText = observer(
             Tag,
             {},
             {
-              default: () => placeholder,
+              default: () => placeholder.value,
             }
           )
         }
@@ -94,7 +106,7 @@ export const PreviewSelectText = observer(
               },
             },
             {
-              default: () => text || placeholder,
+              default: () => text || placeholder.value,
             }
           )
         })
@@ -104,7 +116,7 @@ export const PreviewSelectText = observer(
         return h(
           Space,
           {
-            class: [prefixCls, attrs.class],
+            class: [prefixCls],
             style: attrs.style,
           },
           {
@@ -118,6 +130,7 @@ export const PreviewSelectText = observer(
 
 export const PreviewCascaderText = observer(
   defineComponent<CascaderProps>({
+    name: 'PreviewCascaderText',
     props: [],
     setup(_props, { attrs }) {
       const fieldRef = useField<Formily.Core.Models.Field>()
@@ -154,7 +167,7 @@ export const PreviewCascaderText = observer(
             Tag,
             {},
             {
-              default: () => placeholder,
+              default: () => placeholder.value,
             }
           )
         }
@@ -170,7 +183,7 @@ export const PreviewCascaderText = observer(
               },
             },
             {
-              default: () => text || placeholder,
+              default: () => text || placeholder.value,
             }
           )
         })
@@ -180,7 +193,7 @@ export const PreviewCascaderText = observer(
         return h(
           Space,
           {
-            class: [prefixCls, attrs.class],
+            class: [prefixCls],
             style: attrs.style,
           },
           {
@@ -193,6 +206,7 @@ export const PreviewCascaderText = observer(
 )
 
 export const PreviewDatePickerText = defineComponent<DatePickerProps>({
+  name: 'PreviewDatePickerText',
   props: [],
   setup(_props, { attrs }) {
     const props = attrs as unknown as DatePickerProps
@@ -201,12 +215,12 @@ export const PreviewDatePickerText = defineComponent<DatePickerProps>({
       if (isArr(props.value)) {
         const labels = (props.value as any[]).map(
           (value: String | Date) =>
-            formatDate(value, props.format) || placeholder
+            formatDate(value, props.format) || placeholder.value
         )
 
         return labels.join('~')
       } else {
-        return formatDate(props.value, props.format) || placeholder
+        return formatDate(props.value, props.format) || placeholder.value
       }
     }
 
@@ -214,7 +228,7 @@ export const PreviewDatePickerText = defineComponent<DatePickerProps>({
       return h(
         'div',
         {
-          class: [prefixCls, attrs.class],
+          class: [prefixCls],
           style: attrs.style,
         },
         {
@@ -226,6 +240,7 @@ export const PreviewDatePickerText = defineComponent<DatePickerProps>({
 })
 
 export const PreviewTimePickerText = defineComponent<TimePickerProps>({
+  name: 'PreviewTimePickerText',
   props: [],
   setup(_props, { attrs }) {
     const props = attrs as unknown as TimePickerProps
@@ -234,12 +249,12 @@ export const PreviewTimePickerText = defineComponent<TimePickerProps>({
     const getLabels = () => {
       if (isArr(props.value)) {
         const labels = props.value.map(
-          (value) => formatDate(value, format) || placeholder
+          (value) => formatDate(value, format) || placeholder.value
         )
 
         return labels.join('~')
       } else {
-        return formatDate(props.value, format) || placeholder
+        return formatDate(props.value, format) || placeholder.value
       }
     }
 
@@ -247,7 +262,7 @@ export const PreviewTimePickerText = defineComponent<TimePickerProps>({
       return h(
         'div',
         {
-          class: [prefixCls, attrs.class],
+          class: [prefixCls],
           style: attrs.style,
         },
         {
@@ -259,16 +274,19 @@ export const PreviewTimePickerText = defineComponent<TimePickerProps>({
 })
 
 export const PreviewText = defineComponent<any>({
+  name: 'PreviewText',
   setup(_props, { attrs }) {
+    const placeholder = usePlaceholder()
+
     return () => {
       return h(
         'div',
         {
-          class: [prefixCls, attrs.class],
+          class: [prefixCls],
           style: attrs.style,
         },
         {
-          default: () => usePlaceholder(attrs.value),
+          default: () => placeholder.value,
         }
       )
     }

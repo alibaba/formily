@@ -1,5 +1,5 @@
 <template>
-  <Form :form="form">
+  <Form :form="form" label-align="left" :label-width="160">
     <SchemaField :schema="schema" />
     <Submit @submit="onSubmit">提交</Submit>
   </Form>
@@ -8,26 +8,33 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, FormItem, Radio, RadioGroup, Submit } from '@formily/element'
+import { Form, FormItem, TimePicker, Submit } from '@formily/element'
 
 const schema = {
   type: 'object',
   properties: {
-    radio: {
-      type: 'boolean',
-      title: '单选',
-      enum: [
-        {
-          label: '选项1',
-          value: 1,
-        },
-        {
-          label: '选项2',
-          value: 2,
-        },
-      ],
+    time: {
+      type: 'string',
+      title: '时间',
       'x-decorator': 'FormItem',
-      'x-component': 'RadioGroup',
+      'x-component': 'TimePicker',
+      'x-component-props': {
+        style: {
+          width: '240px',
+        },
+      },
+    },
+    '[startTime,endTime]': {
+      title: '时间范围',
+      'x-decorator': 'FormItem',
+      'x-component': 'TimePicker',
+      'x-component-props': {
+        isRange: true,
+        style: {
+          width: '240px',
+        },
+      },
+      type: 'string',
     },
   },
 }
@@ -36,8 +43,7 @@ const form = createForm()
 const { SchemaField } = createSchemaField({
   components: {
     FormItem,
-    Radio,
-    RadioGroup,
+    TimePicker,
   },
 })
 
@@ -56,3 +62,4 @@ export default {
   },
 }
 </script>
+l

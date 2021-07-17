@@ -15,6 +15,7 @@ export type UploadProps = ElUploadProps & {
 }
 
 const UploadWrapper = defineComponent<UploadProps>({
+  name: 'Upload',
   props: {
     textContent: {
       type: String,
