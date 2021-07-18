@@ -8,7 +8,7 @@ hero:
     - text: 主站文档
       link: //v2.formilyjs.org
     - text: 组件文档
-      link: /components
+      link: /zh-CN/components
 features:
   - icon: https://img.alicdn.com/imgextra/i2/O1CN016i72sH1c5wh1kyy9U_!!6000000003550-55-tps-800-800.svg
     title: 更易用

@@ -8,7 +8,7 @@ hero:
     - text: 主站文档
       link: //v2.formilyjs.org
     - text: 内核文档
-      link: /guide
+      link: /zh-CN/guide
 features:
   - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
     title: 超高的性能

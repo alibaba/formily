@@ -5,27 +5,27 @@ hero:
   title: FORMILY CORE
   desc: Alibaba unified front-end form solution
   actions:
-    -text: main site document
+    - text: main site document
       link: //v2.formilyjs.org
-    -text: kernel documentation
+    - text: kernel documentation
       link: /guide
 features:
-  -icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
+  - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
     title: Super high performance
     desc: Dependency tracking, efficient update, on-demand rendering
-  -icon: https://img.alicdn.com/imgextra/i3/O1CN0194OqFF1ui6mMT4g7O_!!6000000006070-55-tps-800-800.svg
+  - icon: https://img.alicdn.com/imgextra/i3/O1CN0194OqFF1ui6mMT4g7O_!!6000000006070-55-tps-800-800.svg
     title: Excellent reusability
     desc: independent side effects, logic pluggable
-  -icon: https://img.alicdn.com/imgextra/i2/O1CN01QnfYS71E44I1ZpxU9_!!6000000000297-55-tps-800-800.svg
+  - icon: https://img.alicdn.com/imgextra/i2/O1CN01QnfYS71E44I1ZpxU9_!!6000000000297-55-tps-800-800.svg
     title: Elegant linkage writing
     desc: flexible, complete, elegant
-  -icon: https://img.alicdn.com/imgextra/i2/O1CN01YqmcpN1tDalwgyHBH_!!6000000005868-55-tps-800-800.svg
+  - icon: https://img.alicdn.com/imgextra/i2/O1CN01YqmcpN1tDalwgyHBH_!!6000000005868-55-tps-800-800.svg
     title: Complete domain model
     desc: Cross-terminal, cross-frame, UI has nothing to do
-  -icon: https://img.alicdn.com/imgextra/i4/O1CN018vDmpl2186xdLu6KI_!!6000000006939-55-tps-800-800.svg
+  - icon: https://img.alicdn.com/imgextra/i4/O1CN018vDmpl2186xdLu6KI_!!6000000006939-55-tps-800-800.svg
     title: Friendly debugging experience
     desc: Natural docking with Formily DevTools
-  -icon: https://img.alicdn.com/imgextra/i4/O1CN01u6jHgs1ZMwXpjAYnh_!!6000000003181-55-tps-800-800.svg
+  - icon: https://img.alicdn.com/imgextra/i4/O1CN01u6jHgs1ZMwXpjAYnh_!!6000000003181-55-tps-800-800.svg
     title: Perfect smart reminder
     desc: Embrace Typescript
 footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by self

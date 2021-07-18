@@ -7,24 +7,44 @@ export default {
   favicon:
     '//img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg',
   outputPath: './doc-site',
-  navs: [
-    {
-      title: '指南',
-      path: '/guide',
-    },
-    {
-      title: 'API',
-      path: '/api',
-    },
-    {
-      title: '主站',
-      path: 'https://v2.formilyjs.org',
-    },
-    {
-      title: 'GITHUB',
-      path: 'https://github.com/alibaba/formily',
-    },
-  ],
+  navs: {
+    'en-US': [
+      {
+        title: 'Guide',
+        path: '/guide',
+      },
+      {
+        title: 'API',
+        path: '/api',
+      },
+      {
+        title: 'Home Site',
+        path: 'https://v2.formilyjs.org',
+      },
+      {
+        title: 'GITHUB',
+        path: 'https://github.com/alibaba/formily',
+      },
+    ],
+    'zh-CN': [
+      {
+        title: '指南',
+        path: '/zh-CN/guide',
+      },
+      {
+        title: 'API',
+        path: '/zh-CN/api',
+      },
+      {
+        title: '主站',
+        path: 'https://v2.formilyjs.org',
+      },
+      {
+        title: 'GITHUB',
+        path: 'https://github.com/alibaba/formily',
+      },
+    ],
+  },
   links: [
     {
       rel: 'stylesheet',
@@ -54,11 +74,19 @@ export default {
   menus: {
     '/guide': [
       {
+        title: 'Introduction',
+        path: '/guide',
+      },
+      { title: 'Architecture', path: '/guide/architecture' },
+      { title: 'Concept', path: '/guide/concept' },
+    ],
+    '/zh-CN/guide': [
+      {
         title: '介绍',
         path: '/guide',
       },
-      { title: '核心架构', path: '/guide/architecture' },
-      { title: '核心概念', path: '/guide/concept' },
+      { title: '核心架构', path: '/zh-CN/guide/architecture' },
+      { title: '核心概念', path: '/zh-CN/guide/concept' },
     ],
   },
 }
