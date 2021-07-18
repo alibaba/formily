@@ -105,7 +105,7 @@ The relative path syntax is mainly expressed in dot syntax at the head of the da
 
 - A dot represents the current path
 - n dots represent n-1 steps forward
-- Subscripts can be used to calculate expressions in square brackets: `[+]` represents the current subscript +1, `[-]` represents the current subscript - 1, `[+n]` represents the current subscript +n, ` [-n]` represents the current subscript - n
+  - Subscripts can be used to calculate expressions in square brackets: `[+]` represents the current subscript +1, `[-]` represents the current subscript - 1, `[+n]` represents the current subscript +n, ` [-n]` represents the current subscript - n
 - When path matching, group matching and range matching cannot be used, such as `*(..[+1].aa,..[+2].bb)`
 
 ```ts

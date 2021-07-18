@@ -94,13 +94,13 @@ Usually, in the process of business development, there is always a need for data
 For example, the form value is `{xx:123}`, and the default form value is `{xx:321}`. The strategy here is:
 
 - If `xx` does not have a corresponding field model, it means it is just redundant data and cannot be modified by the user
-- If the form value is assigned first, and the default value is assigned later, then the default value directly overrides the form value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted.` {xx:321}`
-- If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
+  - If the form value is assigned first, and the default value is assigned later, then the default value directly overrides the form value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted.` {xx:321}`
+  - If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
 - If `xx` has a field model
-- If the form value is assigned first, the default value is assigned later
-- If the current field has been modified by the user (modified is true), then the default value cannot overwrite the form value, and finally submit the data `{xx:123}`
-- If the current field has not been modified by the user (modified is false), then the default value will directly override the field value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted `{xx:312}`
-- If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
+  - If the form value is assigned first, the default value is assigned later
+    - If the current field has been modified by the user (modified is true), then the default value cannot overwrite the form value, and finally submit the data `{xx:123}`
+    - If the current field has not been modified by the user (modified is false), then the default value will directly override the field value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted `{xx:312}`
+  - If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
 
 **No conflicts**
 

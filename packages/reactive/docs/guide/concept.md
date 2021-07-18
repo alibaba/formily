@@ -9,11 +9,11 @@ An observable object, literally means a subscribable object, **we create a subsc
 We mainly use the following APIs to create observable objects in @formily/reactive:
 
 - The observable function creates a deep observable object
-- The observable.deep function creates a deep hijacking observable object
-- The observable.shallow function creates shallow hijacked observable objects
-- The observable.computed function creates a cache calculator
-- The observable.box function creates observable objects with get/set methods
-- The observable.ref function creates a reference-level observable object
+  - The observable.deep function creates a deep hijacking observable object
+  - The observable.shallow function creates shallow hijacked observable objects
+  - The observable.computed function creates a cache calculator
+  - The observable.box function creates observable objects with get/set methods
+  - The observable.ref function creates a reference-level observable object
 - The define function defines the observable domain model, which can be combined with the observable function and its static attribute (such as observable.computed) function to complete the definition of the domain model
 - The model function defines an automatic observable domain model. It will wrap the getter setter attribute as a computed attribute, wrap the function as an action, and wrap other data attributes with observable (note that this is a deep hijacking)
 

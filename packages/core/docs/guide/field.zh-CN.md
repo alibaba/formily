@@ -175,7 +175,7 @@ interface Feedback {
 
 - 调用 validate 方法，触发字段校验器执行校验动作，校验结果的 Code 统一是 Validate\*`
   - 调用 onInput 会触发 validate
-  - 调用 onFoucs 会触发 validate
+  - 调用 onFocus 会触发 validate
   - 调用 onBlur 会触发 validate
   - 调用 reset，并指定 validate 为 true 会触发 validate
 - 直接修改 feedbacks 属性

@@ -123,10 +123,16 @@ The validator in the field model is mainly described by the validator attribute.
 A validator mainly has the following forms:
 
 - Pure string format verification, such as `"phone" | validator = "url" | validator= "email"`. This format verification is a short form of regular rules. Formily provides some standard regular rules. Of course Users can also manually create rules through registerValidateFormats to facilitate reuse
-- Custom function verification, there are 3 return value modes: - `(value)=>"message"`, a string returned means there is an error, and no string means no error - `(value)=>({type:"error",message:"message"})`, return object form, you can specify type as error or warning or success - `{validator:()=>false,message:"message"}`, returns a boolean form, the error message will reuse the message field of the object structure
-- Object structure verification is a more complete expression, such as: - `{format:"url"}` This can specify the regular format - `{required:true}` This can specify required fields
-- There are more rule attributes can refer to the API documentation, and we can also register similar validation rules through registerValidateRules
-- Object array structure verification is a combination of the previous three types. In fact, the first three types will all be converted into object array structures, such as: - `["url",{required:true},(value)=>"message"]` is actually equivalent to `[{format:"url"},{required:true},{validator:(value)=> "message"}]`
+- Custom function verification, there are 3 return value modes:
+  - `(value)=>"message"`, a string returned means there is an error, and no string means no error
+  - `(value)=>({type:"error",message:"message"})`, return object form, you can specify type as error or warning or success
+  - `{validator:()=>false,message:"message"}`, returns a boolean form, the error message will reuse the message field of the object structure
+- Object structure verification is a more complete expression, such as:
+  - `{format:"url"}` This can specify the regular format
+  - `{required:true}` This can specify required fields
+  - There are more rule attributes can refer to the API documentation, and we can also register similar validation rules through registerValidateRules
+- Object array structure verification is a combination of the previous three types. In fact, the first three types will all be converted into object array structures, such as:
+  - `["url",{required:true},(value)=>"message"]` is actually equivalent to `[{format:"url"},{required:true},{validator:(value)=> "message"}]`
 
 #### Check timing
 
@@ -168,10 +174,10 @@ There are four main ways to read:
 There are 3 ways to write:
 
 - Call the validate method to trigger the field validator to perform the validation action, and the code of the validation result is uniformly Validate\*`
-- Calling onInput will trigger validate
-- Calling onFoucs will trigger validate
-- Calling onBlur will trigger validate
-- Call reset and specify validate as true to trigger validate
+  - Calling onInput will trigger validate
+  - Calling onFocus will trigger validate
+  - Calling onBlur will trigger validate
+  - Call reset and specify validate as true to trigger validate
 - Modify the feedbacks attribute directly
 - Modify the errors property directly, it will be converted into an array of feedbacks objects, and the code of Feedback will be forcibly overwritten as EffectError
 - Modify the warnings attribute directly, it will be converted into an array of feedbacks objects, and the code of Feedback will be forcibly overwritten as EffectWarning
