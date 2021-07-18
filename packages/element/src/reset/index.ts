@@ -10,6 +10,7 @@ export type ResetProps = IFieldResetOptions & IElButton
 
 export const Reset = observer(
   defineComponent<ResetProps>({
+    name: 'Reset',
     props: {
       forceClear: {
         type: Boolean,

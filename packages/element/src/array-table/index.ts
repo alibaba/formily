@@ -12,8 +12,8 @@ import {
   h,
 } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
-import { isArr, uid } from '@formily/shared'
-import { ArrayBase, ArrayBaseItem, useArray } from '../array-base'
+import { isArr } from '@formily/shared'
+import { ArrayBase, ArrayBaseItem } from '../array-base'
 import { stylePrefix } from '../__builtins__/configs'
 import type { Schema } from '@formily/json-schema'
 import type { TableColumn as ElColumnProps } from 'element-ui'
@@ -99,7 +99,7 @@ const getArrayTableSources = (
     }
   }
 
-  const parseArrayItems = (schema: Schema['items']) => {
+  const parseArrayTable = (schema: Schema['items']) => {
     const sources: ObservableColumnSource[] = []
     const items = isArr(schema) ? schema : ([schema] as Schema[])
     return items.reduce((columns, schema) => {
@@ -113,7 +113,7 @@ const getArrayTableSources = (
 
   if (!schemaRef) throw new Error('can not found schema object')
 
-  return parseArrayItems(schemaRef.value.items)
+  return parseArrayTable(schemaRef.value.items)
 }
 
 const getArrayTableColumns = (
@@ -192,21 +192,18 @@ const renderAddition = () => {
 
 const ArrayTableInner = observer(
   defineComponent({
+    name: 'ArrayTableInner',
     setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
-      const array = useArray()
-      const prefixCls = `${stylePrefix}-form-array-table-inner`
+      const prefixCls = `${stylePrefix}-array-table-inner`
       return () => {
         const field = fieldRef.value
         const sources = getArrayTableSources(fieldRef, schemaRef)
         const dataSource = Array.isArray(field.value) ? field.value.slice() : []
         const columns = getArrayTableColumns(dataSource, sources)
         const defaultRowKey = (record: any) => {
-          if (!array?.keyMap.has(record)) {
-            array?.keyMap.set(record, uid())
-          }
-          return array?.keyMap.get(record)
+          return dataSource.indexOf(record)
         }
         const renderColumns = () =>
           columns.map(({ key, render, asterisk, ...props }) => {
@@ -261,10 +258,11 @@ const ArrayTableInner = observer(
 
 export const ArrayTable = observer(
   defineComponent({
+    name: 'ArrayTable',
     setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
-      const prefixCls = `${stylePrefix}-form-array-table`
+      const prefixCls = `${stylePrefix}-array-table`
       return () => {
         const sources = getArrayTableSources(fieldRef, schemaRef)
         const renderStateManager = () =>
@@ -312,3 +310,13 @@ export const ArrayTableColumn: Component = {
     return h()
   },
 }
+
+export {
+  ArrayBaseSortHandle as ArrayTableSortHandle,
+  ArrayBaseRemove as ArrayTableRemove,
+  ArrayBaseMoveDown as ArrayTableMoveDown,
+  ArrayBaseMoveUp as ArrayTableMoveUp,
+  ArrayBaseAddition as ArrayTableAddition,
+  ArrayBaseIndex as ArrayTableIndex,
+  useIndex as useArrayTableIndex,
+} from '../array-base'

@@ -16,6 +16,7 @@ export interface CheckboxProps extends ElCheckboxProps {
 }
 
 const CheckboxOption = defineComponent<CheckboxProps>({
+  name: 'Checkbox',
   props: {
     option: {
       type: Object,

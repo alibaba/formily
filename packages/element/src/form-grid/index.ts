@@ -306,7 +306,7 @@ const useGridSpan = (gridSpan: number) => {
 }
 
 export const FormGrid = defineComponent({
-  name: 'FormilyFormGrid',
+  name: 'FormGrid',
   props: {
     columnGap: {
       type: Number,
@@ -416,6 +416,7 @@ export const FormGrid = defineComponent({
 })
 
 export const FormGridColumn = defineComponent({
+  name: 'FormGridColumn',
   props: {
     gridSpan: {
       type: Number,

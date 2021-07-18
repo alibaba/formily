@@ -18876,6 +18876,11 @@ vue-server-renderer@^2.6.10:
     serialize-javascript "^3.1.0"
     source-map "0.5.6"
 
+vue-slicksort@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.nlark.com/vue-slicksort/download/vue-slicksort-1.2.0.tgz#2bc1da2facc4350279ebc3866acea6ee5fe681ef"
+  integrity sha1-K8HaL6zENQJ568OGas6m7l/mge8=
+
 vue-style-loader@^4.1.0:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.3.tgz#6d55863a51fa757ab24e89d9371465072aa7bc35"

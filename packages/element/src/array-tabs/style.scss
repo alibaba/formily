@@ -1,0 +1,15 @@
+@import '../__builtins__/styles/common.scss';
+
+$array-table-prefix-cls: '#{$formily-prefix}-array-tabs';
+
+.#{$array-table-prefix-cls} {
+  .#{$formily-prefix}-array-tabs-addition {
+    position: absolute;
+    right: -56px;
+    top: -1px;
+  }
+
+  .#{$array-table-prefix-cls}-errors-badge {
+    line-height: 1;
+  }
+}
