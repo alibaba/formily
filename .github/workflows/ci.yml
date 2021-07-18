@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ matrix.node_version }}
 
       - run: yarn -v
-      - run: yarn --ignore-engines
+      - run: yarn install
       - uses: actions/checkout@v2
       - name: ESlint Runner Action
         uses: tinovyatkin/action-eslint@v1
