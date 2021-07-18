@@ -1,5 +1,5 @@
-const path = require('path')
-const fs = require('fs-extra')
+import path from 'path'
+import fs from 'fs-extra'
 
 const getEntry = (src) => {
   return [path.resolve(__dirname, '../src/extension/', src)]
@@ -15,7 +15,7 @@ fs.copy(
   path.resolve(__dirname, '../package/manifest.json')
 )
 
-module.exports = {
+export default {
   mode: 'development',
   devtool: 'inline-source-map', // 嵌入到源文件中
   entry: {

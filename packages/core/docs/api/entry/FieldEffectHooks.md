@@ -35,7 +35,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldInit('target', (field, form) => {
+          onFieldInit('target', () => {
             setResponse('target已初始化')
           })
         },
@@ -83,7 +83,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldMount('target', (field, form) => {
+          onFieldMount('target', () => {
             setResponse('target已挂载')
           })
         },
@@ -131,10 +131,10 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldMount('target', (field, form) => {
+          onFieldMount('target', () => {
             setResponse('target已挂载')
           })
-          onFieldUnmount('target', (field, form) => {
+          onFieldUnmount('target', () => {
             setResponse('target已卸载')
           })
         },
@@ -187,7 +187,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldReact('target', (field, form) => {
+          onFieldReact('target', () => {
             setResponse(
               'target ' + (form.values.other === 123 ? '显示' : '隐藏')
             )
@@ -262,10 +262,10 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldChange('target', (field, form) => {
+          onFieldChange('target', () => {
             setResponse('target值变化：' + field.value)
           })
-          onFieldChange('target', ['component'], (field, form) => {
+          onFieldChange('target', ['component'], () => {
             setResponse('target组件变化')
           })
         },
@@ -320,7 +320,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValueChange('target', (field, form) => {
+          onFieldValueChange('target', () => {
             setResponse('target值变化：' + field.value)
           })
         },
@@ -367,7 +367,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldInitialValueChange('target', (field, form) => {
+          onFieldInitialValueChange('target', () => {
             setResponse('target默认值变化：' + field.value)
           })
         },
@@ -414,7 +414,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldInputValueChange('target', (field, form) => {
+          onFieldInputValueChange('target', () => {
             setResponse('target 值变化：' + field.value)
           })
         },
@@ -463,7 +463,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValidateStart('target', (field, form) => {
+          onFieldValidateStart('target', () => {
             setResponse('target校验开始')
           })
         },
@@ -512,7 +512,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValidateEnd('target', (field, form) => {
+          onFieldValidateEnd('target', () => {
             setResponse('target校验结束')
           })
         },
@@ -561,7 +561,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValidateFailed('target', (field, form) => {
+          onFieldValidateFailed('target', () => {
             setResponse('target校验失败')
           })
         },
@@ -614,10 +614,10 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValidateFailed('target', (field, form) => {
+          onFieldValidateFailed('target', () => {
             setResponse('target校验失败')
           })
-          onFieldValidateSuccess('target', (field, form) => {
+          onFieldValidateSuccess('target', () => {
             setResponse('target校验成功')
           })
         },

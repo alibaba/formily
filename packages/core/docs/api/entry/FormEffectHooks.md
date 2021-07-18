@@ -27,11 +27,11 @@ import { ActionResponse } from './ActionResponse'
 
 export default () => {
   const [response, setResponse] = useState('')
-  const form = useMemo(
+  useMemo(
     () =>
       createForm({
         effects() {
-          onFormInit((form) => {
+          onFormInit(() => {
             setResponse('表单已初始化')
           })
         },
@@ -69,7 +69,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormMount((form) => {
+          onFormMount(() => {
             setResponse('表单已挂载')
           })
         },
@@ -117,7 +117,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormUnmount((form) => {
+          onFormUnmount(() => {
             setResponse('表单已卸载')
           })
         },
@@ -372,7 +372,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormSubmit((form) => {
+          onFormSubmit(() => {
             setResponse('表单已提交')
           })
         },
@@ -420,7 +420,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormSubmitStart((form) => {
+          onFormSubmitStart(() => {
             setResponse('表单提交开始')
           })
         },
@@ -468,7 +468,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormSubmitEnd((form) => {
+          onFormSubmitEnd(() => {
             setResponse('表单提交结束')
           })
         },
@@ -516,7 +516,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormSubmitFailed((form) => {
+          onFormSubmitFailed(() => {
             setResponse('表单提交失败')
           })
         },
@@ -527,7 +527,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormSubmitFailed((form) => {
+          onFormSubmitFailed(() => {
             setResponse('表单校验失败')
           })
         },
@@ -588,7 +588,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormSubmitSuccess((form) => {
+          onFormSubmitSuccess(() => {
             setResponse('表单提交成功')
           })
         },
@@ -636,7 +636,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormSubmitValidateStart((form) => {
+          onFormSubmitValidateStart(() => {
             setResponse('表单提交校验开始')
           })
         },
@@ -688,7 +688,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormSubmitValidateEnd((form) => {
+          onFormSubmitValidateEnd(() => {
             setResponse('表单提交校验结束')
           })
         },
@@ -740,7 +740,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormSubmitValidateFailed((form) => {
+          onFormSubmitValidateFailed(() => {
             setResponse('表单提交校验失败')
           })
         },
@@ -792,7 +792,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormSubmitValidateSuccess((form) => {
+          onFormSubmitValidateSuccess(() => {
             setResponse('表单提交校验成功')
           })
         },
@@ -843,7 +843,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormValidateStart((form) => {
+          onFormValidateStart(() => {
             setResponse('表单校验开始')
           })
         },
@@ -895,7 +895,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormValidateEnd((form) => {
+          onFormValidateEnd(() => {
             setResponse('表单校验结束')
           })
         },
@@ -947,7 +947,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormValidateFailed((form) => {
+          onFormValidateFailed(() => {
             setResponse('表单校验失败')
           })
         },
@@ -999,7 +999,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFormValidateSuccess((form) => {
+          onFormValidateSuccess(() => {
             setResponse('表单校验成功')
           })
         },

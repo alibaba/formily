@@ -16,9 +16,9 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "webpack-cli --config config/webpack.prod.js",
+    "build": "webpack-cli --config config/webpack.prod.ts",
     "build:zip": "rimraf package.zip && zip -r package.zip package",
-    "start": "webpack-dev-server --config config/webpack.dev.js"
+    "start": "webpack-dev-server --config config/webpack.dev.ts"
   },
   "dependencies": {
     "@formily/core": "2.0.0-beta.79",

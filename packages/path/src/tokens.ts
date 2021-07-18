@@ -109,7 +109,7 @@ export const braceLTok = TokenType('{', {
     }
     return prev === dotTok || prev === colonTok
   },
-  updateContext(prev) {
+  updateContext() {
     this.state.context.push(braceContext)
   },
 })
@@ -166,7 +166,7 @@ export const bracketLTok = TokenType('[', {
       prev == commaTok
     )
   },
-  updateContext(prev) {
+  updateContext() {
     this.state.context.push(bracketContext)
   },
 })
@@ -189,7 +189,7 @@ export const bracketRTok = TokenType(']', {
       next === bracketRTok
     )
   },
-  updateContext(prev) {
+  updateContext() {
     if (this.includesContext(bracketArrayContext)) return
     if (!this.includesContext(bracketContext)) throw this.unexpect()
     this.state.context.pop()
@@ -221,7 +221,7 @@ export const parenLTok = TokenType('(', {
   expectPrev(prev) {
     return prev === starTok
   },
-  updateContext(prev) {
+  updateContext() {
     this.state.context.push(parenContext)
   },
 })

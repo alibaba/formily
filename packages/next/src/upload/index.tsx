@@ -94,7 +94,8 @@ const getState = (target: any) => {
 
 const normalizeFileList = (fileList: UploadProps['value']) => {
   if (fileList && fileList.length) {
-    return fileList.map(({ originFileObj, ...file }, index) => {
+    return fileList.map(({ ...file }, index) => {
+      delete file['originFileObj']
       return {
         ...file,
         uid: file.uid || index,

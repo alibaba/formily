@@ -1,4 +1,4 @@
-declare var chrome: any
+declare let chrome: any
 
 let created = false
 
@@ -17,7 +17,7 @@ const createPanel = () => {
         'Formily',
         'img/logo/scalable.png',
         './devpanel.html',
-        function (panel) {}
+        function () {}
       )
     }
   )
