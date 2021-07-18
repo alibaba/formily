@@ -1,14 +1,14 @@
 # observe
 
-## 描述
+## Description
 
-与 autorun/reaction/Tracker 非常不一样，使用 observe 会监听 observable 对象的所有操作，支持深度监听也支持浅监听
+Very different from autorun/reaction/Tracker, using observe will monitor all operations of observable objects, support deep monitoring and shallow monitoring
 
 <Alert>
-注意：读取操作是不会被监听到的
+Note: The read operation will not be monitored
 </Alert>
 
-## 签名
+## Signature
 
 ```ts
 type PropertyKey = string | number | symbol
@@ -40,12 +40,12 @@ interface observe {
   (
     target: object,
     observer?: (change: IChange) => void,
-    deep?: boolean //默认为true
-  ): IDispose //释放监听
+    deep?: boolean //default is true
+  ): IDispose //Release the monitor
 }
 ```
 
-## 用例
+## Example
 
 ```ts
 import { observable, observe } from '@formily/reactive'

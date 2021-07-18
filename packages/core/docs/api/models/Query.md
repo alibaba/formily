@@ -4,19 +4,19 @@ order: 5
 
 # Query
 
-调用[Form](/api/models/form#query)或[Field](/api/models/field#query)实例中的 query 方法所返回的 Query 对象
+The Query object returned by calling the query method in the [Form](/api/models/form#query) or [Field](/api/models/field#query) instance
 
-## 方法
+## Method
 
 ### take
 
-#### 描述
+#### Description
 
-从查询结果集中提取第一个结果
+Extract the first result from the query result set
 
-注意，必须要存在对应的节点才能读取
+Note that there must be a corresponding node to be able to read
 
-#### 签名
+#### Signature
 
 ```ts
 interface take {
@@ -27,13 +27,13 @@ interface take {
 
 ### map
 
-#### 描述
+#### Description
 
-遍历并映射查询结果集
+Traverse and map the query result set
 
-注意，必须要存在对应的节点才能遍历
+Note that there must be a corresponding node to traverse
 
-#### 签名
+#### Signature
 
 ```ts
 interface map {
@@ -46,13 +46,13 @@ interface map {
 
 ### forEach
 
-#### 描述
+#### Description
 
-遍历查询结果集
+Traverse the query result set
 
-注意，必须要存在对应的节点才能遍历
+Note that there must be a corresponding node to traverse
 
-#### 签名
+#### Signature
 
 ```ts
 interface forEach {
@@ -62,13 +62,13 @@ interface forEach {
 
 ### reduce
 
-#### 描述
+#### Description
 
-对查询结果集执行 reduce 操作
+Perform a reduce operation on the query result set
 
-注意，必须要存在对应的节点才能遍历
+Note that there must be a corresponding node to traverse
 
-#### 签名
+#### Signature
 
 ```ts
 interface reduce {
@@ -81,13 +81,13 @@ interface reduce {
 
 ### get
 
-#### 描述
+#### Description
 
-从查询结果集中找到第一个结果，并读取其属性
+Find the first result from the query result set and read its attributes
 
-注意，必须要存在对应的节点才能读取
+Note that there must be a corresponding node to be able to read
 
-#### 签名
+#### Signature
 
 ```ts
 interface get {
@@ -97,13 +97,13 @@ interface get {
 
 ### getIn
 
-#### 描述
+#### Description
 
-从查询结果集中找到第一个结果，并读取其属性，支持 [FormPathPattern](/api/entry/form-path#formpathpattern) 路径语法
+Find the first result from the query result set and read its attributes, support [FormPathPattern](/api/entry/form-path#formpathpattern) path syntax
 
-注意，必须要存在对应的节点才能读取
+Note that there must be a corresponding node to be able to read
 
-#### 签名
+#### Signature
 
 ```ts
 interface getIn {
@@ -113,11 +113,11 @@ interface getIn {
 
 ### value
 
-#### 描述
+#### Description
 
-查询指定路径值，不局限于 Field 节点
+Query the specified path value, not limited to Field nodes
 
-#### 签名
+#### Signature
 
 ```ts
 interface value {
@@ -127,11 +127,11 @@ interface value {
 
 ### initialValue
 
-#### 描述
+#### Description
 
-查询指定路径初始值，不局限于 Field 节点
+Query the initial value of the specified path, not limited to the Field node
 
-#### 签名
+#### Signature
 
 ```ts
 interface initialValue {

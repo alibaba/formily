@@ -1,10 +1,10 @@
 # Upload
 
-> 上传组件
+> Upload components
 >
-> 注意：使用上传组件，推荐用户进行二次封装，用户无需关心上传组件与 Formily 的数据通信，只需要处理样式与基本上传配置即可。
+> Note: Using the upload component, it is recommended that users perform secondary packaging. Users do not need to care about the data communication between the upload component and Formily, only the style and basic upload configuration are required.
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -32,7 +32,7 @@ const NormalUpload = (props) => {
     >
       <Button>
         <UploadOutlined />
-        上传文件
+        upload files
       </Button>
     </Upload>
   )
@@ -88,35 +88,35 @@ export default () => (
       <SchemaField>
         <SchemaField.Array
           name="upload"
-          title="上传"
+          title="Upload"
           x-decorator="FormItem"
           x-component="NormalUpload"
           required
         />
         <SchemaField.Array
           name="upload2"
-          title="卡片上传"
+          title="Card upload"
           x-decorator="FormItem"
           x-component="CardUpload"
           required
         />
         <SchemaField.Array
           name="upload3"
-          title="拖拽上传"
+          title="Drag and drop upload"
           x-decorator="FormItem"
           x-component="DraggerUpload"
           required
         />
       </SchemaField>
       <FormButtonGroup.FormItem>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormLayout>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -144,7 +144,7 @@ const NormalUpload = (props) => {
     >
       <Button>
         <UploadOutlined />
-        上传文件
+        upload files
       </Button>
     </Upload>
   )
@@ -199,21 +199,21 @@ const schema = {
   properties: {
     upload: {
       type: 'array',
-      title: '上传',
+      title: 'Upload',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'NormalUpload',
     },
     upload2: {
       type: 'array',
-      title: '卡片上传',
+      title: 'Card upload',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'CardUpload',
     },
     upload3: {
       type: 'array',
-      title: '拖拽上传',
+      title: 'Drag and drop upload',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'DraggerUpload',
@@ -226,14 +226,14 @@ export default () => (
     <FormLayout labelCol={6} wrapperCol={14}>
       <SchemaField schema={schema} />
       <FormButtonGroup.FormItem>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormLayout>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -261,7 +261,7 @@ const NormalUpload = (props) => {
     >
       <Button>
         <UploadOutlined />
-        上传文件
+        upload files
       </Button>
     </Upload>
   )
@@ -307,27 +307,27 @@ export default () => (
     <FormLayout labelCol={6} wrapperCol={14}>
       <Field
         name="upload"
-        title="上传"
+        title="Upload"
         required
         decorator={[FormItem]}
         component={[NormalUpload]}
       />
       <Field
         name="upload2"
-        title="卡片上传"
+        title="Card upload"
         required
         decorator={[FormItem]}
         component={[CardUpload]}
       />
       <Field
         name="upload3"
-        title="拖拽上传"
+        title="Drag and drop upload"
         required
         decorator={[FormItem]}
         component={[DraggerUpload]}
       />
       <FormButtonGroup.FormItem>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormLayout>
   </FormProvider>
@@ -336,4 +336,4 @@ export default () => (
 
 ## API
 
-参考 https://fusion.design/pc/component/basic/upload
+Reference https://fusion.design/pc/component/basic/upload

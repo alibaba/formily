@@ -4,21 +4,21 @@ order: 7
 
 # FormConsumer
 
-## 描述
+## Description
 
-表单响应消费者，专门用于监听表单模型数据变化而实现各种 UI 响应的组件，使用方式为 render props.
+The form response consumer is specifically used to monitor the data changes of the form model to implement various UI response components. The use method is render props.
 
-当回调函数内依赖的数据发生变化时就会重新渲染回调函数
+When the dependent data in the callback function changes, the callback function will be re-rendered
 
-## 签名
+## Signature
 
 ```ts
 type FormConsumer = React.FC<{ children: (form: Form) => React.ReactNode }>
 ```
 
-Form 参考[Form](https://core.formilyjs.org/api/models/form)
+Form reference [Form](https://core.formilyjs.org/api/models/form)
 
-## 用例
+## Example
 
 ```tsx
 import React from 'react'

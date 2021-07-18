@@ -1,10 +1,10 @@
 # toJS
 
-## 描述
+## Description
 
-深度递归将 observable 对象转换成普通 JS 对象
+Deep recursion converts observable objects into ordinary JS objects
 
-## 签名
+## Signature
 
 ```ts
 interface toJS<T> {
@@ -12,7 +12,7 @@ interface toJS<T> {
 }
 ```
 
-## 用例
+## Example
 
 ```ts
 import { observable, autorun, toJS } from '@formily/reactive'
@@ -28,7 +28,7 @@ const obs = observable({
 const js = toJS(obs)
 
 autorun(() => {
-  console.log(js.aa.bb.cc) //变化时不会触发
+  console.log(js.aa.bb.cc) // will not trigger when changes
 })
 
 js.aa.bb.cc = 321

@@ -1,10 +1,10 @@
 # ArrayCards
 
-> 卡片列表，对于每行字段数量较多，联动较多的场景比较适合使用 ArrayCards
+> Card list, it is more suitable to use ArrayCards for scenarios with a large number of fields in each row and more linkages
 >
-> 注意：该组件只适用于 Schema 场景
+> Note: This component is only applicable to Schema scenarios
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -38,7 +38,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="ArrayCards"
           x-component-props={{
-            title: '字符串数组',
+            title: 'String array',
           }}
         >
           <SchemaField.Void>
@@ -56,7 +56,7 @@ export default () => {
           </SchemaField.Void>
           <SchemaField.Void
             x-component="ArrayCards.Addition"
-            title="添加条目"
+            title="Add entry"
           />
         </SchemaField.Array>
         <SchemaField.Array
@@ -65,7 +65,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="ArrayCards"
           x-component-props={{
-            title: '对象数组',
+            title: 'Object array',
           }}
         >
           <SchemaField.Object>
@@ -83,19 +83,19 @@ export default () => {
           </SchemaField.Object>
           <SchemaField.Void
             x-component="ArrayCards.Addition"
-            title="添加条目"
+            title="Add entry"
           />
         </SchemaField.Array>
       </SchemaField>
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup>
     </FormProvider>
   )
 }
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -128,7 +128,7 @@ const schema = {
       maxItems: 3,
       'x-decorator': 'FormItem',
       'x-component-props': {
-        title: '字符串数组',
+        title: 'String array',
       },
       items: {
         type: 'void',
@@ -161,7 +161,7 @@ const schema = {
       properties: {
         addition: {
           type: 'void',
-          title: '添加条目',
+          title: 'Add entry',
           'x-component': 'ArrayCards.Addition',
         },
       },
@@ -172,7 +172,7 @@ const schema = {
       maxItems: 3,
       'x-decorator': 'FormItem',
       'x-component-props': {
-        title: '对象数组',
+        title: 'Object array',
       },
       items: {
         type: 'object',
@@ -205,7 +205,7 @@ const schema = {
       properties: {
         addition: {
           type: 'void',
-          title: '添加条目',
+          title: 'Add entry',
           'x-component': 'ArrayCards.Addition',
         },
       },
@@ -218,14 +218,14 @@ export default () => {
     <FormProvider form={form}>
       <SchemaField schema={schema} />
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup>
     </FormProvider>
   )
 }
 ```
 
-## Effects 联动案例
+## Effects linkage case
 
 ```tsx
 import React from 'react'
@@ -249,13 +249,13 @@ const SchemaField = createSchemaField({
 
 const form = createForm({
   effects: () => {
-    //主动联动模式
+    //Active linkage mode
     onFieldChange('array.*.aa', ['value'], (field, form) => {
       form.setFieldState(field.query('.bb'), (state) => {
         state.visible = field.value != '123'
       })
     })
-    //被动联动模式
+    //Passive linkage mode
     onFieldReact('array.*.dd', (field) => {
       field.visible = field.query('.cc').get('value') != '123'
     })
@@ -272,7 +272,7 @@ export default () => {
           x-component="ArrayCards"
           x-decorator="FormItem"
           x-component-props={{
-            title: '对象数组',
+            title: 'Object array',
           }}
         >
           <SchemaField.Object>
@@ -282,7 +282,7 @@ export default () => {
               x-decorator="FormItem"
               title="AA"
               required
-              description="AA输入123时隐藏BB"
+              description="AA hide BB when entering 123"
               x-component="Input"
             />
             <SchemaField.String
@@ -297,7 +297,7 @@ export default () => {
               x-decorator="FormItem"
               title="CC"
               required
-              description="CC输入123时隐藏DD"
+              description="Hide DD when CC enters 123"
               x-component="Input"
             />
             <SchemaField.String
@@ -313,19 +313,19 @@ export default () => {
           </SchemaField.Object>
           <SchemaField.Void
             x-component="ArrayCards.Addition"
-            title="添加条目"
+            title="Add entry"
           />
         </SchemaField.Array>
       </SchemaField>
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup>
     </FormProvider>
   )
 }
 ```
 
-## JSON Schema 联动案例
+## JSON Schema linkage case
 
 ```tsx
 import React from 'react'
@@ -356,7 +356,7 @@ const schema = {
       type: 'array',
       'x-component': 'ArrayCards',
       maxItems: 3,
-      title: '对象数组',
+      title: 'Object array',
       items: {
         type: 'object',
         properties: {
@@ -370,7 +370,7 @@ const schema = {
             title: 'AA',
             required: true,
             'x-component': 'Input',
-            description: '输入123',
+            description: 'Enter 123',
           },
           bb: {
             type: 'string',
@@ -414,7 +414,7 @@ const schema = {
       properties: {
         addition: {
           type: 'void',
-          title: '添加条目',
+          title: 'Add entry',
           'x-component': 'ArrayCards.Addition',
         },
       },
@@ -427,7 +427,7 @@ export default () => {
     <FormProvider form={form}>
       <SchemaField schema={schema} />
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup>
     </FormProvider>
   )
@@ -438,66 +438,66 @@ export default () => {
 
 ### ArrayCards
 
-参考 https://fusion.design/pc/component/basic/card
+Reference https://fusion.design/pc/component/basic/card
 
 ### ArrayCards.Addition
 
-> 添加按钮
+> Add button
 
-扩展属性
+Extended attributes
 
-| 属性名       | 类型                  | 描述     | 默认值   |
-| ------------ | --------------------- | -------- | -------- |
-| title        | ReactText             | 文案     |          |
-| method       | `'push' \| 'unshift'` | 添加方式 | `'push'` |
-| defaultValue | `any`                 | 默认值   |          |
+| Property name | Type                 | Description   | Default value |
+| ------------- | -------------------- | ------------- | ------------- |
+| title         | ReactText            | Copywriting   |               |
+| method        | `'push' \|'unshift'` | add method    | `'push'`      |
+| defaultValue  | `any`                | Default value |               |
 
-其余参考 https://fusion.design/pc/component/basic/button
+Other references https://fusion.design/pc/component/basic/button
 
-注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
 ### ArrayCards.Remove
 
-> 删除按钮
+> Delete button
 
-| 属性名 | 类型      | 描述 | 默认值 |
-| ------ | --------- | ---- | ------ |
-| title  | ReactText | 文案 |        |
+| Property name | Type      | Description | Default value |
+| ------------- | --------- | ----------- | ------------- |
+| title         | ReactText | Copywriting |               |
 
-其余参考 https://ant.design/components/icon-cn/
+Other references https://ant.design/components/icon-cn/
 
-注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
 ### ArrayCards.MoveDown
 
-> 下移按钮
+> Move down button
 
-| 属性名 | 类型      | 描述 | 默认值 |
-| ------ | --------- | ---- | ------ |
-| title  | ReactText | 文案 |        |
+| Property name | Type      | Description | Default value |
+| ------------- | --------- | ----------- | ------------- |
+| title         | ReactText | Copywriting |               |
 
-其余参考 https://ant.design/components/icon-cn/
+Other references https://ant.design/components/icon-cn/
 
-注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
 ### ArrayCards.MoveUp
 
-> 上移按钮
+> Move up button
 
-| 属性名 | 类型      | 描述 | 默认值 |
-| ------ | --------- | ---- | ------ |
-| title  | ReactText | 文案 |        |
+| Property name | Type      | Description | Default value |
+| ------------- | --------- | ----------- | ------------- |
+| title         | ReactText | Copywriting |               |
 
-其余参考 https://ant.design/components/icon-cn/
+Other references https://ant.design/components/icon-cn/
 
-注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
 ### ArrayCards.Index
 
-> 索引渲染器
+> Index Renderer
 
-无属性
+No attributes
 
 ### ArrayItems.useIndex
 
-> 读取当前渲染行索引的 React Hook
+> Read the React Hook of the current rendering row index

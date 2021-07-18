@@ -4,15 +4,15 @@ order: 4
 
 # Form Checkers
 
-> 类型检查器主要用于判断某个对象具体是什么类型
+> The type checker is mainly used to determine the specific type of an object
 
 ## isForm
 
-#### 描述
+#### Description
 
-判断一个对象是否为 [Form](/api/models/form) 对象
+Determine whether an object is a [Form](/api/models/form) object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isForm {
@@ -20,7 +20,7 @@ interface isForm {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isForm } from '@formily/core'
@@ -32,11 +32,11 @@ console.log(isForm(form)) //true
 
 ## isField
 
-#### 描述
+#### Description
 
-判断一个对象是否为 [Field](/api/models/field) 对象
+Determine whether an object is a [Field](/api/models/field) object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isField {
@@ -44,7 +44,7 @@ interface isField {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isField } from '@formily/core'
@@ -58,11 +58,11 @@ console.log(isField(field)) //true
 
 ## isArrayField
 
-#### 描述
+#### Description
 
-判断一个对象是否为 [ArrayField](/api/models/array-field) 对象
+Determine whether an object is [ArrayField](/api/models/array-field) object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isArrayField {
@@ -70,7 +70,7 @@ interface isArrayField {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isArrayField } from '@formily/core'
@@ -84,11 +84,11 @@ console.log(isArrayField(field)) //true
 
 ## isObjectField
 
-#### 描述
+#### Description
 
-判断一个对象是否为 [ObjectField](/api/models/object-field) 对象
+Determine whether an object is a [ObjectField](/api/models/object-field) object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isObjectField {
@@ -96,7 +96,7 @@ interface isObjectField {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isObjectField } from '@formily/core'
@@ -110,11 +110,11 @@ console.log(isObjectField(field)) //true
 
 ## isVoidField
 
-#### 描述
+#### Description
 
-判断一个对象是否为 [VoidField](/api/models/void-field) 对象
+Determine whether an object is a [VoidField](/api/models/void-field) object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isVoidField {
@@ -122,7 +122,7 @@ interface isVoidField {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isVoidField } from '@formily/core'
@@ -136,11 +136,11 @@ console.log(isVoidField(field)) //true
 
 ## isGeneralField
 
-#### 描述
+#### Description
 
-判断一个对象是否为 Field/ArrayField/ObjectField/VoidField 对象
+Determine whether an object is a Field/ArrayField/ObjectField/VoidField object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isGeneralField {
@@ -148,7 +148,7 @@ interface isGeneralField {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isGeneralField } from '@formily/core'
@@ -169,11 +169,11 @@ console.log(isGeneralField({})) //false
 
 ## isDataField
 
-#### 描述
+#### Description
 
-判断一个对象是否为 Field/ArrayField/ObjectField 对象
+Determine whether an object is a Field/ArrayField/ObjectField object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isDataField {
@@ -181,7 +181,7 @@ interface isDataField {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isDataField } from '@formily/core'
@@ -202,11 +202,11 @@ console.log(isDataField({})) //false
 
 ## isFormState
 
-#### 描述
+#### Description
 
-判断一个对象是否为 [IFormState](/api/models/form#iformstate) 对象
+Determine whether an object is [IFormState](/api/models/form#iformstate) object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isFormState {
@@ -214,7 +214,7 @@ interface isFormState {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isFormState } from '@formily/core'
@@ -227,11 +227,11 @@ console.log(isFormState(form.getState())) //true
 
 ## isFieldState
 
-#### 描述
+#### Description
 
-判断一个对象是否为 [IFieldState](/api/models/field#ifieldstate) 对象
+Determine whether an object is [IFieldState](/api/models/field#ifieldstate) object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isFieldState {
@@ -239,7 +239,7 @@ interface isFieldState {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isFieldState } from '@formily/core'
@@ -255,11 +255,11 @@ console.log(isFieldState(field.getState())) //true
 
 ## isArrayFieldState
 
-#### 描述
+#### Description
 
-判断一个对象是否为 [IArrayFieldState](/api/models/array-field#iarrayfieldstate) 对象
+Determine whether an object is [IArrayFieldState](/api/models/array-field#iarrayfieldstate) object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isArrayFieldState {
@@ -267,7 +267,7 @@ interface isArrayFieldState {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isArrayFieldState } from '@formily/core'
@@ -283,11 +283,11 @@ console.log(isArrayFieldState(field.getState())) //true
 
 ## isObjectFieldState
 
-#### 描述
+#### Description
 
-判断一个对象是否为 [IObjectFieldState](/api/models/object-field#iobjectfieldstate) 对象
+Determine whether an object is [IObjectFieldState](/api/models/object-field#iobjectfieldstate) object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isObjectFieldState {
@@ -295,7 +295,7 @@ interface isObjectFieldState {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isObjectFieldState } from '@formily/core'
@@ -311,11 +311,11 @@ console.log(isObjectFieldState(field.getState())) //true
 
 ## isVoidFieldState
 
-#### 描述
+#### Description
 
-判断一个对象是否为 [IVoidFieldState](/api/models/void-field#ivoidfieldstate) 对象
+Determine whether an object is [IVoidFieldState](/api/models/void-field#ivoidfieldstate) object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isVoidFieldState {
@@ -323,7 +323,7 @@ interface isVoidFieldState {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isVoidFieldState } from '@formily/core'
@@ -339,11 +339,11 @@ console.log(isVoidFieldState(field.getState())) //true
 
 ## isGeneralFieldState
 
-#### 描述
+#### Description
 
-判断一个对象是否为 IFieldState/IArrayFieldState/IObjectFieldState/IVoidFieldState 对象
+Determine whether an object is an IFieldState/IArrayFieldState/IObjectFieldState/IVoidFieldState object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isGeneralFieldState {
@@ -355,7 +355,7 @@ interface isGeneralFieldState {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isGeneralFieldState } from '@formily/core'
@@ -380,11 +380,11 @@ console.log(isGeneralFieldState({})) //false
 
 ## isDataFieldState
 
-#### 描述
+#### Description
 
-判断一个对象是否为 IFieldState/IArrayFieldState/IObjectFieldState 对象
+Determine whether an object is an IFieldState/IArrayFieldState/IObjectFieldState object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isDataFieldState {
@@ -392,7 +392,7 @@ interface isDataFieldState {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isDataFieldState } from '@formily/core'
@@ -417,11 +417,11 @@ console.log(isDataFieldState({})) //false
 
 ## isQuery
 
-#### 描述
+#### Description
 
-判断一个对象是否为 Query 对象
+Determine whether an object is a Query object
 
-#### 签名
+#### Signature
 
 ```ts
 interface isQuery {
@@ -429,7 +429,7 @@ interface isQuery {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { createForm, isQuery } from '@formily/core'

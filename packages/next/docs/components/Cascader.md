@@ -1,8 +1,8 @@
 # Cascader
 
-> 联级选择器
+> Cascade selector
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -64,7 +64,7 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="address"
-        title="地址选择"
+        title="Address Selection"
         x-decorator="FormItem"
         x-component="Cascader"
         x-component-props={{
@@ -75,13 +75,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -139,7 +139,7 @@ const schema = {
   properties: {
     address: {
       type: 'string',
-      title: '地址选择',
+      title: 'Address Selection',
       'x-decorator': 'FormItem',
       'x-component': 'Cascader',
       'x-component-props': {
@@ -161,13 +161,13 @@ export default () => (
       scope={{ useAsyncDataSource, transformAddress }}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -221,7 +221,7 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="address"
-      title="地址选择"
+      title="Address Selection"
       decorator={[FormItem]}
       component={[
         Cascader,
@@ -233,7 +233,7 @@ export default () => (
       ]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -241,4 +241,4 @@ export default () => (
 
 ## API
 
-参考 https://fusion.design/pc/component/basic/cascader-select
+Reference https://fusion.design/pc/component/basic/cascader-select

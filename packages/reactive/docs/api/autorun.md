@@ -1,10 +1,10 @@
 # autorun
 
-## 描述
+## Description
 
-接收一个 tracker 函数，如果函数内部有消费 observable 数据，数据发生变化时，tracker 函数会重复执行
+Receive a tracker function, if there is observable data in the function, the tracker function will be executed repeatedly when the data changes
 
-## 签名
+## Signature
 
 ```ts
 interface autorun {
@@ -12,7 +12,7 @@ interface autorun {
 }
 ```
 
-## 用例
+## Example
 
 ```ts
 import { observable, autorun } from '@formily/reactive'
@@ -30,13 +30,13 @@ dispose()
 
 ## autorun.memo
 
-### 描述
+### Description
 
-在 autorun 中用于创建持久引用数据，仅仅只会受依赖变化而重新执行 memo 内部函数
+Used in autorun to create persistent reference data, only re-execute memo internal functions due to dependency changes
 
-注意：请不要在 If/For 这类语句中使用，因为它内部是依赖执行顺序来绑定当前 autorun 的
+Note: Please do not use it in If/For statements, because it depends on the execution order to bind the current autorun
 
-### 签名
+### Signature
 
 ```ts
 interface memo<T> {
@@ -44,9 +44,9 @@ interface memo<T> {
 }
 ```
 
-注意：依赖默认为`[]`，也就是如果不传依赖，代表永远不会执行第二次
+Note: The default dependency is `[]`, that is, if the dependency is not passed, it means that the second time will never be executed
 
-### 用例
+### Example
 
 ```ts
 import { observable, autorun } from '@formily/reactive'
@@ -67,11 +67,11 @@ const dispose = autorun(() => {
 obs1.aa++
 obs1.aa++
 obs1.aa++
-//执行四次，输出结果为
+//Execute four times, the output result is
 /**
  * 0 0
  * 1 1
- * 2 2
+ * twenty two
  * 3 3
  */
 
@@ -80,13 +80,13 @@ dispose()
 
 ## autorun.effect
 
-### 描述
+### Description
 
-在 autorun 中用于响应 autorun 第一次执行的下一个微任务时机与响应 autorun 的 dispose
+In autorun, it is used to respond to the next micro task timing of autorun's first execution and the dispose of responding to autorun
 
-注意：请不要在 If/For 这类语句中使用，因为它内部是依赖执行顺序来绑定当前 autorun 的
+Note: Please do not use it in If/For statements, because it depends on the execution order to bind the current autorun
 
-### 签名
+### Signature
 
 ```ts
 interface effect {
@@ -94,9 +94,9 @@ interface effect {
 }
 ```
 
-注意：依赖默认为`[{}]`，也就是如果不传依赖，代表会持续执行，因为内部脏检查是浅比较
+Note: The default dependency is `[{}]`, that is, if the dependency is not passed, the representative will continue to execute, because the internal dirty check is a shallow comparison
 
-### 用例
+### Example
 
 ```ts
 import { observable, autorun } from '@formily/reactive'
@@ -119,11 +119,11 @@ const dispose = autorun(() => {
 obs1.aa++
 obs1.aa++
 obs1.aa++
-//执行五次，输出结果为
+//Execute five times, the output result is
 /**
  * 0 0
  * 1 1
- * 2 2
+ * twenty two
  * 3 3
  * 3 5
  */

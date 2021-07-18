@@ -1,10 +1,10 @@
 # connect
 
-## 描述
+## Description
 
-主要用于对第三方组件库的无侵入接入 Formily
+Mainly used for non-intrusive access to third-party component libraries Formily
 
-## 签名
+## Signature
 
 ```ts
 interface IComponentMapper<T extends React.FC> {
@@ -15,9 +15,9 @@ interface connect<T extends React.FC> {
 }
 ```
 
-入参传入第一个参数是要接入的组件，后面的参数都是组件映射器，每个映射器都是一个函数，通常我们会使用内置的[mapProps](/api/shared/map-props)和[mapReadPretty](/api/shared/map-read-pretty)映射器
+The first parameter passed in is the component to be connected, the following parameters are component mappers, each mapper is a function, usually we will use the built-in [mapProps](/api/shared/map- props) and [mapReadPretty](/api/shared/map-read-pretty) mapper
 
-## 用例
+## Example
 
 ```tsx
 import React, { useMemo } from 'react'
@@ -31,7 +31,7 @@ import {
 } from '@formily/react'
 import { Input, Form, Button } from 'antd'
 
-// FormItem UI组件
+// FormItem UI component
 const FormItem = connect(
   Form.Item,
   mapProps(

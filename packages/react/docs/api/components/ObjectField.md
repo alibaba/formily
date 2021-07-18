@@ -4,21 +4,21 @@ order: 2
 
 # ObjectField
 
-## 描述
+## Description
 
-作为@formily/core 的 [createObjectField](https://core.formilyjs.org/api/models/form#createobjectfield) React 实现，它是专门用于将 ViewModel 与输入控件做绑定的桥接组件，ObjectField 组件属性参考[IFieldFactoryProps](https://core.formilyjs.org/api/models/form#ifieldfactoryprops)
+As @formily/core's [createObjectField](https://core.formilyjs.org/api/models/form#createobjectfield) React implementation, it is a bridge component specifically used to bind ViewModel and input controls, ObjectField component Property reference [IFieldFactoryProps](https://core.formilyjs.org/api/models/form#ifieldfactoryprops)
 
 <Alert>
-我们在使用 ObjectField 组件的时候，一定要记得传name属性。同时要使用render props形式来组织子组件
+When we use the ObjectField component, we must remember to pass the name attribute. At the same time, use render props to organize sub-components
 </Alert>
 
-## 签名
+## Signature
 
 ```ts
 type ObjectField = React.FC<IFieldFactoryProps>
 ```
 
-## 自定义组件用例
+## Custom component use case
 
 ```tsx
 import React from 'react'
@@ -84,7 +84,7 @@ export default () => (
 )
 ```
 
-## RenderProps 用例
+## RenderProps use cases
 
 ```tsx
 import React from 'react'

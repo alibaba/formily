@@ -1,14 +1,14 @@
 # useField
 
-## 描述
+## Description
 
-主要用在自定义组件内读取当前字段属性，操作字段状态等，在所有 Field 组件的子树内都能使用，注意，拿到的是[GeneralField](https://core.formilyjs.org/api/models/field#generalfield)，如果需要对不同类型的字段做处理，请使用[Type Checker](https://core.formilyjs.org/api/entry/form-checker)
+Mainly used in custom components to read current field properties, manipulate field status, etc. It can be used in the subtree of all Field components. Note that the one you get is [GeneralField](https://core.formilyjs.org/ api/models/field#generalfield), if you need to process different types of fields, please use [Type Checker](https://core.formilyjs.org/api/entry/form-checker)
 
 <Alert>
-注意：如果要在自定义组件内使用useField，并响应字段模型变化，那需要给自定义组件包装observer
+Note: If you want to use useField in a custom component and respond to changes in the field model, you need to wrap the observer for the custom component
 </Alert>
 
-## 签名
+## Signature
 
 ```ts
 interface useField {
@@ -16,7 +16,7 @@ interface useField {
 }
 ```
 
-## 用例
+## Example
 
 ```tsx
 import React, { useMemo } from 'react'
@@ -30,7 +30,7 @@ import {
 } from '@formily/react'
 import { Input, Form, Button } from 'antd'
 
-// FormItem UI组件
+// FormItem UI component
 const FormItem = observer(({ children }) => {
   const field = useField()
   return (

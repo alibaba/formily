@@ -1,8 +1,8 @@
 # NumberPicker
 
-> 数字输入框
+> Number input box
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -24,7 +24,7 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="input"
-        title="输入框"
+        title="input box"
         x-decorator="FormItem"
         x-component="NumberPicker"
         required
@@ -36,13 +36,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -64,7 +64,7 @@ const schema = {
   properties: {
     input: {
       type: 'string',
-      title: '输入框',
+      title: 'input box',
       'x-decorator': 'FormItem',
       'x-component': 'NumberPicker',
       'x-component-props': {
@@ -80,13 +80,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -100,7 +100,7 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="input"
-      title="输入框"
+      title="input box"
       required
       decorator={[FormItem]}
       component={[
@@ -113,7 +113,7 @@ export default () => (
       ]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -121,4 +121,4 @@ export default () => (
 
 ## API
 
-参考 https://ant.design/components/input-number-cn/
+Reference https://ant.design/components/input-number-cn/

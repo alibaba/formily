@@ -1,10 +1,10 @@
 # FormTab
 
-> 选项卡表单
+> Tab form
 >
-> 注意：该组件只适用于 Schema 场景
+> Note: This component is only applicable to Schema scenarios
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -89,23 +89,23 @@ export default () => {
             })
           }}
         >
-          显示/隐藏最后一个Tab
+          Show/hide the last tab
         </Button>
         <Button
           onClick={() => {
             formTab.setActiveKey('tab2')
           }}
         >
-          切换第二个Tab
+          Switch to the second Tab
         </Button>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormProvider>
   )
 }
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -206,16 +206,16 @@ export default () => {
             })
           }}
         >
-          显示/隐藏最后一个Tab
+          Show/hide the last tab
         </Button>
         <Button
           onClick={() => {
             formTab.setActiveKey('tab2')
           }}
         >
-          切换第二个Tab
+          Switch to the second Tab
         </Button>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormProvider>
   )
@@ -226,15 +226,15 @@ export default () => {
 
 ### FormTab
 
-| 属性名  | 类型     | 描述                                             | 默认值 |
-| ------- | -------- | ------------------------------------------------ | ------ |
-| formTab | IFormTab | 传入通过 createFormTab/useFormTab 创建出来的模型 |        |
+| Property name | Type     | Description                                           | Default value |
+| ------------- | -------- | ----------------------------------------------------- | ------------- |
+| formTab       | IFormTab | Pass in the model created by createFormTab/useFormTab |               |
 
-其余参考 https://fusion.design/pc/component/basic/tab
+Other references https://fusion.design/pc/component/basic/tab
 
 ### FormTab.TabPane
 
-参考 https://fusion.design/pc/component/basic/tab 的 Item 属性
+Refer to the Item property of https://fusion.design/pc/component/basic/tab
 
 ### FormTab.createFormTab
 
@@ -246,9 +246,9 @@ interface createFormTab {
 }
 
 interface IFormTab {
-  //激活主键
+  //Activate the primary key
   activeKey: ActiveKey
-  //设置激活主键
+  //Set the activation key
   setActiveKey(key: ActiveKey): void
 }
 ```
