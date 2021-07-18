@@ -21,10 +21,10 @@ type VoidField = React.FC<IVoidFieldFactoryProps>
 ## Example
 
 ```tsx
-import React from'react'
-import {createForm} from'@formily/core'
-import {FormProvider, FormConsumer, Field, VoidField} from'@formily/react'
-import {Input, Button, Space} from'antd'
+import React from 'react'
+import { createForm } from '@formily/core'
+import { FormProvider, FormConsumer, Field, VoidField } from '@formily/react'
+import { Input, Button, Space } from 'antd'
 
 const form = createForm()
 
@@ -35,7 +35,7 @@ export default () => (
         <Field name="input" component={[Input]} />
       </VoidField>
       <FormConsumer>
-        (() => (
+        {() => (
           <Space>
             <Button
               onClick={() => {
@@ -47,7 +47,7 @@ export default () => (
                   })
               }}
             >
-              {form.query('layout').get('visible')?'Hide':'Show'}
+              {form.query('layout').get('visible') ? 'Hide' : 'Show'}
             </Button>
             <div>{JSON.stringify(form.values, null, 2)}</div>
           </Space>

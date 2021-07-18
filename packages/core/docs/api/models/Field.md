@@ -597,29 +597,29 @@ Field validator, the type is more complicated and needs to be digested carefully
 ```ts
 //String format validator
 type ValidatorFormats =
-  |'url'
-  |'email'
-  |'ipv6'
-  |'ipv4'
-  |'number'
-  |'integer'
-  |'idcard'
-  |'qq'
-  |'phone'
-  |'money'
-  |'zh'
-  |'date'
-  |'zip'
-  | (string & ()) //Other format validators need to be registered through registerValidateFormats
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'number'
+  | 'integer'
+  | 'idcard'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | (string & {}) //Other format validators need to be registered through registerValidateFormats
 
 //Object type verification result
 interface IValidateResult {
-  type:'error' |'warning' |'success' | (string & {})
+  type: 'error' | 'warning' | 'success' | (string & {})
   message: string
 }
 //Object validator
 interface IValidatorRules<Context = any> {
-  triggerType?:'onInput' |'onFocus' |'onBlur'
+  triggerType?: 'onInput' | 'onFocus' | 'onBlur'
   format?: ValidatorFormats
   validator?: ValidatorFunction<Context>
   required?: boolean

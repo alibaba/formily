@@ -7,11 +7,11 @@
 ## Markup Schema example
 
 ```tsx
-import React from'react'
-import {FormStep, FormItem, Input, FormButtonGroup} from'@formily/antd'
-import {createForm} from'@formily/core'
-import {FormProvider, FormConsumer, createSchemaField} from'@formily/react'
-import {Button} from'antd'
+import React from 'react'
+import { FormStep, FormItem, Input, FormButtonGroup } from '@formily/antd'
+import { createForm } from '@formily/core'
+import { FormProvider, FormConsumer, createSchemaField } from '@formily/react'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -34,7 +34,7 @@ export default () => {
         >
           <SchemaField.Void
             x-component="FormStep.StepPane"
-            x-component-props={{ title:'First Step' }}
+            x-component-props={{ title: 'First Step' }}
           >
             <SchemaField.String
               name="aaa"
@@ -45,7 +45,7 @@ export default () => {
           </SchemaField.Void>
           <SchemaField.Void
             x-component="FormStep.StepPane"
-            x-component-props={{ title:'Second Step' }}
+            x-component-props={{ title: 'Second Step' }}
           >
             <SchemaField.String
               name="bbb"
@@ -57,7 +57,7 @@ export default () => {
           <SchemaField.Void
             type="void"
             x-component="FormStep.StepPane"
-            x-component-props={{ title:'Step 3'}}
+            x-component-props={{ title: 'Step 3' }}
           >
             <SchemaField.String
               name="ccc"
@@ -69,7 +69,7 @@ export default () => {
         </SchemaField.Void>
       </SchemaField>
       <FormConsumer>
-        (() => (
+        {() => (
           <FormButtonGroup>
             <Button
               disabled={!formStep.allowBack}
@@ -106,11 +106,11 @@ export default () => {
 ## JSON Schema case
 
 ```tsx
-import React from'react'
-import {FormStep, FormItem, Input, FormButtonGroup} from'@formily/antd'
-import {createForm} from'@formily/core'
-import {FormProvider, FormConsumer, createSchemaField} from'@formily/react'
-import {Button} from'antd'
+import React from 'react'
+import { FormStep, FormItem, Input, FormButtonGroup } from '@formily/antd'
+import { createForm } from '@formily/core'
+import { FormProvider, FormConsumer, createSchemaField } from '@formily/react'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -124,60 +124,60 @@ const form = createForm()
 const formStep = FormStep.createFormStep()
 
 const schema = {
-  type:'object',
+  type: 'object',
   properties: {
     step: {
-      type:'void',
-      'x-component':'FormStep',
+      type: 'void',
+      'x-component': 'FormStep',
       'x-component-props': {
-        formStep:'{{formStep}}',
+        formStep: '{{formStep}}',
       },
       properties: {
         step1: {
-          type:'void',
-          'x-component':'FormStep.StepPane',
+          type: 'void',
+          'x-component': 'FormStep.StepPane',
           'x-component-props': {
-            title:'First Step',
+            title: 'First Step',
           },
           properties: {
             aaa: {
-              type:'string',
-              title:'AAA',
+              type: 'string',
+              title: 'AAA',
               required: true,
-              'x-decorator':'FormItem',
-              'x-component':'Input',
+              'x-decorator': 'FormItem',
+              'x-component': 'Input',
             },
           },
         },
         step2: {
-          type:'void',
-          'x-component':'FormStep.StepPane',
+          type: 'void',
+          'x-component': 'FormStep.StepPane',
           'x-component-props': {
-            title:'Second Step',
+            title: 'Second Step',
           },
           properties: {
             bbb: {
-              type:'string',
-              title:'AAA',
+              type: 'string',
+              title: 'AAA',
               required: true,
-              'x-decorator':'FormItem',
-              'x-component':'Input',
+              'x-decorator': 'FormItem',
+              'x-component': 'Input',
             },
           },
         },
         step3: {
-          type:'void',
-          'x-component':'FormStep.StepPane',
+          type: 'void',
+          'x-component': 'FormStep.StepPane',
           'x-component-props': {
-            title:'The third step',
+            title: 'The third step',
           },
           properties: {
             ccc: {
-              type:'string',
-              title:'AAA',
+              type: 'string',
+              title: 'AAA',
               required: true,
-              'x-decorator':'FormItem',
-              'x-component':'Input',
+              'x-decorator': 'FormItem',
+              'x-component': 'Input',
             },
           },
         },
@@ -191,7 +191,7 @@ export default () => {
     <FormProvider form={form}>
       <SchemaField schema={schema} scope={{ formStep }} />
       <FormConsumer>
-        (() => (
+        {() => (
           <FormButtonGroup>
             <Button
               disabled={!formStep.allowBack}

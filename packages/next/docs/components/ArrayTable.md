@@ -143,8 +143,8 @@ export default () => {
       </FormButtonGroup>
       <Message style={{ marginTop: 10 }} type="warning">
         Note: Open the formily plug-in page, because there is data communication
-        in the background, which will occupy the browser's computing power, it
-        is best to test in the incognito mode (without the formily plug-in)
+        in the background, which will occupy the browser{"'"}s computing power,
+        it is best to test in the incognito mode (without the formily plug-in)
       </Message>
     </FormProvider>
   )

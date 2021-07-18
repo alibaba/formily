@@ -83,12 +83,12 @@ type Observer = React.FC<IObserverProps>
 /**
  * defaultShowCode: true
  */
-import React from'react'
-import {observable} from'@formily/reactive'
-import {Observer} from'@formily/reactive-react'
+import React from 'react'
+import { observable } from '@formily/reactive'
+import { Observer } from '@formily/reactive-react'
 
 const obs = observable({
-  value:'Hello world',
+  value: 'Hello world',
 })
 
 export default () => {
@@ -96,7 +96,7 @@ export default () => {
     <div>
       <div>
         <Observer>
-          (() => (
+          {() => (
             <input
               style={{
                 height: 28,

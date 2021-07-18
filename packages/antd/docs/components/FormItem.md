@@ -118,7 +118,7 @@ export default () => (
 ## Commonly used attribute cases
 
 ```tsx
-import React from'react'
+import React from 'react'
 import {
   Input,
   Radio,
@@ -129,9 +129,9 @@ import {
   FormItem,
   NumberPicker,
   Switch,
-} from'@formily/antd'
-import {createForm} from'@formily/core'
-import {FormProvider, createSchemaField} from'@formily/react'
+} from '@formily/antd'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 
 const Title = (props) => <h3>{props.text}</h3>
 
@@ -158,7 +158,7 @@ export default () => {
       <SchemaField>
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text:'Display when label is empty' }}
+          x-component-props={{ text: 'Display when label is empty' }}
         />
         <SchemaField.String
           x-decorator="FormItem"
@@ -177,7 +177,7 @@ export default () => {
         />
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text:'colon' }}
+          x-component-props={{ text: 'colon' }}
         />
         <SchemaField.String
           title="default"
@@ -195,7 +195,7 @@ export default () => {
 
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text:'Fixed width settings' }}
+          x-component-props={{ text: 'Fixed width settings' }}
         />
         <SchemaField.String
           title="Fixed label width (labelWidth)"
@@ -206,14 +206,14 @@ export default () => {
           }}
         />
         <SchemaField.String
-          title="Fixed label width (labelWidth) overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow
+          title="Fixed label width (labelWidth) overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow"
           description="description description"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
             labelWidth: 300,
-            tooltip:'Prompt Tip',
-            tooltipLayout:'text',
+            tooltip: 'Prompt Tip',
+            tooltipLayout: 'text',
           }}
         />
         <SchemaField.String
@@ -224,7 +224,7 @@ export default () => {
           x-decorator-props={{
             labelWidth: 300,
             labelWrap: true,
-            tooltip:'Prompt Tip',
+            tooltip: 'Prompt Tip',
           }}
         />
         <SchemaField.String
@@ -239,7 +239,7 @@ export default () => {
 
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text:'Alignment settings' }}
+          x-component-props={{ text: 'Alignment settings' }}
         />
         <SchemaField.String
           title="labelLeft Alignment(labelAlign=left)"
@@ -247,7 +247,7 @@ export default () => {
           x-component="Input"
           x-decorator-props={{
             labelWidth: 300,
-            labelAlign:'left',
+            labelAlign: 'left',
           }}
         />
         <SchemaField.String
@@ -256,7 +256,7 @@ export default () => {
           x-component="Input"
           x-decorator-props={{
             labelWidth: 300,
-            labelAlign:'right',
+            labelAlign: 'right',
           }}
         />
 
@@ -267,7 +267,7 @@ export default () => {
           x-decorator-props={{
             labelWidth: 300,
             wrapperWidth: 240,
-            wrapperAlign:'left',
+            wrapperAlign: 'left',
           }}
         />
         <SchemaField.String
@@ -277,7 +277,7 @@ export default () => {
           x-decorator-props={{
             labelWidth: 300,
             wrapperWidth: 240,
-            wrapperAlign:'right',
+            wrapperAlign: 'right',
           }}
         />
 
@@ -286,13 +286,13 @@ export default () => {
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
-            tooltip:'tooltip',
+            tooltip: 'tooltip',
           }}
         />
 
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text:'Is it full?' }}
+          x-component-props={{ text: 'Is it full?' }}
         />
 
         <SchemaField.String
@@ -311,7 +311,7 @@ export default () => {
 
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text:'auxiliary information' }}
+          x-component-props={{ text: 'auxiliary information' }}
         />
 
         <SchemaField.String
@@ -330,7 +330,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
-            addonBefore:'addonBefore',
+            addonBefore: 'addonBefore',
             labelCol: 6,
             wrapperCol: 10,
           }}
@@ -340,7 +340,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
-            addonAfter:'addonAfter',
+            addonAfter: 'addonAfter',
             labelCol: 6,
             wrapperCol: 10,
           }}
@@ -351,7 +351,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
-            feedbackText:'feedbackText',
+            feedbackText: 'feedbackText',
             labelCol: 6,
             wrapperCol: 10,
           }}
@@ -362,8 +362,8 @@ export default () => {
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
-            feedbackText:'feedbackText',
-            extra:'extra',
+            feedbackText: 'feedbackText',
+            extra: 'extra',
             labelCol: 6,
             wrapperCol: 10,
           }}
