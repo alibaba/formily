@@ -23,15 +23,12 @@ jobs:
           node-version: ${{ matrix.node_version }}
 
       - run: yarn -v
-      - run: yarn --frozen-lockfile --ignore-engines --ignore-optional --no-bin-links --non-interactive --silent --ignore-scripts --production=false
-        env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
-          HUSKY_SKIP_INSTALL: true
+      - run: yarn --ignore-engines
       - name: ESlint
-        uses: tinovyatkin/action-eslint@v1
+        uses: reviewdog/action-eslint@v1
         with:
-           repo-token: ${{secrets.GITHUB_TOKEN}}
-           check-name: eslint
+          reporter: github-check
+          eslint_flags: 'src/'
       - run: yarn build
       - run: yarn test:prod
         env:
