@@ -1,8 +1,8 @@
 # TreeSelect
 
-> 树选择器
+> Tree selector
 
-## Markup Schema 同步数据源案例
+## Markup Schema synchronization data source case
 
 ```tsx
 import React from 'react'
@@ -24,12 +24,12 @@ export default () => (
     <SchemaField>
       <SchemaField.Number
         name="select"
-        label="选择框"
+        label="select box"
         x-decorator="FormItem"
         x-component="TreeSelect"
         enum={[
           {
-            label: '选项1',
+            label: 'Option 1',
             value: 1,
             children: [
               {
@@ -50,7 +50,7 @@ export default () => (
             ],
           },
           {
-            label: '选项2',
+            label: 'Option 2',
             value: 2,
             children: [
               {
@@ -79,13 +79,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## Markup Schema 异步联动数据源案例
+## Markup Schema Asynchronous Linkage Data Source Case
 
 ```tsx
 import React from 'react'
@@ -232,12 +232,12 @@ export default () => (
     <SchemaField>
       <SchemaField.Number
         name="linkage"
-        label="联动选择框"
+        label="Linkage selection box"
         x-decorator="FormItem"
         x-component="Select"
         enum={[
-          { label: '发请求1', value: 1 },
-          { label: '发请求2', value: 2 },
+          { label: 'Request 1', value: 1 },
+          { label: 'Request 2', value: 2 },
         ]}
         x-component-props={{
           style: {
@@ -247,7 +247,7 @@ export default () => (
       />
       <SchemaField.String
         name="select"
-        label="异步选择框"
+        label="Asynchronous selection box"
         x-decorator="FormItem"
         x-component="TreeSelect"
         x-component-props={{
@@ -258,13 +258,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 同步数据源案例
+## JSON Schema synchronization data source case
 
 ```tsx
 import React from 'react'
@@ -286,12 +286,12 @@ const schema = {
   properties: {
     select: {
       type: 'string',
-      label: '选择框',
+      label: 'Select box',
       'x-decorator': 'FormItem',
       'x-component': 'TreeSelect',
       enum: [
         {
-          label: '选项1',
+          label: 'Option 1',
           value: 1,
           children: [
             {
@@ -312,7 +312,7 @@ const schema = {
           ],
         },
         {
-          label: '选项2',
+          label: 'Option 2',
           value: 2,
           children: [
             {
@@ -346,13 +346,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 异步联动数据源案例
+## JSON Schema asynchronous linkage data source case
 
 ```tsx
 import React from 'react'
@@ -492,10 +492,10 @@ const schema = {
   properties: {
     linkage: {
       type: 'string',
-      label: '联动选择框',
+      label: 'Linkage selection box',
       enum: [
-        { label: '发请求1', value: 1 },
-        { label: '发请求2', value: 2 },
+        { label: 'Request 1', value: 1 },
+        { label: 'Request 2', value: 2 },
       ],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
@@ -507,7 +507,7 @@ const schema = {
     },
     select: {
       type: 'string',
-      label: '异步选择框',
+      label: 'Asynchronous selection box',
       'x-decorator': 'FormItem',
       'x-component': 'TreeSelect',
       'x-component-props': {
@@ -524,13 +524,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} scope={{ useAsyncDataSource, loadData }} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 同步数据源案例
+## Pure JSX synchronization data source case
 
 ```tsx
 import React from 'react'
@@ -544,10 +544,10 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="select"
-      label="选择框"
+      label="select box"
       dataSource={[
         {
-          label: '选项1',
+          label: 'Option 1',
           value: 1,
           children: [
             {
@@ -568,7 +568,7 @@ export default () => (
           ],
         },
         {
-          label: '选项2',
+          label: 'Option 2',
           value: 2,
           children: [
             {
@@ -600,13 +600,13 @@ export default () => (
       ]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 异步联动数据源案例
+## Pure JSX asynchronous linkage data source case
 
 ```tsx
 import React from 'react'
@@ -749,10 +749,10 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="linkage"
-      label="联动选择框"
+      label="Linkage selection box"
       dataSource={[
-        { label: '发请求1', value: 1 },
-        { label: '发请求2', value: 2 },
+        { label: 'Request 1', value: 1 },
+        { label: 'Request 2', value: 2 },
       ]}
       decorator={[FormItem]}
       component={[
@@ -766,7 +766,7 @@ export default () => (
     />
     <Field
       name="select"
-      label="异步选择框"
+      label="Asynchronous selection box"
       decorator={[FormItem]}
       component={[
         TreeSelect,
@@ -778,7 +778,7 @@ export default () => (
       ]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -786,4 +786,4 @@ export default () => (
 
 ## API
 
-参考 https://fusion.design/pc/component/basic/tree-select
+Reference https://fusion.design/pc/component/basic/tree-select

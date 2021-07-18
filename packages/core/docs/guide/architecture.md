@@ -1,17 +1,17 @@
-# 核心架构
+# Core Architecture
 
-## 领域模型
+## Domain Model
 
-Formily 内核架构非常复杂，因为要解决一个领域级的问题，而不是单点具体的问题，先上架构图：
+Formily's kernel architecture is very complicated, because it is necessary to solve a domain-level problem, rather than a single point of specific problem, first go to the architecture diagram:
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01VlHYkh1WQeur8bQMN_!!6000000002783-55-tps-2431-2037.svg)
 
-## 说明
+## Description
 
-从上图中我们可以看到 Formily 内核其实是一个 @formily/reactive 领域模型。
+From the above figure, we can see that the Formily kernel is actually a @formily/reactive domain model.
 
-实际消费领域模型则主要是依赖 @formily/reactive 的 响应器 机制做依赖追踪来消费。
+The actual consumption domain model mainly relies on the @formily/reactive responder mechanism for dependency tracking to consume.
 
-我们可以在响应器(Reactions)中消费 Form/Field/ArrayField/ObjectField/VoidField 模型中的任意属性，依赖的属性发生变化，响应器就会重复执行。
+We can consume any attribute in the Form/Field/ArrayField/ObjectField/VoidField model in the responder (Reactions). When the dependent attribute changes, the responder will execute repeatedly.
 
-从而实现了表单层面的 Reactive 编程模型。
+So as to realize the Reactive programming model at the form level.

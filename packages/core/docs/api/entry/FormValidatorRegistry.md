@@ -6,11 +6,11 @@ order: 6
 
 ## setValidateLanguage
 
-#### 描述
+#### Description
 
-设置内置校验规则语言
+Set the built-in verification rule language
 
-#### 签名
+#### Signature
 
 ```ts
 interface setValidateLanguage {
@@ -18,7 +18,7 @@ interface setValidateLanguage {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { setValidateLanguage } from '@formily/core'
@@ -30,11 +30,11 @@ setValidationLanguage('zh-CN')
 
 ## registerValidateFormats
 
-#### 描述
+#### Description
 
-注册通用正则规则，目前内置正则库参考：[formats.ts](https://github.com/alibaba/formily/blob/master/packages/validator/src/formats.ts)
+Register general regular rules, the current built-in regular library reference: [formats.ts](https://github.com/alibaba/formily/blob/master/packages/validator/src/formats.ts)
 
-#### 签名
+#### Signature
 
 ```ts
 interface registerValidateFormats {
@@ -42,7 +42,7 @@ interface registerValidateFormats {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { registerValidateFormats } from '@formily/core'
@@ -54,11 +54,11 @@ registerValidateFormats({
 
 ## registerValidateLocale
 
-#### 描述
+#### Description
 
-全局注册校验语言包，目前内置语言包参考：[locale.ts](https://github.com/alibaba/formily/blob/master/packages/validator/src/locale.ts)
+Global registration verification language package, the current built-in language package reference: [locale.ts](https://github.com/alibaba/formily/blob/master/packages/validator/src/locale.ts)
 
-#### 签名
+#### Signature
 
 ```ts
 interface registerValidateLocale {
@@ -70,25 +70,25 @@ interface registerValidateLocale {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { registerValidateLocale } from '@formily/core'
 
 registerValidateLocale({
   ja: {
-    required: 'この項目は必須です',
+    required: 'このProjectは mustです',
   },
 })
 ```
 
 ## registerValidateMessageTemplateEngine
 
-#### 描述
+#### Description
 
-全局注册校验消息模板引擎，我们在校验器中返回校验消息的时候，可以基于模板引擎语法做转换
+Globally register the verification message template engine. When we return the verification message in the validator, we can perform conversion based on the template engine syntax
 
-#### 签名
+#### Signature
 
 ```ts
 interface registerValidateMessageTemplateEngine {
@@ -96,7 +96,7 @@ interface registerValidateMessageTemplateEngine {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { registerValidateMessageTemplateEngine } from '@formily/core'
@@ -110,11 +110,11 @@ registerValidateMessageTemplateEngine((message, context) => {
 
 ## registerValidateRules
 
-#### 描述
+#### Description
 
-注册通用校验规则，目前内置规则库参考：[rules.ts](https://github.com/alibaba/formily/blob/master/packages/validator/src/rules.ts)
+Register general verification rules, the current built-in rule library reference: [rules.ts](https://github.com/alibaba/formily/blob/master/packages/validator/src/rules.ts)
 
-#### 签名
+#### Signature
 
 ```ts
 interface registerValidateRules {
@@ -128,7 +128,7 @@ interface registerValidateRules {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { registerValidateRules } from '@formily/core'
@@ -142,11 +142,11 @@ registerValidateRules({
 
 ## getValidateLocaleIOSCode
 
-#### 描述
+#### Description
 
-获取内置存在的 ISO Code
+Get the built-in ISO Code
 
-#### 签名
+#### Signature
 
 ```ts
 interface getValidateLocaleIOSCode {
@@ -154,12 +154,12 @@ interface getValidateLocaleIOSCode {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { getValidateLocaleIOSCode } from '@formily/core'
 
 getValidateLocaleIOSCode('en')
 
-// ==>  en_US
+// ==> en_US
 ```

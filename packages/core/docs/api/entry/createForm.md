@@ -4,11 +4,11 @@ order: 0
 
 # createForm
 
-## 描述
+## Description
 
-创建一个 Form 实例，作为 ViewModel 给 UI 框架层消费
+Create a Form instance as a ViewModel for consumption by the UI framework layer
 
-## 签名
+## Signature
 
 ```ts
 interface createForm {
@@ -18,22 +18,22 @@ interface createForm {
 
 ## IFormProps
 
-| 属性          | 描述                             | 类型                                                     | 默认值       |
-| ------------- | -------------------------------- | -------------------------------------------------------- | ------------ |
-| values        | 表单值                           | Object                                                   | `{}`         |
-| initialValues | 表单默认值                       | Object                                                   | `{}`         |
-| pattern       | 表单交互模式                     | `"editable" \| "disabled" \| "readOnly" \| "readPretty"` | `"editable"` |
-| display       | 表单显隐                         | `"visible" \| "hidden" \| "none"`                        | `"visible`   |
-| hidden        | UI 隐藏                          | Boolean                                                  | `true`       |
-| visible       | 显示/隐藏(数据隐藏)              | Boolean                                                  | `true`       |
-| editable      | 是否可编辑                       | Boolean                                                  | `true`       |
-| disabled      | 是否禁用                         | Boolean                                                  | `false`      |
-| readOnly      | 是否只读                         | Boolean                                                  | `false`      |
-| readPretty    | 是否是优雅阅读态                 | Boolean                                                  | `false`      |
-| effects       | 副作用逻辑，用于实现各种联动逻辑 | `(form:Form)=>void`                                      |              |
-| validateFirst | 是否只校验第一个非法规则         | Boolean                                                  | `false`      |
+| Property      | Description                                                | Type                                                     | Default Value |
+| ------------- | ---------------------------------------------------------- | -------------------------------------------------------- | ------------- |
+| values        | form values                                                | Object                                                   | `{}`          |
+| initialValues | Form default values                                        | Object                                                   | `{}`          |
+| pattern       | Form interaction mode                                      | `"editable" \| "disabled" \| "readOnly" \| "readPretty"` | `"editable"`  |
+| display       | The form is visible and hidden                             | `"visible" \| "hidden" \| "none"`                        | `"visible`    |
+| hidden        | UI hidden                                                  | Boolean                                                  | `true`        |
+| visible       | show/hide (data hiding)                                    | Boolean                                                  | `true`        |
+| editable      | Editable                                                   | Boolean                                                  | `true`        |
+| disabled      | Whether to disable                                         | Boolean                                                  | `false`       |
+| readOnly      | Is it read-only                                            | Boolean                                                  | `false`       |
+| readPretty    | Is it an elegant reading state                             | Boolean                                                  | `false`       |
+| effects       | Side effect logic, used to implement various linkage logic | `(form:Form)=>void`                                      |               |
+| validateFirst | Whether to validate only the first illegal rule            | Boolean                                                  | `false`       |
 
-## 用例
+## Example
 
 ```ts
 import { createForm } from '@formily/core'

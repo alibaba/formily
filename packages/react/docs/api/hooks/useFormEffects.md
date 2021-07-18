@@ -1,14 +1,14 @@
 # useFormEffects
 
-## 描述
+## Description
 
-主要在自定义组件中往当前[Form](https://core.formilyjs.org/api/models/form)实例注入副作用逻辑，用于实现一些较为复杂的场景化组件
+Mainly inject side-effect logic into the current [Form](https://core.formilyjs.org/api/models/form) instance in the custom component to implement some more complex scenario-based components
 
 <Alert>
-注意：在effects函数内监听onFormInit是无效的，因为渲染到当前组件，Form早已初始化，同时effects函数是只会执行一次，所以想要依赖useState的数据，请使用useRef的引用数据
+Note: It is invalid to monitor onFormInit in the effects function, because the Form has already been initialized when rendering to the current component, and the effects function will only be executed once, so if you want to rely on the data of useState, please use the reference data of useRef.
 </Alert>
 
-## 签名
+## Signature
 
 ```ts
 interface useFormEffects {
@@ -16,7 +16,7 @@ interface useFormEffects {
 }
 ```
 
-## 用例
+## Example
 
 ```tsx
 import React from 'react'

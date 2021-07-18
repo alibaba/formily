@@ -4,15 +4,15 @@ order: 4
 
 # SchemaField
 
-## 描述
+## Description
 
-SchemaField 组件是专门用于解析[JSON-Schema](/api/shared/schema)动态渲染表单的组件。
-在使用 SchemaField 组件的时候，需要通过 createSchemaField 工厂函数创建一个 SchemaField 组件。
+The SchemaField component is a component specially used to parse [JSON-Schema](/api/shared/schema) dynamically rendering forms.
+When using the SchemaField component, you need to create a SchemaField component through the createSchemaField factory function.
 
-## 签名
+## Signature
 
 ```ts
-//SchemaField组件与其静态属性
+//SchemaField component and its static properties
 type ComposeSchemaField = React.FC<ISchemaFieldProps> & {
   Markup: React.FC<ISchema>
   String: React.FC<Omit<ISchema, 'type'>>
@@ -25,35 +25,35 @@ type ComposeSchemaField = React.FC<ISchemaFieldProps> & {
   Void: React.FC<Omit<ISchema, 'type'>>
 }
 
-//工厂函数参数属性
+//Factory function parameter attributes
 interface ISchemaFieldFactoryProps {
   components?: {
-    [key: string]: React.FC //组件列表
+    [key: string]: React.FC //Component list
   }
-  scope?: any //全局作用域，用于实现协议表达式变量注入
+  scope?: any //Global scope, used to implement protocol expression variable injection
 }
 
-//SchemaField属性
+//SchemaField attribute
 interface ISchemaFieldProps extends IFieldFactoryProps {
-  schema?: ISchema //字段schema
-  scope?: any //协议表达式作用域
-  name?: string //字段名称
+  schema?: ISchema //Field schema
+  scope?: any //Protocol expression scope
+  name?: string //Field name
   component?: {
-    [key: string]: React.FC //局部组件列表，注意：这里传的组件是享受不到智能提示的
+    [key: string]: React.FC //Partial component list, note: the components passed here cannot enjoy smart prompts
   }
 }
 
-//工厂函数
+//Factory function
 interface createSchemaField {
   (props: ISchemaFieldFactoryProps): ComposeSchemaField
 }
 ```
 
-IFieldFactoryProps 参考 [IFieldFactoryProps](https://core.formilyjs.org/api/models/form#ifieldfactoryprops)
+IFieldFactoryProps reference [IFieldFactoryProps](https://core.formilyjs.org/api/models/form#ifieldfactoryprops)
 
-ISchema 参考 [ISchema](/api/shared/schema#ischema)
+ISchema Reference [ISchema](/api/shared/schema#ischema)
 
-## Markup Schema 用例
+## Markup Schema Use Case
 
 ```tsx
 import React from 'react'
@@ -92,7 +92,7 @@ export default () => (
 )
 ```
 
-## JSON Schema 用例
+## JSON Schema Use Case
 
 ```tsx
 import React from 'react'

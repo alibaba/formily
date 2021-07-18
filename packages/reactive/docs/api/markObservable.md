@@ -1,10 +1,10 @@
 # markObservable
 
-## 描述
+## Description
 
-标记任意一个对象或者类原型为可被 observable 劫持，在@formily/reactive 中会自动绕过 React Node 与带有 toJSON/toJS 方法的对象，特殊场景，我们可能希望该对象应该被劫持，所以可以使用 markObservable 标记
+Mark any object or class prototype as being hijacked by observable. React Node and objects with toJSON/toJS methods will be automatically bypassed in @formily/reactive. In special scenarios, we may hope that the object should be hijacked, so you can use it markObservable mark
 
-## 签名
+## Signature
 
 ```ts
 interface markObservable<T> {
@@ -12,7 +12,7 @@ interface markObservable<T> {
 }
 ```
 
-## 用例
+## Example
 
 ```ts
 import { observable, autorun, markObservable } from '@formily/reactive'
@@ -26,29 +26,29 @@ class A {
 const a = observable(new A())
 
 autorun(() => {
-  console.log(a.property) //property变化时不会被触发，因为A实例中有toJSON方法
+  console.log(a.property) //will not be triggered when the property changes, because there is a toJSON method in the A instance
 })
 
 a.property = 123
 
 //--------------------------------------------
 
-const b = observable(markObservable(new A())) //实例级标记，只对当前实例生效
+const b = observable(markObservable(new A())) //instance-level mark, only valid for the current instance
 
 autorun(() => {
-  console.log(b.property) //property变化时可以被触发，因为已被标记observable
+  console.log(b.property) //Can be triggered when the property changes, because it has been marked as observable
 })
 
 b.property = 123
 
 //--------------------------------------------
 
-markObservable(A) //类级标记，那么所有实例都会生效
+markObservable(A) //Class-level mark, then all instances will take effect
 
 const c = observable(new A())
 
 autorun(() => {
-  console.log(c.property) //property变化时可以被触发，因为已被标记observable
+  console.log(c.property) //Can be triggered when the property changes, because it has been marked as observable
 })
 
 c.property = 123

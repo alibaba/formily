@@ -44,7 +44,8 @@
     "prelease:force": "lerna publish from-package --yes --dist-tag next && ts-node scripts/release release",
     "release": "lerna publish",
     "prelease": "lerna publish --dist-tag next",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "translate": "ts-node scripts/translate"
   },
   "resolutions": {
     "@types/react": "^17.0.0",
@@ -151,7 +152,8 @@
     "vue-eslint-parser": "^7.1.1",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1"
+    "webpack-dev-server": "^3.10.1",
+    "@google-cloud/translate": "^6.2.5"
   },
   "repository": {
     "type": "git",

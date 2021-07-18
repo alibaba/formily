@@ -1,14 +1,14 @@
 # raw
 
-## 描述
+## Description
 
-从 observable 对象中获取源数据，通常情况下并不推荐使用该 API
+Obtain the source data from the observable object. Generally, this API is not recommended
 
 <Alert>
-注意：只能获取当前对象的源数据，不包括深层对象属性
+Note: Only the source data of the current object can be obtained, excluding deep object properties
 </Alert>
 
-## 签名
+## Signature
 
 ```ts
 interface raw<T extends object> {
@@ -16,7 +16,7 @@ interface raw<T extends object> {
 }
 ```
 
-## 用例
+## Example
 
 ```ts
 import { raw, observable } from '@formily/reactive'

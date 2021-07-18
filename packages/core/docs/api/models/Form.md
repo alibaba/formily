@@ -4,45 +4,45 @@ order: 0
 
 # Form
 
-调用[createForm](/api/entry/create-form)所返回的核心[表单模型](/guide/form) API，以下会列出所有模型属性，如果该属性是可写的，那么我们可以直接引用是修改该属性，@formily/reactive 便会响应从而触发 UI 更新。
+Call the core [Form Model](/guide/form) API returned by [createForm](/api/entry/create-form), the following will list all model attributes, if the attribute is writable, then we can directly The reference is to modify the attribute, and @formily/reactive will respond to trigger the UI update.
 
-## 属性
+## Attributes
 
-| 属性          | 描述                   | 类型                                  | 是否只读 | 默认值            |
-| ------------- | ---------------------- | ------------------------------------- | -------- | ----------------- |
-| initialized   | 表单是否初始化         | Boolean                               | 否       | `false`           |
-| validating    | 表单是否正在校验       | Boolean                               | 否       | `false`           |
-| submitting    | 表单是否正在提交       | Boolean                               | 否       | `false`           |
-| modified      | 表单值是否已被手动修改 | Boolean                               | 否       | `false`           |
-| pattern       | 表单交互模式           | [FormPatternTypes](#formpatterntypes) | 否       | `"editable"`      |
-| display       | 表单展示形态           | [FormDisplayTypes](#formdisplaytypes) | 否       | `"visible"`       |
-| mounted       | 表单是否已挂载         | Boolean                               | 否       | `false`           |
-| unmounted     | 表单是否已卸载         | Boolean                               | 否       | `false`           |
-| values        | 表单值                 | Object                                | 否       | `{}`              |
-| initialValues | 表单默认值             | Object                                | 否       | `{}`              |
-| valid         | 表单是否合法           | Boolean                               | 是       | `true`            |
-| invalid       | 表单是否非法           | Boolean                               | 是       | `false`           |
-| errors        | 表单校验错误消息       | [IFormFeedback](#iformfeedback)[]     | 是       | `[]`              |
-| warnings      | 表单校验警告消息       | [IFormFeedback](#iformfeedback)[]     | 是       | `[]`              |
-| successes     | 表单校验成功消息       | [IFormFeedback](#iformfeedback)[]     | 是       | `[]`              |
-| hidden        | 表单是否隐藏           | Boolean                               | 否       | `false`           |
-| visible       | 表单是否显示           | Boolean                               | 否       | `true`            |
-| editable      | 表单是否可编辑         | Boolean                               | 否       | `true`            |
-| readOnly      | 表单是否只读           | Boolean                               | 否       | `false`           |
-| disabled      | 表单是否禁用           | Boolean                               | 否       | `false`           |
-| readPretty    | 表单是否为阅读态       | Boolean                               | 否       | `false`           |
-| id            | 表单 ID                | String                                | 否       | `{RANDOM_STRING}` |
-| displayName   | 模型标签               | String                                | 否       | `"Form"`          |
+| Property      | Description                                       | Type                                  | Read-only or not | Default value     |
+| ------------- | ------------------------------------------------- | ------------------------------------- | ---------------- | ----------------- |
+| initialized   | Whether the form is initialized                   | Boolean                               | No               | `false`           |
+| validating    | Is the form being validated                       | Boolean                               | No               | `false`           |
+| submitting    | Is the form being submitted                       | Boolean                               | No               | `false`           |
+| modified      | Whether the form value has been manually modified | Boolean                               | No               | `false`           |
+| pattern       | Form interaction mode                             | [FormPatternTypes](#formpatterntypes) | No               | `"editable"`      |
+| display       | Form display form                                 | [FormDisplayTypes](#formdisplaytypes) | No               | `"visible"`       |
+| mounted       | Is the form mounted                               | Boolean                               | No               | `false`           |
+| unmounted     | Is the form unmounted                             | Boolean                               | No               | `false`           |
+| values        | form values                                       | Object                                | No               | `{}`              |
+| initialValues | Form default values                               | Object                                | No               | `{}`              |
+| valid         | Is the form valid                                 | Boolean                               | Yes              | `true`            |
+| invalid       | Is the form illegal                               | Boolean                               | Yes              | `false`           |
+| errors        | Form validation error message                     | [IFormFeedback](#iformfeedback)[]     | Yes              | `[]`              |
+| warnings      | Form verification warning message                 | [IFormFeedback](#iformfeedback)[]     | Yes              | `[]`              |
+| successes     | Form verification success message                 | [IFormFeedback](#iformfeedback)[]     | Yes              | `[]`              |
+| hidden        | Whether the form is hidden                        | Boolean                               | No               | `false`           |
+| visible       | Whether the form is displayed                     | Boolean                               | No               | `true`            |
+| editable      | Is the form editable                              | Boolean                               | No               | `true`            |
+| readOnly      | Is the form read-only                             | Boolean                               | No               | `false`           |
+| disabled      | Whether the form is disabled                      | Boolean                               | No               | `false`           |
+| readPretty    | Is the form in a read state                       | Boolean                               | No               | `false`           |
+| id            | Form ID                                           | String                                | No               | `{RANDOM_STRING}` |
+| displayName   | Model label                                       | String                                | No               | `"Form"`          |
 
-## 方法
+## Method
 
 ### createField
 
-#### 描述
+#### Description
 
-创建一个 Field 实例的工厂函数，如果路径相同，多次调用，会复用实例对象
+Create a factory function for a Field instance. If the path is the same and called multiple times, the instance object will be reused
 
-#### 签名
+#### Signature
 
 ```ts
 interface createField {
@@ -50,15 +50,15 @@ interface createField {
 }
 ```
 
-函数入参请参考[IFieldFactoryProps](#ifieldfactoryprops)
+For function entry, please refer to [IFieldFactoryProps](#ifieldfactoryprops)
 
 ### createArrayField
 
-#### 描述
+#### Description
 
-创建一个 ArrayField 实例的工厂函数，如果路径相同，多次调用，会复用实例对象
+A factory function for creating an ArrayField instance. If the path is the same and called multiple times, the instance object will be reused
 
-#### 签名
+#### Signature
 
 ```ts
 interface createArrayField {
@@ -66,15 +66,15 @@ interface createArrayField {
 }
 ```
 
-函数入参请参考[IFieldFactoryProps](#ifieldfactoryprops)
+For function entry, please refer to [IFieldFactoryProps](#ifieldfactoryprops)
 
 ### createObjectField
 
-#### 描述
+#### Description
 
-创建一个 ObjectField 实例的工厂函数，如果路径相同，多次调用，会复用实例对象
+A factory function to create an ObjectField instance. If the path is the same and called multiple times, it will reuse the instance object
 
-#### 签名
+#### Signature
 
 ```ts
 interface createObjectField {
@@ -82,15 +82,15 @@ interface createObjectField {
 }
 ```
 
-函数入参请参考[IFieldFactoryProps](#ifieldfactoryprops)
+For function entry, please refer to [IFieldFactoryProps](#ifieldfactoryprops)
 
 ### createVoidField
 
-#### 描述
+#### Description
 
-创建一个 VoidField 实例的工厂函数，如果路径相同，多次调用，会复用实例对象
+A factory function to create a VoidField instance. If the path is the same and called multiple times, the instance object will be reused
 
-#### 签名
+#### Signature
 
 ```ts
 interface createVoidField {
@@ -98,15 +98,15 @@ interface createVoidField {
 }
 ```
 
-函数入参请参考[IVoidFieldFactoryProps](#ivoidfieldfactoryprops)
+For function entry, please refer to [IVoidFieldFactoryProps](#ivoidfieldfactoryprops)
 
 ### setValues
 
-#### 描述
+#### Description
 
-设置表单值，可以设置合并策略 [IFormMergeStrategy](#iformmergestrategy)
+Set the form value, you can set the merge strategy [IFormMergeStrategy](#iformmergestrategy)
 
-#### 签名
+#### Signature
 
 ```ts
 interface setValues {
@@ -116,11 +116,11 @@ interface setValues {
 
 ### setInitialValues
 
-#### 描述
+#### Description
 
-设置表单默认值，可以设置合并策略
+Set the default value of the form, you can set the merge strategy
 
-#### 签名
+#### Signature
 
 ```ts
 interface setInitialValues {
@@ -130,11 +130,11 @@ interface setInitialValues {
 
 ### setValuesIn
 
-#### 描述
+#### Description
 
-精确设置表单值
+Precisely set form values
 
-#### 签名
+#### Signature
 
 ```ts
 interface setValuesIn {
@@ -142,15 +142,15 @@ interface setValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### setInitialValuesIn
 
-#### 描述
+#### Description
 
-精确设置表单默认值
+Precisely set the form default value
 
-#### 签名
+#### Signature
 
 ```ts
 interface setInitialValuesIn {
@@ -158,15 +158,15 @@ interface setInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### existValuesIn
 
-#### 描述
+#### Description
 
-根据指定路径判断值是否存在
+Determine whether the value exists according to the specified path
 
-#### 签名
+#### Signature
 
 ```ts
 interface existValuesIn {
@@ -174,15 +174,15 @@ interface existValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### existInitialValuesIn
 
-#### 描述
+#### Description
 
-根据指定路径判断默认值是否存在
+Determine whether the default value exists according to the specified path
 
-#### 签名
+#### Signature
 
 ```ts
 interface existInitialValuesIn {
@@ -190,15 +190,15 @@ interface existInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### getValuesIn
 
-#### 描述
+#### Description
 
-根据指定路径获取表单值
+Get the form value according to the specified path
 
-#### 签名
+#### Signature
 
 ```ts
 interface getValuesIn {
@@ -206,15 +206,15 @@ interface getValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### getInitialValuesIn
 
-#### 描述
+#### Description
 
-根据指定路径获取表单默认值
+Get the default value of the form according to the specified path
 
-#### 签名
+#### Signature
 
 ```ts
 interface getInitialValuesIn {
@@ -222,15 +222,15 @@ interface getInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### deleteValuesIn
 
-#### 描述
+#### Description
 
-根据指定路径删除表单值
+Delete the form value according to the specified path
 
-#### 签名
+#### Signature
 
 ```ts
 interface deleteValuesIn {
@@ -238,15 +238,15 @@ interface deleteValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### deleteInitialValuesIn
 
-#### 描述
+#### Description
 
-根据指定路径删除表单默认值
+Delete the default value of the form according to the specified path
 
-#### 签名
+#### Signature
 
 ```ts
 interface deleteInitialValuesIn {
@@ -254,15 +254,15 @@ interface deleteInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### setSubmitting
 
-#### 描述
+#### Description
 
-设置表单是否正在提交状态
+Set whether the form is being submitted
 
-#### 签名
+#### Signature
 
 ```ts
 interface setSubmitting {
@@ -272,11 +272,11 @@ interface setSubmitting {
 
 ### setValidating
 
-#### 描述
+#### Description
 
-设置表单是否正在校验状态
+Set whether the form is verifying status
 
-#### 签名
+#### Signature
 
 ```ts
 interface setValidating {
@@ -286,11 +286,11 @@ interface setValidating {
 
 ### setDisplay
 
-#### 描述
+#### Description
 
-设置表单展示状态
+Set form display status
 
-#### 签名
+#### Signature
 
 ```ts
 interface setDisplay {
@@ -298,15 +298,15 @@ interface setDisplay {
 }
 ```
 
-函数入参请参考[FormDisplayTypes](#formdisplaytypes)
+For function entry, please refer to [FormDisplayTypes](#formdisplaytypes)
 
 ### setPattern
 
-#### 描述
+#### Description
 
-设置表单交互模式
+Set the form interaction mode
 
-#### 签名
+#### Signature
 
 ```ts
 interface setPattern {
@@ -314,15 +314,15 @@ interface setPattern {
 }
 ```
 
-函数入参请参考[FormPatternTypes](#formpatterntypes)
+For function entry, please refer to [FormPatternTypes](#formpatterntypes)
 
 ### addEffects
 
-#### 描述
+#### Description
 
-添加副作用
+Add side effects
 
-#### 签名
+#### Signature
 
 ```ts
 interface addEffects {
@@ -332,11 +332,11 @@ interface addEffects {
 
 ### removeEffects
 
-#### 描述
+#### Description
 
-移除副作用，id 与 addEffects 的 id 保持一致
+Remove side effects, the id is consistent with the id of addEffects
 
-#### 签名
+#### Signature
 
 ```ts
 interface removeEffects {
@@ -346,11 +346,11 @@ interface removeEffects {
 
 ### setEffects
 
-#### 描述
+#### Description
 
-覆盖式更新副作用
+Overwrite update side effects
 
-#### 签名
+#### Signature
 
 ```ts
 interface setEffects {
@@ -360,11 +360,11 @@ interface setEffects {
 
 ### clearErrors
 
-#### 描述
+#### Description
 
-清空错误消息
+Clear error message
 
-#### 签名
+#### Signature
 
 ```ts
 interface clearErrors {
@@ -372,15 +372,15 @@ interface clearErrors {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### clearWarnings
 
-#### 描述
+#### Description
 
-清空警告消息
+Clear warning message
 
-#### 签名
+#### Signature
 
 ```ts
 interface clearWarnings {
@@ -388,15 +388,15 @@ interface clearWarnings {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### clearSuccesses
 
-#### 描述
+#### Description
 
-清空成功消息
+Clear success message
 
-#### 签名
+#### Signature
 
 ```ts
 interface clearSuccesses {
@@ -404,15 +404,15 @@ interface clearSuccesses {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
 ### query
 
-#### 描述
+#### Description
 
-查询字段节点
+Query field node
 
-#### 签名
+#### Signature
 
 ```ts
 interface query {
@@ -420,17 +420,17 @@ interface query {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
-Query 对象 API 参考 [Query](/api/models/query)
+Query object API reference [Query](/api/models/query)
 
 ### queryFeedbacks
 
-#### 描述
+#### Description
 
-查询消息反馈
+Query message feedback
 
-#### 签名
+#### Signature
 
 ```ts
 interface queryFeedbacks {
@@ -438,17 +438,17 @@ interface queryFeedbacks {
 }
 ```
 
-ISearchFeedback 参考 [ISearchFeedback](/api/models/field#isearchfeedback)
+ISearchFeedback Reference [ISearchFeedback](/api/models/field#isearchfeedback)
 
-IFormFeedback 参考[IFormFeedback](#iformfeedback)
+IFormFeedback Reference [IFormFeedback](#iformfeedback)
 
 ### notify
 
-#### 描述
+#### Description
 
-广播消息
+Broadcast message
 
-#### 签名
+#### Signature
 
 ```ts
 interface notify<T> {
@@ -458,11 +458,11 @@ interface notify<T> {
 
 ### subscribe
 
-#### 描述
+#### Description
 
-订阅消息
+Subscribe to news
 
-#### 签名
+#### Signature
 
 ```ts
 interface subscibe<T> {
@@ -472,11 +472,11 @@ interface subscibe<T> {
 
 ### unsubscribe
 
-#### 描述
+#### Description
 
-取消订阅
+unsubscribe
 
-#### 签名
+#### Signature
 
 ```ts
 interface unsubscribe {
@@ -486,11 +486,11 @@ interface unsubscribe {
 
 ### onInit
 
-#### 描述
+#### Description
 
-触发表单初始化，默认不需要手动调用
+Trigger form initialization, no need to manually call by default
 
-#### 签名
+#### Signature
 
 ```ts
 interface onInit {
@@ -500,11 +500,11 @@ interface onInit {
 
 ### onMount
 
-#### 描述
+#### Description
 
-触发挂载
+Trigger mount
 
-#### 签名
+#### Signature
 
 ```ts
 interface onMount {
@@ -514,11 +514,11 @@ interface onMount {
 
 ### onUnmount
 
-#### 描述
+#### Description
 
-触发卸载
+Trigger offload
 
-#### 签名
+#### Signature
 
 ```ts
 interface onUnmount {
@@ -528,11 +528,11 @@ interface onUnmount {
 
 ### setState
 
-#### 描述
+#### Description
 
-设置表单状态
+Set form status
 
-#### 签名
+#### Signature
 
 ```ts
 interface setState {
@@ -541,15 +541,15 @@ interface setState {
 }
 ```
 
-IFormState 参考 [IFormState](#iformstate)
+IFormState Reference [IFormState](#iformstate)
 
 ### getState
 
-#### 描述
+#### Description
 
-获取表单状态
+Get form status
 
-#### 签名
+#### Signature
 
 ```ts
 interface getState<T> {
@@ -558,23 +558,23 @@ interface getState<T> {
 }
 ```
 
-IFormState 参考 [IFormState](#iformstate)
+IFormState Reference [IFormState](#iformstate)
 
 ### setFormState
 
-与 setState API 一致
+Consistent with setState API
 
 ### getFormState
 
-与 getState API 一致
+Consistent with getState API
 
 ### setFieldState
 
-#### 描述
+#### Description
 
-设置字段状态
+Set field status
 
-#### 签名
+#### Signature
 
 ```ts
 interface setFieldState {
@@ -583,17 +583,17 @@ interface setFieldState {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
-IGeneralFieldState 参考 [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
+IGeneralFieldState Reference [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
 
 ### getFieldState
 
-#### 描述
+#### Description
 
-获取字段状态
+Get field status
 
-#### 签名
+#### Signature
 
 ```ts
 interface getFieldState<T> {
@@ -602,17 +602,17 @@ interface getFieldState<T> {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
-IGeneralFieldState 参考 [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
+IGeneralFieldState Reference [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
 
 ### getFormGraph
 
-#### 描述
+#### Description
 
-获取表单字段集
+Get form field set
 
-#### 签名
+#### Signature
 
 ```ts
 interface getFormGraph {
@@ -624,11 +624,11 @@ interface getFormGraph {
 
 ### setFormGraph
 
-#### 描述
+#### Description
 
-设置表单字段集
+Set the form field set
 
-#### 签名
+#### Signature
 
 ```ts
 interface setFormGraph {
@@ -638,11 +638,11 @@ interface setFormGraph {
 
 ### clearFormGraph
 
-#### 描述
+#### Description
 
-清空字段集
+Clear the field set
 
-#### 签名
+#### Signature
 
 ```ts
 interface clearFormGraph {
@@ -652,11 +652,11 @@ interface clearFormGraph {
 
 ### validate
 
-#### 描述
+#### Description
 
-表单校验触发器，可以按照指定路径校验，如果校验成功是不会有任何返回，校验失败会在 promise reject 中返回[IFormFeedback](#iformfeedback)[]
+The form verification trigger can be verified according to the specified path. If the verification is successful, there will be no return, and the verification failure will be returned in the promise reject [IFormFeedback](#iformfeedback)[]
 
-#### 签名
+#### Signature
 
 ```ts
 interface validate {
@@ -666,11 +666,11 @@ interface validate {
 
 ### submit
 
-#### 描述
+#### Description
 
-表单提交方法，如果在 onSubmit 回调函数中返回 Promise，表单会在提交开始的时候设置 submitting 状态为 true，Promise resolve 的时候再设置为 false，视图层可以消费 submitting 状态来实现防重复提交
+In the form submission method, if the Promise is returned in the onSubmit callback function, the form will set the submitting status to true at the beginning of the submission, and then set it to false when the Promise resolves. The view layer can consume the submitting status to prevent repeated submissions.
 
-#### 签名
+#### Signature
 
 ```ts
 interface submit<T> {
@@ -681,11 +681,11 @@ interface submit<T> {
 
 ### reset
 
-#### 描述
+#### Description
 
-表单重置方法，可以指定重置具体字段，也可以指定重置时自动校验
+Form reset method, you can specify the specific field to be reset, or you can specify automatic verification when reset
 
-#### 描述
+#### Description
 
 ```ts
 interface reset {
@@ -693,14 +693,14 @@ interface reset {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
-IFieldResetOptions 参考 [IFieldResetOptions](/api/models/field/#ifieldresetoptions)
+IFieldResetOptions Reference [IFieldResetOptions](/api/models/field/#ifieldresetoptions)
 
-## 类型
+## Types of
 
 <Alert>
-注意：如果要手动消费类型，直接从包模块中导出即可
+Note: If you want to manually consume the type, just export it directly from the package module
 </Alert>
 
 ### FormPatternTypes
@@ -719,18 +719,18 @@ type FormDisplayTypes = 'none' | 'hidden' | 'visible'
 
 ```ts
 interface IFormFeedback {
-  path?: string //校验字段数据路径
-  address?: string //校验字段绝对路径
-  triggerType?: 'onInput' | 'onFocus' | 'onBlur' //校验触发类型
-  type?: 'error' | 'success' | 'warning' //反馈类型
-  code?: //反馈编码
+  path?: string //Check field data path
+  address?: string //The absolute path of the verification field
+  triggerType?: 'onInput' | 'onFocus' | 'onBlur' //Verify the trigger type
+  type?: 'error' | 'success' | 'warning' //feedback type
+  code?: //Feedback code
   | 'ValidateError'
     | 'ValidateSuccess'
     | 'ValidateWarning'
     | 'EffectError'
     | 'EffectSuccess'
     | 'EffectWarning'
-  messages?: string[] //反馈消息
+  messages?: string[] //Feedback message
 }
 ```
 
@@ -772,64 +772,64 @@ type IFormMergeStrategy = 'overwrite' | 'merge' | 'deepMerge' | 'shallowMerge'
 
 ```ts
 interface IFieldFactoryProps {
-  name: FormPathPattern //字段名称，当前节点的路径名称
-  basePath?: FormPathPattern //基础路径
-  title?: string | JSXElement //字段标题
-  description?: string | JSXElement //字段描述
-  value?: any //字段值
-  initialValue?: any //字段默认值
-  required?: boolean //字段是否必填
-  display?: 'none' | 'hidden' | 'visible' //字段展示形式
-  pattern?: 'editable' | 'disabled' | 'readOnly' | 'readPretty' //字段交互模式
-  hidden?: boolean //字段是否隐藏
-  visible?: boolean //字段是否显示
-  editable?: boolean //字段是否可编辑
-  disabled?: boolean //字段是否禁用
-  readOnly?: boolean //字段是否只读
-  readPretty?: boolean //字段是否为阅读态
-  dataSource?: any[] //字段数据源
-  validateFirst?: boolean //字段校验是否只校验第一个非法规则
-  validator?: FieldValidator //字段校验器
-  decorator?: any[] //字段装饰器，第一个元素代表组件引用，第二个元素代表组件属性
-  component?: any[] //字段组件，第一个元素代表组件引用，第二个元素代表组件属性
-  reactions?: FieldReaction[] | FieldReaction //字段响应器
+  name: FormPathPattern //Field name, the path name of the current node
+  basePath?: FormPathPattern //base path
+  title?: string | JSXElement //Field title
+  description?: string | JSXElement //Field description
+  value?: any //Field value
+  initialValue?: any //Field default value
+  required?: boolean //Is the field required
+  display?: 'none' | 'hidden' | 'visible' //Field display form
+  pattern?: 'editable' | 'disabled' | 'readOnly' | 'readPretty' //Field interaction mode
+  hidden?: boolean //whether the field is hidden
+  visible?: boolean //Whether the field is displayed
+  editable?: boolean //Is the field editable
+  disabled?: boolean //Whether the field is disabled
+  readOnly?: boolean //Is the field read-only
+  readPretty?: boolean //Whether the field is in the read state
+  dataSource?: any[] //Field data source
+  validateFirst?: boolean //Does the field verification only verify the first illegal rule?
+  validator?: FieldValidator //Field validator
+  decorator?: any[] //Field decorator, the first element represents the component reference, the second element represents the component attribute
+  component?: any[] //Field component, the first element represents the component reference, the second element represents the component attribute
+  reactions?: FieldReaction[] | FieldReaction //Field responder
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
-FieldValidator 参考 [FieldValidator](/api/models/field#fieldvalidator)
+FieldValidator Reference [FieldValidator](/api/models/field#fieldvalidator)
 
-FieldReaction 参考 [FieldReaction](/api/models/field#fieldreaction)
+FieldReaction Reference [FieldReaction](/api/models/field#fieldreaction)
 
 ### IVoidFieldFactoryProps
 
 ```ts
 interface IFieldFactoryProps {
-  name: FormPathPattern //字段名称，当前节点的路径名称
-  basePath?: FormPathPattern //基础路径
-  title?: string | JSXElement //字段标题
-  description?: string | JSXElement //字段描述
-  required?: boolean //字段是否必填
-  display?: 'none' | 'hidden' | 'visible' //字段展示形式
-  pattern?: 'editable' | 'disabled' | 'readOnly' | 'readPretty' //字段交互模式
-  hidden?: boolean //字段是否隐藏
-  visible?: boolean //字段是否显示
-  editable?: boolean //字段是否可编辑
-  disabled?: boolean //字段是否禁用
-  readOnly?: boolean //字段是否只读
-  readPretty?: boolean //字段是否为阅读态
-  decorator?: any[] //字段装饰器，第一个元素代表组件引用，第二个元素代表组件属性
-  component?: any[] //字段组件，第一个元素代表组件引用，第二个元素代表组件属性
-  reactions?: FieldReaction[] | FieldReaction //字段响应器
+  name: FormPathPattern //Field name, the path name of the current node
+  basePath?: FormPathPattern //base path
+  title?: string | JSXElement //Field title
+  description?: string | JSXElement //Field description
+  required?: boolean //Is the field required
+  display?: 'none' | 'hidden' | 'visible' //Field display form
+  pattern?: 'editable' | 'disabled' | 'readOnly' | 'readPretty' //Field interaction mode
+  hidden?: boolean //whether the field is hidden
+  visible?: boolean //Whether the field is displayed
+  editable?: boolean //Is the field editable
+  disabled?: boolean //Whether the field is disabled
+  readOnly?: boolean //Is the field read-only
+  readPretty?: boolean //Whether the field is in the read state
+  decorator?: any[] //Field decorator, the first element represents the component reference, the second element represents the component attribute
+  component?: any[] //Field component, the first element represents the component reference, the second element represents the component attribute
+  reactions?: FieldReaction[] | FieldReaction //Field responder
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
-FieldReaction 参考 [FieldReaction](/api/models/field#fieldreaction)
+FieldReaction Reference [FieldReaction](/api/models/field#fieldreaction)
 
-> Formily Typescript 类型约定
+> Formily Typescript type convention
 >
-> - 简单非对象数据类型或 Union 数据类型用 type 定义类型，不能以大写`I`字符开头
-> - 简单对象类型统一用 interface 定义类型，且以大写`I`字符开头，如果存在不同 interface 的组合(Intersection or Extends)使用 type 定义类型，同样以大写`I`字符开头
+> - Simple non-object data types or Union data types use type to define the type, and cannot start with an uppercase `I` character
+> - Simple object types use interface to define the type uniformly, and start with an uppercase `I` character. If there are combinations of different interfaces (Intersection or Extends), use type to define the type, and also start with an uppercase `I` character

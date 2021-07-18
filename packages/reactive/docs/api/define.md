@@ -1,10 +1,10 @@
 # define
 
-## 描述
+## Description
 
-手动定义领域模型，可以指定具体属性的响应式行为，也可以指定某个方法为 batch 模式
+Manually define the domain model, you can specify the responsive behavior of specific attributes, or you can specify a method as batch mode
 
-## 签名
+## Signature
 
 ```ts
 interface define<Target extends object> {
@@ -19,16 +19,16 @@ interface define<Target extends object> {
 
 ## Annotations
 
-目前支持的所有 Annotation 有：
+All Annotations currently supported are:
 
-- observable/observable.deep 定义深度劫持响应式属性
-- observable.box 定义 get/set 容器
-- observable.computed 定义计算属性
-- observable.ref 定义引用劫持响应式属性
-- observable.shallow 定义浅劫持响应式属性
-- action/batch 定义批处理方法
+- observable/observable.deep defines deep hijacking responsive properties
+- observable.box defines get/set container
+- observable.computed defines calculated properties
+- observable.ref defines reference hijacking responsive attributes
+- observable.shallow defines shallow hijacking responsive properties
+- action/batch defines the batch processing method
 
-## 用例
+## Example
 
 ```ts
 import { define, observable, action, autorun } from '@formily/reactive'
@@ -66,6 +66,6 @@ autorun(() => {
 })
 
 model.action(1, 2)
-model.action(1, 2) //重复调用不会重复响应
+model.action(1, 2) //Repeat calls will not respond repeatedly
 model.action(3, 4)
 ```

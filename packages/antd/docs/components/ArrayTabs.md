@@ -1,10 +1,10 @@
 # ArrayTabs
 
-> 自增选项卡，对于纵向空间要求较高的场景可以考虑使用该组件
+> Self-increasing tab, you can consider using this component for scenarios with high vertical space requirements
 >
-> 注意：该组件只适用于 Schema 场景，交互上请避免跨 Tab 联动
+> Note: This component is only applicable to Schema scenarios, please avoid cross-tab linkage in interaction
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -35,7 +35,7 @@ export default () => {
         <SchemaField.Array
           name="string_array"
           x-decorator="FormItem"
-          title="字符串数组"
+          title="string array"
           maxItems={3}
           x-component="ArrayTabs"
         >
@@ -48,7 +48,7 @@ export default () => {
         <SchemaField.Array
           name="array"
           x-decorator="FormItem"
-          title="对象数组"
+          title="Object array"
           maxItems={3}
           x-component="ArrayTabs"
         >
@@ -71,14 +71,14 @@ export default () => {
         </SchemaField.Array>
       </SchemaField>
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup>
     </FormProvider>
   )
 }
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -107,7 +107,7 @@ const schema = {
   properties: {
     string_array: {
       type: 'array',
-      title: '字符串数组',
+      title: 'String array',
       'x-decorator': 'FormItem',
       maxItems: 3,
       'x-component': 'ArrayTabs',
@@ -120,7 +120,7 @@ const schema = {
     },
     array: {
       type: 'array',
-      title: '对象数组',
+      title: 'Object array',
       'x-decorator': 'FormItem',
       maxItems: 3,
       'x-component': 'ArrayTabs',
@@ -152,7 +152,7 @@ export default () => {
     <FormProvider form={form}>
       <SchemaField schema={schema} />
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup>
     </FormProvider>
   )
@@ -163,4 +163,4 @@ export default () => {
 
 ### ArrayTabs
 
-参考 https://ant.design/components/tabs-cn/
+Reference https://ant.design/components/tabs-cn/

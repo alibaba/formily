@@ -4,21 +4,21 @@ order: 0
 
 # Field
 
-## 描述
+## Description
 
-作为@formily/core 的 [createField](https://core.formilyjs.org/api/models/form#createfield) React 实现，它是专门用于将 ViewModel 与输入控件做绑定的桥接组件，Field 组件属性参考[IFieldFactoryProps](https://core.formilyjs.org/api/models/form#ifieldfactoryprops)
+As @formily/core's [createField](https://core.formilyjs.org/api/models/form#createfield) React implementation, it is a bridge component specifically used to bind ViewModel and input controls, the Field component Property reference [IFieldFactoryProps](https://core.formilyjs.org/api/models/form#ifieldfactoryprops)
 
 <Alert>
-我们在使用 Field 组件的时候，一定要记得传name属性。
+When we use the Field component, we must remember to pass the name attribute.
 </Alert>
 
-## 签名
+## Signature
 
 ```ts
 type Field = React.FC<IFieldFactoryProps>
 ```
 
-## 用例
+## Example
 
 ```tsx
 import React from 'react'

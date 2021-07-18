@@ -1,10 +1,10 @@
 # Reset
 
-> 重置按钮
+> Reset button
 
-## 普通重置
+## Normal reset
 
-> 有默认值的控件无法被清空
+> Controls with default values cannot be cleared
 
 ```tsx
 import React from 'react'
@@ -26,14 +26,14 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="input"
-        title="输入框"
+        title="input box"
         required
         x-decorator="FormItem"
         x-component="Input"
       />
       <SchemaField.String
         name="input2"
-        title="输入框"
+        title="input box"
         default="123"
         required
         x-decorator="FormItem"
@@ -41,13 +41,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Reset>重置</Reset>
+      <Reset>Reset</Reset>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 强制清空重置
+## Force empty reset
 
 ```tsx
 import React from 'react'
@@ -69,14 +69,14 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="input"
-        title="输入框"
+        title="input box"
         required
         x-decorator="FormItem"
         x-component="Input"
       />
       <SchemaField.String
         name="input2"
-        title="输入框"
+        title="input box"
         default="123"
         required
         x-decorator="FormItem"
@@ -84,13 +84,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Reset forceClear>重置</Reset>
+      <Reset forceClear>Reset</Reset>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 重置并校验
+## Reset and verify
 
 ```tsx
 import React from 'react'
@@ -112,14 +112,14 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="input"
-        title="输入框"
+        title="input box"
         required
         x-decorator="FormItem"
         x-component="Input"
       />
       <SchemaField.String
         name="input2"
-        title="输入框"
+        title="input box"
         default="123"
         required
         x-decorator="FormItem"
@@ -127,13 +127,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Reset validate>重置</Reset>
+      <Reset validate>Reset</Reset>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 强制清空重置并校验
+## Force empty reset and verify
 
 ```tsx
 import React from 'react'
@@ -155,14 +155,14 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="input"
-        title="输入框"
+        title="input box"
         required
         x-decorator="FormItem"
         x-component="Input"
       />
       <SchemaField.String
         name="input2"
-        title="输入框"
+        title="input box"
         default="123"
         required
         x-decorator="FormItem"
@@ -171,7 +171,7 @@ export default () => (
     </SchemaField>
     <FormButtonGroup>
       <Reset forceClear validate>
-        重置
+        Reset
       </Reset>
     </FormButtonGroup>
   </FormProvider>
@@ -182,10 +182,10 @@ export default () => (
 
 ### Reset
 
-其余 API 参考 https://ant.design/components/button-cn/
+Other API reference https://ant.design/components/button-cn/
 
-| 属性名                 | 类型                                                                                             | 描述                                  | 默认值 |
-| ---------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------- | ------ |
-| onClick                | `(event: MouseEvent) => void \| boolean`                                                         | 点击事件，如果返回 false 可以阻塞重置 | -      |
-| onResetValidateSuccess | (payload: any) => void                                                                           | 重置校验成功事件                      | -      |
-| onResetValidateFailed  | (feedbacks: [IFormFeedback](https://core.formilyjs.org/api/models/form#iformfeedback)[]) => void | 重置校验失败事件                      | -      |
+| Property name          | Type                                                                                             | Description                                              | Default value |
+| ---------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------- | ------------- |
+| onClick                | `(event: MouseEvent) => void \| boolean`                                                         | Click event, if it returns false, it can block resetting | -             |
+| onResetValidateSuccess | (payload: any) => void                                                                           | Reset validation success event                           | -             |
+| onResetValidateFailed  | (feedbacks: [IFormFeedback](https://core.formilyjs.org/api/models/form#iformfeedback)[]) => void | Reset validation failure event                           | -             |

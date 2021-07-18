@@ -2,19 +2,19 @@
 
 ## observer
 
-### 描述
+### Description
 
-observer 是一个 [HOC](https://reactjs.bootcss.com/docs/higher-order-components.html)，用于为 react 函数组件添加 reactive 特性。
+The observer is a [HOC](https://reactjs.bootcss.com/docs/higher-order-components.html), which is used to add reactive features to react functional components.
 
-### 什么时候使用
+### When to use
 
-当一个组件内部使用了 [observable](https://reactive.formilyjs.org/api/observable) 对象，而你希望组件响应 observable 对象的变化时。
+When a component uses an [observable](https://reactive.formilyjs.org/api/observable) object inside, and you want the component to respond to changes in the observable object.
 
-### API 定义
+### API definition
 
 ```ts
 interface IObserverOptions {
-  // 是否需要 observer 使用 forwardRef 传递 ref 属性
+  // Do you need observers to use forwardRef to pass ref attributes
   forwardRef?: boolean
   scheduler?: (updater: () => void) => void
   displayName?: string
@@ -32,7 +32,7 @@ function observer<P, Options extends IObserverOptions>(
 >
 ```
 
-### 用例
+### Example
 
 ```tsx
 /**
@@ -69,19 +69,19 @@ export default observer(() => {
 })
 ```
 
-### 注意
+### Note
 
-`observer` 只能接收 callable 函数组件，不支持 `React.forwardRef` | `React.memo` 等包裹的组件。
+`observer` can only receive callable function components, and does not support packaged components such as `React.forwardRef` | `React.memo`.
 
 ## Observer
 
-### 描述
+### Description
 
-类似于 Vue 的响应式 Slot，它接收一个 Function RenderProps，只要在 Function 内部消费到的任何响应式数据，都会随数据变化而自动重新渲染，也更容易实现局部精确渲染
+Similar to Vue's responsive slot, it receives a Function RenderProps, as long as any responsive data consumed inside the Function, it will be automatically re-rendered as the data changes, and it is easier to achieve local accurate rendering
 
-其实该 API 与 FormConsumer 的作用基本一致，只是 FormConsumer 在 RenderProps 参数种透出了当前上下文的 form 实例
+In fact, the function of this API is basically the same as that of FormConsumer, except that FormConsumer reveals the form instance of the current context in the RenderProps parameter.
 
-### 签名
+### Signature
 
 ```ts
 interface IObserverProps {
@@ -91,7 +91,7 @@ interface IObserverProps {
 type Observer = React.FC<IObserverProps>
 ```
 
-### 用例
+### Example
 
 ```tsx
 /**

@@ -31,6 +31,7 @@
     // allow specifying true explicitly for boolean props
     "react/jsx-boolean-value": 0,
     "react/no-did-update-set-state": 0,
+    "react/no-unescaped-entities": "off",
     // maybe we should no-public
     "@typescript-eslint/explicit-member-accessibility": 0,
     "@typescript-eslint/interface-name-prefix": 0,

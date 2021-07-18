@@ -7,20 +7,40 @@ export default {
   favicon:
     '//img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg',
   outputPath: './doc-site',
-  navs: [
-    {
-      title: 'Ant Design',
-      path: '/components',
-    },
-    {
-      title: '主站',
-      path: 'https://v2.formilyjs.org',
-    },
-    {
-      title: 'GITHUB',
-      path: 'https://github.com/alibaba/formily',
-    },
+  locales: [
+    ['en-US', 'English'],
+    ['zh-CN', '中文'],
   ],
+  navs: {
+    'zh-CN': [
+      {
+        title: 'Ant Design',
+        path: '/zh-CN/components',
+      },
+      {
+        title: '主站',
+        path: 'https://v2.formilyjs.org',
+      },
+      {
+        title: 'GITHUB',
+        path: 'https://github.com/alibaba/formily',
+      },
+    ],
+    'en-US': [
+      {
+        title: 'Ant Design',
+        path: '/components',
+      },
+      {
+        title: 'Home Site',
+        path: 'https://v2.formilyjs.org',
+      },
+      {
+        title: 'GITHUB',
+        path: 'https://github.com/alibaba/formily',
+      },
+    ],
+  },
   links: [
     {
       rel: 'stylesheet',
