@@ -23,7 +23,10 @@ jobs:
           node-version: ${{ matrix.node_version }}
 
       - run: yarn -v
-      - run: yarn --ignore-engines
+      - run: yarn --frozen-lockfile --ignore-engines --ignore-optional --no-bin-links --non-interactive --silent --ignore-scripts --production=false
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          HUSKY_SKIP_INSTALL: true
       - name: ESlint
         uses: tinovyatkin/action-eslint@v1
         with:
