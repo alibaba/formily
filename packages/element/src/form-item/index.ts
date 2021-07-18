@@ -1,4 +1,10 @@
-import { ref, toRefs, reactive, provide, defineComponent } from 'vue-demi'
+import {
+  ref,
+  toRefs,
+  reactive,
+  provide,
+  defineComponent,
+} from '@vue/composition-api'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps, h } from '@formily/vue'
 import { reduce } from '@formily/shared'

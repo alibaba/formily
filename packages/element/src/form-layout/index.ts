@@ -1,4 +1,9 @@
-import { provide, inject, InjectionKey, defineComponent } from 'vue-demi'
+import {
+  provide,
+  inject,
+  InjectionKey,
+  defineComponent,
+} from '@vue/composition-api'
 import { h } from '@formily/vue'
 import { stylePrefix } from '../__builtins__/configs'
 

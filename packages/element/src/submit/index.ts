@@ -1,7 +1,7 @@
 import { h, useForm } from '@formily/vue'
 import { IFormFeedback } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
-import { defineComponent } from 'vue-demi'
+import { defineComponent } from '@vue/composition-api'
 
 import type { Button as ElButtonProps } from 'element-ui'
 import { Button as ElButton } from 'element-ui'

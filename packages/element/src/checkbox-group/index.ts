@@ -1,7 +1,7 @@
 import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
 import { getComponentByTag } from '../__builtins__/shared'
 import { Checkbox } from '../checkbox'
-import { defineComponent } from 'vue-demi'
+import { defineComponent } from '@vue/composition-api'
 
 import type { CheckboxGroup as ElCheckboxGroupProps } from 'element-ui'
 import type { CheckboxProps } from '../checkbox'

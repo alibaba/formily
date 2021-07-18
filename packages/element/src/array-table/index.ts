@@ -1,4 +1,4 @@
-import { defineComponent, Ref } from 'vue-demi'
+import { defineComponent, Ref } from '@vue/composition-api'
 import {
   GeneralField,
   IVoidFieldFactoryProps,

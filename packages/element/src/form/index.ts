@@ -1,6 +1,6 @@
 import { Form as FormType, IFormFeedback } from '@formily/core'
 import { FormProvider as _FormProvider, h } from '@formily/vue'
-import { defineComponent } from 'vue-demi'
+import { defineComponent } from '@vue/composition-api'
 import { FormLayout, FormLayoutProps } from '../form-layout'
 import { PreviewTextPlaceholder } from '../preview-text'
 import { Component, VNode } from 'vue'

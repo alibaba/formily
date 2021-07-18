@@ -1,16 +1,17 @@
-import { h, toRaw } from 'vue-demi'
+import { h, toRaw } from '@vue/composition-api'
 import { Component, VNode } from 'vue'
 
 export const resolveComponent = (
-  child?: Component | string | ((...args: any[]) => VNode[])
+  child?: Component | string | number | ((...args: any[]) => VNode[] | VNode),
+  props?: Record<string, any>
 ) => {
   if (child) {
-    if (typeof child === 'string') {
+    if (typeof child === 'string' || typeof child === 'number') {
       return child
     } else if (typeof child === 'function') {
-      return (child as Function)()
+      return (child as Function)(props)
     } else {
-      return h(toRaw(child))
+      return h(toRaw(child), { props })
     }
   }
 
