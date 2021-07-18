@@ -1,14 +1,11 @@
 import React, { Fragment } from 'react'
 import { observer } from '@formily/reactive-react'
 import { isFn } from '@formily/shared'
-import { isVoidField } from '@formily/core'
+import { isVoidField, GeneralField, Form } from '@formily/core'
 interface IReactiveFieldProps {
-  field: Formily.Core.Types.GeneralField
+  field: GeneralField
   children?:
-    | ((
-        field: Formily.Core.Types.GeneralField,
-        form: Formily.Core.Models.Form
-      ) => React.ReactChild)
+    | ((field: GeneralField, form: Form) => React.ReactChild)
     | React.ReactNode
 }
 

@@ -13,7 +13,9 @@ Form 上下文，可以获取当前 Form 实例
 #### 签名
 
 ```ts
-const FormContext = inject<Formily.Core.Models.Form>(FormSymbol)
+import { Form } from '@formily/core'
+
+const FormContext = inject<Form>(FormSymbol)
 ```
 
 ## FieldContext
@@ -25,7 +27,9 @@ const FormContext = inject<Formily.Core.Models.Form>(FormSymbol)
 #### 签名
 
 ```ts
-const FieldContext = inject<Formily.Core.Types.GeneralField>(FieldSymbol)
+import { GeneralField } from '@formily/core'
+
+const FieldContext = inject<GeneralField>(FieldSymbol)
 ```
 
 ## SchemaMarkupContext
@@ -73,5 +77,6 @@ Schema 全局参数上下文，主要用于获取从 createSchemaField 传入的
 #### 签名
 
 ```ts
-const SchemaOptionsContext = inject<ISchemaFieldFactoryOptions>(SchemaOptionsSymbol)
+const SchemaOptionsContext =
+  inject<ISchemaFieldFactoryOptions>(SchemaOptionsSymbol)
 ```

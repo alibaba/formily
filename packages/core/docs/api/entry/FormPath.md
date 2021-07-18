@@ -289,7 +289,7 @@ console.log(FormPath.parse('*(aa,bb,cc)').toArray()) //[]
 
 ```ts
 interface concat {
-  (...args[]: FormPathPattern[]): FormPath
+  (...args: FormPathPattern[]): FormPath
 }
 ```
 

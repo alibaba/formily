@@ -7,6 +7,7 @@ import {
   CollapseProps,
   Empty,
 } from 'antd'
+import { ArrayField } from '@formily/core'
 import {
   RecursionField,
   useField,
@@ -77,7 +78,7 @@ const insertActiveKeys = (activeKeys: number[], index: number) => {
 
 export const ArrayCollapse: ComposedArrayCollapse = observer(
   (props: IArrayCollapseProps) => {
-    const field = useField<Formily.Core.Models.ArrayField>()
+    const field = useField<ArrayField>()
     const dataSource = Array.isArray(field.value) ? field.value : []
     const [activeKeys, setActiveKeys] = useState<number[]>(
       takeDefaultActiveKeys(dataSource.length, props.defaultOpenPanelCount)

@@ -7,7 +7,7 @@
 ```tsx
 import React from 'react'
 import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, onFieldReact } from '@formily/core'
+import { createForm, onFieldReact, FormPathPattern } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { action } from '@formily/reactive'
 
@@ -18,7 +18,7 @@ const SchemaField = createSchemaField({
   },
 })
 
-const useAddress = (pattern: Formily.Core.Types.FormPathPattern) => {
+const useAddress = (pattern: FormPathPattern) => {
   const transform = (data = {}) => {
     return Object.entries(data).reduce((buf, [key, value]) => {
       if (typeof value === 'string')
@@ -120,19 +120,18 @@ const transformAddress = (data = {}) => {
   }, [])
 }
 
-const useAsyncDataSource = (url: string, transform: (data: any) => any) => (
-  field
-) => {
-  field.loading = true
-  fetch(url)
-    .then((res) => res.json())
-    .then(
-      action((data) => {
-        field.dataSource = transform(data)
-        field.loading = false
-      })
-    )
-}
+const useAsyncDataSource =
+  (url: string, transform: (data: any) => any) => (field) => {
+    field.loading = true
+    fetch(url)
+      .then((res) => res.json())
+      .then(
+        action((data) => {
+          field.dataSource = transform(data)
+          field.loading = false
+        })
+      )
+  }
 
 const form = createForm()
 
@@ -174,11 +173,11 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, onFieldReact } from '@formily/core'
+import { createForm, onFieldReact, FormPathPattern } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
 import { action } from '@formily/reactive'
 
-const useAddress = (pattern: Formily.Core.Types.FormPathPattern) => {
+const useAddress = (pattern: FormPathPattern) => {
   const transform = (data = {}) => {
     return Object.entries(data).reduce((buf, [key, value]) => {
       if (typeof value === 'string')

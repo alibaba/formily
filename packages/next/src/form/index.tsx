@@ -1,16 +1,19 @@
 import React, { useMemo } from 'react'
-import { FormProvider } from '@formily/react'
+import { FormProvider, IProviderProps, JSXComponent } from '@formily/react'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
 import { ConfigProvider } from '@alifd/next'
-import { getValidateLocaleIOSCode, setValidateLanguage } from '@formily/core'
+import {
+  getValidateLocaleIOSCode,
+  setValidateLanguage,
+  Form as FormType,
+  IFormFeedback,
+} from '@formily/core'
 import { PreviewText } from '../preview-text'
-export interface FormProps
-  extends Formily.React.Types.IProviderProps,
-    IFormLayoutProps {
-  form: Formily.Core.Models.Form
-  component?: Formily.React.Types.JSXComponent
+export interface FormProps extends IProviderProps, IFormLayoutProps {
+  form: FormType
+  component?: JSXComponent
   onAutoSubmit?: (values: any) => any
-  onAutoSubmitFailed?: (feedbacks: Formily.Core.Types.IFormFeedback[]) => void
+  onAutoSubmitFailed?: (feedbacks: IFormFeedback[]) => void
   previewTextPlaceholder?: React.ReactNode
 }
 

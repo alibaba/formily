@@ -1,3 +1,4 @@
+import { Field } from '@formily/core'
 import { defineComponent } from 'vue-demi'
 import { connect, mapProps, h, useField, Fragment } from '@formily/vue'
 
@@ -10,7 +11,7 @@ import { Upload as ElUpload, Button as ElButton } from 'element-ui'
 
 export type UploadProps = ElUploadProps & {
   textContent?: String
-  errorAdaptar?: (error?: ErrorEvent) => String
+  errorAdaptor?: (error?: ErrorEvent) => String
 }
 
 const UploadWrapper = defineComponent<UploadProps>({
@@ -19,7 +20,7 @@ const UploadWrapper = defineComponent<UploadProps>({
       type: String,
       default: '',
     },
-    errorAdaptar: {
+    errorAdaptor: {
       type: Function,
       default(error?: ErrorEvent) {
         return error?.message || ''
@@ -28,9 +29,9 @@ const UploadWrapper = defineComponent<UploadProps>({
   },
   setup(curProps: UploadProps, { slots, attrs, listeners, emit }) {
     return () => {
-      const fieldRef = useField<Formily.Core.Models.Field>()
+      const fieldRef = useField<Field>()
       const setFeedBack = (error?: ErrorEvent) => {
-        const message = curProps.errorAdaptar(error)
+        const message = curProps.errorAdaptor(error)
 
         fieldRef.value.setFeedback({
           type: 'error',

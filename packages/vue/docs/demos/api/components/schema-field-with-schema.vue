@@ -23,7 +23,7 @@ import 'ant-design-vue/dist/antd.css'
 
 const { SchemaField } = createSchemaField({
   components: {
-    Input
+    Input,
   },
 })
 
@@ -31,8 +31,8 @@ export default {
   components: { FormProvider, SchemaField },
   data() {
     return {
-      form: createForm()
+      form: createForm(),
     }
-  }
+  },
 }
 </script>

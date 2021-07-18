@@ -118,8 +118,10 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const [active, setActice] = useState(false)
   const gridSpan = useGridSpan(props.gridSpan)
   const formLayout = useFormItemLayout(others)
-  const { containerRef, contentRef, overflow } =
-    useOverflow<HTMLDivElement, HTMLLabelElement>()
+  const { containerRef, contentRef, overflow } = useOverflow<
+    HTMLDivElement,
+    HTMLLabelElement
+  >()
   const {
     label,
     style,

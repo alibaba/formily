@@ -7,6 +7,7 @@ import {
   SchemaKey,
   ISchemaTransformerOptions,
 } from './types'
+import { IFieldFactoryProps } from '@formily/core'
 import { map, each, isFn, instOf, FormPath, isStr } from '@formily/shared'
 import { compile, silent, shallowCompile, registerCompiler } from './compiler'
 import { transformSchemaToFieldProps } from './transformer'
@@ -558,7 +559,7 @@ export class Schema<
 
   toFieldProps = (
     options?: ISchemaTransformerOptions
-  ): Formily.Core.Types.IFieldFactoryProps<any, any> => {
+  ): IFieldFactoryProps<any, any> => {
     return transformSchemaToFieldProps(this, options)
   }
 

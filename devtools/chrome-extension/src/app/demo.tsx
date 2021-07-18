@@ -16,16 +16,16 @@ const dataSource = [
       values: {
         aa: true,
         cc: true,
-        gg: 'aaaa'
+        gg: 'aaaa',
       },
       initialValues: {
         aa: true,
-        cc: true
+        cc: true,
       },
       mounted: true,
       unmounted: false,
       props: {},
-      displayName: 'FormState'
+      displayName: 'FormState',
     },
     block: {
       name: 'block',
@@ -41,13 +41,13 @@ const dataSource = [
         name: 'block',
         'x-component': 'block',
         'x-props': {
-          title: 'Block1'
+          title: 'Block1',
         },
         'x-component-props': {
-          title: 'Block1'
-        }
+          title: 'Block1',
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'block.aa': {
       name: 'aa',
@@ -88,16 +88,16 @@ const dataSource = [
         enum: [
           {
             label: '是',
-            value: true
+            value: true,
           },
           {
             label: '否',
-            value: false
-          }
+            value: false,
+          },
         ],
-        title: '是否隐藏AA'
+        title: '是否隐藏AA',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'block.bb': {
       name: 'bb',
@@ -131,9 +131,9 @@ const dataSource = [
         key: 'bb',
         name: 'bb',
         type: 'string',
-        title: 'AA'
+        title: 'AA',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'block.cc': {
       name: 'cc',
@@ -175,15 +175,15 @@ const dataSource = [
         enum: [
           {
             label: '是',
-            value: true
+            value: true,
           },
           {
             label: '否',
-            value: false
-          }
-        ]
+            value: false,
+          },
+        ],
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     dd: {
       name: 'dd',
@@ -199,13 +199,13 @@ const dataSource = [
         name: 'dd',
         'x-component': 'block',
         'x-props': {
-          title: 'Block2'
+          title: 'Block2',
         },
         'x-component-props': {
-          title: 'Block2'
-        }
+          title: 'Block2',
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     kk: {
       name: 'kk',
@@ -221,13 +221,13 @@ const dataSource = [
         name: 'kk',
         'x-component': 'block',
         'x-props': {
-          title: 'Block3'
+          title: 'Block3',
         },
         'x-component-props': {
-          title: 'Block3'
-        }
+          title: 'Block3',
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'kk.gg': {
       name: 'gg',
@@ -267,28 +267,28 @@ const dataSource = [
           showSearch: true,
           filterLocal: false,
           style: {
-            width: 200
-          }
+            width: 200,
+          },
         },
         enum: [
           {
             label: 'aaaa',
             value: 'aaaa',
-            extra: ['x1', 'x2', 'x3']
+            extra: ['x1', 'x2', 'x3'],
           },
           {
             label: 'bbbb',
             value: 'bbbb',
-            extra: ['x4', 'x5', 'x6']
+            extra: ['x4', 'x5', 'x6'],
           },
           {
             label: 'cccc',
             value: 'cccc',
-            extra: ['x7', 'x8', 'x9']
-          }
-        ]
+            extra: ['x7', 'x8', 'x9'],
+          },
+        ],
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'kk.hh': {
       name: 'hh',
@@ -326,12 +326,12 @@ const dataSource = [
         enum: [],
         'x-props': {
           style: {
-            width: 200
-          }
-        }
+            width: 200,
+          },
+        },
       },
-      displayName: 'FieldState'
-    }
+      displayName: 'FieldState',
+    },
   },
   {
     '': {
@@ -349,7 +349,7 @@ const dataSource = [
       mounted: true,
       unmounted: false,
       props: {},
-      displayName: 'FormState'
+      displayName: 'FormState',
     },
     total: {
       name: 'total',
@@ -377,8 +377,8 @@ const dataSource = [
       editable: true,
       rules: [
         {
-          required: true
-        }
+          required: true,
+        },
       ],
       required: true,
       mounted: true,
@@ -388,9 +388,9 @@ const dataSource = [
         name: 'total',
         type: 'number',
         required: true,
-        title: '总价'
+        title: '总价',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     count: {
       name: 'count',
@@ -418,8 +418,8 @@ const dataSource = [
       editable: true,
       rules: [
         {
-          required: true
-        }
+          required: true,
+        },
       ],
       required: true,
       mounted: true,
@@ -429,9 +429,9 @@ const dataSource = [
         name: 'count',
         type: 'number',
         required: true,
-        title: '数量'
+        title: '数量',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     price: {
       name: 'price',
@@ -459,8 +459,8 @@ const dataSource = [
       editable: true,
       rules: [
         {
-          required: true
-        }
+          required: true,
+        },
       ],
       required: true,
       mounted: true,
@@ -470,10 +470,10 @@ const dataSource = [
         name: 'price',
         type: 'number',
         required: true,
-        title: '单价'
+        title: '单价',
       },
-      displayName: 'FieldState'
-    }
+      displayName: 'FieldState',
+    },
   },
   {
     '': {
@@ -491,7 +491,7 @@ const dataSource = [
       mounted: true,
       unmounted: false,
       props: {},
-      displayName: 'FormState'
+      displayName: 'FormState',
     },
     NO_NAME_FIELD_$0: {
       name: 'NO_NAME_FIELD_$0',
@@ -507,13 +507,13 @@ const dataSource = [
         name: 'NO_NAME_FIELD_$0',
         'x-component': 'block',
         'x-props': {
-          title: 'Block1'
+          title: 'Block1',
         },
         'x-component-props': {
-          title: 'Block1'
-        }
+          title: 'Block1',
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'NO_NAME_FIELD_$0.aa': {
       name: 'aa',
@@ -548,9 +548,9 @@ const dataSource = [
         name: 'aa',
         type: 'string',
         enum: ['aaaaa', 'bbbbb', 'ccccc', 'ddddd', 'eeeee'],
-        title: 'AA'
+        title: 'AA',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.bb': {
       name: 'bb',
@@ -585,9 +585,9 @@ const dataSource = [
         type: 'string',
         name: 'bb',
         title: 'BB',
-        enum: []
+        enum: [],
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.cc': {
       name: 'cc',
@@ -621,10 +621,10 @@ const dataSource = [
         key: 'cc',
         type: 'string',
         name: 'cc',
-        title: 'CC'
+        title: 'CC',
       },
-      displayName: 'FieldState'
-    }
+      displayName: 'FieldState',
+    },
   },
   {
     '': {
@@ -642,7 +642,7 @@ const dataSource = [
       mounted: true,
       unmounted: false,
       props: {},
-      displayName: 'FormState'
+      displayName: 'FormState',
     },
     aa: {
       name: 'aa',
@@ -670,8 +670,8 @@ const dataSource = [
       editable: true,
       rules: [
         {
-          required: true
-        }
+          required: true,
+        },
       ],
       required: true,
       mounted: true,
@@ -681,9 +681,9 @@ const dataSource = [
         name: 'aa',
         type: 'string',
         required: true,
-        title: 'AA'
+        title: 'AA',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     bb: {
       name: 'bb',
@@ -718,10 +718,10 @@ const dataSource = [
         type: 'string',
         name: 'bb',
         title: 'BB',
-        enum: ['111', '222']
+        enum: ['111', '222'],
       },
-      displayName: 'FieldState'
-    }
+      displayName: 'FieldState',
+    },
   },
   {
     '': {
@@ -741,22 +741,22 @@ const dataSource = [
             dd: [
               {
                 ff: '是',
-                ee: '是'
-              }
+                ee: '是',
+              },
             ],
-            cc: '1111'
+            cc: '1111',
           },
           {
             bb: 'ccccc',
             dd: [
               {
                 ff: '是',
-                ee: '否'
-              }
+                ee: '否',
+              },
             ],
-            cc: '1111'
-          }
-        ]
+            cc: '1111',
+          },
+        ],
       },
       initialValues: {
         aa: [
@@ -765,25 +765,25 @@ const dataSource = [
             dd: [
               {
                 ee: '是',
-                ff: '是'
-              }
-            ]
+                ff: '是',
+              },
+            ],
           },
           {
             bb: 'ccccc',
             dd: [
               {
                 ee: '否',
-                ff: '是'
-              }
-            ]
-          }
-        ]
+                ff: '是',
+              },
+            ],
+          },
+        ],
       },
       mounted: true,
       unmounted: false,
       props: {},
-      displayName: 'FormState'
+      displayName: 'FormState',
     },
     NO_NAME_FIELD_$0: {
       name: 'NO_NAME_FIELD_$0',
@@ -799,13 +799,13 @@ const dataSource = [
         name: 'NO_NAME_FIELD_$0',
         'x-component': 'block',
         'x-props': {
-          title: 'Block1'
+          title: 'Block1',
         },
         'x-component-props': {
-          title: 'Block1'
-        }
+          title: 'Block1',
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'NO_NAME_FIELD_$0.aa': {
       name: 'aa',
@@ -831,22 +831,22 @@ const dataSource = [
             dd: [
               {
                 ff: '是',
-                ee: '是'
-              }
+                ee: '是',
+              },
             ],
-            cc: '1111'
+            cc: '1111',
           },
           {
             bb: 'ccccc',
             dd: [
               {
                 ff: '是',
-                ee: '否'
-              }
+                ee: '否',
+              },
             ],
-            cc: '1111'
-          }
-        ]
+            cc: '1111',
+          },
+        ],
       ],
       ruleErrors: [],
       ruleWarnings: [],
@@ -860,21 +860,21 @@ const dataSource = [
           dd: [
             {
               ff: '是',
-              ee: '是'
-            }
+              ee: '是',
+            },
           ],
-          cc: '1111'
+          cc: '1111',
         },
         {
           bb: 'ccccc',
           dd: [
             {
               ff: '是',
-              ee: '否'
-            }
+              ee: '否',
+            },
           ],
-          cc: '1111'
-        }
+          cc: '1111',
+        },
       ],
       initialValue: [
         {
@@ -882,19 +882,19 @@ const dataSource = [
           dd: [
             {
               ee: '是',
-              ff: '是'
-            }
-          ]
+              ff: '是',
+            },
+          ],
         },
         {
           bb: 'ccccc',
           dd: [
             {
               ee: '否',
-              ff: '是'
-            }
-          ]
-        }
+              ff: '是',
+            },
+          ],
+        },
       ],
       rules: [],
       required: false,
@@ -903,9 +903,9 @@ const dataSource = [
       props: {
         key: 'aa',
         type: 'array',
-        name: 'aa'
+        name: 'aa',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.0': {
       name: 'aa.0',
@@ -930,11 +930,11 @@ const dataSource = [
           dd: [
             {
               ff: '是',
-              ee: '是'
-            }
+              ee: '是',
+            },
           ],
-          cc: '1111'
-        }
+          cc: '1111',
+        },
       ],
       ruleErrors: [],
       ruleWarnings: [],
@@ -947,28 +947,28 @@ const dataSource = [
         dd: [
           {
             ff: '是',
-            ee: '是'
-          }
+            ee: '是',
+          },
         ],
-        cc: '1111'
+        cc: '1111',
       },
       initialValue: {
         bb: 'aaaaa',
         dd: [
           {
             ee: '是',
-            ff: '是'
-          }
-        ]
+            ff: '是',
+          },
+        ],
       },
       rules: [],
       required: false,
       mounted: true,
       unmounted: false,
       props: {
-        type: 'object'
+        type: 'object',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$1': {
       name: 'aa.0.NO_NAME_FIELD_$1',
@@ -984,13 +984,13 @@ const dataSource = [
         name: 'NO_NAME_FIELD_$1',
         'x-component': 'block',
         'x-props': {
-          title: '基本信息'
+          title: '基本信息',
         },
         'x-component-props': {
-          title: '基本信息'
-        }
+          title: '基本信息',
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$1.NO_NAME_FIELD_$2': {
       name: 'aa.0.NO_NAME_FIELD_$2',
@@ -1006,13 +1006,13 @@ const dataSource = [
         name: 'NO_NAME_FIELD_$2',
         'x-component': 'layout',
         'x-props': {
-          inline: true
+          inline: true,
         },
         'x-component-props': {
-          inline: true
-        }
+          inline: true,
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$1.NO_NAME_FIELD_$2.bb': {
       name: 'aa.0.bb',
@@ -1049,9 +1049,9 @@ const dataSource = [
         type: 'string',
         name: 'bb',
         enum: ['aaaaa', 'bbbbb', 'ccccc', 'ddddd', 'eeeee'],
-        title: 'BB'
+        title: 'BB',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$1.NO_NAME_FIELD_$2.cc': {
       name: 'aa.0.cc',
@@ -1087,9 +1087,9 @@ const dataSource = [
         type: 'string',
         name: 'cc',
         enum: ['1111', '2222'],
-        title: 'CC'
+        title: 'CC',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$1.NO_NAME_FIELD_$2.gg': {
       name: 'aa.0.gg',
@@ -1126,11 +1126,11 @@ const dataSource = [
         title: 'GG',
         'x-props': {
           style: {
-            width: 200
-          }
-        }
+            width: 200,
+          },
+        },
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$3': {
       name: 'aa.0.NO_NAME_FIELD_$3',
@@ -1146,13 +1146,13 @@ const dataSource = [
         name: 'NO_NAME_FIELD_$3',
         'x-component': 'block',
         'x-props': {
-          title: '嵌套Array'
+          title: '嵌套Array',
         },
         'x-component-props': {
-          title: '嵌套Array'
-        }
+          title: '嵌套Array',
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$3.dd': {
       name: 'aa.0.dd',
@@ -1175,9 +1175,9 @@ const dataSource = [
         [
           {
             ee: '是',
-            ff: '是'
-          }
-        ]
+            ff: '是',
+          },
+        ],
       ],
       ruleErrors: [],
       ruleWarnings: [],
@@ -1188,14 +1188,14 @@ const dataSource = [
       value: [
         {
           ee: '是',
-          ff: '是'
-        }
+          ff: '是',
+        },
       ],
       initialValue: [
         {
           ee: '是',
-          ff: '是'
-        }
+          ff: '是',
+        },
       ],
       rules: [],
       required: false,
@@ -1204,9 +1204,9 @@ const dataSource = [
       props: {
         key: 'dd',
         type: 'array',
-        name: 'dd'
+        name: 'dd',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$3.dd.0': {
       name: 'aa.0.dd.0',
@@ -1228,8 +1228,8 @@ const dataSource = [
       values: [
         {
           ee: '是',
-          ff: '是'
-        }
+          ff: '是',
+        },
       ],
       ruleErrors: [],
       ruleWarnings: [],
@@ -1239,20 +1239,20 @@ const dataSource = [
       editable: true,
       value: {
         ee: '是',
-        ff: '是'
+        ff: '是',
       },
       initialValue: {
         ee: '是',
-        ff: '是'
+        ff: '是',
       },
       rules: [],
       required: false,
       mounted: true,
       unmounted: false,
       props: {
-        type: 'object'
+        type: 'object',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$3.dd.0.NO_NAME_FIELD_$4': {
       name: 'aa.0.dd.0.NO_NAME_FIELD_$4',
@@ -1270,17 +1270,17 @@ const dataSource = [
         'x-props': {
           inline: true,
           style: {
-            marginLeft: 20
-          }
+            marginLeft: 20,
+          },
         },
         'x-component-props': {
           inline: true,
           style: {
-            marginLeft: 20
-          }
-        }
+            marginLeft: 20,
+          },
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$3.dd.0.NO_NAME_FIELD_$4.ee': {
       name: 'aa.0.dd.0.ee',
@@ -1318,9 +1318,9 @@ const dataSource = [
         name: 'ee',
         enum: ['是', '否'],
         title: 'EE',
-        description: '是否显示GG'
+        description: '是否显示GG',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.0.NO_NAME_FIELD_$3.dd.0.NO_NAME_FIELD_$4.ff': {
       name: 'aa.0.dd.0.ff',
@@ -1359,9 +1359,9 @@ const dataSource = [
         default: '是',
         enum: ['是', '否'],
         title: 'FF',
-        description: '是否显示EE'
+        description: '是否显示EE',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.1': {
       name: 'aa.1',
@@ -1386,11 +1386,11 @@ const dataSource = [
           dd: [
             {
               ff: '是',
-              ee: '否'
-            }
+              ee: '否',
+            },
           ],
-          cc: '1111'
-        }
+          cc: '1111',
+        },
       ],
       ruleErrors: [],
       ruleWarnings: [],
@@ -1403,28 +1403,28 @@ const dataSource = [
         dd: [
           {
             ff: '是',
-            ee: '否'
-          }
+            ee: '否',
+          },
         ],
-        cc: '1111'
+        cc: '1111',
       },
       initialValue: {
         bb: 'ccccc',
         dd: [
           {
             ee: '否',
-            ff: '是'
-          }
-        ]
+            ff: '是',
+          },
+        ],
       },
       rules: [],
       required: false,
       mounted: true,
       unmounted: false,
       props: {
-        type: 'object'
+        type: 'object',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$1': {
       name: 'aa.1.NO_NAME_FIELD_$1',
@@ -1440,13 +1440,13 @@ const dataSource = [
         name: 'NO_NAME_FIELD_$1',
         'x-component': 'block',
         'x-props': {
-          title: '基本信息'
+          title: '基本信息',
         },
         'x-component-props': {
-          title: '基本信息'
-        }
+          title: '基本信息',
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$1.NO_NAME_FIELD_$2': {
       name: 'aa.1.NO_NAME_FIELD_$2',
@@ -1462,13 +1462,13 @@ const dataSource = [
         name: 'NO_NAME_FIELD_$2',
         'x-component': 'layout',
         'x-props': {
-          inline: true
+          inline: true,
         },
         'x-component-props': {
-          inline: true
-        }
+          inline: true,
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$1.NO_NAME_FIELD_$2.bb': {
       name: 'aa.1.bb',
@@ -1505,9 +1505,9 @@ const dataSource = [
         type: 'string',
         name: 'bb',
         enum: ['aaaaa', 'bbbbb', 'ccccc', 'ddddd', 'eeeee'],
-        title: 'BB'
+        title: 'BB',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$1.NO_NAME_FIELD_$2.cc': {
       name: 'aa.1.cc',
@@ -1543,9 +1543,9 @@ const dataSource = [
         type: 'string',
         name: 'cc',
         enum: ['1111', '2222'],
-        title: 'CC'
+        title: 'CC',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$1.NO_NAME_FIELD_$2.gg': {
       name: 'aa.1.gg',
@@ -1582,11 +1582,11 @@ const dataSource = [
         title: 'GG',
         'x-props': {
           style: {
-            width: 200
-          }
-        }
+            width: 200,
+          },
+        },
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$3': {
       name: 'aa.1.NO_NAME_FIELD_$3',
@@ -1602,13 +1602,13 @@ const dataSource = [
         name: 'NO_NAME_FIELD_$3',
         'x-component': 'block',
         'x-props': {
-          title: '嵌套Array'
+          title: '嵌套Array',
         },
         'x-component-props': {
-          title: '嵌套Array'
-        }
+          title: '嵌套Array',
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$3.dd': {
       name: 'aa.1.dd',
@@ -1631,9 +1631,9 @@ const dataSource = [
         [
           {
             ee: '否',
-            ff: '是'
-          }
-        ]
+            ff: '是',
+          },
+        ],
       ],
       ruleErrors: [],
       ruleWarnings: [],
@@ -1644,14 +1644,14 @@ const dataSource = [
       value: [
         {
           ee: '否',
-          ff: '是'
-        }
+          ff: '是',
+        },
       ],
       initialValue: [
         {
           ee: '否',
-          ff: '是'
-        }
+          ff: '是',
+        },
       ],
       rules: [],
       required: false,
@@ -1660,9 +1660,9 @@ const dataSource = [
       props: {
         key: 'dd',
         type: 'array',
-        name: 'dd'
+        name: 'dd',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$3.dd.0': {
       name: 'aa.1.dd.0',
@@ -1684,8 +1684,8 @@ const dataSource = [
       values: [
         {
           ee: '否',
-          ff: '是'
-        }
+          ff: '是',
+        },
       ],
       ruleErrors: [],
       ruleWarnings: [],
@@ -1695,20 +1695,20 @@ const dataSource = [
       editable: true,
       value: {
         ee: '否',
-        ff: '是'
+        ff: '是',
       },
       initialValue: {
         ee: '否',
-        ff: '是'
+        ff: '是',
       },
       rules: [],
       required: false,
       mounted: true,
       unmounted: false,
       props: {
-        type: 'object'
+        type: 'object',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$3.dd.0.NO_NAME_FIELD_$4': {
       name: 'aa.1.dd.0.NO_NAME_FIELD_$4',
@@ -1726,17 +1726,17 @@ const dataSource = [
         'x-props': {
           inline: true,
           style: {
-            marginLeft: 20
-          }
+            marginLeft: 20,
+          },
         },
         'x-component-props': {
           inline: true,
           style: {
-            marginLeft: 20
-          }
-        }
+            marginLeft: 20,
+          },
+        },
       },
-      displayName: 'VirtualFieldState'
+      displayName: 'VirtualFieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$3.dd.0.NO_NAME_FIELD_$4.ee': {
       name: 'aa.1.dd.0.ee',
@@ -1774,9 +1774,9 @@ const dataSource = [
         name: 'ee',
         enum: ['是', '否'],
         title: 'EE',
-        description: '是否显示GG'
+        description: '是否显示GG',
       },
-      displayName: 'FieldState'
+      displayName: 'FieldState',
     },
     'NO_NAME_FIELD_$0.aa.1.NO_NAME_FIELD_$3.dd.0.NO_NAME_FIELD_$4.ff': {
       name: 'aa.1.dd.0.ff',
@@ -1815,11 +1815,11 @@ const dataSource = [
         default: '是',
         enum: ['是', '否'],
         title: 'FF',
-        description: '是否显示EE'
+        description: '是否显示EE',
       },
-      displayName: 'FieldState'
-    }
-  }
+      displayName: 'FieldState',
+    },
+  },
 ]
 
 ReactDOM.render(

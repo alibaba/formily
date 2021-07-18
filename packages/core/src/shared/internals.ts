@@ -13,7 +13,7 @@ import {
   shallowClone,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
-import { action, batch, toJS } from '@formily/reactive'
+import { action, batch, toJS, DataChange } from '@formily/reactive'
 import { Field, ArrayField, Form, ObjectField } from '../models'
 import {
   ISpliceArrayStateProps,
@@ -660,7 +660,7 @@ export const applyValuesPatch = (
 
 export const triggerFormInitialValuesChange = (
   form: Form,
-  change: Formily.Reactive.Types.DataChange
+  change: DataChange
 ) => {
   if (change.path[0] === 'initialValues') {
     if (change.type === 'add' || change.type === 'set') {
@@ -670,10 +670,7 @@ export const triggerFormInitialValuesChange = (
   }
 }
 
-export const triggerFormValuesChange = (
-  form: Form,
-  change: Formily.Reactive.Types.DataChange
-) => {
+export const triggerFormValuesChange = (form: Form, change: DataChange) => {
   if (change.path[0] === 'values') {
     form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
   }

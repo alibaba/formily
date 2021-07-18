@@ -22,7 +22,7 @@ type ObjectField = React.FC<IFieldFactoryProps>
 
 ```tsx
 import React from 'react'
-import { createForm } from '@formily/core'
+import { createForm, ObjectField as ObjectFieldType } from '@formily/core'
 import {
   FormProvider,
   Field,
@@ -35,7 +35,7 @@ import { Input, Button, Space } from 'antd'
 const form = createForm()
 
 const ObjectComponent = observer(() => {
-  const field = useField<Formily.Core.Models.ObjectField>()
+  const field = useField<ObjectFieldType>()
   return (
     <>
       <div>

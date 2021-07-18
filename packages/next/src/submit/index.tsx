@@ -1,13 +1,14 @@
 import React from 'react'
 import { Button } from '@alifd/next'
 import { ButtonProps } from '@alifd/next/lib/button'
+import { IFormFeedback } from '@formily/core'
 import { useForm, observer } from '@formily/react'
 
 interface ISubmitProps extends ButtonProps {
   onClick?: (e: React.MouseEvent<Element, MouseEvent>) => any
   onSubmit?: (values: any) => any
   onSubmitSuccess?: (payload: any) => void
-  onSubmitFailed?: (feedbacks: Formily.Core.Types.IFormFeedback[]) => void
+  onSubmitFailed?: (feedbacks: IFormFeedback[]) => void
 }
 
 export const Submit: React.FC<ISubmitProps> = observer(

@@ -1,7 +1,7 @@
-const baseConfig = require('./webpack.base')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const webpack = require('webpack')
-const path = require('path')
+import baseConfig from './webpack.base'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import webpack from 'webpack'
+import path from 'path'
 
 const PORT = 3000
 

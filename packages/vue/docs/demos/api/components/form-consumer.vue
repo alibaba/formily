@@ -20,8 +20,8 @@ export default {
   data() {
     return {
       Input,
-      form: createForm()
+      form: createForm(),
     }
-  }
+  },
 }
 </script>

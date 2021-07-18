@@ -310,9 +310,9 @@ export default () => (
 
 > 浮层编辑
 
-| 属性名        | 类型                                                 | 描述       | 默认值 |
-| ------------- | ---------------------------------------------------- | ---------- | ------ |
-| renderPreview | `(field:Formily.Core.Types.GeneralField)=>ReactNode` | 预览渲染器 |        |
+| 属性名        | 类型                              | 描述       | 默认值 |
+| ------------- | --------------------------------- | ---------- | ------ |
+| renderPreview | `(field:GeneralField)=>ReactNode` | 预览渲染器 |        |
 
 注意：如果在 Popover 内部有 Select/DatePicker 之类的浮层组件，需要在浮层组件上配置 followTrigger=true
 

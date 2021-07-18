@@ -7,11 +7,13 @@
 ## 签名
 
 ```ts
+import { Field, GeneralField } from '@formily/core'
+
 type IStateMapper<Props> =
   | {
-      [key in keyof Formily.Core.Models.Field]?: keyof Props | boolean
+      [key in keyof Field]?: keyof Props | boolean
     }
-  | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)
+  | ((props: Props, field: GeneralField) => Props)
 
 interface mapProps<T extends Vue.Component> {
   (...args: IStateMapper<VueComponentProps<T>>[]): Vue.Component

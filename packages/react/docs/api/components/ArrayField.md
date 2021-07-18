@@ -22,7 +22,7 @@ type ArrayField = React.FC<IFieldFactoryProps>
 
 ```tsx
 import React from 'react'
-import { createForm } from '@formily/core'
+import { createForm, ArrayField as ArrayFieldType } from '@formily/core'
 import {
   FormProvider,
   Field,
@@ -35,7 +35,7 @@ import { Input, Button, Space } from 'antd'
 const form = createForm()
 
 const ArrayComponent = observer(() => {
-  const field = useField<Formily.Core.Models.ArrayField>()
+  const field = useField<ArrayFieldType>()
   return (
     <>
       <div>

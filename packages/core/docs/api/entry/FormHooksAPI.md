@@ -156,7 +156,7 @@ const useMyHook = () => {
 
 export default () => {
   const [response, setResponse] = useState('')
-  const form = useMemo(
+  useMemo(
     () =>
       createForm({
         effects() {

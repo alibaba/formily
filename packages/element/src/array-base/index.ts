@@ -9,6 +9,7 @@ import {
 } from 'vue-demi'
 import { FragmentComponent, useField, useFieldSchema, h } from '@formily/vue'
 import { isValid, uid } from '@formily/shared'
+import { ArrayField } from '@formily/core'
 import { stylePrefix } from '../__builtins__/configs'
 
 import type { Component } from 'vue'
@@ -22,7 +23,7 @@ interface AdditionProps extends ElButtonProps {
 }
 
 interface Context {
-  field: Ref<Formily.Core.Models.ArrayField>
+  field: Ref<ArrayField>
   schema: Ref<Schema>
   keyMap: WeakMap<any, string | number>
 }
@@ -61,7 +62,7 @@ const getDefaultValue = (defaultValue: any, schema: Schema): any => {
 
 export const ArrayBase = defineComponent({
   setup(props, { slots }) {
-    const field = useField<Formily.Core.Models.ArrayField>()
+    const field = useField<ArrayField>()
     const schema = useFieldSchema()
     const keyMap = new WeakMap()
     provide(ArrayBaseSymbol, { field, schema, keyMap })

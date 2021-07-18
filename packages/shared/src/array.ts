@@ -151,7 +151,7 @@ export function every<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): boolean
-export function every<T extends {}, TValue extends T[keyof T]>(
+export function every<T extends {}>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean
@@ -181,7 +181,7 @@ export function some<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): boolean
-export function some<T extends {}, TValue extends T[keyof T]>(
+export function some<T extends {}>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean
@@ -211,7 +211,7 @@ export function findIndex<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): number
-export function findIndex<T extends {}, TValue extends T[keyof T]>(
+export function findIndex<T extends {}>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean
@@ -245,7 +245,7 @@ export function find<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): T
-export function find<T extends {}, TValue extends T[keyof T]>(
+export function find<T extends {}>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean

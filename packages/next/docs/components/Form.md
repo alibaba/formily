@@ -82,15 +82,7 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import {
-  Input,
-  Select,
-  Form,
-  FormItem,
-  FormGrid,
-  FormButtonGroup,
-  Submit,
-} from '@formily/next'
+import { Input, Form, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { Field } from '@formily/react'
 import { ConfigProvider } from '@alifd/next'

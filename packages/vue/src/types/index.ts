@@ -1,5 +1,16 @@
 import type { Vue2Component } from './vue2'
 import type { Vue3Component } from './vue3'
+import {
+  Form,
+  IFieldFactoryProps,
+  IVoidFieldFactoryProps,
+  GeneralField,
+  Field,
+  ObjectField,
+  FormPatternTypes,
+  FieldDisplayTypes,
+  FieldValidator,
+} from '@formily/core'
 import type { FormPathPattern } from '@formily/shared'
 import type { ISchema, Schema, SchemaKey } from '@formily/json-schema'
 import type { DefineComponent as DefineVue3Component } from '@type-helper/vue3'
@@ -18,24 +29,24 @@ export type VueComponentProps<T extends VueComponent> =
   T extends VueComponentOptionsWithProps ? T['props'] : T
 
 export interface IProviderProps {
-  form: Formily.Core.Models.Form
+  form: Form
 }
 
 export type IFieldProps<
   D extends VueComponent = VueComponent,
   C extends VueComponent = VueComponent
-> = Formily.Core.Types.IFieldFactoryProps<D, C>
+> = IFieldFactoryProps<D, C>
 
 export type IVoidFieldProps<
   D extends VueComponent = VueComponent,
   C extends VueComponent = VueComponent
-> = Formily.Core.Types.IVoidFieldFactoryProps<D, C>
+> = IVoidFieldFactoryProps<D, C>
 
 export type IArrayFieldProps = IFieldProps
 export type IObjectFieldProps = IFieldProps
 
 export interface IReactiveFieldProps {
-  field: Formily.Core.Types.GeneralField
+  field: GeneralField
 }
 
 export interface IComponentMapper<T extends VueComponent = any> {
@@ -44,9 +55,9 @@ export interface IComponentMapper<T extends VueComponent = any> {
 
 export type IStateMapper<Props> =
   | {
-      [key in keyof Formily.Core.Models.Field]?: keyof Props | boolean
+      [key in keyof Field]?: keyof Props | boolean
     }
-  | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)
+  | ((props: Props, field: GeneralField) => Props)
 
 export type SchemaVueComponents = Record<string, VueComponent>
 
@@ -60,11 +71,8 @@ export interface ISchemaFieldVueFactoryOptions<
 export interface ISchemaFieldProps<
   Decorator extends VueComponent = VueComponent,
   Component extends VueComponent = VueComponent,
-  InnerField = Formily.Core.Models.ObjectField<Decorator, Component>
-> extends Omit<
-    Formily.Core.Types.IFieldFactoryProps<Decorator, Component, InnerField>,
-    'name'
-  > {
+  InnerField = ObjectField<Decorator, Component>
+> extends Omit<IFieldFactoryProps<Decorator, Component, InnerField>, 'name'> {
   schema?: ISchema
   components?: {
     [key: string]: VueComponent
@@ -114,11 +122,11 @@ export type ISchemaMarkupFieldProps<
   Component,
   ComponentPropsByPathValue<Components, Decorator>,
   ComponentPropsByPathValue<Components, Component>,
-  Formily.Core.Types.FormPatternTypes,
-  Formily.Core.Types.FieldDisplayTypes,
-  Formily.Core.Types.FieldValidator,
+  FormPatternTypes,
+  FieldDisplayTypes,
+  FieldValidator,
   string,
-  Formily.Core.Types.GeneralField
+  GeneralField
 >
 
 export type ISchemaTypeFieldProps<

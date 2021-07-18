@@ -44,8 +44,7 @@
     "prelease:force": "lerna publish from-package --yes --dist-tag next && ts-node scripts/release release",
     "release": "lerna publish",
     "prelease": "lerna publish --dist-tag next",
-    "lint": "eslint --ext .ts,.tsx,.js  --fix",
-    "postinstall": "opencollective-postinstall"
+    "lint": "eslint ."
   },
   "resolutions": {
     "@types/react": "^17.0.0",

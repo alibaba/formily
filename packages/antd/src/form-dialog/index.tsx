@@ -1,6 +1,6 @@
 import React, { Fragment, useRef, useLayoutEffect, useState } from 'react'
 import ReactDOM, { createPortal } from 'react-dom'
-import { createForm } from '@formily/core'
+import { createForm, IFormProps } from '@formily/core'
 import { FormProvider } from '@formily/react'
 import { isNum, isStr, isBool, isFn } from '@formily/shared'
 import { Modal } from 'antd'
@@ -34,7 +34,7 @@ const getModelProps = (props: any): IFormModalProps => {
 }
 
 export interface IFormDialog {
-  open(props?: Formily.Core.Types.IFormProps): Promise<any>
+  open(props?: IFormProps): Promise<any>
   close(): void
 }
 
@@ -104,7 +104,7 @@ export function FormDialog(title: any, content: any): IFormDialog {
   }
   document.body.appendChild(env.root)
   const formDialog = {
-    open: (props: Formily.Core.Types.IFormProps) => {
+    open: (props: IFormProps) => {
       if (env.promise) return env.promise
       env.form = env.form || createForm(props)
       env.promise = new Promise((resolve) => {

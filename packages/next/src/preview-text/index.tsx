@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from 'react'
 import { isArr, isEmpty, isValid } from '@formily/shared'
+import { Field } from '@formily/core'
 import { useField, observer } from '@formily/react'
 import { InputProps } from '@alifd/next/lib/input'
 import { SelectProps } from '@alifd/next/lib/select'
@@ -37,7 +38,7 @@ const Input: React.FC<InputProps> = (props) => {
 }
 
 const Select: React.FC<SelectProps> = observer((props) => {
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   const prefixCls = usePrefixCls('form-text', props)
   const dataSource: any[] = field?.dataSource?.length
     ? field.dataSource
@@ -86,7 +87,7 @@ const Select: React.FC<SelectProps> = observer((props) => {
 })
 
 const TreeSelect: React.FC<TreeSelectProps> = observer((props) => {
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)
   const dataSource = field?.dataSource?.length
@@ -145,7 +146,7 @@ const TreeSelect: React.FC<TreeSelectProps> = observer((props) => {
 })
 
 const Cascader: React.FC<CascaderProps> = observer((props) => {
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)
   const dataSource: any[] = field?.dataSource?.length
