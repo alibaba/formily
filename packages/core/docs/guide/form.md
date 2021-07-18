@@ -6,11 +6,11 @@ Earlier I talked about the overall architecture of the Formily kernel, and also 
 
 The entire form model is very large and complicated. In fact, the core of the decomposition is the following sub-models:
 
--Field management model
--Field model
--Data model
--Linkage model
--Path system
+- Field management model
+- Field model
+- Data model
+- Linkage model
+- Path system
 
 Let's talk about how the form model is managed in detail below.
 
@@ -18,11 +18,11 @@ Let's talk about how the form model is managed in detail below.
 
 The field management model mainly includes:
 
--Field addition
--Field query
--Import field set
--Export field set
--Clear the field set
+- Field addition
+- Field query
+- Import field set
+- Export field set
+- Clear the field set
 
 #### Field addition
 
@@ -52,10 +52,10 @@ The field set is cleared mainly through clearFormGraph.
 
 The field model mainly includes:
 
--Field model, which is mainly responsible for managing the state of non-incremental fields, such as Input/Select/NumberPicker/DatePicker components
--The ArrayField model is mainly responsible for managing the state of the auto-increment list field, and can add, delete, and move list items.
--ObjectField model, which is mainly responsible for managing the state of auto-incremented object fields, and can add or delete the key of the object.
--The VoidField model is mainly responsible for managing the state of the virtual field. The virtual field is a node that does not pollute the form data, but it can control the display and hiding of its child nodes, and the interactive mode.
+- Field model, which is mainly responsible for managing the state of non-incremental fields, such as Input/Select/NumberPicker/DatePicker components
+- The ArrayField model is mainly responsible for managing the state of the auto-increment list field, and can add, delete, and move list items.
+- ObjectField model, which is mainly responsible for managing the state of auto-incremented object fields, and can add or delete the key of the object.
+- The VoidField model is mainly responsible for managing the state of the virtual field. The virtual field is a node that does not pollute the form data, but it can control the display and hiding of its child nodes, and the interactive mode.
 
 Because the field model is very complicated, it will be explained in detail in the following [Field Model](/guide/field) article.
 
@@ -65,11 +65,11 @@ For the form data model, the previous version of Formily will more or less have 
 
 The data model mainly includes:
 
--Form values (values) management
--Form default value (initialValues) management
--Field value (value) management
--Field default value (initialValue) management
--Value and default value selection merge strategy
+- Form values (values) management
+- Form default value (initialValues) management
+- Field value (value) management
+- Field default value (initialValue) management
+- Value and default value selection merge strategy
 
 Form value management is actually the values attribute of an object structure, but it is an @formily/reactive observable attribute. At the same time, with the help of @formily/reactive's deep observer capability, it monitors any attribute changes, and if it changes, it will trigger The life cycle hook of onFormValuesChange.
 
@@ -93,14 +93,14 @@ Usually, in the process of business development, there is always a need for data
 
 For example, the form value is `{xx:123}`, and the default form value is `{xx:321}`. The strategy here is:
 
--If `xx` does not have a corresponding field model, it means it is just redundant data and cannot be modified by the user
--If the form value is assigned first, and the default value is assigned later, then the default value directly overrides the form value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted.` {xx:321}`
--If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
--If `xx` has a field model
--If the form value is assigned first, the default value is assigned later
--If the current field has been modified by the user (modified is true), then the default value cannot overwrite the form value, and finally submit the data `{xx:123}`
--If the current field has not been modified by the user (modified is false), then the default value will directly override the field value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted `{xx:312}`
--If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
+- If `xx` does not have a corresponding field model, it means it is just redundant data and cannot be modified by the user
+- If the form value is assigned first, and the default value is assigned later, then the default value directly overrides the form value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted.` {xx:321}`
+- If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
+- If `xx` has a field model
+- If the form value is assigned first, the default value is assigned later
+- If the current field has been modified by the user (modified is true), then the default value cannot overwrite the form value, and finally submit the data `{xx:123}`
+- If the current field has not been modified by the user (modified is false), then the default value will directly override the field value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted `{xx:312}`
+- If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
 
 **No conflicts**
 
@@ -118,8 +118,8 @@ The default value mentioned here can be assigned repeatedly, and it is also the 
 
 The core of the form verification model is to verify the validity of the data, and then manage the verification results, so the verification model mainly includes:
 
--Validation rule management
--Calibration result management
+- Validation rule management
+- Calibration result management
 
 Because the verification model belongs to the field model, it will be explained in detail in the following [Field Model](/guide/field#Verification Rules)
 
@@ -147,8 +147,8 @@ Therefore, the two linkage models require users to choose according to their own
 
 The path system is very important. The path system is used everywhere in almost the entire form model. It mainly provides the following capabilities for the form model:
 
--It can be used to find any field from the field set, and it also supports batch search according to the rules
--It can be used to express the model of the relationship between the fields. With the help of the path system, we can find the father of a certain field, can find the father, and can also realize the data inheritance ability of the tree level. Similarly, we can also find the data of a certain field. Adjacent node
--It can be used to read and write field data, read and write data with deconstruction
+- It can be used to find any field from the field set, and it also supports batch search according to the rules
+- It can be used to express the model of the relationship between the fields. With the help of the path system, we can find the father of a certain field, can find the father, and can also realize the data inheritance ability of the tree level. Similarly, we can also find the data of a certain field. Adjacent node
+- It can be used to read and write field data, read and write data with deconstruction
 
 The entire path system is actually implemented based on the path DSL of @formily/path. If you want to know more about the path system, you can take a look at [FormPath API](/api/entry/form-path) in detail

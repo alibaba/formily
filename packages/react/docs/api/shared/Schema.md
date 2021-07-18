@@ -4,9 +4,9 @@
 
 The core part of the @formily/react protocol driver. Schema is a general class in which users can use it by themselves. At the same time, both SchemaField and RecursionField rely on it. It has several core capabilities:
 
--Ability to parse json-schema
--The ability to convert json-schema to Field Model
--The ability to compile json-schema expressions
+- Ability to parse json-schema
+- The ability to convert json-schema to Field Model
+- The ability to compile json-schema expressions
 
 You can export the Schema Class from @formily/react, but if you don’t want to use @formily/react, you can rely on the @formily/json-schema package alone
 
@@ -73,10 +73,10 @@ Create a Schema Tree based on a piece of json schema data to ensure that each sc
 
 #### Detailed description
 
--The component ID of x-component matches the key of the component collection passed in [createSchemaField](/api/components/schema-field#signature)
--The component ID of x-decorator matches the key of the component collection passed in [createSchemaField](/api/components/schema-field#signature)
--Every attribute of Schema can use string expression `{{expression}}`, expression variables can be passed in from createSchemaField or from SchemaField component
--The predefined format of $ref specified Schema must be `#/definitions/address` this format, loading remote JSON Schema is not supported
+- The component ID of x-component matches the key of the component collection passed in [createSchemaField](/api/components/schema-field#signature)
+- The component ID of x-decorator matches the key of the component collection passed in [createSchemaField](/api/components/schema-field#signature)
+- Every attribute of Schema can use string expression `{{expression}}`, expression variables can be passed in from createSchemaField or from SchemaField component
+- The predefined format of $ref specified Schema must be `#/definitions/address` this format, loading remote JSON Schema is not supported
 
 ## Method
 
@@ -529,13 +529,13 @@ Schema.registerPolyfills('1.0', (schema) => {
 
 Turn on the protocol gasket, the 1.0 version protocol compatible gasket is built in by default, and the main compatibility features are:
 
--x-decorator does not declare, it is automatically used as FormItem
--x-linkages converted to x-reactions
--x-props is automatically converted to x-decorator-props
--x-rules converted to x-validator
--convert editable to x-editable
--Convert visible to x-visible
--x-component is automatically converted to VoidField for card/block/grid-row/grid-col/grid/layout/step/tab/text-box,
+- x-decorator does not declare, it is automatically used as FormItem
+- x-linkages converted to x-reactions
+- x-props is automatically converted to x-decorator-props
+- x-rules converted to x-validator
+- convert editable to x-editable
+- Convert visible to x-visible
+- x-component is automatically converted to VoidField for card/block/grid-row/grid-col/grid/layout/step/tab/text-box,
 
 #### Signature
 

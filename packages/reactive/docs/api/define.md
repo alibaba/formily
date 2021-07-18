@@ -21,12 +21,12 @@ interface define<Target extends object> {
 
 All Annotations currently supported are:
 
--observable/observable.deep defines deep hijacking responsive properties
--observable.box defines get/set container
--observable.computed defines calculated properties
--observable.ref defines reference hijacking responsive attributes
--observable.shallow defines shallow hijacking responsive properties
--action/batch defines the batch processing method
+- observable/observable.deep defines deep hijacking responsive properties
+- observable.box defines get/set container
+- observable.computed defines calculated properties
+- observable.ref defines reference hijacking responsive attributes
+- observable.shallow defines shallow hijacking responsive properties
+- action/batch defines the batch processing method
 
 ## Example
 

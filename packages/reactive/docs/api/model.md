@@ -4,9 +4,9 @@
 
 Quickly define the domain model, and automatically declare the model attributes:
 
--Automatic declaration of getter/setter properties computed
--Function automatically declare action
--Common attributes are automatically declared observable
+- Automatic declaration of getter/setter properties computed
+- Function automatically declare action
+- Common attributes are automatically declared observable
 
 ## Signature
 

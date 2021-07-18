@@ -6,8 +6,8 @@ order: 5
 
 The core of FormPath in Formily is to solve 2 types of problems:
 
--Path matching problem
--Data manipulation issues
+- Path matching problem
+- Data manipulation issues
 
 Path matching requires that the given path must be a valid path matching syntax, such as `*(aa,bb,cc)`.
 
@@ -84,9 +84,9 @@ console.log(target) //{array:[{aa:'000'},{aa:'111'}]}
 
 The deconstruction expression is similar to the ES6 deconstruction grammar, except that it does not support `...` deconstruction. It is very suitable for scenarios where the front and back data is inconsistent. It has several characteristics:
 
--The deconstruction expression will be regarded as a node of the point path, we can regard it as a normal string node, but it will take effect during data manipulation, so only the deconstruction expression needs to be matched as a normal node node in the matching grammar Can
--Use the deconstruction path in setIn, the data will be deconstructed
--Use the deconstruction path in getIn, the data will be reorganized
+- The deconstruction expression will be regarded as a node of the point path, we can regard it as a normal string node, but it will take effect during data manipulation, so only the deconstruction expression needs to be matched as a normal node node in the matching grammar Can
+- Use the deconstruction path in setIn, the data will be deconstructed
+- Use the deconstruction path in getIn, the data will be reorganized
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -103,10 +103,10 @@ console.log(FormPath.parse('parent.[aa,bb]').toString()) //parent.[aa,bb]
 
 The relative path syntax is mainly expressed in dot syntax at the head of the data type path. It is very useful for calculating adjacent elements of the array. It has several characteristics:
 
--A dot represents the current path
--n dots represent n-1 steps forward
--Subscripts can be used to calculate expressions in square brackets: `[+]` represents the current subscript +1, `[-]` represents the current subscript -1, `[+n]` represents the current subscript +n, ` [-n]` represents the current subscript -n
--When path matching, group matching and range matching cannot be used, such as `*(..[+1].aa,..[+2].bb)`
+- A dot represents the current path
+- n dots represent n-1 steps forward
+- Subscripts can be used to calculate expressions in square brackets: `[+]` represents the current subscript +1, `[-]` represents the current subscript - 1, `[+n]` represents the current subscript +n, ` [-n]` represents the current subscript - n
+- When path matching, group matching and range matching cannot be used, such as `*(..[+1].aa,..[+2].bb)`
 
 ```ts
 import { FormPath } from '@formily/core'

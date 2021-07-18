@@ -16,10 +16,10 @@ With the help of @formily/reactive, @formily/core naturally gains the ability to
 
 If we break down the form question, we can actually break it down:
 
--Data management issues
--Field management issues
--Calibration management issues
--Linkage management issues
+- Data management issues
+- Field management issues
+- Calibration management issues
+- Linkage management issues
 
 The problems in these directions can actually be solved as domain-level problems. Each domain problem is actually a very complex problem. In Formily, all of them are solved by breakthroughs, so you only need to focus on business logic. That's it.
 

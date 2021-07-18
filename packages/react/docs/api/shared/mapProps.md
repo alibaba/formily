@@ -19,8 +19,8 @@ interface mapProps<T extends React.FC> {
 }
 ```
 
--Parameters can be passed objects (key is the attribute of the field, value is the attribute of the component, if the value is true, the mapped attribute name is the same)
--Parameters can be passed to functions, and functions can directly do more complex mappings to attributes
+- Parameters can be passed objects (key is the attribute of the field, value is the attribute of the component, if the value is true, the mapped attribute name is the same)
+- Parameters can be passed to functions, and functions can directly do more complex mappings to attributes
 
 ## Example
 

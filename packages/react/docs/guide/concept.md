@@ -2,12 +2,12 @@
 
 The architecture of @formily/react itself is not complicated, because it only provides a series of components and Hooks for users to use, but we still need to understand the following concepts:
 
--Form context
--Field context
--Protocol context
--Model binding
--Protocol driven
--Three development modes
+- Form context
+- Field context
+- Protocol context
+- Model binding
+- Protocol driven
+- Three development modes
 
 ## Form context
 
@@ -33,10 +33,10 @@ In Formily, @formily/core is ViewModel, Component and Decorator are View, @formi
 
 Protocol-driven rendering is the most expensive part of @formily/react, but after learning it, the benefits it brings to the business are also very high. A total of 4 core concepts need to be understood:
 
--Schema
--Recursive rendering
--Protocol binding
--Three development modes
+- Schema
+- Recursive rendering
+- Protocol binding
+- Three development modes
 
 ### Schema
 
@@ -97,8 +97,8 @@ A special case here is the rendering of the array type auto-increment list, whic
 
 What is the difference between SchemaField and RecursionField? There are two main points:
 
--SchemaField supports Markup grammar, it will parse Markup grammar in advance to generate [JSON Schema](/api/shared/schema) and transfer it to RecursionField for rendering, so RecursionField can only be rendered based on [JSON Schema](/api/shared/schema)
--SchemaField renders the overall Schema protocol, while RecursionField renders the partial Schema protocol
+- SchemaField supports Markup grammar, it will parse Markup grammar in advance to generate [JSON Schema](/api/shared/schema) and transfer it to RecursionField for rendering, so RecursionField can only be rendered based on [JSON Schema](/api/shared/schema)
+- SchemaField renders the overall Schema protocol, while RecursionField renders the partial Schema protocol
 
 ### Protocol binding
 
@@ -112,9 +112,9 @@ To sum up, in @formily/react, there are mainly two layers of binding relationshi
 
 From the [architecture diagram](/guide/architecture), we have actually seen that the entire @formily/react has three development modes, corresponding to different users:
 
--JSX development model
--JSON Schema development mode
--Markup Schema development mode
+- JSX development model
+- JSON Schema development mode
+- Markup Schema development mode
 
 We can look at specific examples
 
@@ -183,9 +183,9 @@ Because it is difficult to get the best smart prompt experience in the JSX envir
 
 Markup Schema mode mainly has the following characteristics:
 
--Mainly rely on description tags such as SchemaField.String/SchemaField.Array/SchemaField.Object... to express Schema
--Each description tag represents a Schema node, which is equivalent to JSON-Schema
--SchemaField child nodes cannot insert UI elements at will, because SchemaField will only parse all the Schema description tags of the child nodes, and then convert them into JSON Schema, and finally give it to [RecursionField](/api/components/recursion-field) for rendering, if you want Insert UI elements, you can upload the `x-content` attribute in VoidDield to insert UI elements
+- Mainly rely on description tags such as SchemaField.String/SchemaField.Array/SchemaField.Object... to express Schema
+- Each description tag represents a Schema node, which is equivalent to JSON-Schema
+- SchemaField child nodes cannot insert UI elements at will, because SchemaField will only parse all the Schema description tags of the child nodes, and then convert them into JSON Schema, and finally give it to [RecursionField](/api/components/recursion-field) for rendering, if you want Insert UI elements, you can upload the `x-content` attribute in VoidDield to insert UI elements
 
 ```tsx
 import React from 'react'

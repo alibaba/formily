@@ -339,9 +339,9 @@ export default () => {
 
 note:
 
--minWidth takes priority over minColumn
--maxWidth has priority over maxColumn
--The array format of minWidth/maxWidth/minColumns/maxColumns represents the mapping with the breakpoint array
+- minWidth takes priority over minColumn
+- maxWidth has priority over maxColumn
+- The array format of minWidth/maxWidth/minColumns/maxColumns represents the mapping with the breakpoint array
 
 ### FormGrid.GridColumn
 

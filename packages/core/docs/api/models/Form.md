@@ -831,5 +831,5 @@ FieldReaction Reference [FieldReaction](/api/models/field#fieldreaction)
 
 > Formily Typescript type convention
 >
-> -Simple non-object data types or Union data types use type to define the type, and cannot start with an uppercase `I` character
-> -Simple object types use interface to define the type uniformly, and start with an uppercase `I` character. If there are combinations of different interfaces (Intersection or Extends), use type to define the type, and also start with an uppercase `I` character
+> - Simple non-object data types or Union data types use type to define the type, and cannot start with an uppercase `I` character
+> - Simple object types use interface to define the type uniformly, and start with an uppercase `I` character. If there are combinations of different interfaces (Intersection or Extends), use type to define the type, and also start with an uppercase `I` character
