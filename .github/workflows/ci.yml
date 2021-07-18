@@ -28,7 +28,7 @@ jobs:
         uses: reviewdog/action-eslint@v1
         with:
           reporter: github-check
-          eslint_flags: 'src/'
+          eslint_flags: '.'
       - run: yarn build
       - run: yarn test:prod
         env:
