@@ -1,5 +1,6 @@
 import { defineComponent, ref } from 'vue-demi'
 import { observer } from '@formily/reactive-vue'
+import { ArrayField } from '@formily/core'
 import { h, useField, useFieldSchema, RecursionField } from '@formily/vue'
 import { Tabs, TabPane, Badge, Button } from 'element-ui'
 import { stylePrefix } from '../__builtins__/configs'
@@ -11,7 +12,7 @@ export const ArrayTabs = observer(
     name: 'ArrayTabs',
     props: [],
     setup(props, { attrs }) {
-      const fieldRef = useField<Formily.Core.Models.ArrayField>()
+      const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
 
       const prefixCls = `${stylePrefix}-array-tabs`

@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue-demi'
+import { ArrayField } from '@formily/core'
 import { useField, useFieldSchema, RecursionField, h } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
 import { ISchema } from '@formily/json-schema'
@@ -18,7 +19,7 @@ export const ArrayItems = observer(
   defineComponent({
     name: 'ArrayItems',
     setup(props, { attrs }) {
-      const fieldRef = useField<Formily.Core.Models.ArrayField>()
+      const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
 
       const prefixCls = `${stylePrefix}-array-items`

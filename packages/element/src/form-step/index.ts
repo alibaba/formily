@@ -1,5 +1,6 @@
 import { defineComponent, PropType } from 'vue-demi'
 import { action, model, observable } from '@formily/reactive'
+import { VoidField, Form } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 import {
   h,
@@ -15,12 +16,12 @@ import { stylePrefix } from '../__builtins__/configs'
 import type { Steps as StepsProps, Step as StepProps } from 'element-ui'
 
 export interface IFormStep {
-  connect: (steps: SchemaStep[], field: Formily.Core.Models.VoidField) => void
+  connect: (steps: SchemaStep[], field: VoidField) => void
   current: number
   allowNext: boolean
   allowBack: boolean
   setCurrent(key: number): void
-  submit: Formily.Core.Models.Form['submit']
+  submit: Form['submit']
   next(): void
   back(): void
 }
@@ -36,8 +37,8 @@ type SchemaStep = {
 }
 
 type FormStepEnv = {
-  form: Formily.Core.Models.Form
-  field: Formily.Core.Models.VoidField
+  form: Form
+  field: VoidField
   steps: SchemaStep[]
 }
 
@@ -135,7 +136,7 @@ export const FormStep = observer(
       },
     },
     setup(props, { attrs }) {
-      const field = useField<Formily.Core.Models.VoidField>().value
+      const field = useField<VoidField>().value
       const prefixCls = `${stylePrefix}-form-step`
       const fieldSchemaRef = useFieldSchema()
 

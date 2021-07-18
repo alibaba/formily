@@ -1,7 +1,7 @@
 import { defineComponent, ref, onBeforeUnmount } from 'vue-demi'
 import { observer } from '@formily/reactive-vue'
 import { reaction } from '@formily/reactive'
-import { isVoidField } from '@formily/core'
+import { isVoidField, Field } from '@formily/core'
 import { h, useField } from '@formily/vue'
 import { Popover } from 'element-ui'
 import { stylePrefix } from '../__builtins__/configs'
@@ -40,7 +40,7 @@ export const Editable = observer(
   defineComponent<EditableProps>({
     name: 'Editable',
     setup(props, { attrs, slots, refs }) {
-      const fieldRef = useField<Formily.Core.Models.Field>()
+      const fieldRef = useField<Field>()
 
       const prefixCls = `${stylePrefix}-editable`
       const setEditable = (payload: boolean) => {
@@ -194,7 +194,7 @@ export const EditablePopover = observer(
   defineComponent<EditablePopoverProps>({
     name: 'EditablePopover',
     setup(props, { attrs, slots }) {
-      const fieldRef = useField<Formily.Core.Models.Field>()
+      const fieldRef = useField<Field>()
 
       const prefixCls = `${stylePrefix}-editable`
       const visible = ref(false)

@@ -33,7 +33,7 @@ const { SchemaField } = createSchemaField({
   components: {
     FormItem,
     Input,
-    Textarea,
+    TextArea,
   },
 })
 

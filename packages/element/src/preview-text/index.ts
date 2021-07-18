@@ -4,6 +4,7 @@ import {
   resolveComponent,
   useContext,
 } from '../__builtins__/shared'
+import { Field } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 import { h, useField } from '@formily/vue'
 import { isArr, isFn, isValid } from '@formily/shared'
@@ -62,7 +63,7 @@ export const PreviewSelectText = observer(
     name: 'PreviewSelectText',
     props: [],
     setup(_props, { attrs }) {
-      const fieldRef = useField<Formily.Core.Models.Field>()
+      const fieldRef = useField<Field>()
       const field = fieldRef.value
       const props = attrs as unknown as SelectProps
       const dataSource: any[] = field?.dataSource?.length
@@ -133,7 +134,7 @@ export const PreviewCascaderText = observer(
     name: 'PreviewCascaderText',
     props: [],
     setup(_props, { attrs }) {
-      const fieldRef = useField<Formily.Core.Models.Field>()
+      const fieldRef = useField<Field>()
       const field = fieldRef.value
       const props = attrs as unknown as CascaderProps
       const dataSource: any[] = field?.dataSource?.length

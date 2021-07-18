@@ -28,7 +28,7 @@ const fields = createSchemaField({
   components: {
     FormItem,
     Input,
-    Textarea,
+    TextArea,
   },
 })
 

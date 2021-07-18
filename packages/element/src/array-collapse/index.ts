@@ -1,5 +1,6 @@
 import { defineComponent, ref, watchEffect, Ref } from 'vue-demi'
 import { Card, Collapse, CollapseItem, Empty, Row, Badge } from 'element-ui'
+import { ArrayField } from '@formily/core'
 import type {
   Collapse as CollapseProps,
   CollapseItem as CollapseItemProps,
@@ -89,7 +90,7 @@ export const ArrayCollapse = observer(
       },
     },
     setup(props, { attrs }) {
-      const fieldRef = useField<Formily.Core.Models.ArrayField>()
+      const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
 
       const prefixCls = `${stylePrefix}-array-collapse`

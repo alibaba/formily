@@ -37,8 +37,6 @@
     - FormCollapse
     - FormStep
     - FormTab
-    - FormDialog
-    - FormDrawer
     - Editable
   - 阅读态组件
     - PreviewText
@@ -53,9 +51,6 @@
   - 每个组件都有着极其完整的类型定义，用户在实际开发过程中，可以感受到前所未有的智能提示体验
 - 更完备的布局控制能力
   - 基于 FormLayout、FormItem、FormGrid 组件，提供更智能的布局能力。
-- 更优雅易用的 API，比如：
-  - FormStep，用户只需要关注 FormStep Reactive Model 即可，通过 createFormStep 就可以创建出 Reactive Model，传给 FormStep 组件即可快速通讯。同理，FormTab/FormCollapse 也是一样的通讯模式。
-  - 弹窗表单，抽屉表单，想必过去，用户几乎每次都得在这两个场景上写大量的代码，这次直接提供了极其简易的 API 让用户使用，最大化提升开发效率。
 
 ## 安装
 

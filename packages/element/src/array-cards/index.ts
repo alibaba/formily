@@ -1,6 +1,7 @@
 import { defineComponent } from 'vue-demi'
 import { Card, Empty, Row } from 'element-ui'
 import type { Card as CardProps } from 'element-ui'
+import { ArrayField } from '@formily/core'
 import { useField, useFieldSchema, RecursionField, h } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
 import { ISchema } from '@formily/json-schema'
@@ -41,7 +42,7 @@ export const ArrayCards = observer(
     name: 'ArrayCards',
     props: [],
     setup(props, { attrs }) {
-      const fieldRef = useField<Formily.Core.Models.ArrayField>()
+      const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
       const prefixCls = `${stylePrefix}-array-cards`
       const getKey = useKey()

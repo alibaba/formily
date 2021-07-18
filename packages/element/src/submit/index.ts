@@ -1,4 +1,5 @@
 import { h, useForm } from '@formily/vue'
+import { IFormFeedback } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 import { defineComponent } from 'vue-demi'
 
@@ -9,7 +10,7 @@ export interface ISubmitProps extends ElButtonProps {
   onClick?: (e: MouseEvent) => any
   onSubmit?: (values: any) => any
   onSubmitSuccess?: (payload: any) => void
-  onSubmitFailed?: (feedbacks: Formily.Core.Types.IFormFeedback[]) => void
+  onSubmitFailed?: (feedbacks: IFormFeedback[]) => void
 }
 
 export const Submit = observer(
