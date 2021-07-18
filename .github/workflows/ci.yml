@@ -24,7 +24,8 @@ jobs:
 
       - run: yarn -v
       - run: yarn --ignore-engines
-      - uses: tinovyatkin/action-eslint@v1
+      - name: ESlint
+        uses: tinovyatkin/action-eslint@v1
         with:
            repo-token: ${{secrets.GITHUB_TOKEN}}
            check-name: eslint
