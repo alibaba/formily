@@ -662,16 +662,20 @@ export const triggerFormInitialValuesChange = (
   form: Form,
   change: DataChange
 ) => {
-  if (change.path[0] === 'initialValues') {
+  const path = change.path
+  if (path[path.length - 1] === 'length') return
+  if (path[0] === 'initialValues') {
     if (change.type === 'add' || change.type === 'set') {
-      applyValuesPatch(form, change.path.slice(1), change.value)
+      applyValuesPatch(form, path.slice(1), change.value)
     }
     form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
   }
 }
 
 export const triggerFormValuesChange = (form: Form, change: DataChange) => {
-  if (change.path[0] === 'values') {
+  const path = change.path
+  if (path[path.length - 1] === 'length') return
+  if (path[0] === 'values') {
     form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
   }
 }

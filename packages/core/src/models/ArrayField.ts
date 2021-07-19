@@ -52,11 +52,11 @@ export class ArrayField<
     if (!isArr(this.value)) return
     return batch(() => {
       const index = this.value.length - 1
-      this.value.pop()
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1,
       })
+      this.value.pop()
       return this.onInput(this.value)
     })
   }
@@ -64,11 +64,11 @@ export class ArrayField<
   insert = async (index: number, ...items: any[]) => {
     if (!isArr(this.value)) return
     return batch(() => {
-      this.value.splice(index, 0, ...items)
       spliceArrayState(this, {
         startIndex: index,
         insertCount: items.length,
       })
+      this.value.splice(index, 0, ...items)
       return this.onInput(this.value)
     })
   }
@@ -76,11 +76,11 @@ export class ArrayField<
   remove = async (index: number) => {
     if (!isArr(this.value)) return
     return batch(() => {
-      this.value.splice(index, 1)
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1,
       })
+      this.value.splice(index, 1)
       return this.onInput(this.value)
     })
   }
@@ -96,11 +96,11 @@ export class ArrayField<
   unshift = async (...items: any[]) => {
     if (!isArr(this.value)) return
     return batch(() => {
-      this.value.unshift(...items)
       spliceArrayState(this, {
         startIndex: 0,
         insertCount: items.length,
       })
+      this.value.unshift(...items)
       return this.onInput(this.value)
     })
   }
