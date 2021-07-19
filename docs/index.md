@@ -9,10 +9,10 @@ hero:
       link: /guide
 features:
   - icon: https://img.alicdn.com/imgextra/i2/O1CN016i72sH1c5wh1kyy9U_!!6000000003550-55-tps-800-800.svg
-    title: Easier to use
+    title: Easier to Use
     desc: Out of the box, rich cases
   - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
-    title: More efficient
+    title: More Efficient
     desc: Fool writing, ultra-high performance
   - icon: https://img.alicdn.com/imgextra/i3/O1CN01xlETZk1G0WSQT6Xii_!!6000000000560-55-tps-800-800.svg
     title: More Professional

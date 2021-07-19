@@ -7,15 +7,15 @@ hero:
   actions:
     - text: Home Site
       link: //v2.formilyjs.org
-    - text: Development Guide
+    - text: Document
       link: /guide
 features:
   - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
-    title: Ultra High Performance
-    desc: Dependency tracking, efficient update, on-demand rendering
+    title: High Performance
+    desc: Efficient update, Demand rendering
   - icon: https://img.alicdn.com/imgextra/i2/O1CN01YqmcpN1tDalwgyHBH_!!6000000005868-55-tps-800-800.svg
-    title: Cross Device,Cross Framework
-    desc: Zero Dependencies
+    title: Zero Dependencies
+    desc: Cross Device,Cross Framework
   - icon: https://img.alicdn.com/imgextra/i4/O1CN01u6jHgs1ZMwXpjAYnh_!!6000000003181-55-tps-800-800.svg
     title: Smart Tips
     desc: Embrace Typescript
