@@ -18,7 +18,7 @@ import {
   RangeExpressionNode,
   DotOperatorNode,
 } from './types'
-import { isEqual, toArr } from './shared'
+import { isEqual, toArr, isSegmentEqual } from './shared'
 
 const isValid = (val) => val !== undefined && val !== null && val !== ''
 
@@ -231,7 +231,7 @@ export class Matcher {
     if (source.length !== target.length) return false
     const match = (pos: number) => {
       const current = () => {
-        const res = isEqual(source[pos], target[pos])
+        const res = isSegmentEqual(source[pos], target[pos])
         if (record && record.score !== undefined) {
           record.score++
         }
