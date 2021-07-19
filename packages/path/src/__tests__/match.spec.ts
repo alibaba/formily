@@ -116,6 +116,11 @@ test('test group', () => {
   expect(node.match('phases.0.steps.1.type')).toBeTruthy()
 })
 
+test('test segments', () => {
+  const node = Path.parse('a.0.b')
+  expect(node.match(['a', 0, 'b'])).toEqual(true)
+})
+
 match({
   '*': [[], ['aa'], ['aa', 'bb', 'cc'], ['aa', 'dd', 'gg']],
   '*.a.b': [
