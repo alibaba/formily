@@ -29,7 +29,7 @@ To understand model binding, you need to understand what [MVVM](//core.formilyjs
 
 In Formily, @formily/core is ViewModel, Component and Decorator are View, @formily/react is the glue layer that binds ViewModel and View, and the binding of ViewModel and View is called model binding, which implements model binding. The main methods are [useField](/api/hooks/use-field), and [connect](/api/shared/connect) and [mapProps](/api/shared/map-props) can also be used. Note that Component only needs to support the value/onChange property to automatically realize the two-way binding of the data layer.
 
-## Protocol driver
+## JSON Schema Driver
 
 Protocol-driven rendering is the most expensive part of @formily/react, but after learning it, the benefits it brings to the business are also very high. A total of 4 core concepts need to be understood:
 

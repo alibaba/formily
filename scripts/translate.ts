@@ -20,6 +20,25 @@ const fixContents = (contents: string) => {
     .replace(/overflow\s*description/g, 'overflow"\ndescription')
     .replace(/\s*>\s*\(\(\)\s*=>\s*\(/g, `>{() => (`)
     .replace(/\/zh\-CN\//g, '/')
+    .replace('main site document', 'Home Site')
+    .replace('kernel documentation', 'Document')
+    .replace('kernel document', 'Document')
+    .replace('component documentation', 'Document')
+    .replace('Smart reminder', 'Smart Tips')
+    .replace('cross terminal, cross frame', 'Cross Device,Cross Framework')
+    .replace('easier to use', 'Easier To Use')
+    .replace('easier to use', 'Easier To Use')
+    .replace('out of the box', 'Out Of The Box')
+    .replace('Protocol driver', 'JSON Schema Driver')
+    .replace('Scene reuse', 'Scene Reuse')
+    .replace('more efficient', 'More Efficient')
+    .replace('More professional', 'More Professional')
+    .replace('Debugging friendly', 'Debugging Friendly')
+    .replace(
+      'UI has nothing to do, framework has nothing to do',
+      'Zero Dependencies'
+    )
+    .replace('UI has nothing to do', 'Pure Core,No UI')
 }
 
 glob('packages/*/docs/**/*.md', async (err, files) => {

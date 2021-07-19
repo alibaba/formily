@@ -5,9 +5,9 @@ hero:
   title: FORMILY CORE
   desc: Alibaba unified front-end form solution
   actions:
-    - text: main site document
+    - text: Home Site
       link: //v2.formilyjs.org
-    - text: kernel documentation
+    - text: Document
       link: /guide
 features:
   - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
@@ -21,7 +21,7 @@ features:
     desc: flexible, complete, elegant
   - icon: https://img.alicdn.com/imgextra/i2/O1CN01YqmcpN1tDalwgyHBH_!!6000000005868-55-tps-800-800.svg
     title: Complete domain model
-    desc: Cross-terminal, cross-frame, UI has nothing to do
+    desc: Cross-terminal, cross-frame, Pure Core,No UI
   - icon: https://img.alicdn.com/imgextra/i4/O1CN018vDmpl2186xdLu6KI_!!6000000006939-55-tps-800-800.svg
     title: Friendly debugging experience
     desc: Natural docking with Formily DevTools

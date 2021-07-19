@@ -10,11 +10,11 @@ With the responsive model of [@formily/core](//core.formilyjs.org), @formily/rea
 
 @formily/react provides a series of React components, such as Field/ArrayField/ObjectField/VoidField. When using it, users only need to pass the component property to the Field component (supporting two-way binding conventions such as value/onChange). Quick access to @formily/react, the access cost is extremely low.
 
-## Protocol driver
+## JSON Schema Driver
 
 @formily/react provides protocol-driven components such as SchemaField. It is also driven by the standard JSON-Schema, so that form development can become more dynamic and configurable. What's more, we can achieve a protocol that allows multiple terminals Render the form.
 
-## Scene reuse
+## Scene Reuse
 
 With the help of protocol-driven capabilities, we can abstract a protocol fragment carrying business logic into a scene component to help users develop efficiently in certain scenes, such as scene components such as FormTab and FormStep.
 

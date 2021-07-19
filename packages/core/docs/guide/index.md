@@ -1,6 +1,6 @@
 # Introduction
 
-## UI has nothing to do
+## Pure Core,No UI
 
 Because @formily/core exists as an independent package, its core meaning is to separate the domain model from the UI framework, and at the same time, it can bring the following two intuitive benefits to developers:
 

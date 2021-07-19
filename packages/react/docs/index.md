@@ -5,7 +5,7 @@ hero:
   title: FORMILY REACT
   desc: Alibaba unified front-end form solution
   actions:
-    - text: main site document
+    - text: Home Site
       link: //v2.formilyjs.org
     - text: Development Guide
       link: /guide
@@ -14,19 +14,19 @@ features:
     title: Ultra High Performance
     desc: Dependency tracking, efficient update, on-demand rendering
   - icon: https://img.alicdn.com/imgextra/i2/O1CN016i72sH1c5wh1kyy9U_!!6000000003550-55-tps-800-800.svg
-    title: out of the box
+    title: Out Of The Box
     desc: The component status is automatically bound, and the access cost is extremely low
   - icon: https://img.alicdn.com/imgextra/i3/O1CN01JHzg8U1FZV5Mvt012_!!6000000000501-55-tps-800-800.svg
-    title: Protocol driver
+    title: JSON Schema Driver
     desc: Standard JSON-Schema
   - icon: https://img.alicdn.com/imgextra/i3/O1CN0194OqFF1ui6mMT4g7O_!!6000000006070-55-tps-800-800.svg
-    title: Scene reuse
+    title: Scene Reuse
     desc: Based on protocol-driven, abstract scene components
   - icon: https://img.alicdn.com/imgextra/i4/O1CN018vDmpl2186xdLu6KI_!!6000000006939-55-tps-800-800.svg
-    title: Debugging friendly
+    title: Debugging Friendly
     desc: Natural docking with Formily DevTools
   - icon: https://img.alicdn.com/imgextra/i4/O1CN01u6jHgs1ZMwXpjAYnh_!!6000000003181-55-tps-800-800.svg
-    title: Smart reminder
+    title: Smart Tips
     desc: Embrace Typescript
 footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by self
 ---
