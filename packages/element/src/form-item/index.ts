@@ -4,19 +4,20 @@ import {
   reactive,
   provide,
   defineComponent,
+  onMounted,
+  Ref,
+  onBeforeUnmount,
+  watch,
 } from '@vue/composition-api'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps, h } from '@formily/vue'
 import { reduce } from '@formily/shared'
-import {
-  useFormLayout,
-  useFormShallowLayout,
-  FormLayoutShallowContext,
-} from '../form-layout'
+import { useFormLayout } from '../form-layout'
 import { resolveComponent } from '../__builtins__/shared'
 import { stylePrefix } from '../__builtins__/configs'
 import { Component } from 'vue'
 import { Tooltip } from 'element-ui'
+import ResizeObserver from 'resize-observer-polyfill'
 
 export type FormItemProps = {
   className?: string
@@ -24,6 +25,7 @@ export type FormItemProps = {
   label?: string | Component
   colon?: boolean
   tooltip?: string | Component
+  layout?: 'vertical' | 'horizontal' | 'inline'
   labelStyle?: Record<string, any>
   labelAlign?: 'left' | 'right'
   labelWrap?: boolean
@@ -42,37 +44,59 @@ export type FormItemProps = {
   feedbackText?: string | Component
   feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none' | (string & {})
   feedbackStatus?: 'error' | 'warning' | 'success' | 'pending' | (string & {})
+  tooltipLayout?: 'icon' | 'text'
   feedbackIcon?: string | Component
   asterisk?: boolean
   gridSpan?: number
+  bordered?: boolean
+  inset?: boolean
 }
 
-const useFormItemLayout = (props: FormItemProps) => {
-  const shallowFormLayout = useFormShallowLayout()
-  const formLayout = useFormLayout()
-  const layout = { ...shallowFormLayout, ...formLayout }
-  const propRefs = toRefs<FormItemProps>(props)
-  return reactive({
-    ...propRefs,
-    layout: layout.layout ?? 'horizontal',
-    colon: props.colon ?? layout.colon,
-    labelAlign:
-      layout.layout === 'vertical'
-        ? props.labelAlign ?? layout.labelAlign ?? 'left'
-        : props.labelAlign ?? layout.labelAlign ?? 'right',
-    labelWrap: props.labelWrap ?? layout.labelWrap,
-    labelWidth: props.labelWidth ?? layout.labelWidth,
-    wrapperWidth: props.wrapperWidth ?? layout.wrapperWidth,
-    labelCol: props.labelCol ?? layout.labelCol,
-    wrapperCol: props.wrapperCol ?? layout.wrapperCol,
-    wrapperAlign: props.wrapperAlign ?? layout.wrapperAlign,
-    wrapperWrap: props.wrapperWrap ?? layout.wrapperWrap,
-    fullness: props.fullness ?? layout.fullness,
-    size: props.size ?? layout.size,
-    asterisk: props.asterisk,
-    feedbackIcon: props.feedbackIcon,
-    feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
+const useOverflow = (containerRef: Ref<HTMLElement>) => {
+  const overflow = ref(false)
+  let resizeObserver: ResizeObserver | undefined
+
+  const cleanup = () => {
+    if (resizeObserver) {
+      resizeObserver.unobserve(containerRef.value)
+      resizeObserver = null
+    }
+  }
+
+  const observer = () => {
+    const container = containerRef.value
+    const content = container.querySelector('label')
+    const containerWidth = container.getBoundingClientRect().width
+    const contentWidth = content.getBoundingClientRect().width
+
+    if (containerWidth !== 0) {
+      if (contentWidth > containerWidth) {
+        overflow.value = true
+      } else {
+        overflow.value = false
+      }
+    }
+  }
+
+  const stopWatch = watch(
+    () => containerRef.value,
+    (el) => {
+      cleanup()
+
+      if (el) {
+        resizeObserver = new ResizeObserver(observer)
+        resizeObserver.observe(el)
+      }
+    },
+    { immediate: true, flush: 'post' }
+  )
+
+  onBeforeUnmount(() => {
+    cleanup()
+    stopWatch()
   })
+
+  return overflow
 }
 
 const ICON_MAP = {
@@ -88,6 +112,7 @@ export const FormBaseItem = defineComponent<FormItemProps>({
     required: {},
     label: {},
     colon: { default: true },
+    layout: {},
     tooltip: {},
     labelStyle: {},
     labelAlign: {},
@@ -106,62 +131,84 @@ export const FormBaseItem = defineComponent<FormItemProps>({
     extra: {},
     feedbackText: {},
     feedbackLayout: {},
+    tooltipLayout: {},
     feedbackStatus: {},
     feedbackIcon: {},
     asterisk: {},
     gridSpan: {},
+    bordered: { default: true },
+    inset: { default: false },
   },
-  setup(props, { slots, attrs }) {
+  setup(props, { slots, attrs, refs }) {
     const active = ref(false)
-    const formLayout = useFormItemLayout(props)
-    const shallowFormLayout = useFormShallowLayout()
+    const deepLayout = useFormLayout()
+
     const prefixCls = `${stylePrefix}-form-item`
-    if (shallowFormLayout) {
-      provide(
-        FormLayoutShallowContext,
-        reduce(
-          shallowFormLayout,
-          (buf: any, _, key) => {
-            if (key === 'size') {
-              buf.size = formLayout.size
-            } else {
-              buf[key] = undefined
-            }
-            return buf
-          },
-          {
-            size: formLayout.size,
-          }
-        )
-      )
-    }
+
+    const containerRef = ref(null)
+    const overflow = useOverflow(containerRef)
+
+    onMounted(() => {
+      containerRef.value = refs.labelContainer
+    })
 
     return () => {
-      const labelStyle: any = formLayout.labelStyle || {}
-      const wrapperStyle: any = formLayout.wrapperStyle || {}
+      const {
+        label,
+        colon,
+        layout = deepLayout.layout ?? 'horizontal',
+        tooltip,
+        labelStyle = {},
+        labelWrap = deepLayout.labelWrap,
+        labelWidth = deepLayout.labelWidth,
+        wrapperWidth = deepLayout.wrapperWidth,
+        labelCol = deepLayout.labelCol,
+        wrapperCol = deepLayout.wrapperCol,
+        wrapperAlign = deepLayout.wrapperAlign,
+        wrapperWrap = deepLayout.wrapperWrap,
+        wrapperStyle = {},
+        fullness = deepLayout.fullness,
+        addonBefore,
+        addonAfter,
+        size = deepLayout.size,
+        extra,
+        feedbackText,
+        feedbackLayout = deepLayout.feedbackLayout ?? 'loose',
+        tooltipLayout = deepLayout.tooltipLayout ?? 'icon',
+        feedbackStatus,
+        feedbackIcon,
+        asterisk,
+        bordered = deepLayout.bordered,
+        inset = deepLayout.inset,
+      } = props
+      const labelAlign =
+        deepLayout.layout === 'vertical'
+          ? props.labelAlign ?? deepLayout.labelAlign ?? 'left'
+          : props.labelAlign ?? deepLayout.labelAlign ?? 'right'
+
       // 固定宽度
       let enableCol = false
-      if (formLayout.labelWidth || formLayout.wrapperWidth) {
-        if (formLayout.labelWidth) {
-          labelStyle.width = `${formLayout.labelWidth}px`
-          labelStyle.maxWidth = `${formLayout.labelWidth}px`
+      if (labelWidth || wrapperWidth) {
+        if (labelWidth) {
+          labelStyle.width = `${labelWidth}px`
+          labelStyle.maxWidth = `${labelWidth}px`
         }
-        if (formLayout.wrapperWidth) {
-          wrapperStyle.width = `${formLayout.wrapperWidth}px`
-          wrapperStyle.maxWidth = `${formLayout.wrapperWidth}px`
+        if (wrapperWidth) {
+          wrapperStyle.width = `${wrapperWidth}px`
+          wrapperStyle.maxWidth = `${wrapperWidth}px`
         }
         // 栅格模式
-      } else if (formLayout.labelCol || formLayout.wrapperCol) {
+      } else if (labelCol || wrapperCol) {
         enableCol = true
       }
 
       const formatChildren =
-        formLayout.feedbackLayout === 'popover'
+        feedbackLayout === 'popover'
           ? h(
               'el-popover',
               {
                 props: {
-                  disabled: !formLayout.feedbackText,
+                  disabled: !feedbackText,
                   placement: 'top',
                 },
               },
@@ -172,25 +219,20 @@ export const FormBaseItem = defineComponent<FormItemProps>({
                     'div',
                     {
                       class: {
-                        [`${prefixCls}-${formLayout.feedbackStatus}-help`]:
-                          !!formLayout.feedbackStatus,
+                        [`${prefixCls}-${feedbackStatus}-help`]:
+                          !!feedbackStatus,
                         [`${prefixCls}-help`]: true,
                       },
                     },
                     {
                       default: () => [
-                        formLayout.feedbackStatus &&
-                        ['error', 'success', 'warning'].includes(
-                          formLayout.feedbackStatus
-                        )
+                        feedbackStatus &&
+                        ['error', 'success', 'warning'].includes(feedbackStatus)
                           ? ICON_MAP[
-                              formLayout.feedbackStatus as
-                                | 'error'
-                                | 'success'
-                                | 'warning'
+                              feedbackStatus as 'error' | 'success' | 'warning'
                             ]()
                           : '',
-                        resolveComponent(formLayout.feedbackText),
+                        resolveComponent(feedbackText),
                       ],
                     }
                   ),
@@ -199,124 +241,151 @@ export const FormBaseItem = defineComponent<FormItemProps>({
             )
           : slots.default?.()
 
+      const renderLabelText = () => {
+        const labelChildren = h(
+          'div',
+          {
+            class: `${prefixCls}-label-content`,
+            ref: 'labelContainer',
+          },
+          {
+            default: () => [
+              asterisk &&
+                h(
+                  'span',
+                  { class: `${prefixCls}-asterisk` },
+                  { default: () => ['*'] }
+                ),
+              h('label', {}, { default: () => [resolveComponent(label)] }),
+            ],
+          }
+        )
+        const isTextTooltip = tooltip && tooltipLayout === 'text'
+        if (isTextTooltip || overflow.value) {
+          return h(
+            Tooltip,
+            {
+              props: {
+                placement: 'top',
+              },
+            },
+            {
+              default: () => [
+                labelChildren,
+                h(
+                  'div',
+                  {
+                    slot: 'content',
+                  },
+                  {
+                    default: () => [
+                      overflow.value && resolveComponent(label),
+                      isTextTooltip && resolveComponent(tooltip),
+                    ],
+                  }
+                ),
+              ],
+            }
+          )
+        } else {
+          return labelChildren
+        }
+      }
+      const renderTooltipIcon = () => {
+        if (tooltip && tooltipLayout === 'icon') {
+          return h(
+            'span',
+            {
+              class: `${prefixCls}-label-tooltip`,
+            },
+            {
+              default: () => [
+                h(
+                  Tooltip,
+                  {
+                    props: {
+                      placement: 'top',
+                    },
+                  },
+                  {
+                    default: () => [
+                      h('i', { class: 'el-icon-info' }, {}),
+                      h(
+                        'div',
+                        {
+                          class: `${prefixCls}-label-tooltip-content`,
+                          slot: 'content',
+                        },
+                        {
+                          default: () => [resolveComponent(tooltip)],
+                        }
+                      ),
+                    ],
+                  }
+                ),
+              ],
+            }
+          )
+        }
+      }
       const renderLabel =
-        formLayout.label &&
+        label &&
         h(
           'div',
           {
             class: {
               [`${prefixCls}-label`]: true,
-              [`${prefixCls}-item-col-${formLayout.labelCol}`]:
-                enableCol && !!formLayout.labelCol,
+              [`${prefixCls}-label-tooltip`]:
+                (tooltip && tooltipLayout === 'text') || overflow.value,
+              [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
             },
             style: labelStyle,
           },
           {
             default: () => [
               // label content
-              h(
-                'div',
-                {
-                  class: `${prefixCls}-label-content`,
-                },
-                {
-                  default: () => [
-                    formLayout.asterisk &&
-                      h(
-                        'span',
-                        { class: `${prefixCls}-asterisk` },
-                        { default: () => ['*'] }
-                      ),
-                    h(
-                      'label',
-                      {},
-                      { default: () => [resolveComponent(formLayout.label)] }
-                    ),
-                  ],
-                }
-              ),
+              renderLabelText(),
               // label tooltip
-              formLayout.tooltip &&
-                h(
-                  'span',
-                  {
-                    class: `${prefixCls}-label-tooltip`,
-                  },
-                  {
-                    default: () => [
-                      h(
-                        Tooltip,
-                        {
-                          props: {
-                            placement: 'top',
-                          },
-                        },
-                        {
-                          default: () => [
-                            h('i', { class: 'el-icon-info' }, {}),
-                            h(
-                              'div',
-                              {
-                                class: `${prefixCls}-label-tooltip-content`,
-                                slot: 'content',
-                              },
-                              {
-                                default: () => [
-                                  resolveComponent(formLayout.tooltip),
-                                ],
-                              }
-                            ),
-                          ],
-                        }
-                      ),
-                    ],
-                  }
-                ),
+              renderTooltipIcon(),
               // label colon
-              formLayout.label &&
+              label &&
                 h(
                   'span',
                   {
                     class: `${prefixCls}-colon`,
                   },
-                  { default: () => [formLayout.colon ? ':' : ''] }
+                  { default: () => [colon ? ':' : ''] }
                 ),
             ],
           }
         )
 
       const renderFeedback =
-        !!formLayout.feedbackText &&
-        formLayout.feedbackLayout !== 'popover' &&
-        formLayout.feedbackLayout !== 'none' &&
+        !!feedbackText &&
+        feedbackLayout !== 'popover' &&
+        feedbackLayout !== 'none' &&
         h(
           'div',
           {
             class: {
-              [`${prefixCls}-${formLayout.feedbackStatus}-help`]:
-                !!formLayout.feedbackStatus,
+              [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
               [`${prefixCls}-help`]: true,
               [`${prefixCls}-help-enter`]: true,
               [`${prefixCls}-help-enter-active`]: true,
             },
           },
-          { default: () => [resolveComponent(formLayout.feedbackText)] }
+          { default: () => [resolveComponent(feedbackText)] }
         )
 
       const renderExtra =
-        formLayout.extra &&
-        h(
-          'div',
-          { class: `${prefixCls}-extra` },
-          { default: () => [formLayout.extra] }
-        )
+        extra &&
+        h('div', { class: `${prefixCls}-extra` }, { default: () => [extra] })
       const renderContent = h(
         'div',
         {
           class: {
             [`${prefixCls}-control`]: true,
-            [`${prefixCls}-item-col-${formLayout.wrapperCol}`]:
-              enableCol && !!formLayout.wrapperCol,
+            [`${prefixCls}-item-col-${wrapperCol}`]: enableCol && !!wrapperCol,
           },
         },
         {
@@ -326,14 +395,12 @@ export const FormBaseItem = defineComponent<FormItemProps>({
               { class: `${prefixCls}-control-content` },
               {
                 default: () => [
-                  formLayout.addonBefore &&
+                  addonBefore &&
                     h(
                       'div',
                       { class: `${prefixCls}-addon-before` },
                       {
-                        default: () => [
-                          resolveComponent(formLayout.addonBefore),
-                        ],
+                        default: () => [resolveComponent(addonBefore)],
                       }
                     ),
                   h(
@@ -342,40 +409,34 @@ export const FormBaseItem = defineComponent<FormItemProps>({
                       class: {
                         [`${prefixCls}-control-content-component`]: true,
                         [`${prefixCls}-control-content-component-has-feedback-icon`]:
-                          !!formLayout.feedbackIcon,
+                          !!feedbackIcon,
                       },
                       style: wrapperStyle,
                     },
                     {
                       default: () => [
                         formatChildren,
-                        formLayout.feedbackIcon &&
+                        feedbackIcon &&
                           h(
                             'div',
                             { class: `${prefixCls}-feedback-icon` },
                             {
                               default: () => [
-                                typeof formLayout.feedbackIcon === 'string'
-                                  ? h(
-                                      'i',
-                                      { class: formLayout.feedbackIcon },
-                                      {}
-                                    )
-                                  : resolveComponent(formLayout.feedbackIcon),
+                                typeof feedbackIcon === 'string'
+                                  ? h('i', { class: feedbackIcon }, {})
+                                  : resolveComponent(feedbackIcon),
                               ],
                             }
                           ),
                       ],
                     }
                   ),
-                  formLayout.addonAfter &&
+                  addonAfter &&
                     h(
                       'div',
                       { class: `${prefixCls}-addon-after` },
                       {
-                        default: () => [
-                          resolveComponent(formLayout.addonAfter),
-                        ],
+                        default: () => [resolveComponent(addonAfter)],
                       }
                     ),
                 ],
@@ -386,37 +447,38 @@ export const FormBaseItem = defineComponent<FormItemProps>({
           ],
         }
       )
-
       return h(
         'div',
         {
           style: attrs.style as string | undefined,
           class: {
             [`${prefixCls}`]: true,
-            [`${prefixCls}-layout-${formLayout.layout}`]: true,
-            [`${prefixCls}-${formLayout.feedbackStatus}`]:
-              !!formLayout.feedbackStatus,
-            [`${prefixCls}-feedback-has-text`]: !!formLayout.feedbackText,
-            [`${prefixCls}-size-${formLayout.size}`]: !!formLayout.size,
-            [`${prefixCls}-feedback-layout-${formLayout.feedbackLayout}`]:
-              !!formLayout.feedbackLayout,
-            [`${prefixCls}-fullness`]:
-              !!formLayout.fullness || !!formLayout.feedbackIcon,
+            [`${prefixCls}-layout-${layout}`]: true,
+            [`${prefixCls}-${feedbackStatus}`]: !!feedbackStatus,
+            [`${prefixCls}-feedback-has-text`]: !!feedbackText,
+            [`${prefixCls}-size-${size}`]: !!size,
+            [`${prefixCls}-feedback-layout-${feedbackLayout}`]:
+              !!feedbackLayout,
+            [`${prefixCls}-fullness`]: !!fullness || !!inset || !!feedbackIcon,
+            [`${prefixCls}-inset`]: !!inset,
             [`${prefixCls}-active`]: active.value,
-            [`${prefixCls}-label-align-${formLayout.labelAlign}`]: true,
-            [`${prefixCls}-control-align-${formLayout.wrapperAlign}`]: true,
-            [`${prefixCls}-label-wrap`]: !!formLayout.labelWrap,
-            [`${prefixCls}-control-wrap`]: !!formLayout.wrapperWrap,
+            [`${prefixCls}-inset-active`]: !!inset && active.value,
+            [`${prefixCls}-label-align-${labelAlign}`]: true,
+            [`${prefixCls}-control-align-${wrapperAlign}`]: true,
+            [`${prefixCls}-label-wrap`]: !!labelWrap,
+            [`${prefixCls}-control-wrap`]: !!wrapperWrap,
+            [`${prefixCls}-bordered-none`]:
+              bordered === false || !!inset || !!feedbackIcon,
             [`${props.className}`]: !!props.className,
           },
           on: {
             '!focus': () => {
-              if (formLayout.feedbackIcon) {
+              if (feedbackIcon || inset) {
                 active.value = true
               }
             },
             '!blur': () => {
-              if (formLayout.feedbackIcon) {
+              if (feedbackIcon || inset) {
                 active.value = false
               }
             },

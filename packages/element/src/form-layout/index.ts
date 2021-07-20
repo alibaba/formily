@@ -24,18 +24,27 @@ export type FormLayoutProps = {
   direction?: 'rtl' | 'ltr'
   shallow?: boolean
   feedbackLayout?: 'loose' | 'terse' | 'popover'
+  tooltipLayout?: 'icon' | 'text'
+  bordered?: boolean
+  inset?: boolean
 }
 
-export const FormLayoutContext: InjectionKey<FormLayoutProps> =
-  Symbol('FormLayoutContext')
+export const FormLayoutDeepContext: InjectionKey<FormLayoutProps> = Symbol(
+  'FormLayoutDeepContext'
+)
 
 export const FormLayoutShallowContext: InjectionKey<FormLayoutProps> = Symbol(
   'FormLayoutShallowContext'
 )
 
-export const useFormLayout = () => inject(FormLayoutContext, null)
+export const useFormDeepLayout = () => inject(FormLayoutDeepContext, null)
 
 export const useFormShallowLayout = () => inject(FormLayoutShallowContext, null)
+
+export const useFormLayout = () => ({
+  ...useFormDeepLayout(),
+  ...useFormShallowLayout(),
+})
 
 export const FormLayout = defineComponent<FormLayoutProps>({
   name: 'FormLayout',
@@ -56,13 +65,30 @@ export const FormLayout = defineComponent<FormLayoutProps>({
     direction: { default: 'ltr' },
     shallow: { default: true },
     feedbackLayout: {},
+    tooltipLayout: {},
+    bordered: { default: true },
+    inset: { default: false },
   },
   setup(props, { slots, attrs }) {
-    if (props.shallow) {
-      provide(FormLayoutShallowContext, props)
-    } else {
-      provide(FormLayoutContext, props)
+    const deepLayout = useFormDeepLayout()
+
+    const newDeepLayout = {
+      ...deepLayout,
     }
+    if (!props.shallow) {
+      Object.assign(newDeepLayout, props)
+    } else {
+      if (props.size) {
+        newDeepLayout.size = props.size
+      }
+      if (props.colon) {
+        newDeepLayout.colon = props.colon
+      }
+    }
+
+    provide(FormLayoutDeepContext, newDeepLayout)
+    provide(FormLayoutShallowContext, props.shallow ? props : undefined)
+
     const formPrefixCls = `${stylePrefix}-form`
     return () => {
       const classNames = {
@@ -75,7 +101,6 @@ export const FormLayout = defineComponent<FormLayoutProps>({
         'div',
         {
           class: classNames,
-          style: attrs.style as string | undefined,
         },
         slots
       )
