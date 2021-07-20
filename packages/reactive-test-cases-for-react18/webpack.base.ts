@@ -2,11 +2,10 @@ import path from 'path'
 import fs from 'fs-extra'
 import { GlobSync } from 'glob'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
-import autoprefixer from 'autoprefixer'
 //import { getThemeVariables } from 'antd/dist/theme'
 
 const getWorkspaceAlias = () => {
-  const basePath = path.resolve(__dirname, '../../../')
+  const basePath = path.resolve(__dirname, '../../')
   const pkg = fs.readJSONSync(path.resolve(basePath, 'package.json')) || {}
   const results = {}
   const workspaces = pkg.workspaces
@@ -32,7 +31,7 @@ export default {
     children: false,
   },
   entry: {
-    playground: path.resolve(__dirname, './main'),
+    index: path.resolve(__dirname, './src/index'),
   },
   output: {
     path: path.resolve(__dirname, '../build'),
@@ -52,7 +51,7 @@ export default {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(tsx?|jsx?)$/,
         use: [
           {
             loader: require.resolve('ts-loader'),
@@ -73,9 +72,6 @@ export default {
           { loader: 'css-loader' },
           {
             loader: 'postcss-loader',
-            options: {
-              plugins: () => autoprefixer(),
-            },
           },
           {
             loader: 'less-loader',

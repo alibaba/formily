@@ -26,6 +26,5 @@ package.zip
 .cjsescache
 doc-site
 .lerna-changelog
-public
 .history
 .lint-report.log

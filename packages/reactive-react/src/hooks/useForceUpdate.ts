@@ -32,7 +32,9 @@ export function useForceUpdate() {
   RENDER_COUNT.value++
 
   useDidUpdate(() => {
-    RENDER_COUNT.value--
+    if (RENDER_COUNT.value > 0) {
+      RENDER_COUNT.value--
+    }
     if (RENDER_COUNT.value === 0) {
       RENDER_QUEUE.forEach((update) => {
         RENDER_QUEUE.delete(update)
