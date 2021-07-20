@@ -29,6 +29,7 @@
     "test:vue:watch": "npm run test:vue --- --watch",
     "test:reactive-vue": "jest packages/reactive-vue",
     "test:reactive-vue:watch": "npm run test:reactive-vue --- --watch",
+    "test:antd": "jest packages/antd",
     "test:watch": "jest --watch",
     "test:prod": "jest --coverage --silent",
     "preversion": "npm run build && npm run lint && npm run test",
