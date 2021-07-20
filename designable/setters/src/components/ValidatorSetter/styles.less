@@ -1,0 +1,34 @@
+@import '~antd/lib/style/themes/default.less';
+
+.dn-validator-setter {
+  &-content {
+    width: 100%;
+    .ant-formily-array-items-item-inner {
+      .ant-space {
+        display: flex;
+        .ant-space-item:nth-child(2) {
+          flex-grow: 1;
+        }
+      }
+    }
+  }
+  &-modal {
+    &--form {
+      margin: 0 auto;
+      width: max-content;
+      &-wrapper {
+        min-height: 400px;
+        max-height: calc(100vh - 240px);
+        overflow: auto;
+      }
+    }
+    .ant-formily-array-items-item-inner {
+      .ant-space {
+        display: flex;
+        .ant-space-item:nth-child(2) {
+          flex-grow: 1;
+        }
+      }
+    }
+  }
+}
