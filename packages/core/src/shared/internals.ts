@@ -386,6 +386,7 @@ export const cleanupArrayChildren = (field: ArrayField, start: number) => {
 }
 
 export const cleanupObjectChildren = (field: ObjectField, keys: string[]) => {
+  if (keys.length === 0) return
   const address = field.address.toString()
   const fields = field.form.fields
 
