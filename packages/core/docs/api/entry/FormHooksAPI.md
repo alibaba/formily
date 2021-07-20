@@ -6,11 +6,11 @@ order: 3
 
 ## createEffectHook
 
-#### 描述
+#### Description
 
-创建自定义钩子监听器
+Create a custom hook listener
 
-#### 签名
+#### Signature
 
 ```ts
 interface createEffectHook {
@@ -19,13 +19,13 @@ interface createEffectHook {
     callback?: (
       payload: any,
       form: Form,
-      ...ctx: any[] //用户注入的上下文
-    ) => (...args: any[]) => void //高阶回调用于处理监听器的封装，帮助用户实现参数定制能力
+      ...ctx: any[] //user-injected context
+    ) => (...args: any[]) => void //High-level callbacks are used to process the encapsulation of the listener and help users achieve parameter customization capabilities
   )
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -46,7 +46,7 @@ export default () => {
       createForm({
         effects() {
           onCustomEvent((payload, form) => {
-            setResponse(payload + ' Form: ' + form.id)
+            setResponse(payload + 'Form:' + form.id)
           })
         },
       }),
@@ -68,11 +68,11 @@ export default () => {
 
 ## createEffectContext
 
-#### 描述
+#### Description
 
-在 effects 函数中如果我们抽象了很多细粒度的 hooks，想要在 hooks 里读到顶层上下文数据就需要层层传递，这样明显是很低效的事情，所以 formily 提供了 createEffectContext 帮助用户快速获取上下文数据
+In the effects function, if we abstract a lot of fine-grained hooks, we need to pass it layer by layer if we want to read the top-level context data in hooks, which is obviously very inefficient, so formily provides createEffectContext to help users quickly obtain context data
 
-#### 签名
+#### Signature
 
 ```ts
 interface createEffectContext<T> {
@@ -83,7 +83,7 @@ interface createEffectContext<T> {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -95,7 +95,7 @@ const { provide, consume } = createEffectContext()
 const useMyHook = () => {
   const setResponse = consume()
   onFormSubmit(() => {
-    setResponse('上下文通讯成功')
+    setResponse('Context communication succeeded')
   })
 }
 
@@ -118,7 +118,7 @@ export default () => {
           form.submit()
         }}
       >
-        提交
+        submit
       </button>
     </ActionResponse>
   )
@@ -127,11 +127,11 @@ export default () => {
 
 ## useEffectForm
 
-#### 描述
+#### Description
 
-useEffectForm 其实是 EffectContext 的便利用法，因为大多数场景用户都会读取 Form 实例，所以就不需要手动定义一个 EffectFormContext
+useEffectForm is actually a convenient usage of EffectContext, because most scene users will read Form instances, so there is no need to manually define an EffectFormContext
 
-#### 签名
+#### Signature
 
 ```ts
 interface useEffectForm {
@@ -139,7 +139,7 @@ interface useEffectForm {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -151,12 +151,12 @@ const { provide, consume } = createEffectContext()
 const useMyHook = () => {
   const form = useEffectForm()
   const setResponse = consume()
-  setResponse('通讯成功：' + form.id)
+  setResponse('Communication successful:' + form.id)
 }
 
 export default () => {
   const [response, setResponse] = useState('')
-  const form = useMemo(
+  useMemo(
     () =>
       createForm({
         effects() {

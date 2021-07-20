@@ -1524,9 +1524,154 @@ export default () => (
 
 ### 循环联动
 
-被动模式实现循环联动会有问题，因为被动模式感知到的数据变化会引发链式联动
+#### Effects 用例
 
-链式联动就会出现无法打破循环的互斥联动，所以推荐用主动模式实现循环联动
+```tsx
+import React from 'react'
+import { createForm, onFieldReact } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, NumberPicker } from '@formily/antd'
+
+const form = createForm({
+  effects() {
+    onFieldReact('total', (field) => {
+      const count = field.query('count').value()
+      const price = field.query('price').value()
+      if (count !== undefined && price !== undefined) {
+        field.value = count * price
+      }
+    })
+    onFieldReact('price', (field) => {
+      const total = field.query('total').value()
+      const count = field.query('count').value()
+      if (total !== undefined && count > 0) {
+        field.value = total / count
+      }
+    })
+    onFieldReact('count', (field) => {
+      const total = field.query('total').value()
+      const price = field.query('price').value()
+      if (total !== undefined && price > 0) {
+        field.value = total / price
+      }
+    })
+  },
+})
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    NumberPicker,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.Number
+        name="total"
+        title="总价"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+      <SchemaField.Number
+        name="count"
+        title="数量"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+      <SchemaField.Number
+        name="price"
+        title="单价"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
+
+#### SchemaReactions 用例
+
+```tsx
+import React from 'react'
+import { createForm } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, NumberPicker } from '@formily/antd'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    NumberPicker,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.Number
+        name="total"
+        title="总价"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['.count', '.price'],
+          fulfill: {
+            state: {
+              value:
+                '{{$deps[0] !== undefined && $deps[1] !== undefined ? $deps[0] * $deps[1] : $self.value}}',
+            },
+          },
+        }}
+      />
+      <SchemaField.Number
+        name="count"
+        title="数量"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['.total', '.price'],
+          fulfill: {
+            state: {
+              value: '{{ $deps[1] > 0 ? $deps[0] / $deps[1] : $self.value}}',
+            },
+          },
+        }}
+      />
+      <SchemaField.Number
+        name="price"
+        title="单价"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['.total', '.count'],
+          fulfill: {
+            state: {
+              value: '{{ $deps[1] > 0 ? $deps[0] / $deps[1] : $self.value}}',
+            },
+          },
+        }}
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
 
 ### 自身联动
 
@@ -1719,7 +1864,7 @@ const SchemaField = createSchemaField({
   scope: {
     asyncVisible(field) {
       const select = field.query('select').take()
-      if(!select) return
+      if (!select) return
       const selectValue = select.value
       select.loading = true
       if (selectValue) {

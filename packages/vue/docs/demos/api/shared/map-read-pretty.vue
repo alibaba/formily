@@ -21,7 +21,7 @@ import {
   Field,
   connect,
   mapProps,
-  mapReadPretty
+  mapReadPretty,
 } from '@formily/vue'
 import 'ant-design-vue/dist/antd.css'
 
@@ -50,9 +50,9 @@ const Input = connect(
   mapReadPretty({
     props: ['value'],
     // you need import "h" from "vue" in vue3
-    render (h) {
+    render(h) {
       return h('div', [this.value])
-    }
+    },
   })
 )
 
@@ -60,15 +60,15 @@ export default {
   components: {
     FormProvider,
     Field,
-    Form
+    Form,
   },
   data() {
     const form = createForm({ validateFirst: true, readPretty: true })
     return {
       FormItem,
       Input,
-      form
+      form,
     }
-  }
+  },
 }
 </script>

@@ -1,8 +1,8 @@
 # Password
 
-> 密码输入框
+> Password input box
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -31,7 +31,7 @@ export default () => (
       <SchemaField>
         <SchemaField.String
           name="input"
-          title="输入框"
+          title="input box"
           x-decorator="FormItem"
           x-component="Password"
           required
@@ -41,14 +41,14 @@ export default () => (
         />
       </SchemaField>
       <FormButtonGroup.FormItem>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormLayout>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -75,7 +75,7 @@ const schema = {
   properties: {
     input: {
       type: 'string',
-      title: '输入框',
+      title: 'input box',
       'x-decorator': 'FormItem',
       'x-component': 'Password',
       'x-component-props': {
@@ -90,14 +90,14 @@ export default () => (
     <FormLayout labelCol={6} wrapperCol={10}>
       <SchemaField schema={schema} />
       <FormButtonGroup.FormItem>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormLayout>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -117,7 +117,7 @@ export default () => (
     <FormLayout labelCol={6} wrapperCol={10}>
       <Field
         name="input"
-        title="输入框"
+        title="input box"
         required
         decorator={[FormItem]}
         component={[
@@ -128,7 +128,7 @@ export default () => (
         ]}
       />
       <FormButtonGroup.FormItem>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormLayout>
   </FormProvider>
@@ -137,4 +137,4 @@ export default () => (
 
 ## API
 
-参考 https://fusion.design/pc/component/basic/input
+Reference https://fusion.design/pc/component/basic/input

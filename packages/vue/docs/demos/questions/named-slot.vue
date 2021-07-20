@@ -12,15 +12,15 @@ import 'ant-design-vue/dist/antd.css'
 
 const { SchemaField } = createSchemaField({
   components: {
-    Input
+    Input,
   },
 })
 
 const PrefixIcon = {
   functional: true,
-  render (h) {
+  render(h) {
     return h(Icon, { props: { type: 'user' } })
-  }
+  },
 }
 
 const schema = {
@@ -30,9 +30,9 @@ const schema = {
       type: 'string',
       'x-component': 'Input',
       'x-content': {
-        prefix: PrefixIcon
-      }
-    }
+        prefix: PrefixIcon,
+      },
+    },
   },
 }
 
@@ -41,8 +41,8 @@ export default {
   data() {
     return {
       form: createForm(),
-      schema
+      schema,
     }
-  }
+  },
 }
 </script>

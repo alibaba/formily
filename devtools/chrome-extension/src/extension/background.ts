@@ -1,8 +1,8 @@
-var connections = {}
+let connections = {}
 
 chrome.runtime.onConnect.addListener(function (port: any) {
   if (port.name === '@formily-devtools-panel-script') {
-    var extensionListener = function (message: any) {
+    const extensionListener = function (message: any) {
       // 原始的连接事件不包含开发者工具网页的标签页标识符，
       // 所以我们需要显式发送它。
       if (message.name == 'init') {
@@ -17,8 +17,8 @@ chrome.runtime.onConnect.addListener(function (port: any) {
 
     port.onDisconnect.addListener(function (port: any) {
       port.onMessage.removeListener(extensionListener)
-      var tabs = Object.keys(connections)
-      for (var i = 0, len = tabs.length; i < len; i++) {
+      let tabs = Object.keys(connections)
+      for (let i = 0, len = tabs.length; i < len; i++) {
         if (connections[tabs[i]] == port) {
           delete connections[tabs[i]]
           break
@@ -33,14 +33,14 @@ chrome.runtime.onConnect.addListener(function (port: any) {
 chrome.runtime.onMessage.addListener(function (request: any, sender: any) {
   // 来自内容脚本的消息应该已经设置 sender.tab
   if (sender.tab) {
-    var tabId = sender.tab.id
+    let tabId = sender.tab.id
     if (tabId in connections) {
       connections[tabId].postMessage(request)
     } else {
-      console.log('连接列表中找不到该标签页。')
+      console.info('连接列表中找不到该标签页。')
     }
   } else {
-    console.log('sender.tab 未定义。')
+    console.info('sender.tab 未定义。')
   }
   return true
 })

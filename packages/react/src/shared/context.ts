@@ -1,4 +1,5 @@
 import React, { createContext } from 'react'
+import { Form, GeneralField } from '@formily/core'
 import { Schema } from '@formily/json-schema'
 import { ISchemaFieldReactFactoryOptions } from '../types'
 
@@ -10,8 +11,8 @@ const createContextCleaner = <T>(...contexts: React.Context<T>[]) => {
   }
 }
 
-export const FormContext = createContext<Formily.Core.Models.Form>(null)
-export const FieldContext = createContext<Formily.Core.Types.GeneralField>(null)
+export const FormContext = createContext<Form>(null)
+export const FieldContext = createContext<GeneralField>(null)
 export const SchemaMarkupContext = createContext<Schema>(null)
 export const SchemaContext = createContext<Schema>(null)
 export const SchemaExpressionScopeContext = createContext<any>(null)

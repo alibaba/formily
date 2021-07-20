@@ -11,4 +11,3 @@ SchemaField 支持直接传入 [JSON-Schema](/api/shared/schema) 对象渲染表
 ## 用例
 
 <dumi-previewer demoPath="api/components/schema-field-with-schema" />
-

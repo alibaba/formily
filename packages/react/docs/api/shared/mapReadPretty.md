@@ -1,10 +1,10 @@
 # mapReadPretty
 
-## 描述
+## Description
 
-因为大多数第三方组件都不支持阅读态，如果想要快速支持阅读态的话，即可使用 mapReadPretty 函数来映射一个阅读态组件
+Because most third-party components do not support the reading state, if you want to quickly support the reading state, you can use the mapReadPretty function to map a reading state component
 
-## 签名
+## Signature
 
 ```ts
 interface mapReadPretty<Target extends React.FC> {
@@ -12,7 +12,7 @@ interface mapReadPretty<Target extends React.FC> {
 }
 ```
 
-## 用例
+## Example
 
 ```tsx
 import React, { useMemo } from 'react'
@@ -26,7 +26,7 @@ import {
 } from '@formily/react'
 import { Input as AntdInput, Form } from 'antd'
 
-// FormItem UI组件
+// FormItem UI component
 const FormItem = connect(
   Form.Item,
   mapProps(

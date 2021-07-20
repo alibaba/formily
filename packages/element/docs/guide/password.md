@@ -2,9 +2,17 @@
 
 > 密码输入框
 
-## 使用案例
+## Markup Schema 案例
 
-<dumi-previewer demoPath="guide/password/base" />
+<dumi-previewer demoPath="guide/password/markup-schema" />
+
+## JSON Schema 案例
+
+<dumi-previewer demoPath="guide/password/json-schema" />
+
+## Template 案例
+
+<dumi-previewer demoPath="guide/password/template" />
 
 ## API
 

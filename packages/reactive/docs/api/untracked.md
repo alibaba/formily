@@ -1,10 +1,10 @@
 # untracked
 
-## 描述
+## Description
 
-用法与 batch 相似，在给定的 untracker 函数内部永远不会被依赖收集
+Usage is similar to batch, and will never be collected by dependencies within a given untracker function
 
-## 签名
+## Signature
 
 ```ts
 interface untracked<T extends () => any> {
@@ -12,7 +12,7 @@ interface untracked<T extends () => any> {
 }
 ```
 
-## 用例
+## Example
 
 ```ts
 import { observable, autorun, untracked } from '@formily/reactive'
@@ -22,7 +22,7 @@ const obs = observable({
 })
 
 autorun(() => {
-  console.log(untracked(() => obs.aa)) //变化时不会触发
+  console.log(untracked(() => obs.aa)) // will not trigger when changes
 })
 
 obs.aa = 22

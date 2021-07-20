@@ -17,15 +17,15 @@ Because Formily’s learning costs are still relatively high, if you want to qui
 
 ### Advanced users
 
-- Digest the core concepts carefully and have a deeper understanding of Formily. 
-- Advanced guide, mainly to learn more advanced usage methods, such as custom components, from simple custom components to super complex custom components. 
+- Digest the core concepts carefully and have a deeper understanding of Formily.
+- Advanced guide, mainly to learn more advanced usage methods, such as custom components, from simple custom components to super complex custom components.
 - Read component documents/core library documents at any time to deepen memory
 - For the details and best practices of custom component development, it is recommended to look directly at the source code of @formily/antd or @formily/next, because this is the boilerplate code and is closely related to the actual business scenario.
 
 ### Source code co-builder
 
-- Contribution guide, understand the most basic contribution posture. 
-- Read the document, if you find that the document is defective, you can submit a PR to fix it. 
+- Contribution guide, understand the most basic contribution posture.
+- Read the document, if you find that the document is defective, you can submit a PR to fix it.
 - Read the unit test to understand the implementation details corresponding to each test case. If you find that there are missing test cases, you can submit a PR.
 - Read the source code, if you find a bug in the source code, you can raise a PR.
 
@@ -40,9 +40,8 @@ If you encounter problems during the development process, it is recommended to u
 ## About the bug
 
 If you find behaviors that do not meet expectations during the development process and can be reproduced in the smallest case, you can submit an [issue](https://github.com/alibaba/formily/issues) to Formily
-It is strongly not recommended to record the problem in the issue, which will disrupt the information flow of Issue. At the same time, **be sure to bring the smallest reproducible link address when mentioning Issue**, so that developers can quickly locate the problem and fix it quickly, instead of Find bugs in a bunch of codes. 
+It is strongly not recommended to record the problem in the issue, which will disrupt the information flow of Issue. At the same time, **be sure to bring the smallest reproducible link address when mentioning Issue**, so that developers can quickly locate the problem and fix it quickly, instead of Find bugs in a bunch of codes.
 
 ## About Feature Request
 
 If during the development process you find that some of Formily's designs are not good, or can be improved better, you can submit your own ideas in the [forum](https://github.com/alibaba/formily/discussions)
-

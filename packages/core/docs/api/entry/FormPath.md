@@ -4,16 +4,16 @@ order: 5
 
 # FormPath
 
-FormPath 在 Formily 中核心是解决 2 类问题：
+The core of FormPath in Formily is to solve 2 types of problems:
 
-- 路径匹配问题
-- 数据操作问题
+- Path matching problem
+- Data manipulation issues
 
-路径匹配是要求给定的路径必须是合法的路径匹配语法，比如`*(aa,bb,cc)`。
+Path matching requires that the given path must be a valid path matching syntax, such as `*(aa,bb,cc)`.
 
-数据操作则要求给定的路径必须是合法的数据操作路径，也就是必须为`a.b.c`这样的形式，不能带`*`
+Data operation requires that the given path must be a legal data operation path, that is, it must be in the form of `a.b.c` and cannot carry `*`
 
-## 构造函数
+## Constructor
 
 ```ts
 class FormPath {
@@ -21,35 +21,35 @@ class FormPath {
 }
 ```
 
-## 属性
+## Attributes
 
-| 属性               | 描述                                                   | 类型                      | 默认值 |
-| ------------------ | ------------------------------------------------------ | ------------------------- | ------ |
-| length             | 如果路径为非匹配型路径，则可以读取路径的长度           | Number                    | `0`    |
-| entire             | 路径完整字符串，与入参数据一致                         | String                    |        |
-| segments           | 如果路径为非匹配型路径，则可以读取到完整的路径分割片段 | `Array<String \| Number>` | `[]`   |
-| isMatchPattern     | 该路径是否是匹配型路径                                 | Boolean                   |        |
-| isWildMatchPattern | 该路径是否是全通配路径，比如`a.b.*`                    | Boolean                   |        |
-| haveExcludePattern | 该路径是否存在反向匹配，比如`*(!a.b.c)`                | Boolean                   |        |
-| tree               | 解析后的 AST 树                                        | Node                      |        |
+| Property           | Description                                                                     | Type                      | Default Value |
+| ------------------ | ------------------------------------------------------------------------------- | ------------------------- | ------------- |
+| length             | If the path is a non-matching path, the length of the path can be read          | Number                    | `0`           |
+| entire             | Path complete string, consistent with the input parameter data                  | String                    |               |
+| segments           | If the path is a non-matching path, you can read the complete path segmentation | `Array<String \| Number>` | `[]`          |
+| isMatchPattern     | Is the path a matching path                                                     | Boolean                   |               |
+| isWildMatchPattern | Is the path a fully wildcarded path, such as `a.b.*`                            | Boolean                   |               |
+| haveExcludePattern | Does the path have reverse matching, such as `*(!a.b.c)`                        | Boolean                   |               |
+| tree               | Parsed AST tree                                                                 | Node                      |               |
 
 ## FormPathPattern
 
-### 签名
+### Signature
 
 ```ts
 type FormPathPattern = string | number | Array<string | number> | RegExp
 ```
 
-### 数据路径语法
+### Data path syntax
 
-#### 点路径
+#### Point path
 
-**描述**
+**description**
 
-就是我们最常用的`a.b.c`格式，用点符号来分割每个路径节点，主要用来读写数据
+It is our most commonly used `a.b.c` format, which uses dot notation to divide each path node, mainly used to read and write data
 
-**用例**
+**Example**
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -61,9 +61,9 @@ console.log(FormPath.getIn(target, 'a.b.c')) //'value'
 console.log(target) //{a:{b:{c:'value'}}}
 ```
 
-#### 下标路径
+#### Subscript path
 
-对于数组路径，都会有下标，我们的下标可以用点语法，也可以用中括号
+For array paths, there will be subscripts. Our subscripts can use dot syntax or square brackets.
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -80,13 +80,13 @@ console.log(FormPath.getIn(target, 'array.1.aa')) //111
 console.log(target) //{array:[{aa:'000'},{aa:'111'}]}
 ```
 
-#### 解构表达式
+#### Deconstruction expression
 
-解构表达式类似于 ES6 的解构语法，只是它不支持`...`解构，在前后端数据不一致的场景非常适用，它主要有几个特点：
+The deconstruction expression is similar to the ES6 deconstruction grammar, except that it does not support `...` deconstruction. It is very suitable for scenarios where the front and back data is inconsistent. It has several characteristics:
 
-- 解构表达式会作为点路径的某个节点，我们可以把它看做一个普通字符串节点，只是在数据操作时会生效，所以在匹配语法中只需要把解构表达式作为普通节点节点来匹配即可
-- 在 setIn 中使用解构路径，数据会被解构
-- 在 getIn 中使用解构路径，数据会被重组
+- The deconstruction expression will be regarded as a node of the point path, we can regard it as a normal string node, but it will take effect during data manipulation, so only the deconstruction expression needs to be matched as a normal node node in the matching grammar Can
+- Use the deconstruction path in setIn, the data will be deconstructed
+- Use the deconstruction path in getIn, the data will be reorganized
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -99,14 +99,14 @@ console.log(FormPath.getIn(target, 'parent.[aa,bb]')) //[11,22]
 console.log(FormPath.parse('parent.[aa,bb]').toString()) //parent.[aa,bb]
 ```
 
-#### 相对路径
+#### relative path
 
-相对路径语法主要是在数据型路径头部用点语法表示，对于计算数组的相邻元素非常好用，它主要有几个特点：
+The relative path syntax is mainly expressed in dot syntax at the head of the data type path. It is very useful for calculating adjacent elements of the array. It has several characteristics:
 
-- 一个点代表当前路径
-- n 个点代表往前 n-1 步
-  - 中括号中可以用下标计算表达式：`[+]`代表当前下标+1，`[-]`代表当前下标-1，`[+n]`代表当前下标+n，`[-n]`代表当前下标-n
-- 路径匹配的时候不能使用分组匹配和范围匹配，比如`*(..[+1].aa,..[+2].bb)`这样的形式
+- A dot represents the current path
+- n dots represent n-1 steps forward
+  - Subscripts can be used to calculate expressions in square brackets: `[+]` represents the current subscript +1, `[-]` represents the current subscript - 1, `[+n]` represents the current subscript +n, ` [-n]` represents the current subscript - n
+- When path matching, group matching and range matching cannot be used, such as `*(..[+1].aa,..[+2].bb)`
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -117,11 +117,11 @@ console.log(FormPath.parse('..[+].dd', 'aa.1.cc').toString()) //aa.2.dd
 console.log(FormPath.parse('..[+10].dd', 'aa.1.cc').toString()) //aa.11.dd
 ```
 
-### 匹配路径语法
+### Match path syntax
 
-#### 全匹配
+#### Full match
 
-全匹配相当于是匹配所有路径，只需要用一个`*`标识即可
+Full match is equivalent to matching all paths, only a `*` identification is required
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -131,9 +131,9 @@ console.log(FormPath.parse('*').match('aa.bb')) //true
 console.log(FormPath.parse('*').match('cc')) //true
 ```
 
-#### 局部匹配
+#### Partial match
 
-局部匹配相当于是匹配一个节点位置的所有路径，同样只需要用一个`*`标识即可
+Local matching is equivalent to matching all paths of a node position, and also only needs to use a `*` mark
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -143,9 +143,9 @@ console.log(FormPath.parse('aa.*.cc').match('aa.kk.cc')) //true
 console.log(FormPath.parse('aa.*.cc').match('aa.dd.cc')) //true
 ```
 
-#### 分组匹配
+#### Group Match
 
-分组匹配可以匹配多个路径，同时还支持嵌套，语法：`*(pattern1,pattern2,pattern3...)`
+Grouped matching can match multiple paths, and also supports nesting, syntax: `*(pattern1,pattern2,pattern3...)`
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -167,9 +167,9 @@ console.log(
 ) //true
 ```
 
-#### 反向匹配
+#### Reverse match
 
-反向匹配主要用于排除指定路径，语法：`*(!pattern1,pattern2,pattern3)`
+Reverse matching is mainly used to exclude the specified path, syntax: `*(!pattern1,pattern2,pattern3)`
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -178,9 +178,9 @@ console.log(FormPath.parse('*(!aa,bb,cc)').match('aa')) //false
 console.log(FormPath.parse('*(!aa,bb,cc)').match('kk')) //true
 ```
 
-#### 扩展匹配
+#### Extended matching
 
-扩展匹配主要用于匹配路径起始子串，语法：`pattern~`
+Extended matching is mainly used to match the starting substring of the path, syntax: `pattern~`
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -189,9 +189,9 @@ console.log(FormPath.parse('test~').match('test_111')) //true
 console.log(FormPath.parse('test~').match('test_222')) //true
 ```
 
-#### 范围匹配
+#### Range match
 
-范围匹配主要用于匹配数组索引范围，语法：`*[x:y]`，x 和 y 可以为空，代表开区间匹配
+Range matching is mainly used to match the array index range, syntax: `*[x:y]`, x and y can be empty, representing open range matching
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -204,9 +204,9 @@ console.log(FormPath.parse('aa.*[:100].bb').match('aa.3.bb')) //true
 console.log(FormPath.parse('aa.*[:100].bb').match('aa.1000.bb')) //false
 ```
 
-#### 转义匹配
+#### Escape match
 
-对于路径节点中包含关键字的，我们可以使用转义语法匹配，语法`\\`或者`[[]]`
+For path nodes that contain keywords, we can use escape syntax matching, the syntax is `\\` or `[[]]`
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -216,12 +216,12 @@ console.log(
     'aa.\\,\\*\\{\\}\\.\\(\\).bb'
   )
 ) //true
-console.log(FormPath.parse('aa.[[,*{}.()]].bb').match('aa.[[,*{}.()]].bb')) //true
+console.log(FormPath.parse('aa.[[,*{}.()]].bb').match('aa.[[,*{}.()]].bb')) // true
 ```
 
-#### 解构匹配
+#### Destructuring matching
 
-对于携带解构表达式的路径，我们匹配的话，直接匹配即可，无需转义
+For the path with deconstruction expression, if we match, we can directly match without escaping
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -229,15 +229,15 @@ import { FormPath } from '@formily/core'
 console.log(FormPath.parse('target.[aa,bb]').match('target.[aa,bb]')) //true
 ```
 
-## 方法
+## Method
 
 ### toString
 
-#### 描述
+#### Description
 
-输出路径的完整字符串，支持匹配型路径与数据操作型路径
+The complete string of the output path, supporting matching paths and data manipulation paths
 
-#### 签名
+#### Signature
 
 ```ts
 interface toString {
@@ -245,7 +245,7 @@ interface toString {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -257,11 +257,11 @@ console.log(FormPath.parse('*(aa,bb,cc)').toString()) //*(aa,bb,cc)
 
 ### toArray
 
-#### 描述
+#### Description
 
-输出路径的数组片段，仅支持数据操作型路径
+Array fragment of output path, only supports data manipulation path
 
-#### 签名
+#### Signature
 
 ```ts
 interface toArray {
@@ -269,7 +269,7 @@ interface toArray {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -281,19 +281,19 @@ console.log(FormPath.parse('*(aa,bb,cc)').toArray()) //[]
 
 ### concat
 
-#### 描述
+#### Description
 
-连接数据操作型路径
+Connection data operation path
 
-#### 签名
+#### Signature
 
 ```ts
 interface concat {
-  (...args[]: FormPathPattern[]): FormPath
+  (...args: FormPathPattern[]): FormPath
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -306,11 +306,11 @@ console.log(
 
 ### slice
 
-#### 描述
+#### Description
 
-选取数据操作路径的某个片段
+Select a segment of the data operation path
 
-#### 签名
+#### Signature
 
 ```ts
 interface slice {
@@ -318,7 +318,7 @@ interface slice {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -328,11 +328,11 @@ console.log(FormPath.parse('aa.bb.cc').slice(1).toString()) //bb.cc
 
 ### push
 
-#### 描述
+#### Description
 
-往数据操作路径推入某个片段路径
+Push a fragment path to the data operation path
 
-#### 签名
+#### Signature
 
 ```ts
 interface push {
@@ -340,7 +340,7 @@ interface push {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -350,11 +350,11 @@ console.log(FormPath.parse('aa.bb.cc').push('dd.kk').toString()) //aa.bb.cc.dd.k
 
 ### pop
 
-#### 描述
+#### Description
 
-从数据操作路径中弹出最后一个 key
+Pop the last key from the data operation path
 
-#### 签名
+#### Signature
 
 ```ts
 interface pop {
@@ -362,7 +362,7 @@ interface pop {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -372,11 +372,11 @@ console.log(FormPath.parse('aa.bb.cc').pop().toString()) //aa.bb
 
 ### splice
 
-#### 描述
+#### Description
 
-对数据操作路径做 splice 操作
+Splice the data operation path
 
-#### 签名
+#### Signature
 
 ```ts
 interface splice {
@@ -388,7 +388,7 @@ interface splice {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -400,11 +400,11 @@ console.log(FormPath.parse('aa.bb.cc').splice(2, 0, ['kk', 'mm']).toString()) //
 
 ### forEach
 
-#### 描述
+#### Description
 
-遍历数据操作路径
+Traverse the data operation path
 
-#### 签名
+#### Signature
 
 ```ts
 interface forEach {
@@ -412,7 +412,7 @@ interface forEach {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -428,11 +428,11 @@ console.log(keys) //['aa','bb','cc']
 
 ### map
 
-#### 描述
+#### Description
 
-循环映射数据操作路径
+Loop mapping data operation path
 
-#### 签名
+#### Signature
 
 ```ts
 interface map {
@@ -440,7 +440,7 @@ interface map {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -454,11 +454,11 @@ console.log(
 
 ### reduce
 
-#### 描述
+#### Description
 
-reduce 方法法对路径中的每个元素执行一个由您提供的 reducer 函数(升序执行)，将其结果汇总为单个返回值。
+The reduce method executes a reducer function (executed in ascending order) provided by you on each element in the path, and aggregates the results into a single return value.
 
-#### 签名
+#### Signature
 
 ```ts
 interface reduce<T> {
@@ -467,7 +467,7 @@ interface reduce<T> {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -481,11 +481,11 @@ console.log(
 
 ### parent
 
-#### 描述
+#### Description
 
-获取当前数据操作路径的父级路径
+Get the parent path of the current data operation path
 
-#### 签名
+#### Signature
 
 ```ts
 interface parent {
@@ -493,7 +493,7 @@ interface parent {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -503,11 +503,11 @@ console.log(FormPath.parse('aa.bb.cc').parent().toString()) //aa.bb
 
 ### includes
 
-#### 描述
+#### Description
 
-用于判断给定数据操作路径是否为当前数据操作路径的子路径
+Used to determine whether a given data operation path is a subpath of the current data operation path
 
-#### 签名
+#### Signature
 
 ```ts
 interface includes {
@@ -515,7 +515,7 @@ interface includes {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -527,11 +527,11 @@ console.log(FormPath.parse('aa.bb.cc').includes('cc.bb')) //false
 
 ### transform
 
-#### 描述
+#### Description
 
-基于正则提取数据做路径拼装
+Based on regular extraction data to do path assembly
 
-#### 签名
+#### Signature
 
 ```ts
 interface transform<T> {
@@ -539,7 +539,7 @@ interface transform<T> {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -554,11 +554,11 @@ console.log(
 
 ### match
 
-#### 描述
+#### Description
 
-使用路径匹配语法匹配当前路径
+Use path matching syntax to match the current path
 
-#### 签名
+#### Signature
 
 ```ts
 interface match {
@@ -566,7 +566,7 @@ interface match {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -576,11 +576,11 @@ console.log(FormPath.parse('aa.1.cc').match('aa.*.cc')) //true
 
 ### matchAliasGroup
 
-#### 描述
+#### Description
 
-别名组匹配，在 formily 中主要用来匹配 address 和 path
+Alias group matching, mainly used to match address and path in formily
 
-#### 签名
+#### Signature
 
 ```ts
 interface matchAliasGroup {
@@ -588,7 +588,7 @@ interface matchAliasGroup {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -598,11 +598,11 @@ console.log(FormPath.parse('aa.bb.cc').matchAliasGroup('aa.bb.cc', 'aa.cc')) //t
 
 ### existIn
 
-#### 描述
+#### Description
 
-基于当前路径判断指定数据是否存在
+Determine whether the specified data exists based on the current path
 
-#### 签名
+#### Signature
 
 ```ts
 interface existIn {
@@ -610,7 +610,7 @@ interface existIn {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -620,11 +620,11 @@ console.log(FormPath.parse('aa.bb.cc').existIn({})) //false
 
 ### getIn
 
-#### 描述
+#### Description
 
-基于当前路径获取指定数据
+Obtain the specified data based on the current path
 
-#### 签名
+#### Signature
 
 ```ts
 interface getIn {
@@ -632,7 +632,7 @@ interface getIn {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -642,11 +642,11 @@ console.log(FormPath.parse('aa.bb.cc').getIn({ aa: { bb: { cc: 'value' } } })) /
 
 ### setIn
 
-#### 描述
+#### Description
 
-基于当前路径更新指定数据
+Update the specified data based on the current path
 
-#### 签名
+#### Signature
 
 ```ts
 interface setIn {
@@ -654,7 +654,7 @@ interface setIn {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -668,11 +668,11 @@ console.log(FormPath.parse('aa.bb.cc').getIn(target)) //value
 
 ### deleteIn
 
-#### 描述
+#### Description
 
-基于当前路径删除指定数据
+Delete the specified data based on the current path
 
-#### 签名
+#### Signature
 
 ```ts
 interface deleteIn {
@@ -680,7 +680,7 @@ interface deleteIn {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -699,11 +699,11 @@ console.log(FormPath.parse('aa.bb.cc').getIn(target)) //undefined
 
 ### ensureIn
 
-#### 描述
+#### Description
 
-确保某个路径下必须有数据，如果没有则创建数据
+Ensure that there must be data under a certain path, if not, create data
 
-#### 签名
+#### Signature
 
 ```ts
 interface ensureIn {
@@ -711,7 +711,7 @@ interface ensureIn {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -723,15 +723,15 @@ FormPath.parse('aa.bb.cc').ensureIn(target, 'value')
 console.log(FormPath.parse('aa.bb.cc').getIn(target)) //value
 ```
 
-## 静态方法
+## Static method
 
 ### match
 
-#### 描述
+#### Description
 
-基于匹配型路径生成一个路径匹配器
+Generate a path matcher based on matching paths
 
-#### 签名
+#### Signature
 
 ```ts
 interface match {
@@ -739,7 +739,7 @@ interface match {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -749,11 +749,11 @@ console.log(FormPath.match('aa.*.cc')('aa.bb.cc')) // true
 
 ### transform
 
-#### 描述
+#### Description
 
-正则转换路径
+Regular conversion path
 
-#### 签名
+#### Signature
 
 ```ts
 interface transform<T> {
@@ -765,7 +765,7 @@ interface transform<T> {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -781,11 +781,11 @@ console.log(
 
 ### parse
 
-#### 描述
+#### Description
 
-解析路径
+Resolve path
 
-#### 签名
+#### Signature
 
 ```ts
 interface parse {
@@ -793,7 +793,7 @@ interface parse {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -803,9 +803,9 @@ console.log(FormPath.parse('aa.0.bb'))
 
 ### getIn
 
-基于路径获取数据
+Get data based on path
 
-#### 签名
+#### Signature
 
 ```ts
 interface getIn {
@@ -813,7 +813,7 @@ interface getIn {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -823,9 +823,9 @@ console.log(FormPath.getIn({ aa: [{ bb: 'value' }] }, 'aa.0.bb'))
 
 ### setIn
 
-基于路径更新数据
+Update data based on path
 
-#### 签名
+#### Signature
 
 ```ts
 interface setIn {
@@ -833,7 +833,7 @@ interface setIn {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -847,9 +847,9 @@ console.log(target) //{aa:{bb:{cc:'value'}}}
 
 ### deleteIn
 
-基于路径删除数据
+Delete data based on path
 
-#### 签名
+#### Signature
 
 ```ts
 interface deleteIn {
@@ -857,7 +857,7 @@ interface deleteIn {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -877,11 +877,11 @@ console.log(target) //{aa:{bb:{}}}
 
 ### existIn
 
-#### 描述
+#### Description
 
-判断指定路径是否存在数据
+Determine whether there is data in the specified path
 
-#### 签名
+#### Signature
 
 ```ts
 interface existIn {
@@ -889,7 +889,7 @@ interface existIn {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'
@@ -908,11 +908,11 @@ console.log(FormPath.existIn(target, 'aa.bb.kk')) //false
 
 ### ensureIn
 
-#### 描述
+#### Description
 
-确保某个路径下必须有数据，如果没有则创建数据
+Ensure that there must be data under a certain path, if not, create data
 
-#### 签名
+#### Signature
 
 ```ts
 interface ensureIn {
@@ -920,7 +920,7 @@ interface ensureIn {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { FormPath } from '@formily/core'

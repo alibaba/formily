@@ -8,7 +8,7 @@
 
 ```ts
 interface IComponentMapper<T extends Vue.Component> {
-  (target: T):  Vue.Component
+  (target: T): Vue.Component
 }
 interface connect<T extends Vue.Component> {
   (target: T, ...args: IComponentMapper<T>[]): Vue.Component

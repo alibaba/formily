@@ -4,87 +4,87 @@ order: 1
 
 # Field
 
-调用[createField](/api/models/form#createfield)所返回的 Field 模型。
+Call the Field model returned by [createField](/api/models/form#createfield).
 
-以下会列出所有模型属性，如果该属性是可写的，那么我们可以直接引用是修改该属性，@formily/reactive 便会响应从而触发 UI 更新。
+All model attributes are listed below. If the attribute is writable, then we can directly refer to it to modify the attribute, and @formily/reactive will respond to trigger the UI update.
 
-## 属性
+## Attributes
 
-| 属性           | 描述                 | 类型                                        | 是否只读 | 默认值       |
-| -------------- | -------------------- | ------------------------------------------- | -------- | ------------ |
-| initialized    | 字段是否已被初始化   | Boolean                                     | 否       | `false`      |
-| mounted        | 字段是否已挂载       | Boolean                                     | 否       | `false`      |
-| unmounted      | 字段是否已卸载       | Boolean                                     | 否       | `false`      |
-| address        | 字段节点路径         | [FormPath](/api/entry/form-path)            | 是       |              |
-| path           | 字段数据路径         | [FormPath](/api/entry/form-path)            | 是       |              |
-| title          | 字段标题             | [FieldMessage](#fieldmessage)               | 否       | `""`         |
-| description    | 字段描述             | [FieldMessage](#fieldmessage)               | 否       | `""`         |
-| loading        | 字段加载状态         | Boolean                                     | 否       | `false`      |
-| validating     | 字段是否正在校验     | Boolean                                     | 否       | `false`      |
-| modified       | 字段是否被手动修改过 | Boolean                                     | 否       | `false`      |
-| active         | 字段是否处于激活态   | Boolean                                     | 否       | `false`      |
-| visited        | 字段是否被浏览过     | Boolean                                     | 否       | `false`      |
-| inputValue     | 字段输入值           | Any                                         | 否       | `null`       |
-| inputValues    | 字段输入值集合       | Array                                       | 否       | `[]`         |
-| dataSource     | 字段数据源           | Array                                       | 否       | `[]`         |
-| validator      | 字段校验器           | [FieldValidator](#fieldvalidator)           | 否       | `null`       |
-| decorator      | 字段装饰器           | Any[]                                       | 否       | `null`       |
-| component      | 字段组件             | Any[]                                       | 否       | `null`       |
-| feedbacks      | 字段反馈信息         | [IFieldFeedback](#ifieldfeedback)[]         | 否       | `[]`         |
-| parent         | 父级字段             | [GeneralField](#generalfield)               | 是       | `null`       |
-| errors         | 字段错误消息         | [FieldMessage](#fieldmessage)[]             | 否       | `[]`         |
-| warnings       | 字段警告消息         | [FieldMessage](#fieldmessage)[]             | 否       | `[]`         |
-| successes      | 字段成功消息         | [FieldMessage](#fieldmessage)[]             | 否       | `[]`         |
-| valid          | 字段是否合法         | Boolean                                     | 是       | `true`       |
-| invalid        | 字段是否非法         | Boolean                                     | 是       | `true`       |
-| value          | 字段值               | Any                                         | 否       |              |
-| initialValue   | 字段默认值           | Any                                         | 否       |              |
-| display        | 字段展示状态         | [FieldDisplayTypes](#fielddisplaytypes)     | 否       | `"visible"`  |
-| pattern        | 字段交互模式         | [FieldPatternTypes](#fieldpatterntypes)     | 否       | `"editable"` |
-| required       | 字段是否必填         | Boolean                                     | 否       | `false`      |
-| hidden         | 字段是否隐藏         | Boolean                                     | 否       | `false`      |
-| visible        | 字段是否显示         | Boolean                                     | 否       | `true`       |
-| disabled       | 字段是否禁用         | Boolean                                     | 否       | `false`      |
-| readOnly       | 字段是否只读         | Boolean                                     | 否       | `false`      |
-| readPretty     | 字段是否为阅读态     | Boolean                                     | 否       | `false`      |
-| editable       | 字段是可编辑         | Boolean                                     | 否       | `true`       |
-| validateStatus | 字段校验状态         | [FieldValidateStatus](#fieldvalidatestatus) | 是       | `null`       |
+| Property       | Description                                  | Type                                        | Read-only or not | Default value |
+| -------------- | -------------------------------------------- | ------------------------------------------- | ---------------- | ------------- |
+| initialized    | Has the field been initialized               | Boolean                                     | No               | `false`       |
+| mounted        | Is the field mounted                         | Boolean                                     | No               | `false`       |
+| unmounted      | Is the field unmounted                       | Boolean                                     | No               | `false`       |
+| address        | Field node path                              | [FormPath](/api/entry/form-path)            | Yes              |               |
+| path           | Field data path                              | [FormPath](/api/entry/form-path)            | Yes              |               |
+| title          | Field Title                                  | [FieldMessage](#fieldmessage)               | No               | `""`          |
+| description    | Field description                            | [FieldMessage](#fieldmessage)               | No               | `""`          |
+| loading        | Field loading status                         | Boolean                                     | No               | `false`       |
+| validating     | Is the field being validated                 | Boolean                                     | No               | `false`       |
+| modified       | Whether the field has been manually modified | Boolean                                     | No               | `false`       |
+| active         | Is the field active                          | Boolean                                     | No               | `false`       |
+| visited        | Whether the field has been visited           | Boolean                                     | No               | `false`       |
+| inputValue     | Field input value                            | Any                                         | No               | `null`        |
+| inputValues    | Field input value collection                 | Array                                       | No               | `[]`          |
+| dataSource     | Field data source                            | Array                                       | No               | `[]`          |
+| validator      | Field validator                              | [FieldValidator](#fieldvalidator)           | No               | `null`        |
+| decorator      | field decorator                              | Any[]                                       | No               | `null`        |
+| component      | Field component                              | Any[]                                       | No               | `null`        |
+| feedbacks      | Field feedback information                   | [IFieldFeedback](#ifieldfeedback)[]         | No               | `[]`          |
+| parent         | Parent field                                 | [GeneralField](#generalfield)               | yes              | `null`        |
+| errors         | Field error message                          | [FieldMessage](#fieldmessage)[]             | No               | `[]`          |
+| warnings       | Field warning message                        | [FieldMessage](#fieldmessage)[]             | No               | `[]`          |
+| successes      | Field success message                        | [FieldMessage](#fieldmessage)[]             | No               | `[]`          |
+| valid          | Is the field valid                           | Boolean                                     | Yes              | `true`        |
+| invalid        | Is the field illegal                         | Boolean                                     | Yes              | `true`        |
+| value          | Field value                                  | Any                                         | No               |               |
+| initialValue   | Field default value                          | Any                                         | No               |               |
+| display        | Field display status                         | [FieldDisplayTypes](#fielddisplaytypes)     | No               | `"visible"`   |
+| pattern        | Field interaction mode                       | [FieldPatternTypes](#fieldpatterntypes)     | No               | `"editable"`  |
+| required       | Is the field required                        | Boolean                                     | No               | `false`       |
+| hidden         | Whether the field is hidden                  | Boolean                                     | No               | `false`       |
+| visible        | Whether the field is displayed               | Boolean                                     | No               | `true`        |
+| disabled       | Whether the field is disabled                | Boolean                                     | No               | `false`       |
+| readOnly       | Is the field read-only                       | Boolean                                     | No               | `false`       |
+| readPretty     | Whether the field is in the reading state    | Boolean                                     | No               | `false`       |
+| editable       | Field is editable                            | Boolean                                     | No               | `true`        |
+| validateStatus | Field validation status                      | [FieldValidateStatus](#fieldvalidatestatus) | yes              | `null`        |
 
-#### 详细解释
+#### explain in detail
 
 **active**
 
-触发 onFocus 为 true，触发 onBlur 为 false
+Trigger onFocus is true, trigger onBlur is false
 
 **visited**
 
-触发过 onFocus 则永远为 true
+Triggered onFocus will always be true
 
 **inputValue**
 
-触发 onInput 收集到的值
+Trigger the value collected by onInput
 
 **inputValues**
 
-触发 onInput 收集到的多参值
+Trigger the multi-parameter values collected by onInput
 
 **hidden**
 
-为 true 时是 display 为 hidden，为 false 时是 display 为 visible
+When true, display is hidden, when false, display is visible
 
 **visible**
 
-为 true 时是 display 为 visible，为 false 时是 display 为 none
+When true, display is visible, when false, display is none
 
-## 方法
+## Method
 
 ### setTitle
 
-#### 描述
+#### Description
 
-设置字段标题
+Set field title
 
-#### 签名
+#### Signature
 
 ```ts
 interface setTitle {
@@ -92,15 +92,15 @@ interface setTitle {
 }
 ```
 
-FieldMessage 参考 [FieldMessage](#fieldmessage)
+FieldMessage Reference [FieldMessage](#fieldmessage)
 
 ### setDescription
 
-#### 描述
+#### Description
 
-设置字段描述信息
+Set field description information
 
-#### 签名
+#### Signature
 
 ```ts
 interface setDescription {
@@ -108,15 +108,15 @@ interface setDescription {
 }
 ```
 
-FieldMessage 参考 [FieldMessage](#fieldmessage)
+FieldMessage Reference [FieldMessage](#fieldmessage)
 
 ### setDataSource
 
-#### 描述
+#### Description
 
-设置字段数据源
+Set field data source
 
-#### 签名
+#### Signature
 
 ```ts
 interface setDataSource {
@@ -124,15 +124,15 @@ interface setDataSource {
 }
 ```
 
-FieldDataSource 参考 [FieldDataSource](#fielddatasource)
+FieldDataSource Reference [FieldDataSource](#fielddatasource)
 
 ### setFeedback
 
-#### 描述
+#### Description
 
-设置字段消息反馈
+Set field message feedback
 
-#### 签名
+#### Signature
 
 ```ts
 interface setFeedback {
@@ -140,15 +140,15 @@ interface setFeedback {
 }
 ```
 
-IFieldFeedback 参考 [IFieldFeedback](#ifieldfeedback)
+IFieldFeedback Reference [IFieldFeedback](#ifieldfeedback)
 
 ### setErrors
 
-#### 描述
+#### Description
 
-设置字段错误消息，这里是以 EffectError 为 code 的 feedback 更新，主要是防止污染校验器结果，如果希望强制覆盖，则可以使用 setFeedback
+Set the field error message, here is a feedback update with EffectError as the code, mainly to prevent pollution of the checker result, if you want to force overwrite, you can use setFeedback
 
-#### 签名
+#### Signature
 
 ```ts
 interface setErrors {
@@ -158,11 +158,11 @@ interface setErrors {
 
 ### setWarnings
 
-#### 描述
+#### Description
 
-设置字段警告信息，这里是以 EffectWarning 为 code 的 feedback 更新，主要是防止污染校验器结果，如果希望强制覆盖，则可以使用 setFeedback
+Set the field warning information, here is a feedback update with EffectWarning as the code, mainly to prevent pollution of the checker result, if you want to force overwrite, you can use setFeedback
 
-#### 签名
+#### Signature
 
 ```ts
 interface setWarning {
@@ -172,11 +172,11 @@ interface setWarning {
 
 ### setSuccesses
 
-#### 描述
+#### Description
 
-设置字段成功信息，这里是以 EffectSuccess 为 code 的 feedback 更新，主要是防止污染校验器结果，如果希望强制覆盖，则可以使用 setFeedback
+Set the field success information, here is a feedback update with EffectSuccess as the code, mainly to prevent pollution of the checker result, if you want to force overwrite, you can use setFeedback
 
-#### 签名
+#### Signature
 
 ```ts
 interface setSuccesses {
@@ -186,11 +186,11 @@ interface setSuccesses {
 
 ### setValidator
 
-#### 描述
+#### Description
 
-设置字段校验器
+Set field validator
 
-#### 签名
+#### Signature
 
 ```ts
 interface setValidator {
@@ -198,15 +198,15 @@ interface setValidator {
 }
 ```
 
-FieldValidator 参考 [FieldValidator](#fieldvalidator)
+FieldValidator Reference [FieldValidator](#fieldvalidator)
 
 ### setRequired
 
-#### 描述
+#### Description
 
-设置字段是否必填
+Whether the setting field is required
 
-#### 签名
+#### Signature
 
 ```ts
 interface setRequired {
@@ -216,11 +216,11 @@ interface setRequired {
 
 ### setValue
 
-#### 描述
+#### Description
 
-设置字段值
+Set field value
 
-#### 签名
+#### Signature
 
 ```ts
 interface setValue {
@@ -228,15 +228,15 @@ interface setValue {
 }
 ```
 
-FieldValue 参考 [FieldValue](#fieldvalue)
+FieldValue Reference [FieldValue](#fieldvalue)
 
 ### setInitialValue
 
-#### 描述
+#### Description
 
-设置字段默认值
+Set field default value
 
-#### 签名
+#### Signature
 
 ```ts
 interface setInitialValue {
@@ -244,15 +244,15 @@ interface setInitialValue {
 }
 ```
 
-FieldValue 参考 [FieldValue](#fieldvalue)
+FieldValue Reference [FieldValue](#fieldvalue)
 
 ### setDisplay
 
-#### 描述
+#### Description
 
-设置字段展示状态
+Set field display status
 
-#### 签名
+#### Signature
 
 ```ts
 interface setDisplay {
@@ -260,15 +260,15 @@ interface setDisplay {
 }
 ```
 
-FieldDisplayTypes 参考 [FieldDisplayTypes](#fielddisplaytypes)
+FieldDisplayTypes Reference [FieldDisplayTypes](#fielddisplaytypes)
 
 ### setPattern
 
-#### 描述
+#### Description
 
-设置字段交互模式
+Set field interaction mode
 
-#### 签名
+#### Signature
 
 ```ts
 interface setPattern {
@@ -276,15 +276,15 @@ interface setPattern {
 }
 ```
 
-FieldPatternTypes 参考 [FieldPatternTypes](#fieldpatterntypes)
+FieldPatternTypes Reference [FieldPatternTypes](#fieldpatterntypes)
 
 ### setLoading
 
-#### 描述
+#### Description
 
-设置字段加载状态
+Set field loading status
 
-#### 签名
+#### Signature
 
 ```ts
 interface setLoading {
@@ -294,11 +294,11 @@ interface setLoading {
 
 ### setValidating
 
-#### 描述
+#### Description
 
-设置字段校验中状态
+Set field verification status
 
-#### 签名
+#### Signature
 
 ```ts
 interface setValidating {
@@ -308,11 +308,11 @@ interface setValidating {
 
 ### setComponent
 
-#### 描述
+#### Description
 
-设置字段组件
+Set field component
 
-#### 签名
+#### Signature
 
 ```ts
 interface setComponent {
@@ -320,15 +320,15 @@ interface setComponent {
 }
 ```
 
-FieldComponent 参考 [FieldComponent](#fieldcomponent)
+FieldComponent Reference [FieldComponent](#fieldcomponent)
 
 ### setComponentProps
 
-#### 描述
+#### Description
 
-设置字段组件属性
+Set field component properties
 
-#### 签名
+#### Signature
 
 ```ts
 interface setComponentProps {
@@ -338,11 +338,11 @@ interface setComponentProps {
 
 ### setDecorator
 
-#### 描述
+#### Description
 
-设置字段装饰器
+Set field decorator
 
-#### 签名
+#### Signature
 
 ```ts
 interface setDecorator {
@@ -350,15 +350,15 @@ interface setDecorator {
 }
 ```
 
-FieldDecorator 参考 [FieldDecorator](#fielddecorator)
+FieldDecorator Reference [FieldDecorator](#fielddecorator)
 
 ### setDecoratorProps
 
-#### 描述
+#### Description
 
-设置字段装饰器属性
+Set field decorator properties
 
-#### 签名
+#### Signature
 
 ```ts
 interface setDecoratorProps {
@@ -368,11 +368,11 @@ interface setDecoratorProps {
 
 ### setState
 
-#### 描述
+#### Description
 
-设置字段状态
+Set field status
 
-#### 签名
+#### Signature
 
 ```ts
 interface setState {
@@ -381,15 +381,15 @@ interface setState {
 }
 ```
 
-IFieldState 参考 [IFieldState](#ifieldstate)
+IFieldState Reference [IFieldState](#ifieldstate)
 
 ### getState
 
-#### 描述
+#### Description
 
-获取字段状态
+Get field status
 
-#### 签名
+#### Signature
 
 ```ts
 interface getState<T> {
@@ -398,15 +398,15 @@ interface getState<T> {
 }
 ```
 
-IFieldState 参考 [IFieldState](#ifieldstate)
+IFieldState Reference [IFieldState](#ifieldstate)
 
 ### onInit
 
-#### 描述
+#### Description
 
-触发字段初始化，默认不需要手动调用
+Trigger field initialization, no need to call manually
 
-#### 签名
+#### Signature
 
 ```ts
 interface onInit {
@@ -416,11 +416,11 @@ interface onInit {
 
 ### onMount
 
-#### 描述
+#### Description
 
-触发字段挂载
+Trigger field mount
 
-#### 签名
+#### Signature
 
 ```ts
 interface onMount {
@@ -430,11 +430,11 @@ interface onMount {
 
 ### onUnmount
 
-#### 描述
+#### Description
 
-触发字段卸载
+Trigger field unloading
 
-#### 签名
+#### Signature
 
 ```ts
 interface onUnmount {
@@ -444,11 +444,11 @@ interface onUnmount {
 
 ### onInput
 
-#### 描述
+#### Description
 
-触发字段输入
+Trigger field entry
 
-#### 签名
+#### Signature
 
 ```ts
 interface onInput {
@@ -458,11 +458,11 @@ interface onInput {
 
 ### onFocus
 
-#### 描述
+#### Description
 
-触发字段聚焦
+Trigger field focus
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFocus {
@@ -472,11 +472,11 @@ interface onFocus {
 
 ### onBlur
 
-#### 描述
+#### Description
 
-触发字段失焦
+Trigger field out of focus
 
-#### 签名
+#### Signature
 
 ```ts
 interface onBlur {
@@ -486,11 +486,11 @@ interface onBlur {
 
 ### validate
 
-#### 描述
+#### Description
 
-触发字段校验
+Trigger field verification
 
-#### 签名
+#### Signature
 
 ```ts
 interface validate {
@@ -498,15 +498,15 @@ interface validate {
 }
 ```
 
-IValidateResults 参考 [IValidateResults](#ivalidateresults)
+IValidateResults Reference [IValidateResults](#ivalidateresults)
 
 ### reset
 
-#### 描述
+#### Description
 
-触发字段重置，如果设置了校验，那么返回结果就是校验结果
+Trigger field reset, if verification is set, then the returned result is the verification result
 
-#### 签名
+#### Signature
 
 ```ts
 interface reset {
@@ -514,17 +514,17 @@ interface reset {
 }
 ```
 
-IFieldResetOptions 参考 [IFieldResetOptions](#ifieldresetoptions)
+IFieldResetOptions Reference [IFieldResetOptions](#ifieldresetoptions)
 
-IValidateResults 参考 [IValidateResults](#ivalidateresults)
+IValidateResults Reference [IValidateResults](#ivalidateresults)
 
 ### query
 
-#### 描述
+#### Description
 
-查询字段，可以基于当前字段查询相邻字段
+Query field, you can query adjacent fields based on the current field
 
-#### 签名
+#### Signature
 
 ```ts
 interface query {
@@ -532,17 +532,17 @@ interface query {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
-Query 对象 API 参考 [Query](/api/models/query)
+Query object API reference [Query](/api/models/query)
 
 ### queryFeedbacks
 
-#### 描述
+#### Description
 
-查询当前字段的反馈信息
+Query the feedback information of the current field
 
-#### 签名
+#### Signature
 
 ```ts
 interface queryFeedbacks {
@@ -550,17 +550,17 @@ interface queryFeedbacks {
 }
 ```
 
-ISearchFeedback 参考 [ISearchFeedback](/api/models/field#isearchfeedback)
+ISearchFeedback Reference [ISearchFeedback](/api/models/field#isearchfeedback)
 
-IFieldFeedback 参考[IFieldFeedback](#ifieldfeedback)
+IFieldFeedback Reference [IFieldFeedback](#ifieldfeedback)
 
 ### dispose
 
-#### 描述
+#### Description
 
-释放 observer，默认不需要手动释放
+Release observer, no need to release manually by default
 
-#### 签名
+#### Signature
 
 ```ts
 interface dispose {
@@ -570,11 +570,11 @@ interface dispose {
 
 ### match
 
-#### 描述
+#### Description
 
-基于路径匹配字段
+Match fields based on path
 
-#### 签名
+#### Signature
 
 ```ts
 interface match {
@@ -582,20 +582,20 @@ interface match {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
-## 类型
+## Types of
 
 <Alert>
-注意：如果要手动消费类型，直接消费全局namespace中的Formily.Core.Types中的类型即可
+Note: If you want to manually consume the type, just export it directly from the package module
 </Alert>
 
 ### FieldValidator
 
-字段校验器，类型较为复杂，需要用户仔细消化
+Field validator, the type is more complicated and needs to be digested carefully by the user
 
 ```ts
-//字符串型格式校验器
+//String format validator
 type ValidatorFormats =
   | 'url'
   | 'email'
@@ -610,14 +610,14 @@ type ValidatorFormats =
   | 'zh'
   | 'date'
   | 'zip'
-  | (string & {}) //其他格式校验器需要通过registerValidateFormats进行注册
+  | (string & {}) //Other format validators need to be registered through registerValidateFormats
 
-//对象型校验结果
+//Object type verification result
 interface IValidateResult {
   type: 'error' | 'warning' | 'success' | (string & {})
   message: string
 }
-//对象型校验器
+//Object validator
 interface IValidatorRules<Context = any> {
   triggerType?: 'onInput' | 'onFocus' | 'onBlur'
   format?: ValidatorFormats
@@ -634,25 +634,25 @@ interface IValidatorRules<Context = any> {
   whitespace?: boolean
   enum?: any[]
   message?: string
-  [key: string]: any //其他属性需要通过registerValidateRules进行注册
+  [key: string]: any //Other attributes need to be registered through registerValidateRules
 }
-//函数型校验器校验结果类型
+//Function type validator check result type
 type ValidatorFunctionResponse = null | string | boolean | IValidateResult
 
-//函数型校验器
+//Functional validator
 type ValidatorFunction<Context = any> = (
   value: any,
   rule: IValidatorRules<Context>,
   ctx: Context
 ) => ValidatorFunctionResponse | Promise<ValidatorFunctionResponse> | null
 
-//非数组型校验器
+//Non-array validator
 type ValidatorDescription =
   | ValidatorFormats
   | ValidatorFunction<Context>
   | IValidatorRules<Context>
 
-//数组型校验器
+//Array type validator
 type MultiValidator<Context = any> = ValidatorDescription<Context>[]
 
 type FieldValidator<Context = any> =
@@ -666,7 +666,7 @@ type FieldValidator<Context = any> =
 type FieldMessage = string | JSXElement
 ```
 
-如果在支持 JSX 的 UI 框架下，我们可以直接传 JSX 的 Node，否则，我们只能传字符串
+If under the UI framework that supports JSX, we can directly pass the Node of JSX, otherwise, we can only pass the string
 
 ### FieldDataSource
 
@@ -678,11 +678,11 @@ type FieldDataSource<ValueType> = Array<{
 }>
 ```
 
-字段数据源其实就是一个数组，内容是啥形式由用户定，只是我们推荐用户都以 label/value 形式来表达数据源，这里需要注意的是，如果要在 UI 框架中使用，不是设置了就直接能生效，dataSource 属性必须是与具体 UI 组件产生了绑定才能生效，比如使用@formily/react，想要绑定状态，可以使用 connect 函数，也可以直接在组件内通过 useField 拿到字段实例，直接消费。
+The field data source is actually an array. The form of the content is determined by the user, but we recommend that users express the data source in the form of label/value. It should be noted here that if it is to be used in the UI framework, it is not set directly. To be effective, the dataSource property must be bound to a specific UI component to be effective. For example, using @formily/react, if you want to bind the state, you can use the connect function, or you can directly get the field instance through useField in the component. consumption.
 
 ### FieldValue
 
-字段值类型其实是`Any`类型，只是需要着重提一下，如果在 ArrayField 中是强制数组类型，ObjectField 中是强制对象类型
+The field value type is actually the `Any` type, but it is important to mention that if it is a mandatory array type in ArrayField, it is a mandatory object type in ObjectField.
 
 ### FieldComponent
 
@@ -690,7 +690,7 @@ type FieldDataSource<ValueType> = Array<{
 type FieldComponent = string | JSXComponentConstructor
 ```
 
-字段组件，如果我们在支持 JSX 的框架中使用，FieldComponent 推荐直接存储 JSX 组件引用，否则可以存储一个组件标识字符串，在实际渲染的时候做一次分发。
+Field component, if we use it in a framework that supports JSX, FieldComponent recommends to store the JSX component reference directly, otherwise it can store a component identification string and distribute it during actual rendering.
 
 ### FieldDecorator
 
@@ -698,7 +698,7 @@ type FieldComponent = string | JSXComponentConstructor
 type FieldDecorator = string | JSXComponentConstructor
 ```
 
-字段装饰器，如果我们在支持 JSX 的框架中使用，FieldDecorator 推荐直接存储 JSX 组件引用，否则可以存储一个组件标识字符串，在实际渲染的时候做一次分发。
+Field decorator, if we use it in a framework that supports JSX, FieldDecorator recommends to store the JSX component reference directly, otherwise it can store a component identification string and distribute it during actual rendering.
 
 ### FieldReaction
 
@@ -730,26 +730,26 @@ type FieldValidateStatus = 'error' | 'warning' | 'success' | 'validating'
 type GeneralField = Field | VoidField | ArrayField | ObjectField
 ```
 
-VoidField 参考 [VoidField](/api/models/void-field)
+VoidField Reference [VoidField](/api/models/void-field)
 
-ArrayField 参考 [ArrayField](/api/models/array-field)
+ArrayField Reference [ArrayField](/api/models/array-field)
 
-ObjectField 参考 [ObjectField](/api/models/object-field)
+ObjectField Reference [ObjectField](/api/models/object-field)
 
 ### IFieldFeedback
 
 ```ts
 interface IFieldFeedback {
-  triggerType?: 'onInput' | 'onFocus' | 'onBlur' //校验触发类型
-  type?: 'error' | 'success' | 'warning' //反馈类型
-  code?: //反馈编码
+  triggerType?: 'onInput' | 'onFocus' | 'onBlur' //Verify the trigger type
+  type?: 'error' | 'success' | 'warning' //feedback type
+  code?: //Feedback code
   | 'ValidateError'
     | 'ValidateSuccess'
     | 'ValidateWarning'
     | 'EffectError'
     | 'EffectSuccess'
     | 'EffectWarning'
-  messages?: string[] //反馈消息
+  messages?: string[] //Feedback message
 }
 ```
 
@@ -757,9 +757,9 @@ interface IFieldFeedback {
 
 ```ts
 interface ISearchFeedback {
-  triggerType?: 'onInput' | 'onFocus' | 'onBlur' //校验触发类型
-  type?: 'error' | 'success' | 'warning' //反馈类型
-  code?: //反馈编码
+  triggerType?: 'onInput' | 'onFocus' | 'onBlur' //Verify the trigger type
+  type?: 'error' | 'success' | 'warning' //feedback type
+  code?: //Feedback code
   | 'ValidateError'
     | 'ValidateSuccess'
     | 'ValidateWarning'
@@ -819,14 +819,14 @@ interface IFieldState {
 type IGeneralFieldState = IFieldState & IVoidFieldState
 ```
 
-IVoidFieldState 参考 [IVoidFieldState](/api/models/void-field#ivoidfieldstate)
+IVoidFieldState Reference [IVoidFieldState](/api/models/void-field#ivoidfieldstate)
 
 ### IFieldResetOptions
 
 ```ts
 interface IFieldResetOptions {
-  forceClear?: boolean //是否强制清除
-  validate?: boolean //是否校验
+  forceClear?: boolean //Whether to force clear
+  validate?: boolean //Whether to verify
 }
 ```
 
@@ -840,7 +840,7 @@ interface IValidateResults {
 }
 ```
 
-> Formily Typescript 类型约定
+> Formily Typescript type convention
 >
-> - 简单非对象数据类型或 Union 数据类型用 type 定义类型，不能以大写`I`字符开头
-> - 简单对象类型统一用 interface 定义类型，且以大写`I`字符开头，如果存在不同 interface 的组合(Intersection or Extends)使用 type 定义类型，同样以大写`I`字符开头
+> - Simple non-object data types or Union data types use type to define the type, and cannot start with an uppercase `I` character
+> - Simple object types use interface to define the type uniformly, and start with an uppercase `I` character. If there are combinations of different interfaces (Intersection or Extends), use type to define the type, and also start with an uppercase `I` character

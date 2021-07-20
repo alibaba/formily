@@ -1,31 +1,50 @@
 import { resolve } from 'path'
 export default {
   mode: 'site',
-  logo:
-    '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
+  logo: '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
   title: 'Formily',
   hash: true,
   favicon:
     '//img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg',
   outputPath: './doc-site',
-  navs: [
-    {
-      title: '指南',
-      path: '/guide',
-    },
-    {
-      title: 'API',
-      path: '/api',
-    },
-    {
-      title: '主站',
-      path: 'https://v2.formilyjs.org',
-    },
-    {
-      title: 'GITHUB',
-      path: 'https://github.com/alibaba/formily',
-    },
-  ],
+  navs: {
+    'en-US': [
+      {
+        title: 'Guide',
+        path: '/guide',
+      },
+      {
+        title: 'API',
+        path: '/api',
+      },
+      {
+        title: 'Home Site',
+        path: 'https://v2.formilyjs.org',
+      },
+      {
+        title: 'GITHUB',
+        path: 'https://github.com/alibaba/formily',
+      },
+    ],
+    'zh-CN': [
+      {
+        title: '指南',
+        path: '/zh-CN/guide',
+      },
+      {
+        title: 'API',
+        path: '/zh-CN/api',
+      },
+      {
+        title: '主站',
+        path: 'https://v2.formilyjs.org',
+      },
+      {
+        title: 'GITHUB',
+        path: 'https://github.com/alibaba/formily',
+      },
+    ],
+  },
   styles: [
     `.__dumi-default-navbar-logo{
       height: 60px !important;
@@ -49,12 +68,12 @@ export default {
   menus: {
     '/guide': [
       {
-        title: '介绍',
+        title: 'Introduction',
         path: '/guide',
       },
-      { title: '核心概念', path: '/guide/concept' },
+      { title: 'Concept', path: '/guide/concept' },
       {
-        title: '最佳实践',
+        title: 'Best Practice',
         path: '/guide/best-practice',
       },
     ],
@@ -122,6 +141,103 @@ export default {
           {
             title: 'Type Chekcer',
             path: '/api/type-checker',
+          },
+        ],
+      },
+      {
+        title: '@formily/reactive-react',
+        children: [
+          {
+            title: 'observer',
+            path: '/api/react/observer',
+          },
+        ],
+      },
+      {
+        title: '@formily/reactive-vue',
+        children: [
+          {
+            title: 'observer',
+            path: '/api/vue/observer',
+          },
+        ],
+      },
+    ],
+    '/zh-CN/guide': [
+      {
+        title: '介绍',
+        path: '/zh-CN/guide',
+      },
+      { title: '核心概念', path: '/zh-CN/guide/concept' },
+      {
+        title: '最佳实践',
+        path: '/zh-CN/guide/best-practice',
+      },
+    ],
+    '/zh-CN/api': [
+      {
+        title: '@formily/reactive',
+        children: [
+          {
+            title: 'observable',
+            path: '/zh-CN/api/observable',
+          },
+          {
+            title: 'autorun',
+            path: '/zh-CN/api/autorun',
+          },
+          {
+            title: 'reaction',
+            path: '/zh-CN/api/reaction',
+          },
+
+          {
+            title: 'batch',
+            path: '/zh-CN/api/batch',
+          },
+          {
+            title: 'action',
+            path: '/zh-CN/api/action',
+          },
+          {
+            title: 'define',
+            path: '/zh-CN/api/define',
+          },
+          {
+            title: 'model',
+            path: '/zh-CN/api/model',
+          },
+          {
+            title: 'observe',
+            path: '/zh-CN/api/observe',
+          },
+          {
+            title: 'markRaw',
+            path: '/zh-CN/api/mark-raw',
+          },
+          {
+            title: 'markObservable',
+            path: '/zh-CN/api/mark-observable',
+          },
+          {
+            title: 'raw',
+            path: '/zh-CN/api/raw',
+          },
+          {
+            title: 'toJS',
+            path: '/zh-CN/api/to-js',
+          },
+          {
+            title: 'untracked',
+            path: '/zh-CN/api/untracked',
+          },
+          {
+            title: 'Tracker',
+            path: '/zh-CN/api/tracker',
+          },
+          {
+            title: 'Type Chekcer',
+            path: '/zh-CN/api/type-checker',
           },
         ],
       },

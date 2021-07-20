@@ -1,10 +1,10 @@
 # useFieldSchema
 
-## 描述
+## Description
 
-主要在自定义组件中读取当前字段的 Schema 信息，该 hook 只能用在 SchemaField 或者 RecursionField 的子树中使用
+Mainly read the Schema information of the current field in the custom component, this hook can only be used in the subtree of SchemaField or RecursionField
 
-## 签名
+## Signature
 
 ```ts
 interface useFieldSchema {
@@ -12,9 +12,9 @@ interface useFieldSchema {
 }
 ```
 
-Schema 参考[Schema](/api/shared/schema)
+Schema Reference [Schema](/api/shared/schema)
 
-## 用例
+## Example
 
 ```tsx
 import React from 'react'

@@ -10,12 +10,16 @@
       />
       <FormConsumer>
         <template #default="{ form }">
-          <div style="white-space: pre; margin-bottom: 16px;">{{JSON.stringify(form.values, null, 2)}}</div>
+          <div style="white-space: pre; margin-bottom: 16px">
+            {{ JSON.stringify(form.values, null, 2) }}
+          </div>
           <Button
             type="primary"
-            @click="() => {
-              form.submit(log)
-            }"
+            @click="
+              () => {
+                form.submit(log)
+              }
+            "
           >
             Submit
           </Button>
@@ -63,20 +67,20 @@ export default {
     FormConsumer,
     Field,
     Form,
-    Button
+    Button,
   },
   data() {
     const form = createForm({ validateFirst: true })
     return {
       FormItem,
       Input,
-      form
+      form,
     }
   },
   methods: {
-    log (...args) {
+    log(...args) {
       console.log(...args)
-    }
-  }
+    },
+  },
 }
 </script>

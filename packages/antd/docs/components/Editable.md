@@ -1,10 +1,10 @@
 # Editable
 
-> 局部编辑器，对于一些空间要求较高的表单区域可以使用该组件
+> Partial editor, you can use this component for some form areas with high space requirements
 >
-> Editable 组件相当于是 FormItem 组件的变体，所以通常放在 decorator 中
+> Editable component is equivalent to a variant of FormItem component, so it is usually placed in decorator
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -35,19 +35,19 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="date"
-        title="日期"
+        title="date"
         x-decorator="Editable"
         x-component="DatePicker"
       />
       <SchemaField.String
         name="input"
-        title="输入框"
+        title="input box"
         x-decorator="Editable"
         x-component="Input"
       />
       <SchemaField.Void
         name="void"
-        title="虚拟节点容器"
+        title="Virtual Node Container"
         x-component="Editable.Popover"
         x-reactions={(field) => {
           field.title = field.query('.void.date2').get('value') || field.title
@@ -55,20 +55,20 @@ export default () => (
       >
         <SchemaField.String
           name="date2"
-          title="日期"
+          title="date"
           x-decorator="FormItem"
           x-component="DatePicker"
         />
         <SchemaField.String
           name="input2"
-          title="输入框"
+          title="input box"
           x-decorator="FormItem"
           x-component="Input"
         />
       </SchemaField.Void>
       <SchemaField.Object
         name="iobject"
-        title="对象节点容器"
+        title="Object node container"
         x-component="Editable.Popover"
         x-reactions={(field) => {
           field.title = field.value?.date || field.title
@@ -76,26 +76,26 @@ export default () => (
       >
         <SchemaField.String
           name="date"
-          title="日期"
+          title="date"
           x-decorator="FormItem"
           x-component="DatePicker"
         />
         <SchemaField.String
           name="input"
-          title="输入框"
+          title="input box"
           x-decorator="FormItem"
           x-component="Input"
         />
       </SchemaField.Object>
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -126,32 +126,32 @@ const schema = {
   properties: {
     date: {
       type: 'string',
-      title: '日期',
+      title: 'Date',
       'x-decorator': 'Editable',
       'x-component': 'DatePicker',
     },
     input: {
       type: 'string',
-      title: '输入框',
+      title: 'input box',
       'x-decorator': 'Editable',
       'x-component': 'Input',
     },
     void: {
       type: 'void',
-      title: '虚拟节点容器',
+      title: 'Virtual Node Container',
       'x-component': 'Editable.Popover',
       'x-reactions':
         "{{(field) => field.title = field.query('.void.date2').get('value') || field.title}}",
       properties: {
         date2: {
           type: 'string',
-          title: '日期',
+          title: 'Date',
           'x-decorator': 'FormItem',
           'x-component': 'DatePicker',
         },
         input2: {
           type: 'string',
-          title: '输入框',
+          title: 'input box',
           'x-decorator': 'FormItem',
           'x-component': 'Input',
         },
@@ -159,20 +159,20 @@ const schema = {
     },
     iobject: {
       type: 'object',
-      title: '对象节点容器',
+      title: 'Object node container',
       'x-component': 'Editable.Popover',
       'x-reactions':
         '{{(field) => field.title = field.value && field.value.date || field.title}}',
       properties: {
         date: {
           type: 'string',
-          title: '日期',
+          title: 'Date',
           'x-decorator': 'FormItem',
           'x-component': 'DatePicker',
         },
         input: {
           type: 'string',
-          title: '输入框',
+          title: 'input box',
           'x-decorator': 'FormItem',
           'x-component': 'Input',
         },
@@ -185,13 +185,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -212,19 +212,19 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="date"
-      title="日期"
+      title="date"
       decorator={[Editable]}
       component={[DatePicker]}
     />
     <Field
       name="input"
-      title="输入框"
+      title="input box"
       decorator={[Editable]}
       component={[Input]}
     />
     <VoidField
       name="void"
-      title="虚拟节点容器"
+      title="Virtual Node Container"
       reactions={(field) => {
         field.title = field.query('.void.date2').get('value') || field.title
       }}
@@ -232,20 +232,20 @@ export default () => (
     >
       <Field
         name="date2"
-        title="日期"
+        title="date"
         decorator={[FormItem]}
         component={[DatePicker]}
       />
       <Field
         name="input2"
-        title="输入框"
+        title="input box"
         decorator={[FormItem]}
         component={[Input]}
       />
     </VoidField>
     <ObjectField
       name="iobject"
-      title="对象节点容器"
+      title="Object node container"
       reactions={(field) => {
         field.title = field.value?.date || field.title
       }}
@@ -253,20 +253,20 @@ export default () => (
     >
       <Field
         name="date"
-        title="日期"
+        title="date"
         decorator={[FormItem]}
         component={[DatePicker]}
       />
       <Field
         name="input"
-        title="输入框"
+        title="input box"
         decorator={[FormItem]}
         component={[Input]}
       />
     </ObjectField>
 
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -276,12 +276,12 @@ export default () => (
 
 ### Editable
 
-> 内联编辑
+> Inline editing
 
-参考 https://ant.design/components/form-cn/ 中的 FormItem 属性
+Refer to the FormItem property in https://ant.design/components/form-cn/
 
 ### Editable.Popover
 
-> 浮层编辑
+> Floating layer editing
 
-参考 https://ant.design/components/popover-cn/
+Reference https://ant.design/components/popover-cn/

@@ -1,10 +1,9 @@
 import { useLayoutEffect, useMemo } from 'react'
+import { Form } from '@formily/core'
 import { uid } from '@formily/shared'
 import { useForm } from './useForm'
 
-export const useFormEffects = (
-  effects?: (form: Formily.Core.Models.Form) => void
-) => {
+export const useFormEffects = (effects?: (form: Form) => void) => {
   const form = useForm()
   const ref = useMemo(() => {
     const id = uid()

@@ -1,8 +1,8 @@
 # FormButtonGroup
 
-> 表单按钮组布局组件
+> Form button group layout component
 
-## 普通案例
+## Common case
 
 ```tsx
 import React from 'react'
@@ -31,63 +31,63 @@ export default () => {
       <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField>
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
         </SchemaField>
         <FormButtonGroup.FormItem>
-          <Submit onSubmit={console.log}>提交</Submit>
-          <Reset>重置</Reset>
+          <Submit onSubmit={console.log}>Submit</Submit>
+          <Reset>Reset</Reset>
         </FormButtonGroup.FormItem>
       </FormLayout>
     </FormProvider>
@@ -95,7 +95,7 @@ export default () => {
 }
 ```
 
-## 吸底案例
+## Suction bottom case
 
 ```tsx
 import React from 'react'
@@ -125,55 +125,55 @@ export default () => {
       <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField>
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
@@ -181,8 +181,8 @@ export default () => {
         </SchemaField>
         <FormButtonGroup.Sticky>
           <FormButtonGroup.FormItem>
-            <Submit onSubmit={console.log}>提交</Submit>
-            <Reset>重置</Reset>
+            <Submit onSubmit={console.log}>Submit</Submit>
+            <Reset>Reset</Reset>
           </FormButtonGroup.FormItem>
         </FormButtonGroup.Sticky>
       </FormLayout>
@@ -191,7 +191,7 @@ export default () => {
 }
 ```
 
-## 吸底居中案例
+## Suction bottom centering case
 
 ```tsx
 import React from 'react'
@@ -221,55 +221,55 @@ export default () => {
       <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField>
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
           />
           <SchemaField.String
-            title="输入框"
+            title="input box"
             x-decorator="FormItem"
             required
             x-component="Input"
@@ -277,8 +277,8 @@ export default () => {
         </SchemaField>
         <FormButtonGroup.Sticky align="center">
           <FormButtonGroup>
-            <Submit onSubmit={console.log}>提交</Submit>
-            <Reset>重置</Reset>
+            <Submit onSubmit={console.log}>Submit</Submit>
+            <Reset>Reset</Reset>
           </FormButtonGroup>
         </FormButtonGroup.Sticky>
       </FormLayout>
@@ -291,23 +291,23 @@ export default () => {
 
 ### FormButtonGroup
 
-> 该组件主要用来处理按钮组间隙
+> This component is mainly used to handle the button group gap
 
-| 属性名 | 类型                        | 描述     | 默认值   |
-| ------ | --------------------------- | -------- | -------- |
-| gutter | number                      | 间隙大小 | 8px      |
-| align  | `'left'\|'center'\|'right'` | 对齐方式 | `'left'` |
+| Property name | Type                        | Description | Default value |
+| ------------- | --------------------------- | ----------- | ------------- |
+| gutter        | number                      | Gap size    | 8px           |
+| align         | `'left'\|'center'\|'right'` | Alignment   | `'left'`      |
 
 ### FormButtonGroup.FormItem
 
-> 该组件主要用来处理按钮组与主表单 FormItem 对齐问题
+> This component is mainly used to deal with the alignment of the button group and the main form FormItem
 
-参考 [FormItem](/components/form-item) 属性
+Refer to [FormItem](/components/form-item) property
 
 ### FormButtonGroup.Sticky
 
-> 该组件主要用来处理按钮组浮动定位问题
+> This component is mainly used to deal with the floating positioning problem of the button group
 
-| 属性名 | 类型                        | 描述     | 默认值   |
-| ------ | --------------------------- | -------- | -------- |
-| align  | `'left'\|'center'\|'right'` | 对齐方式 | `'left'` |
+| Property name | Type                        | Description | Default value |
+| ------------- | --------------------------- | ----------- | ------------- |
+| align         | `'left'\|'center'\|'right'` | Alignment   | `'left'`      |

@@ -2,9 +2,8 @@
 
 $array-base-prefix-cls: '#{$css-prefix}formily-array-base';
 
-
 .#{$array-base-prefix-cls}-remove {
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
   color: $color-text1-3;
   font-size: 16px;
   margin-right: 6px;
@@ -15,11 +14,11 @@ $array-base-prefix-cls: '#{$css-prefix}formily-array-base';
 }
 
 .#{$array-base-prefix-cls}-addition {
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
 }
 
 .#{$array-base-prefix-cls}-move-down {
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
   color: $color-text1-3;
   font-size: 16px;
   margin-right: 6px;
@@ -30,7 +29,7 @@ $array-base-prefix-cls: '#{$css-prefix}formily-array-base';
 }
 
 .#{$array-base-prefix-cls}-move-up {
-  transition: all .25s ease-in-out;
+  transition: all 0.25s ease-in-out;
   color: $color-text1-3;
   font-size: 16px;
   margin-right: 6px;

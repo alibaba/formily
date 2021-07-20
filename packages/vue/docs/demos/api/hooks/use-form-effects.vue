@@ -1,6 +1,10 @@
 <template>
   <FormProvider :form="form">
-    <Field name="input" :decorator="[FormItem]" :component="[Input, { placeholder: 'input' }]" />
+    <Field
+      name="input"
+      :decorator="[FormItem]"
+      :component="[Input, { placeholder: 'input' }]"
+    />
     <Field name="custom" :decorator="[FormItem]" :component="[Custom]" />
   </FormProvider>
 </template>
@@ -13,23 +17,44 @@ import { Form, Input } from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 
 const Custom = defineComponent({
-  setup () {
+  setup() {
     useFormEffects(() => {
       onFieldReact('custom.bb', (field) => {
         field.value = field.query('.aa').get('value')
       })
     })
-    return () => h('div', {}, [
-      h(Field, { props: { name: 'aa', decorator: [Form.Item], component: [Input, { placeholder: 'aa' }] } }, {}),
-      h(Field, { props: { name: 'bb', decorator: [Form.Item], component: [Input, { placeholder: 'bb' }] } }, {}),
-    ])
+    return () =>
+      h('div', {}, [
+        h(
+          Field,
+          {
+            props: {
+              name: 'aa',
+              decorator: [Form.Item],
+              component: [Input, { placeholder: 'aa' }],
+            },
+          },
+          {}
+        ),
+        h(
+          Field,
+          {
+            props: {
+              name: 'bb',
+              decorator: [Form.Item],
+              component: [Input, { placeholder: 'bb' }],
+            },
+          },
+          {}
+        ),
+      ])
   },
 })
 
 export default {
   components: {
     FormProvider,
-    Field
+    Field,
   },
   data() {
     const form = createForm({
@@ -43,8 +68,8 @@ export default {
       FormItem: Form.Item,
       Input,
       Custom,
-      form
+      form,
     }
-  }
+  },
 }
 </script>

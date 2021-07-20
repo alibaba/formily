@@ -17,7 +17,7 @@ export type FormItemProps = {
   required?: boolean
   label?: string | Component
   colon?: boolean
-  tooltip?: boolean
+  tooltip?: string | Component
   labelStyle?: Record<string, any>
   labelAlign?: 'left' | 'right'
   labelWrap?: boolean
@@ -76,7 +76,7 @@ const ICON_MAP = {
 }
 
 export const FormBaseItem = defineComponent<FormItemProps>({
-  name: 'FormilyFormItem',
+  name: 'FormItem',
   props: {
     className: {},
     required: {},
@@ -194,7 +194,7 @@ export const FormBaseItem = defineComponent<FormItemProps>({
           : slots.default?.()
 
       const renderLabel =
-        formLayout.label !== undefined &&
+        formLayout.label &&
         h(
           'div',
           {
@@ -243,10 +243,25 @@ export const FormBaseItem = defineComponent<FormItemProps>({
                         {
                           props: {
                             placement: 'top',
-                            content: formLayout.tooltip,
                           },
                         },
-                        { default: () => h('i', { class: 'el-icon-info' }, {}) }
+                        {
+                          default: () => [
+                            h('i', { class: 'el-icon-info' }, {}),
+                            h(
+                              'div',
+                              {
+                                class: `${prefixCls}-label-tooltip-content`,
+                                slot: 'content',
+                              },
+                              {
+                                default: () => [
+                                  resolveComponent(formLayout.tooltip),
+                                ],
+                              }
+                            ),
+                          ],
+                        }
                       ),
                     ],
                   }

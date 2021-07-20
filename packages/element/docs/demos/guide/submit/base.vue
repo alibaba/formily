@@ -17,7 +17,7 @@
       />
     </SchemaField>
     <FormButtonGroup align-form-item>
-      <Submit @submit="log">提交</Submit>
+      <Submit :onSubmit="log">提交</Submit>
     </FormButtonGroup>
   </FormProvider>
 </template>

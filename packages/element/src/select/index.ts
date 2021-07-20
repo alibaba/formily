@@ -1,5 +1,6 @@
-import { connect, mapProps, h } from '@formily/vue'
+import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
 import { defineComponent } from 'vue-demi'
+import { PreviewSelectText } from '../preview-text'
 
 import type {
   Select as ElSelectProps,
@@ -12,6 +13,7 @@ export type SelectProps = ElSelectProps & {
 }
 
 const SelectOption = defineComponent<SelectProps>({
+  name: 'Select',
   props: ['options'],
   setup(customProps, { attrs, slots, listeners }) {
     return () => {
@@ -49,5 +51,6 @@ const SelectOption = defineComponent<SelectProps>({
 
 export const Select = connect(
   SelectOption,
-  mapProps({ dataSource: 'options', loading: true })
+  mapProps({ dataSource: 'options', loading: true }),
+  mapReadPretty(PreviewSelectText)
 )

@@ -7,20 +7,36 @@ export default {
     '//img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg',
   hash: true,
   outputPath: './doc-site',
-  navs: [
-    {
-      title: 'Alibaba Fusion',
-      path: '/components',
-    },
-    {
-      title: '主站',
-      path: 'https://v2.formilyjs.org',
-    },
-    {
-      title: 'GITHUB',
-      path: 'https://github.com/alibaba/formily',
-    },
-  ],
+  navs: {
+    'en-US': [
+      {
+        title: 'Alibaba Fusion',
+        path: '/components',
+      },
+      {
+        title: 'Home Site',
+        path: 'https://v2.formilyjs.org',
+      },
+      {
+        title: 'GITHUB',
+        path: 'https://github.com/alibaba/formily',
+      },
+    ],
+    'zh-CN': [
+      {
+        title: 'Alibaba Fusion',
+        path: '/zh-CN/components',
+      },
+      {
+        title: '主站',
+        path: 'https://v2.formilyjs.org',
+      },
+      {
+        title: 'GITHUB',
+        path: 'https://github.com/alibaba/formily',
+      },
+    ],
+  },
   links: [
     {
       rel: 'stylesheet',

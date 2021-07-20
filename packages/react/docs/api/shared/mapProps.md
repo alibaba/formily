@@ -1,27 +1,28 @@
 # mapProps
 
-## 描述
+## Description
 
-将[Field](https://core.formilyjs.org/api/models/field)属性与组件属性映射的适配器函数，主要与 connect 函数搭配使用
+Adapter function that maps [Field](https://core.formilyjs.org/api/models/field) attributes and component attributes, mainly used in conjunction with the connect function
 
-## 签名
+## Signature
 
 ```ts
+import { Field, GeneralField } from '@formily/core'
 type IStateMapper<Props> =
   | {
-      [key in keyof Formily.Core.Models.Field]?: keyof Props | boolean
+      [key in keyof Field]?: keyof Props | boolean
     }
-  | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)
+  | ((props: Props, field: GeneralField) => Props)
 
 interface mapProps<T extends React.FC> {
   (...args: IStateMapper<React.ComponentProps<T>>[]): React.FC
 }
 ```
 
-- 参数可以传对象(key 是 field 的属性，value 是组件的属性，如果 value 为 true，代表映射的属性名相同)
-- 参数可以传函数，函数可以直接对属性做更复杂的映射
+- Parameters can be passed objects (key is the attribute of the field, value is the attribute of the component, if the value is true, the mapped attribute name is the same)
+- Parameters can be passed to functions, and functions can directly do more complex mappings to attributes
 
-## 用例
+## Example
 
 ```tsx
 import React, { useMemo } from 'react'
@@ -35,7 +36,7 @@ import {
 } from '@formily/react'
 import { Input, Form, Button } from 'antd'
 
-// FormItem UI组件
+// FormItem UI component
 const FormItem = connect(
   Form.Item,
   mapProps(

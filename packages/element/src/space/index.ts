@@ -19,7 +19,7 @@ const spaceSize = {
 }
 
 export const Space = defineComponent<SpaceProps>({
-  name: 'ElSpace',
+  name: 'Space',
   props: ['size', 'direction', 'align'],
   setup(props, { slots }) {
     return () => {

@@ -1,5 +1,6 @@
 import React, { Fragment, useContext, useMemo } from 'react'
 import { isFn, isValid } from '@formily/shared'
+import { GeneralField } from '@formily/core'
 import { Schema } from '@formily/json-schema'
 import {
   SchemaContext,
@@ -34,7 +35,7 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const basePath = getBasePath()
   const children =
     fieldSchema['x-content'] || fieldSchema['x-component-props']?.['children']
-  const renderProperties = (field?: Formily.Core.Types.GeneralField) => {
+  const renderProperties = (field?: GeneralField) => {
     if (props.onlyRenderSelf) return
     return (
       <Fragment>

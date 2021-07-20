@@ -2,9 +2,17 @@
 
 > 开关组件
 
-## 使用案例
+## Markup Schema 案例
 
-<dumi-previewer demoPath="guide/switch" />
+<dumi-previewer demoPath="guide/switch/markup-schema" />
+
+## JSON Schema 案例
+
+<dumi-previewer demoPath="guide/switch/json-schema" />
+
+## Template 案例
+
+<dumi-previewer demoPath="guide/switch/template" />
 
 ## API
 

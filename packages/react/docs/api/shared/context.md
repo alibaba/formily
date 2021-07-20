@@ -1,40 +1,44 @@
 # context
 
-## 描述
+## Description
 
-@formily/react 的所有 React Context，方便用户做更复杂的个性化定制，我们可以通过 useContext 来消费这些上下文
+All React Context of @formily/react is convenient for users to do more complex personalized customization. We can consume these contexts through useContext
 
 ## FormContext
 
-#### 描述
+#### Description
 
-Form 上下文，可以获取当前 Form 实例
+Form context, you can get the current Form instance
 
-#### 签名
+#### Signature
 
 ```ts
-const FormContext = createContext<Formily.Core.Models.Form>(null)
+import { Form } from '@formily/core'
+
+const FormContext = createContext<Form>(null)
 ```
 
 ## FieldContext
 
-#### 描述
+#### Description
 
-字段上下文，可以获取当前字段实例
+Field context, you can get the current field instance
 
-#### 签名
+#### Signature
 
 ```ts
-const FieldContext = createContext<Formily.Core.Types.GeneralField>(null)
+import { GeneralField } from '@formily/core'
+
+const FieldContext = createContext<GeneralField>(null)
 ```
 
 ## SchemaMarkupContext
 
-#### 描述
+#### Description
 
-Schema 标签上下文，主要用于收集 JSX Markup 写法的 Schema 标签，然后转换成标准 JSON Schema
+Schema tag context, mainly used to collect Schema tags written in JSX Markup, and then convert them into standard JSON Schema
 
-#### 签名
+#### Signature
 
 ```ts
 SchemaMarkupContext = createContext<Schema>(null)
@@ -42,11 +46,11 @@ SchemaMarkupContext = createContext<Schema>(null)
 
 ## SchemaContext
 
-#### 描述
+#### Description
 
-字段 Schema 上下文，主要用于获取当前字段的 Schema 信息
+Field Schema context, mainly used to obtain the Schema information of the current field
 
-#### 签名
+#### Signature
 
 ```ts
 const SchemaContext = createContext<Schema>(null)
@@ -54,11 +58,11 @@ const SchemaContext = createContext<Schema>(null)
 
 ## SchemaExpressionScopeContext
 
-#### 描述
+#### Description
 
-Schema 表达式作用域上下文
+Schema expression scope context
 
-#### 签名
+#### Signature
 
 ```ts
 export const SchemaExpressionScopeContext = createContext<any>(null)
@@ -66,11 +70,11 @@ export const SchemaExpressionScopeContext = createContext<any>(null)
 
 ## SchemaOptionsContext
 
-#### 描述
+#### Description
 
-Schema 全局参数上下文，主要用于获取从 createSchemaField 传入的参数
+Schema global parameter context, mainly used to obtain the parameters passed in from createSchemaField
 
-#### 签名
+#### Signature
 
 ```ts
 const SchemaOptionsContext = createContext<ISchemaFieldFactoryOptions>(null)

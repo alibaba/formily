@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Tabs, Badge } from 'antd'
+import { ArrayField } from '@formily/core'
 import {
   useField,
   observer,
@@ -9,7 +10,7 @@ import {
 import { TabsProps } from 'antd/lib/tabs'
 
 export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
-  const field = useField<Formily.Core.Models.ArrayField>()
+  const field = useField<ArrayField>()
   const schema = useFieldSchema()
   const [activeKey, setActiveKey] = useState('tab-0')
   const value = Array.isArray(field.value) ? field.value : []
@@ -31,7 +32,7 @@ export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
       }
     }
   }
-  const badgedTab = (index: number, key: string) => {
+  const badgedTab = (index: number) => {
     const tab = `${field.title || 'Untitled'} ${index + 1}`
     const path = field.address.concat(index)
     const errors = field.form.queryFeedbacks({
@@ -63,11 +64,7 @@ export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
           : schema.items
         const key = `tab-${index}`
         return (
-          <Tabs.TabPane
-            key={key}
-            closable={index !== 0}
-            tab={badgedTab(index, key)}
-          >
+          <Tabs.TabPane key={key} closable={index !== 0} tab={badgedTab(index)}>
             <RecursionField schema={items} name={index} />
           </Tabs.TabPane>
         )

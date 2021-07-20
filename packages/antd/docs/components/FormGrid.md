@@ -1,8 +1,8 @@
 # FormGrid
 
-> FormGrid 组件
+> FormGrid component
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -81,7 +81,7 @@ export default () => {
 }
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -165,7 +165,7 @@ export default () => {
 }
 ```
 
-## 原生 案例
+## Native case
 
 ```tsx
 import React from 'react'
@@ -326,36 +326,36 @@ export default () => {
 
 ### FormGrid
 
-| 属性名      | 类型                 | 描述         | 默认值            |
-| ----------- | -------------------- | ------------ | ----------------- |
-| minWidth    | `number \| number[]` | 元素最小宽度 | 100               |
-| maxWidth    | `number \| number[]` | 元素最大宽度 | -                 |
-| minColumns  | `number \| number[]` | 最小列数     | 0                 |
-| maxColumns  | `number \| number[]` | 最大列数     | -                 |
-| breakpoints | number[]             | 容器尺寸断点 | `[720,1280,1920]` |
-| columnGap   | number               | 列间距       | 10                |
-| rowGap      | number               | 行间距       | 5                 |
-| colWrap     | boolean              | 自动换行     | true              |
+| Property name | Type                 | Description                | Default value     |
+| ------------- | -------------------- | -------------------------- | ----------------- |
+| minWidth      | `number \| number[]` | Minimum element width      | 100               |
+| maxWidth      | `number \| number[]` | Maximum element width      | -                 |
+| minColumns    | `number \| number[]` | Minimum number of columns  | 0                 |
+| maxColumns    | `number \| number[]` | Maximum number of columns  | -                 |
+| breakpoints   | number[]             | Container size breakpoints | `[720,1280,1920]` |
+| columnGap     | number               | Column spacing             | 10                |
+| rowGap        | number               | Row spacing                | 5                 |
+| colWrap       | boolean              | Wrap                       | true              |
 
-注意：
+note:
 
-- minWidth 生效优先级高于 minColumn
-- maxWidth 优先级高于 maxColumn
-- minWidth/maxWidth/minColumns/maxColumns 的数组格式代表与断点数组映射
+- minWidth takes priority over minColumn
+- maxWidth has priority over maxColumn
+- The array format of minWidth/maxWidth/minColumns/maxColumns represents the mapping with the breakpoint array
 
 ### FormGrid.GridColumn
 
-| 属性名   | 类型   | 描述         | 默认值 |
-| -------- | ------ | ------------ | ------ |
-| gridSpan | number | 元素所跨列数 | 1      |
+| Property name | Type   | Description                              | Default value |
+| ------------- | ------ | ---------------------------------------- | ------------- |
+| gridSpan      | number | Number of columns spanned by the element | 1             |
 
 ### FormGrid.useGridSpan
 
-#### 描述
+#### Description
 
-根据容器宽度计算出正确的 span，防止元素溢出
+Calculate the correct span based on the width of the container to prevent element overflow
 
-#### 签名
+#### Signature
 
 ```ts
 interface uesGridSpan {

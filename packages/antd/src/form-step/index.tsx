@@ -3,6 +3,7 @@ import { action, model } from '@formily/reactive'
 import { Steps } from 'antd'
 import cls from 'classnames'
 import { StepsProps, StepProps } from 'antd/lib/steps'
+import { Form, VoidField } from '@formily/core'
 import {
   connect,
   useField,
@@ -14,12 +15,12 @@ import { Schema, SchemaKey } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
 
 export interface IFormStep {
-  connect: (steps: SchemaStep[], field: Formily.Core.Models.VoidField) => void
+  connect: (steps: SchemaStep[], field: VoidField) => void
   current: number
   allowNext: boolean
   allowBack: boolean
   setCurrent(key: number): void
-  submit: Formily.Core.Models.Form['submit']
+  submit: Form['submit']
   next(): void
   back(): void
 }
@@ -40,8 +41,8 @@ type SchemaStep = {
 }
 
 type FormStepEnv = {
-  form: Formily.Core.Models.Form
-  field: Formily.Core.Models.VoidField
+  form: Form
+  field: VoidField
   steps: SchemaStep[]
 }
 
@@ -127,7 +128,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
 
 export const FormStep: ComposedFormTab = connect(
   observer(({ formStep, className, ...props }: IFormStepProps) => {
-    const field = useField<Formily.Core.Models.VoidField>()
+    const field = useField<VoidField>()
     const prefixCls = usePrefixCls('formily-step', props)
     const schema = useFieldSchema()
     const steps = parseSteps(schema)

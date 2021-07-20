@@ -1,6 +1,6 @@
 import React, { Fragment, useLayoutEffect, useRef, useState } from 'react'
 import ReactDOM, { createPortal } from 'react-dom'
-import { createForm } from '@formily/core'
+import { createForm, IFormProps } from '@formily/core'
 import { FormProvider } from '@formily/react'
 import { isNum, isStr, isBool, isFn } from '@formily/shared'
 import { Drawer } from 'antd'
@@ -38,7 +38,7 @@ const getDrawerProps = (props: any): IFormDrawerProps => {
 }
 
 export interface IFormDrawer {
-  open(props?: Formily.Core.Types.IFormProps): Promise<any>
+  open(props?: IFormProps): Promise<any>
   close(): void
 }
 
@@ -104,7 +104,7 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
   }
   document.body.appendChild(env.root)
   const formDrawer = {
-    open: (props: Formily.Core.Types.IFormProps) => {
+    open: (props: IFormProps) => {
       if (env.promise) return env.promise
       env.form = env.form || createForm(props)
       env.promise = new Promise((resolve) => {

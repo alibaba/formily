@@ -9,7 +9,7 @@ module.exports = {
     require.resolve('jest-dom/extend-expect'),
     path.resolve(__dirname, './global.ts'),
   ],
- // moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
+  // moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
   globals: {
     'ts-jest': {
       babelConfig: true,

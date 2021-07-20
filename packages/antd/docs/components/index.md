@@ -1,14 +1,14 @@
 # Ant Design
 
-## 介绍
+## Introduction
 
-@formily/antd 是基于 Ant Design 封装的针对表单场景专业级(Professional)组件库，它主要有以下几个特点：
+@formily/antd is a professional component library for form scenarios based on Ant Design encapsulation. It has the following characteristics:
 
-- 仅支持 Formily2.x
-  - 大部分组件无法向后兼容
-  - 很遗憾，1.x 的很多组件在 API 设计上存在本质上的缺陷，这也是因为表单方案一直在探索之中，所以才会出现版本断裂。
-- 更丰富的组件体系
-  - 布局组件
+- Only Formily 2.x is supported
+  - Most components are not backward compatible
+  - Unfortunately, many components of 1.x have inherent flaws in the API design. This is also because the form scheme has been explored, so there will be version breaks.
+- Richer component system
+  - Layout components
     - FormLayout
     - FormItem
     - FormGrid
@@ -16,7 +16,7 @@
     - Space
     - Submit
     - Reset
-  - 输入控件
+  - Input controls
     - Input
     - Password
     - Select
@@ -30,7 +30,7 @@
     - Checkbox
     - Upload
     - Switch
-  - 场景组件
+  - Scene components
     - ArrayCards
     - ArrayItems
     - ArrayTable
@@ -41,23 +41,23 @@
     - FormDialog
     - FormDrawer
     - Editable
-  - 阅读态组件
+  - Reading state component
     - PreviewText
-- 主题定制能力
-  - 完全放弃了 1.x styled-components 方案，follow 组件库的样式体系，更方便定制主题
-- 支持二次封装
-  - 所有组件都能二次封装，1.x 的组件体系是不能二次封装的，所以提供了这个能力则更方便用户做业务定制
-- 支持阅读态
-  - 虽然 1.x 同样支持阅读态，但是 2.x 单独提供了 PreviewText 组件，用户可以基于它自己做阅读态封装，灵活性更强
-- 类型更加友好
-  - 每个组件都有着极其完整的类型定义，用户在实际开发过程中，可以感受到前所未有的智能提示体验
-- 更完备的布局控制能力
-  - 1.x 的布局能力基本上都收敛到了 FormMegaLayout 上，这次，我们直接去掉 Mega，Mega 就是标准组件，完全内化到 FormLayout 和 FormItem 组件中，同时将 MegaLayout 的网格布局能力放到了 FormGrid 组件中，也提供了更智能的布局能力。
-- 更优雅易用的 API，比如：
-  - 过去的 FormStep，有很多问题，第一，类型不友好，第二，API 隐藏太深，想要控制前进后退需要理解一堆的私有事件。新版 FormStep，用户只需要关注 FormStep Reactive Model 即可，通过 createFormStep 就可以创建出 Reactive Model，传给 FormStep 组件即可快速通讯。同理，FormTab/FormCollapse 也是一样的通讯模式。
-  - 弹窗表单，抽屉表单，想必过去，用户几乎每次都得在这两个场景上写大量的代码，这次直接提供了极其简易的 API 让用户使用，最大化提升开发效率。
+- Theme customization ability
+  - Completely abandon the 1.x styled-components solution, follow the style system of the component library, it is more convenient to customize the theme
+- Support secondary packaging
+  - All components can be repackaged, and the 1.x component system cannot be repackaged, so providing this capability makes it more convenient for users to do business customization
+- Support reading mode
+  - Although 1.x also supports reading mode, 2.x provides a separate PreviewText component, users can make reading mode encapsulation based on it, which is more flexible
+- Type is more friendly
+  - Each component has an extremely complete type definition, and users can feel an unprecedented intelligent reminder experience during the actual development process
+- More complete layout control capabilities
+  - 1.x's layout capabilities have basically converged to FormMegaLayout. This time, we directly removed Mega. Mega is a standard component and is completely internalized into FormLayout and FormItem components. At the same time, MegaLayout's grid layout capabilities are placed in FormGrid components. In, it also provides smarter layout capabilities.
+- More elegant and easy-to-use APIs, such as:
+  - FormStep in the past has many problems. First, the type is not friendly. Second, the API is too hidden. To control the forward and backwards, you need to understand a bunch of private events. In the new version of FormStep, users only need to pay attention to the FormStep Reactive Model. You can create a Reactive Model through createFormStep and pass it to the FormStep component to quickly communicate. Similarly, FormTab/FormCollapse is the same communication mode.
+  - Pop-up forms, drawer forms, presumably in the past, users had to write a lot of code on these two scenarios almost every time. This time, an extremely simple API is directly provided for users to use, which maximizes development efficiency.
 
-## 安装
+## Installation
 
 ```bash
 $ npm install --save antd moment
@@ -67,10 +67,10 @@ $ npm install --save @formily/core @formily/react @formily/antd
 
 ## Q/A
 
-问：我想自己封装一套组件库，该怎么做？
+Q: I want to package a set of component libraries by myself, what should I do?
 
-答：如果是开源组件库，可以直接参与项目共建，提供 PR，如果是企业内私有组件库，参考源码即可，源码并没有太多复杂逻辑。
+Answer: If it is an open source component library, you can directly participate in the project co-construction and provide PR. If it is a private component library in the enterprise, you can refer to the source code. The source code does not have too much complicated logic.
 
-问：为什么 ArrayCards/ArrayTable/FormStep 这类组件只支持 Schema 模式，不支持纯 JSX 模式？
+Question: Why do components such as ArrayCards/ArrayTable/FormStep only support Schema mode and not pure JSX mode?
 
-答：这就是 Schema 模式的核心优势，借助协议，我们可以做场景化抽象，相反，纯 JSX 模式，受限于 JSX 的不可解析性，我们很难做到 UI 级别的场景化抽象，更多的只是抽象 Hook。
+Answer: This is the core advantage of Schema mode. With the help of protocols, we can do scene-based abstraction. On the contrary, pure JSX mode is limited by the unparseability of JSX. It is difficult for us to achieve UI-level scene-based abstraction. It's just an abstract hook.

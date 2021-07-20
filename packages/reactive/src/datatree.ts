@@ -1,6 +1,6 @@
 import { ProxyRaw, RawNode } from './environment'
 import { ObservablePath, PropertyKey, IOperation } from './types'
-import { concat } from './concat'
+import { concat } from './array'
 
 export class DataChange {
   path: ObservablePath

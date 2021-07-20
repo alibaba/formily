@@ -1,7 +1,7 @@
 import Vue, { FunctionalComponentOptions } from 'vue'
 import { render, fireEvent, waitFor } from '@testing-library/vue'
 import { defineComponent, h } from '@vue/composition-api'
-import { createForm } from '@formily/core'
+import { createForm, Field as FieldType } from '@formily/core'
 import { useField, useFormEffects, connect, mapProps, mapReadPretty } from '../'
 import {
   FormProvider,
@@ -210,7 +210,7 @@ test('useFormEffects', async () => {
   const CustomField = defineComponent({
     props: ['value'],
     setup(props) {
-      const fieldRef = useField<Formily.Core.Models.Field>()
+      const fieldRef = useField<FieldType>()
       useFormEffects(() => {
         onFieldChange('aa', ['value'], (target) => {
           if (isVoidField(target)) return

@@ -27,15 +27,19 @@ import { FormProvider, createSchemaField, useFieldSchema } from '@formily/vue'
 import 'ant-design-vue/dist/antd.css'
 
 const Custom = defineComponent({
-  setup () {
+  setup() {
     const schemaRef = useFieldSchema()
     return () => {
       const schema = schemaRef.value
-      return h('div', {
-        style: { whiteSpace: 'pre' }
-      }, [JSON.stringify(schema.toJSON(), null, 4)])
+      return h(
+        'div',
+        {
+          style: { whiteSpace: 'pre' },
+        },
+        [JSON.stringify(schema.toJSON(), null, 4)]
+      )
     }
-  }
+  },
 })
 
 const { SchemaField, SchemaObjectField } = createSchemaField({
@@ -49,8 +53,8 @@ export default {
   data() {
     const form = createForm({ validateFirst: true })
     return {
-      form
+      form,
     }
-  }
+  },
 }
 </script>

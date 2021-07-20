@@ -2,9 +2,17 @@
 
 > 穿梭框
 
-## 使用案例
+## Markup Schema 案例
 
-<dumi-previewer demoPath="guide/transfer" />
+<dumi-previewer demoPath="guide/transfer/markup-schema" />
+
+## JSON Schema 案例
+
+<dumi-previewer demoPath="guide/transfer/json-schema" />
+
+## Template 案例
+
+<dumi-previewer demoPath="guide/transfer/template" />
 
 ## API
 

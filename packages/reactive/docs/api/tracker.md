@@ -1,10 +1,10 @@
 # tracker
 
-## 描述
+## Description
 
-主要用于接入 React/Vue 的手动追踪依赖工具，在依赖发生变化时不会重复执行 tracker 函数，需要用户手动重复执行，只会触发 scheduler
+Mainly used to access the manual tracking dependency tool of React/Vue. The tracker function will not be executed repeatedly when the dependency changes. It requires the user to manually execute it repeatedly, which will only trigger the scheduler
 
-## 签名
+## Signature
 
 ```ts
 class Tracker {
@@ -14,7 +14,7 @@ class Tracker {
 }
 ```
 
-## 用例
+## Example
 
 ```ts
 import { observable, Tracker } from '@formily/reactive'

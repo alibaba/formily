@@ -1,4 +1,5 @@
 import { createForm } from '../'
+import { onFieldValueChange, onFormValuesChange } from '../effects'
 import { attach } from './shared'
 
 test('create array field', () => {
@@ -280,4 +281,39 @@ test('array field move api with children', async () => {
   await array.move(0, 2)
   expect(form.fields['array.0.name']).not.toBeUndefined()
   expect(form.fields['array.2.name']).toBeUndefined()
+})
+
+test('array field remove memo leak', async () => {
+  const handler = jest.fn()
+  const valuesChange = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFormValuesChange(valuesChange)
+        onFieldValueChange('*', handler)
+      },
+    })
+  )
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  await array.push('')
+  attach(
+    form.createField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  await array.remove(0)
+  await array.push('')
+  attach(
+    form.createField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  expect(handler).toBeCalledTimes(1)
+  expect(valuesChange).toBeCalledTimes(4)
 })

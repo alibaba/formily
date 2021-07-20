@@ -1,14 +1,14 @@
 # observable
 
-> 主要用于创建不同响应式行为的 observable 对象，同时可以作为 annotation 给 define 用于标记响应式属性
+> Mainly used to create observable objects with different responsive behaviors, and can be used as an annotation to define to mark responsive attributes
 
 ## observable/observable.deep
 
-### 描述
+### Description
 
-创建深度劫持响应式对象
+Create deep hijacking responsive objects
 
-### 签名
+### Signature
 
 ```ts
 interface observable<T extends object> {
@@ -20,7 +20,7 @@ interface deep<T extends object> {
 }
 ```
 
-### 用例
+### Example
 
 ```ts
 import { observable, autorun } from '@formily/reactive'
@@ -40,11 +40,11 @@ obs.aa.bb = 321
 
 ## observable.shallow
 
-### 描述
+### Description
 
-创建浅劫持响应式对象，也就是只会对目标对象的第一级属性操作响应
+Create shallow hijacking responsive objects, that is, only respond to the first-level attribute operations of the target object
 
-### 签名
+### Signature
 
 ```ts
 interface shallow<T extends object> {
@@ -52,7 +52,7 @@ interface shallow<T extends object> {
 }
 ```
 
-### 用例
+### Example
 
 ```ts
 import { observable, autorun } from '@formily/reactive'
@@ -67,17 +67,17 @@ autorun(() => {
   console.log(obs.aa.bb)
 })
 
-obs.aa.bb = 222 // 不会响应
-obs.aa = { bb: 333 } // 可以响应
+obs.aa.bb = 222 // will not respond
+obs.aa = { bb: 333 } // can respond
 ```
 
 ## observable.computed
 
-### 描述
+### Description
 
-创建一个计算缓存器
+Create a calculation buffer
 
-### 签名
+### Signature
 
 ```ts
 interface computed {
@@ -88,7 +88,7 @@ interface computed {
 }
 ```
 
-### 用例
+### Example
 
 ```ts
 import { observable, autorun } from '@formily/reactive'
@@ -109,11 +109,11 @@ obs.aa = 33
 
 ## observable.ref
 
-### 描述
+### Description
 
-创建引用劫持响应式对象
+Create reference hijacking responsive objects
 
-### 签名
+### Signature
 
 ```ts
 interface ref<T extends object> {
@@ -121,7 +121,7 @@ interface ref<T extends object> {
 }
 ```
 
-### 用例
+### Example
 
 ```ts
 import { observable, autorun } from '@formily/reactive'
@@ -137,11 +137,11 @@ ref.value = 2
 
 ## observable.box
 
-### 描述
+### Description
 
-与 ref 相似，只是读写数据是通过 get/set 方法
+Similar to ref, except that the data is read and written through the get/set method
 
-### 签名
+### Signature
 
 ```ts
 interface box<T extends object> {
@@ -149,7 +149,7 @@ interface box<T extends object> {
 }
 ```
 
-### 用例
+### Example
 
 ```ts
 import { observable, autorun } from '@formily/reactive'

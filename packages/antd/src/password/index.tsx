@@ -18,20 +18,20 @@ export const Password = connect((props: IPasswordProps) => {
     top: 0,
     background: '#fff',
     width: 1,
-    transform: 'translate(-50%, 0)'
+    transform: 'translate(-50%, 0)',
   }
   return (
     <span className={className}>
       <Input.Password {...others} value={value} />
       {checkStrength && (
         <PasswordStrength value={String(value)}>
-          {score => {
+          {(score) => {
             return (
               <div
                 style={{
                   background: '#e0e0e0',
                   marginBottom: 3,
-                  position: 'relative'
+                  position: 'relative',
                 }}
               >
                 <div style={{ ...blockStyle, left: '20%' }} />
@@ -47,7 +47,7 @@ export const Password = connect((props: IPasswordProps) => {
                     height: 8,
                     width: '100%',
                     marginTop: 5,
-                    clipPath: `polygon(0 0,${score}% 0,${score}% 100%,0 100%)`
+                    clipPath: `polygon(0 0,${score}% 0,${score}% 100%,0 100%)`,
                   }}
                 />
               </div>

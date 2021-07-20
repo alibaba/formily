@@ -2,13 +2,13 @@
 
 name: Check Commit spec
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the formily_next branch
   push:
-    branches: [ formily_next ]
+    branches: [formily_next]
   pull_request:
-    branches: [ formily_next ]
+    branches: [formily_next]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

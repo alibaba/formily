@@ -1,8 +1,8 @@
 # Radio
 
-> 单选框
+> Single selection box
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -24,14 +24,14 @@ export default () => (
     <SchemaField>
       <SchemaField.Number
         name="radio"
-        title="单选"
+        title="single choice"
         enum={[
           {
-            label: '选项1',
+            label: 'Option 1',
             value: 1,
           },
           {
-            label: '选项2',
+            label: 'Option 2',
             value: 2,
           },
         ]}
@@ -40,13 +40,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -68,14 +68,14 @@ const schema = {
   properties: {
     radio: {
       type: 'number',
-      title: '单选',
+      title: 'Single selection',
       enum: [
         {
-          label: '选项1',
+          label: 'Option 1',
           value: 1,
         },
         {
-          label: '选项2',
+          label: 'Option 2',
           value: 2,
         },
       ],
@@ -89,13 +89,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -109,14 +109,14 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="radio"
-      title="单选"
+      title="single choice"
       dataSource={[
         {
-          label: '选项1',
+          label: 'Option 1',
           value: 1,
         },
         {
-          label: '选项2',
+          label: 'Option 2',
           value: 2,
         },
       ]}
@@ -124,7 +124,7 @@ export default () => (
       component={Radio.Group}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -132,4 +132,4 @@ export default () => (
 
 ## API
 
-参考 https://ant.design/components/radio-cn/
+Reference https://ant.design/components/radio-cn/

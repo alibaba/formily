@@ -2,21 +2,21 @@
 
 ## observer
 
-### 描述
+### Description
 
-在 React 中，将 Function Component 变成 Reaction，每次视图重新渲染就会收集依赖，依赖更新会自动重渲染
+In React, turn Function Component into Reaction, and dependencies will be collected every time the view is re-rendered, and dependency updates will be automatically re-rendered
 
 <Alert>
-注意：只支持Function Component
+Note: Only Function Component is supported
 </Alert>
 
-### 签名
+### Signature
 
 ```ts
 interface IObserverOptions {
-  forwardRef?: boolean //是否透传引用
-  scheduler?: (updater: () => void) => void //调度器，可以手动控制更新时机
-  displayName?: string //包装后的组件的displayName
+  forwardRef?: boolean //Whether to pass the reference transparently
+  scheduler?: (updater: () => void) => void //The scheduler, you can manually control the timing of the update
+  displayName?: string //displayName of the packaged component
 }
 
 interface observer<T extends React.FC> {
@@ -24,7 +24,7 @@ interface observer<T extends React.FC> {
 }
 ```
 
-### 用例
+### Example
 
 ```tsx
 /**
@@ -63,11 +63,11 @@ export default observer(() => {
 
 ## Observer
 
-### 描述
+### Description
 
-类似于 Vue 的响应式 Slot，它接收一个 Function RenderProps，只要在 Function 内部消费到的任何响应式数据，都会随数据变化而自动重新渲染，也更容易实现局部精确渲染
+Similar to Vue's responsive slot, it receives a Function RenderProps, as long as any responsive data consumed inside the Function, it will be automatically re-rendered as the data changes, and it is easier to achieve local accurate rendering
 
-### 签名
+### Signature
 
 ```ts
 interface IObserverProps {
@@ -77,7 +77,7 @@ interface IObserverProps {
 type Observer = React.FC<IObserverProps>
 ```
 
-### 用例
+### Example
 
 ```tsx
 /**

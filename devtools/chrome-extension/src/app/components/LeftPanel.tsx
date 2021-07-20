@@ -10,21 +10,21 @@ export const LeftPanel = styled(({ className, dataSource, onSelect }) => {
       <Tabs
         dataSource={dataSource}
         current={current}
-        onChange={index => {
+        onChange={(index) => {
           setCurrent(index)
           onSelect({
             current: index,
-            key: ''
+            key: '',
           })
         }}
       />
       <FieldTree
         dataSource={dataSource[current]}
-        onSelect={node => {
+        onSelect={(node) => {
           if (onSelect) {
             onSelect({
               current,
-              key: node.path
+              key: node.path,
             })
           }
         }}

@@ -1,8 +1,8 @@
 # Switch
 
-> 开关组件
+> Switch Components
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -24,19 +24,19 @@ export default () => (
     <SchemaField>
       <SchemaField.Number
         name="switch"
-        title="开关"
+        title="Switch"
         x-decorator="FormItem"
         x-component="Switch"
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -58,7 +58,7 @@ const schema = {
   properties: {
     switch: {
       type: 'number',
-      title: '开关',
+      title: 'Switch',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
     },
@@ -69,13 +69,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -89,12 +89,12 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="switch"
-      title="开关"
+      title="Switch"
       decorator={[FormItem]}
       component={[Switch]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -102,4 +102,4 @@ export default () => (
 
 ## API
 
-参考 https://fusion.design/pc/component/basic/switch
+Reference https://fusion.design/pc/component/basic/switch

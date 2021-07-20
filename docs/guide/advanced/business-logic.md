@@ -11,6 +11,7 @@ With so many ways of describing logic, how should we choose? What scenarios are 
 First of all, reactions are responders used on specific field properties. They will be executed repeatedly based on the data changes that the function depends on. Its biggest advantage is that it is simple, straightforward and easy to understand, such as:
 
 ```tsx pure
+/* eslint-disable */
 <Field
   name="A"
   reactions={(field) => {
@@ -32,7 +33,7 @@ Another advantage of using effects is that a series of reusable logic plug-ins c
 In this way, do we not need to define the logic locally?
 
 No, the premise of the above writing is that for a large number of fields, if the view layer is full of reactions, it looks uncomfortable, so it is a better strategy to consider extracting logic from unified maintenance.
-On the contrary, if the number of fields is small and the logic is relatively simple, it is also good to write reactions directly on the field attributes, which is clear. 
+On the contrary, if the number of fields is small and the logic is relatively simple, it is also good to write reactions directly on the field attributes, which is clear.
 
 At the same time, because JSON Schema can be consumed by the configuration system, we need to logically configure a specific field on the configuration interface. So we still need to support local definition logic capabilities, and also need to support structured description logic, such as:
 
@@ -57,7 +58,7 @@ This can well solve the linkage requirements of most configuration scenarios. Ho
 }
 ```
 
-This is very similar to a low-code configuration. Of course, we can also register a series of general logic functions in the context scope: 
+This is very similar to a low-code configuration. Of course, we can also register a series of general logic functions in the context scope:
 
 ```json
 {
@@ -68,7 +69,7 @@ This is very similar to a low-code configuration. Of course, we can also registe
 In conclusion, the way we manage business logic has the following priorities:
 
 - Pure source mode
-  - The number of fields is huge and the logic is complex, and the logic defined in effects is preferred. 
+  - The number of fields is huge and the logic is complex, and the logic defined in effects is preferred.
   - The number of fields is small, the logic is simple, and the logic defined in reactions is preferred
 - Schema mode
   - There is no asynchronous logic, structured reactions are preferred to define logic.

@@ -3,8 +3,7 @@
   "extends": [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:markdown/recommended"
+    "prettier/@typescript-eslint"
   ],
   "env": {
     "node": true
@@ -32,6 +31,7 @@
     // allow specifying true explicitly for boolean props
     "react/jsx-boolean-value": 0,
     "react/no-did-update-set-state": 0,
+    "react/no-unescaped-entities": "off",
     // maybe we should no-public
     "@typescript-eslint/explicit-member-accessibility": 0,
     "@typescript-eslint/interface-name-prefix": 0,
@@ -60,7 +60,7 @@
   },
   "overrides": [
     {
-      "files": ["**/*.md"],
+      "files": ["**/*.md.{jsx,tsx}"],
       "processor": "markdown/markdown"
     },
     {
@@ -68,7 +68,19 @@
       "rules": {
         "@typescript-eslint/no-unused-vars": "error",
         "no-unused-vars": "error",
-        "no-console": "off"
+        "no-console": "off",
+        "react/display-name": "off",
+        "react/prop-types": "off"
+      }
+    },
+    {
+      "files": ["**/*.md/*.{js,ts}"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-unused-vars": "off",
+        "no-console": "off",
+        "react/display-name": "off",
+        "react/prop-types": "off"
       }
     }
   ]

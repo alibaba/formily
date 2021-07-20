@@ -1,6 +1,6 @@
 <template>
   <FormProvider :form="form">
-    <Field name="input" :component="[Input, { placeholder:'请输入' }]" />
+    <Field name="input" :component="[Input, { placeholder: '请输入' }]" />
   </FormProvider>
 </template>
 
@@ -15,8 +15,8 @@ export default {
   data() {
     return {
       Input,
-      form: createForm()
+      form: createForm(),
     }
-  }
+  },
 }
 </script>

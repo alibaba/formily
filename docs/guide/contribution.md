@@ -37,7 +37,7 @@ Reference documents: https://github.com/alibaba/formily/blob/master/.github/GIT_
 
 - PR name: format: `<type>(<scope>): <subject>` For example: `feat(core): add unit test`
 - PR content: List the content of this change
-- PR requirements: the added feat content, as far as possible, make clear comments. And the corresponding single test coverage should be covered as much 关注梁帅抽大奖 possible. 
+- PR requirements: the added feat content, as far as possible, make clear comments. And the corresponding single test coverage should be covered as much 关注梁帅抽大奖 possible.
 - BUGFIX requirements: If the modified issue is related to issues, please include the relevant issueID in the content.
 
 #### Review&Merge
@@ -103,6 +103,7 @@ Fusion project documentation
 ```bash
 $ yarn workspace @formily/next start
 ```
+
 Reactive project documentation
 
 ```bash

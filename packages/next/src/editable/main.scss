@@ -22,7 +22,7 @@ $editable-popover-prefix-cls: '#{$css-prefix}formily-editable-popover';
     display: flex;
     align-items: center;
 
-    >* {
+    > * {
       margin-right: 3px;
 
       &:last-child {
@@ -33,7 +33,7 @@ $editable-popover-prefix-cls: '#{$css-prefix}formily-editable-popover';
 
   .#{$editable-prefix-cls}-edit-btn,
   .#{$editable-prefix-cls}-close-btn {
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     color: #aaa;
     font-size: 12px;
 
@@ -67,5 +67,4 @@ $editable-popover-prefix-cls: '#{$css-prefix}formily-editable-popover';
   &-edit-btn {
     color: #aaa;
   }
-
 }

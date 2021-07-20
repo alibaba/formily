@@ -2,7 +2,12 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { render, fireEvent, waitFor } from '@testing-library/react'
 import { createForm } from '@formily/core'
-import { isField, isVoidField, onFieldChange } from '@formily/core'
+import {
+  isField,
+  Field as FieldType,
+  isVoidField,
+  onFieldChange,
+} from '@formily/core'
 import {
   FormProvider,
   ArrayField,
@@ -126,7 +131,7 @@ test('ReactiveField', () => {
   render(<ReactiveField field={null}>{() => <div></div>}</ReactiveField>)
 })
 
-test('useAttch', () => {
+test('useAttach', () => {
   const form = createForm()
   const MyComponent = (props: any) => {
     return (
@@ -145,7 +150,7 @@ test('useAttch', () => {
 test('useFormEffects', async () => {
   const form = createForm()
   const CustomField = observer(() => {
-    const field = useField<Formily.Core.Models.Field>()
+    const field = useField<FieldType>()
     useFormEffects(() => {
       onFieldChange('aa', ['value'], (target) => {
         if (isVoidField(target)) return

@@ -5,8 +5,7 @@
   "extends": [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:markdown/recommended"
+    "prettier/@typescript-eslint"
   ],
   "globals": {
     "sleep": true,
@@ -20,12 +19,7 @@
     }
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "prettier",
-    "markdown"
-  ],
+  "plugins": ["@typescript-eslint", "react", "prettier", "markdown"],
   "settings": {
     "react": {
       "version": "detect"
@@ -34,25 +28,34 @@
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/no-unused-vars": "error"
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "react/no-unescaped-entities": "off",
+    "react/prop-types": "off"
   },
   "overrides": [
     {
-      "files": [
-        "**/*.md"
-      ],
+      "files": ["**/*.md"],
       "processor": "markdown/markdown"
     },
     {
-      "files": [
-        "**/*.md/*.{js,tsx}"
-      ],
+      "files": ["**/*.md/*.{jsx,tsx}"],
       "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-unused-vars": "error",
-        "react/display-name": "off",
         "no-unused-vars": "error",
-        "no-console": "off"
+        "no-console": "off",
+        "react/display-name": "off",
+        "react/prop-types": "off"
+      }
+    },
+    {
+      "files": ["**/*.md/*.{js,ts}"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-unused-vars": "off",
+        "no-console": "off",
+        "react/display-name": "off",
+        "react/prop-types": "off"
       }
     }
   ]

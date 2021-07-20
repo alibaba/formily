@@ -21,5 +21,4 @@ export const buildAllStyles = async (outputFile: string) => {
       ...getRollupBasePlugin(),
     ],
   })
-
 }

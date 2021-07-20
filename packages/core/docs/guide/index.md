@@ -1,36 +1,36 @@
-# 介绍
+# Introduction
 
-## UI 无关
+## Pure Core,No UI
 
-因为@formily/core 作为一个独立的包而存在，它的核心意义是将领域模型从 UI 框架从抽离出来，同时可以给开发者带来了以下两个直观收益：
+Because @formily/core exists as an independent package, its core meaning is to separate the domain model from the UI framework, and at the same time, it can bring the following two intuitive benefits to developers:
 
-1. 可以方便 formily 开发者从 UI 与逻辑的耦合关系中释放出来，提升代码可维护性；
+1. It is convenient for formily developers to release from the coupling relationship between UI and logic, and improve code maintainability;
 
-2. 可以让 formily 拥有跨终端，跨框架的能力，不管你是 React 用户，Vue 用户还是 Angular 用户，都能享受到 formily 的领域模型带来的提效。
+2. Allow formily to have cross-terminal and cross-framework capabilities. Whether you are a React user, Vue user or Angular user, you can enjoy the efficiency improvement brought by formily's domain model.
 
-## 超高性能
+## Ultra high performance
 
-借助 @formily/reactive，@formily/core 天然获得了依赖追踪，高效更新，按需渲染的能力，不管是在 React 下，还是 Vue/Angular 下，不管是字段频繁输入，还是字段联动，都能给用户带来 O(1)的性能体验，开发者无需关心性能优化的事情，只需要专注于业务逻辑实现即可。
+With the help of @formily/reactive, @formily/core naturally gains the ability to track dependencies, update efficiently, and render on-demand. Whether it is under React or Vue/Angular, whether it is frequent field input or field linkage, it can give Users bring O(1) performance experience, developers do not need to care about performance optimization, only need to focus on business logic implementation.
 
-## 领域模型
+## Domain Model
 
-如果把表单问题做分解，其实我们可以分解出：
+If we break down the form question, we can actually break it down:
 
-- 数据管理问题
-- 字段管理问题
-- 校验管理问题
-- 联动管理问题
+- Data management issues
+- Field management issues
+- Calibration management issues
+- Linkage management issues
 
-这几个方向的问题其实都可以作为领域级问题去解决，每一个领域问题，其实都是非常复杂的问题，在 Formily 中，全部一一给您突破解决了，所以您只需要专注于业务逻辑即可。
+The problems in these directions can actually be solved as domain-level problems. Each domain problem is actually a very complex problem. In Formily, all of them are solved by breakthroughs, so you only need to focus on business logic. That's it.
 
-## 智能提示
+## Smart tips
 
-因为 formily 是完全的 Typescript 项目，所以用户在 VSCode 上开发可以获得最大化的智能提示体验
+Because formily is a complete Typescript project, users can develop on VSCode to get the maximum intelligent prompt experience
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01yiREHk1X95KJPPz1c_!!6000000002880-2-tps-2014-868.png)
 
-## 状态可观测
+## Status observable
 
-安装 [FormilyDevtools](https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN) 可以实时观测模型状态变化，排查问题
+Install [FormilyDevtools](https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN) to observe the model status changes in real time and troubleshoot problems
 
 ![](//img.alicdn.com/imgextra/i4/O1CN01DSci5h1rAGfRafpXw_!!6000000005590-2-tps-2882-1642.png)

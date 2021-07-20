@@ -12,20 +12,19 @@ export type FormButtonGroupProps = Omit<SpaceProps, 'align' | 'size'> & {
 }
 
 export const FormButtonGroup = defineComponent<FormButtonGroupProps>({
-  name: 'FormilyFormButtonGroup',
+  name: 'FormButtonGroup',
   props: {
     align: {
       type: String,
       default: 'left',
     },
-    className: String,
     gutter: {
       type: Number,
       default: 8,
     },
     alignFormItem: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   setup(props, { slots, attrs }) {
@@ -40,11 +39,11 @@ export const FormButtonGroup = defineComponent<FormButtonGroupProps>({
               padding: 0,
               width: '100%',
             },
-            props: {
+            attrs: {
               colon: false,
               label: ' ',
+              ...attrs,
             },
-            attrs,
           },
           {
             default: () => h(Space, { props: { size: props.gutter } }, slots),
@@ -54,10 +53,7 @@ export const FormButtonGroup = defineComponent<FormButtonGroupProps>({
         return h(
           Space,
           {
-            class: {
-              [prefixCls]: true,
-              [`${props.className}`]: !!props.className,
-            },
+            class: [prefixCls],
             style: {
               justifyContent:
                 props.align === 'left'
@@ -68,7 +64,7 @@ export const FormButtonGroup = defineComponent<FormButtonGroupProps>({
               display: 'flex',
             },
             props: {
-              ...props,
+              ...attrs,
               size: props.gutter,
             },
             attrs,

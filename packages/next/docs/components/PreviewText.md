@@ -1,8 +1,8 @@
 # PreviewText
 
-> 阅读态组件，主要用来实现类 Input，类 DatePicker 这些组件的阅读态
+> Reading state components, mainly used to implement the reading state of these components of class Input and DatePicker
 
-## 简单用例
+## Simple use case
 
 ```tsx
 import React from 'react'
@@ -26,13 +26,13 @@ export default () => {
         <SchemaField>
           <SchemaField.String
             x-decorator="FormItem"
-            title="文本预览"
+            title="text preview"
             x-component="PreviewText.Input"
             default={'Hello world'}
           />
           <SchemaField.String
             x-decorator="FormItem"
-            title="选择项预览"
+            title="Select item preview"
             x-component="PreviewText.Select"
             x-component-props={{
               mode: 'multiple',
@@ -45,22 +45,22 @@ export default () => {
           />
           <SchemaField.String
             x-decorator="FormItem"
-            title="日期预览"
+            title="date preview"
             x-component="PreviewText.DatePicker"
             default={'2020-11-23 22:15:20'}
           />
           <SchemaField.String
             x-decorator="FormItem"
-            title="Cascader预览"
+            title="Cascader Preview"
             x-component="PreviewText.Cascader"
             default={['hangzhou', 'yuhang']}
             enum={[
               {
-                label: '杭州',
+                label: 'Hangzhou',
                 value: 'hangzhou',
               },
               {
-                label: '余杭',
+                label: 'Yuhang',
                 value: 'yuhang',
               },
             ]}
@@ -72,7 +72,7 @@ export default () => {
 }
 ```
 
-## 扩展阅读态
+## Extended reading mode
 
 ```tsx
 import React from 'react'
@@ -105,14 +105,14 @@ const form = createForm()
 
 export default () => {
   return (
-    <PreviewText.Placeholder value="暂无数据">
+    <PreviewText.Placeholder value="No data currently available">
       <FormLayout labelCol={8} wrapperCol={16}>
         <FormProvider form={form}>
           <SchemaField>
             <SchemaField.Markup
               type="string"
               x-decorator="FormItem"
-              title="文本预览"
+              title="text preview"
               required
               x-component="Input"
               default={'Hello world'}
@@ -120,7 +120,7 @@ export default () => {
             <SchemaField.Markup
               type="string"
               x-decorator="FormItem"
-              title="选择项预览"
+              title="Select item preview"
               x-component="PreviewText.Select"
               x-component-props={{
                 mode: 'multiple',
@@ -134,22 +134,22 @@ export default () => {
             <SchemaField.Markup
               type="string"
               x-decorator="FormItem"
-              title="日期预览"
+              title="date preview"
               x-component="PreviewText.DatePicker"
             />
             <SchemaField.Markup
               type="string"
               x-decorator="FormItem"
-              title="Cascader预览"
+              title="Cascader Preview"
               x-component="PreviewText.Cascader"
               default={['hangzhou', 'yuhang']}
               enum={[
                 {
-                  label: '杭州',
+                  label: 'Hangzhou',
                   value: 'hangzhou',
                 },
                 {
-                  label: '余杭',
+                  label: 'Yuhang',
                   value: 'yuhang',
                 },
               ]}
@@ -163,7 +163,7 @@ export default () => {
                 })
               }}
             >
-              切换阅读态
+              Switch reading mode
             </Button>
           </FormButtonGroup.FormItem>
         </FormProvider>
@@ -177,37 +177,37 @@ export default () => {
 
 ### PreviewText.Input
 
-参考 https://fusion.design/pc/component/basic/input
+Reference https://fusion.design/pc/component/basic/input
 
 ### PreviewText.Select
 
-参考 https://fusion.design/pc/component/basic/select
+Reference https://fusion.design/pc/component/basic/select
 
 ### PreviewText.TreeSelect
 
-参考 https://fusion.design/pc/component/basic/tree-select
+Reference https://fusion.design/pc/component/basic/tree-select
 
 ### PreviewText.Cascader
 
-参考 https://fusion.design/pc/component/basic/cascader-select
+Reference https://fusion.design/pc/component/basic/cascader-select
 
 ### PreviewText.DatePicker
 
-参考 https://fusion.design/pc/component/basic/date-picker
+Reference https://fusion.design/pc/component/basic/date-picker
 
 ### PreviewText.DateRangePicker
 
-参考 https://fusion.design/pc/component/basic/date-picker
+Reference https://fusion.design/pc/component/basic/date-picker
 
 ### PreviewText.TimePicker
 
-参考 https://fusion.design/pc/component/basic/time-picker
+Reference https://fusion.design/pc/component/basic/time-picker
 
 ### PreviewText.Placeholder
 
-| 属性名 | 类型   | 描述       | 默认值 |
-| ------ | ------ | ---------- | ------ |
-| value  | stirng | 缺省占位符 | N/A    |
+| Property name | Type   | Description         | Default value |
+| ------------- | ------ | ------------------- | ------------- |
+| value         | stirng | Default placeholder | N/A           |
 
 ### PreviewText.usePlaceholder
 

@@ -1,8 +1,8 @@
 # DatePicker
 
-> 日期选择器
+> Date Picker
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -24,31 +24,31 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="date"
-        title="普通日期"
+        title="normal date"
         x-decorator="FormItem"
         x-component="DatePicker"
       />
       <SchemaField.String
         name="week"
-        title="周选择"
+        title="Week Selection"
         x-decorator="FormItem"
         x-component="DatePicker.WeekPicker"
       />
       <SchemaField.String
         name="month"
-        title="月选择"
+        title="Month Selection"
         x-decorator="FormItem"
         x-component="DatePicker.MonthPicker"
       />
       <SchemaField.String
         name="year"
-        title="年选择"
+        title="Year selection"
         x-decorator="FormItem"
         x-component="DatePicker.YearPicker"
       />
       <SchemaField.String
         name="[startDate,endDate]"
-        title="日期范围"
+        title="Date Range"
         x-decorator="FormItem"
         x-component="DatePicker.RangePicker"
         x-component-props={{
@@ -57,7 +57,7 @@ export default () => (
       />
       <SchemaField.String
         name="range_month"
-        title="月范围选择"
+        title="Month Range Selection"
         x-decorator="FormItem"
         x-component="DatePicker.RangePicker"
         x-component-props={{
@@ -66,7 +66,7 @@ export default () => (
       />
       <SchemaField.String
         name="range_year"
-        title="年范围选择"
+        title="Year range selection"
         x-decorator="FormItem"
         x-component="DatePicker.RangePicker"
         x-component-props={{
@@ -75,13 +75,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -102,31 +102,31 @@ const schema = {
   type: 'object',
   properties: {
     date: {
-      title: '普通日期',
+      title: 'Normal date',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker',
       type: 'string',
     },
     week: {
-      title: '周选择',
+      title: 'Week Selection',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.WeekPicker',
       type: 'string',
     },
     month: {
-      title: '月选择',
+      title: 'Month Selection',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.MonthPicker',
       type: 'string',
     },
     year: {
-      title: '年选择',
+      title: 'Year selection',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.YearPicker',
       type: 'string',
     },
     '[startDate,endDate]': {
-      title: '日期范围',
+      title: 'Date range',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.RangePicker',
       'x-component-props': {
@@ -135,7 +135,7 @@ const schema = {
       type: 'string',
     },
     range_month: {
-      title: '月范围选择',
+      title: 'Month Range Selection',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.RangePicker',
       'x-component-props': {
@@ -145,7 +145,7 @@ const schema = {
     },
     range_year: {
       name: 'range_year',
-      title: '年范围选择',
+      title: 'Year range selection',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.RangePicker',
       'x-component-props': {
@@ -160,13 +160,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -180,37 +180,37 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="date"
-      title="日期选择"
+      title="date selection"
       decorator={[FormItem]}
       component={[DatePicker]}
     />
     <Field
       name="week"
-      title="周选择"
+      title="Week Selection"
       decorator={[FormItem]}
       component={[DatePicker.WeekPicker]}
     />
     <Field
       name="quarter"
-      title="财年选择"
+      title="Financial Year Selection"
       decorator={[FormItem]}
       component={[DatePicker.MonthPicker]}
     />
     <Field
       name="year"
-      title="年选择"
+      title="Year selection"
       decorator={[FormItem]}
       component={[DatePicker.YearPicker]}
     />
     <Field
       name="[startDate,endDate]"
-      title="日期范围选择"
+      title="Date range selection"
       decorator={[FormItem]}
       component={[DatePicker.RangePicker]}
     />
     <Field
       name="range_month"
-      title="月范围选择"
+      title="Month Range Selection"
       decorator={[FormItem]}
       component={[
         DatePicker.RangePicker,
@@ -221,7 +221,7 @@ export default () => (
     />
     <Field
       name="range_year"
-      title="年范围选择"
+      title="Year range selection"
       decorator={[FormItem]}
       component={[
         DatePicker.RangePicker,
@@ -231,7 +231,7 @@ export default () => (
       ]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -239,4 +239,4 @@ export default () => (
 
 ## API
 
-参考 https://fusion.design/pc/component/basic/date-picker
+Reference https://fusion.design/pc/component/basic/date-picker

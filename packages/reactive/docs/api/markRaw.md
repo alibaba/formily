@@ -1,10 +1,10 @@
 # markRaw
 
-## 描述
+## Description
 
-标记任意一个对象或者类原型为永远不可被 observable 劫持，优先级比 markObservable 高
+Mark any object or class prototype as never being hijacked by observable, priority is higher than markObservable
 
-## 签名
+## Signature
 
 ```ts
 interface markRaw<T> {
@@ -12,7 +12,7 @@ interface markRaw<T> {
 }
 ```
 
-## 用例
+## Example
 
 ```ts
 import { observable, autorun, markRaw } from '@formily/reactive'
@@ -24,29 +24,29 @@ class A {
 const a = observable(new A())
 
 autorun(() => {
-  console.log(a.property) //property变化时会被触发，因为A实例是普通对象
+  console.log(a.property) //It will be triggered when the property changes, because the A instance is a normal object
 })
 
 a.property = 123
 
 //--------------------------------------------
 
-const b = observable(markRaw(new A())) //实例级标记，只对当前实例生效
+const b = observable(markRaw(new A())) //instance-level mark, only valid for the current instance
 
 autorun(() => {
-  console.log(b.property) //property变化时不会被触发，因为已被标记raw
+  console.log(b.property) //will not be triggered when the property changes, because it has been marked raw
 })
 
 b.property = 123
 
 //--------------------------------------------
 
-markRaw(A) //类级标记，那么所有实例都会生效
+markRaw(A) //Class-level mark, then all instances will take effect
 
 const c = observable(new A())
 
 autorun(() => {
-  console.log(c.property) //property变化时不会被触发，因为已被标记raw
+  console.log(c.property) //will not be triggered when the property changes, because it has been marked raw
 })
 
 c.property = 123

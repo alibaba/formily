@@ -3,13 +3,6 @@
   "compilerOptions": {
     "outDir": "./lib"
   },
-  "include": [
-    "./src/**/*.ts",
-    "./src/**/*.tsx",
-  ],
-  "exclude": [
-    "./src/__tests__/*",
-    "./esm/*",
-    "./lib/*",
-  ]
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["./src/__tests__/*", "./esm/*", "./lib/*"]
 }

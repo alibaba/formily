@@ -1,8 +1,8 @@
 # Transfer
 
-> 穿梭框
+> Shuttle Box
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -24,12 +24,12 @@ export default () => (
     <SchemaField>
       <SchemaField.Array
         name="transfer"
-        title="穿梭框"
+        title="shuttle box"
         x-decorator="FormItem"
         x-component="Transfer"
         enum={[
-          { title: '选项1', key: 1 },
-          { title: '选项2', key: 2 },
+          { title: 'Option 1', key: 1 },
+          { title: 'Option 2', key: 2 },
         ]}
         x-component-props={{
           render: (item) => item.title,
@@ -37,13 +37,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -65,12 +65,12 @@ const schema = {
   properties: {
     transfer: {
       type: 'array',
-      title: '穿梭框',
+      title: 'shuttle box',
       'x-decorator': 'FormItem',
       'x-component': 'Transfer',
       enum: [
-        { title: '选项1', key: 1 },
-        { title: '选项2', key: 2 },
+        { title: 'Option 1', key: 1 },
+        { title: 'Option 2', key: 2 },
       ],
       'x-component-props': {
         render: '{{renderTitle}}',
@@ -85,13 +85,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} scope={{ renderTitle }} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -105,10 +105,10 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="transfer"
-      title="穿梭框"
+      title="shuttle box"
       dataSource={[
-        { title: '选项1', key: 1 },
-        { title: '选项2', key: 2 },
+        { title: 'Option 1', key: 1 },
+        { title: 'Option 2', key: 2 },
       ]}
       decorator={[FormItem]}
       component={[
@@ -119,7 +119,7 @@ export default () => (
       ]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -127,4 +127,4 @@ export default () => (
 
 ## API
 
-参考 https://ant.design/components/transfer-cn/
+Reference https://ant.design/components/transfer-cn/

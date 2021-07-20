@@ -1,4 +1,5 @@
 import React from 'react'
+import { ArrayField } from '@formily/core'
 import {
   useField,
   observer,
@@ -57,7 +58,7 @@ const useAddition = () => {
 }
 
 export const ArrayItems: ComposedArrayItems = observer((props) => {
-  const field = useField<Formily.Core.Models.ArrayField>()
+  const field = useField<ArrayField>()
   const prefixCls = usePrefixCls('formily-array-items')
   const schema = useFieldSchema()
   const addition = useAddition()

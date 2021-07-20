@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { Badge, Card, Collapse } from '@alifd/next'
+import { ArrayField } from '@formily/core'
 import {
   RecursionField,
   useField,
@@ -71,7 +72,7 @@ const insertExpandedKeys = (expandedKeys: number[], index: number) => {
 
 export const ArrayCollapse: ComposedArrayCollapse = observer(
   ({ defaultOpenPanelCount, ...props }: IArrayCollapseProps) => {
-    const field = useField<Formily.Core.Models.ArrayField>()
+    const field = useField<ArrayField>()
     const dataSource = Array.isArray(field.value) ? field.value : []
 
     const [expandKeys, setExpandKeys] = useState<number[]>(

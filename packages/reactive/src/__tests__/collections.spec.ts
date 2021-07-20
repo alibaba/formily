@@ -1,4 +1,4 @@
-import { isObservable, observable, autorun, raw } from '..'
+import { observable, autorun, raw } from '..'
 
 describe('Map', () => {
   test('should be a proper JS Map', () => {
@@ -42,7 +42,7 @@ describe('Map', () => {
     autorun(() => {
       dummy = 0
       // eslint-disable-next-line no-unused-vars
-      for (let [key, num] of map) {
+      for (let [, num] of map) {
         dummy += num
       }
     })
@@ -125,7 +125,7 @@ describe('Map', () => {
     autorun(() => {
       dummy = 0
       // eslint-disable-next-line no-unused-vars
-      for (let [key, num] of map.entries()) {
+      for (let [, num] of map.entries()) {
         dummy += num
       }
     })
@@ -206,7 +206,7 @@ describe('Map', () => {
     autorun(() => {
       dummy = 0
       // eslint-disable-next-line no-unused-vars
-      for (let [key, num] of raw(map).entries()) {
+      for (let [, num] of raw(map).entries()) {
         dummy += num
       }
       for (let key of raw(map).keys()) {
@@ -215,11 +215,11 @@ describe('Map', () => {
       for (let num of raw(map).values()) {
         dummy += num
       }
-      raw(map).forEach((num, key) => {
+      raw(map).forEach((num) => {
         dummy += num
       })
       // eslint-disable-next-line no-unused-vars
-      for (let [key, num] of raw(map)) {
+      for (let [, num] of raw(map)) {
         dummy += num
       }
     })

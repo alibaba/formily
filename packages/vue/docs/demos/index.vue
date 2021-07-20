@@ -5,14 +5,14 @@
       title="Name"
       required
       :decorator="[FormItem]"
-      :component="[Input, { placeholder:'Please Input' }]"
+      :component="[Input, { placeholder: 'Please Input' }]"
     />
     <Field
       name="password"
       title="Password"
       required
       :decorator="[FormItem]"
-      :component="[Input, { type: 'password', placeholder:'Please Input' }]"
+      :component="[Input, { type: 'password', placeholder: 'Please Input' }]"
       :reactions="createPasswordEqualValidate('confirm_password')"
     />
     <Field
@@ -20,12 +20,14 @@
       title="Confirm Password"
       required
       :decorator="[FormItem]"
-      :component="[Input, { type: 'password', placeholder:'Please Input' }]"
+      :component="[Input, { type: 'password', placeholder: 'Please Input' }]"
       :reactions="createPasswordEqualValidate('password')"
     />
     <FormConsumer>
       <template #default="{ form }">
-        <div style="white-space: pre;">{{ JSON.stringify(form.values, null, 2) }}</div>
+        <div style="white-space: pre">
+          {{ JSON.stringify(form.values, null, 2) }}
+        </div>
       </template>
     </FormConsumer>
   </FormProvider>
@@ -51,7 +53,11 @@ const FormItem = connect(
     { validateStatus: true, title: 'label', required: true },
     (props, field) => {
       return {
-        help: !isVoidField(field) ? (field.errors.length ? field.errors : undefined) : undefined,
+        help: !isVoidField(field)
+          ? field.errors.length
+            ? field.errors
+            : undefined
+          : undefined,
         extra: field.description,
       }
     }
@@ -62,7 +68,7 @@ export default {
   components: {
     FormProvider,
     FormConsumer,
-    Field
+    Field,
   },
   data() {
     const form = createForm({ validateFirst: true })
@@ -81,8 +87,8 @@ export default {
       FormItem,
       Input,
       form,
-      createPasswordEqualValidate
+      createPasswordEqualValidate,
     }
-  }
+  },
 }
 </script>

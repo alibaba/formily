@@ -1,85 +1,85 @@
-# 核心概念
+# Core idea
 
-@formily/react 本身架构不复杂，因为它只是提供了一系列的组件和 Hooks 给用户使用，但是我们还是需要理解以下几个概念：
+The architecture of @formily/react itself is not complicated, because it only provides a series of components and Hooks for users to use, but we still need to understand the following concepts:
 
-- 表单上下文
-- 字段上下文
-- 协议上下文
-- 模型绑定
-- 协议驱动
-- 三种开发模式
+- Form context
+- Field context
+- Protocol context
+- Model binding
+- Protocol driven
+- Three development modes
 
-## 表单上下文
+## Form context
 
-从[架构图](/guide/architecture)中我们可以看到 FormProvider 是作为表单统一上下文而存在，它的地位非常重要，主要用于将@formily/core 创建出来的[Form](//core.formilyjs.org/api/models/form)实例下发到所有子组件中，不管是在内置组件还是用户扩展的组件，都能通过[useForm](/api/hooks/use-form)读取到[Form](//core.formilyjs.org/api/models/form)实例
+From the [architecture diagram](/guide/architecture) we can see that FormProvider exists as a unified context for forms, and its position is very important. It is mainly used to create [Form](//core. formilyjs.org/api/models/form) instances are distributed to all sub-components, whether in built-in components or user-extended components, can be read through [useForm](/api/hooks/use-form) [ Form](//core.formilyjs.org/api/models/form) instance
 
-## 字段上下文
+## Field context
 
-从[架构图](/guide/architecture)中我们可以看到不管是 Field/ArrayField/ObjectField/VoidField，会给子树下发一个 FieldContext，我们可以在自定义组件中读取到当前字段模型，主要是使用[useField](/api/hooks/use-field)来读取，这样非常方便于做模型映射
+From the [architecture diagram](/guide/architecture) we can see that whether it is Field/ArrayField/ObjectField/VoidField, a FieldContext will be issued to the subtree. We can read the current field model in the custom component, mainly Use [useField](/api/hooks/use-field) to read, which is very convenient for model mapping
 
-## 协议上下文
+## Protocol context
 
-从[架构图](/guide/architecture)中我们可以看到[RecursionField](/api/components/recursion-field)会给子树下发一个 FieldSchemaContext，我们可以在自定义组件中读取到当前字段的 Schema 描述，主要是使用[useFieldSchema](/api/hooks/useFieldSchema)来读取。注意，该 Hook 只能用在[SchemaField](/api/components/SchemaField)和[RecursionField](/api/components/recursion-field)子树中使用
+From the [architecture diagram](/guide/architecture) we can see that [RecursionField](/api/components/recursion-field) will send a FieldSchemaContext to the subtree, and we can read the current field in the custom component The Schema description is mainly read using [useFieldSchema](/api/hooks/useFieldSchema). Note that this Hook can only be used in the [SchemaField](/api/components/SchemaField) and [RecursionField](/api/components/recursion-field) subtrees
 
-## 模型绑定
+## Model binding
 
-想要理解模型绑定，需要先理解什么是[MVVM](//core.formilyjs.org/guide/mvvm)，理解了之后我们再看看这张图：
+To understand model binding, you need to understand what [MVVM](//core.formilyjs.org/guide/mvvm) is. After understanding, let’s take a look at this picture:
 
 ![](https://img.alicdn.com/imgextra/i1/O1CN01A03C191KwT1raxnDg_!!6000000001228-55-tps-2200-869.svg)
 
-在 Formily 中，@formily/core 就是 ViewModel，Component 和 Decorator 就是 View，@formily/react 就是将 ViewModel 和 View 绑定起来的胶水层，ViewModel 和 View 的绑定就叫做模型绑定，实现模型绑定的手段主要有[useField](/api/hooks/use-field)，也能使用[connect](/api/shared/connect)和[mapProps](/api/shared/map-props)，需要注意的是，Component 只需要支持 value/onChange 属性即可自动实现数据层的双向绑定。
+In Formily, @formily/core is ViewModel, Component and Decorator are View, @formily/react is the glue layer that binds ViewModel and View, and the binding of ViewModel and View is called model binding, which implements model binding. The main methods are [useField](/api/hooks/use-field), and [connect](/api/shared/connect) and [mapProps](/api/shared/map-props) can also be used. Note that Component only needs to support the value/onChange property to automatically realize the two-way binding of the data layer.
 
-## 协议驱动
+## JSON Schema Driver
 
-协议驱动渲染算是@formily/react 中学习成本最高的部分了，但是学会了之后，它给业务带来的收益也是很高，总共需要理解 4 个核心概念：
+Protocol-driven rendering is the most expensive part of @formily/react, but after learning it, the benefits it brings to the business are also very high. A total of 4 core concepts need to be understood:
 
 - Schema
-- 递归渲染
-- 协议绑定
-- 三种开发模式
+- Recursive rendering
+- Protocol binding
+- Three development modes
 
 ### Schema
 
-formily 的协议驱动主要是基于标准 JSON Schema 来进行驱动渲染的，同时我们在标准之上又扩展了一些`x-*`属性来表达 UI，使得整个协议可以具备完整描述一个复杂表单的能力，具体 Schema 协议，参考[Schema](/api/shared/schema) API 文档
+Formily’s protocol driver is mainly based on the standard JSON Schema to drive rendering. At the same time, we have extended some `x-*` attributes to express the UI on top of the standard, so that the entire protocol can fully describe a complex form. Schema protocol, refer to [Schema](/api/shared/schema) API document
 
-### 递归渲染
+### Recursive rendering
 
-何为递归渲染？递归渲染就是组件 A 在某些条件下会继续用组件 A 来渲染内容，看看以下伪代码：
+What is recursive rendering? Recursive rendering means that component A will continue to use component A to render content under certain conditions. Take a look at the following pseudo code:
 
 ```json
-{ <---- RecursionField(条件：object；渲染权：RecursionField)
+{<---- RecursionField (condition: object; rendering right: RecursionField)
   "type":"object",
   "properties":{
-    "username":{ <---- RecursionField(条件：string；渲染权：RecursionField)
+    "username":{ <---- RecursionField (condition: string; rendering right: RecursionField)
       "type":"string",
       "x-component":"Input"
     },
-    "phone":{ <---- RecursionField(条件：string；渲染权：RecursionField)
+    "phone":{ <---- RecursionField (condition: string; rendering right: RecursionField)
       "type":"string",
       "x-component":"Input",
       "x-validator":"phone"
     },
-    "email":{ <---- RecursionField(条件：string；渲染权：RecursionField)
+    "email":{ <---- RecursionField (condition: string; rendering right: RecursionField)
       "type":"string",
       "x-component":"Input",
       "x-validator":"email"
     },
-    "contacts":{ <---- RecursionField(条件：array；渲染权：RecursionField)
+    "contacts":{ <---- RecursionField (condition: array; rendering right: RecursionField)
       "type":"array",
       "x-component":"ArrayTable",
-      "items":{ <---- RecursionField(条件：object；渲染权：ArrayTable组件)
+      "items":{ <---- RecursionField (condition: object; rendering rights: ArrayTable component)
         "type":"object",
         "properties":{
-          "username":{ <---- RecursionField(条件：string；渲染权：RecursionField)
+          "username":{ <---- RecursionField (condition: string; rendering right: RecursionField)
             "type":"string",
             "x-component":"Input"
           },
-          "phone":{ <---- RecursionField(条件：string；渲染权：RecursionField)
+          "phone":{ <---- RecursionField (condition: string; rendering right: RecursionField)
             "type":"string",
             "x-component":"Input",
             "x-validator":"phone"
           },
-          "email":{ <---- RecursionField(条件：string；渲染权：RecursionField)
+          "email":{ <---- RecursionField (condition: string; rendering right: RecursionField)
             "type":"string",
             "x-component":"Input",
             "x-validator":"email"
@@ -91,36 +91,36 @@ formily 的协议驱动主要是基于标准 JSON Schema 来进行驱动渲染�
 }
 ```
 
-@formily/react 递归渲染的入口是[SchemaField](/api/components/schema-field)，但它内部实际是使用 [RecursionField](/api/components/recursion-field) 来渲染的，因为 JSON-Schema 就是一个递归型结构，所以 [RecursionField](/api/components/recursion-field) 在渲染的时候会从顶层 Schema 节点解析，如果是非 object 和 array 类型则直接渲染具体组件，如果是 object，则会遍历 properties 继续用 [RecursionField](/api/components/recursion-field) 渲染子级 Schema 节点。
+@formily/react The entry point for recursive rendering is [SchemaField](/api/components/schema-field), but it actually uses [RecursionField](/api/components/recursion-field) to render internally, because of JSON-Schema It is a recursive structure, so [RecursionField](/api/components/recursion-field) will be parsed from the top-level Schema node when rendering. If it is a non-object and array type, it will directly render the specific component. If it is an object, it will traverse. properties Continue to use [RecursionField](/api/components/recursion-field) to render child Schema nodes.
 
-这里有点特殊的情况是 array 类型的自增列表渲染，需要用户在自定义组件内使用[RecursionField](/api/components/recursion-field)进行递归渲染，因为自增列表的 UI 个性化定制程度很高，所以就把递归渲染权交给用户来渲染了，这样设计也能让协议驱动渲染变得更加灵活。
+A special case here is the rendering of the array type auto-increment list, which requires the user to use [RecursionField](/api/components/recursion-field) in the custom component for recursive rendering, because the UI of the auto-increment list is very customized High, so the recursive rendering rights are handed over to the user to render, so the design can also make protocol-driven rendering more flexible.
 
-那 SchemaField 和 RecursionField 有啥差别呢？主要有两点：
+What is the difference between SchemaField and RecursionField? There are two main points:
 
-- SchemaField 是支持 Markup 语法的，它会提前解析 Markup 语法生成[JSON Schema](/api/shared/schema)移交给 RecursionField 渲染，所以 RecursionField 只能基于 [JSON Schema](/api/shared/schema) 渲染
-- SchemaField 渲染的是整体的 Schema 协议，而 RecursionField 渲染的是局部 Schema 协议
+- SchemaField supports Markup grammar, it will parse Markup grammar in advance to generate [JSON Schema](/api/shared/schema) and transfer it to RecursionField for rendering, so RecursionField can only be rendered based on [JSON Schema](/api/shared/schema)
+- SchemaField renders the overall Schema protocol, while RecursionField renders the partial Schema protocol
 
-### 协议绑定
+### Protocol binding
 
-前面讲了模型绑定，而协议绑定则是将 Schema 协议转换成模型绑定的过程，因为 JSON-Schema 协议是 JSON 字符串，可离线存储的，而模型绑定则是内存间的绑定关系，是 Runtime 层的，比如`x-component`在 Schema 中是组件的字符串标识，但是在模型中的 component 则是需要组件引用，所以 JSON 字符串与 Runtime 层是需要转换的。然后我们就可以继续完善一下以上模型绑定的图：
+I talked about model binding, and protocol binding is the process of converting Schema protocol into model binding, because JSON-Schema protocol is a JSON string and can be stored offline, while model binding is a binding between memory The relationship is at the Runtime layer. For example, `x-component` is the string identifier of the component in the Schema, but the component in the model requires component reference, so the JSON string and the Runtime layer need to be converted. Then we can continue to improve the above model binding diagram:
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01jLCRxH1aa3V0x6nw4_!!6000000003345-55-tps-2200-1147.svg)
 
-总结下来，在@formily/react 中，主要有 2 层绑定关系，Schema 绑定模型，模型绑定组件，实现绑定的胶水层就是@formily/react，需要注意的是，Schema 绑定字段模型之后，字段模型中是感知不到 Schema 的，比如要修改`enum`，就是修改字段模型中的`dataSource`属性了，总之，想要更新字段模型，参考[Field](//core.formilyjs.org/models/field)，想要理解 Schema 与字段模型的映射关系可以参考[Schema](/api/shared/schema)文档
+To sum up, in @formily/react, there are mainly two layers of binding relationships, Schema binding model, model binding component, the glue layer that realizes the binding is @formily/react, it should be noted that Schema binds the field model After that, the Schema is not perceptible in the field model. For example, if you want to modify the `enum`, you need to modify the `dataSource` attribute in the field model. In short, if you want to update the field model, refer to [Field](//core.formilyjs. org/models/field), you can refer to [Schema](/api/shared/schema) document if you want to understand the mapping relationship between Schema and field model
 
-## 三种开发模式
+## Three development models
 
-从[架构图](/guide/architecture)中我们其实已经看到整个@formily/react 是有三种开发模式的，对应不同用户：
+From the [architecture diagram](/guide/architecture), we have actually seen that the entire @formily/react has three development modes, corresponding to different users:
 
-- JSX 开发模式
-- JSON Schema 开发模式
-- Markup Schema 开发模式
+- JSX development model
+- JSON Schema development mode
+- Markup Schema development mode
 
-我们可以看看具体例子
+We can look at specific examples
 
-#### JSX 开发模式
+#### JSX development model
 
-该模式主要是使用 Field/ArrayField/ObjectField/VoidField 组件
+This mode mainly uses Field/ArrayField/ObjectField/VoidField components
 
 ```tsx
 import React from 'react'
@@ -132,14 +132,14 @@ const form = createForm()
 
 export default () => (
   <FormProvider form={form}>
-    <Field name="input" component={[Input, { placeholder: '请输入' }]} />
+    <Field name="input" component={[Input, { placeholder: 'Please enter' }]} />
   </FormProvider>
 )
 ```
 
-#### JSON Schema 开发模式
+#### JSON Schema Development Mode
 
-该模式是给 SchemaField 的 schema 属性传递 JSON Schema 即可
+This mode is to pass JSON Schema to the schema attribute of SchemaField
 
 ```tsx
 import React from 'react'
@@ -165,7 +165,7 @@ export default () => (
             type: 'string',
             'x-component': 'Input',
             'x-component-props': {
-              placeholder: '请输入',
+              placeholder: 'Please enter',
             },
           },
         },
@@ -175,17 +175,17 @@ export default () => (
 )
 ```
 
-#### Markup Schema 开发模式
+#### Markup Schema Development Mode
 
-该模式算是一个对源码开发比较友好的 Schema 开发模式，同样是使用 SchemaField 组件。
+This mode can be regarded as a Schema development mode that is more friendly to source code development, and it also uses the SchemaField component.
 
-因为用 JSON Schema 在 JSX 环境下很难得到最好的智能提示体验，而且也不方便维护，用标签的形式可维护性会更好，智能提示也很强。
+Because it is difficult to get the best smart prompt experience in the JSX environment with JSON Schema, and it is inconvenient to maintain, the maintainability in the form of tags will be better, and the smart prompt is also very strong.
 
-Markup Schema 模式主要有以下几个特点：
+Markup Schema mode mainly has the following characteristics:
 
-- 主要依赖 SchemaField.String/SchemaField.Array/SchemaField.Object...这类描述标签来表达 Schema
-- 每个描述标签都代表一个 Schema 节点，与 JSON-Schema 等价
-- SchemaField 子节点不能随意插 UI 元素，因为 SchemaField 只会解析子节点的所有 Schema 描述标签，然后转换成 JSON Schema，最终交给[RecursionField](/api/components/recursion-field)渲染，如果想要插入 UI 元素，可以在 VoidDield 上传`x-content`属性来插入 UI 元素
+- Mainly rely on description tags such as SchemaField.String/SchemaField.Array/SchemaField.Object... to express Schema
+- Each description tag represents a Schema node, which is equivalent to JSON-Schema
+- SchemaField child nodes cannot insert UI elements at will, because SchemaField will only parse all the Schema description tags of the child nodes, and then convert them into JSON Schema, and finally give it to [RecursionField](/api/components/recursion-field) for rendering, if you want Insert UI elements, you can upload the `x-content` attribute in VoidDield to insert UI elements
 
 ```tsx
 import React from 'react'
@@ -206,10 +206,10 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         x-component="Input"
-        x-component-props={{ placeholder: '请输入' }}
+        x-component-props={{ placeholder: 'Please enter' }}
       />
-      <div>我不会被渲染</div>
-      <SchemaField.Void x-content={<div>我会被渲染</div>} />
+      <div>I will not be rendered</div>
+      <SchemaField.Void x-content={<div>I will be rendered</div>} />
     </SchemaField>
   </FormProvider>
 )

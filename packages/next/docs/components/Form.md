@@ -1,8 +1,8 @@
 # Form
 
-> FormProvider + FormLayout + form 标签的组合组件，可以帮助我们快速实现带回车提交的且能批量布局的表单
+> The combination of FormProvider + FormLayout + form tags can help us quickly implement forms that are submitted with carriage return and can be laid out in batches
 
-## 使用案例
+## Use Cases
 
 ```tsx
 import React from 'react'
@@ -31,66 +31,58 @@ export default () => (
     <FormGrid maxColumns={4}>
       <Field
         name="aa"
-        title="选择框"
+        title="select box"
         decorator={[FormItem]}
         component={[Select]}
         dataSource={[
           {
-            label: '选项1',
+            label: 'Option 1',
             value: 1,
           },
           {
-            label: '选项2',
+            label: 'Option 2',
             value: 2,
           },
         ]}
       />
       <Field
         name="bb"
-        title="输入框"
+        title="input box"
         required
         decorator={[FormItem]}
         component={[Input]}
       />
       <Field
         name="cc"
-        title="输入框"
+        title="input box"
         decorator={[FormItem]}
         component={[Input]}
       />
       <Field
         name="dd"
-        title="输入框"
+        title="input box"
         decorator={[FormItem]}
         component={[Input]}
       />
       <Field
         name="ee"
-        title="输入框"
+        title="input box"
         decorator={[FormItem]}
         component={[Input]}
       />
       <FormButtonGroup.FormItem>
-        <Submit>查询</Submit>
+        <Submit>Query</Submit>
       </FormButtonGroup.FormItem>
     </FormGrid>
   </Form>
 )
 ```
 
-## Fusion 多语言
+## Fusion Multilingual
 
 ```tsx
 import React from 'react'
-import {
-  Input,
-  Select,
-  Form,
-  FormItem,
-  FormGrid,
-  FormButtonGroup,
-  Submit,
-} from '@formily/next'
+import { Input, Form, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { Field } from '@formily/react'
 import { ConfigProvider } from '@alifd/next'
@@ -123,17 +115,17 @@ export default () => (
 ```
 
 <Alert style="margin-top:20px">
-注意：想要实现回车提交，我们在使用Submit组件的时候不能给其传onSubmit事件，否则回车提交会失效，这样做的目的是为了防止用户同时在多处写onSubmit事件监听器，处理逻辑不一致的话，提交时很难定位问题。
+Note: To realize the carriage return submission, we cannot pass the onSubmit event to it when using the Submit component, otherwise the carriage return submission will become invalid. The purpose of this is to prevent users from writing onSubmit event listeners in multiple places at the same time, and processing logic If they are inconsistent, it is difficult to locate the problem when submitting.
 </Alert>
 
 ## API
 
-布局相关的 API 属性，我们参考 [FormLayout](./form-layout)即可，剩下是 Form 组件独有的 API 属性
+For layout-related API properties, we can refer to [FormLayout](./form-layout), and the rest are the unique API properties of the Form component
 
-| 属性名                 | 类型                                                                                             | 描述                               | 默认值 |
-| ---------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------- | ------ |
-| form                   | [Form](https://core.formilyjs.org/api/models/form)                                               | Form 实例                          | -      |
-| component              | string                                                                                           | 渲染组件，可以指定为自定义组件渲染 | `form` |
-| previewTextPlaceholder | ReactNode                                                                                        | 预览态占位符                       | `N/A`  |
-| onAutoSubmit           | `(values:any)=>any`                                                                              | 回车提交事件回调                   | -      |
-| onAutoSubmitFailed     | (feedbacks: [IFormFeedback](https://core.formilyjs.org/api/models/form#iformfeedback)[]) => void | 回车提交校验失败事件回调           | -      |
+| Property name          | Type                                                                                             | Description                                                         | Default value |
+| ---------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------- |
+| form                   | [Form](https://core.formilyjs.org/api/models/form)                                               | Form example                                                        | -             |
+| component              | string                                                                                           | Rendering component, can be specified as custom component rendering | `form`        |
+| previewTextPlaceholder | ReactNode                                                                                        | Preview State Placeholder                                           | `N/A`         |
+| onAutoSubmit           | `(values:any)=>any`                                                                              | Carriage return submit event callback                               | -             |
+| onAutoSubmitFailed     | (feedbacks: [IFormFeedback](https://core.formilyjs.org/api/models/form#iformfeedback)[]) => void | Carriage return submission verification failure event callback      | -             |

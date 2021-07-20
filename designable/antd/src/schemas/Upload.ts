@@ -3,6 +3,11 @@ import { ISchema } from '@formily/react'
 export const Upload: ISchema & { Dragger?: ISchema } = {
   type: 'object',
   properties: {
+    textContent: {
+      type: 'string',
+      'x-decorator': 'FormItem',
+      'x-component': 'Input',
+    },
     accept: {
       type: 'string',
       'x-decorator': 'FormItem',
@@ -51,6 +56,7 @@ export const Upload: ISchema & { Dragger?: ISchema } = {
         include: ['EXPRESSION'],
       },
     },
+
     listType: {
       enum: ['text', 'picture', 'picture-card'],
       'x-decorator': 'FormItem',

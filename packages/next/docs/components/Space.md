@@ -1,8 +1,8 @@
 # Space
 
-> 超级便捷的 Flex 布局组件，可以帮助用户快速实现任何元素的并排紧挨布局
+> Super convenient Flex layout component, can help users quickly realize the layout of any element side by side next to each other
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -32,7 +32,7 @@ export default () => (
     <FormLayout labelCol={6} wrapperCol={16}>
       <SchemaField>
         <SchemaField.Void
-          title="姓名"
+          title="name"
           x-decorator="FormItem"
           x-decorator-props={{
             asterisk: true,
@@ -54,7 +54,7 @@ export default () => (
           />
         </SchemaField.Void>
         <SchemaField.Void
-          title="文本串联"
+          title="Text concatenation"
           x-decorator="FormItem"
           x-decorator-props={{
             asterisk: true,
@@ -67,7 +67,7 @@ export default () => (
             x-decorator="FormItem"
             x-component="Input"
             x-decorator-props={{
-              addonAfter: '单位',
+              addonAfter: 'Unit',
             }}
             required
           />
@@ -76,7 +76,7 @@ export default () => (
             x-decorator="FormItem"
             x-component="Input"
             x-decorator-props={{
-              addonAfter: '单位',
+              addonAfter: 'Unit',
             }}
             required
           />
@@ -85,14 +85,14 @@ export default () => (
             x-decorator="FormItem"
             x-component="Input"
             x-decorator-props={{
-              addonAfter: '单位',
+              addonAfter: 'Unit',
             }}
             required
           />
         </SchemaField.Void>
         <SchemaField.String
           name="textarea"
-          title="文本框"
+          title="text box"
           x-decorator="FormItem"
           required
           x-component="Input.TextArea"
@@ -104,14 +104,14 @@ export default () => (
         />
       </SchemaField>
       <FormButtonGroup.FormItem>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormLayout>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -141,7 +141,7 @@ const schema = {
   properties: {
     name: {
       type: 'void',
-      title: '姓名',
+      title: 'Name',
       'x-decorator': 'FormItem',
       'x-decorator-props': {
         asterisk: true,
@@ -165,7 +165,7 @@ const schema = {
     },
     texts: {
       type: 'void',
-      title: '文本串联',
+      title: 'Text concatenation',
       'x-decorator': 'FormItem',
       'x-decorator-props': {
         asterisk: true,
@@ -177,7 +177,7 @@ const schema = {
           type: 'string',
           'x-decorator': 'FormItem',
           'x-decorator-props': {
-            addonAfter: '单位',
+            addonAfter: 'Unit',
           },
           'x-component': 'Input',
           required: true,
@@ -186,7 +186,7 @@ const schema = {
           type: 'string',
           'x-decorator': 'FormItem',
           'x-decorator-props': {
-            addonAfter: '单位',
+            addonAfter: 'Unit',
           },
           'x-component': 'Input',
           required: true,
@@ -195,7 +195,7 @@ const schema = {
           type: 'string',
           'x-decorator': 'FormItem',
           'x-decorator-props': {
-            addonAfter: '单位',
+            addonAfter: 'Unit',
           },
           'x-component': 'Input',
           required: true,
@@ -205,7 +205,7 @@ const schema = {
 
     textarea: {
       type: 'string',
-      title: '文本框',
+      title: 'Text box',
       'x-decorator': 'FormItem',
       'x-component': 'Input.TextArea',
       'x-component-props': {
@@ -223,14 +223,14 @@ export default () => (
     <FormLayout labelCol={6} wrapperCol={16}>
       <SchemaField schema={schema} />
       <FormButtonGroup.FormItem>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormLayout>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -252,7 +252,7 @@ export default () => (
     <FormLayout labelCol={6} wrapperCol={16}>
       <VoidField
         name="name"
-        title="姓名"
+        title="name"
         decorator={[
           FormItem,
           {
@@ -277,7 +277,7 @@ export default () => (
       </VoidField>
       <VoidField
         name="texts"
-        title="文本串联"
+        title="Text concatenation"
         decorator={[
           FormItem,
           {
@@ -292,7 +292,7 @@ export default () => (
           decorator={[
             FormItem,
             {
-              addonAfter: '单位',
+              addonAfter: 'Unit',
             },
           ]}
           component={[Input]}
@@ -303,7 +303,7 @@ export default () => (
           decorator={[
             FormItem,
             {
-              addonAfter: '单位',
+              addonAfter: 'Unit',
             },
           ]}
           component={[Input]}
@@ -314,7 +314,7 @@ export default () => (
           decorator={[
             FormItem,
             {
-              addonAfter: '单位',
+              addonAfter: 'Unit',
             },
           ]}
           component={[Input]}
@@ -323,7 +323,7 @@ export default () => (
       </VoidField>
       <Field
         name="textarea"
-        title="文本框"
+        title="text box"
         decorator={[FormItem]}
         component={[
           Input.TextArea,
@@ -336,7 +336,7 @@ export default () => (
         required
       />
       <FormButtonGroup.FormItem>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormLayout>
   </FormProvider>
@@ -345,12 +345,12 @@ export default () => (
 
 ## API
 
-| 属性名    | 类型                                         | 描述     | 默认值    |
-| --------- | -------------------------------------------- | -------- | --------- |
-| style     | CSSProperties                                | 样式     | -         |
-| className | string                                       | 类名     | -         |
-| prefix    | string                                       | 样式前缀 | true      |
-| size      | `number \| 'small' \| 'large' \| 'middle'`   | 间隔尺寸 | 8px       |
-| direction | `'horizontal' \| 'vertical'`                 | 方向     | -         |
-| align     | `'start' \| 'end' \| 'center' \| 'baseline'` | 对齐     | `'start'` |
-| wrap      | boolean                                      | 是否换行 | false     |
+| Property name | Type                                      | Description     | Default value |
+| ------------- | ----------------------------------------- | --------------- | ------------- |
+| style         | CSSProperties                             | Style           | -             |
+| className     | string                                    | class name      | -             |
+| prefix        | string                                    | style prefix    | true          |
+| size          | `number \|'small' \|'large' \|'middle'`   | interval size   | 8px           |
+| direction     | `'horizontal' \|'vertical'`               | direction       | -             |
+| align         | `'start' \|'end' \|'center' \|'baseline'` | align           | `'start'`     |
+| wrap          | boolean                                   | Whether to wrap | false         |

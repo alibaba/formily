@@ -6,13 +6,13 @@ import styled from 'styled-components'
 export default styled(({ className, dataSource }) => {
   const [selected, select] = useState({
     current: 0,
-    key: ''
+    key: '',
   })
   return (
     <div className={className}>
       <LeftPanel
         dataSource={dataSource}
-        onSelect={info => {
+        onSelect={(info) => {
           select(info)
         }}
       />

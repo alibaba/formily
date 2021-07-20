@@ -3,7 +3,7 @@ function nullthrows(x: any, message?: string) {
   if (x != null) {
     return x
   }
-  var error: any = new Error(
+  const error: any = new Error(
     message !== undefined ? message : 'Got unexpected ' + x
   )
   error.framesToPop = 1 // Skip nullthrows's own stack frame.

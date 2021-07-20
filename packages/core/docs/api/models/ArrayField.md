@@ -4,25 +4,25 @@ order: 2
 
 # ArrayField
 
-调用[createArrayField](/api/models/form#createarrayfield)所返回的 ArrayField 模型。
+Call the ArrayField model returned by [createArrayField](/api/models/form#createarrayfield).
 
-因为 ArrayField 是继承至 [Field](/api/models/field) 模型的，所以大部分 API 参考 Field 模型即可，该文档只讲解扩展方法
+Because ArrayField is inherited from the [Field](/api/models/field) model, most APIs can refer to the Field model. This document only explains the extension method
 
-## 方法
+## Method
 
 <Alert>
 
-注意：以下方法不仅会对数组数据做更新，同时还会对子节点做状态转置，如果不希望自动转置状态，可以直接调用`setValue`方法覆盖式更新值即可。
+Note: The following method not only updates the array data, but also transposes the state of the child nodes. If you don't want to automatically transpose the state, you can directly call the `setValue` method to overwrite the update value.
 
 </Alert>
 
 ### push
 
-#### 描述
+#### Description
 
-往数组尾部追加元素，并触发 onInput
+Append an element to the end of the array and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface push {
@@ -32,11 +32,11 @@ interface push {
 
 ### pop
 
-#### 描述
+#### Description
 
-弹出数组最后一个元素，并触发 onInput
+Pop the last element of the array and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface pop {
@@ -46,11 +46,11 @@ interface pop {
 
 ### insert
 
-#### 描述
+#### Description
 
-往数组中插入元素，并触发 onInput
+Insert an element into the array and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface insert {
@@ -60,11 +60,11 @@ interface insert {
 
 ### remove
 
-#### 描述
+#### Description
 
-删除数组元素，并触发 onInput
+Delete the array element and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface remove {
@@ -74,11 +74,11 @@ interface remove {
 
 ### shift
 
-#### 描述
+#### Description
 
-弹出数组第一个元素，并触发 onInput
+Pop the first element of the array and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface shift {
@@ -88,11 +88,11 @@ interface shift {
 
 ### unshift
 
-#### 描述
+#### Description
 
-往数组头部追加元素，并触发 onInput
+Append an element to the head of the array and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface unshift {
@@ -102,11 +102,11 @@ interface unshift {
 
 ### move
 
-#### 描述
+#### Description
 
-移动数组元素，并触发 onInput
+Move the array element and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface move {
@@ -116,11 +116,11 @@ interface move {
 
 ### moveUp
 
-#### 描述
+#### Description
 
-上移数组元素，并触发 onInput
+Move the array element up and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface moveUp {
@@ -130,11 +130,11 @@ interface moveUp {
 
 ### moveDown
 
-#### 描述
+#### Description
 
-下移数组元素，并触发 onInput
+Move the array element down and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface moveDown {
@@ -142,8 +142,8 @@ interface moveDown {
 }
 ```
 
-## 类型
+## Types of
 
 ### IArrayFieldState
 
-主要属性参考[IFieldState](/api/models/field#ifieldstate)，只是 value 的数据类型要求是数组
+The main attributes refer to [IFieldState](/api/models/field#ifieldstate), but the data type of value is required to be an array

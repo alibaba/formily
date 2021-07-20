@@ -1,16 +1,16 @@
 # Schema
 
-## 描述
+## Description
 
-@formily/react 协议驱动最核心的部分，Schema 在其中是一个通用 Class，用户可以自行使用，同时在 SchemaField 和 RecursionField 中都有依赖它，它主要有几个核心能力：
+The core part of the @formily/react protocol driver. Schema is a general class in which users can use it by themselves. At the same time, both SchemaField and RecursionField rely on it. It has several core capabilities:
 
-- 解析 json-schema 的能力
-- 将 json-schema 转换成 Field Model 的能力
-- 编译 json-schema 表达式的能力
+- Ability to parse json-schema
+- The ability to convert json-schema to Field Model
+- The ability to compile json-schema expressions
 
-从@formily/react 中可以导出 Schema 这个 Class，但是如果你不希望使用@formily/react，你可以单独依赖@formily/json-schema 这个包
+You can export the Schema Class from @formily/react, but if you don’t want to use @formily/react, you can rely on the @formily/json-schema package alone
 
-## 构造器
+## Constructor
 
 ```ts
 class Schema {
@@ -18,209 +18,209 @@ class Schema {
 }
 ```
 
-基于一份 json schema 数据创建一棵 Schema Tree，保证每个 schema 节点都是包含对应方法的
+Create a Schema Tree based on a piece of json schema data to ensure that each schema node contains the corresponding method
 
-## 属性
+## Attributes
 
-| 属性                 | 描述                                              | 类型                                                                               | 字段模型映射                                                             |
-| -------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| type                 | 类型                                              | [SchemaTypes](#schematypes)                                                        | [GeneralField](https://core.formilyjs.org/api/models/field#generalfield) |
-| title                | 标题                                              | React.ReactNode                                                                    | `title`                                                                  |
-| description          | 描述                                              | React.ReactNode                                                                    | `description`                                                            |
-| default              | 默认值                                            | Any                                                                                | `initialValue`                                                           |
-| readOnly             | 是否只读                                          | Boolean                                                                            | `readOnly`                                                               |
-| writeOnly            | 是否只写                                          | Boolean                                                                            | `editable`                                                               |
-| enum                 | 枚举                                              | [SchemaEnum](#schemaenum)                                                          | `dataSource`                                                             |
-| const                | 校验字段值是否与 const 的值相等                   | Any                                                                                | `validator`                                                              |
-| multipleOf           | 校验字段值是否可被 multipleOf 的值整除            | Number                                                                             | `validator`                                                              |
-| maximum              | 校验最大值(大于)                                  | Number                                                                             | `validator`                                                              |
-| exclusiveMaximum     | 校验最大值（大于等于                              | Number                                                                             | `validator`                                                              |
-| minimum              | 校验最小值(小于)                                  | Number                                                                             | `validator`                                                              |
-| exclusiveMinimum     | 最小值（小于等于）                                | Number                                                                             | `validator`                                                              |
-| maxLength            | 校验最大长度                                      | Number                                                                             | `validator`                                                              |
-| minLength            | 校验最小长度                                      | Number                                                                             | `validator`                                                              |
-| pattern              | 正则校验规则                                      | RegExpString                                                                       | `validator`                                                              |
-| maxItems             | 最大条目数                                        | Number                                                                             | `validator`                                                              |
-| minItems             | 最小条目数                                        | Number                                                                             | `validator`                                                              |
-| uniqueItems          | 是否校验重复                                      | Boolean                                                                            | `validator`                                                              |
-| maxProperties        | 最大属性数量                                      | Number                                                                             | `validator`                                                              |
-| minProperties        | 最小属性数量                                      | Number                                                                             | `validator`                                                              |
-| required             | 必填                                              | Boolean                                                                            | `validator`                                                              |
-| format               | 正则校验格式                                      | [ValidatorFormats](https://core.formilyjs.org/api/models/field#fieldvalidator)     | `validator`                                                              |
-| properties           | 属性描述                                          | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
-| items                | 数组描述                                          | [SchemaItems](#schemaitems)                                                        | -                                                                        |
-| additionalItems      | 额外数组元素描述                                  | Schema                                                                             | -                                                                        |
-| patternProperties    | 动态匹配对象的某个属性的 Schema                   | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
-| additionalProperties | 匹配对象额外属性的 Schema                         | Schema                                                                             | -                                                                        |
-| x-index              | UI 展示顺序                                       | Number                                                                             | -                                                                        |
-| x-pattern            | UI 交互模式                                       | [FieldPatternTypes](https://core.formilyjs.org/api/models/field#fieldpatterntypes) | `pattern`                                                                |
-| x-display            | UI 展示                                           | [FieldDisplayTypes](https://core.formilyjs.org/api/models/field#fielddisplaytypes) | `display`                                                                |
-| x-validator          | 字段校验器                                        | [FieldValidator](https://core.formilyjs.org/api/models/field#fieldvalidator)       | `validator`                                                              |
-| x-decorator          | 字段 UI 包装器组件                                | `String \| React.FC`                                                               | `decorator`                                                              |
-| x-decorator-props    | 字段 UI 包装器组件属性                            | Any                                                                                | `decorator`                                                              |
-| x-component          | 字段 UI 组件                                      | `String \| React.FC`                                                               | `component`                                                              |
-| x-component-props    | 字段 UI 组件属性                                  | Any                                                                                | `component`                                                              |
-| x-reactions          | 字段联动协议                                      | [SchemaReactions](#schemareactions)                                                | `reactions`                                                              |
-| x-content            | 字段内容，用来传入某个组件的子节点                | React.ReactNode                                                                    | ReactChildren                                                            |
-| x-visible            | 字段显示隐藏                                      | Boolean                                                                            | `visible`                                                                |
-| x-hidden             | 字段 UI 隐藏(保留数据)                            | Boolean                                                                            | `hidden`                                                                 |
-| x-disabled           | 字段禁用                                          | Boolean                                                                            | `disabled`                                                               |
-| x-editable           | 字段可编辑                                        | Boolean                                                                            | `editable`                                                               |
-| x-read-only          | 字段只读                                          | Boolean                                                                            | `readOnly`                                                               |
-| x-read-pretty        | 字段阅读态                                        | Boolean                                                                            | `readPretty`                                                             |
-| definitions          | Schema 预定义                                     | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
-| $ref                 | 从 Schema 预定义中读取 Schema 并合并至当前 Schema | String                                                                             | -                                                                        |
+| Property             | Description                                                                     | Type                                                                               | Field Model Mapping                                                      |
+| -------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| type                 | Type                                                                            | [SchemaTypes](#schematypes)                                                        | [GeneralField](https://core.formilyjs.org/api/models/field#generalfield) |
+| title                | Title                                                                           | React.ReactNode                                                                    | `title`                                                                  |
+| description          | Description                                                                     | React.ReactNode                                                                    | `description`                                                            |
+| default              | Default value                                                                   | Any                                                                                | `initialValue`                                                           |
+| readOnly             | Is it read-only                                                                 | Boolean                                                                            | `readOnly`                                                               |
+| writeOnly            | Whether to write only                                                           | Boolean                                                                            | `editable`                                                               |
+| enum                 | Enumeration                                                                     | [SchemaEnum](#schemaenum)                                                          | `dataSource`                                                             |
+| const                | Check whether the field value is equal to the value of const                    | Any                                                                                | `validator`                                                              |
+| multipleOf           | Check whether the field value is divisible by the value of multipleOf           | Number                                                                             | `validator`                                                              |
+| maximum              | Check the maximum value (greater than)                                          | Number                                                                             | `validator`                                                              |
+| exclusiveMaximum     | Check the maximum value (greater than or equal to                               | Number                                                                             | `validator`                                                              |
+| minimum              | Validation minimum value (less than)                                            | Number                                                                             | `validator`                                                              |
+| exclusiveMinimum     | Minimum value (less than or equal to)                                           | Number                                                                             | `validator`                                                              |
+| maxLength            | Maximum length of verification                                                  | Number                                                                             | `validator`                                                              |
+| minLength            | Check minimum length                                                            | Number                                                                             | `validator`                                                              |
+| pattern              | Regular verification rules                                                      | RegExpString                                                                       | `validator`                                                              |
+| maxItems             | Maximum number of items                                                         | Number                                                                             | `validator`                                                              |
+| minItems             | Minimum number of items                                                         | Number                                                                             | `validator`                                                              |
+| uniqueItems          | Whether to verify duplicates                                                    | Boolean                                                                            | `validator`                                                              |
+| maxProperties        | Maximum number of properties                                                    | Number                                                                             | `validator`                                                              |
+| minProperties        | Minimum number of properties                                                    | Number                                                                             | `validator`                                                              |
+| required             | required                                                                        | Boolean                                                                            | `validator`                                                              |
+| format               | Regular verification format                                                     | [ValidatorFormats](https://core.formilyjs.org/api/models/field#fieldvalidator)     | `validator`                                                              |
+| properties           | Property description                                                            | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
+| items                | Array description                                                               | [SchemaItems](#schemaitems)                                                        | -                                                                        |
+| additionalItems      | Additional array element description                                            | Schema                                                                             | -                                                                        |
+| patternProperties    | Schema of a certain property of the dynamic matching object                     | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
+| additionalProperties | Schema of matching object additional properties                                 | Schema                                                                             | -                                                                        |
+| x-index              | UI display order                                                                | Number                                                                             | -                                                                        |
+| x-pattern            | UI interaction mode                                                             | [FieldPatternTypes](https://core.formilyjs.org/api/models/field#fieldpatterntypes) | `pattern`                                                                |
+| x-display            | UI display                                                                      | [FieldDisplayTypes](https://core.formilyjs.org/api/models/field#fielddisplaytypes) | `display`                                                                |
+| x-validator          | Field Validator                                                                 | [FieldValidator](https://core.formilyjs.org/api/models/field#fieldvalidator)       | `validator`                                                              |
+| x-decorator          | Field UI wrapper component                                                      | `String \| React.FC`                                                               | `decorator`                                                              |
+| x-decorator-props    | Field UI wrapper component properties                                           | Any                                                                                | `decorator`                                                              |
+| x-component          | Field UI component                                                              | `String \| React.FC`                                                               | `component`                                                              |
+| x-component-props    | Field UI component properties                                                   | Any                                                                                | `component`                                                              |
+| x-reactions          | Field linkage agreement                                                         | [SchemaReactions](#schemareactions)                                                | `reactions`                                                              |
+| x-content            | Field content, used to pass in the child nodes of a component                   | React.ReactNode                                                                    | ReactChildren                                                            |
+| x-visible            | Field display hidden                                                            | Boolean                                                                            | `visible`                                                                |
+| x-hidden             | Field UI hidden (data retention)                                                | Boolean                                                                            | `hidden`                                                                 |
+| x-disabled           | Field disabled                                                                  | Boolean                                                                            | `disabled`                                                               |
+| x-editable           | Editable field                                                                  | Boolean                                                                            | `editable`                                                               |
+| x-read-only          | Field read-only                                                                 | Boolean                                                                            | `readOnly`                                                               |
+| x-read-pretty        | Field Reading State                                                             | Boolean                                                                            | `readPretty`                                                             |
+| definitions          | Schema predefined                                                               | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
+| $ref                 | Read the Schema from the Schema predefined and merge it into the current Schema | String                                                                             | -                                                                        |
 
-#### 详细说明
+#### Detailed description
 
-- x-component 的组件标识与[createSchemaField](/api/components/schema-field#签名)传入的组件集合的 Key 匹配
-- x-decorator 的组件标识与[createSchemaField](/api/components/schema-field#签名)传入的组件集合的 Key 匹配
-- Schema 的每个属性都能使用字符串表达式`{{expression}}`，表达式变量可以从 createSchemaField 中传入，也可以从 SchemaField 组件中传入
-- $ref 指定 Schema 预定义的格式必须是`#/definitions/address`这种格式，不支持加载远程 JSON Schema
+- The component ID of x-component matches the key of the component collection passed in [createSchemaField](/api/components/schema-field#signature)
+- The component ID of x-decorator matches the key of the component collection passed in [createSchemaField](/api/components/schema-field#signature)
+- Every attribute of Schema can use string expression `{{expression}}`, expression variables can be passed in from createSchemaField or from SchemaField component
+- The predefined format of $ref specified Schema must be `#/definitions/address` this format, loading remote JSON Schema is not supported
 
-## 方法
+## Method
 
 ### addProperty
 
-#### 描述
+#### Description
 
-添加属性描述
+Add attribute description
 
-#### 签名
+#### Signature
 
 ```ts
 interface addProperty {
-  (key: string | number, schema: ISchema): Schema //返回添加后的Schema对象
+  (key: string | number, schema: ISchema): Schema //Return the added Schema object
 }
 ```
 
 ### removeProperty
 
-#### 描述
+#### Description
 
-移除属性描述
+Remove attribute description
 
-#### 签名
+#### Signature
 
 ```ts
 interface removeProperty {
-  (key: string | number): Schema //返回被移除的Schema对象
+  (key: string | number): Schema //Return the removed Schema object
 }
 ```
 
 ### setProperties
 
-#### 描述
+#### Description
 
-覆盖式更新属性描述
+Overwrite update attribute description
 
-#### 签名
+#### Signature
 
 ```ts
 interface setProperties {
-  (properties: SchemaProperties): Schema //返回当前Schema对象
+  (properties: SchemaProperties): Schema //Return the current Schema object
 }
 ```
 
-SchemaProperties 参考 [SchemaProperties](#schemaproperties)
+SchemaProperties Reference [SchemaProperties](#schemaproperties)
 
 ### addPatternProperty
 
-#### 描述
+#### Description
 
-添加正则属性描述
+Add regular attribute description
 
-#### 签名
+#### Signature
 
 ```ts
 interface addPatternProperty {
-  (regexp: string, schema: ISchema): Schema //返回添加后的Schema对象
+  (regexp: string, schema: ISchema): Schema //Return the added Schema object
 }
 ```
 
 ### removePatternProperty
 
-#### 描述
+#### Description
 
-移除正则属性描述
+Remove regular attribute description
 
-#### 签名
+#### Signature
 
 ```ts
 interface removePatternProperty {
-  (regexp: string): Schema //返回移除后的Schema对象
+  (regexp: string): Schema //Return the removed Schema object
 }
 ```
 
 ### setPatternProperties
 
-#### 描述
+#### Description
 
-覆盖式更新正则属性描述
+Override update regular attribute description
 
-#### 签名
+#### Signature
 
 ```ts
 interface setPatternProperties {
-  (properties: SchemaProperties): Schema //返回当前Schema对象
+  (properties: SchemaProperties): Schema //Return the current Schema object
 }
 ```
 
-SchemaProperties 参考 [SchemaProperties](#schemaproperties)
+SchemaProperties Reference [SchemaProperties](#schemaproperties)
 
 ### setAdditionalProperties
 
-#### 描述
+#### Description
 
-覆盖式更新扩展属性描述
+Overwrite update extended attribute description
 
-#### 签名
+#### Signature
 
 ```ts
 interface setAdditionalProperties {
-  (properties: ISchema): Schema //返回扩展属性Schema对象
+  (properties: ISchema): Schema //Returns the extended properties Schema object
 }
 ```
 
 ### setItems
 
-#### 描述
+#### Description
 
-覆盖式更新数组项描述
+Override to update the array item description
 
-#### 签名
+#### Signature
 
 ```ts
 interface setItems {
-  (items: SchemaItems): SchemaItems //返回更新后的SchemaItems对象
+  (items: SchemaItems): SchemaItems //Return the updated SchemaItems object
 }
 ```
 
-SchemaItems 参考 [SchemaItems](#schemaitems)
+SchemaItems Reference [SchemaItems](#schemaitems)
 
 ### setAdditionalItems
 
-#### 描述
+#### Description
 
-覆盖式更新数组扩展项描述
+Override to update the array extension item description
 
-#### 签名
+#### Signature
 
 ```ts
 interface setAdditionalItems {
-  (items: ISchema): Schema //返回更新后的Schema对象
+  (items: ISchema): Schema //Return the updated Schema object
 }
 ```
 
-SchemaItems 参考 [SchemaItems](#schemaitems)
+SchemaItems Reference [SchemaItems](#schemaitems)
 
 ### mapProperties
 
-#### 描述
+#### Description
 
-遍历并映射当前 Schema 的 properties 属性，同时会基于 x-index 顺序来遍历
+Traverse and map the properties of the current Schema, and traverse based on the x-index order
 
-#### 签名
+#### Signature
 
 ```ts
 interface mapProperties<T> {
@@ -230,11 +230,11 @@ interface mapProperties<T> {
 
 ### mapPatternProperties
 
-#### 描述
+#### Description
 
-遍历并映射当前 Schema 的 patternProperties 属性，同时会基于 x-index 顺序来遍历
+Traverse and map the patternProperties attribute of the current Schema, and traverse based on the x-index order
 
-#### 签名
+#### Signature
 
 ```ts
 interface mapPatternProperties<T> {
@@ -244,11 +244,11 @@ interface mapPatternProperties<T> {
 
 ### reduceProperties
 
-#### 描述
+#### Description
 
-reduce 当前 Schema 的 properties 属性，同时会基于 x-index 顺序来遍历
+reduce the properties of the current Schema, and it will be traversed based on the x-index order
 
-#### 签名
+#### Signature
 
 ```ts
 interface reduceProperties<T> {
@@ -261,11 +261,11 @@ interface reduceProperties<T> {
 
 ### reducePatternProperties
 
-#### 描述
+#### Description
 
-reduce 当前 Schema 的 patternProperties 属性，同时会基于 x-index 顺序来遍历
+reduce the patternProperties attribute of the current Schema, and it will be traversed based on the x-index order
 
-#### 签名
+#### Signature
 
 ```ts
 interface reducePatternProperties<T> {
@@ -278,13 +278,13 @@ interface reducePatternProperties<T> {
 
 ### compile
 
-#### 描述
+#### Description
 
-深度递归当前 Schema 对象中的表达式片段，编译表达式，并返回 Schema，我们可以传入作用域对象，在表达式中即可消费作用域变量
+Deeply recurse the expression fragments in the current Schema object, compile the expression, and return the Schema. We can pass in the scope object, and then consume the scope variable in the expression
 
-表达式片段约定：以`{{`开头`}}`结尾的字符串代表一个表达式片段
+Expression fragment convention: a string ending with `{{`beginning with `}}` represents an expression fragment
 
-#### 签名
+#### Signature
 
 ```ts
 interface compile {
@@ -294,11 +294,11 @@ interface compile {
 
 ### fromJSON
 
-#### 描述
+#### Description
 
-将普通 json 数据转换成 Schema 对象
+Convert ordinary json data into Schema objects
 
-#### 签名
+#### Signature
 
 ```ts
 interface fromJSON {
@@ -308,11 +308,11 @@ interface fromJSON {
 
 ### toJSON
 
-#### 描述
+#### Description
 
-将当前 Schema 对象转换成普通 json 数据
+Convert the current Schema object into ordinary json data
 
-#### 签名
+#### Signature
 
 ```ts
 interface toJSON {
@@ -322,29 +322,31 @@ interface toJSON {
 
 ### toFieldProps
 
-#### 描述
+#### Description
 
-将当前 Schema 对象转换成 Formily 字段模型属性，映射关系参考 [属性](#属性)
+Convert the current Schema object into a Formily field model attribute, refer to the mapping relationship [attribute](#attribute)
 
-#### 签名
+#### Signature
 
 ```ts
+import { IFieldFactoryProps } from '@formily/core'
+
 interface toFieldProps {
-  (): Formily.Core.Types.IFieldFactoryProps
+  (): IFieldFactoryProps
 }
 ```
 
-IFieldFactoryProps 参考 [IFieldFactoryProps](https://core.formilyjs.org/api/models/form#ifieldfactoryprops)
+IFieldFactoryProps reference [IFieldFactoryProps](https://core.formilyjs.org/api/models/form#ifieldfactoryprops)
 
-## 静态方法
+## Static method
 
 ### getOrderProperties
 
-#### 描述
+#### Description
 
-从 Schema 中获取排序后的 properties
+Get the sorted properties from the Schema
 
-#### 签名
+#### Signature
 
 ```ts
 interface getOrderProperties {
@@ -354,11 +356,11 @@ interface getOrderProperties {
 
 ### compile
 
-#### 描述
+#### Description
 
-深度遍历任意对象中的表达式片段，表达式片段约定：以`{{`开头`}}`结尾的字符串代表一个表达式片段
+In-depth traversal of expression fragments in any object, expression fragment convention: a string ending with `{{`beginning`}}` represents an expression fragment
 
-#### 签名
+#### Signature
 
 ```ts
 interface compile {
@@ -368,11 +370,11 @@ interface compile {
 
 ### shallowCompile
 
-#### 描述
+#### Description
 
-浅层遍历任意对象中的表达式片段，表达式片段约定：以`{{`开头`}}`结尾的字符串代表一个表达式片段
+Shallow traversal of expression fragments in any object, expression fragment convention: a string ending with `{{`beginning with `}}` represents an expression fragment
 
-#### 签名
+#### Signature
 
 ```ts
 interface shallowCompile {
@@ -382,11 +384,11 @@ interface shallowCompile {
 
 ### silent
 
-#### 描述
+#### Description
 
-是否静默编译，如果是，则表达式报错不会有任何提醒
+Whether to compile silently, if it is, there will be no reminder if the expression error is reported
 
-#### 签名
+#### Signature
 
 ```ts
 interface silent {
@@ -396,11 +398,11 @@ interface silent {
 
 ### isSchemaInstance
 
-#### 描述
+#### Description
 
-判断某个对象是否为 Schema Class 的实例对象
+Determine whether an object is an instance of Schema Class
 
-#### 签名
+#### Signature
 
 ```ts
 interface isSchemaInstance {
@@ -410,11 +412,11 @@ interface isSchemaInstance {
 
 ### registerCompiler
 
-#### 描述
+#### Description
 
-注册表达式编译器
+Register the expression compiler
 
-#### 签名
+#### Signature
 
 ```ts
 interface registerCompiler {
@@ -424,11 +426,11 @@ interface registerCompiler {
 
 ### registerPatches
 
-#### 描述
+#### Description
 
-注册 Schema 补丁，方便做不同版本的 Schema 协议兼容
+Register Schema patch to facilitate compatibility of different versions of Schema protocol
 
-#### 签名
+#### Signature
 
 ```ts
 type SchemaPatch = (schema: ISchema) => ISchema
@@ -440,11 +442,11 @@ interface registerPatches {
 
 ### registerVoidComponents
 
-#### 描述
+#### Description
 
-给字段组件打上标识，标识该组件是虚拟组件，与 formily1.x 做兼容
+Mark the field component to indicate that the component is a virtual component and is compatible with formily1.x
 
-#### 签名
+#### Signature
 
 ```ts
 interface registerVoidComponents {
@@ -452,7 +454,7 @@ interface registerVoidComponents {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { Schema } from '@formily/react'
@@ -461,16 +463,16 @@ Schema.registerVoidComponents(['card', 'tab', 'step'])
 ```
 
 <Alert type="warning">
-  注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用
+  Note that this api needs to be used with <code>enablePolyfills(['1.0'])</code>
 </Alert>
 
 ### registerTypeDefaultComponents
 
-#### 描述
+#### Description
 
-给 Schema 类型标识默认组件类型
+Identify the default component type for the Schema type
 
-#### 签名
+#### Signature
 
 ```ts
 interface registerTypeDefaultComponents {
@@ -478,7 +480,7 @@ interface registerTypeDefaultComponents {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { Schema } from '@formily/react'
@@ -491,16 +493,16 @@ Schema.registerTypeDefaultComponents({
 ```
 
 <Alert type="warning">
-  注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用
+  Note that this api needs to be used with <code>enablePolyfills(['1.0'])</code>
 </Alert>
 
 ### registerPolyfills
 
-#### 描述
+#### Description
 
-注册协议兼容垫片
+Registration agreement compatible gasket
 
-#### 签名
+#### Signature
 
 ```ts
 type SchemaPatch = (schema: ISchema) => ISchema
@@ -510,7 +512,7 @@ interface registerPolyfills {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { Schema } from '@formily/react'
@@ -523,19 +525,19 @@ Schema.registerPolyfills('1.0', (schema) => {
 
 ### enablePolyfills
 
-#### 描述
+#### Description
 
-开启协议垫片，默认内置 1.0 版本协议兼容垫片，主要兼容特性：
+Turn on the protocol gasket, the 1.0 version protocol compatible gasket is built in by default, and the main compatibility features are:
 
-- x-decorator 不声明，自动作为 FormItem
-- x-linkages 转换为 x-reactions
-- x-props 自动转换为 x-decorator-props
-- x-rules 转换为 x-validator
-- editable 转换为 x-editable
-- visible 转换为 x-visible
-- x-component 为 card/block/grid-row/grid-col/grid/layout/step/tab/text-box 自动转换 VoidField，
+- x-decorator does not declare, it is automatically used as FormItem
+- x-linkages converted to x-reactions
+- x-props is automatically converted to x-decorator-props
+- x-rules converted to x-validator
+- convert editable to x-editable
+- Convert visible to x-visible
+- x-component is automatically converted to VoidField for card/block/grid-row/grid-col/grid/layout/step/tab/text-box,
 
-#### 签名
+#### Signature
 
 ```ts
 interface enablePolyfills {
@@ -543,7 +545,7 @@ interface enablePolyfills {
 }
 ```
 
-#### 用例
+#### Example
 
 ```ts
 import { Schema } from '@formily/react'
@@ -551,21 +553,21 @@ import { Schema } from '@formily/react'
 Schema.enablePolyfills(['1.0'])
 ```
 
-## 类型
+## Types of
 
 ### ISchema
 
-#### 描述
+#### Description
 
-ISchema 就是一份普通 JSON 数据，同时它是遵循 Schema [属性](#属性) 规范的 JSON 数据
+ISchema is a normal JSON data, and at the same time it is JSON data following the Schema [Attribute](#Attribute) specification
 
 ### SchemaTypes
 
-#### 描述
+#### Description
 
-Schema 描述的类型
+Schema description type
 
-#### 签名
+#### Signature
 
 ```ts
 type SchemaTypes =
@@ -582,11 +584,11 @@ type SchemaTypes =
 
 ### SchemaProperties
 
-#### 描述
+#### Description
 
-Schema 属性描述
+Schema attribute description
 
-#### 签名
+#### Signature
 
 ```ts
 type SchemaProperties = Record<string, ISchema>
@@ -594,11 +596,11 @@ type SchemaProperties = Record<string, ISchema>
 
 ### SchemaItems
 
-#### 描述
+#### Description
 
-Schema 数组项描述
+Schema array item description
 
-#### 签名
+#### Signature
 
 ```ts
 type SchemaItems = ISchema | ISchema[]
@@ -606,11 +608,11 @@ type SchemaItems = ISchema | ISchema[]
 
 ### SchemaEnum
 
-#### 描述
+#### Description
 
-Schema 枚举
+Schema enum
 
-#### 签名
+#### Signature
 
 ```ts
 type SchemaEnum<Message> = Array<
@@ -623,14 +625,16 @@ type SchemaEnum<Message> = Array<
 
 ### SchemaReactions
 
-#### 描述
+#### Description
 
-Schema 联动协议，如果 reaction 对象里包含 target，则代表主动联动模式，否则代表被动联动模式
-如果想实现更复杂的联动，可以通过作用域传入 reaction 响应器函数进行处理
+Schema linkage protocol, if the reaction object contains target, it represents active linkage mode, otherwise it represents passive linkage mode
+If you want to achieve more complex linkage, you can pass in the reaction responder function through the scope for processing
 
-#### 签名
+#### Signature
 
 ```ts
+import { IGeneralFieldState } from '@formily/core'
+
 type SchemaReactionEffect =
   | 'onFieldInit'
   | 'onFieldMount'
@@ -645,35 +649,35 @@ type SchemaReactionEffect =
 
 type SchemaReaction<Field = any> =
   | {
-      dependencies?: string[] | Record<string, string> //依赖的字段路径列表，只能以点路径描述依赖，支持相对路径，如果是数组格式，那么读的时候也是数组格式，如果是对象格式，读的时候也是对象格式，只是对象格式相当于是一个alias
-      when?: string | boolean //联动条件
-      target?: string //要操作的字段路径，支持FormPathPattern路径语法，注意：不支持相对路径！！
-      effects?: SchemaReactionEffect[] //主动模式下的独立生命周期钩子
+      dependencies?: string[] | Record<string, string> //The list of dependent field paths can only describe dependencies in dot paths, and supports relative paths. If it is an array format, then it is also an array format when reading, if it is an object format , It is also an object format when reading, but the object format is equivalent to an alias
+      when?: string | boolean //Linkage condition
+      target?: string //The field path to be operated, supports FormPathPattern path syntax, note: relative path is not supported! !
+      effects?: SchemaReactionEffect[] //Independent life cycle hook in active mode
       fulfill?: {
-        //满足条件
-        state?: Formily.Core.Types.IGeneralFieldState //更新状态
-        schema?: ISchema //更新Schema
-        run?: string //执行语句
+        //To meet the conditions
+        state?: IGeneralFieldState //Update state
+        schema?: ISchema //Update Schema
+        run?: string //Execute statement
       }
       otherwise?: {
-        //不满足条件
-        state?: Formily.Core.Types.IGeneralFieldState //更新状态
-        schema?: ISchema //更新Schema
-        run?: string //执行语句
+        //Does not meet the conditions
+        state?: IGeneralFieldState //Update state
+        schema?: ISchema //Update Schema
+        run?: string //Execute statement
       }
     }
-  | ((field: Field) => void) //可以复杂联动
+  | ((field: Field) => void) //Can be complex linkage
 
 type SchemaReactions<Field = any> =
   | SchemaReaction<Field>
   | SchemaReaction<Field>[]
 ```
 
-#### 用例
+#### Example
 
-**主动联动**
+**Active linkage**
 
-写法一，标准主动联动
+Writing method one, standard initiative linkage
 
 ```json
 {
@@ -705,7 +709,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-写法二，局部表达式分发联动
+Writing method two, local expression distribution linkage
 
 ```json
 {
@@ -718,7 +722,7 @@ type SchemaReactions<Field = any> =
         "target": "target",
         "fulfill": {
           "state": {
-            "visible": "{{$self.value === '123'}}" //任意层次属性都支持表达式
+            "visible": "{{$self.value === '123'}}" //Any level of attributes supports expressions
           }
         }
       }
@@ -731,7 +735,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-写法三，相邻元素联动
+Writing method three, linkage of adjacent elements
 
 ```json
 {
@@ -747,7 +751,7 @@ type SchemaReactions<Field = any> =
           "target": ".target",
           "fulfill": {
             "state": {
-              "visible": "{{$self.value === '123'}}" //任意层次属性都支持表达式
+              "visible": "{{$self.value === '123'}}" //Any level of attributes supports expressions
             }
           }
         }
@@ -761,7 +765,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-写法四，基于 Schema 协议联动
+Writing method four, based on Schema protocol linkage
 
 ```json
 {
@@ -774,7 +778,7 @@ type SchemaReactions<Field = any> =
         "target": "target",
         "fulfill": {
           "schema": {
-            "x-visible": "{{$self.value === '123'}}" //任意层次属性都支持表达式
+            "x-visible": "{{$self.value === '123'}}" //Any level of attributes supports expressions
           }
         }
       }
@@ -787,7 +791,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-写法五，基于 run 语句联动
+Writing method five, based on run statement linkage
 
 ```json
 {
@@ -810,7 +814,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-写法六，基于生命周期钩子联动
+Writing method six, based on the linkage of life cycle hooks
 
 ```json
 {
@@ -824,7 +828,7 @@ type SchemaReactions<Field = any> =
         "effects": ["onFieldInputValueChange"],
         "fulfill": {
           "state": {
-            "visible": "{{$self.value === '123'}}" //任意层次属性都支持表达式
+            "visible": "{{$self.value === '123'}}" //Any level of attributes supports expressions
           }
         }
       }
@@ -837,7 +841,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-**被动联动**
+**Passive linkage**
 
 ```json
 {
@@ -851,11 +855,11 @@ type SchemaReactions<Field = any> =
       "type": "string",
       "x-component": "Input",
       "x-reactions": {
-        "dependencies": ["source"], //依赖路径写法默认是取value，如果依赖的是字段的其他属性，可以使用 source#modified，用#分割取详细属性
-        // "dependencies":{ aliasName:"source" }, //别名形式
+        "dependencies": ["source"], //Dependency path is written by default to take value. If you rely on other attributes of the field, you can use source#modified, and use # to split to get detailed attributes
+        // "dependencies":{ aliasName:"source" }, //alias form
         "fulfill": {
           "schema": {
-            "x-visible": "{{$deps[0] === '123'}}" //任意层次属性都支持表达式
+            "x-visible": "{{$deps[0] === '123'}}" //Any level of attributes supports expressions
           }
         }
       }
@@ -864,7 +868,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-**复杂联动**
+**Complex linkage**
 
 ```json
 {
@@ -877,15 +881,15 @@ type SchemaReactions<Field = any> =
     "target": {
       "type": "string",
       "x-component": "Input",
-      "x-reactions": "{{myReaction}}" //外部传入的函数，在函数内可以实现更复杂的联动
+      "x-reactions": "{{myReaction}}" //For externally passed functions, more complex linkages can be realized within the function
     }
   }
 }
 ```
 
-**组件属性联动**
+**Component attribute linkage**
 
-写法一，操作状态
+Writing one, operating status
 
 ```json
 {
@@ -898,7 +902,7 @@ type SchemaReactions<Field = any> =
         "target": "target",
         "fulfill": {
           "state": {
-            "component[1].style.color": "{{$self.value === '123' ? 'red' : 'blue'}}" //任意层次属性都支持表达式，同时key是支持路径表达式的，可以实现精确操作属性
+            "component[1].style.color": "{{$self.value === '123'?'red':'blue'}}" //Any level attribute supports expressions, and the key is a support path Expression, can achieve precise manipulation of attributes
           }
         }
       }
@@ -911,7 +915,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-写法二，操作 Schema 协议
+Writing method two, operating the Schema protocol
 
 ```json
 {
@@ -924,7 +928,7 @@ type SchemaReactions<Field = any> =
         "target": "target",
         "fulfill": {
           "schema": {
-            "x-component-props.style.color": "{{$self.value === '123' ? 'red' : 'blue'}}" //任意层次属性都支持表达式，同时key是支持路径表达式的，可以实现精确操作属性
+            "x-component-props.style.color": "{{$self.value === '123'?'red':'blue'}}" //Any level of property supports expressions, and the key is supported Path expression, can achieve precise operation properties
           }
         }
       }
@@ -937,26 +941,26 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-## 内置表达式作用域
+## Built-in expression scope
 
-内置表达式作用域主要用于在表达式中实现各种联动关系
+Built-in expression scope is mainly used to realize various linkage relationships in expressions
 
 ### $self
 
-只能在 x-reactions 中的表达式消费，代表当前字段实例
+Can only be consumed by expressions in x-reactions, representing the current field instance
 
 ### $dependencies
 
-只能在 x-reactions 中的表达式消费，与 x-reactions 定义的 dependencies 对应，数组顺序一致
+It can only be consumed by expressions in x-reactions, corresponding to the dependencies defined by x-reactions, and the sequence of the array is the same
 
 ### $deps
 
-只能在 x-reactions 中的表达式消费，与 x-reactions 定义的 dependencies 对应，数组顺序一致
+It can only be consumed by expressions in x-reactions, corresponding to the dependencies defined by x-reactions, and the sequence of the array is the same
 
 ### $form
 
-只能在 x-reactions 中的表达式消费，代表当前字段实例
+Can only be consumed by expressions in x-reactions, representing the current field instance
 
 ### $target
 
-只能在 x-reactions 中的表达式消费，代表主动模式的 target 字段
+Can only be consumed in expressions in x-reactions, representing the target field of active mode

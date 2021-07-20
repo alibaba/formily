@@ -1,10 +1,10 @@
 # ArrayTable
 
-> 自增表格，对于数据量超大的场景比较适合使用该组件，虽然数据量大到一定程度会有些许卡顿，但是不会影响基本操作
+> Self-increasing table, it is more suitable to use this component for scenes with a large amount of data. Although the amount of data is large to a certain extent, it will be a little bit stuck, but it will not affect the basic operation
 >
-> 注意：该组件只适用于 Schema 场景，且只能是对象数组
+> Note: This component is only applicable to Schema scenarios and can only be an array of objects
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -125,12 +125,12 @@ export default () => {
           </SchemaField.Object>
           <SchemaField.Void
             x-component="ArrayTable.Addition"
-            title="添加条目"
+            title="Add entry"
           />
         </SchemaField.Array>
       </SchemaField>
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
         <Button
           onClick={() => {
             form.setInitialValues({
@@ -138,18 +138,20 @@ export default () => {
             })
           }}
         >
-          加载10W条超大数据
+          Load 10W pieces of large data
         </Button>
       </FormButtonGroup>
       <Message style={{ marginTop: 10 }} type="warning">
-        注意：开启formily插件的页面，因为后台有数据通信，会占用浏览器算力，最好在无痕模式(无formily插件)下测试
+        Note: Open the formily plug-in page, because there is data communication
+        in the background, which will occupy the browser's computing power, it
+        is best to test in the incognito mode (without the formily plug-in)
       </Message>
     </FormProvider>
   )
 }
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -287,7 +289,7 @@ const schema = {
         add: {
           type: 'void',
           'x-component': 'ArrayTable.Addition',
-          title: '添加条目',
+          title: 'Add entry',
         },
       },
     },
@@ -299,14 +301,14 @@ export default () => {
     <FormProvider form={form}>
       <SchemaField schema={schema} />
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup>
     </FormProvider>
   )
 }
 ```
 
-## Effects 联动案例
+## Effects linkage case
 
 ```tsx
 import React from 'react'
@@ -334,7 +336,7 @@ const SchemaField = createSchemaField({
 
 const form = createForm({
   effects: () => {
-    //主动联动模式
+    //Active linkage mode
     onFieldChange('hideFirstColumn', ['value'], (field) => {
       field.query('array.column4').take((target) => {
         target.visible = !field.value
@@ -343,7 +345,7 @@ const form = createForm({
         target.visible = !field.value
       })
     })
-    //被动联动模式
+    //Passive linkage mode
     onFieldReact('array.*.a2', (field) => {
       field.visible = !field.query('.a1').get('value')
     })
@@ -358,7 +360,7 @@ export default () => {
           name="hideFirstColumn"
           x-decorator="FormItem"
           x-component="Switch"
-          title="隐藏A2"
+          title="Hide A2"
         />
         <SchemaField.Array
           name="array"
@@ -400,7 +402,7 @@ export default () => {
               x-component="ArrayTable.Column"
               name="column3"
               x-component-props={{
-                title: '显隐->A2',
+                title: 'Explicitly hidden->A2',
                 dataIndex: 'a1',
                 width: 100,
               }}
@@ -455,19 +457,19 @@ export default () => {
           </SchemaField.Object>
           <SchemaField.Void
             x-component="ArrayTable.Addition"
-            title="添加条目"
+            title="Add entry"
           />
         </SchemaField.Array>
       </SchemaField>
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup>
     </FormProvider>
   )
 }
 ```
 
-## JSON Schema 联动案例
+## JSON Schema linkage case
 
 ```tsx
 import React from 'react'
@@ -498,7 +500,7 @@ const schema = {
   properties: {
     hideFirstColumn: {
       type: 'boolean',
-      title: '隐藏A2',
+      title: 'Hide A2',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
     },
@@ -543,7 +545,7 @@ const schema = {
           column3: {
             type: 'void',
             'x-component': 'ArrayTable.Column',
-            'x-component-props': { width: 100, title: '显隐->A2' },
+            'x-component-props': { width: 100, title: 'Explicitly hidden->A2' },
             properties: {
               a1: {
                 type: 'string',
@@ -646,7 +648,7 @@ const schema = {
         add: {
           type: 'void',
           'x-component': 'ArrayTable.Addition',
-          title: '添加条目',
+          title: 'Add entry',
         },
       },
     },
@@ -658,7 +660,7 @@ export default () => {
     <FormProvider form={form}>
       <SchemaField schema={schema} />
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup>
     </FormProvider>
   )
@@ -669,80 +671,80 @@ export default () => {
 
 ### ArrayTable
 
-> 表格组件
+> Form Components
 
-参考 https://fusion.design/pc/component/basic/table
+Reference https://fusion.design/pc/component/basic/table
 
 ### ArrayTable.Column
 
-> 表格列
+> Table Column
 
-参考 https://fusion.design/pc/component/basic/table
+Reference https://fusion.design/pc/component/basic/table
 
 ### ArrayTable.SortHandle
 
-> 拖拽手柄
+> Drag handle
 
-参考 https://ant.design/components/icon-cn/
+Reference https://ant.design/components/icon-cn/
 
 ### ArrayTable.Addition
 
-> 添加按钮
+> Add button
 
-扩展属性
+Extended attributes
 
-| 属性名       | 类型                  | 描述     | 默认值   |
-| ------------ | --------------------- | -------- | -------- |
-| title        | ReactText             | 文案     |          |
-| method       | `'push' \| 'unshift'` | 添加方式 | `'push'` |
-| defaultValue | `any`                 | 默认值   |          |
+| Property name | Type                 | Description   | Default value |
+| ------------- | -------------------- | ------------- | ------------- |
+| title         | ReactText            | Copywriting   |               |
+| method        | `'push' \|'unshift'` | add method    | `'push'`      |
+| defaultValue  | `any`                | Default value |               |
 
-其余参考 https://fusion.design/pc/component/basic/button
+Other references https://fusion.design/pc/component/basic/button
 
-注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
 ### ArrayTable.Remove
 
-> 删除按钮
+> Delete button
 
-| 属性名 | 类型      | 描述 | 默认值 |
-| ------ | --------- | ---- | ------ |
-| title  | ReactText | 文案 |        |
+| Property name | Type      | Description | Default value |
+| ------------- | --------- | ----------- | ------------- |
+| title         | ReactText | Copywriting |               |
 
-其余参考 https://ant.design/components/icon-cn/
+Other references https://ant.design/components/icon-cn/
 
-注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
 ### ArrayTable.MoveDown
 
-> 下移按钮
+> Move down button
 
-| 属性名 | 类型      | 描述 | 默认值 |
-| ------ | --------- | ---- | ------ |
-| title  | ReactText | 文案 |        |
+| Property name | Type      | Description | Default value |
+| ------------- | --------- | ----------- | ------------- |
+| title         | ReactText | Copywriting |               |
 
-其余参考 https://ant.design/components/icon-cn/
+Other references https://ant.design/components/icon-cn/
 
-注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
 ### ArrayTable.MoveUp
 
-> 上移按钮
+> Move up button
 
-| 属性名 | 类型      | 描述 | 默认值 |
-| ------ | --------- | ---- | ------ |
-| title  | ReactText | 文案 |        |
+| Property name | Type      | Description | Default value |
+| ------------- | --------- | ----------- | ------------- |
+| title         | ReactText | Copywriting |               |
 
-其余参考 https://ant.design/components/icon-cn/
+Other references https://ant.design/components/icon-cn/
 
-注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
 ### ArrayTable.Index
 
-> 索引渲染器
+> Index Renderer
 
-无属性
+No attributes
 
 ### ArrayItems.useIndex
 
-> 读取当前渲染行索引的 React Hook
+> Read the React Hook of the current rendering row index

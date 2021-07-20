@@ -32,8 +32,8 @@ interface ILayoutProps {
   maxColumns: number | number[]
   intervals: Array<number[]>
   colWrap: boolean[]
-  columnGap: number
-  rowGap: number
+  columnGap?: number
+  rowGap?: number
 }
 
 export interface IFormGridProps {
@@ -43,8 +43,8 @@ export interface IFormGridProps {
   maxColumns?: number | number[]
   colWrap?: boolean | boolean[]
   breakpoints?: number[]
-  columnGap: number
-  rowGap: number
+  columnGap?: number
+  rowGap?: number
 }
 
 interface IStyle {
@@ -65,7 +65,7 @@ interface IStyleProps extends IFormGridProps {
 }
 
 export interface IGridColumnProps {
-  gridSpan: number
+  gridSpan?: number
 }
 
 type ComposedFormGrid = React.FC<IFormGridProps> & {

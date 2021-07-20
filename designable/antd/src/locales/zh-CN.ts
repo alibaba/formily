@@ -259,6 +259,7 @@ const UploadLocale = {
   withCredentials: '携带Cookie',
   maxCount: '最大数量',
   method: '方法',
+  textContent: '上传文案',
 }
 
 const FormGridLocale = {

@@ -33,7 +33,7 @@ export const useFormLayout = () => inject(FormLayoutContext, null)
 export const useFormShallowLayout = () => inject(FormLayoutShallowContext, null)
 
 export const FormLayout = defineComponent<FormLayoutProps>({
-  name: 'FormilyFormLayout',
+  name: 'FormLayout',
   props: {
     className: {},
     colon: { default: true },

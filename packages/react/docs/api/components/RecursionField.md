@@ -4,29 +4,29 @@ order: 5
 
 # RecursionField
 
-## 描述
+## Description
 
-递归渲染组件，主要基于[JSON-Schema](/api/shared/schema)做递归渲染，它是[SchemaField](/api/components/schema-field)组件内部的核心渲染组件，当然，它是可以独立于 SchemaField 单独使用的，我们使用的时候主要是在自定义组件中使用，用于实现具有递归渲染能力的自定义组件
+The recursive rendering component is mainly based on [JSON-Schema](/api/shared/schema) for recursive rendering. It is the core rendering component inside the [SchemaField](/api/components/schema-field) component. Of course, it can It is used separately from SchemaField. When we use it, it is mainly used in custom components to implement custom components with recursive rendering capabilities.
 
-## 签名
+## Signature
 
 ```ts
 interface IRecursionFieldProps {
-  schema: Schema //schema对象
-  name?: string //路径名称
-  basePath?: FormPathPattern //基础路径
-  onlyRenderProperties?: boolean //是否只渲染properties
-  onlyRenderSelf?: boolean //是否只渲染自身，不渲染properties
-  mapProperties?: (schema: Schema, name: string) => Schema //schema properties映射器，主要用于改写schema
-  filterProperties?: (schema: Schema, name: string) => boolean //schema properties过滤器，被过滤掉的schema节点不会被渲染
+  schema: Schema //schema object
+  name?: string //Path name
+  basePath?: FormPathPattern //base path
+  onlyRenderProperties?: boolean //Whether to only render properties
+  onlyRenderSelf?: boolean //Whether to only render itself without rendering properties
+  mapProperties?: (schema: Schema, name: string) => Schema //schema properties mapper, mainly used to rewrite the schema
+  filterProperties?: (schema: Schema, name: string) => boolean //schema properties filter, the filtered schema nodes will not be rendered
 }
 
 type RecursionField = React.FC<IRecursionFieldProps>
 ```
 
-## 用例
+## Example
 
-### 简单递归
+### Simple recursion
 
 ```tsx
 import React from 'react'
@@ -70,9 +70,9 @@ export default () => (
 )
 ```
 
-我们可以从组件属性中读取独立的 schema 对象，传给 RecursionField 渲染
+We can read independent schema objects from component properties and pass them to RecursionField for rendering
 
-### 自增列表递归
+### Incremental list recursion
 
 ```tsx
 import React from 'react'
@@ -141,4 +141,4 @@ export default () => (
 )
 ```
 
-使用[useField](/api/hooks/useField)和[useFieldSchema](/api/shared/use-field-schema)来获取当前字段上下文中的字段实例和字段 schema
+Use [useField](/api/hooks/useField) and [useFieldSchema](/api/shared/use-field-schema) to get the field instance and field schema in the current field context

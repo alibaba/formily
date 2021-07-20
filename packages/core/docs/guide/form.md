@@ -1,154 +1,154 @@
-# 表单模型
+# Form model
 
-前面讲到了 Formily 内核的整体架构，同时也讲了 MVVM，你应该也能大致能理解什么是 Formily 的表单模型了，下面我们再深一步来讲表单模型的具体领域逻辑，主要是偏思路性的总结性内容，如果第一遍看不懂，可以先直接去看 API 文档，看完之后再回来看，就能加深对 formily 的理解了。
+Earlier I talked about the overall architecture of the Formily kernel, and also talked about MVVM. You should also be able to roughly understand what Formily's form model is. Let's take a deeper look at the specific domain logic of the form model, which is mainly biased. Concluding content, if you don't understand it the first time, you can go directly to the API documentation, and come back after reading it, you can deepen your understanding of formily.
 
-## 梳理
+## Combing
 
-整个表单模型很大很复杂，分解下来其实核心是以下几个子模型：
+The entire form model is very large and complicated. In fact, the core of the decomposition is the following sub-models:
 
-- 字段管理模型
-- 字段模型
-- 数据模型
-- 联动模型
-- 路径系统
+- Field management model
+- Field model
+- Data model
+- Linkage model
+- Path system
 
-下面具体来讲一下表单模型是如何管理的。
+Let's talk about how the form model is managed in detail below.
 
-## 字段管理模型
+## Field Management Model
 
-字段管理模型，主要包含：
+The field management model mainly includes:
 
-- 字段添加
-- 字段查询
-- 导入字段集
-- 导出字段集
-- 清空字段集
+- Field addition
+- Field query
+- Import field set
+- Export field set
+- Clear the field set
 
-#### 字段添加
+#### Field addition
 
-主要通过 createField/createArrayField/createObjectField/createVoidField 方法来创建字段，如果字段已经存在，则不会重复创建
+The field is created mainly through the createField/createArrayField/createObjectField/createVoidField method. If the field already exists, it will not be created repeatedly
 
-#### 字段查询
+#### Field query
 
-主要通过 query 方法来查询字段，query 方法可以传入字段的路径或者正则表达式来匹配字段。
+The query method is mainly used to query the field. The query method can pass in the path of the field or regular expression to match the field.
 
-因为字段路径的详细规则还是比较复杂的，在后面的[路径系统](/guide/path)篇中会详细讲解。
+Because the detailed rules of the field path are still more complicated, they will be explained in detail in the following [Path System](/guide/path) article.
 
-然后调用 query 方法会返回一个 Query 对象，Query 对象中可以有批量遍历所有字段的 forEach/map/reduce 方法，也可以有只取查询到的第一个字段的 take 方法，同时还有直接读取字段属性的 get 方法，还有可以深层读取字段属性的 getIn 方法，两个方法的差别就是前者可以有智能提示，后者没有提示，所以推荐用户都用 get 方法。
+Then calling the query method will return a Query object. The Query object can have a forEach/map/reduce method that traverses all fields in batches, or a take method that takes only the first field that is queried, as well as direct reading of fields. The get method of properties, and the getIn method that can read field properties in depth, the difference between the two methods is that the former can have smart prompts, and the latter has no prompts, so it is recommended that users use the get method.
 
-#### 导入字段集
+#### Import field set
 
-主要通过 setFormGraph 来导入字段集，入参格式是一个扁平对象格式，key 是字段的绝对路径，value 是字段的状态，使用该 API 主要在一些需要做时间旅行的场景，将 Immutable 字段状态导入至表单模型中。
+The field set is imported mainly through setFormGraph. The input parameter format is a flat object format, the key is the absolute path of the field, and the value is the state of the field. Use this API to import the Immutable field state into the form in some scenarios that require time travel. In the model.
 
-#### 导出字段集
+#### Export field set
 
-主要通过 getFormGraph 来导出字段集，导出格式是一个扁平对象格式，key 是字段的绝对路径，value 是字段的状态，与导入字段集入参一致，因为返回的数据是一个 Immutable 的数据，所以是可以完全做持久化存储的，方便时间旅行。
+The field set is mainly exported through getFormGraph. The export format is a flat object format, the key is the absolute path of the field, and the value is the state of the field, which is consistent with the imported field set input parameters. Because the returned data is an Immutable data, it is OK Completely persistent storage, convenient for time travel.
 
-#### 清空字段集
+#### Clear the field set
 
-主要通过 clearFormGraph 来清空字段集。
+The field set is cleared mainly through clearFormGraph.
 
-## 字段模型
+## Field Model
 
-字段模型主要包含了：
+The field model mainly includes:
 
-- Field 模型，主要负责管理非自增型字段状态，比如 Input/Select/NumberPicker/DatePicker 这些组件
-- ArrayField 模型，主要负责管理自增列表字段状态，可以对列表项进行增删移动的。
-- ObjectField 模型，主要负责管理自增对象字段状态，可以对对象的 key 做增删操作。
-- VoidField 模型，主要负责管理虚字段状态，虚字段是一种不会污染表单数据的节点存在，但是它可以控制它的子节点显示隐藏，交互模式。
+- Field model, which is mainly responsible for managing the state of non-incremental fields, such as Input/Select/NumberPicker/DatePicker components
+- The ArrayField model is mainly responsible for managing the state of the auto-increment list field, and can add, delete, and move list items.
+- ObjectField model, which is mainly responsible for managing the state of auto-incremented object fields, and can add or delete the key of the object.
+- The VoidField model is mainly responsible for managing the state of the virtual field. The virtual field is a node that does not pollute the form data, but it can control the display and hiding of its child nodes, and the interactive mode.
 
-因为字段模型非常复杂，所以会在后面的[字段模型](/guide/field)篇中详细讲解。
+Because the field model is very complicated, it will be explained in detail in the following [Field Model](/guide/field) article.
 
-## 数据模型
+## Data Model
 
-表单数据模型，formily 之前的版本或多或少都会存在一些边界问题，在 2.x 中重新梳理了一版，才真正把之前的遗留问题突破掉了。
+For the form data model, the previous version of Formily will more or less have some boundary problems. After reorganizing a version in 2.x, it really broke through the previous legacy problems.
 
-数据模型主要包含：
+The data model mainly includes:
 
-- 表单值(values)管理
-- 表单默认值(initialValues)管理
-- 字段值(value)管理
-- 字段默认值(initialValue)管理
-- 值与默认值的选择合并策略
+- Form values (values) management
+- Form default value (initialValues) management
+- Field value (value) management
+- Field default value (initialValue) management
+- Value and default value selection merge strategy
 
-表单值管理，其实就是一个对象结构的 values 属性，只是它是一个 @formily/reactive observable 属性，同时借助了 @formily/reactive 的深度 observer 能力，监听了它任意属性变化，如果发生变化，便会触发 onFormValuesChange 的生命周期钩子。
+Form value management is actually the values attribute of an object structure, but it is an @formily/reactive observable attribute. At the same time, with the help of @formily/reactive's deep observer capability, it monitors any attribute changes, and if it changes, it will trigger The life cycle hook of onFormValuesChange.
 
-同理，默认值管理其实也是一个对象结构的 initialValues 属性，同样会深度监听属性变化，触发 onFormInitialValues 的生命周期钩子。
+In the same way, the default value management is actually the initialValues property of an object structure. It will also deeply monitor property changes and trigger the onFormInitialValues life cycle hook.
 
-字段值管理，是在每个数据型字段的 value 属性上体现的，formily 会给每个字段维护一个叫 path 的数据路径属性，然后 value 的读写，都是对顶层表单的 values 进行读写，这样保证了字段的值与表单的值是绝对幂等的，同理字段默认值也一样。
+Field value management is reflected in the value attribute of each data type field. Formily will maintain a data path attribute called path for each field, and then read and write values are all read and write the values of the top-level form. This ensures that the value of the field and the value of the form are absolutely idempotent, and the default value of the field is the same.
 
-总结一下，**值的管理，都是在顶层表单上管理的，字段的值与表单的值是通过 path 来实现的绝对幂等。**
-
-<Alert>
-
-值与默认值的差别其实就在于表单重置的时候，字段是否会重置为默认值状态
-
-</Alert>
-
-#### 值与默认值的选择合并策略
-
-平时我们在业务开发的过程中，总会有数据回显的需求，这份数据一般都是作为异步默认值，作为详情页面的话，都还好，但是作为编辑页面的话，就会存在一些问题了：
-
-**存在冲突**
-
-比如表单值为`{xx:123}`，表单默认值为`{xx:321}`，这里的策略是：
-
-- 如果`xx`没有相应的字段模型，代表仅仅只是冗余数据，用户无法修改
-  - 如果表单值是先赋值，默认值是后赋值的，那么默认值直接覆盖表单值，这种场景适用于异步数据回显场景，不同业务状态，回显的默认数据不一样，最终提交数据`{xx:321}`
-  - 如果默认值先赋值，表单值是后赋值的，那么表单值直接覆盖默认值，这种场景适用于同步默认值，最终提交数据`{xx:123}`
-- 如果`xx`有字段模型
-  - 如果表单值先赋值，默认值是后赋值的
-    - 如果当前字段被用户修改过(modified 为 true)，那么默认值不能覆盖表单值，最终提交数据`{xx:123}`
-    - 如果当前字段没有被用户修改过(modified 为 false)，那么默认值会直接覆盖字段值，这种场景适用于异步数据回显场景，不同业务状态，回显的默认数据不一样，最终提交数据`{xx:312}`
-  - 如果默认值先赋值，表单值是后赋值的，那么表单值直接覆盖默认值，这种场景适用于同步默认值，最终提交数据`{xx:123}`
-
-**不存在冲突**
-
-比如表单值为`{xx:123}`，表单默认值为`{yy:321}`，这里的策略是直接合并。
-
-总结一下，值与默认值的选择合并策略，**核心是看该字段是否被用户修改过，一切以用户为准，如果没被用户修改过就以赋值顺序为准**
+To sum up, the management of **values is all managed on the top-level form, and the value of the field and the value of the form are absolutely idempotent through path. **
 
 <Alert>
 
-这里提到的默认值，是可以重复赋值的，说的也是在重复赋值的过程中，要不要舍弃值的问题。
+The difference between the value and the default value is actually whether the field will be reset to the default value state when the form is reset
 
 </Alert>
 
-## 校验模型
+#### Value and default value selection merge strategy
 
-表单校验模型核心是对数据的合法性校验，然后将校验结果管理起来，所以校验模型主要包含了：
+Usually, in the process of business development, there is always a need for data echo. This data is generally used as an asynchronous default value. If it is used as a detail page, it is okay, but as an editing page, there will be some problems. :
 
-- 校验规则管理
-- 校验结果管理
+**There is a conflict**
 
-因为校验模型隶属于字段模型，所以会在后面的[字段模型](/guide/field#校验规则)篇中详细讲解
+For example, the form value is `{xx:123}`, and the default form value is `{xx:321}`. The strategy here is:
 
-## 联动模型
+- If `xx` does not have a corresponding field model, it means it is just redundant data and cannot be modified by the user
+  - If the form value is assigned first, and the default value is assigned later, then the default value directly overrides the form value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted.` {xx:321}`
+  - If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
+- If `xx` has a field model
+  - If the form value is assigned first, the default value is assigned later
+    - If the current field has been modified by the user (modified is true), then the default value cannot overwrite the form value, and finally submit the data `{xx:123}`
+    - If the current field has not been modified by the user (modified is false), then the default value will directly override the field value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted `{xx:312}`
+  - If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
 
-联动模型在 formily1.x 中核心是走的主动式联动模型，大致用一句表达式来表达就是：
+**No conflicts**
+
+For example, the form value is `{xx:123}`, and the default form value is `{yy:321}`. The strategy here is to merge directly.
+
+To sum up, the selection and merging strategy of the value and the default value, the core is to see whether the field has been modified by the user, everything is subject to the user, if it has not been modified by the user, the order of assignment shall prevail.\*\*
+
+<Alert>
+
+The default value mentioned here can be assigned repeatedly, and it is also the question of whether to discard the value in the process of repeated assignment.
+
+</Alert>
+
+## Validation model
+
+The core of the form verification model is to verify the validity of the data, and then manage the verification results, so the verification model mainly includes:
+
+- Validation rule management
+- Calibration result management
+
+Because the verification model belongs to the field model, it will be explained in detail in the following [Field Model](/guide/field#Verification Rules)
+
+## Linkage model
+
+The core of the linkage model in formily1.x is the active linkage model, which is roughly expressed in one sentence:
 
 ```ts
 setFieldState(Subscribe(FormLifeCycle, Selector(Path)), TargetState)
 ```
 
-解释下就是，任意一次联动，都是基于表单的某个生命周期钩子去触发指定路径下字段的状态，这样的模型能解决很多问题，但是它也有个很明显的问题，就是在多对一联动的场景下，需要同时监听多个字段变化去控制某个字段的状态，这样对用户而言，实现成本还是比较高的，特别是实现一些计算器联动需求，代码量剧增。当然，对于一对多场景，反而这种模型又是最高效的。
+The explanation is that any linkage is based on a certain life cycle hook of the form to trigger the state of the field under the specified path. Such a model can solve many problems, but it also has an obvious problem, which is the many-to-one linkage. In the scenario where you need to monitor changes in multiple fields at the same time to control the state of a field, the implementation cost is still relatively high for users, especially to achieve some calculator linkage requirements, and the amount of code increases sharply. Of course, for one-to-many scenarios, this model is the most efficient.
 
-所以，在 formily2.x 中，在主动联动模型上新增了被动联动模型，同样是一句表达式表达：
+Therefore, in formily 2.x, a passive linkage model is added to the active linkage model, which is also an expression:
 
 ```ts
 subscribe(Dependencies, Reactions)
 ```
 
-简化了很多，核心就是针对依赖数据变化做响应，依赖的数据可以是表单模型属性，也可以是任意字段模型的属性，响应的动作可以是改任意字段模型的属性，也可以是做其他异步动作。这样的模型同样是一个完备的联动模型，只是在一对多场景下，比起主动模型而言，实现成本会比较高。
+Simplified a lot, the core is to respond to dependent data changes. The dependent data can be form model attributes or attributes of any field model. The response action can be to change the attributes of any field model or do other asynchronous actions. . Such a model is also a complete linkage model, but in a one-to-many scenario, the implementation cost will be higher than the active model.
 
-所以，两种联动模型，需要用户根据自身需求来选择。
+Therefore, the two linkage models require users to choose according to their own needs.
 
-## 路径系统
+## Path system
 
-路径系统，非常重要，几乎整个表单模型处处都有用到路径系统，它的主要给表单模型提供了以下几个能力：
+The path system is very important. The path system is used everywhere in almost the entire form model. It mainly provides the following capabilities for the form model:
 
-- 它可以用来从字段集中查找任意一个字段，同时支持按照规则批量查找
-- 它可以用来表达字段间关系的模型，借助路径系统，我们可以实现查找某个字段父亲，能查找父亲，也就能实现树级别的数据继承能力，同样，我们也能查找某个字段的相邻节点
-- 它可以用来实现字段数据的读写，带解构的数据读写
+- It can be used to find any field from the field set, and it also supports batch search according to the rules
+- It can be used to express the model of the relationship between the fields. With the help of the path system, we can find the father of a certain field, can find the father, and can also realize the data inheritance ability of the tree level. Similarly, we can also find the data of a certain field. Adjacent node
+- It can be used to read and write field data, read and write data with deconstruction
 
-整个路径系统，其实是基于@formily/path 的路径 DSL 来实现的，想要了解更多路径系统的内容，可以详细看看[FormPath API](/api/entry/form-path)篇
+The entire path system is actually implemented based on the path DSL of @formily/path. If you want to know more about the path system, you can take a look at [FormPath API](/api/entry/form-path) in detail

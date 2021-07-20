@@ -1,7 +1,15 @@
 import React, { useState } from 'react'
 import { Input, Button } from 'antd'
 
-export const VerifyCode = ({
+interface IVerifyCodeProps {
+  value?: any
+  onChange?: (value: any) => void
+  readyPost?: boolean
+  phoneNumber?: number
+  style?: React.CSSProperties
+}
+
+export const VerifyCode: React.FC<IVerifyCodeProps> = ({
   value,
   onChange,
   readyPost,

@@ -2,27 +2,37 @@
   <FormProvider :form="form">
     <ArrayField name="array">
       <template #default="{ field }">
-        <div v-for="(item, index) in field.value || []" :key="item.id" :style="{ marginBottom: '10px' }">
+        <div
+          v-for="(item, index) in field.value || []"
+          :key="item.id"
+          :style="{ marginBottom: '10px' }"
+        >
           <Space>
             <Field :name="`${index}.value`" :component="[Input]" />
             <Button
-              @click="() => {
-                field.remove(index)
-              }"
+              @click="
+                () => {
+                  field.remove(index)
+                }
+              "
             >
               Remove
             </Button>
             <Button
-              @click="() => {
-                field.moveUp(index)
-              }"
+              @click="
+                () => {
+                  field.moveUp(index)
+                }
+              "
             >
               Move Up
             </Button>
             <Button
-              @click="() => {
-                field.moveDown(index)
-              }"
+              @click="
+                () => {
+                  field.moveDown(index)
+                }
+              "
             >
               Move Down
             </Button>
@@ -47,8 +57,8 @@ export default {
   data() {
     return {
       Input,
-      form: createForm()
+      form: createForm(),
     }
-  }
+  },
 }
 </script>

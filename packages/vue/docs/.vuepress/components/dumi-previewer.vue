@@ -18,32 +18,51 @@
           <svg
             v-if="copied"
             class="dumi-previewer-actions__icon"
-            style="fill: green;"
-            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"/></svg>
+            style="fill: green"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path
+              d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"
+            />
+          </svg>
 
           <svg
             v-else
             class="dumi-previewer-actions__icon"
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24" width="24" height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
             @click="handleCopy"
-          ><path fill="none" d="M0 0h24v24H0z"/><path d="M7 6V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3v3c0 .552-.45 1-1.007 1H4.007A1.001 1.001 0 0 1 3 21l.003-14c0-.552.45-1 1.007-1H7zM5.003 8L5 20h10V8H5.003zM9 6h8v10h2V4H9v2z"/></svg>
+          >
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path
+              d="M7 6V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3v3c0 .552-.45 1-1.007 1H4.007A1.001 1.001 0 0 1 3 21l.003-14c0-.552.45-1 1.007-1H7zM5.003 8L5 20h10V8H5.003zM9 6h8v10h2V4H9v2z"
+            />
+          </svg>
 
           <svg
             class="dumi-previewer-actions__icon"
-            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
             @click="handleCollapse"
-          ><path fill="none" d="M0 0h24v24H0z"/><path d="M24 12l-5.657 5.657-1.414-1.414L21.172 12l-4.243-4.243 1.414-1.414L24 12zM2.828 12l4.243 4.243-1.414 1.414L0 12l5.657-5.657L7.07 7.757 2.828 12zm6.96 9H7.66l6.552-18h2.128L9.788 21z"/></svg>
+          >
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path
+              d="M24 12l-5.657 5.657-1.414-1.414L21.172 12l-4.243-4.243 1.414-1.414L24 12zM2.828 12l4.243 4.243-1.414 1.414L0 12l5.657-5.657L7.07 7.757 2.828 12zm6.96 9H7.66l6.552-18h2.128L9.788 21z"
+            />
+          </svg>
         </div>
       </div>
 
-      <div
-        v-show="!collapsed"
-        class="dumi-previewer-source">
-        <div
-          v-html="highlightCode"
-          class="language-vue extra-class"
-        />
+      <div v-show="!collapsed" class="dumi-previewer-source">
+        <div v-html="highlightCode" class="language-vue extra-class" />
       </div>
     </section>
   </client-only>
@@ -59,16 +78,16 @@ export default {
   props: {
     code: {
       type: String,
-      default: ''
+      default: '',
     },
 
     demoPath: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
 
-  data () {
+  data() {
     return {
       collapsed: false,
       copied: false,
@@ -77,42 +96,46 @@ export default {
       /**
        * take over VuePress render
        * 接管VuePress渲染
-      */
-      demo: null
+       */
+      demo: null,
     }
   },
 
   computed: {
-    decodedCode () {
+    decodedCode() {
       return decodeURIComponent(this.code || this.demoStr)
     },
 
-    highlightCode () {
+    highlightCode() {
       return highlight(this.decodedCode, 'vue')
-    }
+    },
   },
 
-  created () {
+  created() {
     if (this.demoPath) {
-      import(/* webpackPrefetch: true */ `../../demos/${this.demoPath}.vue`).then(module => {
+      import(
+        /* webpackPrefetch: true */ `../../demos/${this.demoPath}.vue`
+      ).then((module) => {
         this.demo = module.default
       })
-      import(/* webpackPrefetch: true */ `!raw-loader!../../demos/${this.demoPath}.vue`).then(module => {
+      import(
+        /* webpackPrefetch: true */ `!raw-loader!../../demos/${this.demoPath}.vue`
+      ).then((module) => {
         this.demoStr = module.default
       })
     }
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     clearTimeout(this.timerId)
   },
 
   methods: {
-    handleCollapse () {
+    handleCollapse() {
       this.collapsed = !this.collapsed
     },
 
-    handleCopy () {
+    handleCopy() {
       this.copied = true
       copy(this.decodedCode)
 
@@ -120,8 +143,8 @@ export default {
       this.timerId = setTimeout(() => {
         this.copied = false
       }, 2000)
-    }
-  }
+    },
+  },
 }
 </script>
 

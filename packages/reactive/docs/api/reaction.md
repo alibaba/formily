@@ -1,16 +1,16 @@
 # reaction
 
-## 描述
+## Description
 
-接收一个 tracker 函数，与 callback 响应函数，如果 tracker 内部有消费 observable 数据，数据发生变化时，tracker 函数会重复执行，但是 callback 执行必须要求 tracker 函数返回值发生变化时才执行
+Receive a tracker function and a callback response function. If there is observable data in the tracker, the tracker function will be executed repeatedly when the data changes, but the callback execution must be executed when the tracker function return value changes.
 
-## 签名
+## Signature
 
 ```ts
 interface IReactionOptions<T> {
   name?: string
-  equals?: (oldValue: T, newValue: T) => boolean //脏检查
-  fireImmediately?: boolean //是否第一次默认触发，绕过脏检查
+  equals?: (oldValue: T, newValue: T) => boolean //Dirty check
+  fireImmediately?: boolean //Is it triggered by default for the first time, bypassing the dirty check
 }
 
 interface reaction<T> {
@@ -22,7 +22,7 @@ interface reaction<T> {
 }
 ```
 
-## 用例
+## Example
 
 ```ts
 import { observable, reaction, batch } from '@formily/reactive'
@@ -37,7 +37,7 @@ const dispose = reaction(() => {
 }, console.log)
 
 batch(() => {
-  //不会触发，因为obs.aa + obs.bb值没变
+  //Won't trigger because the value of obs.aa + obs.bb has not changed
   obs.aa = 2
   obs.bb = 1
 })

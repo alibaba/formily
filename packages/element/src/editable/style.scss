@@ -1,0 +1,53 @@
+@import '../__builtins__/styles/common.scss';
+
+$editable-prefix-cls: '#{$formily-prefix}-editable';
+
+.#{$editable-prefix-cls} {
+  cursor: pointer;
+  display: inline-block !important;
+
+  .#{$formily-prefix}-form-text {
+    .#{$formily-prefix}-tag {
+      transition: none !important;
+    }
+
+    .#{$formily-prefix}-tag:last-child {
+      margin-right: 0 !important;
+    }
+  }
+
+  &-content {
+    display: flex;
+    align-items: center;
+
+    > * {
+      margin-right: 3px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .#{$editable-prefix-cls}-edit-btn,
+  .#{$editable-prefix-cls}-close-btn {
+    transition: all 0.25s ease-in-out;
+
+    &:hover {
+      color: $--color-primary;
+    }
+  }
+
+  .#{$formily-prefix}-form-text {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$editable-prefix-cls}-preview {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+    max-width: 100px;
+    display: block;
+  }
+}

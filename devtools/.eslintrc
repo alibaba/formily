@@ -1,0 +1,86 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "env": {
+    "node": true
+  },
+  "plugins": ["@typescript-eslint", "react", "prettier", "markdown"],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 10,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "prettier/prettier": 0,
+    // don't force es6 functions to include space before paren
+    "space-before-function-paren": 0,
+    "react/prop-types": 0,
+    "react/no-find-dom-node": 0,
+    "react/display-name": 0,
+    // allow specifying true explicitly for boolean props
+    "react/jsx-boolean-value": 0,
+    "react/no-did-update-set-state": 0,
+    // maybe we should no-public
+    "@typescript-eslint/explicit-member-accessibility": 0,
+    "@typescript-eslint/interface-name-prefix": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/no-parameter-properties": 0,
+    "@typescript-eslint/array-type": 0,
+    "@typescript-eslint/no-object-literal-type-assertion": 0,
+    "@typescript-eslint/no-use-before-define": 0,
+    "@typescript-eslint/no-unused-vars": 1,
+    "@typescript-eslint/no-namespace": 0,
+    "@typescript-eslint/ban-types": 0,
+    "@typescript-eslint/adjacent-overload-signatures": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/triple-slash-reference": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "no-console": [
+      "error",
+      {
+        "allow": ["warn", "error", "info"]
+      }
+    ],
+    "prefer-const": 0,
+    "no-var": 1,
+    "prefer-rest-params": 0
+  },
+  "overrides": [
+    {
+      "files": ["**/*.md.{jsx,tsx}"],
+      "processor": "markdown/markdown"
+    },
+    {
+      "files": ["**/*.md/*.{jsx,tsx}"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "error",
+        "no-unused-vars": "error",
+        "no-console": "off",
+        "react/display-name": "off",
+        "react/prop-types": "off"
+      }
+    },
+    {
+      "files": ["**/*.md/*.{js,ts}"],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-unused-vars": "off",
+        "no-console": "off",
+        "react/display-name": "off",
+        "react/prop-types": "off"
+      }
+    }
+  ]
+}

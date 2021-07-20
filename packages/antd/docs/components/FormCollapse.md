@@ -1,10 +1,10 @@
 # FormCollapse
 
-> 折叠面板，通常用在布局空间要求较高的表单场景
+> Folding panel, usually used in form scenes with high layout space requirements
 >
-> 注意：只能用在 Schema 场景
+> Note: Can only be used in Schema scenarios
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -36,7 +36,7 @@ export default () => {
       <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField>
           <SchemaField.Void
-            title="折叠面板"
+            title="Folding Panel"
             x-decorator="FormItem"
             x-component="FormCollapse"
             x-component-props={{
@@ -92,16 +92,16 @@ export default () => {
               })
             }}
           >
-            显示/隐藏最后一个Tab
+            Show/hide the last tab
           </Button>
           <Button
             onClick={() => {
               formCollapse.toggleActiveKey('panel2')
             }}
           >
-            切换第二个Tab
+            Switch to the second Tab
           </Button>
-          <Submit onSubmit={console.log}>提交</Submit>
+          <Submit onSubmit={console.log}>Submit</Submit>
         </FormButtonGroup.FormItem>
       </FormLayout>
     </FormProvider>
@@ -109,7 +109,7 @@ export default () => {
 }
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -140,7 +140,7 @@ const schema = {
   properties: {
     collapse: {
       type: 'void',
-      title: '折叠面板',
+      title: 'Folding Panel',
       'x-decorator': 'FormItem',
       'x-component': 'FormCollapse',
       'x-component-props': {
@@ -213,16 +213,16 @@ export default () => {
               })
             }}
           >
-            显示/隐藏最后一个Tab
+            Show/hide the last tab
           </Button>
           <Button
             onClick={() => {
               formCollapse.toggleActiveKey('panel2')
             }}
           >
-            切换第二个Tab
+            Switch to the second Tab
           </Button>
-          <Submit onSubmit={console.log}>提交</Submit>
+          <Submit onSubmit={console.log}>Submit</Submit>
         </FormButtonGroup.FormItem>
       </FormLayout>
     </FormProvider>
@@ -234,15 +234,15 @@ export default () => {
 
 ### FormCollapse
 
-| 属性名       | 类型          | 描述                                                       | 默认值 |
-| ------------ | ------------- | ---------------------------------------------------------- | ------ |
-| formCollapse | IFormCollapse | 传入通过 createFormCollapse/useFormCollapse 创建出来的模型 |        |
+| Property name | Type          | Description                                                     | Default value |
+| ------------- | ------------- | --------------------------------------------------------------- | ------------- |
+| formCollapse  | IFormCollapse | Pass in the model created by createFormCollapse/useFormCollapse |               |
 
-其余参考 https://ant.design/components/collapse-cn/
+Other references https://ant.design/components/collapse-cn/
 
 ### FormCollapse.CollapsePanel
 
-参考 https://ant.design/components/collapse-cn/
+Reference https://ant.design/components/collapse-cn/
 
 ### FormCollapse.createFormCollapse
 
@@ -255,17 +255,17 @@ interface createFormCollapse {
 }
 
 interface IFormCollapse {
-  //激活主键列表
+  //Activate the primary key list
   activeKeys: ActiveKeys
-  //是否存在该激活主键
+  //Does the activation key exist?
   hasActiveKey(key: ActiveKey): boolean
-  //设置激活主键列表
+  //Set the list of active primary keys
   setActiveKeys(keys: ActiveKeys): void
-  //添加激活主键
+  //Add activation key
   addActiveKey(key: ActiveKey): void
-  //删除激活主键
+  //Delete the active primary key
   removeActiveKey(key: ActiveKey): void
-  //开关切换激活主键
+  //Switch to activate the main key
   toggleActiveKey(key: ActiveKey): void
 }
 ```

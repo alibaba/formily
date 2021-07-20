@@ -2,6 +2,9 @@ import { observable, reaction, autorun } from '../'
 import { batch } from '../batch'
 import { define } from '../model'
 
+const sleep = (duration = 100) =>
+  new Promise((resolve) => setTimeout(resolve, duration))
+
 test('autorun', () => {
   const obs = observable({
     aa: {
@@ -205,4 +208,299 @@ test('autorun direct recursive react with head track', () => {
   obs2.value = '222'
   expect(fn).not.toHaveBeenCalledWith('111', undefined)
   expect(fn).toHaveBeenCalledWith('111', '222')
+})
+
+test('autorun.memo', () => {
+  const obs = observable<any>({
+    bb: 0,
+  })
+  const fn = jest.fn()
+  autorun(() => {
+    const value = autorun.memo(() => ({
+      aa: 0,
+    }))
+    fn(obs.bb, value.aa++)
+  })
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(3, 3)
+  expect(fn).toBeCalledWith(4, 4)
+})
+
+test('autorun.memo with observable', () => {
+  const obs1 = observable({
+    aa: 0,
+  })
+  const fn = jest.fn()
+  const dispose = autorun(() => {
+    const obs2 = autorun.memo(() =>
+      observable({
+        bb: 0,
+      })
+    )
+    fn(obs1.aa, obs2.bb++)
+  })
+  obs1.aa++
+  obs1.aa++
+  obs1.aa++
+  expect(fn).toBeCalledTimes(4)
+  expect(fn).toBeCalledWith(0, 0)
+  expect(fn).toBeCalledWith(1, 1)
+  expect(fn).toBeCalledWith(2, 2)
+  expect(fn).toBeCalledWith(3, 3)
+  dispose()
+  obs1.aa++
+  expect(fn).toBeCalledTimes(4)
+})
+
+test('autorun.memo with observable and effect', async () => {
+  const obs1 = observable({
+    aa: 0,
+  })
+  const fn = jest.fn()
+  const dispose = autorun(() => {
+    const obs2 = autorun.memo(() =>
+      observable({
+        bb: 0,
+      })
+    )
+    fn(obs1.aa, obs2.bb++)
+    autorun.effect(() => {
+      obs2.bb++
+    }, [])
+  })
+  obs1.aa++
+  obs1.aa++
+  obs1.aa++
+  await sleep(100)
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(0, 0)
+  expect(fn).toBeCalledWith(1, 1)
+  expect(fn).toBeCalledWith(2, 2)
+  expect(fn).toBeCalledWith(3, 3)
+  expect(fn).toBeCalledWith(3, 5)
+  dispose()
+  obs1.aa++
+  expect(fn).toBeCalledTimes(5)
+})
+
+test('autorun.memo with deps', () => {
+  const obs = observable<any>({
+    bb: 0,
+    cc: 0,
+  })
+  const fn = jest.fn()
+  autorun(() => {
+    const value = autorun.memo(
+      () => ({
+        aa: 0,
+      }),
+      [obs.cc]
+    )
+    fn(obs.bb, value.aa++)
+  })
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(3, 3)
+  expect(fn).toBeCalledWith(4, 4)
+  obs.cc++
+  expect(fn).toBeCalledTimes(6)
+  expect(fn).toBeCalledWith(4, 0)
+})
+
+test('autorun.memo with deps and dispose', () => {
+  const obs = observable<any>({
+    bb: 0,
+    cc: 0,
+  })
+  const fn = jest.fn()
+  const dispose = autorun(() => {
+    const value = autorun.memo(
+      () => ({
+        aa: 0,
+      }),
+      [obs.cc]
+    )
+    fn(obs.bb, value.aa++)
+  })
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(3, 3)
+  expect(fn).toBeCalledWith(4, 4)
+  obs.cc++
+  expect(fn).toBeCalledTimes(6)
+  expect(fn).toBeCalledWith(4, 0)
+  dispose()
+  obs.bb++
+  obs.cc++
+  expect(fn).toBeCalledTimes(6)
+})
+
+test('autorun.memo with invalid params', () => {
+  const obs = observable<any>({
+    bb: 0,
+  })
+  const fn = jest.fn()
+  autorun(() => {
+    const value = autorun.memo({ aa: 0 } as any)
+    fn(obs.bb, value)
+  })
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(4, undefined)
+})
+
+test('autorun.memo not in autorun', () => {
+  expect(() => autorun.memo(() => ({ aa: 0 }))).toThrow()
+})
+
+test('autorun no memo', () => {
+  const obs = observable<any>({
+    bb: 0,
+  })
+  const fn = jest.fn()
+  autorun(() => {
+    const value = {
+      aa: 0,
+    }
+    fn(obs.bb, value.aa++)
+  })
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(3, 0)
+  expect(fn).toBeCalledWith(4, 0)
+})
+
+test('autorun.effect', async () => {
+  const obs = observable<any>({
+    bb: 0,
+  })
+  const fn = jest.fn()
+  const effect = jest.fn()
+  const disposer = jest.fn()
+  const dispose = autorun(() => {
+    autorun.effect(() => {
+      effect()
+      return disposer
+    }, [])
+    fn(obs.bb)
+  })
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  await sleep(16)
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(4)
+  expect(effect).toBeCalledTimes(1)
+  expect(disposer).toBeCalledTimes(0)
+  dispose()
+  expect(effect).toBeCalledTimes(1)
+  expect(disposer).toBeCalledTimes(1)
+})
+
+test('autorun.effect dispose when autorun dispose', async () => {
+  const obs = observable<any>({
+    bb: 0,
+  })
+  const fn = jest.fn()
+  const effect = jest.fn()
+  const disposer = jest.fn()
+  const dispose = autorun(() => {
+    autorun.effect(() => {
+      effect()
+      return disposer
+    }, [])
+    fn(obs.bb)
+  })
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  dispose()
+  await sleep(16)
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(4)
+  expect(effect).toBeCalledTimes(0)
+  expect(disposer).toBeCalledTimes(0)
+})
+
+test('autorun.effect with deps', async () => {
+  const obs = observable<any>({
+    bb: 0,
+    cc: 0,
+  })
+  const fn = jest.fn()
+  const effect = jest.fn()
+  const dispose = autorun(() => {
+    autorun.effect(() => {
+      effect()
+    }, [obs.cc])
+    fn(obs.bb)
+  })
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  expect(effect).toBeCalledTimes(0)
+  await sleep(16)
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(4)
+  expect(effect).toBeCalledTimes(1)
+  obs.cc++
+  expect(effect).toBeCalledTimes(1)
+  await sleep(16)
+  expect(fn).toBeCalledTimes(6)
+  expect(fn).toBeCalledWith(4)
+  expect(effect).toBeCalledTimes(2)
+  dispose()
+  expect(effect).toBeCalledTimes(2)
+})
+
+test('autorun.effect with default deps', async () => {
+  const obs = observable<any>({
+    bb: 0,
+  })
+  const fn = jest.fn()
+  const effect = jest.fn()
+  const dispose = autorun(() => {
+    autorun.effect(() => {
+      effect()
+    })
+    fn(obs.bb)
+  })
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  obs.bb++
+  expect(effect).toBeCalledTimes(0)
+  await sleep(100)
+  expect(fn).toBeCalledTimes(5)
+  expect(fn).toBeCalledWith(4)
+  expect(effect).toBeCalledTimes(5)
+  dispose()
+  expect(effect).toBeCalledTimes(5)
+})
+
+test('autorun.effect not in autorun', () => {
+  expect(() => autorun.effect(() => {})).toThrow()
+})
+
+test('autorun.effect with invalid params', () => {
+  autorun.effect({} as any)
 })

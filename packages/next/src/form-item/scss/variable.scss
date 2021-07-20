@@ -13,8 +13,7 @@
 // form variables
 // --------------------------------------------------
 
-
-$form-item-cls: #{$css-prefix}+'formily-item';
+$form-item-cls: #{$css-prefix}+ 'formily-item';
 
 $input-border-color: $color-line1-3 !default;
 /// label padding (r)
@@ -75,7 +74,6 @@ $form-top-label-margin-b: 2px !default;
 /// text
 /// @namespace statement/label
 $form-label-color: $color-text1-3 !default;
-
 
 /// padding
 /// @namespace size/bounding

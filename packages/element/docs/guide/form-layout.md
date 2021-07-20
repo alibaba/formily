@@ -2,9 +2,17 @@
 
 > 区块级布局批量控制组件，借助该组件，我们可以轻松的控制被 FormLayout 圈住的所有 FormItem 组件的布局模式
 
-## 使用案例
+## Markup Schema 案例
 
-<dumi-previewer demoPath="guide/form-layout" />
+<dumi-previewer demoPath="guide/form-layout/markup-schema" />
+
+## JSON Schema 案例
+
+<dumi-previewer demoPath="guide/form-layout/json-schema" />
+
+## Template 案例
+
+<dumi-previewer demoPath="guide/form-layout/template" />
 
 ## API
 

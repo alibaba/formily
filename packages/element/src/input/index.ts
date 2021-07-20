@@ -1,6 +1,6 @@
 import { getComponentByTag } from '../__builtins__/shared'
-import { connect, mapProps } from '@formily/vue'
-
+import { connect, mapProps, mapReadPretty } from '@formily/vue'
+import { PreviewInputText } from '../preview-text'
 import type { Input as ElInputProps } from 'element-ui'
 import { Input as ElInput } from 'element-ui'
 
@@ -12,15 +12,17 @@ const TransformElInput = getComponentByTag<InputProps>(ElInput, {
 
 export const Input = connect(
   TransformElInput,
-  mapProps({ readOnly: 'readonly' })
+  mapProps({ readOnly: 'readonly' }),
+  mapReadPretty(PreviewInputText)
 )
 
-export const Textarea = connect(
+export const TextArea = connect(
   Input,
   mapProps((props) => {
     return {
       ...props,
       type: 'textarea',
     }
-  })
+  }),
+  mapReadPretty(PreviewInputText)
 )

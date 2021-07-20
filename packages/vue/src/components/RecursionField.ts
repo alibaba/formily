@@ -1,4 +1,5 @@
 import { inject, provide, watch, defineComponent, shallowRef } from 'vue-demi'
+import { GeneralField } from '@formily/core'
 import { isFn, isValid } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { observer } from '@formily/reactive-vue'
@@ -124,7 +125,7 @@ const RecursionField = observer(
           return slots
         }
 
-        const renderProperties = (field?: Formily.Core.Types.GeneralField) => {
+        const renderProperties = (field?: GeneralField) => {
           if (props.onlyRenderSelf) return
           const children = fieldSchemaRef.value.mapProperties(
             (item, name, index) => {

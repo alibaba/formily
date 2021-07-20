@@ -1,0 +1,37 @@
+@import '../__builtins__/styles/common.scss';
+
+$array-table-prefix-cls: '#{$formily-prefix}-array-collapse';
+
+.#{$array-table-prefix-cls} {
+  .el-card__header {
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+  }
+  .el-empty {
+    padding: 0;
+  }
+
+  .#{$array-table-prefix-cls}-item {
+    margin-bottom: 10px;
+  }
+
+  .#{$array-table-prefix-cls}-errors-badge {
+    line-height: 1;
+  }
+
+  .#{$formily-prefix}-array-base-addition {
+    width: 100%;
+    border: $--border-width-base dashed $--border-color-base;
+
+    &:hover {
+      background-color: $--color-white;
+      border-color: $--border-color-hover;
+    }
+
+    &:active,
+    &:focus {
+      background-color: $--color-white;
+      border-color: $--color-primary;
+    }
+  }
+}

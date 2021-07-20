@@ -1,54 +1,54 @@
 ---
-title: Formily - 阿里巴巴统一前端表单解决方案
+title: Formily-Alibaba unified front-end form solution
 order: 10
 hero:
   title: FORMILY CORE
-  desc: 阿里巴巴统一前端表单解决方案
+  desc: Alibaba unified front-end form solution
   actions:
-    - text: 主站文档
+    - text: Home Site
       link: //v2.formilyjs.org
-    - text: 内核文档
+    - text: Document
       link: /guide
 features:
   - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
-    title: 超高的性能
-    desc: 依赖追踪，高效更新，按需渲染
+    title: High Performance
+    desc: Efficient update, Demand rendering
   - icon: https://img.alicdn.com/imgextra/i3/O1CN0194OqFF1ui6mMT4g7O_!!6000000006070-55-tps-800-800.svg
-    title: 极佳的复用性
-    desc: 副作用独立，逻辑可拔插
+    title: Excellent Reusability
+    desc: Independent side effects, Pluggable
   - icon: https://img.alicdn.com/imgextra/i2/O1CN01QnfYS71E44I1ZpxU9_!!6000000000297-55-tps-800-800.svg
-    title: 优雅的联动写法
-    desc: 灵活，完备，优雅
+    title: Elegant Linkage Writing
+    desc: Flexible, Complete, Elegant
   - icon: https://img.alicdn.com/imgextra/i2/O1CN01YqmcpN1tDalwgyHBH_!!6000000005868-55-tps-800-800.svg
-    title: 完备的领域模型
-    desc: 跨终端，跨框架，UI无关
+    title: Complete domain model
+    desc: Pure Core, No UI, No Framework
   - icon: https://img.alicdn.com/imgextra/i4/O1CN018vDmpl2186xdLu6KI_!!6000000006939-55-tps-800-800.svg
-    title: 友好的调试体验
-    desc: 天然对接Formily DevTools
+    title: Friendly debugging
+    desc: Natural docking with Formily DevTools
   - icon: https://img.alicdn.com/imgextra/i4/O1CN01u6jHgs1ZMwXpjAYnh_!!6000000003181-55-tps-800-800.svg
-    title: 完美的智能提示
-    desc: 拥抱Typescript
+    title: Smart Tips
+    desc: Embrace Typescript
 footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by self
 ---
 
-## 安装
+## Installation
 
 ```bash
 $ npm install --save @formily/core
 
 ```
 
-## 快速开始
+## Quick start
 
-> 以下案例是一步步教您从零实现一个表单
+> The following case is to teach you step by step to implement a form from scratch
 >
-> @formily/core 给您带来了以下几个能力：
+> @formily/core brings you the following capabilities:
 >
-> 1. 响应式计算能力
-> 2. 校验能力、校验国际化能力
-> 3. 值管理能力
-> 4. 联动管理能力
-> 5. 开发工具调试能力，[下载 Formily Devtools](https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN)
+> 1. Responsive computing capabilities
+> 2. Verification capability, verification internationalization capability
+> 3. Value Management Ability
+> 4. Linkage management capabilities
+> 5. Development tool debugging capabilities, [download Formily Devtools](https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN)
 
 ```tsx
 /**
@@ -58,33 +58,33 @@ import React, { createContext, useMemo, useContext, useEffect } from 'react'
 import { createForm, setValidateLanguage } from '@formily/core'
 import { observer } from '@formily/reactive-react'
 
-//创建上下文，方便Field消费
+//Create a context to facilitate Field consumption
 const FormContext = createContext()
-//创建上下文，方便FormItem消费
+//Create a context to facilitate the consumption of FormItem
 const FieldContext = createContext()
 
-//状态桥接器组件
+//State bridge component
 const Field = observer((props) => {
   const form = useContext(FormContext)
-  //创建字段
+  //Create a field
   const field = form.createField(props)
   useEffect(() => {
-    //挂载字段
+    //Mount field
     field.onMount()
     return () => {
-      //卸载字段
+      //Unload field
       field.onUnmount()
     }
   })
   if (!field.visible || field.hidden) return null
-  //渲染字段，将字段状态与UI组件关联
+  //Render the field, associate the field state with the UI component
   const component = React.createElement(field.component[0], {
     ...field.component[1],
     value: field.value,
     onChange: field.onInput,
   })
 
-  //渲染字段包装器
+  //Render field wrapper
   const decorator = React.createElement(
     field.decorator[0],
     field.decorator[1],
@@ -96,7 +96,7 @@ const Field = observer((props) => {
   )
 })
 
-// FormItem UI组件
+// FormItem UI component
 const FormItem = observer(({ children }) => {
   const field = useContext(FieldContext)
   return (
@@ -110,7 +110,7 @@ const FormItem = observer(({ children }) => {
   )
 })
 
-// Input UI组件
+// Input UI component
 const Input = (props) => {
   return (
     <input
@@ -128,13 +128,13 @@ const Input = (props) => {
   )
 }
 
-//表单管理入口
+//Form management entrance
 const FormProvider = (props) => {
   useEffect(() => {
-    //挂载表单
+    //Mount form
     props.form?.onMount()
     return () => {
-      //卸载表单
+      //Uninstall the form
       props.form?.onUnmount()
     }
   })
@@ -145,17 +145,17 @@ const FormProvider = (props) => {
   )
 }
 
-//表单响应式监控器
+//Form response monitor
 const FormConsumer = observer((props) => {
   const form = useContext(FormContext)
   return <div>{props.children(form)}</div>
 })
 
 /*
- * 以上逻辑都已经在 @formily/react 或 @formily/vue 中实现，实际使用无需重复编写
+ * The above logic has been implemented in @formily/react or @formily/vue, and there is no need to rewrite it in actual use
  */
 
-//切换内置校验国际化文案为英文
+//Switch the built-in check internationalization copy to English
 setValidateLanguage('en')
 
 export default () => {

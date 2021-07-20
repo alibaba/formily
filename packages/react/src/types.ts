@@ -1,3 +1,15 @@
+import {
+  Form,
+  Field as FieldType,
+  VoidField,
+  ObjectField,
+  GeneralField,
+  IFieldFactoryProps,
+  IVoidFieldFactoryProps,
+  FormPatternTypes,
+  FieldDisplayTypes,
+  FieldValidator,
+} from '@formily/core'
 import { ISchema, Schema, SchemaKey } from '@formily/json-schema'
 import { FormPathPattern } from '@formily/shared'
 
@@ -6,21 +18,19 @@ export type JSXComponent =
   | React.JSXElementConstructor<any>
 
 export type IProviderProps = {
-  form: Formily.Core.Models.Form
+  form: Form
 }
 
 export interface IFormSpyProps {
-  children?: (form: Formily.Core.Models.Form) => React.ReactChild
+  children?: (form: Form) => React.ReactChild
 }
 
 export interface IFieldProps<
   D extends JSXComponent,
   C extends JSXComponent,
-  Field = Formily.Core.Models.Field
-> extends Formily.Core.Types.IFieldFactoryProps<D, C> {
-  children?:
-    | ((field: Field, form: Formily.Core.Models.Form) => React.ReactChild)
-    | React.ReactNode
+  Field = FieldType
+> extends IFieldFactoryProps<D, C> {
+  children?: ((field: Field, form: Form) => React.ReactChild) | React.ReactNode
   decorator?: [] | [D] | [D, React.ComponentProps<D>] | any[]
   component?: [] | [C] | [C, React.ComponentProps<C>] | any[]
 }
@@ -28,11 +38,9 @@ export interface IFieldProps<
 export interface IVoidFieldProps<
   D extends JSXComponent,
   C extends JSXComponent,
-  Field = Formily.Core.Models.VoidField
-> extends Formily.Core.Types.IVoidFieldFactoryProps<D, C> {
-  children?:
-    | ((field: Field, form: Formily.Core.Models.Form) => React.ReactChild)
-    | React.ReactNode
+  Field = VoidField
+> extends IVoidFieldFactoryProps<D, C> {
+  children?: ((field: Field, form: Form) => React.ReactChild) | React.ReactNode
   decorator?: [] | [D] | [D, React.ComponentProps<D>] | any[]
   component?: [] | [C] | [C, React.ComponentProps<C>] | any[]
 }
@@ -43,9 +51,9 @@ export interface IComponentMapper<T extends JSXComponent> {
 
 export type IStateMapper<Props> =
   | {
-      [key in keyof Formily.Core.Models.Field]?: keyof Props | boolean
+      [key in keyof FieldType]?: keyof Props | boolean
     }
-  | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)
+  | ((props: Props, field: GeneralField) => Props)
 
 export type SchemaReactComponents = Record<string, JSXComponent>
 
@@ -59,11 +67,8 @@ export interface ISchemaFieldReactFactoryOptions<
 export interface ISchemaFieldProps<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
-  InnerField = Formily.Core.Models.ObjectField<Decorator, Component>
-> extends Omit<
-    Formily.Core.Types.IFieldFactoryProps<Decorator, Component, InnerField>,
-    'name'
-  > {
+  InnerField = ObjectField<Decorator, Component>
+> extends Omit<IFieldFactoryProps<Decorator, Component, InnerField>, 'name'> {
   schema?: ISchema
   components?: {
     [key: string]: JSXComponent
@@ -153,11 +158,11 @@ export interface ISchemaMarkupFieldProps<
     Component,
     ReactComponentPropsByPathValue<Components, Decorator>,
     ReactComponentPropsByPathValue<Components, Component>,
-    Formily.Core.Types.FormPatternTypes,
-    Formily.Core.Types.FieldDisplayTypes,
-    Formily.Core.Types.FieldValidator,
+    FormPatternTypes,
+    FieldDisplayTypes,
+    FieldValidator,
     React.ReactNode,
-    Formily.Core.Types.GeneralField
+    GeneralField
   > {
   children?: React.ReactNode
 }

@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.0.0-beta.79(2021-07-15)
+
+### :tada: Enhancements
+
+1. [feat(project): support bundle dts (#1796)](https://github.com/alibaba/formily/commit/5f8c1879) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :beetle: Bug Fixes
+
+1. [fix(vue): fix field doesnt update correctly in designable mode (#1799)](https://github.com/alibaba/formily/commit/837cfc0b) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+### :blush: Other Changes
+
+1. [chore(project): improve typings and fix typo (#1802)](https://github.com/alibaba/formily/commit/af23767b) :point_right: ( [Janry](https://github.com/Janry) )
+
 ## v2.0.0-beta.78(2021-07-13)
 
 ### :tada: Enhancements
@@ -925,13 +939,3 @@
 ### :rose: Improve code quality
 
 1. [refactor(project): update styled-component version compat](https://github.com/alibaba/formily/commit/0cf618d5) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v1.2.4(2020-07-06)
-
-### :beetle: Bug Fixes
-
-1. [fix(schema): compat eva expression actions (#951)](https://github.com/alibaba/formily/commit/aed0369b) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-### :rocket: Improve Performance
-
-1. [perf(validator): improve validate perf (#950)](https://github.com/alibaba/formily/commit/0162788b) :point_right: ( [Janry](https://github.com/Janry) )

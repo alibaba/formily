@@ -2,9 +2,17 @@
 
 > 超级便捷的 Flex 布局组件，可以帮助用户快速实现任何元素的并排紧挨布局
 
-## 使用案例
+## Markup Schema 案例
 
-<dumi-previewer demoPath="guide/space" />
+<dumi-previewer demoPath="guide/space/markup-schema" />
+
+## JSON Schema 案例
+
+<dumi-previewer demoPath="guide/space/json-schema" />
+
+## Template 案例
+
+<dumi-previewer demoPath="guide/space/template" />
 
 ## API
 

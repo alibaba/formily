@@ -7,31 +7,41 @@ import {
   toRefs,
   ref,
 } from 'vue-demi'
-import { FragmentComponent, useField, useFieldSchema, h } from '@formily/vue'
+import { Fragment, useField, useFieldSchema, h } from '@formily/vue'
 import { isValid, uid } from '@formily/shared'
+import { ArrayField } from '@formily/core'
 import { stylePrefix } from '../__builtins__/configs'
 
-import type { Component } from 'vue'
-import type { Button as ElButtonProps } from 'element-ui'
-import { Button as ElButton } from 'element-ui'
+import type { Button as ButtonProps } from 'element-ui'
+import { Button } from 'element-ui'
 import type { Schema } from '@formily/json-schema'
+import { HandleDirective } from 'vue-slicksort'
 
-interface AdditionProps extends ElButtonProps {
+export interface IArrayBaseAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
+  defaultValue?: any
 }
 
-interface Context {
-  field: Ref<Formily.Core.Models.ArrayField>
-  schema: Ref<Schema>
-  keyMap: WeakMap<any, string | number>
+export interface IArrayBaseProps {
+  disabled?: boolean
 }
 
-interface ItemProps {
+export interface IArrayBaseItemProps {
   index: number
 }
 
-const ArrayBaseSymbol: InjectionKey<Context> = Symbol('ArrayBaseContext')
+export interface IArrayBaseContext {
+  field: Ref<ArrayField>
+  schema: Ref<Schema>
+  props: IArrayBaseProps
+  listeners: {
+    [key in string]?: Function
+  }
+}
+
+const ArrayBaseSymbol: InjectionKey<IArrayBaseContext> =
+  Symbol('ArrayBaseContext')
 const ItemSymbol: InjectionKey<{
   index: Ref<number>
 }> = Symbol('ItemContext')
@@ -40,9 +50,22 @@ export const useArray = () => {
   return inject(ArrayBaseSymbol, null)
 }
 
-const useIndex = (index?: number) => {
+export const useIndex = (index?: number) => {
   const ctx = inject(ItemSymbol, null)
   return ctx ? ctx.index : ref(index)
+}
+
+export const useKey = () => {
+  const keyMap = new WeakMap()
+
+  return (record: any) => {
+    record =
+      record === null || typeof record !== 'object' ? Object(record) : record
+    if (!keyMap.has(record)) {
+      keyMap.set(record, uid())
+    }
+    return keyMap.get(record)
+  }
 }
 
 const getDefaultValue = (defaultValue: any, schema: Schema): any => {
@@ -60,57 +83,116 @@ const getDefaultValue = (defaultValue: any, schema: Schema): any => {
 }
 
 export const ArrayBase = defineComponent({
-  setup(props, { slots }) {
-    const field = useField<Formily.Core.Models.ArrayField>()
+  name: 'ArrayBase',
+  props: ['disabled'],
+  setup(props: IArrayBaseProps, { slots, listeners }) {
+    const field = useField<ArrayField>()
     const schema = useFieldSchema()
-    const keyMap = new WeakMap()
-    provide(ArrayBaseSymbol, { field, schema, keyMap })
+
+    provide(ArrayBaseSymbol, { field, schema, props, listeners })
     return () => {
-      return h(FragmentComponent as Component, {}, slots)
+      return h(Fragment, {}, slots)
     }
   },
 })
 
-export const ArrayBaseItem = defineComponent<ItemProps>({
+export const ArrayBaseItem = defineComponent({
+  name: 'ArrayBaseItem',
   props: ['index'],
-  setup(props, { slots }) {
+  setup(props: IArrayBaseItemProps, { slots }) {
     provide(ItemSymbol, toRefs(props))
     return () => {
-      return h(FragmentComponent as Component, {}, slots)
+      return h(Fragment, {}, slots)
     }
   },
 })
 
-export const ArrayAddition = defineComponent<AdditionProps>({
-  props: ['title', 'method'],
-  setup(props, { attrs, listeners }) {
+export const ArrayBaseSortHandle = defineComponent({
+  name: 'ArrayBaseSortHandle',
+  props: ['index'],
+  directives: {
+    handle: HandleDirective,
+  },
+  setup(props, { attrs }) {
+    const array = useArray()
+    const prefixCls = `${stylePrefix}-array-base`
+
+    return () => {
+      if (!array) return null
+      if (array.field.value?.pattern !== 'editable') return null
+
+      return h(
+        Button,
+        {
+          directives: [{ name: 'handle' }],
+          class: [`${prefixCls}-sort-handle`],
+          attrs: {
+            size: 'mini',
+            type: 'text',
+            icon: 'el-icon-rank',
+            ...attrs,
+          },
+        },
+        {}
+      )
+    }
+  },
+})
+
+export const ArrayBaseIndex = defineComponent({
+  name: 'ArrayBaseIndex',
+  setup(props, { attrs }) {
+    const index = useIndex()
+    return () =>
+      h(
+        'span',
+        {
+          attrs,
+        },
+        {
+          default: () => [`#${index.value + 1}.`],
+        }
+      )
+  },
+})
+
+export const ArrayBaseAddition = defineComponent({
+  name: 'ArrayBaseAddition',
+  props: ['title', 'method', 'defaultValue'],
+  setup(props: IArrayBaseAdditionProps, { listeners }) {
     const self = useField()
     const array = useArray()
-    const prefixCls = `${stylePrefix}-form-array-base`
+    const prefixCls = `${stylePrefix}-array-base`
     return () => {
+      if (!array) return null
       if (array?.field.value.pattern !== 'editable') return null
       return h(
-        ElButton,
+        Button,
         {
           class: `${prefixCls}-addition`,
           attrs: {
             type: 'ghost',
             icon: 'qax-icon-Alone-Plus',
-            ...attrs,
+            ...props,
           },
           on: {
             ...listeners,
-            click: () => {
+            click: (e) => {
+              if (array.props?.disabled) return
               const defaultValue = getDefaultValue(
-                attrs.defaultValue,
+                props.defaultValue,
                 array?.schema.value
               )
               if (props.method === 'unshift') {
                 array?.field?.value.unshift(defaultValue)
+                array.listeners?.add?.(0)
               } else {
                 array?.field?.value.push(defaultValue)
+                array.listeners?.add?.(array?.field?.value?.value?.length - 1)
               }
-              array.keyMap.set(defaultValue, uid())
+              if (listeners.click) {
+                listeners.click(e)
+              }
             },
           },
         },
@@ -122,29 +204,37 @@ export const ArrayAddition = defineComponent<AdditionProps>({
   },
 })
 
-export const ArrayRemove = defineComponent<
-  ElButtonProps & { title?: string; index?: number }
+export const ArrayBaseRemove = defineComponent<
+  ButtonProps & { title?: string; index?: number }
 >({
+  name: 'ArrayBaseRemove',
   props: ['title', 'index'],
   setup(props, { attrs, listeners }) {
     const indexRef = useIndex(props.index)
     const base = useArray()
-    const prefixCls = `${stylePrefix}-form-array-base`
+    const prefixCls = `${stylePrefix}-array-base`
     return () => {
       if (base?.field.value.pattern !== 'editable') return null
       return h(
-        ElButton,
+        Button,
         {
           class: `${prefixCls}-remove`,
           attrs: {
             type: 'text',
-            icon: props.title ? undefined : 'qax-icon-Trash',
+            size: 'mini',
+            icon: 'el-icon-delete',
             ...attrs,
           },
           on: {
             ...listeners,
-            click: () => {
+            click: (e: MouseEvent) => {
+              e.stopPropagation()
               base?.field.value.remove(indexRef.value as number)
+              base?.listeners?.remove?.(indexRef.value as number)
+
+              if (listeners.click) {
+                listeners.click(e)
+              }
             },
           },
         },
@@ -156,29 +246,37 @@ export const ArrayRemove = defineComponent<
   },
 })
 
-export const ArrayMoveDown = defineComponent<
-  ElButtonProps & { title?: string; index?: number }
+export const ArrayBaseMoveDown = defineComponent<
+  ButtonProps & { title?: string; index?: number }
 >({
+  name: 'ArrayBaseMoveDown',
   props: ['title', 'index'],
   setup(props, { attrs, listeners }) {
     const indexRef = useIndex(props.index)
     const base = useArray()
-    const prefixCls = `${stylePrefix}-form-array-base`
+    const prefixCls = `${stylePrefix}-array-base`
     return () => {
       if (base?.field.value.pattern !== 'editable') return null
       return h(
-        ElButton,
+        Button,
         {
           class: `${prefixCls}-move-down`,
           attrs: {
+            size: 'mini',
             type: 'text',
-            icon: props.title ? undefined : 'qax-icon-Angle-down',
+            icon: 'el-icon-arrow-down',
             ...attrs,
           },
           on: {
             ...listeners,
-            click: () => {
+            click: (e: MouseEvent) => {
+              e.stopPropagation()
               base?.field.value.moveDown(indexRef.value as number)
+              base?.listeners?.moveDown?.(indexRef.value as number)
+
+              if (listeners.click) {
+                listeners.click(e)
+              }
             },
           },
         },
@@ -190,29 +288,37 @@ export const ArrayMoveDown = defineComponent<
   },
 })
 
-export const ArrayMoveUp = defineComponent<
-  ElButtonProps & { title?: string; index?: number }
+export const ArrayBaseMoveUp = defineComponent<
+  ButtonProps & { title?: string; index?: number }
 >({
+  name: 'ArrayBaseMoveUp',
   props: ['title', 'index'],
   setup(props, { attrs, listeners }) {
     const indexRef = useIndex(props.index)
     const base = useArray()
-    const prefixCls = `${stylePrefix}-form-array-base`
+    const prefixCls = `${stylePrefix}-array-base`
     return () => {
       if (base?.field.value.pattern !== 'editable') return null
       return h(
-        ElButton,
+        Button,
         {
           class: `${prefixCls}-move-up`,
           attrs: {
+            size: 'mini',
             type: 'text',
-            icon: props.title ? undefined : 'qax-icon-Angle-up',
+            icon: 'el-icon-arrow-up',
             ...attrs,
           },
           on: {
             ...listeners,
-            click: () => {
+            click: (e: MouseEvent) => {
+              e.stopPropagation()
               base?.field.value.moveUp(indexRef.value as number)
+              base?.listeners?.moveUp?.(indexRef.value as number)
+
+              if (listeners.click) {
+                listeners.click(e)
+              }
             },
           },
         },
