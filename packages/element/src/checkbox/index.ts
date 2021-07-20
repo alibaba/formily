@@ -1,5 +1,5 @@
 import { connect, h } from '@formily/vue'
-import { defineComponent } from 'vue-demi'
+import { defineComponent } from '@vue/composition-api'
 
 import type { Checkbox as _ElCheckboxProps } from 'element-ui'
 import { Checkbox as ElCheckbox } from 'element-ui'

@@ -50,6 +50,18 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  &-tooltip {
+    cursor: help;
+
+    * {
+      cursor: help;
+    }
+
+    label {
+      border-bottom: 1px dashed currentColor;
+    }
+  }
 }
 
 .#{$form-item-prefix}-label label {
@@ -79,7 +91,7 @@
 .#{$form-item-prefix}-feedback-layout-terse {
   margin-bottom: 8px;
 
-  &.#{$form-item-prefix}-feedback-has-text {
+  &.#{$form-item-prefix}-feedback-has-text:not(.#{$form-item-prefix}-inset) {
     margin-bottom: 0;
   }
 }
@@ -87,7 +99,7 @@
 .#{$form-item-prefix}-feedback-layout-loose {
   margin-bottom: $--form-error-line-height;
 
-  &.#{$form-item-prefix}-feedback-has-text {
+  &.#{$form-item-prefix}-feedback-has-text:not(.#{$form-item-prefix}-inset) {
     margin-bottom: 0;
   }
 }
@@ -95,7 +107,7 @@
 .#{$form-item-prefix}-feedback-layout-none {
   margin-bottom: 0;
 
-  &.#{$form-item-prefix}-feedback-has-text {
+  &.#{$form-item-prefix}-feedback-has-text:not(.#{$form-item-prefix}-inset) {
     margin-bottom: 0;
   }
 }
@@ -139,7 +151,7 @@
 }
 
 .#{$form-item-prefix}-size-small {
-  font-size: $--form-label-font-size;
+  font-size: $--font-size-extra-small;
 
   .#{$form-item-prefix}-label * {
     line-height: $--form-item-small-line-height;
@@ -156,22 +168,6 @@
     }
   }
 
-  &.#{$form-item-prefix}-feedback-layout-terse {
-    margin-bottom: 8px;
-
-    &.#{$form-item-prefix}-feedback-has-text {
-      margin-bottom: 0;
-    }
-  }
-
-  &.#{$form-item-prefix}-feedback-layout-loose {
-    margin-bottom: $--form-error-line-height;
-
-    &.#{$form-item-prefix}-feedback-has-text {
-      margin-bottom: 0;
-    }
-  }
-
   .#{$form-item-prefix}-help,
   .#{$form-item-prefix}-extra {
     min-height: $--form-error-line-height;
@@ -184,10 +180,30 @@
   .#{$form-item-prefix}-label > label {
     height: $--form-item-small-line-height;
   }
+
+  .#{$namespace}-input {
+    input {
+      height: $--form-item-small-line-height;
+      line-height: $--form-item-small-line-height;
+    }
+  }
+
+  .#{$namespace}-input-number {
+    line-height: $--form-item-small-line-height;
+    &.is-controls-right {
+      .#{$namespace}-input-number__increase,
+      .#{$namespace}-input-number__decrease {
+        line-height: $--form-item-small-line-height / 2;
+        height: $--form-item-small-line-height / 2;
+        font-size: $--font-size-extra-small;
+        box-sizing: border-box;
+      }
+    }
+  }
 }
 
 .#{$form-item-prefix}-size-large {
-  font-size: $--form-font-size;
+  font-size: $--font-size-medium;
 
   .#{$form-item-prefix}-label * {
     line-height: $--form-item-large-line-height;
@@ -213,11 +229,33 @@
     min-height: $--form-item-large-line-height;
   }
 
-  &.#{$form-item-prefix}-feedback-layout-loose {
-    margin-bottom: $--form-error-line-height;
+  .#{$namespace}-input {
+    input {
+      height: $--form-item-large-line-height;
+      line-height: $--form-item-large-line-height;
+    }
+  }
 
-    &.#{$form-item-prefix}-feedback-has-text {
-      margin-bottom: 0;
+  .#{$namespace}-select {
+    input {
+      height: $--form-item-large-line-height !important;
+      line-height: $--form-item-large-line-height;
+    }
+  }
+
+  .#{$namespace}-select__tags .el-tag {
+    height: $--form-item-large-line-height - 12px;
+    line-height: $--form-item-large-line-height - 12px;
+  }
+
+  .#{$namespace}-input-number {
+    line-height: $--form-item-large-line-height;
+    &.is-controls-right {
+      .#{$namespace}-input-number__increase,
+      .#{$namespace}-input-number__decrease {
+        line-height: $--form-item-large-line-height / 2 - 1;
+        font-size: $--font-size-medium;
+      }
     }
   }
 }
@@ -449,4 +487,31 @@
   .#{$namespace}-input__validateIcon {
     color: $--color-success !important;
   }
+}
+
+.#{$form-item-prefix}-bordered-none {
+  .#{$namespace}-input__inner {
+    border: none !important;
+  }
+
+  .#{$namespace}-input-number__decrease,
+  .#{$namespace}-input-number__increase {
+    border: none !important;
+    background: transparent !important;
+  }
+}
+
+.#{$form-item-prefix}-inset {
+  border-radius: $--border-radius-base;
+  border: $--border-base;
+  padding-left: 12px;
+  transition: 0.3s all;
+
+  &:hover {
+    @include hover;
+  }
+}
+
+.#{$form-item-prefix}-inset-active {
+  @include active;
 }

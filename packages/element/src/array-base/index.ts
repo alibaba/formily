@@ -6,7 +6,7 @@ import {
   inject,
   toRefs,
   ref,
-} from 'vue-demi'
+} from '@vue/composition-api'
 import { Fragment, useField, useFieldSchema, h } from '@formily/vue'
 import { isValid, uid } from '@formily/shared'
 import { ArrayField } from '@formily/core'

@@ -117,6 +117,15 @@
           tooltip: 'tooltip',
         }"
       />
+      <SchemaStringField
+        title="tooltip"
+        x-decorator="FormItem"
+        x-component="Input"
+        :x-decorator-props="{
+          tooltip: 'tooltip',
+          tooltipLayout: 'text',
+        }"
+      />
       <SchemaVoidField x-component="Title" x-content="是否撑满: " />
       <SchemaStringField
         title="默认不撑满(fullness=false)"

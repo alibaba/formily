@@ -7,7 +7,7 @@ import {
   InjectionKey,
   Ref,
   inject,
-} from 'vue-demi'
+} from '@vue/composition-api'
 import { isValid, isNum, isBool, isEqual } from '@formily/shared'
 import { h } from '@formily/vue'
 import ResizeObserver from 'resize-observer-polyfill'

@@ -1,4 +1,4 @@
-import { defineComponent, reactive, computed } from 'vue-demi'
+import { defineComponent, reactive, computed } from '@vue/composition-api'
 import { observer } from '@formily/reactive-vue'
 import { model } from '@formily/reactive'
 import {

@@ -1,5 +1,5 @@
 import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
-import { defineComponent } from 'vue-demi'
+import { defineComponent } from '@vue/composition-api'
 import { PreviewSelectText } from '../preview-text'
 
 import type {

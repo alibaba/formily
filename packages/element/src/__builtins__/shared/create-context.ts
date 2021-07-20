@@ -8,7 +8,7 @@ import {
   ref,
   Ref,
   toRef,
-} from 'vue-demi'
+} from '@vue/composition-api'
 
 export type CreateContext<T> = {
   Provider: Component
