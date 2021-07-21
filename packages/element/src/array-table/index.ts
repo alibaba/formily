@@ -1,4 +1,11 @@
-import { defineComponent, Ref } from '@vue/composition-api'
+import {
+  defineComponent,
+  onBeforeUnmount,
+  ref,
+  Ref,
+  shallowRef,
+} from '@vue/composition-api'
+import { observe } from '@formily/reactive'
 import {
   GeneralField,
   IVoidFieldFactoryProps,
@@ -10,17 +17,38 @@ import {
   useFieldSchema,
   RecursionField as _RecursionField,
   h,
+  Fragment,
+  useForm,
 } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
-import { isArr } from '@formily/shared'
-import { ArrayBase, ArrayBaseItem } from '../array-base'
+import { FormPath, isArr, isBool } from '@formily/shared'
+import { ArrayBase, ArrayBaseItem, useKey } from '../array-base'
 import { stylePrefix } from '../__builtins__/configs'
 import type { Schema } from '@formily/json-schema'
-import type { TableColumn as ElColumnProps } from 'element-ui'
+import type {
+  Table as TableProps,
+  TableColumn as ElColumnProps,
+  Pagination as PaginationProps,
+} from 'element-ui'
 import type { VNode, Component } from 'vue'
-import { Table as ElTable, TableColumn as ElTableColumn } from 'element-ui'
+import {
+  Table as ElTable,
+  TableColumn as ElTableColumn,
+  Pagination,
+  Select,
+  Option,
+  Badge,
+} from 'element-ui'
+import { Space } from '../space'
 
 const RecursionField = _RecursionField as unknown as Component
+
+interface IArrayTableProps extends TableProps {
+  pagination?: PaginationProps | boolean
+}
+interface IArrayTablePaginationProps extends PaginationProps {
+  dataSource?: any[]
+}
 
 interface ObservableColumnSource {
   field: GeneralField
@@ -111,13 +139,13 @@ const getArrayTableSources = (
     }, sources)
   }
 
-  if (!schemaRef) throw new Error('can not found schema object')
+  if (!schemaRef.value) throw new Error('can not found schema object')
 
   return parseArrayTable(schemaRef.value.items)
 }
 
 const getArrayTableColumns = (
-  dataSource: any[],
+  reactiveDataSource: Ref<any[]>,
   sources: ObservableColumnSource[]
 ): ColumnProps[] => {
   return sources.reduce(
@@ -129,6 +157,7 @@ const getArrayTableColumns = (
       const { title, asterisk, ...props } = columnProps
       if (display !== 'visible') return buf
       if (!isColumnComponent(schema)) return buf
+
       const render =
         columnProps?.type && columnProps?.type !== 'default'
           ? undefined
@@ -137,10 +166,12 @@ const getArrayTableColumns = (
               column: ElColumnProps
               $index: number
             }): VNode => {
-              const index = props.$index
+              // let index = props.$index
+              const index = reactiveDataSource.value.indexOf(props.row)
+
               const children = h(
                 ArrayBaseItem,
-                { props: { index } },
+                { props: { index }, key: `${key}${index}` },
                 {
                   default: () =>
                     h(
@@ -190,21 +221,222 @@ const renderAddition = () => {
   }, null)
 }
 
-const ArrayTableInner = observer(
+const StatusSelect = observer(
   defineComponent({
-    name: 'ArrayTableInner',
+    props: {
+      value: Number,
+      onChange: Function,
+      options: Array,
+      pageSize: Number,
+    },
+    setup(props, { attrs }) {
+      const formRef = useForm()
+      const fieldRef = useField<ArrayField>()
+      const prefixCls = `${stylePrefix}-array-table`
+      const width = String(props.options?.length).length * 15
+
+      return () => {
+        const form = formRef.value
+        const field = fieldRef.value
+
+        const errors = form.queryFeedbacks({
+          type: 'error',
+          address: `${field.address}.*`,
+        })
+        const createIndexPattern = (page: number) => {
+          const pattern = `${field.address}.*[${(page - 1) * props.pageSize}:${
+            page * props.pageSize
+          }].*`
+          return FormPath.parse(pattern)
+        }
+
+        return h(
+          Select,
+          {
+            style: {
+              width: `${width < 60 ? 60 : width}px`,
+            },
+            class: [
+              `${prefixCls}-status-select`,
+              {
+                'has-error': errors?.length,
+              },
+            ],
+            props: {
+              value: props.value,
+              popperClass: `${prefixCls}-status-select-dropdown`,
+            },
+            on: {
+              input: props.onChange,
+            },
+          },
+          {
+            default: () => {
+              return props.options?.map(({ label, value }) => {
+                const hasError = errors.some(({ address }) => {
+                  return createIndexPattern(value).match(address)
+                })
+
+                return h(
+                  Option,
+                  {
+                    key: value,
+                    props: {
+                      label,
+                      value,
+                    },
+                  },
+                  {
+                    default: () => {
+                      if (hasError) {
+                        return h(
+                          Badge,
+                          {
+                            props: {
+                              isDot: true,
+                            },
+                          },
+                          { default: () => label }
+                        )
+                      }
+
+                      return label
+                    },
+                  }
+                )
+              })
+            },
+          }
+        )
+      }
+    },
+  })
+)
+
+const ArrayTablePagination = defineComponent<IArrayTablePaginationProps>({
+  inheritAttrs: false,
+  props: [],
+  setup(props, { attrs, slots }) {
+    const prefixCls = `${stylePrefix}-array-table`
+    const current = ref(1)
+    return () => {
+      const props = attrs as unknown as IArrayTablePaginationProps
+      const pageSize = props.pageSize || 10
+      const dataSource = props.dataSource || []
+      const startIndex = (current.value - 1) * pageSize
+      const endIndex = startIndex + pageSize - 1
+      const total = dataSource?.length || 0
+      const totalPage = Math.ceil(total / pageSize)
+      const pages = Array.from(new Array(totalPage)).map((_, index) => {
+        const page = index + 1
+        return {
+          label: page,
+          value: page,
+        }
+      })
+
+      const renderPagination = function () {
+        if (totalPage <= 1) return
+        return h(
+          'div',
+          {
+            class: [`${prefixCls}-pagination`],
+          },
+          {
+            default: () =>
+              h(
+                Space,
+                {},
+                {
+                  default: () => [
+                    h(
+                      StatusSelect,
+                      {
+                        props: {
+                          value: current.value,
+                          onChange: (val: number) => {
+                            current.value = val
+                          },
+                          pageSize,
+                          options: pages,
+                        },
+                      },
+                      {}
+                    ),
+                    h(
+                      Pagination,
+                      {
+                        props: {
+                          background: true,
+                          layout: 'prev, pager, next',
+                          ...props,
+                          pageSize,
+                          pageCount: totalPage,
+                          currentPage: current.value,
+                        },
+                        on: {
+                          'current-change': (val: number) => {
+                            current.value = val
+                          },
+                        },
+                      },
+                      {}
+                    ),
+                  ],
+                }
+              ),
+          }
+        )
+      }
+
+      return h(
+        Fragment,
+        {},
+        {
+          default: () =>
+            slots?.default?.(
+              dataSource?.slice(startIndex, endIndex + 1),
+              renderPagination
+            ),
+        }
+      )
+    }
+  },
+})
+
+export const ArrayTable = observer(
+  defineComponent<IArrayTableProps>({
+    name: 'ArrayTable',
+    inheritAttrs: false,
     setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
-      const prefixCls = `${stylePrefix}-array-table-inner`
+      const prefixCls = `${stylePrefix}-array-table`
+      const getKey = useKey()
+
+      const defaultRowKey = (record: any) => {
+        return getKey(record)
+      }
+      const reactiveDataSource = shallowRef([])
+
+      const dispose = observe(
+        fieldRef.value,
+        () => {
+          reactiveDataSource.value = fieldRef.value.value
+        },
+        false
+      )
+
+      onBeforeUnmount(dispose)
+
       return () => {
+        const props = attrs as unknown as IArrayTableProps
         const field = fieldRef.value
-        const sources = getArrayTableSources(fieldRef, schemaRef)
         const dataSource = Array.isArray(field.value) ? field.value.slice() : []
-        const columns = getArrayTableColumns(dataSource, sources)
-        const defaultRowKey = (record: any) => {
-          return dataSource.indexOf(record)
-        }
+        const pagination = props.pagination
+        const sources = getArrayTableSources(fieldRef, schemaRef)
+        const columns = getArrayTableColumns(reactiveDataSource, sources)
+
         const renderColumns = () =>
           columns.map(({ key, render, asterisk, ...props }) => {
             const children = {} as Record<string, any>
@@ -237,34 +469,6 @@ const ArrayTableInner = observer(
               children
             )
           })
-
-        return h(
-          ElTable,
-          {
-            attrs: {
-              rowKey: defaultRowKey,
-              ...attrs,
-              data: dataSource,
-            },
-          },
-          {
-            default: renderColumns,
-          }
-        )
-      }
-    },
-  })
-)
-
-export const ArrayTable = observer(
-  defineComponent({
-    name: 'ArrayTable',
-    setup(props, { attrs }) {
-      const fieldRef = useField<ArrayField>()
-      const schemaRef = useFieldSchema()
-      const prefixCls = `${stylePrefix}-array-table`
-      return () => {
-        const sources = getArrayTableSources(fieldRef, schemaRef)
         const renderStateManager = () =>
           sources.map((column, key) => {
             //专门用来承接对Column的状态管理
@@ -282,23 +486,53 @@ export const ArrayTable = observer(
               {}
             )
           })
+
+        const renderTable = (dataSource?: any[], pager?: () => VNode) => {
+          return h(
+            'div',
+            { class: prefixCls },
+            {
+              default: () =>
+                h(
+                  ArrayBase,
+                  {},
+                  {
+                    default: () => [
+                      h(
+                        ElTable,
+                        {
+                          props: {
+                            rowKey: defaultRowKey,
+                            ...attrs,
+                            data: dataSource,
+                          },
+                        },
+                        {
+                          default: renderColumns,
+                        }
+                      ),
+                      pager?.(),
+                      renderStateManager(),
+                      renderAddition(),
+                    ],
+                  }
+                ),
+            }
+          )
+        }
+
+        if (!pagination) {
+          return renderTable(dataSource, null)
+        }
         return h(
-          'div',
-          { class: prefixCls },
+          ArrayTablePagination,
           {
-            default: () =>
-              h(
-                ArrayBase,
-                {},
-                {
-                  default: () => [
-                    h(ArrayTableInner, { attrs }, {}),
-                    renderStateManager(),
-                    renderAddition(),
-                  ],
-                }
-              ),
-          }
+            attrs: {
+              ...(isBool(pagination) ? {} : pagination),
+              dataSource,
+            },
+          },
+          { default: renderTable }
         )
       }
     },

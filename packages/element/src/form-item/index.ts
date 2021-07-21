@@ -213,7 +213,8 @@ export const FormBaseItem = defineComponent<FormItemProps>({
                 },
               },
               {
-                reference: () => slots.default?.(),
+                reference: () =>
+                  h('div', {}, { default: () => slots.default?.() }),
                 default: () => [
                   h(
                     'div',
