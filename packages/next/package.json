@@ -13,7 +13,8 @@
     "esm/*.js",
     "lib/*.js",
     "src/*.ts",
-    "*.scss"
+    "*.scss",
+    "**/*/style.js"
   ],
   "repository": {
     "type": "git",
