@@ -22,6 +22,7 @@ import { merge } from '../merge'
 import { instOf } from '../instanceof'
 import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../checkers'
 import { defaults } from '../defaults'
+import { applyMiddleware } from '../middleware'
 
 describe('array', () => {
   test('toArr', () => {
@@ -499,6 +500,7 @@ describe('shared Subscribable', () => {
     objWithCustomNotify.subscribe(cb)
     objWithCustomNotify.notify({ key3: 'val3' })
     expect(customNotify).toBeCalledTimes(1)
+    objWithCustomNotify.unsubscribe()
   })
 })
 
@@ -693,4 +695,24 @@ test('defaults', () => {
     ee: { value: 555 },
     mm: { value: 123 },
   })
+})
+
+test('applyMiddleware', async () => {
+  expect(
+    await applyMiddleware(0, [
+      (num: number, next) => next(num + 1),
+      (num: number, next) => next(num + 1),
+      (num: number, next) => next(num + 1),
+    ])
+  ).toEqual(3)
+
+  expect(
+    await applyMiddleware(0, [
+      (num: number, next) => next(num + 1),
+      () => '123',
+      (num: number, next) => next(num + 1),
+    ])
+  ).toEqual('123')
+
+  expect(await applyMiddleware(0)).toEqual(0)
 })
