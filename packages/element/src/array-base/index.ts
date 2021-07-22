@@ -42,17 +42,15 @@ export interface IArrayBaseContext {
 
 const ArrayBaseSymbol: InjectionKey<IArrayBaseContext> =
   Symbol('ArrayBaseContext')
-const ItemSymbol: InjectionKey<{
-  index: Ref<number>
-}> = Symbol('ItemContext')
+const ItemSymbol: InjectionKey<Ref<number>> = Symbol('ItemContext')
 
 export const useArray = () => {
   return inject(ArrayBaseSymbol, null)
 }
 
 export const useIndex = (index?: number) => {
-  const ctx = inject(ItemSymbol, null)
-  return ctx ? ctx.index : ref(index)
+  const indexRef = inject(ItemSymbol)
+  return indexRef ?? ref(index)
 }
 
 export const useKey = () => {
@@ -100,7 +98,8 @@ export const ArrayBaseItem = defineComponent({
   name: 'ArrayBaseItem',
   props: ['index'],
   setup(props: IArrayBaseItemProps, { slots }) {
-    provide(ItemSymbol, toRefs(props))
+    const { index } = toRefs(props)
+    provide(ItemSymbol, index)
     return () => {
       return h(Fragment, {}, slots)
     }
@@ -143,8 +142,8 @@ export const ArrayBaseIndex = defineComponent({
   name: 'ArrayBaseIndex',
   setup(props, { attrs }) {
     const index = useIndex()
-    return () =>
-      h(
+    return () => {
+      return h(
         'span',
         {
           attrs,
@@ -153,6 +152,7 @@ export const ArrayBaseIndex = defineComponent({
           default: () => [`#${index.value + 1}.`],
         }
       )
+    }
   },
 })
 

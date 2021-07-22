@@ -5,6 +5,9 @@
         name="array"
         x-decorator="FormItem"
         x-component="ArrayTable"
+        :x-component-props="{
+          pagination: { pageSize: 10 },
+        }"
       >
         <SchemaObjectField>
           <SchemaVoidField
@@ -28,7 +31,7 @@
           </SchemaVoidField>
           <SchemaVoidField
             x-component="ArrayTableColumn"
-            :x-component-props="{ prop: 'a2', title: 'A2', width: 200 }"
+            :x-component-props="{ title: 'A2', width: 200 }"
           >
             <SchemaStringField
               x-decorator="FormItem"
@@ -39,7 +42,7 @@
           </SchemaVoidField>
           <SchemaVoidField
             x-component="ArrayTableColumn"
-            :x-component-props="{ prop: 'a3', title: 'A3' }"
+            :x-component-props="{ title: 'A3' }"
           >
             <SchemaStringField
               name="a3"
@@ -54,7 +57,6 @@
               title: 'Operations',
               prop: 'operations',
               width: 200,
-              fixed: 'right',
             }"
           >
             <SchemaVoidField x-component="FormItem">
@@ -68,6 +70,22 @@
       </SchemaArrayField>
     </SchemaField>
     <Submit @submit="log">提交</Submit>
+    <Button
+      @click="
+        () => {
+          form.setInitialValues({
+            array: range(100000),
+          })
+        }
+      "
+    >
+      加载10W条超大数据
+    </Button>
+    <Alert
+      :style="{ marginTop: '10px' }"
+      title="注意：开启formily插件的页面，因为后台有数据通信，会占用浏览器算力，最好在无痕模式(无formily插件)下测试"
+      type="warning"
+    />
   </FormProvider>
 </template>
 
@@ -88,6 +106,7 @@ import {
   Input,
   Editable,
 } from '@formily/element'
+import { Button, Alert } from 'element-ui'
 
 const fields = createSchemaField({
   components: {
@@ -106,7 +125,7 @@ const fields = createSchemaField({
 })
 
 export default {
-  components: { FormProvider, Submit, ...fields },
+  components: { FormProvider, Submit, Button, Alert, ...fields },
   data() {
     const form = createForm()
     return {
@@ -116,6 +135,11 @@ export default {
   methods: {
     log(...v) {
       console.log(...v)
+    },
+    range(count) {
+      return Array.from(new Array(count)).map((_, key) => ({
+        aaa: key,
+      }))
     },
   },
 }

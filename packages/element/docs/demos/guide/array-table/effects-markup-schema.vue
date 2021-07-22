@@ -17,16 +17,12 @@
             name="column1"
             x-component="ArrayTableColumn"
             :x-component-props="{ width: 80, title: 'Index' }"
-            ><SchemaVoidField
-              x-decorator="FormItem"
-              x-component="ArrayTableIndex"
-            />
+            ><SchemaVoidField x-component="ArrayTableIndex" />
           </SchemaVoidField>
           <SchemaVoidField
             name="column2"
             x-component="ArrayTableColumn"
             :x-component-props="{
-              prop: 'a1',
               title: '显隐->A2',
               width: 100,
             }"
@@ -40,7 +36,7 @@
           <SchemaVoidField
             x-component="ArrayTableColumn"
             name="column3"
-            :x-component-props="{ prop: 'a2', title: 'A2', width: 200 }"
+            :x-component-props="{ title: 'A2', width: 200 }"
           >
             <SchemaStringField
               x-decorator="FormItem"
@@ -51,11 +47,10 @@
           <SchemaVoidField
             name="column4"
             x-component="ArrayTableColumn"
-            :x-component-props="{ prop: 'a3', title: 'A3' }"
+            :x-component-props="{ title: 'A3' }"
           >
             <SchemaStringField
               name="a3"
-              :required="true"
               x-decorator="FormItem"
               x-component="Input"
             />
