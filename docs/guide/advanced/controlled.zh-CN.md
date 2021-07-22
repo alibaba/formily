@@ -348,10 +348,12 @@ const SchemaForm = observer(({ values }) => {
 })
 
 export default () => {
-  const values = useMemo(() =>
-    observable({
-      type: 'type_1',
-    })
+  const values = useMemo(
+    () =>
+      observable({
+        type: 'type_1',
+      }),
+    []
   )
   return <SchemaForm values={values} />
 }

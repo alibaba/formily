@@ -1,5 +1,35 @@
 # Changelog
 
+## v2.0.0-beta.80(2021-07-19)
+
+### :tada: Enhancements
+
+1. [feat(element): improve docs & add components (#1821)](https://github.com/alibaba/formily/commit/eddc3077) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [feat(reactive): support autorun.memo/autorun.effect (#1819)](https://github.com/alibaba/formily/commit/e43dda6a) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [feat(setters): support declaration to ReactionsSetter (#1805)](https://github.com/alibaba/formily/commit/b421ae6f) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :beetle: Bug Fixes
+
+1. [fix(antd/next): form-grid and layout props optional with default value (#1809)](https://github.com/alibaba/formily/commit/2738e418) :point_right: ( [gwsbhqt](https://github.com/gwsbhqt) )
+
+### :memo: Documents Changes
+
+1. [docs(project): improve english docs](https://github.com/alibaba/formily/commit/49a74f0a) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs(project): add translated docs (#1822)](https://github.com/alibaba/formily/commit/79ab341f) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :rose: Improve code quality
+
+1. [refactor(project): remove Formily.\* use cases (#1820)](https://github.com/alibaba/formily/commit/72a2958c) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [refactor(designable-ant): expose upload component's textContent property in setting form (#1818)](https://github.com/alibaba/formily/commit/15344449) :point_right: ( [nekic](https://github.com/nekic) )
+
+### :blush: Other Changes
+
+1. [chore(flow): update lint.yml](https://github.com/alibaba/formily/commit/a7502479) :point_right: ( [Janry](https://github.com/Janry) )
+
 ## v2.0.0-beta.79(2021-07-15)
 
 ### :tada: Enhancements
@@ -925,17 +955,3 @@
 1. [fix(layout): type typo (#962)](https://github.com/alibaba/formily/commit/9b9f052f) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
 
 1. [fix(core): fix move down throw errors and fix null assign merge throw errors (#961)](https://github.com/alibaba/formily/commit/854feec2) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v1.2.5(2020-07-09)
-
-### :beetle: Bug Fixes
-
-1. [fix(core): fix ci](https://github.com/alibaba/formily/commit/33a48c46) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(core): use form batch to sync errors in array state exchanging](https://github.com/alibaba/formily/commit/0e4880fb) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(editor): remove import lodash/fp](https://github.com/alibaba/formily/commit/a105cff3) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :rose: Improve code quality
-
-1. [refactor(project): update styled-component version compat](https://github.com/alibaba/formily/commit/0cf618d5) :point_right: ( [janrywang](https://github.com/janrywang) )
