@@ -4,10 +4,16 @@ export interface IMiddleware {
 
 export const applyMiddleware = (payload: any, fns: IMiddleware[] = []) => {
   const compose = (payload: any, fns: IMiddleware[]) => {
-    if (fns.length === 0) return Promise.resolve(payload)
     return Promise.resolve(
       fns[0](payload, (payload) => compose(payload, fns.slice(1)))
     )
   }
-  return compose(payload, fns)
+  return new Promise((resolve) => {
+    compose(
+      payload,
+      fns.concat((payload) => {
+        resolve(payload)
+      })
+    )
+  })
 }

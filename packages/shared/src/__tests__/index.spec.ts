@@ -24,6 +24,8 @@ import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../checkers'
 import { defaults } from '../defaults'
 import { applyMiddleware } from '../middleware'
 
+const sleep = (d = 100) => new Promise((resolve) => setTimeout(resolve, d))
+
 describe('array', () => {
   test('toArr', () => {
     expect(isEqual(toArr([123]), [123])).toBeTruthy()
@@ -698,6 +700,7 @@ test('defaults', () => {
 })
 
 test('applyMiddleware', async () => {
+  expect(await applyMiddleware(0)).toEqual(0)
   expect(
     await applyMiddleware(0, [
       (num: number, next) => next(num + 1),
@@ -705,14 +708,12 @@ test('applyMiddleware', async () => {
       (num: number, next) => next(num + 1),
     ])
   ).toEqual(3)
-
-  expect(
-    await applyMiddleware(0, [
-      (num: number, next) => next(num + 1),
-      () => '123',
-      (num: number, next) => next(num + 1),
-    ])
-  ).toEqual('123')
-
-  expect(await applyMiddleware(0)).toEqual(0)
+  const resolved = jest.fn()
+  applyMiddleware(0, [
+    (num: number, next) => next(num + 1),
+    () => '123',
+    (num: number, next) => next(num + 1),
+  ]).then(resolved)
+  await sleep(16)
+  expect(resolved).toBeCalledTimes(0)
 })
