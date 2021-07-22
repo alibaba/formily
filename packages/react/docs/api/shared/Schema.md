@@ -959,7 +959,7 @@ It can only be consumed by expressions in x-reactions, corresponding to the depe
 
 ### $form
 
-Can only be consumed by expressions in x-reactions, representing the current field instance
+Can only be consumed by expressions in x-reactions, representing the current Form instance
 
 ### $target
 

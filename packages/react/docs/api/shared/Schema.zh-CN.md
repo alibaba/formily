@@ -959,7 +959,7 @@ type SchemaReactions<Field = any> =
 
 ### $form
 
-只能在 x-reactions 中的表达式消费，代表当前字段实例
+只能在 x-reactions 中的表达式消费，代表当前 Form 实例
 
 ### $target
 
