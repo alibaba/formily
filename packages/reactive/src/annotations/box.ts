@@ -11,6 +11,7 @@ export interface IBox {
 }
 
 export const box: IBox = createAnnotation(({ target, key, value }) => {
+  key = key || Symbol('boxKey')
   const store = {
     value: target ? target[key] : value,
   }
