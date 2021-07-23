@@ -56,6 +56,10 @@ test('box annotation', () => {
   expect(handler).toBeCalledTimes(2)
   expect(handler.mock.calls[0][0]).toBe(123)
   expect(handler.mock.calls[1][0]).toBe(boxValue)
+
+  obs.set(boxValue)
+  expect(handler1).toBeCalledTimes(1)
+  expect(handler).toBeCalledTimes(2)
 })
 
 test('ref annotation', () => {
