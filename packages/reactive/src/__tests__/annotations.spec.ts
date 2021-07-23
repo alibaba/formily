@@ -47,10 +47,15 @@ test('box annotation', () => {
   reaction(() => {
     handler(obs.get())
   })
-  obs.set(333)
-  expect(handler).toBeCalledWith(123)
-  expect(handler).toBeCalledWith(123)
+  const boxValue = 333
+  obs.set(boxValue)
   expect(handler1).toBeCalledTimes(1)
+  expect(handler1.mock.calls[0][0]).toMatchObject({
+    value: boxValue,
+  })
+  expect(handler).toBeCalledTimes(2)
+  expect(handler.mock.calls[0][0]).toBe(123)
+  expect(handler.mock.calls[1][0]).toBe(boxValue)
 })
 
 test('ref annotation', () => {
