@@ -89,10 +89,9 @@ function useOverflow<
 
   useLayoutEffect(() => {
     if (containerRef.current && contentRef.current) {
-      if (
-        contentRef.current.getBoundingClientRect().width >
-        containerRef.current.getBoundingClientRect().width
-      ) {
+      const contentWidth = contentRef.current.getBoundingClientRect().width
+      const containerWidth = containerRef.current.getBoundingClientRect().width
+      if (contentWidth && containerWidth && containerWidth < contentWidth) {
         if (!overflow) setOverflow(true)
       } else {
         if (overflow) setOverflow(false)

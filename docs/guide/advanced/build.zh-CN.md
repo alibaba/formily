@@ -136,7 +136,7 @@ yarn add babel-plugin-import --dev
       "import",
       {
         "libraryName": "@formily/antd",
-        "libraryDirectory": "esn",
+        "libraryDirectory": "esm",
         "style": true
       }
     ]

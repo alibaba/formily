@@ -1,0 +1,19 @@
+{
+  "version": "0.1",
+  "language": "en",
+  "ignoreWords": [
+    "autorun",
+    "Formily",
+    "formily",
+    "untracked",
+    "Unmount",
+    "antd",
+    "Antd",
+    "alifd",
+    "Mixins",
+    "builtins",
+    "cascader",
+    "Cascader",
+    "middlewares"
+  ]
+}

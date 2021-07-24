@@ -297,33 +297,36 @@ export default () => {
 ### FormDialog
 
 ```ts pure
-import { IFormProps } from '@formily/core'
+import { IFormProps, Form } from '@formily/core'
 
-type FormDialogHandler = {
-  //Open the pop-up window and receive the form attributes, you can pass in initialValues/values/effects etc.
+type FormDialogRenderer =
+  | React.ReactElement
+  | ((form: Form) => React.ReactElement)
+
+interface IFormDialog {
+  forOpen(
+    middleware: (
+      props: IFormProps,
+      next: (props?: IFormProps) => Promise<any>
+    ) => any
+  ): any //Middleware interceptor, can intercept Dialog to open
+  forConfirm(
+    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
+  ): any //Middleware interceptor, which can intercept Dialog confirmation
+  forCancel(
+    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
+  ): any //Middleware interceptor, can intercept Dialog to cancel
+  //Open the pop-up window to receive form attributes, you can pass in initialValues/values/effects etc.
   open(props: IFormProps): Promise<any> //return form data
   //Close the pop-up window
   close(): void
 }
 
-interface IFormDialog {
-  (
-    title: React.ReactNode, //If it is ReactNode, it will be passed in as a pop-up window title
-    renderer: (resolve: () => void, reject: () => void) => React.ReactElement
-  ): FormDialogHandler
-  (
-    title: IFormDialogProps, //If it is an object, it is passed in as IFormDialogProps
-    renderer: (resolve: () => void, reject: () => void) => React.ReactElement
-  ): FormDialogHandler
-}
-```
-
-### IFormDialogProps
-
-```ts pure
-interface IFormDialogProps extends DialogProps {
-  // If the return value is true, the dialog will not be closed after clicking Cancel or OK. If you need to close the dialog, you need to manually call FormDialogHandler.close()
-  onCancel?: (e: React.MouseEvent<Element>) => boolean | void
+interface FormDialog {
+  (title: DialogProps, id: string, renderer: FormDialogRenderer): IFormDialog
+  (title: DialogProps, id: FormDialogRenderer, renderer: unknown): IFormDialog
+  (title: ModalTitle, id: string, renderer: FormDialogRenderer): IFormDialog
+  (title: ModalTitle, id: FormDialogRenderer, renderer: unknown): IFormDialog
 }
 ```
 
@@ -332,3 +335,7 @@ interface IFormDialogProps extends DialogProps {
 ### FormDialog.Footer
 
 No attributes, only child nodes are received
+
+### FormDialog.Portal
+
+Receive the optional id attribute, the default value is `form-dialog`, if there are multiple prefixCls in an application, and the prefixCls in the pop-up window of different regions are different, then it is recommended to specify the id as the region-level id

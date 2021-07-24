@@ -1115,3 +1115,34 @@ test('form values change with array field(default value)', async () => {
   await array.push({})
   expect(handler).toBeCalledTimes(2)
 })
+
+test('setValues deep merge', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        aa: {
+          bb: 123,
+          cc: 321,
+        },
+      },
+    })
+  )
+  expect(form.values).toEqual({
+    aa: {
+      bb: 123,
+      cc: 321,
+    },
+  })
+  form.setValues({
+    aa: {
+      bb: '',
+      cc: '',
+    },
+  })
+  expect(form.values).toEqual({
+    aa: {
+      bb: '',
+      cc: '',
+    },
+  })
+})

@@ -29,7 +29,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('Drawer Form', (resolve) => {
+        FormDrawer('Drawer Form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField>
@@ -64,18 +64,31 @@ export default () => {
               </SchemaField>
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>Submit</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    Submit
+                  </Submit>
                   <Reset>Reset</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
             </FormLayout>
           )
         })
-          .open({
-            initialValues: {
-              aaa: '123',
-            },
+          .forOpen((props, next) => {
+            setTimeout(() => {
+              next({
+                initialValues: {
+                  aaa: '123',
+                },
+              })
+            }, 1000)
           })
+          .open()
           .then(console.log)
       }}
     >
@@ -146,13 +159,21 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('Pop-up form', (resolve) => {
+        FormDrawer('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField schema={schema} />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>Submit</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    Submit
+                  </Submit>
                   <Reset>Reset</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
@@ -193,7 +214,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('Pop-up form', (resolve) => {
+        FormDrawer('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <Field
@@ -226,7 +247,15 @@ export default () => {
               />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>Submit</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    Submit
+                  </Submit>
                   <Reset>Reset</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
@@ -252,33 +281,30 @@ export default () => {
 ### FormDrawer
 
 ```ts pure
-import { IFormProps } from '@formily/core'
+import { IFormProps, Form } from '@formily/core'
 
-type FormDrawerHandler = {
-  //Open the pop-up window and receive the form attributes, you can pass in initialValues/values/effects etc.
+type FormDrawerRenderer =
+  | React.ReactElement
+  | ((form: Form) => React.ReactElement)
+
+interface IFormDrawer {
+  forOpen(
+    middleware: (
+      props: IFormProps,
+      next: (props?: IFormProps) => Promise<any>
+    ) => any
+  ): any //Middleware interceptor, can intercept Drawer to open
+  //Open the pop-up window to receive form attributes, you can pass in initialValues/values/effects etc.
   open(props: IFormProps): Promise<any> //return form data
   //Close the pop-up window
   close(): void
 }
 
-interface IFormDrawer {
-  (
-    title: React.ReactNode, //If it is ReactNode, it will be passed in as a pop-up window title
-    renderer: (resolve: () => void, reject: () => void) => React.ReactElement
-  ): FormDrawerHandler
-  (
-    title: IFormDrawerProps, //If it is an object, it is passed in as IFormDrawerProps
-    renderer: (resolve: () => void, reject: () => void) => React.ReactElement
-  ): FormDrawerHandler
-}
-```
-
-### IFormDrawerProps
-
-```ts pure
-interface IFormDrawerProps extends DrawerProps {
-  // If the return value is true, the drawer will not be closed after clicking Cancel or OK. At this time, you need to manually call FormDrawerHandler.close() to close the drawer
-  onClose?: (reason: string, e: React.MouseEvent) => boolean | void
+interface FormDrawer {
+  (title: DrawerProps, id: string, renderer: FormDrawerRenderer): IFormDrawer
+  (title: DrawerProps, id: FormDrawerRenderer, renderer: unknown): IFormDrawer
+  (title: ModalTitle, id: string, renderer: FormDrawerRenderer): IFormDrawer
+  (title: ModalTitle, id: FormDrawerRenderer, renderer: unknown): IFormDrawer
 }
 ```
 
@@ -287,3 +313,7 @@ interface IFormDrawerProps extends DrawerProps {
 ### FormDrawer.Footer
 
 No attributes, only child nodes are received
+
+### FormDrawer.Portal
+
+Receive an optional id attribute, the default value is `form-drawer`, if there are multiple prefixCls in an application, and the prefixCls in the pop-up window of different regions are different, then it is recommended to specify the id as the region-level id
