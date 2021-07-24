@@ -1,4 +1,5 @@
 @import '~@alifd/next/lib/core/index-noreset.scss';
+@import '~@alifd/next/lib/form/scss/variable.scss';
 
 $array-table-prefix-cls: '#{$css-prefix}formily-array-table';
 
@@ -12,6 +13,7 @@ $array-table-prefix-cls: '#{$css-prefix}formily-array-table';
       min-width: 60px;
       margin-right: 6px;
       width: auto !important;
+
       .#{$css-prefix}input {
         min-width: 60px;
       }
@@ -45,11 +47,13 @@ $array-table-prefix-cls: '#{$css-prefix}formily-array-table';
           width: 100%;
           z-index: 1;
           border-radius: 3px;
-          box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
+            0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
           background-color: $form-error-color;
           color: #fff;
           padding: 6px 8px;
           margin-top: 6px;
+
           &:after {
             content: ' ';
             background: $form-error-color;
@@ -59,12 +63,8 @@ $array-table-prefix-cls: '#{$css-prefix}formily-array-table';
             height: 5px;
             pointer-events: none;
             top: -2px;
-            -webkit-transform: rotate(
-                45deg
-            );
-            transform: rotate(
-                45deg
-            );
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
             box-sizing: content-box !important;
             border: 1px solid transparent;
             z-index: -1;

@@ -125,15 +125,10 @@ interface Options {
     options?: Options
   ) => ((x: any, y: any) => any) | undefined
   isMergeableObject?(value: object): boolean
+  cloneUnlessOtherwiseSpecified?: (value: any, options: Options) => any
 }
 
-function deepmerge<T>(x: Partial<T>, y: Partial<T>, options?: Options): T
-function deepmerge<T1, T2>(
-  x: Partial<T1>,
-  y: Partial<T2>,
-  options?: Options
-): T1 & T2
-function deepmerge(target: any, source: any, options: any) {
+function deepmerge(target: any, source: any, options?: Options) {
   options = options || {}
   options.arrayMerge = options.arrayMerge || defaultArrayMerge
   options.isMergeableObject =

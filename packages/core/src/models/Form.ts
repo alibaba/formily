@@ -14,7 +14,7 @@ import {
   isValid,
   uid,
   globalThisPolyfill,
-  defaults,
+  merge,
   clone,
   isPlainObj,
   isArr,
@@ -399,7 +399,7 @@ export class Form<ValueType extends object = any> {
     if (!isPlainObj(values)) return
     untracked(() => {
       if (strategy === 'merge' || strategy === 'deepMerge') {
-        this.values = defaults(this.values, values)
+        this.values = merge(this.values, values)
       } else if (strategy === 'shallowMerge') {
         this.values = Object.assign(this.values, values)
       } else {
@@ -415,7 +415,7 @@ export class Form<ValueType extends object = any> {
     if (!isPlainObj(initialValues)) return
     untracked(() => {
       if (strategy === 'merge' || strategy === 'deepMerge') {
-        this.initialValues = defaults(this.initialValues, initialValues)
+        this.initialValues = merge(this.initialValues, initialValues)
       } else if (strategy === 'shallowMerge') {
         this.initialValues = Object.assign(this.initialValues, initialValues)
       } else {

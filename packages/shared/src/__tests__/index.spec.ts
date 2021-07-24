@@ -708,6 +708,13 @@ test('applyMiddleware', async () => {
       (num: number, next) => next(num + 1),
     ])
   ).toEqual(3)
+  expect(
+    await applyMiddleware(0, [
+      (num: number, next) => next(),
+      (num: number, next) => next(num + 1),
+      (num: number, next) => next(num + 1),
+    ])
+  ).toEqual(2)
   const resolved = jest.fn()
   applyMiddleware(0, [
     (num: number, next) => next(num + 1),

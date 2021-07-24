@@ -29,7 +29,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('抽屉表单', (resolve) => {
+        FormDrawer('抽屉表单', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField>
@@ -64,13 +64,26 @@ export default () => {
               </SchemaField>
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>提交</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    提交
+                  </Submit>
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
             </FormLayout>
           )
         })
+          .forOpen((props, next) => {
+            setTimeout(() => {
+              next()
+            }, 1000)
+          })
           .open({
             initialValues: {
               aaa: '123',
@@ -146,13 +159,21 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('弹窗表单', (resolve) => {
+        FormDrawer('弹窗表单', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField schema={schema} />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>提交</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    提交
+                  </Submit>
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
@@ -193,7 +214,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('弹窗表单', (resolve) => {
+        FormDrawer('弹窗表单', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <Field
@@ -226,7 +247,15 @@ export default () => {
               />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>提交</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    提交
+                  </Submit>
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
@@ -252,33 +281,30 @@ export default () => {
 ### FormDrawer
 
 ```ts pure
-import { IFormProps } from '@formily/core'
+import { IFormProps, Form } from '@formily/core'
 
-type FormDrawerHandler = {
+type FormDrawerRenderer =
+  | React.ReactElement
+  | ((form: Form) => React.ReactElement)
+
+interface IFormDrawer {
+  forOpen(
+    middleware: (
+      props: IFormProps,
+      next: (props?: IFormProps) => Promise<any>
+    ) => any
+  ): any //中间件拦截器，可以拦截Drawer打开
   //打开弹窗，接收表单属性，可以传入initialValues/values/effects etc.
   open(props: IFormProps): Promise<any> //返回表单数据
   //关闭弹窗
   close(): void
 }
 
-interface IFormDrawer {
-  (
-    title: React.ReactNode, //如果是ReactNode，则作为弹窗title传入
-    renderer: (resolve: () => void, reject: () => void) => React.ReactElement
-  ): FormDrawerHandler
-  (
-    title: IFormDrawerProps, //如果是对象，则作为IFormDrawerProps传入
-    renderer: (resolve: () => void, reject: () => void) => React.ReactElement
-  ): FormDrawerHandler
-}
-```
-
-### IFormDrawerProps
-
-```ts pure
-interface IFormDrawerProps extends DrawerProps {
-  // 如果返回值是true时，点取消或确定后不会关闭drawer，此时关闭drawer需要手动调用FormDrawerHandler.close()
-  onClose?: (reason: string, e: React.MouseEvent) => boolean | void
+interface FormDrawer {
+  (title: DrawerProps, id: string, renderer: FormDrawerRenderer): IFormDrawer
+  (title: DrawerProps, id: FormDrawerRenderer, renderer: unknown): IFormDrawer
+  (title: ModalTitle, id: string, renderer: FormDrawerRenderer): IFormDrawer
+  (title: ModalTitle, id: FormDrawerRenderer, renderer: unknown): IFormDrawer
 }
 ```
 
@@ -287,3 +313,7 @@ interface IFormDrawerProps extends DrawerProps {
 ### FormDrawer.Footer
 
 无属性，只接收子节点
+
+### FormDrawer.Portal
+
+接收可选的 id 属性，默认值为`form-drawer`，如果一个应用存在多个 prefixCls，不同区域的弹窗内部 prefixCls 不一样，那推荐指定 id 为区域级 id
