@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: ${{ matrix.node_version }}
       - run: yarn -v
-      - run: yarn config set 'registry' to 'https://registry.npmjs.org/:_authToken=${{secrets.NPM_AUTH_TOKEN}}'
+      - run: yarn config set registry to https://registry.npmjs.org/:_authToken=${{secrets.NPM_AUTH_TOKEN}}
       - run: yarn --ignore-engines
       - run: yarn build
       - run: yarn run release:force
