@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: ${{ matrix.node_version }}
       - run: yarn -v
+      - run: yarn config set 'registry' to 'https://registry.npmjs.org/:_authToken=${{secrets.NPM_AUTH_TOKEN}}'
       - run: yarn --ignore-engines
       - run: yarn build
       - run: yarn run release:force
@@ -27,6 +28,5 @@ jobs:
           HEADLESS: false
           PROGRESS: none
           NODE_ENV: test
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_OPTIONS: --max_old_space_size=4096
