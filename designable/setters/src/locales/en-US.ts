@@ -46,6 +46,10 @@ export default {
         pleaseSelect: 'Please Select',
         expressionValueTypeIs: 'Expression value type is',
       },
+      ValidatorSetter: {
+        addEnum: 'Add',
+        edit: 'Edit Rule',
+      },
     },
   },
 }

@@ -357,7 +357,7 @@ const FieldLocale = {
     title: 'UI Pattern',
     dataSource: ['Editable', 'Disabled', 'ReadOnly', 'ReadPretty', 'Inherit'],
   },
-  'x-validator': 'Validator',
+  'x-validator-wrapper': 'Validator',
   'x-reactions': 'Reactions',
   'x-decorator': 'Decorator',
   'x-decorator-props': {

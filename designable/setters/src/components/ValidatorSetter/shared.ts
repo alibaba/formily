@@ -1,0 +1,15 @@
+export const buildInRules = [
+  'url',
+  'email',
+  'ipv6',
+  'ipv4',
+  'number',
+  'integer',
+  'idcard',
+  'qq',
+  'phone',
+  'money',
+  'zh',
+  'date',
+  'zip',
+]

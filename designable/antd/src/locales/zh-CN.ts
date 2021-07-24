@@ -350,7 +350,7 @@ const FieldLocale = {
     title: 'UI形态',
     dataSource: ['可编辑', '禁用', '只读', '阅读', '继承'],
   },
-  'x-validator': '校验规则',
+  'x-validator-wrapper': '校验规则',
   'x-reactions': '响应器规则',
   'x-decorator': '启用容器组件',
   'x-decorator-props': {

@@ -44,6 +44,10 @@ export default {
         pleaseSelect: '请选择',
         expressionValueTypeIs: '表达式值类型为',
       },
+      ValidatorSetter: {
+        addEnum: '添加',
+        edit: '编辑规则',
+      },
     },
   },
 }
