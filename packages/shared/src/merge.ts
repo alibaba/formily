@@ -128,7 +128,7 @@ interface Options {
   cloneUnlessOtherwiseSpecified?: (value: any, options: Options) => any
 }
 
-function deepmerge(target: any, source: any, options: Options) {
+function deepmerge(target: any, source: any, options?: Options) {
   options = options || {}
   options.arrayMerge = options.arrayMerge || defaultArrayMerge
   options.isMergeableObject =
