@@ -1,0 +1,32 @@
+name: Node CI
+
+on:
+  push:
+    branches:
+      - formily_next
+
+jobs:
+  release:
+    if: !startsWith(github.event.head_commit.message, 'chore(versions): ')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: [11.x]
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node_version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node_version }}
+      - run: yarn -v
+      - run: yarn --ignore-engines
+      - run: yarn build
+      - run: yarn run release:force
+        env:
+          HEADLESS: false
+          PROGRESS: none
+          NODE_ENV: test
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NODE_OPTIONS: --max_old_space_size=4096
