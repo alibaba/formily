@@ -1,5 +1,31 @@
 # Changelog
 
+## v2.0.0-beta.81(2021-07-22)
+
+### :tada: Enhancements
+
+1. [feat(element): add dialog & drawer component (#1841)](https://github.com/alibaba/formily/commit/a181bb5c) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [feat(next): optimize array-table validate style (#1837)](https://github.com/alibaba/formily/commit/1475c9cf) :point_right: ( [王大白](https://github.com/王大白) )
+
+1. [feat(packages): add react 18 test cases (#1834)](https://github.com/alibaba/formily/commit/aa792203) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :beetle: Bug Fixes
+
+1. [fix(react): fix select type validate error #1838 (#1844)](https://github.com/alibaba/formily/commit/b7975baf) :point_right: ( [张威](https://github.com/张威) )
+
+1. [fix(antd): fix sideEffects mismatch when use babel-plugin-import (#1843)](https://github.com/alibaba/formily/commit/eaccb72a) :point_right: ( [KM.Seven](https://github.com/KM.Seven) )
+
+1. [fix(core): fix object field's children auto clean but they are not additionalProperty (#1840)](https://github.com/alibaba/formily/commit/dd313646) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): fix ArrayField operation will trigger memo leak (#1831)](https://github.com/alibaba/formily/commit/021c155a) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(path): fix segments match (#1826)](https://github.com/alibaba/formily/commit/6e541dcb) :point_right: ( [砂糖梨子](https://github.com/砂糖梨子) )
+
+### :memo: Documents Changes
+
+1. [docs(main): add schema fragment controlled case (#1852)](https://github.com/alibaba/formily/commit/2212486b) :point_right: ( [Janry](https://github.com/Janry) )
+
 ## v2.0.0-beta.80(2021-07-19)
 
 ### :tada: Enhancements
@@ -947,11 +973,3 @@
 ### :rocket: Improve Performance
 
 1. [perf(core): improve array remove node performance (#971)](https://github.com/alibaba/formily/commit/970adbba) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v1.2.7(2020-07-14)
-
-### :beetle: Bug Fixes
-
-1. [fix(layout): type typo (#962)](https://github.com/alibaba/formily/commit/9b9f052f) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix(core): fix move down throw errors and fix null assign merge throw errors (#961)](https://github.com/alibaba/formily/commit/854feec2) :point_right: ( [Janry](https://github.com/Janry) )
