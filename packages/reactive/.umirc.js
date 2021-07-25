@@ -246,7 +246,7 @@ export default {
         children: [
           {
             title: 'observer',
-            path: '/api/react/observer',
+            path: '/zh-CN/api/react/observer',
           },
         ],
       },
@@ -255,7 +255,7 @@ export default {
         children: [
           {
             title: 'observer',
-            path: '/api/vue/observer',
+            path: '/zh-CN/api/vue/observer',
           },
         ],
       },
