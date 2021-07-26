@@ -145,7 +145,7 @@ const RecursionField = observer(
               return h(
                 RecursionField,
                 {
-                  key: index,
+                  key: name + '_' + index,
                   attrs: {
                     schema,
                     name,
