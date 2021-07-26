@@ -4,6 +4,13 @@
 
 ## Markup Schema 案例
 
+以下例子演示了 FormDialog 的几个能力：
+
+- 快速打开，关闭能力
+- 中间件能力，自动出现加载态
+- 渲染函数内可以响应式能力
+- 上下文共享能力
+
 <dumi-previewer demoPath="guide/form-dialog/markup-schema" />
 
 ## JSON Schema 案例
@@ -14,39 +21,46 @@
 
 <dumi-previewer demoPath="guide/form-dialog/template" />
 
-## 弹框拦截案例
-
-<dumi-previewer demoPath="guide/form-dialog/json-schema-before-close" />
-
-## 自定义 footer
-
-<dumi-previewer demoPath="guide/form-dialog/custom" />
-
 ## API
 
 ### FormDialog
 
 ```ts pure
-import { IFormProps } from '@formily/core'
+import { IFormProps, Form } from '@formily/core'
 
-type FormDialogContentProps = { resolve: () => any; reject: () => any }
+type FormDialogRenderer = Component | (({ form: Form }) => VNode)
 
-type FormDialogHandler = {
+interface IFormDialog {
+  forOpen(
+    middleware: (
+      props: IFormProps,
+      next: (props?: IFormProps) => Promise<any>
+    ) => any
+  ): any //中间件拦截器，可以拦截Dialog打开
+  forConfirm(
+    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
+  ): any //中间件拦截器，可以拦截Dialog确认
+  forCancel(
+    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
+  ): any //中间件拦截器，可以拦截Dialog取消
   //打开弹窗，接收表单属性，可以传入initialValues/values/effects etc.
   open(props: IFormProps): Promise<any> //返回表单数据
   //关闭弹窗
   close(): void
 }
 
-interface IFormDialog {
-  (
-    title: string | Component | VNode,
-    renderer: Component | ((props: FormDialogContentProps) => VNode)
-  ): FormDialogHandler
-  (
-    title: IFormDialogProps, //如果是对象，则作为IFormDialogProps传入
-    renderer: Component | ((props: FormDialogContentProps) => VNode)
-  ): FormDialogHandler
+interface FormDialog {
+  (title: ModalProps, id: string, renderer: FormDialogRenderer): IFormDialog
+  (title: ModalProps, id: FormDialogRenderer): IFormDialog
+  (title: ModalTitle, id: string, renderer: FormDialogRenderer): IFormDialog
+  (title: ModalTitle, id: FormDialogRenderer): IFormDialog
+}
+
+interface FormDialog {
+  (title: ModalProps, id: string, renderer: FormDialogRenderer): IFormDialog
+  (title: ModalProps, id: FormDialogRenderer): IFormDialog
+  (title: ModalTitle, id: string, renderer: FormDialogRenderer): IFormDialog
+  (title: ModalTitle, id: FormDialogRenderer): IFormDialog
 }
 ```
 
@@ -74,3 +88,7 @@ type IFormDialogProps = DialogProps & {
 ### FormDialogFooter
 
 无属性，只接收子节点
+
+### FormDialogPortal
+
+接收可选的 id 属性，默认值为 form-dialog，如果一个应用存在多个 prefixCls，不同区域的弹窗内部 prefixCls 不一样，那推荐指定 id 为区域级 id

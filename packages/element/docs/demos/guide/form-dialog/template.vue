@@ -55,17 +55,30 @@ export default {
           </FormDialogFooter>
         </FormLayout>
       ))
-        .open({
-          initialValues: {
-            aaa: '123',
-          },
+        .forOpen((payload, next) => {
+          setTimeout(() => {
+            next({
+              initialValues: {
+                aaa: '123',
+              },
+            })
+          }, 1000)
         })
-        .then((values) => {
-          console.log('values', values)
+        .forConfirm((payload, next) => {
+          setTimeout(() => {
+            console.log(payload)
+            next(payload)
+          }, 1000)
         })
-        .catch((e) => {
-          console.log(e)
+        .forCancel((payload, next) => {
+          setTimeout(() => {
+            console.log(payload)
+            next(payload)
+          }, 1000)
         })
+        .open()
+        .then(console.log)
+        .catch(console.error)
     },
   },
 }

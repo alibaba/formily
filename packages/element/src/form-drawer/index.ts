@@ -1,12 +1,26 @@
 import { h, FormProvider, Fragment } from '@formily/vue'
-import { createForm } from '@formily/core'
-import { isNum, isStr, isBool, isFn } from '@formily/shared'
+import { toJS } from '@formily/reactive'
+import { observer } from '@formily/reactive-vue'
+import { createForm, Form, IFormProps } from '@formily/core'
+import {
+  isNum,
+  isStr,
+  isBool,
+  isFn,
+  IMiddleware,
+  applyMiddleware,
+} from '@formily/shared'
 import { Drawer, Button } from 'element-ui'
 import type { Drawer as DrawerProps, Button as ButtonProps } from 'element-ui'
-// @ts-ignore
 import { t } from 'element-ui/src/locale'
 import Vue, { Component, VNode } from 'vue'
-import { isValidElement, resolveComponent } from '../__builtins__/shared'
+import {
+  isValidElement,
+  resolveComponent,
+  createPortalProvider,
+  getProtalContext,
+  loading,
+} from '../__builtins__/shared'
 import { stylePrefix } from '../__builtins__/configs'
 import { defineComponent } from '@vue/composition-api'
 import { Portal, PortalTarget } from 'portal-vue'
@@ -49,7 +63,10 @@ const getDrawerProps = (props: any): IFormDrawerProps => {
 }
 
 export interface IFormDrawer {
-  open(props?: Formily.Core.Types.IFormProps): Promise<any>
+  forOpen(middleware: IMiddleware<IFormProps>): IFormDrawer
+  forConfirm(middleware: IMiddleware<IFormProps>): IFormDrawer
+  forCancel(middleware: IMiddleware<IFormProps>): IFormDrawer
+  open(props?: IFormProps): Promise<any>
   close(): void
 }
 
@@ -60,20 +77,41 @@ export interface IFormDrawerComponentProps {
 }
 
 export function FormDrawer(
-  title: IFormDrawerProps,
+  title: IFormDrawerProps | ModalTitle,
   content: FormDrawerContent
 ): IFormDrawer
+
+export function FormDrawer(
+  title: IFormDrawerProps | ModalTitle,
+  id: string | symbol,
+  content: FormDrawerContent
+): IFormDrawer
+
 export function FormDrawer(
   title: ModalTitle,
+  id: string,
   content: FormDrawerContent
 ): IFormDrawer
-export function FormDrawer(title: any, content: any): IFormDrawer {
+
+export function FormDrawer(
+  title: IFormDrawerProps | ModalTitle,
+  id: string | symbol | FormDrawerContent,
+  content?: FormDrawerContent
+): IFormDrawer {
+  if (isFn(id) || isValidElement(id)) {
+    content = id as FormDrawerContent
+    id = 'form-drawer'
+  }
+
   const prefixCls = `${stylePrefix}-form-drawer`
   const env = {
     root: document.createElement('div'),
     form: null,
     promise: null,
     instance: null,
+    openMiddlewares: [],
+    confirmMiddlewares: [],
+    cancelMiddlewares: [],
   }
 
   document.body.appendChild(env.root)
@@ -90,34 +128,49 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
     },
   }
 
-  const component = defineComponent<IFormDrawerComponentProps>({
-    props: ['content', 'resolve', 'reject'],
-    setup(props) {
-      return () =>
-        h(
-          Fragment,
-          {},
-          {
-            default: () =>
-              resolveComponent(props.content, {
-                resolve: props.resolve,
-                reject: props.reject,
-              }),
-          }
-        )
-    },
-  })
+  const component = observer(
+    defineComponent({
+      setup() {
+        return () =>
+          h(
+            Fragment,
+            {},
+            {
+              default: () =>
+                resolveComponent(content, {
+                  form: env.form,
+                }),
+            }
+          )
+      },
+    })
+  )
 
   const render = (visible = true, resolve?: () => any, reject?: () => any) => {
     if (!env.instance) {
       const ComponentConstructor = Vue.extend({
+        props: ['drawerProps'],
         data() {
           return {
             visible: false,
           }
         },
         render() {
-          const drawerProps = this.drawerProps
+          const {
+            onClose,
+            onClosed,
+            onOpen,
+            onOpend,
+            onOK,
+            onCancel,
+            title,
+            footer,
+            okText,
+            cancelText,
+            okButtonProps,
+            cancelButtonProps,
+            ...drawerProps
+          } = this.drawerProps
 
           return h(
             FormProvider,
@@ -141,17 +194,17 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
                         this.visible = val
                       },
                       close: () => {
-                        drawerProps.onClose?.()
+                        onClose?.()
                       },
 
                       closed: () => {
-                        drawerProps.onClosed?.()
+                        onClosed?.()
                       },
                       open: () => {
-                        drawerProps.onOpen?.()
+                        onOpen?.()
                       },
                       opend: () => {
-                        drawerProps.onOpend?.()
+                        onOpend?.()
                       },
                     },
                   },
@@ -163,12 +216,7 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
                           class: [`${prefixCls}-body`],
                         },
                         {
-                          default: () =>
-                            h(
-                              component,
-                              { props: { resolve, reject, content } },
-                              {}
-                            ),
+                          default: () => h(component, {}, {}),
                         }
                       ),
                       h(
@@ -189,7 +237,6 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
                               {}
                             )
 
-                            const footer = drawerProps.footer
                             if (footer === null) {
                               return [null, FooterProtalTarget]
                             } else if (footer) {
@@ -203,24 +250,18 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
                               h(
                                 Button,
                                 {
-                                  attrs: drawerProps.cancelButtonProps,
+                                  attrs: cancelButtonProps,
                                   on: {
                                     click: (e) => {
-                                      drawerProps?.onCancel?.(e)
-                                      if (drawerProps.beforeClose) {
-                                        drawerProps.beforeClose(() => {
-                                          formDrawer.close()
-                                        })
-                                      } else {
-                                        formDrawer.close()
-                                      }
+                                      onCancel?.(e)
+                                      reject()
                                     },
                                   },
                                 },
                                 {
                                   default: () =>
                                     resolveComponent(
-                                      drawerProps.cancelText ||
+                                      cancelText ||
                                         t('el.popconfirm.cancelButtonText')
                                     ),
                                 }
@@ -231,11 +272,11 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
                                 {
                                   attrs: {
                                     type: 'primary',
-                                    ...drawerProps.okButtonProps,
+                                    ...okButtonProps,
                                   },
                                   on: {
                                     click: (e) => {
-                                      drawerProps?.onOK?.(e)
+                                      onOK?.(e)
                                       resolve()
                                     },
                                   },
@@ -243,7 +284,7 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
                                 {
                                   default: () =>
                                     resolveComponent(
-                                      drawerProps.okText ||
+                                      okText ||
                                         t('el.popconfirm.confirmButtonText')
                                     ),
                                 }
@@ -257,7 +298,7 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
                         {
                           slot: 'title',
                         },
-                        { default: () => resolveComponent(drawerProps.title) }
+                        { default: () => resolveComponent(title) }
                       ),
                     ],
                   }
@@ -267,11 +308,10 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
         },
       })
       env.instance = new ComponentConstructor({
-        data() {
-          return {
-            drawerProps,
-          }
+        propsData: {
+          drawerProps,
         },
+        parent: getProtalContext(id as string | symbol),
       })
       env.instance.$mount(env.root)
     }
@@ -280,16 +320,44 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
   }
 
   const formDrawer = {
+    forOpen: (middleware: IMiddleware<IFormProps>) => {
+      if (isFn(middleware)) {
+        env.openMiddlewares.push(middleware)
+      }
+      return formDrawer
+    },
+    forConfirm: (middleware: IMiddleware<Form>) => {
+      if (isFn(middleware)) {
+        env.confirmMiddlewares.push(middleware)
+      }
+      return formDrawer
+    },
+    forCancel: (middleware: IMiddleware<Form>) => {
+      if (isFn(middleware)) {
+        env.cancelMiddlewares.push(middleware)
+      }
+      return formDrawer
+    },
     open: (props: Formily.Core.Types.IFormProps) => {
       if (env.promise) return env.promise
-      env.form = env.form || createForm(props)
-      env.promise = new Promise((resolve, reject) => {
+
+      env.promise = new Promise(async (resolve, reject) => {
+        try {
+          props = await loading(() =>
+            applyMiddleware(props, env.openMiddlewares)
+          )
+          env.form = env.form || createForm(props)
+        } catch (e) {
+          reject(e)
+        }
+
         render(
           true,
           () => {
             env.form
-              .submit((values: any) => {
-                resolve(values)
+              .submit(async () => {
+                await applyMiddleware(env.form, env.confirmMiddlewares)
+                resolve(toJS(env.form.values))
                 if (drawerProps.beforeClose) {
                   setTimeout(() => {
                     drawerProps.beforeClose(() => {
@@ -302,8 +370,18 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
               })
               .catch(reject)
           },
-          () => {
-            formDrawer.close()
+          async () => {
+            await loading(() =>
+              applyMiddleware(env.form, env.cancelMiddlewares)
+            )
+
+            if (drawerProps.beforeClose) {
+              drawerProps.beforeClose(() => {
+                formDrawer.close()
+              })
+            } else {
+              formDrawer.close()
+            }
           }
         )
       })
@@ -318,7 +396,7 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
 }
 
 export const FormDrawerFooter = defineComponent({
-  setup(props, { attrs, slots }) {
+  setup(props, { slots }) {
     return () => {
       return h(
         Portal,
@@ -334,3 +412,5 @@ export const FormDrawerFooter = defineComponent({
     }
   },
 })
+
+export const FormDrawerPortal = createPortalProvider('form-drawer')

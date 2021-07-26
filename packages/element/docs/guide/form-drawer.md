@@ -14,39 +14,46 @@
 
 <dumi-previewer demoPath="guide/form-drawer/template" />
 
-## 抽屉拦截案例
-
-<dumi-previewer demoPath="guide/form-drawer/json-schema-before-close" />
-
-## 自定义 footer
-
-<dumi-previewer demoPath="guide/form-drawer/custom" />
-
 ## API
 
 ### FormDrawer
 
 ```ts pure
-import { IFormProps } from '@formily/core'
+import { IFormProps, Form } from '@formily/core'
 
-type FormDrawerContentProps = { resolve: () => any; reject: () => any }
+type FormDrawerRenderer = Component | (({ form: Form }) => VNode)
 
-type FormDrawerHandler = {
+interface IFormDrawer {
+  forOpen(
+    middleware: (
+      props: IFormProps,
+      next: (props?: IFormProps) => Promise<any>
+    ) => any
+  ): any //中间件拦截器，可以拦截Drawer打开
+  forConfirm(
+    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
+  ): any //中间件拦截器，可以拦截Drawer确认
+  forCancel(
+    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
+  ): any //中间件拦截器，可以拦截Drawer取消
   //打开弹窗，接收表单属性，可以传入initialValues/values/effects etc.
   open(props: IFormProps): Promise<any> //返回表单数据
   //关闭弹窗
   close(): void
 }
 
-interface IFormDrawer {
-  (
-    title: string | Component | Vnode | () => VNode,
-    renderer: ((props: FormDrawerContentProps) => VNode) | Component
-  ): FormDrawerHandler
-  (
-    title: IFormDrawerProps, //如果是对象，则作为IFormDrawerProps传入
-    renderer: ((props: FormDrawerContentProps) => VNode) | Component
-  ): FormDrawerHandler
+interface FormDrawer {
+  (title: ModalProps, id: string, renderer: FormDrawerRenderer): IFormDrawer
+  (title: ModalProps, id: FormDrawerRenderer): IFormDrawer
+  (title: ModalTitle, id: string, renderer: FormDrawerRenderer): IFormDrawer
+  (title: ModalTitle, id: FormDrawerRenderer): IFormDrawer
+}
+
+interface FormDrawer {
+  (title: ModalProps, id: string, renderer: FormDrawerRenderer): IFormDrawer
+  (title: ModalProps, id: FormDrawerRenderer): IFormDrawer
+  (title: ModalTitle, id: string, renderer: FormDrawerRenderer): IFormDrawer
+  (title: ModalTitle, id: FormDrawerRenderer): IFormDrawer
 }
 ```
 
@@ -74,3 +81,7 @@ type IFormDrawerProps = DrawerProps & {
 ### FormDrawerFooter
 
 无属性，只接收子节点
+
+### FormDrawerPortal
+
+接收可选的 id 属性，默认值为 form-dialog，如果一个应用存在多个 prefixCls，不同区域的弹窗内部 prefixCls 不一样，那推荐指定 id 为区域级 id
