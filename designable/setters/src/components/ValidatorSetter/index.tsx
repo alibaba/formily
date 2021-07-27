@@ -110,10 +110,20 @@ const ValidatorSchema: ISchema = {
           },
         },
       },
+      moveDown: {
+        type: 'void',
+        'x-component': 'ArrayItems.MoveDown',
+        'x-component-props': { style: { marginLeft: 10 } },
+      },
+      moveUp: {
+        type: 'void',
+        'x-component': 'ArrayItems.MoveUp',
+        'x-component-props': { style: { marginLeft: 5 } },
+      },
       remove: {
         type: 'void',
         'x-component': 'ArrayItems.Remove',
-        'x-component-props': { style: { marginLeft: 10 } },
+        'x-component-props': { style: { marginLeft: 5 } },
       },
     },
   },
