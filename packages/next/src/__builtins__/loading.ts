@@ -1,8 +1,11 @@
 import { Message } from '@alifd/next'
 
-export const loading = async (processor: () => Promise<any>) => {
+export const loading = async (
+  title: React.ReactNode = 'Loading...',
+  processor: () => Promise<any>
+) => {
   let loading = setTimeout(() => {
-    Message.loading('Loading...')
+    Message.loading(title as any)
   }, 100)
   const results = await processor()
   Message.hide()

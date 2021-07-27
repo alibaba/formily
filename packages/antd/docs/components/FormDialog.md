@@ -288,6 +288,8 @@ type FormDialogRenderer =
   | React.ReactElement
   | ((form: Form) => React.ReactElement)
 
+type ModalTitle = string | number | React.ReactElement
+
 interface IFormDialog {
   forOpen(
     middleware: (
@@ -307,9 +309,15 @@ interface IFormDialog {
   close(): void
 }
 
+interface IModalProps extends ModalProps {
+  onOk?: (event: React.MouseEvent<HTMLElement>) => void | boolean // return false can prevent onOk
+  onCancel?: (event: React.MouseEvent<HTMLElement>) => void | boolean // return false can prevent onCancel
+  loadingText?: React.ReactNode
+}
+
 interface FormDialog {
-  (title: ModalProps, id: string, renderer: FormDialogRenderer): IFormDialog
-  (title: ModalProps, renderer: FormDialogRenderer): IFormDialog
+  (title: IModalProps, id: string, renderer: FormDialogRenderer): IFormDialog
+  (title: IModalProps, renderer: FormDialogRenderer): IFormDialog
   (title: ModalTitle, id: string, renderer: FormDialogRenderer): IFormDialog
   (title: ModalTitle, renderer: FormDialogRenderer): IFormDialog
 }

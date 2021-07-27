@@ -39,7 +39,7 @@ const isDrawerTitle = (props: any): props is DrawerTitle => {
   )
 }
 
-const getDrawerProps = (props: any): DrawerProps => {
+const getDrawerProps = (props: any): IDrawerProps => {
   if (isDrawerTitle(props)) {
     return {
       title: props,
@@ -49,6 +49,11 @@ const getDrawerProps = (props: any): DrawerProps => {
   }
 }
 
+export interface IDrawerProps extends DrawerProps {
+  onClose?: (reason: string, e: React.MouseEvent) => void | boolean
+  loadingText?: React.ReactNode
+}
+
 export interface IFormDrawer {
   forOpen(middleware: IMiddleware<IFormProps>): IFormDrawer
   open(props?: IFormProps): Promise<any>
@@ -56,24 +61,22 @@ export interface IFormDrawer {
 }
 
 export function FormDrawer(
-  title: DrawerProps,
+  title: IDrawerProps,
   id: string,
-  renderer?: FormDrawerRenderer
+  renderer: FormDrawerRenderer
 ): IFormDrawer
 export function FormDrawer(
-  title: DrawerProps,
-  id: FormDrawerRenderer,
-  renderer?: unknown
+  title: IDrawerProps,
+  renderer: FormDrawerRenderer
 ): IFormDrawer
 export function FormDrawer(
   title: DrawerTitle,
   id: string,
-  renderer?: FormDrawerRenderer
+  renderer: FormDrawerRenderer
 ): IFormDrawer
 export function FormDrawer(
   title: DrawerTitle,
-  id: FormDrawerRenderer,
-  renderer?: unknown
+  renderer: FormDrawerRenderer
 ): IFormDrawer
 export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   if (isFn(id) || React.isValidElement(id)) {
@@ -88,12 +91,13 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   }
   const root = createPortalRoot(env.host, id)
   const props = getDrawerProps(title)
-  const drawer: DrawerProps = {
+  const drawer = {
     width: '40%',
     ...props,
     onClose: (reason: string, e: any) => {
-      props?.onClose?.(reason, e)
-      formDrawer.close()
+      if (props?.onClose?.(reason, e) !== false) {
+        formDrawer.close()
+      }
     },
     afterClose() {
       props?.afterClose?.()
@@ -130,7 +134,7 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
       if (env.promise) return env.promise
       env.promise = new Promise(async (resolve, reject) => {
         try {
-          props = await loading(() =>
+          props = await loading(drawer.loadingText, () =>
             applyMiddleware(props, env.openMiddlewares)
           )
           env.form =

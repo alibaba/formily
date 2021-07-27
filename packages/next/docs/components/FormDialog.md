@@ -322,9 +322,15 @@ interface IFormDialog {
   close(): void
 }
 
+interface IDialogProps extends DialogProps {
+  onOk?: (event: React.MouseEvent) => void | boolean // return false can prevent onOk
+  onCancel?: (event: React.MouseEvent) => void | boolean // return false can prevent onCancel
+  loadingText?: React.ReactText
+}
+
 interface FormDialog {
-  (title: DialogProps, id: string, renderer: FormDialogRenderer): IFormDialog
-  (title: DialogProps, renderer: FormDialogRenderer): IFormDialog
+  (title: IDialogProps, id: string, renderer: FormDialogRenderer): IFormDialog
+  (title: IDialogProps, renderer: FormDialogRenderer): IFormDialog
   (title: ModalTitle, id: string, renderer: FormDialogRenderer): IFormDialog
   (title: ModalTitle, renderer: FormDialogRenderer): IFormDialog
 }
