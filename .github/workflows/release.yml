@@ -15,18 +15,13 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node_version }}
-      - run: yarn -v
-      - run: yarn config set registry https://registry.npmjs.org/:_authToken=${{secrets.NPM_AUTH_TOKEN}}
-      - run: yarn --ignore-engines
-      - run: yarn build
-      - run: lerna publish from-package --registry="https://registry.npmjs.org/:_authToken=${{secrets.NPM_AUTH_TOKEN}}" --yes --dist-tag next && ts-node scripts/release release
+      - run: | 
+          echo "registry=\"https://registry.npmjs.org/:_authToken=$NPM_TOKEN\"" > .yarnrc
+          yarn -v
+          yarn --ignore-engines
+          yarn build
+          lerna publish from-package --yes --dist-tag next && ts-node scripts/release release
         env:
-          HEADLESS: false
-          PROGRESS: none
-          NODE_ENV: test
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
           NODE_OPTIONS: --max_old_space_size=4096
