@@ -34,7 +34,7 @@ const isModalTitle = (props: any): props is ModalTitle => {
   )
 }
 
-const getModelProps = (props: any): DialogProps => {
+const getModelProps = (props: any): IDialogProps => {
   if (isModalTitle(props)) {
     return {
       title: props,
@@ -42,6 +42,12 @@ const getModelProps = (props: any): DialogProps => {
   } else {
     return props
   }
+}
+
+export interface IDialogProps extends DialogProps {
+  onOk?: (event: React.MouseEvent) => void | boolean
+  onCancel?: (event: React.MouseEvent) => void | boolean
+  loadingText?: React.ReactText
 }
 
 export interface IFormDialog {
@@ -53,24 +59,22 @@ export interface IFormDialog {
 }
 
 export function FormDialog(
-  title: DialogProps,
+  title: IDialogProps,
   id: string,
-  renderer?: FormDialogRenderer
+  renderer: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(
-  title: DialogProps,
-  id: FormDialogRenderer,
-  renderer?: unknown
+  title: IDialogProps,
+  renderer: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(
   title: ModalTitle,
   id: string,
-  renderer?: FormDialogRenderer
+  renderer: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(
   title: ModalTitle,
-  id: FormDialogRenderer,
-  renderer?: unknown
+  renderer: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
   if (isFn(id) || React.isValidElement(id)) {
@@ -122,8 +126,9 @@ export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
                     className={prefix + '-dialog-btn'}
                     loading={env.form.submitting}
                     onClick={(e) => {
-                      modal?.onOk?.(e)
-                      resolve()
+                      if (modal?.onOk?.(e) !== false) {
+                        resolve()
+                      }
                     }}
                   >
                     {modal?.locale?.ok || ctx?.locale?.Dialog?.ok || '确定'}
@@ -131,8 +136,9 @@ export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
                   <Button
                     className={prefix + '-dialog-btn'}
                     onClick={(e) => {
-                      modal?.onCancel?.(e)
-                      reject()
+                      if (modal?.onCancel?.(e) !== false) {
+                        reject()
+                      }
                     }}
                   >
                     {modal?.locale?.cancel ||
@@ -179,7 +185,7 @@ export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
       if (env.promise) return env.promise
       env.promise = new Promise(async (resolve, reject) => {
         try {
-          props = await loading(() =>
+          props = await loading(modal.loadingText, () =>
             applyMiddleware(props, env.openMiddlewares)
           )
           env.form = env.form || createForm(props)
@@ -199,7 +205,7 @@ export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
                 .catch(() => {})
             },
             async () => {
-              await loading(() =>
+              await loading(modal.loadingText, () =>
                 applyMiddleware(env.form, env.cancelMiddlewares)
               )
               formDialog.close()

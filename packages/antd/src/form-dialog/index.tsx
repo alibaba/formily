@@ -31,7 +31,7 @@ const isModalTitle = (props: any): props is ModalTitle => {
   )
 }
 
-const getModelProps = (props: any): ModalProps => {
+const getModelProps = (props: any): IModalProps => {
   if (isModalTitle(props)) {
     return {
       title: props,
@@ -49,25 +49,29 @@ export interface IFormDialog {
   close(): void
 }
 
+export interface IModalProps extends ModalProps {
+  onOk?: (event: React.MouseEvent<HTMLElement>) => void | boolean
+  onCancel?: (event: React.MouseEvent<HTMLElement>) => void | boolean
+  loadingText?: React.ReactNode
+}
+
 export function FormDialog(
-  title: ModalProps,
+  title: IModalProps,
   id: string,
-  renderer?: FormDialogRenderer
+  renderer: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(
-  title: ModalProps,
-  id: FormDialogRenderer,
-  renderer?: unknown
+  title: IModalProps,
+  renderer: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(
   title: ModalTitle,
   id: string,
-  renderer?: FormDialogRenderer
+  renderer: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(
   title: ModalTitle,
-  id: FormDialogRenderer,
-  renderer?: unknown
+  renderer: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
   if (isFn(id) || React.isValidElement(id)) {
@@ -107,12 +111,14 @@ export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
             visible={visible}
             confirmLoading={env.form.submitting}
             onCancel={(e) => {
-              modal?.onCancel?.(e)
-              reject()
+              if (modal?.onCancel?.(e) !== false) {
+                reject()
+              }
             }}
             onOk={async (e) => {
-              modal?.onOk?.(e)
-              resolve()
+              if (modal?.onOk?.(e) !== false) {
+                resolve()
+              }
             }}
           >
             <FormProvider form={env.form}>
@@ -148,7 +154,7 @@ export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
       if (env.promise) return env.promise
       env.promise = new Promise(async (resolve, reject) => {
         try {
-          props = await loading(() =>
+          props = await loading(modal.loadingText, () =>
             applyMiddleware(props, env.openMiddlewares)
           )
           env.form = env.form || createForm(props)
@@ -168,7 +174,7 @@ export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
                 .catch(() => {})
             },
             async () => {
-              await loading(() =>
+              await loading(modal.loadingText, () =>
                 applyMiddleware(env.form, env.cancelMiddlewares)
               )
               formDialog.close()
