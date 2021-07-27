@@ -370,9 +370,9 @@ interface IFormDrawer {
 
 interface FormDrawer {
   (title: DrawerProps, id: string, renderer: FormDrawerRenderer): IFormDrawer
-  (title: DrawerProps, id: FormDrawerRenderer, renderer: unknown): IFormDrawer
+  (title: DrawerProps, renderer: FormDrawerRenderer): IFormDrawer
   (title: ModalTitle, id: string, renderer: FormDrawerRenderer): IFormDrawer
-  (title: ModalTitle, id: FormDrawerRenderer, renderer: unknown): IFormDrawer
+  (title: ModalTitle, renderer: FormDrawerRenderer): IFormDrawer
 }
 ```
 

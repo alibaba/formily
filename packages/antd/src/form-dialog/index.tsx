@@ -52,24 +52,24 @@ export interface IFormDialog {
 export function FormDialog(
   title: ModalProps,
   id: string,
-  renderer: FormDialogRenderer
+  renderer?: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(
   title: ModalProps,
   id: FormDialogRenderer,
-  renderer: unknown
+  renderer?: unknown
 ): IFormDialog
 export function FormDialog(
   title: ModalTitle,
   id: string,
-  renderer: FormDialogRenderer
+  renderer?: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(
   title: ModalTitle,
   id: FormDialogRenderer,
-  renderer: unknown
+  renderer?: unknown
 ): IFormDialog
-export function FormDialog(title: any, id: any, renderer: any): IFormDialog {
+export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
   if (isFn(id) || React.isValidElement(id)) {
     renderer = id
     id = 'form-dialog'
