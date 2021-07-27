@@ -50,6 +50,7 @@ const getDrawerProps = (props: any): DrawerProps => {
 }
 
 export interface IFormDrawer {
+  forOpen(middleware: IMiddleware<IFormProps>): IFormDrawer
   open(props?: IFormProps): Promise<any>
   close(): void
 }
@@ -57,24 +58,24 @@ export interface IFormDrawer {
 export function FormDrawer(
   title: DrawerProps,
   id: string,
-  renderer: FormDrawerRenderer
+  renderer?: FormDrawerRenderer
 ): IFormDrawer
 export function FormDrawer(
   title: DrawerProps,
   id: FormDrawerRenderer,
-  renderer: unknown
+  renderer?: unknown
 ): IFormDrawer
 export function FormDrawer(
   title: DrawerTitle,
   id: string,
-  renderer: FormDrawerRenderer
+  renderer?: FormDrawerRenderer
 ): IFormDrawer
 export function FormDrawer(
   title: DrawerTitle,
   id: FormDrawerRenderer,
-  renderer: unknown
+  renderer?: unknown
 ): IFormDrawer
-export function FormDrawer(title: any, id: any, renderer: any): IFormDrawer {
+export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   if (isFn(id) || React.isValidElement(id)) {
     renderer = id
     id = 'form-drawer'

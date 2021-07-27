@@ -318,9 +318,9 @@ interface IFormDialog {
 
 interface FormDialog {
   (title: ModalProps, id: string, renderer: FormDialogRenderer): IFormDialog
-  (title: ModalProps, id: FormDialogRenderer, renderer: unknown): IFormDialog
+  (title: ModalProps, renderer: FormDialogRenderer): IFormDialog
   (title: ModalTitle, id: string, renderer: FormDialogRenderer): IFormDialog
-  (title: ModalTitle, id: FormDialogRenderer, renderer: unknown): IFormDialog
+  (title: ModalTitle, renderer: FormDialogRenderer): IFormDialog
 }
 ```
 

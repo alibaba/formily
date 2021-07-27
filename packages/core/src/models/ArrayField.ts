@@ -41,8 +41,10 @@ export class ArrayField<
   }
 
   push = async (...items: any[]) => {
-    if (!isArr(this.value)) return
     return batch(() => {
+      if (!isArr(this.value)) {
+        this.value = []
+      }
       this.value.push(...items)
       return this.onInput(this.value)
     })
@@ -62,8 +64,10 @@ export class ArrayField<
   }
 
   insert = async (index: number, ...items: any[]) => {
-    if (!isArr(this.value)) return
     return batch(() => {
+      if (!isArr(this.value)) {
+        this.value = []
+      }
       spliceArrayState(this, {
         startIndex: index,
         insertCount: items.length,
@@ -94,8 +98,10 @@ export class ArrayField<
   }
 
   unshift = async (...items: any[]) => {
-    if (!isArr(this.value)) return
     return batch(() => {
+      if (!isArr(this.value)) {
+        this.value = []
+      }
       spliceArrayState(this, {
         startIndex: 0,
         insertCount: items.length,

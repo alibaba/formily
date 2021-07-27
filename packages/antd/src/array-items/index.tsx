@@ -49,9 +49,9 @@ const isAdditionComponent = (schema: ISchema) => {
 
 const useAddition = () => {
   const schema = useFieldSchema()
-  return schema.reduceProperties((addition, schema) => {
+  return schema.reduceProperties((addition, schema, key) => {
     if (isAdditionComponent(schema)) {
-      return <RecursionField schema={schema} name="addition" />
+      return <RecursionField schema={schema} name={key} />
     }
     return addition
   }, null)

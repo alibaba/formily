@@ -1,5 +1,55 @@
+const ValidatorFormats = [
+  { label: 'URL', value: 'url' },
+  { label: 'Email', value: 'email' },
+  { label: 'IPV6', value: 'ipv6' },
+  { label: 'IPV4', value: 'ipv4' },
+  { label: 'Number', value: 'number' },
+  { label: 'Integer', value: 'integer' },
+  { label: 'ID', value: 'idcard' },
+  { label: 'QQ', value: 'qq' },
+  { label: 'Phone Number', value: 'phone' },
+  { label: 'Currency', value: 'money' },
+  { label: 'Chinese', value: 'zh' },
+  { label: 'Date', value: 'date' },
+  { label: 'Zip', value: 'zip' },
+]
+
 export default {
   'en-US': {
+    settings: {
+      'x-validator': {
+        title: 'Validator',
+        addValidatorRules: 'Add Validator Rules',
+        drawer: 'Edit Rules',
+        triggerType: {
+          title: 'Trigger Type',
+          placeholder: 'Please Select',
+          dataSource: ['onInput', 'onFocus', 'onBlur'],
+        },
+        format: {
+          title: 'Format',
+          placeholder: 'Please Select',
+          dataSource: ValidatorFormats,
+        },
+        validator: {
+          title: 'Custom Validator',
+          tooltip: 'Format: function (value){ return "Error Message"}',
+        },
+        pattern: 'RegExp',
+        len: 'Length Limit',
+        max: 'Length/Value Lt',
+        min: 'Length/Value Gt',
+        exclusiveMaximum: 'Length/Value Lte',
+        exclusiveMinimum: 'Length/Value Gte',
+        whitespace: 'No Whitespace',
+        required: 'Required',
+        message: {
+          title: 'Error Message',
+          tooltip:
+            'The error message is only effective for one built-in rule of the current rule set. If you need to customize the error message for different built-in rules, please split into multiple rules',
+        },
+      },
+    },
     SettingComponents: {
       DataSourceSetter: {
         nodeProperty: 'Node Property',
@@ -45,6 +95,10 @@ export default {
         decoratorProps: 'Decorator Props',
         pleaseSelect: 'Please Select',
         expressionValueTypeIs: 'Expression value type is',
+      },
+      ValidatorSetter: {
+        pleaseSelect: 'Please Select',
+        formats: ValidatorFormats,
       },
     },
   },

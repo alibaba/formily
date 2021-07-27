@@ -11,8 +11,8 @@ export const ActionsWidget = observer(() => (
       value={GlobalRegistry.getDesignerLanguage()}
       optionType="button"
       options={[
-        { label: 'Engligh', value: 'en-US' },
-        { label: '简体中文', value: 'zh-CN' },
+        { label: 'Engligh', value: 'en-us' },
+        { label: '简体中文', value: 'zh-cn' },
       ]}
       onChange={(e) => {
         GlobalRegistry.setDesignerLanguage(e.target.value)

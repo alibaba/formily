@@ -353,9 +353,9 @@ interface IFormDialog {
 
 interface FormDialog {
   (title: DialogProps, id: string, renderer: FormDialogRenderer): IFormDialog
-  (title: DialogProps, id: FormDialogRenderer, renderer: unknown): IFormDialog
+  (title: DialogProps, renderer: FormDialogRenderer): IFormDialog
   (title: ModalTitle, id: string, renderer: FormDialogRenderer): IFormDialog
-  (title: ModalTitle, id: FormDialogRenderer, renderer: unknown): IFormDialog
+  (title: ModalTitle, renderer: FormDialogRenderer): IFormDialog
 }
 ```
 
