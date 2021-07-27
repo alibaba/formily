@@ -23,7 +23,7 @@ jobs:
       - run: yarn config set registry https://registry.npmjs.org/:_authToken=${{secrets.NPM_AUTH_TOKEN}}
       - run: yarn --ignore-engines
       - run: yarn build
-      - run: yarn run release:force
+      - run: lerna publish from-package --registry="https://registry.npmjs.org/:_authToken=${{secrets.NPM_AUTH_TOKEN}}" --yes --dist-tag next && ts-node scripts/release release
         env:
           HEADLESS: false
           PROGRESS: none
