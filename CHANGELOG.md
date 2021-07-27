@@ -1,5 +1,25 @@
 # Changelog
 
+## v2.0.0-beta.82(2021-07-24)
+
+### :tada: Enhancements
+
+1. [feat(element): update array-table component & doc (#1862)](https://github.com/alibaba/formily/commit/f98129a9) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :rose: Improve code quality
+
+1. [refactor(antd/core): refactor FormDialog/FormDrawer/Form.setValues/setInitialValues (#1876)](https://github.com/alibaba/formily/commit/849ba7c0) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [refactor(shared): change applyMiddleware behavior (#1859)](https://github.com/alibaba/formily/commit/e0fc3c6c) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :construction: Add/Update Test Cases
+
+1. [test(reactive): optimize box test case (#1866)](https://github.com/alibaba/formily/commit/4e191e0f) :point_right: ( [Zardddddd60](https://github.com/Zardddddd60) )
+
+### :blush: Other Changes
+
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/9455b400) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.81(2021-07-22)
 
 ### :tada: Enhancements
@@ -963,13 +983,3 @@
 ### :tada: Enhancements
 
 1. [feat(schema): add nested form polyfill (#972)](https://github.com/alibaba/formily/commit/6deb86d9) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-## v1.2.8(2020-07-21)
-
-### :beetle: Bug Fixes
-
-1. [fix(core): fix field default sync exception (#970)](https://github.com/alibaba/formily/commit/d0872817) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :rocket: Improve Performance
-
-1. [perf(core): improve array remove node performance (#971)](https://github.com/alibaba/formily/commit/970adbba) :point_right: ( [Janry](https://github.com/Janry) )

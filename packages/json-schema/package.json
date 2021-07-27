@@ -1,6 +1,6 @@
 {
   "name": "@formily/json-schema",
-  "version": "2.0.0-beta.82",
+  "version": "2.0.0-beta.83",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -28,9 +28,9 @@
     "build:global": "ts-node ../../scripts/build-global"
   },
   "dependencies": {
-    "@formily/core": "2.0.0-beta.82",
-    "@formily/reactive": "2.0.0-beta.82",
-    "@formily/shared": "2.0.0-beta.82"
+    "@formily/core": "2.0.0-beta.83",
+    "@formily/reactive": "2.0.0-beta.83",
+    "@formily/shared": "2.0.0-beta.83"
   },
   "publishConfig": {
     "access": "public"
