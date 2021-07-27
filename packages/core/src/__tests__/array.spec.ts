@@ -224,22 +224,23 @@ test('fault tolerance', () => {
     })
   )
   array.setValue({} as any)
-  array.push(11)
-  array.pop()
-  array.remove(1)
-  array.shift()
-  array.unshift(1)
-  array.move(0, 1)
-  array.moveUp(1)
-  array.moveDown(1)
-  array.insert(1)
-  expect(array.value).toEqual({})
-  array2.move(1, 1)
-  array2.moveUp(2)
-  array2.moveUp(0)
-  array2.moveDown(0)
-  array2.moveDown(1)
-  array2.moveDown(2)
+  array.push(11) //[11]
+  array.pop() //[]
+  array.remove(1) //[]
+  array.shift() //[]
+  array.unshift(1) //[1]
+  array.move(0, 1) //[undefined,1]
+  array.moveUp(1) //[1,undefined]
+  array.moveDown(1) //[1,undefined]
+  array.insert(1) //[1,undefined]
+  expect(array.value).toEqual([1, undefined])
+  array2.move(1, 1) //[1,undefined]
+  array2.moveUp(2) //[1,undefined]
+  array2.moveUp(0) //[1,undefined]
+  array2.moveDown(0) //[undefined,1]
+  array2.moveDown(1) //[undefined,1]
+  array2.moveDown(2) //[undefined,1]
+  expect(array.value).toEqual([1, undefined])
 })
 
 test('array field move api with children', async () => {
