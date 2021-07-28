@@ -75,6 +75,6 @@
 | asterisk       | boolean                                                | 星号提醒                                    | -          |
 | gridSpan       | number                                                 | ⽹格布局占宽                                | -          |
 
-### FormBaseItem
+### FormItem.BaseItem
 
 纯样式组件，属性与 FormItem 一样，与 Formily Core 不做状态桥接，主要用于一些需要依赖 FormItem 的样式布局能力，但不希望接入 Field 状态的场景

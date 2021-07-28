@@ -12,13 +12,6 @@ import {
   Submit,
   FormItem,
   ArrayTable,
-  ArrayTableColumn,
-  ArrayTableAddition,
-  ArrayTableMoveDown,
-  ArrayTableMoveUp,
-  ArrayTableRemove,
-  ArrayTableIndex,
-  ArrayTableSortHandle,
   Input,
   Editable,
   Switch,
@@ -28,13 +21,6 @@ const fields = createSchemaField({
   components: {
     FormItem,
     ArrayTable,
-    ArrayTableColumn,
-    ArrayTableAddition,
-    ArrayTableMoveDown,
-    ArrayTableMoveUp,
-    ArrayTableRemove,
-    ArrayTableIndex,
-    ArrayTableSortHandle,
     Input,
     Editable,
     Switch,
@@ -79,7 +65,7 @@ export default {
             properties: {
               column1: {
                 type: 'void',
-                'x-component': 'ArrayTableColumn',
+                'x-component': 'ArrayTable.Column',
                 'x-component-props': {
                   width: 80,
                   title: 'Index',
@@ -88,13 +74,13 @@ export default {
                 properties: {
                   index: {
                     type: 'void',
-                    'x-component': 'ArrayTableIndex',
+                    'x-component': 'ArrayTable.Index',
                   },
                 },
               },
               column2: {
                 type: 'void',
-                'x-component': 'ArrayTableColumn',
+                'x-component': 'ArrayTable.Column',
                 'x-component-props': { width: 100, title: '显隐->A2' },
                 properties: {
                   a1: {
@@ -106,7 +92,7 @@ export default {
               },
               column3: {
                 type: 'void',
-                'x-component': 'ArrayTableColumn',
+                'x-component': 'ArrayTable.Column',
                 'x-component-props': { width: 200, title: 'A2' },
                 properties: {
                   a2: {
@@ -118,7 +104,7 @@ export default {
               },
               column4: {
                 type: 'void',
-                'x-component': 'ArrayTableColumn',
+                'x-component': 'ArrayTable.Column',
                 'x-component-props': { title: 'A3' },
                 properties: {
                   a3: {
@@ -130,7 +116,7 @@ export default {
               },
               column5: {
                 type: 'void',
-                'x-component': 'ArrayTableColumn',
+                'x-component': 'ArrayTable.Column',
                 'x-component-props': {
                   title: 'Operations',
                   prop: 'operations',
@@ -144,15 +130,15 @@ export default {
                     properties: {
                       remove: {
                         type: 'void',
-                        'x-component': 'ArrayTableRemove',
+                        'x-component': 'ArrayTable.Remove',
                       },
                       moveDown: {
                         type: 'void',
-                        'x-component': 'ArrayTableMoveDown',
+                        'x-component': 'ArrayTable.MoveDown',
                       },
                       moveUp: {
                         type: 'void',
-                        'x-component': 'ArrayTableMoveUp',
+                        'x-component': 'ArrayTable.MoveUp',
                       },
                     },
                   },
@@ -163,7 +149,7 @@ export default {
           properties: {
             add: {
               type: 'void',
-              'x-component': 'ArrayTableAddition',
+              'x-component': 'ArrayTable.Addition',
               title: '添加条目',
             },
           },

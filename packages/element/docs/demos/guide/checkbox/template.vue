@@ -14,7 +14,7 @@
         { label: '选项2', value: 2 },
       ]"
       :decorator="[FormItem]"
-      :component="[CheckboxGroup]"
+      :component="[Checkbox.Group]"
     />
     <Submit @submit="onSubmit">提交</Submit>
   </Form>
@@ -23,13 +23,7 @@
 <script>
 import { createForm } from '@formily/core'
 import { Field, ArrayField } from '@formily/vue'
-import {
-  Form,
-  FormItem,
-  Checkbox,
-  CheckboxGroup,
-  Submit,
-} from '@formily/element'
+import { Form, FormItem, Checkbox, Submit } from '@formily/element'
 
 const form = createForm()
 
@@ -39,7 +33,6 @@ export default {
     return {
       FormItem,
       Checkbox,
-      CheckboxGroup,
       form,
     }
   },

@@ -10,7 +10,7 @@
       name="textarea"
       title="文本框"
       :decorator="[FormItem]"
-      :component="[TextArea]"
+      :component="[Input.TextArea]"
     />
     <Submit @submit="log">提交</Submit>
   </FormProvider>
@@ -18,8 +18,8 @@
 
 <script>
 import { createForm } from '@formily/core'
-import { createSchemaField, FormProvider, Field } from '@formily/vue'
-import { FormItem, Input, TextArea, Submit } from '@formily/element'
+import { FormProvider, Field } from '@formily/vue'
+import { FormItem, Input, Submit } from '@formily/element'
 
 const form = createForm()
 
@@ -29,7 +29,6 @@ export default {
     return {
       FormItem,
       Input,
-      TextArea,
       form,
     }
   },

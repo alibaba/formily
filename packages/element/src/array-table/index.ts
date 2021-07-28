@@ -22,8 +22,9 @@ import {
 } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
 import { FormPath, isArr, isBool } from '@formily/shared'
-import { ArrayBase, ArrayBaseItem, useKey } from '../array-base'
+import { ArrayBase } from '../array-base'
 import { stylePrefix } from '../__builtins__/configs'
+import { composeExport } from '../__builtins__/shared'
 import type { Schema } from '@formily/json-schema'
 import type {
   Table as TableProps,
@@ -170,7 +171,7 @@ const getArrayTableColumns = (
               const index = reactiveDataSource.value.indexOf(props.row)
 
               const children = h(
-                ArrayBaseItem,
+                ArrayBase.Item,
                 { props: { index }, key: `${key}${index}` },
                 {
                   default: () =>
@@ -404,15 +405,15 @@ const ArrayTablePagination = defineComponent<IArrayTablePaginationProps>({
   },
 })
 
-export const ArrayTable = observer(
+const ArrayTableInner = observer(
   defineComponent<IArrayTableProps>({
-    name: 'ArrayTable',
+    name: 'FArrayTable',
     inheritAttrs: false,
     setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
       const prefixCls = `${stylePrefix}-array-table`
-      const getKey = useKey()
+      const getKey = ArrayBase.useKey()
 
       const defaultRowKey = (record: any) => {
         return getKey(record)
@@ -539,18 +540,23 @@ export const ArrayTable = observer(
   })
 )
 
-export const ArrayTableColumn: Component = {
+const ArrayTableColumn: Component = {
+  name: 'FArrayTableColumn',
   render(h) {
     return h()
   },
 }
 
-export {
-  ArrayBaseSortHandle as ArrayTableSortHandle,
-  ArrayBaseRemove as ArrayTableRemove,
-  ArrayBaseMoveDown as ArrayTableMoveDown,
-  ArrayBaseMoveUp as ArrayTableMoveUp,
-  ArrayBaseAddition as ArrayTableAddition,
-  ArrayBaseIndex as ArrayTableIndex,
-  useIndex as useArrayTableIndex,
-} from '../array-base'
+export const ArrayTable = composeExport(ArrayTableInner, {
+  Column: ArrayTableColumn,
+  Index: ArrayBase.Index,
+  SortHandle: ArrayBase.SortHandle,
+  Addition: ArrayBase.Addition,
+  Remove: ArrayBase.Remove,
+  MoveDown: ArrayBase.MoveDown,
+  MoveUp: ArrayBase.MoveUp,
+  useArray: ArrayBase.useArray,
+  useIndex: ArrayBase.useIndex,
+})
+
+export default ArrayTable

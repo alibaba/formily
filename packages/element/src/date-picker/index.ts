@@ -3,7 +3,7 @@ import { connect, mapProps, mapReadPretty } from '@formily/vue'
 
 import type { DatePicker as ElDatePickerProps } from 'element-ui'
 import { DatePicker as ElDatePicker } from 'element-ui'
-import { PreviewDatePickerText } from '../preview-text'
+import { PreviewText } from '../preview-text'
 
 export type DatePickerProps = ElDatePickerProps
 
@@ -36,5 +36,7 @@ export const DatePicker = connect(
       valueFormat: props.valueFormat || getDefaultFormat(props, 'valueFormat'),
     }
   }),
-  mapReadPretty(PreviewDatePickerText)
+  mapReadPretty(PreviewText.DatePicker)
 )
+
+export default DatePicker

@@ -8,13 +8,12 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, FormItem, Radio, RadioGroup, Submit } from '@formily/element'
+import { Form, FormItem, Radio, Submit } from '@formily/element'
 
 const { SchemaField } = createSchemaField({
   components: {
     FormItem,
     Radio,
-    RadioGroup,
   },
 })
 
@@ -38,7 +37,7 @@ export default {
             },
           ],
           'x-decorator': 'FormItem',
-          'x-component': 'RadioGroup',
+          'x-component': 'Radio.Group',
         },
       },
     }

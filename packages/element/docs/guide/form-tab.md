@@ -22,11 +22,11 @@
 
 其余参考 [https://element.eleme.io/#/zh-CN/component/tabs](https://element.eleme.io/#/zh-CN/component/tabs)
 
-### FormTabPane
+### FormTab.TabPane
 
 参考 [https://element.eleme.io/#/zh-CN/component/tabs](https://element.eleme.io/#/zh-CN/component/tabs)
 
-### createFormTab
+### FormTab.createFormTab
 
 ```ts pure
 type ActiveKey = string | number

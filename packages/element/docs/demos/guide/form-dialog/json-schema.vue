@@ -3,13 +3,7 @@
 </template>
 
 <script>
-import {
-  FormDialog,
-  FormDialogFooter,
-  FormLayout,
-  FormItem,
-  Input,
-} from '@formily/element'
+import { FormDialog, FormLayout, FormItem, Input } from '@formily/element'
 import { Button } from 'element-ui'
 import { createSchemaField } from '@formily/vue'
 const { SchemaField } = createSchemaField({
@@ -63,9 +57,9 @@ const DialogForm = {
     return (
       <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField schema={this.schema} />
-        <FormDialogFooter>
+        <FormDialog.Footer>
           <span style={{ marginLeft: '4px' }}>扩展文案</span>
-        </FormDialogFooter>
+        </FormDialog.Footer>
       </FormLayout>
     )
   },
@@ -79,17 +73,30 @@ export default {
   methods: {
     handleOpen() {
       FormDialog('弹框表单', DialogForm)
-        .open({
-          initialValues: {
-            aaa: '123',
-          },
+        .forOpen((payload, next) => {
+          setTimeout(() => {
+            next({
+              initialValues: {
+                aaa: '123',
+              },
+            })
+          }, 1000)
         })
-        .then((values) => {
-          console.log('values', values)
+        .forConfirm((payload, next) => {
+          setTimeout(() => {
+            console.log(payload)
+            next(payload)
+          }, 1000)
         })
-        .catch((e) => {
-          console.log(e)
+        .forCancel((payload, next) => {
+          setTimeout(() => {
+            console.log(payload)
+            next(payload)
+          }, 1000)
         })
+        .open()
+        .then(console.log)
+        .catch(console.error)
     },
   },
 }

@@ -11,7 +11,7 @@
         name="textarea"
         title="文本框"
         x-decorator="FormItem"
-        x-component="TextArea"
+        x-component="Input.TextArea"
       />
     </SchemaField>
     <Submit @submit="log">提交</Submit>
@@ -21,14 +21,13 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField, FormProvider } from '@formily/vue'
-import { FormItem, Input, TextArea, Submit } from '@formily/element'
+import { FormItem, Input, Submit } from '@formily/element'
 
 const form = createForm()
 const fields = createSchemaField({
   components: {
     FormItem,
     Input,
-    TextArea,
   },
 })
 

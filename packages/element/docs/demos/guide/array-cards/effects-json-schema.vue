@@ -14,11 +14,6 @@ import {
   Submit,
   Input,
   ArrayCards,
-  ArrayCardsRemove,
-  ArrayCardsMoveDown,
-  ArrayCardsMoveUp,
-  ArrayCardsAddition,
-  ArrayCardsIndex,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
@@ -27,11 +22,6 @@ const SchemaField = createSchemaField({
     FormItem,
     Input,
     ArrayCards,
-    ArrayCardsRemove,
-    ArrayCardsMoveDown,
-    ArrayCardsMoveUp,
-    ArrayCardsAddition,
-    ArrayCardsIndex,
   },
 })
 
@@ -59,7 +49,7 @@ export default {
             properties: {
               index: {
                 type: 'void',
-                'x-component': 'ArrayCardsIndex',
+                'x-component': 'ArrayCards.Index',
               },
               aa: {
                 type: 'string',
@@ -96,15 +86,15 @@ export default {
               },
               remove: {
                 type: 'void',
-                'x-component': 'ArrayCardsRemove',
+                'x-component': 'ArrayCards.Remove',
               },
               moveUp: {
                 type: 'void',
-                'x-component': 'ArrayCardsMoveUp',
+                'x-component': 'ArrayCards.MoveUp',
               },
               moveDown: {
                 type: 'void',
-                'x-component': 'ArrayCardsMoveDown',
+                'x-component': 'ArrayCards.MoveDown',
               },
             },
           },
@@ -112,7 +102,7 @@ export default {
             addition: {
               type: 'void',
               title: '添加条目',
-              'x-component': 'ArrayCardsAddition',
+              'x-component': 'ArrayCards.Addition',
             },
           },
         },

@@ -4,8 +4,9 @@ import { useField, useFieldSchema, RecursionField, h } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
 import { ISchema } from '@formily/json-schema'
 import { stylePrefix } from '../__builtins__/configs'
-import { ArrayBase, ArrayBaseItem, useKey } from '../array-base'
+import { ArrayBase } from '../array-base'
 import { SlickList, SlickItem } from 'vue-slicksort'
+import { composeExport } from '../__builtins__/shared'
 
 const isAdditionComponent = (schema: ISchema) => {
   return schema['x-component']?.indexOf('Addition') > -1
@@ -15,15 +16,15 @@ export interface IArrayItemsItemProps {
   type?: 'card' | 'divide'
 }
 
-export const ArrayItems = observer(
+const ArrayItemsInner = observer(
   defineComponent({
-    name: 'ArrayItems',
+    name: 'FArrayItems',
     setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
 
       const prefixCls = `${stylePrefix}-array-items`
-      const getKey = useKey()
+      const getKey = ArrayBase.useKey()
 
       return () => {
         const field = fieldRef.value
@@ -37,7 +38,7 @@ export const ArrayItems = observer(
               : schema.items
             const key = getKey(item)
             return h(
-              ArrayBaseItem,
+              ArrayBase.Item,
               {
                 key,
                 props: {
@@ -133,8 +134,8 @@ export const ArrayItems = observer(
   })
 )
 
-export const ArrayItemsItem = defineComponent<IArrayItemsItemProps>({
-  name: 'ArrayItemsItem',
+const ArrayItemsItem = defineComponent<IArrayItemsItemProps>({
+  name: 'FArrayItemsItem',
   props: ['type'],
   setup(props, { attrs, slots }) {
     const prefixCls = `${stylePrefix}-array-items`
@@ -154,12 +155,16 @@ export const ArrayItemsItem = defineComponent<IArrayItemsItemProps>({
   },
 })
 
-export {
-  ArrayBaseSortHandle as ArrayItemsSortHandle,
-  ArrayBaseRemove as ArrayItemsRemove,
-  ArrayBaseMoveDown as ArrayItemsMoveDown,
-  ArrayBaseMoveUp as ArrayItemsMoveUp,
-  ArrayBaseAddition as ArrayItemsAddition,
-  ArrayBaseIndex as ArrayItemsIndex,
-  useIndex as useArrayItemsIndex,
-} from '../array-base'
+export const ArrayItems = composeExport(ArrayItemsInner, {
+  Item: ArrayItemsItem,
+  Index: ArrayBase.Index,
+  SortHandle: ArrayBase.SortHandle,
+  Addition: ArrayBase.Addition,
+  Remove: ArrayBase.Remove,
+  MoveDown: ArrayBase.MoveDown,
+  MoveUp: ArrayBase.MoveUp,
+  useArray: ArrayBase.useArray,
+  useIndex: ArrayBase.useIndex,
+})
+
+export default ArrayItems

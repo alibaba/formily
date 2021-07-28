@@ -19,7 +19,7 @@ const spaceSize = {
 }
 
 export const Space = defineComponent<SpaceProps>({
-  name: 'Space',
+  name: 'FSpace',
   props: ['size', 'direction', 'align'],
   setup(props, { slots }) {
     return () => {
@@ -85,3 +85,5 @@ export const Space = defineComponent<SpaceProps>({
     }
   },
 })
+
+export default Space

@@ -12,6 +12,7 @@ import { isValid, isNum, isBool, isEqual } from '@formily/shared'
 import { h } from '@formily/vue'
 import ResizeObserver from 'resize-observer-polyfill'
 import { stylePrefix } from '../__builtins__/configs'
+import { composeExport } from '../__builtins__/shared'
 
 interface FormGridContext {
   colWrap?: boolean
@@ -305,8 +306,8 @@ const useGridSpan = (gridSpan: number) => {
   }
 }
 
-export const FormGrid = defineComponent({
-  name: 'FormGrid',
+const FormGridInner = defineComponent({
+  name: 'FFormGrid',
   props: {
     columnGap: {
       type: Number,
@@ -415,8 +416,8 @@ export const FormGrid = defineComponent({
   },
 })
 
-export const FormGridColumn = defineComponent({
-  name: 'FormGridColumn',
+const FormGridColumn = defineComponent({
+  name: 'FFormGridColumn',
   props: {
     gridSpan: {
       type: Number,
@@ -439,3 +440,10 @@ export const FormGridColumn = defineComponent({
     }
   },
 })
+
+export const FormGrid = composeExport(FormGridInner, {
+  GridColumn: FormGridColumn,
+  useGridSpan,
+})
+
+export default FormGrid

@@ -1,8 +1,5 @@
 import {
   ref,
-  toRefs,
-  reactive,
-  provide,
   defineComponent,
   onMounted,
   Ref,
@@ -11,9 +8,8 @@ import {
 } from '@vue/composition-api'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps, h } from '@formily/vue'
-import { reduce } from '@formily/shared'
 import { useFormLayout } from '../form-layout'
-import { resolveComponent } from '../__builtins__/shared'
+import { composeExport, resolveComponent } from '../__builtins__/shared'
 import { stylePrefix } from '../__builtins__/configs'
 import { Component } from 'vue'
 import { Tooltip } from 'element-ui'
@@ -493,7 +489,7 @@ export const FormBaseItem = defineComponent<FormItemProps>({
   },
 })
 
-export const FormItem = connect(
+const Item = connect(
   FormBaseItem,
   mapProps(
     { validateStatus: true, title: 'label', required: true },
@@ -552,3 +548,9 @@ export const FormItem = connect(
     }
   )
 )
+
+export const FormItem = composeExport(Item, {
+  BaseItem: FormBaseItem,
+})
+
+export default FormItem

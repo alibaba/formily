@@ -3,13 +3,7 @@
 </template>
 
 <script>
-import {
-  FormDrawer,
-  FormDrawerFooter,
-  FormLayout,
-  FormItem,
-  Input,
-} from '@formily/element'
+import { FormDrawer, FormLayout, FormItem, Input } from '@formily/element'
 import { Button } from 'element-ui'
 import { Field } from '@formily/vue'
 
@@ -50,9 +44,9 @@ export default {
             decorator={[FormItem]}
             component={[Input]}
           />
-          <FormDrawerFooter>
+          <FormDrawer.Footer>
             <span style={{ marginLeft: '4px' }}>扩展文案</span>
-          </FormDrawerFooter>
+          </FormDrawer.Footer>
         </FormLayout>
       ))
         .open({

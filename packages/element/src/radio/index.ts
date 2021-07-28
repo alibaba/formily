@@ -1,7 +1,7 @@
 import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
 import { defineComponent } from '@vue/composition-api'
-import { getComponentByTag } from '../__builtins__/shared'
-import { PreviewSelectText } from '../preview-text'
+import { composeExport, getComponentByTag } from '../__builtins__/shared'
+import { PreviewText } from '../preview-text'
 import type {
   Radio as ElRadioProps,
   RadioGroup as ElRadioGroupProps,
@@ -23,7 +23,7 @@ const TransformElRadioGroup = getComponentByTag(ElRadioGroup, {
 })
 
 const RadioGroupOption = defineComponent<RadioGroupProps>({
-  name: 'RadioGroup',
+  name: 'FRadioGroup',
   props: {
     options: {
       type: Array,
@@ -74,9 +74,13 @@ const RadioGroupOption = defineComponent<RadioGroupProps>({
   },
 })
 
-export const RadioGroup = connect(
+const RadioGroup = connect(
   RadioGroupOption,
   mapProps({ dataSource: 'options' }),
-  mapReadPretty(PreviewSelectText)
+  mapReadPretty(PreviewText.Select)
 )
-export const Radio = ElRadio
+export const Radio = composeExport(ElRadio, {
+  Group: RadioGroup,
+})
+
+export default Radio

@@ -15,7 +15,7 @@ export type UploadProps = ElUploadProps & {
 }
 
 const UploadWrapper = defineComponent<UploadProps>({
-  name: 'Upload',
+  name: 'FUpload',
   props: {
     textContent: {
       type: String,
@@ -124,3 +124,5 @@ export const Upload = connect(
   UploadWrapper,
   mapProps({ readOnly: 'readonly', value: 'fileList' })
 )
+
+export default Upload

@@ -4,7 +4,7 @@
       name="input"
       title="单选"
       :decorator="[FormItem]"
-      :component="[RadioGroup]"
+      :component="[Radio.Group]"
       :dataSource="[
         {
           label: '选项1',
@@ -23,7 +23,7 @@
 <script>
 import { createForm } from '@formily/core'
 import { FormProvider, Field } from '@formily/vue'
-import { FormItem, RadioGroup, Submit } from '@formily/element'
+import { FormItem, Radio, Submit } from '@formily/element'
 
 const form = createForm()
 
@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       FormItem,
-      RadioGroup,
+      Radio,
       form,
     }
   },

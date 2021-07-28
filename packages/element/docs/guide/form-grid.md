@@ -35,13 +35,13 @@
 - maxWidth 优先级高于 maxColumn
 - minWidth/maxWidth/minColumns/maxColumns 的数组格式代表与断点数组映射
 
-### FormGridColumn
+### FormGrid.GridColumn
 
 | 属性名   | 类型   | 描述         | 默认值 |
 | -------- | ------ | ------------ | ------ |
 | gridSpan | number | 元素所跨列数 | 1      |
 
-### useGridSpan
+### FormGrid.useGridSpan
 
 #### 描述
 

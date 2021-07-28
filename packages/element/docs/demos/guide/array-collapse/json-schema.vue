@@ -14,12 +14,6 @@ import {
   Submit,
   Input,
   ArrayCollapse,
-  ArrayCollapseItem,
-  ArrayCollapseRemove,
-  ArrayCollapseMoveDown,
-  ArrayCollapseMoveUp,
-  ArrayCollapseAddition,
-  ArrayCollapseIndex,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
@@ -28,12 +22,6 @@ const SchemaField = createSchemaField({
     FormItem,
     Input,
     ArrayCollapse,
-    ArrayCollapseItem,
-    ArrayCollapseRemove,
-    ArrayCollapseMoveDown,
-    ArrayCollapseMoveUp,
-    ArrayCollapseAddition,
-    ArrayCollapseIndex,
   },
 })
 
@@ -58,14 +46,14 @@ export default {
           'x-decorator': 'FormItem',
           items: {
             type: 'object',
-            'x-component': 'ArrayCollapseItem',
+            'x-component': 'ArrayCollapse.Item',
             'x-component-props': {
               title: '字符串数组',
             },
             properties: {
               index: {
                 type: 'void',
-                'x-component': 'ArrayCollapseIndex',
+                'x-component': 'ArrayCollapse.Index',
               },
               input: {
                 type: 'string',
@@ -76,15 +64,15 @@ export default {
               },
               remove: {
                 type: 'void',
-                'x-component': 'ArrayCollapseRemove',
+                'x-component': 'ArrayCollapse.Remove',
               },
               moveUp: {
                 type: 'void',
-                'x-component': 'ArrayCollapseMoveUp',
+                'x-component': 'ArrayCollapse.MoveUp',
               },
               moveDown: {
                 type: 'void',
-                'x-component': 'ArrayCollapseMoveDown',
+                'x-component': 'ArrayCollapse.MoveDown',
               },
             },
           },
@@ -92,7 +80,7 @@ export default {
             addition: {
               type: 'void',
               title: '添加条目',
-              'x-component': 'ArrayCollapseAddition',
+              'x-component': 'ArrayCollapse.Addition',
             },
           },
         },
@@ -103,14 +91,14 @@ export default {
           'x-decorator': 'FormItem',
           items: {
             type: 'object',
-            'x-component': 'ArrayCollapseItem',
+            'x-component': 'ArrayCollapse.Item',
             'x-component-props': {
               title: '对象数组',
             },
             properties: {
               index: {
                 type: 'void',
-                'x-component': 'ArrayCollapseIndex',
+                'x-component': 'ArrayCollapse.Index',
               },
               input: {
                 type: 'string',
@@ -121,15 +109,15 @@ export default {
               },
               remove: {
                 type: 'void',
-                'x-component': 'ArrayCollapseRemove',
+                'x-component': 'ArrayCollapse.Remove',
               },
               moveUp: {
                 type: 'void',
-                'x-component': 'ArrayCollapseMoveUp',
+                'x-component': 'ArrayCollapse.MoveUp',
               },
               moveDown: {
                 type: 'void',
-                'x-component': 'ArrayCollapseMoveDown',
+                'x-component': 'ArrayCollapse.MoveDown',
               },
             },
           },
@@ -137,7 +125,7 @@ export default {
             addition: {
               type: 'void',
               title: '添加条目',
-              'x-component': 'ArrayCollapseAddition',
+              'x-component': 'ArrayCollapse.Addition',
             },
           },
         },
@@ -148,14 +136,14 @@ export default {
           'x-decorator': 'FormItem',
           items: {
             type: 'object',
-            'x-component': 'ArrayCollapseItem',
+            'x-component': 'ArrayCollapse.Item',
             'x-component-props': {
               title: '对象数组',
             },
             properties: {
               index: {
                 type: 'void',
-                'x-component': 'ArrayCollapseIndex',
+                'x-component': 'ArrayCollapse.Index',
               },
               input: {
                 type: 'string',
@@ -166,15 +154,15 @@ export default {
               },
               remove: {
                 type: 'void',
-                'x-component': 'ArrayCollapseRemove',
+                'x-component': 'ArrayCollapse.Remove',
               },
               moveUp: {
                 type: 'void',
-                'x-component': 'ArrayCollapseMoveUp',
+                'x-component': 'ArrayCollapse.MoveUp',
               },
               moveDown: {
                 type: 'void',
-                'x-component': 'ArrayCollapseMoveDown',
+                'x-component': 'ArrayCollapse.MoveDown',
               },
             },
           },
@@ -182,7 +170,7 @@ export default {
             addition: {
               type: 'void',
               title: '添加条目(unshift)',
-              'x-component': 'ArrayCollapseAddition',
+              'x-component': 'ArrayCollapse.Addition',
               'x-component-props': {
                 method: 'unshift',
               },

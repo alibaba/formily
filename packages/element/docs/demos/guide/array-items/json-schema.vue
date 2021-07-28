@@ -17,13 +17,6 @@ import {
   Select,
   DatePicker,
   ArrayItems,
-  ArrayItemsItem,
-  ArrayItemsSortHandle,
-  ArrayItemsRemove,
-  ArrayItemsMoveDown,
-  ArrayItemsMoveUp,
-  ArrayItemsAddition,
-  ArrayItemsIndex,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
@@ -35,13 +28,6 @@ const SchemaField = createSchemaField({
     Select,
     DatePicker,
     ArrayItems,
-    ArrayItemsItem,
-    ArrayItemsSortHandle,
-    ArrayItemsRemove,
-    ArrayItemsMoveDown,
-    ArrayItemsMoveUp,
-    ArrayItemsAddition,
-    ArrayItemsIndex,
   },
 })
 
@@ -71,7 +57,7 @@ export default {
               sort: {
                 type: 'void',
                 'x-decorator': 'FormItem',
-                'x-component': 'ArrayItemsSortHandle',
+                'x-component': 'ArrayItems.SortHandle',
               },
               input: {
                 type: 'string',
@@ -81,7 +67,7 @@ export default {
               remove: {
                 type: 'void',
                 'x-decorator': 'FormItem',
-                'x-component': 'ArrayItemsRemove',
+                'x-component': 'ArrayItems.Remove',
               },
             },
           },
@@ -89,7 +75,7 @@ export default {
             add: {
               type: 'void',
               title: '添加条目',
-              'x-component': 'ArrayItemsAddition',
+              'x-component': 'ArrayItems.Addition',
             },
           },
         },
@@ -108,7 +94,7 @@ export default {
                   sort: {
                     type: 'void',
                     'x-decorator': 'FormItem',
-                    'x-component': 'ArrayItemsSortHandle',
+                    'x-component': 'ArrayItems.SortHandle',
                   },
                   date: {
                     type: 'string',
@@ -146,7 +132,7 @@ export default {
                   remove: {
                     type: 'void',
                     'x-decorator': 'FormItem',
-                    'x-component': 'ArrayItemsRemove',
+                    'x-component': 'ArrayItems.Remove',
                   },
                 },
               },
@@ -156,7 +142,7 @@ export default {
             add: {
               type: 'void',
               title: '添加条目',
-              'x-component': 'ArrayItemsAddition',
+              'x-component': 'ArrayItems.Addition',
             },
           },
         },
@@ -168,7 +154,7 @@ export default {
           title: '对象数组',
           items: {
             type: 'object',
-            'x-decorator': 'ArrayItemsItem',
+            'x-decorator': 'ArrayItems.Item',
             properties: {
               space: {
                 type: 'void',
@@ -177,7 +163,7 @@ export default {
                   sort: {
                     type: 'void',
                     'x-decorator': 'FormItem',
-                    'x-component': 'ArrayItemsSortHandle',
+                    'x-component': 'ArrayItems.SortHandle',
                   },
                   date: {
                     type: 'string',
@@ -200,7 +186,7 @@ export default {
                   remove: {
                     type: 'void',
                     'x-decorator': 'FormItem',
-                    'x-component': 'ArrayItemsRemove',
+                    'x-component': 'ArrayItems.Remove',
                   },
                 },
               },
@@ -210,7 +196,7 @@ export default {
             add: {
               type: 'void',
               title: '添加条目',
-              'x-component': 'ArrayItemsAddition',
+              'x-component': 'ArrayItems.Addition',
             },
           },
         },

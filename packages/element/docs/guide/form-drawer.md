@@ -14,63 +14,49 @@
 
 <dumi-previewer demoPath="guide/form-drawer/template" />
 
-## 抽屉拦截案例
-
-<dumi-previewer demoPath="guide/form-drawer/json-schema-before-close" />
-
-## 自定义 footer
-
-<dumi-previewer demoPath="guide/form-drawer/custom" />
-
 ## API
 
 ### FormDrawer
 
 ```ts pure
-import { IFormProps } from '@formily/core'
+import { IFormProps, Form } from '@formily/core'
 
-type FormDrawerContentProps = { resolve: () => any; reject: () => any }
+type FormDrawerContentProps = { form: Form }
 
-type FormDrawerHandler = {
-  //打开弹窗，接收表单属性，可以传入initialValues/values/effects etc.
-  open(props: IFormProps): Promise<any> //返回表单数据
-  //关闭弹窗
-  close(): void
-}
+type FormDrawerContent = Component | ((props: FormDrawerContentProps) => VNode)
 
-interface IFormDrawer {
-  (
-    title: string | Component | Vnode | () => VNode,
-    renderer: ((props: FormDrawerContentProps) => VNode) | Component
-  ): FormDrawerHandler
-  (
-    title: IFormDrawerProps, //如果是对象，则作为IFormDrawerProps传入
-    renderer: ((props: FormDrawerContentProps) => VNode) | Component
-  ): FormDrawerHandler
-}
-```
+type DrawerTitle = string | number | Component | VNode | (() => VNode)
 
-### IFormDrawerProps
-
-```ts pure
-type IFormDrawerProps = DrawerProps & {
-  title?: string | Component | VNode
-  footer?: null | Component | VNode
-  cancelText?: string | Component | VNode
+type IFormDrawerProps = Omit<DrawerProps, 'title'> & {
+  title?: DrawerTitle
+  footer?: null | Component | VNode | (() => VNode)
+  cancelText?: string | Component | VNode | (() => VNode)
   cancelButtonProps?: ButtonProps
-  okText?: string | Component | VNode
+  okText?: string | Component | VNode | (() => VNode)
   okButtonProps?: ButtonProps
   onOpen?: () => void
   onOpend?: () => void
   onClose?: () => void
   onClosed?: () => void
-  onCancel?: () => void // 取消按钮点击事件
-  onOK?: () => void // 确定按钮点击事件
+  onCancel?: () => void
+  onOK?: () => void
+  loadingText?: string
+}
+
+interface FormDrawer {
+  (title: IFormDrawerProps, id: string, content: FormDrawerContent): IFormDrawer
+  (title: IFormDrawerProps, id: FormDrawerContent): IFormDrawer
+  (title: DrawerTitle, id: string, content: FormDrawerContent): IFormDrawer
+  (title: DrawerTitle, id: FormDrawerContent): IFormDrawer
 }
 ```
 
 `DrawerProps`类型定义参考 [Element-UI Drawer API](https://element.eleme.io/#/zh-CN/component/drawer#attributes)
 
-### FormDrawerFooter
+### FormDrawer.Footer
 
 无属性，只接收子节点
+
+### FormDrawer.Portal
+
+接收可选的 id 属性，默认值为 form-dialog，如果一个应用存在多个 prefixCls，不同区域的弹窗内部 prefixCls 不一样，那推荐指定 id 为区域级 id

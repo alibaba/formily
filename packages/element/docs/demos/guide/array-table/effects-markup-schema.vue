@@ -15,13 +15,13 @@
         <SchemaObjectField>
           <SchemaVoidField
             name="column1"
-            x-component="ArrayTableColumn"
+            x-component="ArrayTable.Column"
             :x-component-props="{ width: 80, title: 'Index' }"
-            ><SchemaVoidField x-component="ArrayTableIndex" />
+            ><SchemaVoidField x-component="ArrayTable.Index" />
           </SchemaVoidField>
           <SchemaVoidField
             name="column2"
-            x-component="ArrayTableColumn"
+            x-component="ArrayTable.Column"
             :x-component-props="{
               title: '显隐->A2',
               width: 100,
@@ -34,7 +34,7 @@
             />
           </SchemaVoidField>
           <SchemaVoidField
-            x-component="ArrayTableColumn"
+            x-component="ArrayTable.Column"
             name="column3"
             :x-component-props="{ title: 'A2', width: 200 }"
           >
@@ -46,7 +46,7 @@
           </SchemaVoidField>
           <SchemaVoidField
             name="column4"
-            x-component="ArrayTableColumn"
+            x-component="ArrayTable.Column"
             :x-component-props="{ title: 'A3' }"
           >
             <SchemaStringField
@@ -57,7 +57,7 @@
           </SchemaVoidField>
           <SchemaVoidField
             name="column5"
-            x-component="ArrayTableColumn"
+            x-component="ArrayTable.Column"
             :x-component-props="{
               title: 'Operations',
               prop: 'operations',
@@ -66,13 +66,13 @@
             }"
           >
             <SchemaVoidField x-component="FormItem">
-              <SchemaVoidField x-component="ArrayTableRemove" />
-              <SchemaVoidField x-component="ArrayTableMoveUp" />
-              <SchemaVoidField x-component="ArrayTableMoveDown" />
+              <SchemaVoidField x-component="ArrayTable.Remove" />
+              <SchemaVoidField x-component="ArrayTable.MoveUp" />
+              <SchemaVoidField x-component="ArrayTable.MoveDown" />
             </SchemaVoidField>
           </SchemaVoidField>
         </SchemaObjectField>
-        <SchemaVoidField x-component="ArrayTableAddition" title="添加条目" />
+        <SchemaVoidField x-component="ArrayTable.Addition" title="添加条目" />
       </SchemaArrayField>
     </SchemaField>
     <Submit @submit="log">提交</Submit>
@@ -86,13 +86,6 @@ import {
   Submit,
   FormItem,
   ArrayTable,
-  ArrayTableColumn,
-  ArrayTableAddition,
-  ArrayTableMoveDown,
-  ArrayTableMoveUp,
-  ArrayTableRemove,
-  ArrayTableIndex,
-  ArrayTableSortHandle,
   Input,
   Editable,
   Switch,
@@ -102,13 +95,6 @@ const fields = createSchemaField({
   components: {
     FormItem,
     ArrayTable,
-    ArrayTableColumn,
-    ArrayTableAddition,
-    ArrayTableMoveDown,
-    ArrayTableMoveUp,
-    ArrayTableRemove,
-    ArrayTableIndex,
-    ArrayTableSortHandle,
     Input,
     Editable,
     Switch,

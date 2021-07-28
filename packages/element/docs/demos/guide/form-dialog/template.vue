@@ -3,13 +3,7 @@
 </template>
 
 <script>
-import {
-  FormDialog,
-  FormDialogFooter,
-  FormLayout,
-  FormItem,
-  Input,
-} from '@formily/element'
+import { FormDialog, FormLayout, FormItem, Input } from '@formily/element'
 import { Button } from 'element-ui'
 import { Field } from '@formily/vue'
 
@@ -50,22 +44,35 @@ export default {
             decorator={[FormItem]}
             component={[Input]}
           />
-          <FormDialogFooter>
+          <FormDialog.Footer>
             <span style={{ marginLeft: '4px' }}>扩展文案</span>
-          </FormDialogFooter>
+          </FormDialog.Footer>
         </FormLayout>
       ))
-        .open({
-          initialValues: {
-            aaa: '123',
-          },
+        .forOpen((payload, next) => {
+          setTimeout(() => {
+            next({
+              initialValues: {
+                aaa: '123',
+              },
+            })
+          }, 1000)
         })
-        .then((values) => {
-          console.log('values', values)
+        .forConfirm((payload, next) => {
+          setTimeout(() => {
+            console.log(payload)
+            next(payload)
+          }, 1000)
         })
-        .catch((e) => {
-          console.log(e)
+        .forCancel((payload, next) => {
+          setTimeout(() => {
+            console.log(payload)
+            next(payload)
+          }, 1000)
         })
+        .open()
+        .then(console.log)
+        .catch(console.error)
     },
   },
 }

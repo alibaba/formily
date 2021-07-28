@@ -10,7 +10,7 @@
         <SchemaVoidField x-component="Space">
           <SchemaVoidField
             x-decorator="FormItem"
-            x-component="ArrayItemsSortHandle"
+            x-component="ArrayItems.SortHandle"
           />
           <SchemaStringField
             x-decorator="FormItem"
@@ -25,10 +25,10 @@
           />
           <SchemaVoidField
             x-decorator="FormItem"
-            x-component="ArrayItemsRemove"
+            x-component="ArrayItems.Remove"
           />
         </SchemaVoidField>
-        <SchemaVoidField x-component="ArrayItemsAddition" title="添加条目" />
+        <SchemaVoidField x-component="ArrayItems.Addition" title="添加条目" />
       </SchemaArrayField>
       <SchemaArrayField
         name="array"
@@ -40,7 +40,7 @@
           <SchemaVoidField x-component="Space">
             <SchemaVoidField
               x-decorator="FormItem"
-              x-component="ArrayItemsSortHandle"
+              x-component="ArrayItems.SortHandle"
             />
             <SchemaStringField
               x-decorator="FormItem"
@@ -80,11 +80,11 @@
             />
             <SchemaVoidField
               x-decorator="FormItem"
-              x-component="ArrayItemsRemove"
+              x-component="ArrayItems.Remove"
             />
           </SchemaVoidField>
         </SchemaObjectField>
-        <SchemaVoidField x-component="ArrayItemsAddition" title="添加条目" />
+        <SchemaVoidField x-component="ArrayItems.Addition" title="添加条目" />
       </SchemaArrayField>
       <SchemaArrayField
         name="array2"
@@ -93,11 +93,11 @@
         x-component="ArrayItems"
         :x-component-props="{ style: { width: '600px' } }"
       >
-        <SchemaObjectField x-decorator="ArrayItemsItem">
+        <SchemaObjectField x-decorator="ArrayItems.Item">
           <SchemaVoidField x-component="Space">
             <SchemaVoidField
               x-decorator="FormItem"
-              x-component="ArrayItemsSortHandle"
+              x-component="ArrayItems.SortHandle"
             />
             <SchemaStringField
               x-decorator="FormItem"
@@ -121,11 +121,11 @@
             />
             <SchemaVoidField
               x-decorator="FormItem"
-              x-component="ArrayItemsRemove"
+              x-component="ArrayItems.Remove"
             />
           </SchemaVoidField>
         </SchemaObjectField>
-        <SchemaVoidField x-component="ArrayItemsAddition" title="添加条目" />
+        <SchemaVoidField x-component="ArrayItems.Addition" title="添加条目" />
       </SchemaArrayField>
     </SchemaField>
     <FormButtonGroup>
@@ -146,13 +146,6 @@ import {
   Space,
   DatePicker,
   ArrayItems,
-  ArrayItemsItem,
-  ArrayItemsSortHandle,
-  ArrayItemsRemove,
-  ArrayItemsMoveDown,
-  ArrayItemsMoveUp,
-  ArrayItemsAddition,
-  ArrayItemsIndex,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
@@ -164,13 +157,6 @@ const SchemaField = createSchemaField({
     Select,
     DatePicker,
     ArrayItems,
-    ArrayItemsItem,
-    ArrayItemsSortHandle,
-    ArrayItemsRemove,
-    ArrayItemsMoveDown,
-    ArrayItemsMoveUp,
-    ArrayItemsAddition,
-    ArrayItemsIndex,
   },
 })
 

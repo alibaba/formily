@@ -5,7 +5,7 @@
         name="input"
         title="单选"
         x-decorator="FormItem"
-        x-component="RadioGroup"
+        x-component="Radio.Group"
         :enum="[
           {
             label: '选项1',
@@ -25,13 +25,13 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField, FormProvider } from '@formily/vue'
-import { FormItem, RadioGroup, Submit } from '@formily/element'
+import { FormItem, Radio, Submit } from '@formily/element'
 
 const form = createForm()
 const fields = createSchemaField({
   components: {
     FormItem,
-    RadioGroup,
+    Radio,
   },
 })
 

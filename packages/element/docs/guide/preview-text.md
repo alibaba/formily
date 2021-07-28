@@ -12,23 +12,23 @@
 
 ## API
 
-### PreviewInputText
+### PreviewText.Input
 
 参考 [https://element.eleme.io/#/zh-CN/component/input](https://element.eleme.io/#/zh-CN/component/input)
 
-### PreviewSelectText
+### PreviewText.Select
 
 参考 [https://element.eleme.io/#/zh-CN/component/select](https://element.eleme.io/#/zh-CN/component/select)
 
-### PreviewCascaderText
+### PreviewText.Cascader
 
 参考 [https://element.eleme.io/#/zh-CN/component/cascader](https://element.eleme.io/#/zh-CN/component/cascader)
 
-### PreviewDatePickerText
+### PreviewText.DatePicker
 
 参考 [https://element.eleme.io/#/zh-CN/component/date-picker](https://element.eleme.io/#/zh-CN/component/date-picker)
 
-### PreviewTimePickerText
+### PreviewText.TimePicker
 
 参考 [https://element.eleme.io/#/zh-CN/component/time-picker](https://element.eleme.io/#/zh-CN/component/time-picker)
 
@@ -38,13 +38,13 @@
 | ------ | ------ | ---------- | ------ |
 | value  | stirng | 缺省占位符 | N/A    |
 
-### PreviewTextPlaceholder
+### PreviewText.Placeholder
 
 | 属性名 | 类型   | 描述       | 默认值 |
 | ------ | ------ | ---------- | ------ |
 | value  | stirng | 缺省占位符 | N/A    |
 
-### usePreviewTextPlaceholder
+### PreviewText.usePlaceholder
 
 ```ts pure
 interface usePreviewTextPlaceholder {

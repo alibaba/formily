@@ -11,7 +11,7 @@
         }"
       >
         <SchemaObjectField>
-          <SchemaVoidField x-component="ArrayCardsIndex" />
+          <SchemaVoidField x-component="ArrayCards.Index" />
           <SchemaStringField
             name="aa"
             x-decorator="FormItem"
@@ -42,11 +42,11 @@
             required
             x-component="Input"
           />
-          <SchemaVoidField x-component="ArrayCardsRemove" />
-          <SchemaVoidField x-component="ArrayCardsMoveUp" />
-          <SchemaVoidField x-component="ArrayCardsMoveDown" />
+          <SchemaVoidField x-component="ArrayCards.Remove" />
+          <SchemaVoidField x-component="ArrayCards.MoveUp" />
+          <SchemaVoidField x-component="ArrayCards.MoveDown" />
         </SchemaObjectField>
-        <SchemaVoidField x-component="ArrayCardsAddition" title="添加条目" />
+        <SchemaVoidField x-component="ArrayCards.Addition" title="添加条目" />
       </SchemaArrayField>
     </SchemaField>
     <Submit @submit="log">提交</Submit>
@@ -62,11 +62,6 @@ import {
   Submit,
   Input,
   ArrayCards,
-  ArrayCardsRemove,
-  ArrayCardsMoveDown,
-  ArrayCardsMoveUp,
-  ArrayCardsAddition,
-  ArrayCardsIndex,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
@@ -75,11 +70,6 @@ const SchemaField = createSchemaField({
     FormItem,
     Input,
     ArrayCards,
-    ArrayCardsRemove,
-    ArrayCardsMoveDown,
-    ArrayCardsMoveUp,
-    ArrayCardsAddition,
-    ArrayCardsIndex,
   },
 })
 

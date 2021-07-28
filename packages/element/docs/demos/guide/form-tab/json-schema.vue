@@ -33,11 +33,9 @@ import { FormProvider, createSchemaField } from '@formily/vue'
 import {
   FormItem,
   FormTab,
-  FormTabPane,
   FormButtonGroup,
   Submit,
   Input,
-  createFormTab,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
@@ -45,7 +43,6 @@ const { SchemaField } = createSchemaField({
   components: {
     FormItem,
     FormTab,
-    FormTabPane,
     Input,
   },
 })
@@ -62,7 +59,7 @@ const schema = {
       properties: {
         tab1: {
           type: 'void',
-          'x-component': 'FormTabPane',
+          'x-component': 'FormTab.TabPane',
           'x-component-props': {
             label: 'A1',
           },
@@ -78,7 +75,7 @@ const schema = {
         },
         tab2: {
           type: 'void',
-          'x-component': 'FormTabPane',
+          'x-component': 'FormTab.TabPane',
           'x-component-props': {
             label: 'A2',
           },
@@ -94,7 +91,7 @@ const schema = {
         },
         tab3: {
           type: 'void',
-          'x-component': 'FormTabPane',
+          'x-component': 'FormTab.TabPane',
           'x-component-props': {
             label: 'A3',
           },
@@ -124,7 +121,7 @@ export default {
 
   data() {
     const form = createForm()
-    const formTab = createFormTab()
+    const formTab = FormTab.createFormTab()
 
     return {
       schema,

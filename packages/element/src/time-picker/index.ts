@@ -1,6 +1,6 @@
 import { getComponentByTag } from '../__builtins__/shared'
 import { connect, mapProps, mapReadPretty } from '@formily/vue'
-import { PreviewTimePickerText } from '../preview-text'
+import { PreviewText } from '../preview-text'
 import type { TimePicker as ElTimePickerProps } from 'element-ui'
 import { TimePicker as ElTimePicker } from 'element-ui'
 
@@ -13,5 +13,7 @@ const TransformElTimePicker = getComponentByTag<TimePickerProps>(ElTimePicker, {
 export const TimePicker = connect(
   TransformElTimePicker,
   mapProps({ readOnly: 'readonly' }),
-  mapReadPretty(PreviewTimePickerText)
+  mapReadPretty(PreviewText.TimePicker)
 )
+
+export default TimePicker
