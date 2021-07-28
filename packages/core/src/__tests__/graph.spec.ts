@@ -40,3 +40,25 @@ test('getGraph/setGraph', () => {
   })
   expect(form.query('object').get('value')).toEqual(123)
 })
+
+test('clearFormGraph', () => {
+  const form = attach(createForm())
+  attach(
+    form.createField({
+      name: 'normal',
+    })
+  )
+  attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'object',
+    })
+  )
+  form.clearFormGraph('normal')
+  expect(form.fields['normal']).toBeUndefined()
+  expect(form.fields['array']).not.toBeUndefined()
+})

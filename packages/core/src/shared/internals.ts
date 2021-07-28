@@ -378,8 +378,7 @@ export const cleanupArrayChildren = (field: ArrayField, start: number) => {
   batch(() => {
     each(fields, (field, identifier) => {
       if (isArrayChildren(identifier) && isNeedCleanup(identifier)) {
-        field.dispose()
-        delete fields[identifier]
+        field.destroy()
       }
     })
   })
@@ -406,8 +405,7 @@ export const cleanupObjectChildren = (field: ObjectField, keys: string[]) => {
   batch(() => {
     each(fields, (field, identifier) => {
       if (isObjectChildren(identifier) && isNeedCleanup(identifier)) {
-        field.dispose()
-        delete fields[identifier]
+        field.destroy()
       }
     })
   })

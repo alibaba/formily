@@ -375,6 +375,11 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     this.form.removeEffects(this)
   }
 
+  destroy = () => {
+    this.dispose()
+    delete this.form.fields[this.address.toString()]
+  }
+
   match = (pattern: FormPathPattern) => {
     return FormPath.parse(pattern).matchAliasGroup(this.address, this.path)
   }
