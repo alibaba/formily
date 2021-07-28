@@ -92,6 +92,9 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
           type: 'string',
           'x-decorator': 'FormItem',
           'x-component': 'Input',
+          'x-component-props': {
+            defaultValue: node.id,
+          },
           'x-index': 0,
         },
         title: {
