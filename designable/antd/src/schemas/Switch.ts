@@ -10,9 +10,9 @@ export const Switch: ISchema = {
     },
     size: {
       type: 'string',
-      enum: ['small', 'default'],
+      enum: ['large', 'small', 'default', ''],
       'x-decorator': 'FormItem',
-      'x-component': 'Radio.Group',
+      'x-component': 'Select',
       'x-component-props': {
         defaultValue: 'default',
         optionType: 'button',
