@@ -611,10 +611,9 @@ export class Form<ValueType extends object = any> {
 
   onUnmount = () => {
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
-    this.query('*').forEach((field) => field.dispose())
+    this.query('*').forEach((field) => field.destroy())
     this.disposers.forEach((dispose) => dispose())
     this.unmounted = true
-    this.fields = {}
     this.indexes.clear()
     this.heart.clear()
     if (globalThisPolyfill[DEV_TOOLS_HOOK] && !this.props.designable) {
@@ -642,8 +641,10 @@ export class Form<ValueType extends object = any> {
     this.graph.setGraph(graph)
   }
 
-  clearFormGraph = () => {
-    this.fields = {}
+  clearFormGraph = (pattern: FormPathPattern = '*') => {
+    this.query(pattern).forEach((field) => {
+      field.destroy()
+    })
   }
 
   validate = async (pattern: FormPathPattern = '*') => {

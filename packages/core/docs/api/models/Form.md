@@ -646,7 +646,7 @@ Clear the field set
 
 ```ts
 interface clearFormGraph {
-  (): void
+  (pattern: FormPathPattern): void
 }
 ```
 

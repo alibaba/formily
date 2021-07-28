@@ -568,6 +568,20 @@ interface dispose {
 }
 ```
 
+### destroy
+
+#### Description
+
+Release observer, and remove current field model
+
+#### Signature
+
+```ts
+interface destroy {
+  (): void
+}
+```
+
 ### match
 
 #### Description

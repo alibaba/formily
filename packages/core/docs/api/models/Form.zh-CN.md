@@ -646,7 +646,7 @@ interface setFormGraph {
 
 ```ts
 interface clearFormGraph {
-  (): void
+  (pattern: FormPathPattern): void
 }
 ```
 

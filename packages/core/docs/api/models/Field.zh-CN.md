@@ -568,6 +568,20 @@ interface dispose {
 }
 ```
 
+### destroy
+
+#### 描述
+
+释放 observer，并删除字段模型
+
+#### 签名
+
+```ts
+interface destroy {
+  (): void
+}
+```
+
 ### match
 
 #### 描述
