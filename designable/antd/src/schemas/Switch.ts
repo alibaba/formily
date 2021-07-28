@@ -15,7 +15,6 @@ export const Switch: ISchema = {
       'x-component': 'Select',
       'x-component-props': {
         defaultValue: 'default',
-        optionType: 'button',
       },
     },
   },
