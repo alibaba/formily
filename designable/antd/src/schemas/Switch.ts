@@ -15,7 +15,6 @@ export const Switch: ISchema = {
       'x-component': 'Radio.Group',
       'x-component-props': {
         defaultValue: 'default',
-        optionType: 'button',
       },
     },
   },
