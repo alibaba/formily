@@ -12,7 +12,7 @@ export type FormButtonGroupProps = Omit<SpaceProps, 'align' | 'size'> & {
 }
 
 export const FormButtonGroup = defineComponent<FormButtonGroupProps>({
-  name: 'FormButtonGroup',
+  name: 'FFormButtonGroup',
   props: {
     align: {
       type: String,
@@ -75,3 +75,5 @@ export const FormButtonGroup = defineComponent<FormButtonGroupProps>({
     }
   },
 })
+
+export default FormButtonGroup

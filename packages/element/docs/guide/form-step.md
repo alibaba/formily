@@ -22,11 +22,11 @@
 
 其余参考 [https://element.eleme.io/#/zh-CN/component/steps](https://element.eleme.io/#/zh-CN/component/steps)
 
-### FormStepPane
+### FormStep.StepPane
 
 参考 [https://element.eleme.io/#/zh-CN/component/steps](https://element.eleme.io/#/zh-CN/component/steps)
 
-### createFormStep
+### FormStep.createFormStep
 
 ```ts pure
 interface createFormStep {

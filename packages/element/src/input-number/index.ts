@@ -3,7 +3,7 @@ import { connect, mapProps, mapReadPretty } from '@formily/vue'
 
 import type { InputNumber as _ElInputNumberProps } from 'element-ui'
 import { InputNumber as ElInputNumber } from 'element-ui'
-import { PreviewInputText } from '../preview-text'
+import { PreviewText } from '../preview-text'
 
 export type InputNumberProps = _ElInputNumberProps
 
@@ -25,5 +25,7 @@ export const InputNumber = connect(
       controlsPosition,
     }
   }),
-  mapReadPretty(PreviewInputText)
+  mapReadPretty(PreviewText.Input)
 )
+
+export default InputNumber

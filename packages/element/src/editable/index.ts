@@ -8,6 +8,7 @@ import { stylePrefix } from '../__builtins__/configs'
 
 import type { Popover as PopoverProps } from 'element-ui'
 import { FormBaseItem, FormItemProps } from '../form-item'
+import { composeExport } from '../__builtins__/shared'
 
 export type EditableProps = FormItemProps
 export type EditablePopoverProps = PopoverProps
@@ -36,9 +37,9 @@ const getFormItemProps = (fieldRef): FormItemProps => {
   }
 }
 
-export const Editable = observer(
+const EditableInner = observer(
   defineComponent<EditableProps>({
-    name: 'Editable',
+    name: 'FEditable',
     setup(props, { attrs, slots, refs }) {
       const fieldRef = useField<Field>()
 
@@ -190,9 +191,9 @@ export const Editable = observer(
   })
 )
 
-export const EditablePopover = observer(
+const EditablePopover = observer(
   defineComponent<EditablePopoverProps>({
-    name: 'EditablePopover',
+    name: 'FEditablePopover',
     setup(props, { attrs, slots }) {
       const fieldRef = useField<Field>()
 
@@ -266,3 +267,9 @@ export const EditablePopover = observer(
     },
   })
 )
+
+export const Editable = composeExport(EditableInner, {
+  Popover: EditablePopover,
+})
+
+export default Editable

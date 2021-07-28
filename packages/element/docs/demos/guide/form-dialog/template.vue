@@ -3,13 +3,7 @@
 </template>
 
 <script>
-import {
-  FormDialog,
-  FormDialogFooter,
-  FormLayout,
-  FormItem,
-  Input,
-} from '@formily/element'
+import { FormDialog, FormLayout, FormItem, Input } from '@formily/element'
 import { Button } from 'element-ui'
 import { Field } from '@formily/vue'
 
@@ -50,9 +44,9 @@ export default {
             decorator={[FormItem]}
             component={[Input]}
           />
-          <FormDialogFooter>
+          <FormDialog.Footer>
             <span style={{ marginLeft: '4px' }}>扩展文案</span>
-          </FormDialogFooter>
+          </FormDialog.Footer>
         </FormLayout>
       ))
         .forOpen((payload, next) => {

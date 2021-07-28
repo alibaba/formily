@@ -43,3 +43,5 @@ export const ElForm: FunctionalComponentOptions<ElFormProps> = {
     ])
   },
 }
+
+export default ElForm

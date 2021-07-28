@@ -1,6 +1,6 @@
 import { Input } from '../input'
 import { connect, mapProps, mapReadPretty } from '@formily/vue'
-import { PreviewInputText } from '../preview-text'
+import { PreviewText } from '../preview-text'
 import type { Input as ElInputProps } from 'element-ui'
 
 export type PasswordProps = ElInputProps
@@ -13,5 +13,7 @@ export const Password = connect(
       showPassword: true,
     }
   }),
-  mapReadPretty(PreviewInputText)
+  mapReadPretty(PreviewText.Input)
 )
+
+export default Password

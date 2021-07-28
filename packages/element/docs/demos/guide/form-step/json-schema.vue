@@ -37,11 +37,9 @@ import { FormProvider, createSchemaField, FormConsumer } from '@formily/vue'
 import {
   FormItem,
   FormStep,
-  FormStepPane,
   FormButtonGroup,
   Submit,
   Input,
-  createFormStep,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
@@ -49,7 +47,6 @@ const { SchemaField } = createSchemaField({
   components: {
     FormItem,
     FormStep,
-    FormStepPane,
     Input,
   },
 })
@@ -66,7 +63,7 @@ const schema = {
       properties: {
         step1: {
           type: 'void',
-          'x-component': 'FormStepPane',
+          'x-component': 'FormStep.StepPane',
           'x-component-props': {
             title: '第一步',
           },
@@ -82,7 +79,7 @@ const schema = {
         },
         step2: {
           type: 'void',
-          'x-component': 'FormStepPane',
+          'x-component': 'FormStep.StepPane',
           'x-component-props': {
             title: '第二步',
           },
@@ -98,7 +95,7 @@ const schema = {
         },
         step3: {
           type: 'void',
-          'x-component': 'FormStepPane',
+          'x-component': 'FormStep.StepPane',
           'x-component-props': {
             title: '第三步',
           },
@@ -129,7 +126,7 @@ export default {
 
   data() {
     const form = createForm()
-    const formStep = createFormStep()
+    const formStep = FormStep.createFormStep()
     return {
       schema,
       form,

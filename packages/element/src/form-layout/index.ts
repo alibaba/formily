@@ -47,7 +47,7 @@ export const useFormLayout = () => ({
 })
 
 export const FormLayout = defineComponent<FormLayoutProps>({
-  name: 'FormLayout',
+  name: 'FFormLayout',
   props: {
     className: {},
     colon: { default: true },
@@ -107,3 +107,5 @@ export const FormLayout = defineComponent<FormLayoutProps>({
     }
   },
 })
+
+export default FormLayout

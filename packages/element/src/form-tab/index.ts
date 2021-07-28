@@ -13,6 +13,7 @@ import { Tabs, TabPane, Badge } from 'element-ui'
 import { stylePrefix } from '../__builtins__/configs'
 
 import type { TabPane as TabPaneProps, Tabs as TabsProps } from 'element-ui'
+import { composeExport } from '../__builtins__/shared'
 
 export interface IFormTab {
   activeKey: string
@@ -27,7 +28,7 @@ export interface IFormTabPaneProps extends TabPaneProps {
   key: string | number
 }
 
-export const useTabs = () => {
+const useTabs = () => {
   const tabsField = useField().value
   const schema = useFieldSchema().value
   const tabs: { name: SchemaKey; props: any; schema: Schema }[] = reactive([])
@@ -48,7 +49,7 @@ export const useTabs = () => {
   return tabs
 }
 
-export const createFormTab = (defaultActiveKey?: string) => {
+const createFormTab = (defaultActiveKey?: string) => {
   const formTab = model({
     activeKey: defaultActiveKey,
     setActiveKey(key: string) {
@@ -58,9 +59,9 @@ export const createFormTab = (defaultActiveKey?: string) => {
   return formTab
 }
 
-export const FormTab = observer(
+const FormTabInner = observer(
   defineComponent<IFormTabProps>({
-    name: 'FormTab',
+    name: 'FFormTab',
     props: ['formTab'],
     setup(props, { attrs, listeners }) {
       const field = useField().value
@@ -150,9 +151,16 @@ export const FormTab = observer(
   })
 )
 
-export const FormTabPane = defineComponent<IFormTabPaneProps>({
-  name: 'FormTabPane',
+const FormTabPane = defineComponent<IFormTabPaneProps>({
+  name: 'FFormTabPane',
   setup(_props, { slots }) {
     return () => h(Fragment, {}, slots)
   },
 })
+
+export const FormTab = composeExport(FormTabInner, {
+  TabPane: FormTabPane,
+  createFormTab,
+})
+
+export default FormTab

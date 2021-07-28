@@ -62,7 +62,48 @@
 ```bash
 $ npm install --save element-ui
 $ npm install --save @formily/core @formily/vue @vue/composition-api @formily/element
+```
 
+## 按需打包
+
+`Element-UI` 按需引入参见 [https://element.eleme.io/#/zh-CN/component/quickstart#an-xu-yin-ru](https://element.eleme.io/#/zh-CN/component/quickstart#an-xu-yin-ru)
+
+`@formily/element`按需引入需借助 `babel-plugin-import`
+
+#### 安装 `babel-plugin-import`
+
+```shell
+npm install babel-plugin-import --save-dev
+```
+
+或者
+
+```shell
+yarn add babel-plugin-import --dev
+```
+
+修改 `.babelrc`
+
+```json
+{
+  "plugins": [
+    [
+      "component",
+      {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-chalk"
+      }
+    ],
+    [
+      "import",
+      {
+        "libraryName": "@formily/element",
+        "libraryDirectory": "esm",
+        "style": true
+      }
+    ]
+  ]
+}
 ```
 
 ## Q/A

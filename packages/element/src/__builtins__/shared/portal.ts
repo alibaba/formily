@@ -8,6 +8,7 @@ const PortalMap = new Map<string | symbol, any>()
 
 export const createPortalProvider = (id: string | symbol) => {
   const Portal = defineComponent({
+    name: 'ProtalProvider',
     props: {
       id: {
         type: [String, Symbol],

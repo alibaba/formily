@@ -1,2 +1,4 @@
 import './style.scss'
-import 'element-ui/packages/theme-chalk/src/button.scss'
+
+// 依赖
+import '../array-base/style'

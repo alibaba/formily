@@ -17,7 +17,6 @@ import {
   Input,
   DatePicker,
   Editable,
-  EditablePopover,
 } from '@formily/element'
 
 const { SchemaField } = createSchemaField({
@@ -26,7 +25,6 @@ const { SchemaField } = createSchemaField({
     Input,
     DatePicker,
     Editable,
-    EditablePopover,
   },
 })
 
@@ -48,7 +46,7 @@ const schema = {
     void: {
       type: 'void',
       title: '虚拟节点容器',
-      'x-component': 'EditablePopover',
+      'x-component': 'Editable.Popover',
       'x-reactions':
         "{{(field) => field.title = field.query('.void.date2').get('value') || field.title}}",
       properties: {
@@ -69,7 +67,7 @@ const schema = {
     iobject: {
       type: 'object',
       title: '对象节点容器',
-      'x-component': 'EditablePopover',
+      'x-component': 'Editable.Popover',
       'x-reactions':
         '{{(field) => field.title = field.value && field.value.date || field.title}}',
       properties: {

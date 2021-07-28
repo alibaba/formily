@@ -15,7 +15,7 @@
           { label: '选项2', value: 2 },
         ]"
         x-decorator="FormItem"
-        x-component="CheckboxGroup"
+        x-component="Checkbox.Group"
       />
     </SchemaField>
     <Submit @submit="onSubmit">提交</Submit>
@@ -25,20 +25,13 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import {
-  Form,
-  FormItem,
-  Checkbox,
-  CheckboxGroup,
-  Submit,
-} from '@formily/element'
+import { Form, FormItem, Checkbox, Submit } from '@formily/element'
 
 const form = createForm()
 const fields = createSchemaField({
   components: {
     FormItem,
     Checkbox,
-    CheckboxGroup,
   },
 })
 

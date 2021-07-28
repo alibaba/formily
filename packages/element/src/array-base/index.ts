@@ -16,11 +16,23 @@ import type { Button as ButtonProps } from 'element-ui'
 import { Button } from 'element-ui'
 import type { Schema } from '@formily/json-schema'
 import { HandleDirective } from 'vue-slicksort'
+import { composeExport } from '../__builtins__/shared'
 
 export interface IArrayBaseAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
   defaultValue?: any
+}
+
+export type ArrayBaseMixins = {
+  Addition?: typeof ArrayBaseAddition
+  Remove?: typeof ArrayBaseRemove
+  MoveUp?: typeof ArrayBaseMoveUp
+  MoveDown?: typeof ArrayBaseMoveDown
+  SortHandle?: typeof ArrayBaseSortHandle
+  Index?: typeof ArrayBaseIndex
+  useArray?: typeof useArray
+  useIndex?: typeof useIndex
 }
 
 export interface IArrayBaseProps {
@@ -44,16 +56,16 @@ const ArrayBaseSymbol: InjectionKey<IArrayBaseContext> =
   Symbol('ArrayBaseContext')
 const ItemSymbol: InjectionKey<Ref<number>> = Symbol('ItemContext')
 
-export const useArray = () => {
+const useArray = () => {
   return inject(ArrayBaseSymbol, null)
 }
 
-export const useIndex = (index?: number) => {
+const useIndex = (index?: number) => {
   const indexRef = inject(ItemSymbol)
   return indexRef ?? ref(index)
 }
 
-export const useKey = () => {
+const useKey = () => {
   const keyMap = new WeakMap()
 
   return (record: any) => {
@@ -80,7 +92,7 @@ const getDefaultValue = (defaultValue: any, schema: Schema): any => {
   return null
 }
 
-export const ArrayBase = defineComponent({
+const ArrayBaseInner = defineComponent({
   name: 'ArrayBase',
   props: ['disabled'],
   setup(props: IArrayBaseProps, { slots, listeners }) {
@@ -94,7 +106,7 @@ export const ArrayBase = defineComponent({
   },
 })
 
-export const ArrayBaseItem = defineComponent({
+const ArrayBaseItem = defineComponent({
   name: 'ArrayBaseItem',
   props: ['index'],
   setup(props: IArrayBaseItemProps, { slots }) {
@@ -106,7 +118,7 @@ export const ArrayBaseItem = defineComponent({
   },
 })
 
-export const ArrayBaseSortHandle = defineComponent({
+const ArrayBaseSortHandle = defineComponent({
   name: 'ArrayBaseSortHandle',
   props: ['index'],
   directives: {
@@ -138,7 +150,7 @@ export const ArrayBaseSortHandle = defineComponent({
   },
 })
 
-export const ArrayBaseIndex = defineComponent({
+const ArrayBaseIndex = defineComponent({
   name: 'ArrayBaseIndex',
   setup(props, { attrs }) {
     const index = useIndex()
@@ -156,7 +168,7 @@ export const ArrayBaseIndex = defineComponent({
   },
 })
 
-export const ArrayBaseAddition = defineComponent({
+const ArrayBaseAddition = defineComponent({
   name: 'ArrayBaseAddition',
   props: ['title', 'method', 'defaultValue'],
   setup(props: IArrayBaseAdditionProps, { listeners }) {
@@ -204,7 +216,7 @@ export const ArrayBaseAddition = defineComponent({
   },
 })
 
-export const ArrayBaseRemove = defineComponent<
+const ArrayBaseRemove = defineComponent<
   ButtonProps & { title?: string; index?: number }
 >({
   name: 'ArrayBaseRemove',
@@ -246,7 +258,7 @@ export const ArrayBaseRemove = defineComponent<
   },
 })
 
-export const ArrayBaseMoveDown = defineComponent<
+const ArrayBaseMoveDown = defineComponent<
   ButtonProps & { title?: string; index?: number }
 >({
   name: 'ArrayBaseMoveDown',
@@ -288,7 +300,7 @@ export const ArrayBaseMoveDown = defineComponent<
   },
 })
 
-export const ArrayBaseMoveUp = defineComponent<
+const ArrayBaseMoveUp = defineComponent<
   ButtonProps & { title?: string; index?: number }
 >({
   name: 'ArrayBaseMoveUp',
@@ -328,4 +340,17 @@ export const ArrayBaseMoveUp = defineComponent<
       )
     }
   },
+})
+
+export const ArrayBase = composeExport(ArrayBaseInner, {
+  Index: ArrayBaseIndex,
+  Item: ArrayBaseItem,
+  SortHandle: ArrayBaseSortHandle,
+  Addition: ArrayBaseAddition,
+  Remove: ArrayBaseRemove,
+  MoveDown: ArrayBaseMoveDown,
+  MoveUp: ArrayBaseMoveUp,
+  useArray: useArray,
+  useIndex: useIndex,
+  useKey: useKey,
 })

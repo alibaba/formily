@@ -3,11 +3,12 @@ import {
   createContext,
   resolveComponent,
   useContext,
+  composeExport,
 } from '../__builtins__/shared'
 import { Field } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 import { h, useField } from '@formily/vue'
-import { isArr, isFn, isValid } from '@formily/shared'
+import { isArr, isValid } from '@formily/shared'
 import { stylePrefix } from '../__builtins__/configs'
 import { InputProps } from '../input'
 import type { SelectProps } from '../select'
@@ -32,8 +33,8 @@ export const usePlaceholder = (value?: any) => {
   return placeholder
 }
 
-export const PreviewInputText = defineComponent<InputProps>({
-  name: 'PreviewInputText',
+const Input = defineComponent<InputProps>({
+  name: 'FPreviewTextInput',
   props: [],
   setup(_props, { attrs, slots }) {
     const placeholder = usePlaceholder(attrs.value)
@@ -58,9 +59,9 @@ export const PreviewInputText = defineComponent<InputProps>({
   },
 })
 
-export const PreviewSelectText = observer(
+const Select = observer(
   defineComponent<SelectProps>({
-    name: 'PreviewSelectText',
+    name: 'FPreviewTextSelect',
     props: [],
     setup(_props, { attrs }) {
       const fieldRef = useField<Field>()
@@ -129,9 +130,9 @@ export const PreviewSelectText = observer(
   })
 )
 
-export const PreviewCascaderText = observer(
+const Cascader = observer(
   defineComponent<CascaderProps>({
-    name: 'PreviewCascaderText',
+    name: 'FPreviewTextCascader',
     props: [],
     setup(_props, { attrs }) {
       const fieldRef = useField<Field>()
@@ -206,8 +207,8 @@ export const PreviewCascaderText = observer(
   })
 )
 
-export const PreviewDatePickerText = defineComponent<DatePickerProps>({
-  name: 'PreviewDatePickerText',
+const DatePicker = defineComponent<DatePickerProps>({
+  name: 'FPreviewTextDatePicker',
   props: [],
   setup(_props, { attrs }) {
     const props = attrs as unknown as DatePickerProps
@@ -240,8 +241,8 @@ export const PreviewDatePickerText = defineComponent<DatePickerProps>({
   },
 })
 
-export const PreviewTimePickerText = defineComponent<TimePickerProps>({
-  name: 'PreviewTimePickerText',
+const TimePicker = defineComponent<TimePickerProps>({
+  name: 'FPreviewTextTimePicker',
   props: [],
   setup(_props, { attrs }) {
     const props = attrs as unknown as TimePickerProps
@@ -274,8 +275,8 @@ export const PreviewTimePickerText = defineComponent<TimePickerProps>({
   },
 })
 
-export const PreviewText = defineComponent<any>({
-  name: 'PreviewText',
+const Text = defineComponent<any>({
+  name: 'FPreviewText',
   setup(_props, { attrs }) {
     const placeholder = usePlaceholder()
 
@@ -294,5 +295,14 @@ export const PreviewText = defineComponent<any>({
   },
 })
 
-export const PreviewTextPlaceholder = PlaceholderContext.Provider
-export const usePreviewTextPlaceholder = usePlaceholder
+export const PreviewText = composeExport(Text, {
+  Input,
+  Select,
+  Cascader,
+  DatePicker,
+  TimePicker,
+  Placeholder: PlaceholderContext.Provider,
+  usePlaceholder,
+})
+
+export default PreviewText

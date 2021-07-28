@@ -24,7 +24,7 @@
 
 参考 [https://element.formilyjs.org/guide/form-item.html#api](https://element.formilyjs.org/guide/form-item.html#api)
 
-### EditablePopover
+### Editable.Popover
 
 > 浮层编辑
 

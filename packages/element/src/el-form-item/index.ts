@@ -16,3 +16,5 @@ export const ElFormItem = connect(
       : undefined,
   }))
 )
+
+export default ElFormItem

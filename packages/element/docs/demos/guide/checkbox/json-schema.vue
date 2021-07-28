@@ -8,13 +8,7 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import {
-  Form,
-  FormItem,
-  Checkbox,
-  CheckboxGroup,
-  Submit,
-} from '@formily/element'
+import { Form, FormItem, Checkbox, Submit } from '@formily/element'
 
 const schema = {
   type: 'object',
@@ -29,7 +23,7 @@ const schema = {
       type: 'array',
       title: '复选',
       'x-decorator': 'FormItem',
-      'x-component': 'CheckboxGroup',
+      'x-component': 'Checkbox.Group',
       enum: [
         {
           label: '选项1',
@@ -49,7 +43,6 @@ const { SchemaField } = createSchemaField({
   components: {
     FormItem,
     Checkbox,
-    CheckboxGroup,
   },
 })
 

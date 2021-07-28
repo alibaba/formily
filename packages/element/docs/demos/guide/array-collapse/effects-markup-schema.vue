@@ -11,13 +11,13 @@
         }"
       >
         <SchemaObjectField
-          x-component="ArrayCollapseItem"
+          x-component="ArrayCollapse.Item"
           x-decorator="FormItem"
           :x-component-props="{
             title: '对象数组',
           }"
         >
-          <SchemaVoidField x-component="ArrayCollapseIndex" />
+          <SchemaVoidField x-component="ArrayCollapse.Index" />
           <SchemaStringField
             name="aa"
             x-decorator="FormItem"
@@ -48,11 +48,14 @@
             required
             x-component="Input"
           />
-          <SchemaVoidField x-component="ArrayCollapseRemove" />
-          <SchemaVoidField x-component="ArrayCollapseMoveUp" />
-          <SchemaVoidField x-component="ArrayCollapseMoveDown" />
+          <SchemaVoidField x-component="ArrayCollapse.Remove" />
+          <SchemaVoidField x-component="ArrayCollapse.MoveUp" />
+          <SchemaVoidField x-component="ArrayCollapse.MoveDown" />
         </SchemaObjectField>
-        <SchemaVoidField x-component="ArrayCollapseAddition" title="添加条目" />
+        <SchemaVoidField
+          x-component="ArrayCollapse.Addition"
+          title="添加条目"
+        />
       </SchemaArrayField>
     </SchemaField>
     <Submit @submit="log">提交</Submit>
@@ -68,12 +71,6 @@ import {
   Submit,
   Input,
   ArrayCollapse,
-  ArrayCollapseItem,
-  ArrayCollapseRemove,
-  ArrayCollapseMoveDown,
-  ArrayCollapseMoveUp,
-  ArrayCollapseAddition,
-  ArrayCollapseIndex,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
@@ -82,12 +79,6 @@ const SchemaField = createSchemaField({
     FormItem,
     Input,
     ArrayCollapse,
-    ArrayCollapseItem,
-    ArrayCollapseRemove,
-    ArrayCollapseMoveDown,
-    ArrayCollapseMoveUp,
-    ArrayCollapseAddition,
-    ArrayCollapseIndex,
   },
 })
 

@@ -25,14 +25,14 @@ import { stylePrefix } from '../__builtins__/configs'
 import { defineComponent } from '@vue/composition-api'
 import { Portal, PortalTarget } from 'portal-vue'
 
-type FormDrawerContentProps = { resolve: () => any; reject: () => any }
+type FormDrawerContentProps = { form: Form }
 
 type FormDrawerContent = Component | ((props: FormDrawerContentProps) => VNode)
 
-type ModalTitle = string | number | Component | VNode | (() => VNode)
+type DrawerTitle = string | number | Component | VNode | (() => VNode)
 
 type IFormDrawerProps = Omit<DrawerProps, 'title'> & {
-  title?: ModalTitle
+  title?: DrawerTitle
   footer?: null | Component | VNode | (() => VNode)
   cancelText?: string | Component | VNode | (() => VNode)
   cancelButtonProps?: ButtonProps
@@ -44,11 +44,12 @@ type IFormDrawerProps = Omit<DrawerProps, 'title'> & {
   onClosed?: () => void
   onCancel?: () => void
   onOK?: () => void
+  loadingText?: string
 }
 
 const PORTAL_TARGET_NAME = 'FormDrawerFooter'
 
-const isDrawerTitle = (props: any): props is ModalTitle => {
+const isDrawerTitle = (props: any): props is DrawerTitle => {
   return isNum(props) || isStr(props) || isBool(props) || isValidElement(props)
 }
 
@@ -77,24 +78,24 @@ export interface IFormDrawerComponentProps {
 }
 
 export function FormDrawer(
-  title: IFormDrawerProps | ModalTitle,
+  title: IFormDrawerProps | DrawerTitle,
   content: FormDrawerContent
 ): IFormDrawer
 
 export function FormDrawer(
-  title: IFormDrawerProps | ModalTitle,
+  title: IFormDrawerProps | DrawerTitle,
   id: string | symbol,
   content: FormDrawerContent
 ): IFormDrawer
 
 export function FormDrawer(
-  title: ModalTitle,
+  title: DrawerTitle,
   id: string,
   content: FormDrawerContent
 ): IFormDrawer
 
 export function FormDrawer(
-  title: IFormDrawerProps | ModalTitle,
+  title: IFormDrawerProps | DrawerTitle,
   id: string | symbol | FormDrawerContent,
   content?: FormDrawerContent
 ): IFormDrawer {
@@ -289,6 +290,7 @@ export function FormDrawer(
                                     ),
                                 }
                               ),
+                              FooterProtalTarget,
                             ]
                           },
                         }
@@ -343,7 +345,7 @@ export function FormDrawer(
 
       env.promise = new Promise(async (resolve, reject) => {
         try {
-          props = await loading(() =>
+          props = await loading(drawerProps.loadingText, () =>
             applyMiddleware(props, env.openMiddlewares)
           )
           env.form = env.form || createForm(props)
@@ -371,7 +373,7 @@ export function FormDrawer(
               .catch(reject)
           },
           async () => {
-            await loading(() =>
+            await loading(drawerProps.loadingText, () =>
               applyMiddleware(env.form, env.cancelMiddlewares)
             )
 
@@ -395,7 +397,8 @@ export function FormDrawer(
   return formDrawer
 }
 
-export const FormDrawerFooter = defineComponent({
+const FormDrawerFooter = defineComponent({
+  name: 'FFormDrawerFooter',
   setup(props, { slots }) {
     return () => {
       return h(
@@ -413,4 +416,7 @@ export const FormDrawerFooter = defineComponent({
   },
 })
 
-export const FormDrawerPortal = createPortalProvider('form-drawer')
+FormDrawer.Footer = FormDrawerFooter
+FormDrawer.Protal = createPortalProvider('form-drawer')
+
+export default FormDrawer

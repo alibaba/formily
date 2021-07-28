@@ -28,67 +28,50 @@
 ```ts pure
 import { IFormProps, Form } from '@formily/core'
 
-type FormDialogRenderer = Component | (({ form: Form }) => VNode)
+type FormDialogContentProps = { form: Form }
 
-interface IFormDialog {
-  forOpen(
-    middleware: (
-      props: IFormProps,
-      next: (props?: IFormProps) => Promise<any>
-    ) => any
-  ): any //中间件拦截器，可以拦截Dialog打开
-  forConfirm(
-    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
-  ): any //中间件拦截器，可以拦截Dialog确认
-  forCancel(
-    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
-  ): any //中间件拦截器，可以拦截Dialog取消
-  //打开弹窗，接收表单属性，可以传入initialValues/values/effects etc.
-  open(props: IFormProps): Promise<any> //返回表单数据
-  //关闭弹窗
-  close(): void
-}
+type FormDialogContent = Component | ((props: FormDialogContentProps) => VNode)
 
-interface FormDialog {
-  (title: ModalProps, id: string, renderer: FormDialogRenderer): IFormDialog
-  (title: ModalProps, id: FormDialogRenderer): IFormDialog
-  (title: ModalTitle, id: string, renderer: FormDialogRenderer): IFormDialog
-  (title: ModalTitle, id: FormDialogRenderer): IFormDialog
-}
+type DialogTitle = string | number | Component | VNode | (() => VNode)
 
-interface FormDialog {
-  (title: ModalProps, id: string, renderer: FormDialogRenderer): IFormDialog
-  (title: ModalProps, id: FormDialogRenderer): IFormDialog
-  (title: ModalTitle, id: string, renderer: FormDialogRenderer): IFormDialog
-  (title: ModalTitle, id: FormDialogRenderer): IFormDialog
-}
-```
-
-### IFormDialogProps
-
-```ts pure
-type IFormDialogProps = DialogProps & {
-  title?: string | Component | VNode
-  footer?: null | Component | VNode
-  cancelText?: string | Component | VNode
+type IFormDialogProps = Omit<DialogProps, 'title'> & {
+  title?: DialogTitle
+  footer?: null | Component | VNode | (() => VNode)
+  cancelText?: string | Component | VNode | (() => VNode)
   cancelButtonProps?: ButtonProps
-  okText?: string | Component | VNode
+  okText?: string | Component | VNode | (() => VNode)
   okButtonProps?: ButtonProps
   onOpen?: () => void
   onOpend?: () => void
   onClose?: () => void
   onClosed?: () => void
-  onCancel?: () => void // 取消按钮点击事件
-  onOK?: () => void // 确定按钮点击事件
+  onCancel?: () => void
+  onOK?: () => void
+  loadingText?: string
+}
+
+interface IFormDialog {
+  forOpen(middleware: IMiddleware<IFormProps>): IFormDialog
+  forConfirm(middleware: IMiddleware<IFormProps>): IFormDialog
+  forCancel(middleware: IMiddleware<IFormProps>): IFormDialog
+  open(props?: IFormProps): Promise<any>
+  close(): void
+}
+
+interface FormDialog {
+  (title: IFormDialogProps, id: string, content: FormDialogContent): IFormDialog
+  (title: IFormDialogProps, id: FormDialogContent): IFormDialog
+  (title: DialogTitle, id: string, content: FormDialogContent): IFormDialog
+  (title: DialogTitle, id: FormDialogContent): IFormDialog
 }
 ```
 
 `DialogProps`类型定义参考 [Element-UI Dialog API](https://element.eleme.io/#/zh-CN/component/dialog#attributes)
 
-### FormDialogFooter
+### FormDialog.Footer
 
 无属性，只接收子节点
 
-### FormDialogPortal
+### FormDialog.Portal
 
 接收可选的 id 属性，默认值为 form-dialog，如果一个应用存在多个 prefixCls，不同区域的弹窗内部 prefixCls 不一样，那推荐指定 id 为区域级 id

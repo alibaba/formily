@@ -15,7 +15,7 @@
       <SchemaStringField
         x-decorator="FormItem"
         title="选择项预览"
-        x-component="PreviewSelectText"
+        x-component="PreviewText.Select"
         :x-component-props="{
           multiple: true,
         }"
@@ -31,19 +31,19 @@
       <SchemaStringField
         x-decorator="FormItem"
         title="日期预览"
-        x-component="PreviewDatePickerText"
+        x-component="PreviewText.DatePicker"
         default="2020-11-23 22:15:20"
       />
       <SchemaStringField
         x-decorator="FormItem"
         title="日期范围预览"
-        x-component="PreviewDatePickerText"
+        x-component="PreviewText.DatePicker"
         :default="['2020-11-23 22:15:20', '2020-11-24 22:15:20']"
       />
       <SchemaStringField
         x-decorator="FormItem"
         title="Cascader预览"
-        x-component="PreviewCascaderText"
+        x-component="PreviewText.Cascader"
         :default="['hangzhou', 'yuhang']"
         :enum="[
           { label: '杭州', value: 'hangzhou' },
@@ -74,9 +74,7 @@ import {
   Form,
   FormItem,
   Input,
-  PreviewSelectText,
-  PreviewCascaderText,
-  PreviewDatePickerText,
+  PreviewText,
   FormButtonGroup,
 } from '@formily/element'
 import { Button } from 'element-ui'
@@ -85,9 +83,7 @@ const fields = createSchemaField({
   components: {
     FormItem,
     Input,
-    PreviewSelectText,
-    PreviewCascaderText,
-    PreviewDatePickerText,
+    PreviewText,
   },
 })
 

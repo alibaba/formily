@@ -16,7 +16,7 @@
       <SchemaVoidField
         name="void"
         title="虚拟节点容器"
-        x-component="EditablePopover"
+        x-component="Editable.Popover"
         :x-reactions="
           (field) => {
             field.title = field.query('.void.date2').get('value') || field.title
@@ -39,7 +39,7 @@
       <SchemaObjectField
         name="object"
         title="对象节点容器"
-        x-component="EditablePopover"
+        x-component="Editable.Popover"
         :x-reactions="
           (field) => {
             field.title = (field.value && field.value.date) || field.title
@@ -76,7 +76,6 @@ import {
   Input,
   DatePicker,
   Editable,
-  EditablePopover,
 } from '@formily/element'
 import { Button } from 'element-ui'
 
@@ -86,7 +85,6 @@ const SchemaField = createSchemaField({
     Input,
     DatePicker,
     Editable,
-    EditablePopover,
   },
 })
 

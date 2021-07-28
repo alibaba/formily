@@ -14,6 +14,7 @@ import { Steps, Step } from 'element-ui'
 import { stylePrefix } from '../__builtins__/configs'
 
 import type { Steps as StepsProps, Step as StepProps } from 'element-ui'
+import { composeExport } from '../__builtins__/shared'
 
 export interface IFormStep {
   connect: (steps: SchemaStep[], field: VoidField) => void
@@ -56,7 +57,7 @@ const parseSteps = (schema: Schema) => {
   return steps
 }
 
-export const createFormStep = (defaultCurrent = 0): IFormStep => {
+const createFormStep = (defaultCurrent = 0): IFormStep => {
   const env: FormStepEnv = observable({
     form: null,
     field: null,
@@ -122,9 +123,9 @@ export const createFormStep = (defaultCurrent = 0): IFormStep => {
   return formStep
 }
 
-export const FormStep = observer(
+const FormStepInner = observer(
   defineComponent<IFormStepProps>({
-    name: 'FormStep',
+    name: 'FFormStep',
     props: {
       formStep: {
         type: Object as PropType<IFormStep>,
@@ -187,9 +188,16 @@ export const FormStep = observer(
   })
 )
 
-export const FormStepPane = defineComponent<StepProps>({
-  name: 'FormStepPane',
+const StepPane = defineComponent<StepProps>({
+  name: 'FFormStepPane',
   setup(_props, { slots }) {
     return () => h(Fragment, {}, slots)
   },
 })
+
+export const FormStep = composeExport(FormStepInner, {
+  StepPane,
+  createFormStep,
+})
+
+export default FormStep

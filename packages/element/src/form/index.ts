@@ -2,7 +2,7 @@ import { Form as FormType, IFormFeedback } from '@formily/core'
 import { FormProvider as _FormProvider, h } from '@formily/vue'
 import { defineComponent } from '@vue/composition-api'
 import { FormLayout, FormLayoutProps } from '../form-layout'
-import { PreviewTextPlaceholder } from '../preview-text'
+import { PreviewText } from '../preview-text'
 import { Component, VNode } from 'vue'
 
 const FormProvider = _FormProvider as unknown as Component
@@ -16,7 +16,7 @@ export interface FormProps extends FormLayoutProps {
 }
 
 export const Form = defineComponent<FormProps>({
-  name: 'Form',
+  name: 'FForm',
   props: [
     'form',
     'component',
@@ -39,7 +39,7 @@ export const Form = defineComponent<FormProps>({
         {
           default: () =>
             h(
-              PreviewTextPlaceholder,
+              PreviewText.Placeholder,
               {
                 props: {
                   value: previewTextPlaceholder,
@@ -80,3 +80,5 @@ export const Form = defineComponent<FormProps>({
     }
   },
 })
+
+export default Form

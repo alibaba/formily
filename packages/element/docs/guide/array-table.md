@@ -28,7 +28,7 @@
 
 参考 [https://element.eleme.io/#/zh-CN/component/table](https://element.eleme.io/#/zh-CN/component/table)
 
-### ArrayTableColumn
+### ArrayTable.Column
 
 > 表格列
 
@@ -42,7 +42,7 @@
 
 > ArrayTableColumn 会自动检查内部的 FormItem 是否必填，并自动在表头加上红色星号。如果不希望显示，可通过 `asterisk` 属性进行覆盖。
 
-### ArrayTableAddition
+### ArrayTable.Addition
 
 > 添加按钮
 
@@ -57,7 +57,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayTableRemove
+### ArrayTable.Remove
 
 > 删除按钮
 
@@ -69,7 +69,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayTableMoveDown
+### ArrayTable.MoveDown
 
 > 下移按钮
 
@@ -81,7 +81,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayTableMoveUp
+### ArrayTable.MoveUp
 
 > 上移按钮
 
@@ -93,12 +93,12 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayTableIndex
+### ArrayTable.Index
 
 > 索引渲染器
 
 无属性
 
-### useArrayTableIndex
+### ArrayTable.useIndex
 
 > 读取当前渲染行索引的 Hook

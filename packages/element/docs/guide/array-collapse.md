@@ -26,11 +26,11 @@
 
 参考 [https://element.eleme.io/#/zh-CN/component/collapse](https://element.eleme.io/#/zh-CN/component/collapse)
 
-### ArrayCollapseItem
+### ArrayCollapse.Item
 
 参考 [https://element.eleme.io/#/zh-CN/component/collapse](https://element.eleme.io/#/zh-CN/component/collapse)
 
-### ArrayCollapseAddition
+### ArrayCollapse.Addition
 
 > 添加按钮
 
@@ -46,7 +46,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCollapseRemove
+### ArrayCollapse.Remove
 
 > 删除按钮
 
@@ -58,7 +58,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCollapseMoveDown
+### ArrayCollapse.MoveDown
 
 > 下移按钮
 
@@ -70,7 +70,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCollapseMoveUp
+### ArrayCollapse.MoveUp
 
 > 上移按钮
 
@@ -82,12 +82,12 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCollapseIndex
+### ArrayCollapse.Index
 
 > 索引渲染器
 
 无属性
 
-### useArrayCollapseIndex
+### ArrayCollapse.useIndex
 
 > 读取当前渲染行索引的 Hook

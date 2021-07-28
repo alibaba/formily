@@ -6,3 +6,5 @@ import { Transfer as ElTransfer } from 'element-ui'
 export type TransferProps = ElTransferProps
 
 export const Transfer = connect(ElTransfer, mapProps({ dataSource: 'data' }))
+
+export default Transfer

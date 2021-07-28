@@ -25,14 +25,14 @@ import { stylePrefix } from '../__builtins__/configs'
 import { defineComponent } from '@vue/composition-api'
 import { Portal, PortalTarget } from 'portal-vue'
 
-type FormDialogContentProps = { resolve: () => any; reject: () => any }
+type FormDialogContentProps = { form: Form }
 
 type FormDialogContent = Component | ((props: FormDialogContentProps) => VNode)
 
-type ModalTitle = string | number | Component | VNode | (() => VNode)
+type DialogTitle = string | number | Component | VNode | (() => VNode)
 
 type IFormDialogProps = Omit<DialogProps, 'title'> & {
-  title?: ModalTitle
+  title?: DialogTitle
   footer?: null | Component | VNode | (() => VNode)
   cancelText?: string | Component | VNode | (() => VNode)
   cancelButtonProps?: ButtonProps
@@ -44,11 +44,12 @@ type IFormDialogProps = Omit<DialogProps, 'title'> & {
   onClosed?: () => void
   onCancel?: () => void
   onOK?: () => void
+  loadingText?: string
 }
 
 const PORTAL_TARGET_NAME = 'FormDialogFooter'
 
-const isDialogTitle = (props: any): props is ModalTitle => {
+const isDialogTitle = (props: any): props is DialogTitle => {
   return isNum(props) || isStr(props) || isBool(props) || isValidElement(props)
 }
 
@@ -77,24 +78,24 @@ export interface IFormDialogComponentProps {
 }
 
 export function FormDialog(
-  title: IFormDialogProps | ModalTitle,
+  title: IFormDialogProps | DialogTitle,
   content: FormDialogContent
 ): IFormDialog
 
 export function FormDialog(
-  title: IFormDialogProps | ModalTitle,
+  title: IFormDialogProps | DialogTitle,
   id: string | symbol,
   content: FormDialogContent
 ): IFormDialog
 
 export function FormDialog(
-  title: ModalTitle,
+  title: DialogTitle,
   id: string,
   content: FormDialogContent
 ): IFormDialog
 
 export function FormDialog(
-  title: IFormDialogProps | ModalTitle,
+  title: IFormDialogProps | DialogTitle,
   id: string | symbol | FormDialogContent,
   content?: FormDialogContent
 ): IFormDialog {
@@ -170,6 +171,7 @@ export function FormDialog(
               cancelText,
               okButtonProps,
               cancelButtonProps,
+              loadingText,
               ...dialogProps
             } = this.dialogProps
 
@@ -338,7 +340,7 @@ export function FormDialog(
 
       env.promise = new Promise(async (resolve, reject) => {
         try {
-          props = await loading(() =>
+          props = await loading(dialogProps.loadingText, () =>
             applyMiddleware(props, env.openMiddlewares)
           )
           env.form = env.form || createForm(props)
@@ -366,7 +368,7 @@ export function FormDialog(
               .catch(reject)
           },
           async () => {
-            await loading(() =>
+            await loading(dialogProps.loadingText, () =>
               applyMiddleware(env.form, env.cancelMiddlewares)
             )
 
@@ -390,7 +392,8 @@ export function FormDialog(
   return formDialog
 }
 
-export const FormDialogFooter = defineComponent({
+const FormDialogFooter = defineComponent({
+  name: 'FFormDialogFooter',
   setup(props, { slots }) {
     return () => {
       return h(
@@ -408,4 +411,7 @@ export const FormDialogFooter = defineComponent({
   },
 })
 
-export const FormDialogPortal = createPortalProvider('form-dialog')
+FormDialog.Footer = FormDialogFooter
+FormDialog.Portal = createPortalProvider('form-dialog')
+
+export default FormDialog

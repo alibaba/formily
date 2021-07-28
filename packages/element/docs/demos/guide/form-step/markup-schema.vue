@@ -3,7 +3,7 @@
     <SchemaField>
       <SchemaVoidField x-component="FormStep" :x-component-props="{ formStep }">
         <SchemaVoidField
-          x-component="FormStepPane"
+          x-component="FormStep.StepPane"
           :x-component-props="{ title: '第一步' }"
         >
           <SchemaStringField
@@ -14,7 +14,7 @@
           />
         </SchemaVoidField>
         <SchemaVoidField
-          x-component="FormStepPane"
+          x-component="FormStep.StepPane"
           :x-component-props="{ title: '第二步' }"
         >
           <SchemaStringField
@@ -26,7 +26,7 @@
         </SchemaVoidField>
         <SchemaVoidField
           type="void"
-          x-component="FormStepPane"
+          x-component="FormStep.StepPane"
           :x-component-props="{ title: '第三步' }"
         >
           <SchemaStringField
@@ -74,11 +74,9 @@ import { FormProvider, FormConsumer, createSchemaField } from '@formily/vue'
 import {
   FormItem,
   FormStep,
-  FormStepPane,
   FormButtonGroup,
   Submit,
   Input,
-  createFormStep,
 } from '@formily/element'
 import { Button } from 'element-ui'
 import Template from '../editable/template.vue'
@@ -87,11 +85,10 @@ const SchemaField = createSchemaField({
   components: {
     FormItem,
     FormStep,
-    FormStepPane,
     Input,
   },
 })
-const formStep = createFormStep()
+const formStep = FormStep.createFormStep
 
 export default {
   components: {

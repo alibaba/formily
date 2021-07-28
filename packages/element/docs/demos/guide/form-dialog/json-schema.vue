@@ -3,13 +3,7 @@
 </template>
 
 <script>
-import {
-  FormDialog,
-  FormDialogFooter,
-  FormLayout,
-  FormItem,
-  Input,
-} from '@formily/element'
+import { FormDialog, FormLayout, FormItem, Input } from '@formily/element'
 import { Button } from 'element-ui'
 import { createSchemaField } from '@formily/vue'
 const { SchemaField } = createSchemaField({
@@ -63,9 +57,9 @@ const DialogForm = {
     return (
       <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField schema={this.schema} />
-        <FormDialogFooter>
+        <FormDialog.Footer>
           <span style={{ marginLeft: '4px' }}>扩展文案</span>
-        </FormDialogFooter>
+        </FormDialog.Footer>
       </FormLayout>
     )
   },

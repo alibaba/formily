@@ -6,7 +6,8 @@ import { useField, useFieldSchema, RecursionField, h } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
 import { ISchema } from '@formily/json-schema'
 import { stylePrefix } from '../__builtins__/configs'
-import { ArrayBase, ArrayBaseItem, useKey } from '../array-base'
+import { ArrayBase } from '../array-base'
+import { composeExport } from '../__builtins__/shared'
 
 const isAdditionComponent = (schema: ISchema) => {
   return schema['x-component']?.indexOf('Addition') > -1
@@ -36,16 +37,15 @@ const isOperationComponent = (schema: ISchema) => {
     isMoveUpComponent(schema)
   )
 }
-
-export const ArrayCards = observer(
+const ArrayCardsInner = observer(
   defineComponent<CardProps>({
-    name: 'ArrayCards',
+    name: 'FArrayCards',
     props: [],
     setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
       const prefixCls = `${stylePrefix}-array-cards`
-      const getKey = useKey()
+      const getKey = ArrayBase.useKey()
 
       return () => {
         const field = fieldRef.value
@@ -124,7 +124,7 @@ export const ArrayCards = observer(
               {}
             )
             return h(
-              ArrayBaseItem,
+              ArrayBase.Item,
               {
                 key: getKey(item),
                 props: {
@@ -230,11 +230,15 @@ export const ArrayCards = observer(
   })
 )
 
-export {
-  ArrayBaseRemove as ArrayCardsRemove,
-  ArrayBaseMoveDown as ArrayCardsMoveDown,
-  ArrayBaseMoveUp as ArrayCardsMoveUp,
-  ArrayBaseAddition as ArrayCardsAddition,
-  ArrayBaseIndex as ArrayCardsIndex,
-  useIndex as useArrayCardsIndex,
-} from '../array-base'
+export const ArrayCards = composeExport(ArrayCardsInner, {
+  Index: ArrayBase.Index,
+  SortHandle: ArrayBase.SortHandle,
+  Addition: ArrayBase.Addition,
+  Remove: ArrayBase.Remove,
+  MoveDown: ArrayBase.MoveDown,
+  MoveUp: ArrayBase.MoveUp,
+  useArray: ArrayBase.useArray,
+  useIndex: ArrayBase.useIndex,
+})
+
+export default ArrayCards

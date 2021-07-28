@@ -15,7 +15,7 @@ export interface ISubmitProps extends ElButtonProps {
 
 export const Submit = observer(
   defineComponent<ISubmitProps>({
-    name: 'Submit',
+    name: 'FSubmit',
     props: ['onClick', 'onSubmit', 'onSubmitSuccess', 'onSubmitFailed'],
     setup(props, { attrs, slots, listeners }) {
       const formRef = useForm()
@@ -60,3 +60,5 @@ export const Submit = observer(
     },
   })
 )
+
+export default Submit

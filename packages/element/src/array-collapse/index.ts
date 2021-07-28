@@ -15,7 +15,8 @@ import {
 import { observer } from '@formily/reactive-vue'
 import { ISchema } from '@formily/json-schema'
 import { stylePrefix } from '../__builtins__/configs'
-import { ArrayBase, ArrayBaseItem, useKey } from '../array-base'
+import { ArrayBase } from '../array-base'
+import { composeExport } from '../__builtins__/shared'
 
 export interface IArrayCollapseProps extends CollapseProps {
   defaultOpenPanelCount?: number
@@ -80,9 +81,9 @@ const insertActiveKeys = (
   }, [])
 }
 
-export const ArrayCollapse = observer(
+export const ArrayCollapseInner = observer(
   defineComponent<IArrayCollapseProps>({
-    name: 'ArrayCollapse',
+    name: 'FArrayCollapse',
     props: {
       defaultOpenPanelCount: {
         type: Number,
@@ -108,7 +109,7 @@ export const ArrayCollapse = observer(
         }
       })
 
-      const getKey = useKey()
+      const getKey = ArrayBase.useKey()
 
       return () => {
         const field = fieldRef.value
@@ -138,7 +139,7 @@ export const ArrayCollapse = observer(
             })
 
             const title = h(
-              ArrayBaseItem,
+              ArrayBase.Item,
               {
                 props: {
                   index,
@@ -177,7 +178,7 @@ export const ArrayCollapse = observer(
               }
             )
             const extra = h(
-              ArrayBaseItem,
+              ArrayBase.Item,
               {
                 props: {
                   index,
@@ -232,7 +233,7 @@ export const ArrayCollapse = observer(
               {
                 default: () => [
                   h(
-                    ArrayBaseItem,
+                    ArrayBase.Item,
                     {
                       props: {
                         index,
@@ -359,17 +360,22 @@ export const ArrayCollapse = observer(
 )
 
 export const ArrayCollapseItem = defineComponent<CollapseItemProps>({
-  name: 'ArrayCollapseItem',
+  name: 'FArrayCollapseItem',
   setup(_props, { slots }) {
     return () => h(Fragment, {}, slots)
   },
 })
 
-export {
-  ArrayBaseRemove as ArrayCollapseRemove,
-  ArrayBaseMoveDown as ArrayCollapseMoveDown,
-  ArrayBaseMoveUp as ArrayCollapseMoveUp,
-  ArrayBaseAddition as ArrayCollapseAddition,
-  ArrayBaseIndex as ArrayCollapseIndex,
-  useIndex as useArrayCollapseIndex,
-} from '../array-base'
+export const ArrayCollapse = composeExport(ArrayCollapseInner, {
+  collapseItem: ArrayCollapseItem,
+  Index: ArrayBase.Index,
+  SortHandle: ArrayBase.SortHandle,
+  Addition: ArrayBase.Addition,
+  Remove: ArrayBase.Remove,
+  MoveDown: ArrayBase.MoveDown,
+  MoveUp: ArrayBase.MoveUp,
+  useArray: ArrayBase.useArray,
+  useIndex: ArrayBase.useIndex,
+})
+
+export default ArrayCollapse

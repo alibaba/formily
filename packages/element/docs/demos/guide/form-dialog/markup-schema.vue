@@ -5,14 +5,7 @@
 </template>
 
 <script>
-import {
-  FormDialog,
-  FormLayout,
-  FormItem,
-  Input,
-  FormDialogFooter,
-  FormDialogPortal,
-} from '@formily/element'
+import { FormDialog, FormLayout, FormItem, Input } from '@formily/element'
 import { Button } from 'element-ui'
 import { createSchemaField } from '@formily/vue'
 
@@ -62,16 +55,16 @@ const DialogForm = {
             x-component="Input"
           />
         </SchemaField>
-        <FormDialogFooter>
+        <FormDialog.Footer>
           <span style={{ marginLeft: '4px' }}>扩展文案: {form.values.aaa}</span>
-        </FormDialogFooter>
+        </FormDialog.Footer>
       </FormLayout>
     )
   },
 }
 
 export default {
-  components: { Button, FormDialogPortal },
+  components: { Button, FormDialogPortal: FormDialog.Portal },
   data() {
     return {
       portalId: '可以传，也可以不传的ID，默认是form-dialog',

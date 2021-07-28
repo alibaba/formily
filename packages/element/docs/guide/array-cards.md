@@ -28,7 +28,7 @@
 
 参考 [https://element.eleme.io/#/zh-CN/component/card](https://element.eleme.io/#/zh-CN/component/card)
 
-### ArrayCardsAddition
+### ArrayCards.Addition
 
 > 添加按钮
 
@@ -44,7 +44,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCardsRemove
+### ArrayCards.Remove
 
 > 删除按钮
 
@@ -56,7 +56,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCardsMoveDown
+### ArrayCards.MoveDown
 
 > 下移按钮
 
@@ -68,7 +68,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCardsMoveUp
+### ArrayCards.MoveUp
 
 > 上移按钮
 
@@ -80,12 +80,12 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCardsIndex
+### ArrayCards.Index
 
 > 索引渲染器
 
 无属性
 
-### useArrayCardsIndex
+### ArrayCards.useIndex
 
 > 读取当前渲染行索引的 Hook

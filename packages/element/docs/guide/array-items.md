@@ -18,19 +18,19 @@
 
 继承 HTMLDivElement Props
 
-### ArrayItemsItem
+### ArrayItems.Item
 
 > 列表区块
 
 继承 HTMLDivElement Props
 
-### ArrayItemsSortHandle
+### ArrayItems.SortHandle
 
 > 拖拽手柄
 
 参考 [https://element.eleme.io/#/zh-CN/component/button](https://element.eleme.io/#/zh-CN/component/button)
 
-### ArrayItemsAddition
+### ArrayItems.Addition
 
 > 添加按钮
 
@@ -46,7 +46,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayItemsRemove
+### ArrayItems.Remove
 
 > 删除按钮
 
@@ -58,7 +58,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayItemsMoveDown
+### ArrayItems.MoveDown
 
 > 下移按钮
 
@@ -70,7 +70,7 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayItemsMoveUp
+### ArrayItems.MoveUp
 
 > 上移按钮
 
@@ -82,12 +82,12 @@
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayItemsIndex
+### ArrayItems.Index
 
 > 索引渲染器
 
 无属性
 
-### useArrayItemsIndex
+### ArrayItems.useIndex
 
 > 读取当前渲染行索引的 Hook

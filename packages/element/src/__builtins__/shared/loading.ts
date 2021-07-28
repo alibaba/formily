@@ -1,10 +1,13 @@
 import { Loading } from 'element-ui'
 
-export const loading = async (processor: () => Promise<any>) => {
+export const loading = async (
+  loadingText = 'Loading...',
+  processor: () => Promise<any>
+) => {
   let loadingInstance = null
   let loading = setTimeout(() => {
     loadingInstance = Loading.service({
-      text: 'Loading...',
+      text: loadingText,
       background: 'transparent',
     })
   }, 100)
