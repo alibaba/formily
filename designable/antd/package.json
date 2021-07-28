@@ -30,7 +30,7 @@
     "start": "webpack-dev-server --config playground/webpack.dev.ts"
   },
   "devDependencies": {
-    "@designable/react-settings-form": "^0.4.16",
+    "@designable/react-settings-form": "^0.4.17",
     "autoprefixer": "^9.0",
     "file-loader": "^5.0.2",
     "fs-extra": "^8.1.0",
@@ -56,9 +56,9 @@
     "react-is": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
-    "@designable/core": "^0.4.16",
-    "@designable/formily": "^0.4.16",
-    "@designable/react": "^0.4.16",
+    "@designable/core": "^0.4.17",
+    "@designable/formily": "^0.4.17",
+    "@designable/react": "^0.4.17",
     "@formily/antd": "2.0.0-beta.83",
     "@formily/core": "2.0.0-beta.83",
     "@formily/designable-setters": "2.0.0-beta.83",

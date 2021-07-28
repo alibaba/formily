@@ -63,6 +63,9 @@ const ValidatorSchema: ISchema = {
             type: 'string',
             'x-decorator': 'FormItem',
             'x-component': 'Select',
+            'x-component-props': {
+              allowClear: true,
+            },
           },
           pattern: {
             type: 'string',
@@ -149,6 +152,7 @@ export const ValidatorSetter: React.FC<IValidatorSetterProps> = observer(
           <Select
             value={Array.isArray(props.value) ? undefined : props.value}
             onChange={props.onChange}
+            allowClear
             placeholder={GlobalRegistry.getDesignerMessage(
               'SettingComponents.ValidatorSetter.pleaseSelect'
             )}
