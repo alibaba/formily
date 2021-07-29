@@ -296,16 +296,16 @@ export default () => {
         />
 
         <SchemaField.String
-          title="The default is not full (fullness=false)"
+          title="The default is fullness(fullness=true)"
           x-decorator="FormItem"
           x-component="Select"
         />
         <SchemaField.String
-          title="Fullness(fullness=true)"
+          title="Not fullness(fullness=false)"
           x-decorator="FormItem"
           x-component="Select"
           x-decorator-props={{
-            fullness: true,
+            fullness: false,
           }}
         />
 
@@ -1059,7 +1059,7 @@ export default () => {
 | wrapperCol     | number                                                 | The number of columns occupied by the content grid, and the number of label columns add up to 24 | -             |
 | wrapperAlign   | `"left"` \| `"right"`                                  | Content text alignment ⻬                                                                        | `"left"`      |
 | wrapperWrap    | boolean                                                | Change the content, otherwise an ellipsis appears, and hover has tooltip                         | false         |
-| fullness       | boolean                                                | fullness                                                                                         | false         |
+| fullness       | boolean                                                | fullness                                                                                         | true          |
 | addonBefore    | ReactNode                                              | Prefix content                                                                                   | -             |
 | addonAfter     | ReactNode                                              | Suffix content                                                                                   | -             |
 | size           | `"small"` \| `"default"` \| `"large"`                  | 尺⼨                                                                                             | -             |
