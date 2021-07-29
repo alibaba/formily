@@ -16,18 +16,11 @@
 
   &-control-content-component {
     line-height: $form-element-medium-height;
-
-    & > .#{$css-prefix}input,
-    .#{$css-prefix}select,
-    .#{$css-prefix}date-picker,
-    .#{$css-prefix}number-picker {
-      width: 100% !important;
-    }
   }
 
   &-inset {
     padding: 0 8px;
-    border-radius: $form-element-large-corner;
+    border-radius: $form-element-medium-corner;
     width: 100%;
 
     .#{$css-prefix}input {
@@ -172,6 +165,7 @@
 
 .#{$form-item-cls}-size-small {
   font-size: $form-element-small-font-size;
+  line-height: $form-element-small-height;
 
   .#{$form-item-cls}-label-content {
     min-height: $form-element-small-height;
@@ -182,6 +176,18 @@
       line-height: $form-element-small-height;
       min-height: $form-element-small-height;
     }
+
+    .#{$form-item-cls}-addon-before {
+      min-height: $form-element-small-height;
+    }
+
+    .#{$form-item-cls}-addon-after {
+      min-height: $form-element-small-height;
+    }
+  }
+
+  &-inset {
+    border-radius: $form-element-small-corner;
   }
 
   &.#{$form-item-cls}-feedback-layout-terse {
@@ -216,6 +222,7 @@
 
 .#{$form-item-cls}-size-large {
   font-size: $form-element-large-font-size;
+  line-height: $form-element-large-height;
 
   .#{$form-item-cls}-label-content {
     min-height: $form-element-large-height;
@@ -226,15 +233,23 @@
       line-height: $form-element-large-height;
       min-height: $form-element-large-height;
     }
+
+    .#{$form-item-cls}-addon-before {
+      min-height: $form-element-large-height;
+    }
+
+    .#{$form-item-cls}-addon-after {
+      min-height: $form-element-large-height;
+    }
+  }
+
+  &-inset {
+    border-radius: $form-element-large-corner;
   }
 
   .#{$form-item-cls}-help,
   .#{$form-item-cls}-extra {
     min-height: $form-element-large-font-size + 2;
-  }
-
-  .#{$form-item-cls}-control-content {
-    min-height: $form-element-large-height;
   }
 
   &.#{$form-item-cls}-feedback-layout-loose {
@@ -251,16 +266,6 @@
 
   .#{$form-item-cls}-label > label {
     height: $form-element-large-height;
-  }
-}
-
-.#{$form-item-cls} {
-  &-layout-vertical {
-    display: block;
-
-    .#{$form-item-cls}-label-content {
-      min-height: $form-element-medium-height - 10 !important;
-    }
   }
 }
 
