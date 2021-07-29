@@ -1059,7 +1059,7 @@ export default () => {
 | wrapperCol     | number                                                 | 内容⽹格所占列数，和标签列数加起来总和为 24 | -         |
 | wrapperAlign   | `"left"` \| `"right"`                                  | 内容文本对齐方式⻬                          | `"left"`  |
 | wrapperWrap    | boolean                                                | 内容换⾏，否则出现省略号，hover 有 tooltip  | false     |
-| fullness       | boolean                                                | 内容撑满                                    | false     |
+| fullness       | boolean                                                | 内容撑满                                    | true      |
 | addonBefore    | ReactNode                                              | 前缀内容                                    | -         |
 | addonAfter     | ReactNode                                              | 后缀内容                                    | -         |
 | size           | `"small"` \| `"default"` \| `"large"`                  | 尺⼨                                        | -         |

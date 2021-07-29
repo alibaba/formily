@@ -1059,7 +1059,7 @@ export default () => {
 | wrapperCol     | number                                                 | The number of columns occupied by the content grid, and the number of label columns add up to 24 | -             |
 | wrapperAlign   | `"left"` \| `"right"`                                  | Content text alignment ⻬                                                                        | `"left"`      |
 | wrapperWrap    | boolean                                                | Change the content, otherwise an ellipsis appears, and hover has tooltip                         | false         |
-| fullness       | boolean                                                | fullness                                                                                         | false         |
+| fullness       | boolean                                                | fullness                                                                                         | true          |
 | addonBefore    | ReactNode                                              | Prefix content                                                                                   | -             |
 | addonAfter     | ReactNode                                              | Suffix content                                                                                   | -             |
 | size           | `"small"` \| `"default"` \| `"large"`                  | 尺⼨                                                                                             | -             |
