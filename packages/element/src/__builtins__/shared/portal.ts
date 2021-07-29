@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance } from '@vue/composition-api'
+import { defineComponent, onBeforeUnmount } from '@vue/composition-api'
 import { h, Fragment } from '@formily/vue'
 export interface IPortalProps {
   id?: string | symbol
@@ -12,8 +12,17 @@ export const createPortalProvider = (id: string | symbol) => {
     props: {
       id: {
         type: [String, Symbol],
-        default: 'form-dialog',
+        default: id,
       },
+    },
+
+    setup(props) {
+      onBeforeUnmount(() => {
+        const { id } = props
+        if (id && PortalMap.has(id)) {
+          PortalMap.delete(id)
+        }
+      })
     },
 
     render() {
