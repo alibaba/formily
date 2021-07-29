@@ -1,8 +1,8 @@
 # Transfer
 
-> 穿梭框
+> Shuttle Box
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -24,23 +24,23 @@ export default () => (
     <SchemaField>
       <SchemaField.Array
         name="transfer"
-        title="穿梭框"
+        title="shuttle box"
         x-decorator="FormItem"
         x-component="Transfer"
         enum={[
-          { label: '选项1', value: 'aaa' },
-          { label: '选项2', value: 'bbb' },
+          { label: 'Option 1', value: 'aaa' },
+          { label: 'Option 2', value: 'bbb' },
         ]}
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -62,12 +62,12 @@ const schema = {
   properties: {
     transfer: {
       type: 'array',
-      title: '穿梭框',
+      title: 'shuttle box',
       'x-decorator': 'FormItem',
       'x-component': 'Transfer',
       enum: [
-        { label: '选项1', value: 'aaa' },
-        { label: '选项2', value: 'bbb' },
+        { label: 'Option 1', value: 'aaa' },
+        { label: 'Option 2', value: 'bbb' },
       ],
     },
   },
@@ -79,13 +79,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} scope={{ renderTitle }} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -99,16 +99,16 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="transfer"
-      title="穿梭框"
+      title="shuttle box"
       dataSource={[
-        { label: '选项1', value: 'aaa' },
-        { label: '选项2', value: 'bbb' },
+        { label: 'Option 1', value: 'aaa' },
+        { label: 'Option 2', value: 'bbb' },
       ]}
       decorator={[FormItem]}
       component={[Transfer]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -116,4 +116,4 @@ export default () => (
 
 ## API
 
-参考 https://fusion.design/pc/component/basic/transfer
+Reference https://fusion.design/pc/component/basic/transfer

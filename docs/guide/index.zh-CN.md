@@ -289,7 +289,6 @@ JSON Schema 独立存在，给 UI 桥接层消费，保证了协议驱动在不�
 import React from 'react'
 import { Table, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import 'antd/lib/table/style'
 
 const text = (content, tooltips) => {
   if (tooltips) {
@@ -490,7 +489,7 @@ export default () => {
 
 问：Formily2.x 相比于 1.x 最大的优势是什么？
 
-答：学习成本的大大降低，对，核心是为了让用户更快速的理解 Formily，我们在 2.x 设计的过程中极力的避免出现各种隐晦逻辑，边界问题，同时因为移除了rxjs/styled-components的依赖，整体体积大大降低
+答：学习成本的大大降低，对，核心是为了让用户更快速的理解 Formily，我们在 2.x 设计的过程中极力的避免出现各种隐晦逻辑，边界问题，同时因为移除了 rxjs/styled-components 的依赖，整体体积大大降低
 
 问：Formily2.x 的浏览器兼容性如何？
 

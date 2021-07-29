@@ -4,46 +4,54 @@ import { GarbageCollector } from '../shared'
 import { IObserverOptions } from '../types'
 import { useForceUpdate } from './useForceUpdate'
 
-class AutoCollector {}
+class ObjectToBeRetainedByReact {}
+
+function objectToBeRetainedByReactFactory() {
+  return new ObjectToBeRetainedByReact()
+}
 
 export const useObserver = <T extends () => any>(
   view: T,
   options?: IObserverOptions
 ): ReturnType<T> => {
   const forceUpdate = useForceUpdate()
-  const unmountRef = React.useRef(false)
+  const unMountRef = React.useRef(false)
+  const trackerRef = React.useRef<Tracker>(null)
   const gcRef = React.useRef<GarbageCollector>()
-
-  const tracker = React.useMemo(() => {
-    return new Tracker(() => {
+  const [objectRetainedByReact] = React.useState(
+    objectToBeRetainedByReactFactory
+  )
+  if (!trackerRef.current) {
+    trackerRef.current = new Tracker(() => {
       if (typeof options?.scheduler === 'function') {
         options.scheduler(forceUpdate)
       } else {
         forceUpdate()
       }
     }, options?.displayName)
-  }, [])
+  }
 
-  //StrictMode/ConcurrentMode会导致组件无法正确触发Unmount，所以只能自己做垃圾回收
+  //StrictMode/ConcurrentMode会导致组件无法正确触发UnMount，所以只能自己做垃圾回收
   if (!gcRef.current) {
     gcRef.current = new GarbageCollector(() => {
-      if (tracker) {
-        tracker.dispose()
+      if (trackerRef.current) {
+        trackerRef.current.dispose()
       }
     })
-    gcRef.current.open(new AutoCollector())
+    gcRef.current.open(objectRetainedByReact)
   }
 
   React.useEffect(() => {
-    unmountRef.current = false
+    unMountRef.current = false
     gcRef.current.close()
     return () => {
-      unmountRef.current = true
-      if (tracker) {
-        tracker.dispose()
+      unMountRef.current = true
+      if (trackerRef.current) {
+        trackerRef.current.dispose()
+        trackerRef.current = null
       }
     }
   }, [])
 
-  return tracker.track(view)
+  return trackerRef.current.track(view)
 }

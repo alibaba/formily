@@ -1,8 +1,8 @@
 # FormDialog
 
-> 弹窗表单，主要用在简单的事件打开表单场景
+> Pop-up form, mainly used in simple event to open the form scene
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -21,45 +21,66 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDialog('弹窗表单', () => {
+        FormDialog('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField>
                 <SchemaField.String
                   name="aaa"
                   required
-                  title="输入框1"
+                  title="input box 1"
                   x-decorator="FormItem"
                   x-component="Input"
                 />
                 <SchemaField.String
                   name="bbb"
                   required
-                  title="输入框2"
+                  title="input box 2"
                   x-decorator="FormItem"
                   x-component="Input"
                 />
                 <SchemaField.String
                   name="ccc"
                   required
-                  title="输入框3"
+                  title="input box 3"
                   x-decorator="FormItem"
                   x-component="Input"
                 />
                 <SchemaField.String
                   name="ddd"
                   required
-                  title="输入框4"
+                  title="input box 4"
                   x-decorator="FormItem"
                   x-component="Input"
                 />
               </SchemaField>
               <FormDialog.Footer>
-                <span style={{ marginLeft: 4 }}>扩展文案</span>
+                <span style={{ marginLeft: 4 }}>Extended copywriting</span>
               </FormDialog.Footer>
             </FormLayout>
           )
         })
+          .forOpen((payload, next) => {
+            setTimeout(() => {
+              next({
+                initialValues: {
+                  aaa: '123',
+                },
+              })
+            }, 1000)
+          })
+          .forConfirm((payload, next) => {
+            setTimeout(() => {
+              console.log(payload)
+              next(payload)
+            }, 1000)
+          })
+          .forCancel((payload, next) => {
+            setTimeout(() => {
+              console.log(payload)
+              next(payload)
+            }, 1000)
+          })
           .open({
             initialValues: {
               aaa: '123',
@@ -68,13 +89,13 @@ export default () => {
           .then(console.log)
       }}
     >
-      点我打开表单
+      Click me to open the form
     </Button>
   )
 }
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -94,28 +115,28 @@ const schema = {
   properties: {
     aaa: {
       type: 'string',
-      title: '输入框1',
+      title: 'input box 1',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     bbb: {
       type: 'string',
-      title: '输入框2',
+      title: 'input box 2',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     ccc: {
       type: 'string',
-      title: '输入框3',
+      title: 'input box 3',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     ddd: {
       type: 'string',
-      title: '输入框4',
+      title: 'input box 4',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
@@ -127,16 +148,37 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDialog('弹窗表单', () => {
+        FormDialog('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField schema={schema} />
               <FormDialog.Footer>
-                <span style={{ marginLeft: 4 }}>扩展文案</span>
+                <span style={{ marginLeft: 4 }}>Extended copywriting</span>
               </FormDialog.Footer>
             </FormLayout>
           )
         })
+          .forOpen((payload, next) => {
+            setTimeout(() => {
+              next({
+                initialValues: {
+                  aaa: '123',
+                },
+              })
+            }, 1000)
+          })
+          .forConfirm((payload, next) => {
+            setTimeout(() => {
+              console.log(payload)
+              next(payload)
+            }, 1000)
+          })
+          .forCancel((payload, next) => {
+            setTimeout(() => {
+              console.log(payload)
+              next(payload)
+            }, 1000)
+          })
           .open({
             initialValues: {
               aaa: '123',
@@ -145,13 +187,13 @@ export default () => {
           .then(console.log)
       }}
     >
-      点我打开表单
+      Click me to open the form
     </Button>
   )
 }
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -163,43 +205,64 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDialog('弹窗表单', () => {
+        FormDialog('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <Field
                 name="aaa"
                 required
-                title="输入框1"
+                title="input box 1"
                 decorator={[FormItem]}
                 component={[Input]}
               />
               <Field
                 name="bbb"
                 required
-                title="输入框2"
+                title="input box 2"
                 decorator={[FormItem]}
                 component={[Input]}
               />
               <Field
                 name="ccc"
                 required
-                title="输入框3"
+                title="input box 3"
                 decorator={[FormItem]}
                 component={[Input]}
               />
               <Field
                 name="ddd"
                 required
-                title="输入框4"
+                title="input box 4"
                 decorator={[FormItem]}
                 component={[Input]}
               />
               <FormDialog.Footer>
-                <span style={{ marginLeft: 4 }}>扩展文案</span>
+                <span style={{ marginLeft: 4 }}>Extended copywriting</span>
               </FormDialog.Footer>
             </FormLayout>
           )
         })
+          .forOpen((payload, next) => {
+            setTimeout(() => {
+              next({
+                initialValues: {
+                  aaa: '123',
+                },
+              })
+            }, 1000)
+          })
+          .forConfirm((payload, next) => {
+            setTimeout(() => {
+              console.log(payload)
+              next(payload)
+            }, 1000)
+          })
+          .forCancel((payload, next) => {
+            setTimeout(() => {
+              console.log(payload)
+              next(payload)
+            }, 1000)
+          })
           .open({
             initialValues: {
               aaa: '123',
@@ -208,7 +271,7 @@ export default () => {
           .then(console.log)
       }}
     >
-      点我打开表单
+      Click me to open the form
     </Button>
   )
 }
@@ -219,25 +282,53 @@ export default () => {
 ### FormDialog
 
 ```ts pure
-type FormDialogHandler = {
-  //打开弹窗，接收表单属性，可以传入initialValues/values/effects etc.
-  open(props: Formily.Core.Types.IFormProps): Promise<any> //返回表单数据
-  //关闭弹窗
+import { IFormProps, Form } from '@formily/core'
+
+type FormDialogRenderer =
+  | React.ReactElement
+  | ((form: Form) => React.ReactElement)
+
+type ModalTitle = string | number | React.ReactElement
+
+interface IFormDialog {
+  forOpen(
+    middleware: (
+      props: IFormProps,
+      next: (props?: IFormProps) => Promise<any>
+    ) => any
+  ): any //Middleware interceptor, can intercept Dialog to open
+  forConfirm(
+    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
+  ): any //Middleware interceptor, which can intercept Dialog confirmation
+  forCancel(
+    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
+  ): any //Middleware interceptor, can intercept Dialog to cancel
+  //Open the pop-up window to receive form attributes, you can pass in initialValues/values/effects etc.
+  open(props: IFormProps): Promise<any> //return form data
+  //Close the pop-up window
   close(): void
 }
 
-interface IFormDialog {
-  (
-    title: React.ReactNode, //如果是ReactNode，则作为弹窗title传入
-    renderer: (resolve: () => void, reject: () => void) => React.ReactElement
-  ): FormDialogHandler
-  (
-    title: ModalProps, //如果是对象，则作为ModalProps传入
-    renderer: (resolve: () => void, reject: () => void) => React.ReactElement
-  ): FormDialogHandler
+interface IModalProps extends ModalProps {
+  onOk?: (event: React.MouseEvent<HTMLElement>) => void | boolean // return false can prevent onOk
+  onCancel?: (event: React.MouseEvent<HTMLElement>) => void | boolean // return false can prevent onCancel
+  loadingText?: React.ReactNode
+}
+
+interface FormDialog {
+  (title: IModalProps, id: string, renderer: FormDialogRenderer): IFormDialog
+  (title: IModalProps, renderer: FormDialogRenderer): IFormDialog
+  (title: ModalTitle, id: string, renderer: FormDialogRenderer): IFormDialog
+  (title: ModalTitle, renderer: FormDialogRenderer): IFormDialog
 }
 ```
 
+`ModalProps` type definition reference ant design [Modal API](https://ant.design/components/modal-cn/#API)
+
 ### FormDialog.Footer
 
-无属性，只接收子节点
+No attributes, only child nodes are received
+
+### FormDialog.Portal
+
+Receive the optional id attribute, the default value is `form-dialog`, if there are multiple prefixCls in an application, and the prefixCls in the pop-up window of different regions are different, then it is recommended to specify the id as the region-level id

@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import cls from 'classnames'
-import { usePrefixCls } from '../__builtins__'
+import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
@@ -19,7 +19,8 @@ export interface IFormItemProps {
   prefixCls?: string
   label?: React.ReactNode
   colon?: boolean
-  tooltip?: boolean
+  tooltip?: React.ReactNode
+  layout?: 'vertical' | 'horizontal' | 'inline'
   tooltipLayout?: 'icon' | 'text'
   labelStyle?: React.CSSProperties
   labelAlign?: 'left' | 'right'
@@ -54,7 +55,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
   const layout = useFormLayout()
   return {
     ...props,
-    layout: layout.layout ?? 'horizontal',
+    layout: props.layout ?? layout.layout ?? 'horizontal',
     colon: props.colon ?? layout.colon,
     labelAlign:
       layout.layout === 'vertical'
@@ -78,6 +79,33 @@ const useFormItemLayout = (props: IFormItemProps) => {
   }
 }
 
+function useOverflow<
+  Container extends HTMLElement,
+  Content extends HTMLElement
+>() {
+  const [overflow, setOverflow] = useState(false)
+  const containerRef = useRef<Container>()
+  const contentRef = useRef<Content>()
+
+  useLayoutEffect(() => {
+    if (containerRef.current && contentRef.current) {
+      const contentWidth = contentRef.current.getBoundingClientRect().width
+      const containerWidth = containerRef.current.getBoundingClientRect().width
+      if (contentWidth && containerWidth && containerWidth < contentWidth) {
+        if (!overflow) setOverflow(true)
+      } else {
+        if (overflow) setOverflow(false)
+      }
+    }
+  }, [])
+
+  return {
+    overflow,
+    containerRef,
+    contentRef,
+  }
+}
+
 const ICON_MAP = {
   error: <CloseCircleOutlined />,
   success: <CheckCircleOutlined />,
@@ -87,9 +115,12 @@ const ICON_MAP = {
 export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const { children, ...others } = props
   const [active, setActice] = useState(false)
-  const popoverContainerRef = useRef()
   const formLayout = useFormItemLayout(others)
   const gridSpan = useGridSpan(props.gridSpan)
+  const { containerRef, contentRef, overflow } = useOverflow<
+    HTMLDivElement,
+    HTMLLabelElement
+  >()
   const {
     label,
     style,
@@ -124,16 +155,19 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   let enableCol = false
   if (labelWidth || wrapperWidth) {
     if (labelWidth) {
-      labelStyle.width = labelWidth
-      labelStyle.maxWidth = labelWidth
+      labelStyle.width = labelWidth === 'auto' ? undefined : labelWidth
+      labelStyle.maxWidth = labelWidth === 'auto' ? undefined : labelWidth
     }
     if (wrapperWidth) {
-      wrapperStyle.width = wrapperWidth
-      wrapperStyle.maxWidth = wrapperWidth
+      wrapperStyle.width = wrapperWidth === 'auto' ? undefined : wrapperWidth
+      wrapperStyle.maxWidth = wrapperWidth === 'auto' ? undefined : wrapperWidth
     }
     // 栅格模式
-  } else if (labelCol || wrapperCol) {
-    enableCol = true
+  }
+  if (labelCol || wrapperCol) {
+    if (!labelStyle.width && !wrapperStyle.width) {
+      enableCol = true
+    }
   }
 
   const prefixCls = usePrefixCls('formily-item', props)
@@ -142,7 +176,6 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       <Popover
         autoAdjustOverflow
         placement="top"
-        getPopupContainer={() => popoverContainerRef.current}
         content={
           <div
             className={cls({
@@ -161,22 +194,84 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       children
     )
 
-  const labelChildren = (
-    <div className={cls(`${prefixCls}-label-content`)}>
-      {asterisk && <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>}
-      <label>{label}</label>
-    </div>
-  )
-
   const gridStyles: React.CSSProperties = {}
 
   if (gridSpan) {
     gridStyles.gridColumnStart = `span ${gridSpan}`
   }
 
+  const getOverflowTooltip = () => {
+    if (overflow) {
+      return (
+        <div>
+          <div>{label}</div>
+          <div>{tooltip}</div>
+        </div>
+      )
+    }
+    return tooltip
+  }
+
+  const renderLabelText = () => {
+    const labelChildren = (
+      <div className={cls(`${prefixCls}-label-content`)} ref={containerRef}>
+        {asterisk && (
+          <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>
+        )}
+        <label ref={contentRef}>{label}</label>
+      </div>
+    )
+
+    if ((tooltipLayout === 'text' && tooltip) || overflow) {
+      return (
+        <Tooltip
+          placement="top"
+          align={{ offset: [0, 10] }}
+          title={getOverflowTooltip()}
+        >
+          {labelChildren}
+        </Tooltip>
+      )
+    }
+    return labelChildren
+  }
+
+  const renderTooltipIcon = () => {
+    if (tooltip && tooltipLayout === 'icon' && !overflow) {
+      return (
+        <span className={cls(`${prefixCls}-label-tooltip-icon`)}>
+          <Tooltip placement="top" align={{ offset: [0, 2] }} title={tooltip}>
+            <QuestionCircleOutlined />
+          </Tooltip>
+        </span>
+      )
+    }
+  }
+
+  const renderLabel = () => {
+    if (!label) return null
+    return (
+      <div
+        className={cls({
+          [`${prefixCls}-label`]: true,
+          [`${prefixCls}-label-tooltip`]:
+            (tooltip && tooltipLayout === 'text') || overflow,
+          [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
+        })}
+        style={labelStyle}
+      >
+        {renderLabelText()}
+        {renderTooltipIcon()}
+        {label !== ' ' && (
+          <span className={cls(`${prefixCls}-colon`)}>{colon ? ':' : ''}</span>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div
-      ref={popoverContainerRef}
+      {...pickDataProps(props)}
       style={{
         ...style,
         ...gridStyles,
@@ -211,51 +306,12 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         }
       }}
     >
-      {label !== undefined && (
-        <div
-          className={cls({
-            [`${prefixCls}-label`]: true,
-            [`${prefixCls}-label-tooltip`]: tooltip && tooltipLayout === 'text',
-            [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
-          })}
-          style={labelStyle}
-        >
-          {tooltipLayout === 'text' ? (
-            <Tooltip
-              placement="top"
-              align={{ offset: [0, 10] }}
-              title={tooltip}
-              getPopupContainer={() => popoverContainerRef.current}
-            >
-              {labelChildren}
-            </Tooltip>
-          ) : (
-            labelChildren
-          )}
-          {tooltip && tooltipLayout === 'icon' && (
-            <span className={cls(`${prefixCls}-label-tooltip`)}>
-              <Tooltip
-                placement="top"
-                align={{ offset: [0, 2] }}
-                title={tooltip}
-                getPopupContainer={() => popoverContainerRef.current}
-              >
-                <QuestionCircleOutlined />
-              </Tooltip>
-            </span>
-          )}
-          {label && (
-            <span className={cls(`${prefixCls}-colon`)}>
-              {colon ? ':' : ''}
-            </span>
-          )}
-        </div>
-      )}
-
+      {renderLabel()}
       <div
         className={cls({
           [`${prefixCls}-control`]: true,
-          [`${prefixCls}-item-col-${wrapperCol}`]: enableCol && !!wrapperCol,
+          [`${prefixCls}-item-col-${wrapperCol}`]:
+            enableCol && !!wrapperCol && label,
         })}
       >
         <div className={cls(`${prefixCls}-control-content`)}>
@@ -311,7 +367,10 @@ export const FormItem: ComposeFormItem = connect(
   mapProps(
     { validateStatus: true, title: 'label', required: true },
     (props, field) => {
-      if (isVoidField(field)) return props
+      if (isVoidField(field))
+        return {
+          extra: props.extra || field.description,
+        }
       if (!field) return props
       const takeMessage = () => {
         const split = (messages: any[]) => {

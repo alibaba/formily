@@ -1,8 +1,8 @@
 # TimePicker
 
-> 时间选择器
+> Time Picker
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -24,19 +24,19 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="time"
-        title="时间"
+        title="time"
         x-decorator="FormItem"
         x-component="TimePicker"
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -57,7 +57,7 @@ const schema = {
   type: 'object',
   properties: {
     time: {
-      title: '时间',
+      title: 'Time',
       'x-decorator': 'FormItem',
       'x-component': 'TimePicker',
       type: 'string',
@@ -69,13 +69,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -89,12 +89,12 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="time"
-      title="时间"
+      title="time"
       decorator={[FormItem]}
       component={[TimePicker]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -102,4 +102,4 @@ export default () => (
 
 ## API
 
-参考 https://fusion.design/pc/component/basic/time-picker
+Reference https://fusion.design/pc/component/basic/time-picker

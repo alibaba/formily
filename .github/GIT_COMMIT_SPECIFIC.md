@@ -12,15 +12,15 @@ All lines are wrapped at 100 characters !
 
 **Allowed `<type>`**
 
-- breaking 💥 Breaking Change",
-- feat 🎉 A new feature",
-- bugfix 🐞 Bug Fix",
-- doc 📝 Documentation",
-- refactor 🌹 Some Code Change",
-- test 🚧 Update Test Cases",
-- perf 🚀 Improve Performace",
-- build 🛠️ Update Workflow Scripts",
-- chore 😊 Improve Some Code"
+- breaking --- Breaking Change,
+- feat --- A new feature,
+- bugfix --- Bug Fix,
+- doc --- Documentation,
+- refactor --- Some Code Change,
+- test --- Update Test Cases,
+- perf --- Improve Performace,
+- build --- Update Workflow Scripts,
+- chore --- Improve Some Code
 
 **Allowed `<scope>`**
 Scope could be anything specifying place of the commit change.

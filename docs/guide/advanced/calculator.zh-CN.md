@@ -18,7 +18,6 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
   components: {
@@ -174,7 +173,6 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
   components: {

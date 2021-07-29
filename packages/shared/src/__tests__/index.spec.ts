@@ -22,6 +22,9 @@ import { merge } from '../merge'
 import { instOf } from '../instanceof'
 import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../checkers'
 import { defaults } from '../defaults'
+import { applyMiddleware } from '../middleware'
+
+const sleep = (d = 100) => new Promise((resolve) => setTimeout(resolve, d))
 
 describe('array', () => {
   test('toArr', () => {
@@ -131,7 +134,7 @@ describe('array', () => {
     ).toBeTruthy()
     expect(
       isEqual(
-        map(obj, (item, key) => `${item}-copy`),
+        map(obj, (item) => `${item}-copy`),
         { k1: 'v1-copy', k2: 'v2-copy' }
       )
     ).toBeTruthy()
@@ -366,7 +369,7 @@ describe('clone and compare', () => {
 describe('deprecate', () => {
   test('deprecate', () => {
     const test = jest.fn(() => {
-      console.log('### deprecated function called ###')
+      console.info('### deprecated function called ###')
     })
     const deprecatedFn = jest.fn(
       deprecate(test, 'Some.Deprecated.Api', 'some deprecated error')
@@ -416,13 +419,17 @@ describe('isEmpty', () => {
     // val - function
     const emptyFunc = function () {}
     const nonEmptyFunc = function (payload) {
-      console.log(payload)
+      console.info(payload)
     }
     expect(isEmpty(emptyFunc)).toBeTruthy()
     expect(isEmpty(nonEmptyFunc)).toBeFalsy()
 
     // val - arrays
     expect(isEmpty([])).toBeTruthy()
+    expect(isEmpty([0])).toBeTruthy()
+    expect(isEmpty([''])).toBeTruthy()
+    expect(isEmpty([''], true)).toBeFalsy()
+    expect(isEmpty([0], true)).toBeFalsy()
     expect(isEmpty([1, 2, 3, 4, 5])).toBeFalsy()
     expect(isEmpty([0, undefined, null, ''])).toBeTruthy()
 
@@ -486,7 +493,7 @@ describe('shared Subscribable', () => {
     // subscribable with custom notify
     const objWithCustomNotify = new Subscribable()
     const customNotify = jest.fn((payload) => {
-      console.log(payload)
+      console.info(payload)
       return false
     })
     objWithCustomNotify.subscription = {
@@ -495,6 +502,7 @@ describe('shared Subscribable', () => {
     objWithCustomNotify.subscribe(cb)
     objWithCustomNotify.notify({ key3: 'val3' })
     expect(customNotify).toBeCalledTimes(1)
+    objWithCustomNotify.unsubscribe()
   })
 })
 
@@ -689,4 +697,30 @@ test('defaults', () => {
     ee: { value: 555 },
     mm: { value: 123 },
   })
+})
+
+test('applyMiddleware', async () => {
+  expect(await applyMiddleware(0)).toEqual(0)
+  expect(
+    await applyMiddleware(0, [
+      (num: number, next) => next(num + 1),
+      (num: number, next) => next(num + 1),
+      (num: number, next) => next(num + 1),
+    ])
+  ).toEqual(3)
+  expect(
+    await applyMiddleware(0, [
+      (num: number, next) => next(),
+      (num: number, next) => next(num + 1),
+      (num: number, next) => next(num + 1),
+    ])
+  ).toEqual(2)
+  const resolved = jest.fn()
+  applyMiddleware(0, [
+    (num: number, next) => next(num + 1),
+    () => '123',
+    (num: number, next) => next(num + 1),
+  ]).then(resolved)
+  await sleep(16)
+  expect(resolved).toBeCalledTimes(0)
 })

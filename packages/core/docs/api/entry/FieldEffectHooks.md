@@ -6,11 +6,11 @@ order: 2
 
 ## onFieldInit
 
-#### 描述
+#### Description
 
-用于监听某个字段初始化的副作用钩子，我们在调用 createField 的时候就会触发字段初始化事件
+Used to monitor the side effect hook of a field initialization, we will trigger the field initialization event when we call createField
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldInit {
@@ -19,10 +19,10 @@ interface onFieldInit {
 ```
 
 <Alert>
-  FormPathPattern的语法格式请参考 <a href="/api/entry/form-path">FormPath</a>
+  For the syntax format of FormPathPattern, please refer to <a href="/api/entry/form-path">FormPath</a>
 </Alert>
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -35,8 +35,8 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldInit('target', (field, form) => {
-            setResponse('target已初始化')
+          onFieldInit('target', () => {
+            setResponse('target has been initialized')
           })
         },
       }),
@@ -49,7 +49,7 @@ export default () => {
           form.createField({ name: 'target' })
         }}
       >
-        创建字段
+        Create field
       </button>
     </ActionResponse>
   )
@@ -58,11 +58,11 @@ export default () => {
 
 ## onFieldMount
 
-#### 描述
+#### Description
 
-用于监听某个字段已挂载的副作用钩子，我们在调用 onMount 的时候就会触发字段挂载事件
+Used to monitor the side-effect hook of a field that has been mounted, we will trigger the field mount event when we call onMount
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldMount {
@@ -70,7 +70,7 @@ interface onFieldMount {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -83,8 +83,8 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldMount('target', (field, form) => {
-            setResponse('target已挂载')
+          onFieldMount('target', () => {
+            setResponse('target is mounted')
           })
         },
       }),
@@ -97,7 +97,7 @@ export default () => {
           form.createField({ name: 'target' }).onMount()
         }}
       >
-        创建并挂载字段
+        Create and mount fields
       </button>
     </ActionResponse>
   )
@@ -106,11 +106,11 @@ export default () => {
 
 ## onFieldUnmount
 
-#### 描述
+#### Description
 
-用于监听某个字段已卸载的副作用钩子，我们在调用 onUnmount 的时候就会触发卸载事件
+It is used to monitor the side effect hook that a field has been unloaded. When we call onUnmount, the unmount event will be triggered
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldUnmount {
@@ -118,7 +118,7 @@ interface onFieldUnmount {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -131,11 +131,11 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldMount('target', (field, form) => {
-            setResponse('target已挂载')
+          onFieldMount('target', () => {
+            setResponse('target is mounted')
           })
-          onFieldUnmount('target', (field, form) => {
-            setResponse('target已卸载')
+          onFieldUnmount('target', () => {
+            setResponse('target has been uninstalled')
           })
         },
       }),
@@ -148,14 +148,14 @@ export default () => {
           form.createField({ name: 'target' }).onMount()
         }}
       >
-        创建并挂载字段
+        Create and mount fields
       </button>
       <button
         onClick={() => {
           form.createField({ name: 'target' }).onUnmount()
         }}
       >
-        卸载字段
+        Unload field
       </button>
     </ActionResponse>
   )
@@ -164,9 +164,9 @@ export default () => {
 
 ## onFieldReact
 
-用于实现字段响应式逻辑的副作用钩子，它的核心原理就是字段初始化的时候会执行回调函数，同时自动追踪依赖，依赖数据发生变化时回调函数会重复执行
+A side-effect hook used to implement field reactive logic. Its core principle is that the callback function will be executed when the field is initialized, and the dependency will be automatically tracked at the same time. The callback function will be executed repeatedly when the dependent data changes.
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldReact {
@@ -174,7 +174,7 @@ interface onFieldReact {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -187,9 +187,9 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldReact('target', (field, form) => {
+          onFieldReact('target', () => {
             setResponse(
-              'target ' + (form.values.other === 123 ? '显示' : '隐藏')
+              'target ' + (form.values.other === 123 ? 'display' : 'hide')
             )
           })
         },
@@ -203,7 +203,7 @@ export default () => {
           form.createField({ name: 'target' })
         }}
       >
-        初始化target
+        Initialize target
       </button>
       <button
         onClick={() => {
@@ -211,7 +211,7 @@ export default () => {
           field.setValue(123)
         }}
       >
-        赋值other = 123
+        Assign other = 123
       </button>
       <button
         onClick={() => {
@@ -219,22 +219,22 @@ export default () => {
           field.setValue(null)
         }}
       >
-        赋值other = null
+        Assign other = null
       </button>
     </ActionResponse>
   )
 }
 ```
 
-> 该示例会追踪 values.other 的变化，如果等于 123，就会控制 target 显示，否则隐藏
+> This example will track the changes of values.other, if it is equal to 123, it will control the display of the target, otherwise it will be hidden
 
 ## onFieldChange
 
-#### 描述
+#### Description
 
-用于监听某个字段的属性变化的副作用钩子
+Side effect hook used to monitor the property changes of a field
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldChange {
@@ -247,9 +247,9 @@ interface onFieldChange {
 }
 ```
 
-可以传入具体要监听的的属性集合，也可以不传，默认是监听 value 变化
+You can pass in the specific set of attributes you want to monitor, or you can leave it alone, the default is to monitor value changes
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -262,11 +262,11 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldChange('target', (field, form) => {
-            setResponse('target值变化：' + field.value)
+          onFieldChange('target', () => {
+            setResponse('target value change:' + field.value)
           })
-          onFieldChange('target', ['component'], (field, form) => {
-            setResponse('target组件变化')
+          onFieldChange('target', ['component'], () => {
+            setResponse('target component change')
           })
         },
       }),
@@ -280,7 +280,7 @@ export default () => {
           field.setValue(field.value ? field.value + 1 : 1)
         }}
       >
-        设置值
+        Settings
       </button>
       <button
         onClick={() => {
@@ -288,7 +288,7 @@ export default () => {
           field.setComponent('Input')
         }}
       >
-        设置组件
+        Set up components
       </button>
     </ActionResponse>
   )
@@ -297,9 +297,9 @@ export default () => {
 
 ## onFieldValueChange
 
-用于监听某个字段值变化的副作用钩子
+Side effect hooks used to monitor changes in a field value
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldValueChange {
@@ -307,7 +307,7 @@ interface onFieldValueChange {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -320,8 +320,8 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValueChange('target', (field, form) => {
-            setResponse('target值变化：' + field.value)
+          onFieldValueChange('target', () => {
+            setResponse('target value change:' + field.value)
           })
         },
       }),
@@ -335,7 +335,7 @@ export default () => {
           field.setValue(field.value ? field.value + 1 : 1)
         }}
       >
-        设置值
+        Settings
       </button>
     </ActionResponse>
   )
@@ -344,9 +344,9 @@ export default () => {
 
 ## onFieldInitialValueChange
 
-用于监听某个字段默认值变化的副作用钩子
+Side-effect hooks used to monitor changes in the default value of a field
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldInitialValueChange {
@@ -354,7 +354,7 @@ interface onFieldInitialValueChange {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -367,8 +367,8 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldInitialValueChange('target', (field, form) => {
-            setResponse('target默认值变化：' + field.value)
+          onFieldInitialValueChange('target', () => {
+            setResponse('target default value change:' + field.value)
           })
         },
       }),
@@ -382,7 +382,7 @@ export default () => {
           field.setInitialValue(field.value ? field.value + 1 : 1)
         }}
       >
-        设置值
+        Settings
       </button>
     </ActionResponse>
   )
@@ -391,9 +391,9 @@ export default () => {
 
 ## onFieldInputValueChange
 
-用于监听某个字段 onInput 触发的副作用钩子
+Used to monitor the side effect hook triggered by a field onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldInputValueChange {
@@ -401,7 +401,7 @@ interface onFieldInputValueChange {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -414,8 +414,8 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldInputValueChange('target', (field, form) => {
-            setResponse('target 值变化：' + field.value)
+          onFieldInputValueChange('target', () => {
+            setResponse('target value change:' + field.value)
           })
         },
       }),
@@ -429,7 +429,7 @@ export default () => {
           field.onInput(field.value ? field.value + 1 : 1)
         }}
       >
-        调用onInput
+        Call onInput
       </button>
     </ActionResponse>
   )
@@ -438,11 +438,11 @@ export default () => {
 
 ## onFieldValidateStart
 
-#### 描述
+#### Description
 
-监听某个字段校验触发开始的副作用钩子
+Monitor the side effect hook that triggers the start of a certain field verification
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldValidateStart {
@@ -450,7 +450,7 @@ interface onFieldValidateStart {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -463,8 +463,8 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValidateStart('target', (field, form) => {
-            setResponse('target校验开始')
+          onFieldValidateStart('target', () => {
+            setResponse('target verification start')
           })
         },
       }),
@@ -478,7 +478,7 @@ export default () => {
           field.onInput('')
         }}
       >
-        触发校验
+        Trigger verification
       </button>
     </ActionResponse>
   )
@@ -487,11 +487,11 @@ export default () => {
 
 ## onFieldValidateEnd
 
-#### 描述
+#### Description
 
-监听某个字段校验触发结束的副作用钩子
+Monitor the side effect hook that triggers the end of a certain field verification
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldValidateEnd {
@@ -499,7 +499,7 @@ interface onFieldValidateEnd {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -512,8 +512,8 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValidateEnd('target', (field, form) => {
-            setResponse('target校验结束')
+          onFieldValidateEnd('target', () => {
+            setResponse('target verification is over')
           })
         },
       }),
@@ -527,7 +527,7 @@ export default () => {
           field.onInput('')
         }}
       >
-        触发校验
+        Trigger verification
       </button>
     </ActionResponse>
   )
@@ -536,11 +536,11 @@ export default () => {
 
 ## onFieldValidateFailed
 
-#### 描述
+#### Description
 
-监听某个字段校验触发失败的副作用钩子
+Listen to the side-effect hook of a field verification trigger failure
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldValidateFailed {
@@ -548,7 +548,7 @@ interface onFieldValidateFailed {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -561,8 +561,8 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValidateFailed('target', (field, form) => {
-            setResponse('target校验失败')
+          onFieldValidateFailed('target', () => {
+            setResponse('target verification failed')
           })
         },
       }),
@@ -576,7 +576,7 @@ export default () => {
           field.onInput('')
         }}
       >
-        触发校验
+        Trigger verification
       </button>
     </ActionResponse>
   )
@@ -585,11 +585,11 @@ export default () => {
 
 ## onFieldValidateSuccess
 
-#### 描述
+#### Description
 
-监听某个字段校验触发成功的副作用钩子
+Monitor the side effect hook that triggers a successful verification of a certain field
 
-#### 签名
+#### Signature
 
 ```ts
 interface onFieldValidateSuccess {
@@ -597,7 +597,7 @@ interface onFieldValidateSuccess {
 }
 ```
 
-#### 用例
+#### Example
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -614,11 +614,11 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValidateFailed('target', (field, form) => {
-            setResponse('target校验失败')
+          onFieldValidateFailed('target', () => {
+            setResponse('target verification failed')
           })
-          onFieldValidateSuccess('target', (field, form) => {
-            setResponse('target校验成功')
+          onFieldValidateSuccess('target', () => {
+            setResponse('target verification succeeded')
           })
         },
       }),
@@ -632,7 +632,7 @@ export default () => {
           field.onInput('')
         }}
       >
-        触发失败
+        Trigger failed
       </button>
       <button
         onClick={() => {
@@ -640,7 +640,7 @@ export default () => {
           field.onInput('123')
         }}
       >
-        触发成功
+        Triggered successfully
       </button>
     </ActionResponse>
   )

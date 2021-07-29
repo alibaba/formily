@@ -1,14 +1,14 @@
 # model
 
-## 描述
+## Description
 
-快速定义领域模型，会对模型属性做自动声明：
+Quickly define the domain model, and automatically declare the model attributes:
 
-- getter/setter 属性自动声明 computed
-- 函数自动声明 action
-- 普通属性自动声明 observable
+- Automatic declaration of getter/setter properties computed
+- Function automatically declare action
+- Common attributes are automatically declared observable
 
-## 签名
+## Signature
 
 ```ts
 interface model<Target extends object> {
@@ -16,7 +16,7 @@ interface model<Target extends object> {
 }
 ```
 
-## 用例
+## Example
 
 ```ts
 import { model, autorun } from '@formily/reactive'

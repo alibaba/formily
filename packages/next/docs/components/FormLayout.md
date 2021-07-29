@@ -1,8 +1,8 @@
 # FormLayout
 
-> 区块级布局批量控制组件，借助该组件，我们可以轻松的控制被 FormLayout 圈住的所有 FormItem 组件的布局模式
+> Block-level layout batch control component, with the help of this component, we can easily control the layout mode of all FormItem components enclosed by FormLayout
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -33,14 +33,17 @@ export default () => (
       >
         <SchemaField.String
           name="input"
-          title="输入框"
+          title="input box"
           x-decorator="FormItem"
+          x-decorator-props={{
+            tooltip: <div>123</div>,
+          }}
           x-component="Input"
           required
         />
         <SchemaField.String
           name="select"
-          title="选择框"
+          title="select box"
           x-decorator="FormItem"
           x-component="Select"
           required
@@ -51,7 +54,7 @@ export default () => (
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -77,18 +80,22 @@ const schema = {
       'x-component-props': {
         labelCol: 6,
         wrapperCol: 10,
+        layout: 'vertical',
       },
       properties: {
         input: {
           type: 'string',
-          title: '输入框',
+          title: 'input box',
           required: true,
           'x-decorator': 'FormItem',
+          'x-decorator-props': {
+            tooltip: <div>123</div>,
+          },
           'x-component': 'Input',
         },
         select: {
           type: 'string',
-          title: '选择框',
+          title: 'Select box',
           required: true,
           'x-decorator': 'FormItem',
           'x-component': 'Select',
@@ -107,7 +114,7 @@ export default () => (
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -130,19 +137,19 @@ export default () => (
       <Field
         name="input"
         required
-        title="输入框"
+        title="input box"
         decorator={[FormItem]}
         component={[Input]}
       />
       <Field
         name="select"
         required
-        title="选择框"
+        title="select box"
         decorator={[FormItem]}
         component={[Select]}
       />
       <FormButtonGroup.FormItem>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormLayout>
   </FormProvider>
@@ -151,25 +158,25 @@ export default () => (
 
 ## API
 
-| 属性名         | 类型                                        | 描述                    | 默认值     |
-| -------------- | ------------------------------------------- | ----------------------- | ---------- |
-| style          | CSSProperties                               | 样式                    | -          |
-| className      | string                                      | 类名                    | -          |
-| colon          | boolean                                     | 是否有冒号              | true       |
-| labelAlign     | `'right' \| 'left'`                         | 标签内容对齐            | -          |
-| wrapperAlign   | `'right' \| 'left'`                         | 组件容器内容对齐        | -          |
-| labelWrap      | boolean                                     | 标签内容换行            | false      |
-| labelWidth     | number                                      | 标签宽度(px)            | -          |
-| wrapperWidth   | number                                      | 组件容器宽度(px)        | -          |
-| wrapperWrap    | boolean                                     | 组件容器换行            | false      |
-| labelCol       | number                                      | 标签宽度(24 column)     | -          |
-| wrapperCol     | number                                      | 组件容器宽度(24 column) | -          |
-| fullness       | boolean                                     | 组件容器宽度 100%       | false      |
-| size           | `'small' \| 'default' \| 'large'`           | 组件尺寸                | default    |
-| layout         | `'vertical' \| 'horizontal' \| 'inline'`    | 布局模式                | horizontal |
-| direction      | `'rtl' \| 'ltr'`                            | 方向(暂不支持)          | ltr        |
-| inset          | boolean                                     | 内联布局                | false      |
-| shallow        | boolean                                     | 上下文浅层传递          | true       |
-| feedbackLayout | `'loose' \| 'terse' \| 'popover' \| 'none'` | 反馈布局                | true       |
-| tooltipLayout  | `"icon" \| "text"`                          | 问提示布局              | `"icon"`   |
-| bordered       | boolean                                     | 是否有边框              | true       |
+| Property name  | Type                                     | Description                           | Default value |
+| -------------- | ---------------------------------------- | ------------------------------------- | ------------- |
+| style          | CSSProperties                            | Style                                 | -             |
+| className      | string                                   | class name                            | -             |
+| colon          | boolean                                  | Is there a colon                      | true          |
+| labelAlign     | `'right' \|'left'`                       | Label content alignment               | -             |
+| wrapperAlign   | `'right' \|'left'`                       | Component container content alignment | -             |
+| labelWrap      | boolean                                  | Wrap label content                    | false         |
+| labelWidth     | number                                   | Label width (px)                      | -             |
+| wrapperWidth   | number                                   | Component container width (px)        | -             |
+| wrapperWrap    | boolean                                  | Component container wrap              | false         |
+| labelCol       | number                                   | Label width (24 column)               | -             |
+| wrapperCol     | number                                   | Component container width (24 column) | -             |
+| fullness       | boolean                                  | Component container width 100%        | false         |
+| size           | `'small' \|'default' \|'large'`          | component size                        | default       |
+| layout         | `'vertical' \|'horizontal' \|'inline'`   | layout mode                           | horizontal    |
+| direction      | `'rtl' \|'ltr'`                          | direction (not supported yet)         | ltr           |
+| inset          | boolean                                  | Inline layout                         | false         |
+| shallow        | boolean                                  | shallow context transfer              | true          |
+| feedbackLayout | `'loose' \|'terse' \|'popover' \|'none'` | feedback layout                       | true          |
+| tooltipLayout  | `"icon" \| "text"`                       | Ask the prompt layout                 | `"icon"`      |
+| bordered       | boolean                                  | Is there a border                     | true          |

@@ -47,10 +47,15 @@ test('box annotation', () => {
   reaction(() => {
     handler(obs.get())
   })
-  obs.set(333)
-  expect(handler).toBeCalledWith(123)
-  expect(handler).toBeCalledWith(123)
+  const boxValue = 333
+  obs.set(boxValue)
   expect(handler1).toBeCalledTimes(1)
+  expect(handler1.mock.calls[0][0]).toMatchObject({
+    value: boxValue,
+  })
+  expect(handler).toBeCalledTimes(2)
+  expect(handler.mock.calls[0][0]).toBe(123)
+  expect(handler.mock.calls[1][0]).toBe(boxValue)
 })
 
 test('ref annotation', () => {
@@ -79,7 +84,7 @@ test('action annotation', () => {
   }, handler)
   setData()
   expect(handler).toBeCalledTimes(1)
-  expect(handler).toBeCalledWith([123, 321])
+  expect(handler).toBeCalledWith([123, 321], [undefined, undefined])
 })
 
 test('no action annotation', () => {
@@ -94,8 +99,8 @@ test('no action annotation', () => {
   }, handler)
   setData()
   expect(handler).toBeCalledTimes(2)
-  expect(handler).toBeCalledWith([123, undefined])
-  expect(handler).toBeCalledWith([123, 321])
+  expect(handler).toBeCalledWith([123, undefined], [undefined, undefined])
+  expect(handler).toBeCalledWith([123, 321], [123, undefined])
 })
 
 test('computed annotation', () => {

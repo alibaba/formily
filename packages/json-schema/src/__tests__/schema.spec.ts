@@ -249,3 +249,50 @@ describe('all static methods', () => {
   expect(Schema.getOrderProperties()).toEqual([])
   Schema.registerPatches(null)
 })
+
+test('single function x-reactions', () => {
+  const reactions = () => console.info('x-reactions')
+  const schema = new Schema({
+    type: 'string',
+    'x-reactions': reactions,
+  })
+  expect(schema.compile()['x-reactions']).toEqual(reactions)
+})
+
+test('definitions and $ref', () => {
+  const schema = new Schema({
+    definitions: {
+      address: {
+        type: 'object',
+        properties: {
+          street_address: {
+            type: 'string',
+          },
+          city: {
+            type: 'string',
+          },
+          state: {
+            type: 'string',
+          },
+        },
+        required: ['street_address', 'city', 'state'],
+      },
+    },
+    type: 'object',
+    properties: {
+      billing_address: {
+        title: 'Billing address',
+        $ref: '#/definitions/address',
+      },
+      shipping_address: {
+        title: 'Shipping address',
+        $ref: '#/definitions/address',
+      },
+    },
+  })
+  expect(schema.properties.billing_address.required).toEqual([
+    'street_address',
+    'city',
+    'state',
+  ])
+})

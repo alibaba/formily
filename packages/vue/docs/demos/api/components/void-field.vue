@@ -8,11 +8,16 @@
         <template #default="{ form }">
           <Space>
             <Button
-              @click="() => {
-                form.query('layout').take().setState((state) => {
-                  state.visible = !state.visible
-                })
-              }"
+              @click="
+                () => {
+                  form
+                    .query('layout')
+                    .take()
+                    .setState((state) => {
+                      state.visible = !state.visible
+                    })
+                }
+              "
             >
               {{ form.query('layout').get('visible') ? 'Hide' : 'Show' }}
             </Button>
@@ -35,8 +40,8 @@ export default {
   data() {
     return {
       Input,
-      form: createForm()
+      form: createForm(),
     }
-  }
+  },
 }
 </script>

@@ -1,25 +1,50 @@
 import { resolve } from 'path'
 export default {
   mode: 'site',
-  logo:
-    '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
+  logo: '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
   title: 'Formily',
   hash: true,
   favicon:
     '//img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg',
   outputPath: './doc-site',
-  navs: [
+  locales: [
+    ['en-US', 'English'],
+    ['zh-CN', '中文'],
+  ],
+  navs: {
+    'zh-CN': [
+      {
+        title: 'Ant Design',
+        path: '/zh-CN/components',
+      },
+      {
+        title: '主站',
+        path: 'https://v2.formilyjs.org',
+      },
+      {
+        title: 'GITHUB',
+        path: 'https://github.com/alibaba/formily',
+      },
+    ],
+    'en-US': [
+      {
+        title: 'Ant Design',
+        path: '/components',
+      },
+      {
+        title: 'Home Site',
+        path: 'https://v2.formilyjs.org',
+      },
+      {
+        title: 'GITHUB',
+        path: 'https://github.com/alibaba/formily',
+      },
+    ],
+  },
+  links: [
     {
-      title: 'Ant Design',
-      path: '/components',
-    },
-    {
-      title: '主站',
-      path: 'https://v2.formilyjs.org',
-    },
-    {
-      title: 'GITHUB',
-      path: 'https://github.com/alibaba/formily',
+      rel: 'stylesheet',
+      href: 'https://unpkg.com/antd/dist/antd.css',
     },
   ],
   styles: [

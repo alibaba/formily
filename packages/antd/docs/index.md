@@ -1,28 +1,28 @@
 ---
-title: Formily - 阿里巴巴统一前端表单解决方案
+title: Formily-Alibaba unified front-end form solution
 order: 10
 hero:
   title: FORMILY ANTD
-  desc: 基于Ant Design封装的优雅且易用的Formily2.x组件体系
+  desc: An elegant and easy-to-use Formily 2.x component system based on Ant Design encapsulation
   actions:
-    - text: 主站文档
+    - text: Home Site
       link: //v2.formilyjs.org
-    - text: 组件文档
+    - text: Document
       link: /components
 features:
   - icon: https://img.alicdn.com/imgextra/i2/O1CN016i72sH1c5wh1kyy9U_!!6000000003550-55-tps-800-800.svg
-    title: 更易用
-    desc: 开箱即用，案例丰富
+    title: Easier To Use
+    desc: Out of the box, rich cases
   - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
-    title: 更高效
-    desc: 傻瓜写法，超高性能
+    title: More Efficient
+    desc: Stupid writing, super high performance
   - icon: https://img.alicdn.com/imgextra/i3/O1CN01xlETZk1G0WSQT6Xii_!!6000000000560-55-tps-800-800.svg
-    title: 更专业
-    desc: 完备，灵活，优雅
+    title: More Professional
+    desc: complete, flexible, elegant
 footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by self
 ---
 
-## 安装
+## Installation
 
 ```bash
 $ npm install --save antd moment
@@ -30,7 +30,7 @@ $ npm install --save @formily/core @formily/react @formily/antd
 
 ```
 
-## 快速开始
+## Quick start
 
 ```tsx
 /**
@@ -48,13 +48,13 @@ export default () => (
     <Space>
       <Field
         name="price"
-        title="价格"
+        title="price"
         initialValue={5.2}
         decorator={[FormItem]}
         component={[
           NumberPicker,
           {
-            placeholder: '请输入',
+            placeholder: 'Please enter',
             style: {
               width: 100,
             },
@@ -64,13 +64,13 @@ export default () => (
       <FormItem>×</FormItem>
       <Field
         name="count"
-        title="数量"
+        title="quantity"
         initialValue={100}
         decorator={[FormItem]}
         component={[
           NumberPicker,
           {
-            placeholder: '请输入',
+            placeholder: 'Please enter',
             style: {
               width: 100,
             },
@@ -79,7 +79,7 @@ export default () => (
       />
       <FormConsumer>
         {(form) => (
-          <FormItem>={` ${form.values.price * form.values.count} 元`}</FormItem>
+          <FormItem>={` ${form.values.price * form.values.count}元`}</FormItem>
         )}
       </FormConsumer>
     </Space>

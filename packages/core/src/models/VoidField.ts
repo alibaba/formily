@@ -8,7 +8,6 @@ import {
 import { define, observable, autorun, batch } from '@formily/reactive'
 import {
   JSXComponent,
-  JSXComponenntProps,
   LifeCycleTypes,
   FieldDisplayTypes,
   FieldPatternTypes,
@@ -25,7 +24,7 @@ import {
   modelStateGetter,
   modelStateSetter,
   initFieldUpdate,
-} from '../shared'
+} from '../shared/internals'
 import { Form } from './Form'
 import { Query } from './Query'
 
@@ -51,18 +50,18 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   form: Form
   props: IVoidFieldProps<Decorator, Component>
 
-  private disposers: (() => void)[] = []
+  protected disposers: (() => void)[] = []
 
   constructor(
     address: FormPathPattern,
     props: IVoidFieldProps<Decorator, Component>,
     form: Form,
-    controlled: boolean
+    designable: boolean
   ) {
     this.initialize(props, form)
     this.makeIndexes(address)
-    this.makeObservable(controlled)
-    this.makeReactive(controlled)
+    this.makeObservable(designable)
+    this.makeReactive(designable)
     this.onInit()
   }
 
@@ -93,8 +92,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     this.component = toArr(this.props.component)
   }
 
-  protected makeObservable(controlled: boolean) {
-    if (controlled) return
+  protected makeObservable(designable: boolean) {
+    if (designable) return
     define(this, {
       title: observable.ref,
       description: observable.ref,
@@ -132,8 +131,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     })
   }
 
-  protected makeReactive(controlled: boolean) {
-    if (controlled) return
+  protected makeReactive(designable: boolean) {
+    if (designable) return
     this.form.addEffects(this, () => {
       toArr(this.props.reactions).forEach((reaction) => {
         if (isFn(reaction)) {
@@ -176,6 +175,11 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
 
   get display(): FieldDisplayTypes {
     const parentDisplay = this.parent?.display
+    if (parentDisplay && parentDisplay !== 'visible') {
+      if (this.selfDisplay && this.selfDisplay !== 'visible')
+        return this.selfDisplay
+      return parentDisplay
+    }
     if (isValid(this.selfDisplay)) return this.selfDisplay
     return parentDisplay || this.form.display || 'visible'
   }
@@ -288,9 +292,9 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     this.pattern = type
   }
 
-  setComponent = <C extends JSXComponent>(
+  setComponent = <C extends JSXComponent, ComponentProps extends object = {}>(
     component?: C,
-    props?: JSXComponenntProps<C>
+    props?: ComponentProps
   ) => {
     if (component) {
       this.componentType = component as any
@@ -301,8 +305,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     }
   }
 
-  setComponentProps = <C extends JSXComponent = Component>(
-    props?: JSXComponenntProps<C>
+  setComponentProps = <ComponentProps extends object = {}>(
+    props?: ComponentProps
   ) => {
     if (props) {
       this.componentProps = this.componentProps || {}
@@ -310,9 +314,9 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     }
   }
 
-  setDecorator = <D extends JSXComponent>(
+  setDecorator = <D extends JSXComponent, ComponentProps extends object = {}>(
     component?: D,
-    props?: JSXComponenntProps<D>
+    props?: ComponentProps
   ) => {
     if (component) {
       this.decoratorType = component as any
@@ -323,8 +327,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     }
   }
 
-  setDecoratorProps = <D extends JSXComponent = Decorator>(
-    props?: JSXComponenntProps<D>
+  setDecoratorProps = <ComponentProps extends object = {}>(
+    props?: ComponentProps
   ) => {
     if (props) {
       this.decoratorProps = this.decoratorProps || {}
@@ -369,6 +373,11 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
       dispose()
     })
     this.form.removeEffects(this)
+  }
+
+  destroy = () => {
+    this.dispose()
+    delete this.form.fields[this.address.toString()]
   }
 
   match = (pattern: FormPathPattern) => {

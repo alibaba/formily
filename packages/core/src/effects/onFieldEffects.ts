@@ -8,7 +8,7 @@ import {
   DataField,
   IFieldState,
 } from '../types'
-import { createEffectHook, useEffectForm } from '../shared'
+import { createEffectHook, useEffectForm } from '../shared/effectbox'
 import { onFormUnmount } from './onFormEffects'
 
 function createFieldEffect<Result extends GeneralField = GeneralField>(
@@ -16,16 +16,19 @@ function createFieldEffect<Result extends GeneralField = GeneralField>(
 ) {
   return createEffectHook(
     type,
-    (field: Result, form: Form) => (
-      pattern: FormPathPattern,
-      callback: (field: Result, form: Form) => void
-    ) => {
-      if (FormPath.parse(pattern).matchAliasGroup(field.address, field.path)) {
-        batch(() => {
-          callback(field, form)
-        })
+    (field: Result, form: Form) =>
+      (
+        pattern: FormPathPattern,
+        callback: (field: Result, form: Form) => void
+      ) => {
+        if (
+          FormPath.parse(pattern).matchAliasGroup(field.address, field.path)
+        ) {
+          batch(() => {
+            callback(field, form)
+          })
+        }
       }
-    }
   )
 }
 const _onFieldInit = createFieldEffect(LifeCycleTypes.ON_FIELD_INIT)

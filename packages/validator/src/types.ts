@@ -3,6 +3,8 @@ export type ValidatorFormats =
   | 'email'
   | 'ipv6'
   | 'ipv4'
+  | 'number'
+  | 'integer'
   | 'idcard'
   | 'qq'
   | 'phone'

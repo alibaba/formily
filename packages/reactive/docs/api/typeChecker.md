@@ -2,11 +2,11 @@
 
 ## isObservable
 
-#### 描述
+#### Description
 
-判断某个对象是否是 observable 对象
+Determine whether an object is observable
 
-#### 签名
+#### Signature
 
 ```ts
 interface isObservable {
@@ -16,11 +16,11 @@ interface isObservable {
 
 ## isAnnotation
 
-#### 描述
+#### Description
 
-判断某个对象是否是 Annotation
+Determine whether an object is Annotation
 
-#### 签名
+#### Signature
 
 ```ts
 interface isAnnotation {
@@ -30,11 +30,11 @@ interface isAnnotation {
 
 ## isSupportObservable
 
-#### 描述
+#### Description
 
-判断某个对象是否可以被 observable
+Determine whether an object can be observable
 
-#### 签名
+#### Signature
 
 ```ts
 interface isSupportObservable {

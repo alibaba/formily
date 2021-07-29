@@ -1,6 +1,6 @@
 {
   "name": "@formily/antd",
-  "version": "2.0.0-beta.53",
+  "version": "2.0.0-beta.83",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -8,6 +8,14 @@
   "unpkg": "dist/formily.antd.umd.production.js",
   "jsdelivr": "dist/formily.antd.umd.production.js",
   "jsnext:main": "esm",
+  "sideEffects": [
+    "dist/*",
+    "esm/*.js",
+    "lib/*.js",
+    "src/*.ts",
+    "*.less",
+    "**/*/style.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/formily.git"
@@ -22,7 +30,8 @@
   },
   "scripts": {
     "start": "dumi dev",
-    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:style",
+    "build": "rimraf -rf lib esm dist && npm run create:style && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:style",
+    "create:style": "ts-node create-style",
     "build:style": "ts-node build-style",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
@@ -43,12 +52,12 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
-    "@formily/core": "2.0.0-beta.53",
-    "@formily/json-schema": "2.0.0-beta.53",
-    "@formily/react": "2.0.0-beta.53",
-    "@formily/reactive": "2.0.0-beta.53",
-    "@formily/reactive-react": "2.0.0-beta.53",
-    "@formily/shared": "2.0.0-beta.53",
+    "@formily/core": "2.0.0-beta.83",
+    "@formily/json-schema": "2.0.0-beta.83",
+    "@formily/react": "2.0.0-beta.83",
+    "@formily/reactive": "2.0.0-beta.83",
+    "@formily/reactive-react": "2.0.0-beta.83",
+    "@formily/shared": "2.0.0-beta.83",
     "@juggle/resize-observer": "^3.3.1",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
@@ -57,5 +66,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "2c44ae410a73f02735c63c6430e021a50e21f3ec"
+  "gitHead": "ac79c196ae9324889aca5e0501146f9b37b04283"
 }

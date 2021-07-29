@@ -3,7 +3,7 @@ import {
   runReactionsFromTargetKey,
 } from './reaction'
 import { ProxyRaw, RawProxy } from './environment'
-import { isSupportObservable } from './externals'
+import { isObservable, isSupportObservable } from './externals'
 import { createObservable } from './internals'
 
 const wellKnownSymbols = new Set(
@@ -16,13 +16,13 @@ const hasOwnProperty = Object.prototype.hasOwnProperty
 
 function findObservable(target: any, key: PropertyKey, value: any) {
   const observableObj = RawProxy.get(value)
-  if (isSupportObservable(value)) {
-    if (observableObj) {
-      return observableObj
-    }
+  if (observableObj) {
+    return observableObj
+  }
+  if (!isObservable(value) && isSupportObservable(value)) {
     return createObservable(target, key, value)
   }
-  return observableObj || value
+  return value
 }
 
 function patchIterator(
@@ -165,16 +165,16 @@ export const collectionHandlers = {
 
 export const baseHandlers: ProxyHandler<any> = {
   get(target, key, receiver) {
-    const result = Reflect.get(target, key, receiver)
+    const result = target[key] // use Reflect.get is too slow
     if (typeof key === 'symbol' && wellKnownSymbols.has(key)) {
       return result
     }
     bindTargetKeyWithCurrentReaction({ target, key, receiver, type: 'get' })
     const observableResult = RawProxy.get(result)
-    if (isSupportObservable(result)) {
-      if (observableResult) {
-        return observableResult
-      }
+    if (observableResult) {
+      return observableResult
+    }
+    if (!isObservable(result) && isSupportObservable(result)) {
       const descriptor = Reflect.getOwnPropertyDescriptor(target, key)
       if (
         !descriptor ||
@@ -183,7 +183,7 @@ export const baseHandlers: ProxyHandler<any> = {
         return createObservable(target, key, result)
       }
     }
-    return observableResult || result
+    return result
   },
   has(target, key) {
     const result = Reflect.has(target, key)
@@ -198,15 +198,13 @@ export const baseHandlers: ProxyHandler<any> = {
     const hadKey = hasOwnProperty.call(target, key)
     const newValue = createObservable(target, key, value)
     const oldValue = target[key]
-    const result = Reflect.set(target, key, newValue, receiver)
-    if (target !== ProxyRaw.get(receiver)) {
-      return result
-    }
+    target[key] = newValue // use Reflect.set is too slow
     if (!hadKey) {
       runReactionsFromTargetKey({
         target,
         key,
         value: newValue,
+        oldValue,
         receiver,
         type: 'add',
       })
@@ -220,7 +218,7 @@ export const baseHandlers: ProxyHandler<any> = {
         type: 'set',
       })
     }
-    return result
+    return true
   },
   deleteProperty(target, key) {
     const res = Reflect.deleteProperty(target, key)

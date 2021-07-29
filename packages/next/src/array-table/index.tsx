@@ -1,9 +1,10 @@
-import React, { Fragment, useState, useRef } from 'react'
+import React, { Fragment, useState, useRef, useEffect } from 'react'
 import { Table, Pagination, Select, Badge } from '@alifd/next'
 import { PaginationProps } from '@alifd/next/lib/pagination'
 import { TableProps, ColumnProps } from '@alifd/next/lib/table'
 import { SelectProps } from '@alifd/next/lib/select'
 import cls from 'classnames'
+import { GeneralField, FieldDisplayTypes, ArrayField } from '@formily/core'
 import {
   useForm,
   useField,
@@ -17,10 +18,10 @@ import { usePrefixCls } from '../__builtins__'
 import { ArrayBase, ArrayBaseMixins } from '../array-base'
 
 interface ObservableColumnSource {
-  field: Formily.Core.Types.GeneralField
+  field: GeneralField
   columnProps: ColumnProps
   schema: Schema
-  display: Formily.Core.Types.FieldDisplayTypes
+  display: FieldDisplayTypes
   name: string
 }
 
@@ -130,9 +131,9 @@ const useArrayTableColumns = (
 
 const useAddition = () => {
   const schema = useFieldSchema()
-  return schema.reduceProperties((addition, schema) => {
+  return schema.reduceProperties((addition, schema, key) => {
     if (isAdditionComponent(schema)) {
-      return <RecursionField schema={schema} name="addition" />
+      return <RecursionField schema={schema} name={key} />
     }
     return addition
   }, null)
@@ -141,7 +142,7 @@ const useAddition = () => {
 const StatusSelect: React.FC<IStatusSelectProps> = observer(
   ({ pageSize, ...props }) => {
     const form = useForm()
-    const field = useField<Formily.Core.Models.ArrayField>()
+    const field = useField<ArrayField>()
     const prefixCls = usePrefixCls('formily-array-table')
     const errors = form.queryFeedbacks({
       type: 'error',
@@ -202,6 +203,12 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = ({
     setCurrent(current)
   }
 
+  useEffect(() => {
+    if (totalPage > 0 && totalPage < current) {
+      handleChange(totalPage)
+    }
+  }, [totalPage, current])
+
   const renderPagination = () => {
     if (totalPage <= 1) return
     return (
@@ -248,7 +255,7 @@ const omit = (props: any, keys?: string[]) => {
 export const ArrayTable: ComposedArrayTable = observer(
   (props: ExtendTableProps) => {
     const ref = useRef<HTMLDivElement>()
-    const field = useField<Formily.Core.Models.ArrayField>()
+    const field = useField<ArrayField>()
     const prefixCls = usePrefixCls('formily-array-table')
     const dataSource = Array.isArray(field.value) ? field.value.slice() : []
     const sources = useArrayTableSources()

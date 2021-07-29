@@ -1,16 +1,17 @@
 import { createForm } from '../'
 import { attach } from './shared'
 
-test('create object field', () => {
+test('create void field', () => {
   const form = attach(createForm())
-  attach(
+  const field = attach(
     form.createVoidField({
       name: 'void',
     })
   )
+  field.destroy()
 })
 
-test('create field props', () => {
+test('create void field props', () => {
   const form = attach(createForm())
   const field1 = attach(
     form.createVoidField({

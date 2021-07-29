@@ -72,10 +72,10 @@
 - V1: 代表虚拟字段
 - V2: 改名，统一使用[VoidField](https://core.formilyjs.org/api/models/void-field)
 
-**unmount行为**
+**unmount 行为**
 
-- V1: 字段unmount，字段值默认会被删除
-- V2: 移除，这个默认行为太隐晦，如果要删值，可以直接修改value，同时自动删值的行为只有字段display为none时才会自动删值
+- V1: 字段 unmount，字段值默认会被删除
+- V2: 移除，这个默认行为太隐晦，如果要删值，可以直接修改 value，同时自动删值的行为只有字段 display 为 none 时才会自动删值
 
 ## 桥接层差异
 

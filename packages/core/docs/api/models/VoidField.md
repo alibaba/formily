@@ -4,52 +4,52 @@ order: 4
 
 # VoidField
 
-调用[createVoidField](/api/models/form#createvoidfield)所返回的 VoidField 模型。
+Call the VoidField model returned by [createVoidField](/api/models/form#createvoidfield).
 
-以下会列出所有模型属性，如果该属性是可写的，那么我们可以直接引用是修改该属性，@formily/reactive 便会响应从而触发 UI 更新。
+All model attributes are listed below. If the attribute is writable, then we can directly refer to it to modify the attribute, and @formily/reactive will respond to trigger the UI update.
 
-## 属性
+## Attributes
 
-| 属性        | 描述               | 类型                                    | 是否只读 | 默认值       |
-| ----------- | ------------------ | --------------------------------------- | -------- | ------------ |
-| initialized | 字段是否已被初始化 | Boolean                                 | 否       | `false`      |
-| mounted     | 字段是否已挂载     | Boolean                                 | 否       | `false`      |
-| unmounted   | 字段是否已卸载     | Boolean                                 | 否       | `false`      |
-| address     | 字段节点路径       | [FormPath](/api/entry/form-path)        | 是       |              |
-| path        | 字段数据路径       | [FormPath](/api/entry/form-path)        | 是       |              |
-| title       | 字段标题           | [FieldMessage](#fieldmessage)           | 否       | `""`         |
-| description | 字段描述           | [FieldMessage](#fieldmessage)           | 否       | `""`         |
-| decorator   | 字段装饰器         | Any[]                                   | 否       | `null`       |
-| component   | 字段组件           | Any[]                                   | 否       | `null`       |
-| parent      | 父级字段           | [GeneralField](#generalfield)           | 是       | `null`       |
-| display     | 字段展示状态       | [FieldDisplayTypes](#fielddisplaytypes) | 否       | `"visible"`  |
-| pattern     | 字段交互模式       | [FieldPatternTypes](#fieldpatterntypes) | 否       | `"editable"` |
-| hidden      | 字段是否隐藏       | Boolean                                 | 否       | `false`      |
-| visible     | 字段是否显示       | Boolean                                 | 否       | `true`       |
-| disabled    | 字段是否禁用       | Boolean                                 | 否       | `false`      |
-| readOnly    | 字段是否只读       | Boolean                                 | 否       | `false`      |
-| readPretty  | 字段是否为阅读态   | Boolean                                 | 否       | `false`      |
-| editable    | 字段是可编辑       | Boolean                                 | 否       | `true`       |
+| Property    | Description                               | Type                                    | Read-only or not | Default value |
+| ----------- | ----------------------------------------- | --------------------------------------- | ---------------- | ------------- |
+| initialized | Whether the field has been initialized    | Boolean                                 | No               | `false`       |
+| mounted     | Is the field mounted                      | Boolean                                 | No               | `false`       |
+| unmounted   | Is the field unmounted                    | Boolean                                 | No               | `false`       |
+| address     | Field node path                           | [FormPath](/api/entry/form-path)        | Yes              |               |
+| path        | Field data path                           | [FormPath](/api/entry/form-path)        | Yes              |               |
+| title       | Field Title                               | [FieldMessage](#fieldmessage)           | No               | `""`          |
+| description | Field description                         | [FieldMessage](#fieldmessage)           | No               | `""`          |
+| decorator   | field decorator                           | Any[]                                   | No               | `null`        |
+| component   | Field component                           | Any[]                                   | No               | `null`        |
+| parent      | Parent field                              | [GeneralField](#generalfield)           | yes              | `null`        |
+| display     | Field display status                      | [FieldDisplayTypes](#fielddisplaytypes) | No               | `"visible"`   |
+| pattern     | Field interaction mode                    | [FieldPatternTypes](#fieldpatterntypes) | No               | `"editable"`  |
+| hidden      | Whether the field is hidden               | Boolean                                 | No               | `false`       |
+| visible     | Whether the field is displayed            | Boolean                                 | No               | `true`        |
+| disabled    | Whether the field is disabled             | Boolean                                 | No               | `false`       |
+| readOnly    | Is the field read-only                    | Boolean                                 | No               | `false`       |
+| readPretty  | Whether the field is in the reading state | Boolean                                 | No               | `false`       |
+| editable    | Field is editable                         | Boolean                                 | No               | `true`        |
 
-#### 详细解释
+#### explain in detail
 
 **hidden**
 
-为 true 时是 display 为 hidden，为 false 时是 display 为 visible
+When true, display is hidden, when false, display is visible
 
 **visible**
 
-为 true 时是 display 为 visible，为 false 时是 display 为 none
+When true, display is visible, when false, display is none
 
-## 方法
+## Method
 
 ### setTitle
 
-#### 描述
+#### Description
 
-设置字段标题
+Set field title
 
-#### 签名
+#### Signature
 
 ```ts
 interface setTitle {
@@ -57,15 +57,15 @@ interface setTitle {
 }
 ```
 
-FieldMessage 参考 [FieldMessage](#fieldmessage)
+FieldMessage Reference [FieldMessage](#fieldmessage)
 
 ### setDescription
 
-#### 描述
+#### Description
 
-设置字段描述信息
+Set field description information
 
-#### 签名
+#### Signature
 
 ```ts
 interface setDescription {
@@ -73,15 +73,15 @@ interface setDescription {
 }
 ```
 
-FieldMessage 参考 [FieldMessage](#fieldmessage)
+FieldMessage Reference [FieldMessage](#fieldmessage)
 
 ### setDisplay
 
-#### 描述
+#### Description
 
-设置字段展示状态
+Set field display status
 
-#### 签名
+#### Signature
 
 ```ts
 interface setDisplay {
@@ -89,15 +89,15 @@ interface setDisplay {
 }
 ```
 
-FieldDisplayTypes 参考 [FieldDisplayTypes](#fielddisplaytypes)
+FieldDisplayTypes Reference [FieldDisplayTypes](#fielddisplaytypes)
 
 ### setPattern
 
-#### 描述
+#### Description
 
-设置字段交互模式
+Set field interaction mode
 
-#### 签名
+#### Signature
 
 ```ts
 interface setPattern {
@@ -105,15 +105,15 @@ interface setPattern {
 }
 ```
 
-FieldPatternTypes 参考 [FieldPatternTypes](#fieldpatterntypes)
+FieldPatternTypes Reference [FieldPatternTypes](#fieldpatterntypes)
 
 ### setComponent
 
-#### 描述
+#### Description
 
-设置字段组件
+Set field component
 
-#### 签名
+#### Signature
 
 ```ts
 interface setComponent {
@@ -121,15 +121,15 @@ interface setComponent {
 }
 ```
 
-FieldComponent 参考 [FieldComponent](#fieldcomponent)
+FieldComponent Reference [FieldComponent](#fieldcomponent)
 
 ### setComponentProps
 
-#### 描述
+#### Description
 
-设置字段组件属性
+Set field component properties
 
-#### 签名
+#### Signature
 
 ```ts
 interface setComponentProps {
@@ -139,11 +139,11 @@ interface setComponentProps {
 
 ### setDecorator
 
-#### 描述
+#### Description
 
-设置字段装饰器
+Set field decorator
 
-#### 签名
+#### Signature
 
 ```ts
 interface setDecorator {
@@ -151,15 +151,15 @@ interface setDecorator {
 }
 ```
 
-FieldDecorator 参考 [FieldDecorator](#fielddecorator)
+FieldDecorator Reference [FieldDecorator](#fielddecorator)
 
 ### setDecoratorProps
 
-#### 描述
+#### Description
 
-设置字段装饰器属性
+Set field decorator properties
 
-#### 签名
+#### Signature
 
 ```ts
 interface setDecoratorProps {
@@ -169,11 +169,11 @@ interface setDecoratorProps {
 
 ### setState
 
-#### 描述
+#### Description
 
-设置字段状态
+Set field status
 
-#### 签名
+#### Signature
 
 ```ts
 interface setState {
@@ -182,15 +182,15 @@ interface setState {
 }
 ```
 
-IVoidFieldState 参考 [IVoidFieldState](#ifieldstate)
+IVoidFieldState Reference [IVoidFieldState](#ifieldstate)
 
 ### getState
 
-#### 描述
+#### Description
 
-获取字段状态
+Get field status
 
-#### 签名
+#### Signature
 
 ```ts
 interface getState<T> {
@@ -199,15 +199,15 @@ interface getState<T> {
 }
 ```
 
-IVoidFieldState 参考 [IVoidFieldState](#ifieldstate)
+IVoidFieldState Reference [IVoidFieldState](#ifieldstate)
 
 ### onInit
 
-#### 描述
+#### Description
 
-触发字段初始化，默认不需要手动调用
+Trigger field initialization, no need to call manually
 
-#### 签名
+#### Signature
 
 ```ts
 interface onInit {
@@ -217,11 +217,11 @@ interface onInit {
 
 ### onMount
 
-#### 描述
+#### Description
 
-触发字段挂载
+Trigger field mount
 
-#### 签名
+#### Signature
 
 ```ts
 interface onMount {
@@ -231,11 +231,11 @@ interface onMount {
 
 ### onUnmount
 
-#### 描述
+#### Description
 
-触发字段卸载
+Trigger field unloading
 
-#### 签名
+#### Signature
 
 ```ts
 interface onUnmount {
@@ -245,11 +245,11 @@ interface onUnmount {
 
 ### query
 
-#### 描述
+#### Description
 
-查询字段，可以基于当前字段查询相邻字段
+Query field, you can query adjacent fields based on the current field
 
-#### 签名
+#### Signature
 
 ```ts
 interface query {
@@ -257,17 +257,17 @@ interface query {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
-Query 对象 API 参考 [Query](/api/models/query)
+Query object API reference [Query](/api/models/query)
 
 ### dispose
 
-#### 描述
+#### Description
 
-释放 observer，默认不需要手动释放
+Release observer, no need to release manually by default
 
-#### 签名
+#### Signature
 
 ```ts
 interface dispose {
@@ -275,13 +275,27 @@ interface dispose {
 }
 ```
 
+### destroy
+
+#### Description
+
+Release observer, and remove current field model
+
+#### Signature
+
+```ts
+interface destroy {
+  (): void
+}
+```
+
 ### match
 
-#### 描述
+#### Description
 
-基于路径匹配字段
+Match fields based on path
 
-#### 签名
+#### Signature
 
 ```ts
 interface match {
@@ -289,12 +303,12 @@ interface match {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
-## 类型
+## Types of
 
 <Alert>
-注意：如果要手动消费类型，直接消费全局namespace中的Formily.Core.Types中的类型即可
+Note: If you want to manually consume the type, just export it directly from the package module
 </Alert>
 
 ### FieldMessage
@@ -303,7 +317,7 @@ FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 type FieldMessage = string | JSXElement
 ```
 
-如果在支持 JSX 的 UI 框架下，我们可以直接传 JSX 的 Node，否则，我们只能传字符串
+If under the UI framework that supports JSX, we can directly pass the Node of JSX, otherwise, we can only pass the string
 
 ### FieldComponent
 
@@ -311,7 +325,7 @@ type FieldMessage = string | JSXElement
 type FieldComponent = string | JSXComponentConstructor
 ```
 
-字段组件，如果我们在支持 JSX 的框架中使用，FieldComponent 推荐直接存储 JSX 组件引用，否则可以存储一个组件标识字符串，在实际渲染的时候做一次分发。
+Field component, if we use it in a framework that supports JSX, FieldComponent recommends to store the JSX component reference directly, otherwise it can store a component identification string and distribute it during actual rendering.
 
 ### FieldDecorator
 
@@ -319,7 +333,7 @@ type FieldComponent = string | JSXComponentConstructor
 type FieldDecorator = string | JSXComponentConstructor
 ```
 
-字段装饰器，如果我们在支持 JSX 的框架中使用，FieldDecorator 推荐直接存储 JSX 组件引用，否则可以存储一个组件标识字符串，在实际渲染的时候做一次分发。
+Field decorator, if we use it in a framework that supports JSX, FieldDecorator recommends to store the JSX component reference directly, otherwise it can store a component identification string and distribute it during actual rendering.
 
 ### FieldReaction
 
@@ -345,11 +359,11 @@ type FieldPatternTypes = 'editable' | 'disabled' | 'readOnly' | 'readPretty'
 type GeneralField = Field | VoidField | ArrayField | ObjectField
 ```
 
-Field 参考 [Field](/api/models/field)
+Field Reference [Field](/api/models/field)
 
-ArrayField 参考 [ArrayField](/api/models/array-field)
+ArrayField Reference [ArrayField](/api/models/array-field)
 
-ObjectField 参考 [ObjectField](/api/models/object-field)
+ObjectField Reference [ObjectField](/api/models/object-field)
 
 ### IVoidFieldState
 
@@ -383,4 +397,4 @@ interface IVoidFieldState {
 type IGeneralFieldState = IVoidFieldState & IFieldState
 ```
 
-IFieldState 参考 [IFieldState](/api/models/field#ifieldstate)
+IFieldState Reference [IFieldState](/api/models/field#ifieldstate)

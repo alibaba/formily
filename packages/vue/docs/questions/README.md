@@ -4,7 +4,6 @@ sidebar: auto
 
 # 常见问题
 
-
 ## 如何添加事件？
 
 `x-component-props` 中可以用 `@` 来标识事件，同时也支持 `onXxx` 这种方式来标识事件。两者区别在于使用 `@` 标识的内容不会再作为 prop 传入组件，而 `onXxx` 这种会。这是为了兼容某些组件具有 `onXxx` 的 prop，如 ElementUI 中的 [upload 组件](https://element.eleme.cn/#/zh-CN/component/upload#attribute)。
@@ -20,7 +19,6 @@ sidebar: auto
 使用 `x-content` 可以在组件的 `default` 插槽中插入内容。可以传入文本或组件。
 
 <dumi-previewer demoPath="questions/default-slot" />
-
 
 ## 如何使用具名插槽？
 

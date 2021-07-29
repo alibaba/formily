@@ -1,10 +1,10 @@
 # FormStep
 
-> 分步表单组件
+> Step-by-step form components
 >
-> 注意：该组件只能用在 Schema 场景
+> Note: This component can only be used in Schema scenarios
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -34,7 +34,7 @@ export default () => {
         >
           <SchemaField.Void
             x-component="FormStep.StepPane"
-            x-component-props={{ title: '第一步' }}
+            x-component-props={{ title: 'First Step' }}
           >
             <SchemaField.String
               name="aaa"
@@ -45,7 +45,7 @@ export default () => {
           </SchemaField.Void>
           <SchemaField.Void
             x-component="FormStep.StepPane"
-            x-component-props={{ title: '第二步' }}
+            x-component-props={{ title: 'Second Step' }}
           >
             <SchemaField.String
               name="bbb"
@@ -57,7 +57,7 @@ export default () => {
           <SchemaField.Void
             type="void"
             x-component="FormStep.StepPane"
-            x-component-props={{ title: '第三步' }}
+            x-component-props={{ title: 'Step 3' }}
           >
             <SchemaField.String
               name="ccc"
@@ -77,7 +77,7 @@ export default () => {
                 formStep.back()
               }}
             >
-              上一步
+              Previous
             </Button>
             <Button
               disabled={!formStep.allowNext}
@@ -85,7 +85,7 @@ export default () => {
                 formStep.next()
               }}
             >
-              下一步
+              Next step
             </Button>
             <Button
               disabled={formStep.allowNext}
@@ -93,7 +93,7 @@ export default () => {
                 formStep.submit(console.log)
               }}
             >
-              提交
+              submit
             </Button>
           </FormButtonGroup>
         )}
@@ -103,7 +103,7 @@ export default () => {
 }
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -137,7 +137,7 @@ const schema = {
           type: 'void',
           'x-component': 'FormStep.StepPane',
           'x-component-props': {
-            title: '第一步',
+            title: 'First Step',
           },
           properties: {
             aaa: {
@@ -153,7 +153,7 @@ const schema = {
           type: 'void',
           'x-component': 'FormStep.StepPane',
           'x-component-props': {
-            title: '第二步',
+            title: 'Second Step',
           },
           properties: {
             bbb: {
@@ -169,7 +169,7 @@ const schema = {
           type: 'void',
           'x-component': 'FormStep.StepPane',
           'x-component-props': {
-            title: '第三步',
+            title: 'The third step',
           },
           properties: {
             ccc: {
@@ -199,7 +199,7 @@ export default () => {
                 formStep.back()
               }}
             >
-              上一步
+              Previous
             </Button>
             <Button
               disabled={!formStep.allowNext}
@@ -207,7 +207,7 @@ export default () => {
                 formStep.next()
               }}
             >
-              下一步
+              Next step
             </Button>
             <Button
               disabled={formStep.allowNext}
@@ -215,7 +215,7 @@ export default () => {
                 formStep.submit(console.log)
               }}
             >
-              提交
+              submit
             </Button>
           </FormButtonGroup>
         )}
@@ -229,37 +229,39 @@ export default () => {
 
 ### FormStep
 
-| 属性名   | 类型      | 描述                                               | 默认值 |
-| -------- | --------- | -------------------------------------------------- | ------ |
-| formStep | IFormStep | 传入通过 createFormStep/useFormStep 创建出来的模型 |        |
+| Property name | Type      | Description                                             | Default value |
+| ------------- | --------- | ------------------------------------------------------- | ------------- |
+| formStep      | IFormStep | Pass in the model created by createFormStep/useFormStep |               |
 
-其余参考 https://fusion.design/pc/component/basic/step
+Other references https://fusion.design/pc/component/basic/step
 
 ### FormStep.StepPane
 
-参考 https://fusion.design/pc/component/basic/step Steps.Step 属性
+Refer to https://fusion.design/pc/component/basic/step Steps.Step properties
 
 ### FormStep.createFormStep
 
 ```ts pure
+import { Form } from '@formily/core'
+
 interface createFormStep {
   (current?: number): IFormStep
 }
 
 interface IFormTab {
-  //当前索引
+  //Current index
   current: number
-  //是否允许向后
+  //Whether to allow backwards
   allowNext: boolean
-  //是否允许向前
+  //Whether to allow forward
   allowBack: boolean
-  //设置当前索引
+  //Set the current index
   setCurrent(key: number): void
-  //提交表单
-  submit: Formily.Core.Models.Form['submit']
-  //向后
+  //submit Form
+  submit: Form['submit']
+  //backward
   next(): void
-  //向前
+  //forward
   back(): void
 }
 ```

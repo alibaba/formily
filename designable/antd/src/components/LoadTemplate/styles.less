@@ -1,0 +1,35 @@
+@import '~antd/lib/style/themes/default.less';
+
+.dn-load-template {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  &-actions {
+    position: relative;
+    padding: 0 20px;
+    &::before {
+      position: absolute;
+      content: '';
+      display: block;
+      height: 0;
+      width: 300%;
+      top: 50%;
+      border-bottom: 2px dashed @border-color-split;
+      right: 100%;
+    }
+    &::after {
+      position: absolute;
+      content: '';
+      display: block;
+      height: 0;
+      width: 300%;
+      top: 50%;
+      border-bottom: 2px dashed @border-color-split;
+      left: 100%;
+    }
+  }
+}

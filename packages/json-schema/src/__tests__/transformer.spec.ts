@@ -5,6 +5,38 @@ test('transform field props', () => {
     type: 'string',
   })
   expect(schema.toFieldProps()).not.toBeUndefined()
+  const schema2 = new Schema({
+    type: 'object',
+    properties: {
+      writeOnly: {
+        type: 'string',
+        writeOnly: true,
+      },
+      'x-editable': {
+        type: 'string',
+        'x-editable': true,
+      },
+      readOnly: {
+        type: 'string',
+        readOnly: true,
+      },
+      'x-read-only': {
+        type: 'string',
+        'x-read-only': true,
+      },
+      'x-read-pretty': {
+        type: 'string',
+        'x-read-pretty': true,
+      },
+    },
+  })
+  expect(schema2.properties['writeOnly'].toFieldProps().editable).toBeTruthy()
+  expect(schema2.properties['x-editable'].toFieldProps().editable).toBeTruthy()
+  expect(schema2.properties['readOnly'].toFieldProps().readOnly).toBeTruthy()
+  expect(schema2.properties['x-read-only'].toFieldProps().readOnly).toBeTruthy()
+  expect(
+    schema2.properties['x-read-pretty'].toFieldProps().readPretty
+  ).toBeTruthy()
 })
 
 test('transform required', () => {
@@ -208,5 +240,53 @@ describe('transform validator', () => {
     })
     const props = schema.toFieldProps()
     expect(props.validator.length).toEqual(1)
+  })
+})
+
+describe('transform component', () => {
+  test('findComponent', () => {
+    const Input = () => null
+    const Number = () => null
+
+    Input.Number = Number
+
+    const options = {
+      components: {
+        Input,
+      },
+    }
+
+    const schema = new Schema({
+      type: 'object',
+      properties: {
+        a: {
+          type: 'string',
+          'x-component': '',
+        },
+        b: {
+          type: 'string',
+          'x-component': 'Input',
+        },
+        c: {
+          type: 'string',
+          'x-component': 'Input.Number',
+        },
+        e: {
+          type: 'string',
+          'x-component': 'Test',
+        },
+      },
+    })
+
+    expect(schema.properties.a.toFieldProps(options).component).toBeUndefined()
+    expect(schema.properties.b.toFieldProps(options).component[0]).toEqual(
+      Input
+    )
+    expect(schema.properties.c.toFieldProps(options).component[0]).toEqual(
+      Number
+    )
+    expect(() => {
+      schema.properties.e.toFieldProps(options)
+    }).toThrowError()
   })
 })

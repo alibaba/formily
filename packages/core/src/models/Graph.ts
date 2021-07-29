@@ -7,7 +7,7 @@ import {
   isFieldState,
   isArrayFieldState,
   isObjectFieldState,
-} from '../shared'
+} from '../shared/checkers'
 
 export class Graph {
   form: Form

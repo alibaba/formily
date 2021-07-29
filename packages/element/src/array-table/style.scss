@@ -1,0 +1,90 @@
+@import '../__builtins__/styles/common.scss';
+
+$array-table-prefix-cls: '#{$formily-prefix}-array-table';
+
+.#{$array-table-prefix-cls} {
+  .#{$formily-prefix}-form-item:not(.#{$formily-prefix}-form-item-feedback-layout-popover) {
+    margin-bottom: 0 !important;
+  }
+
+  &-status-select-dropdown {
+    .#{$namespace}-badge {
+      line-height: 1;
+    }
+  }
+
+  &-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+
+    .#{$array-table-prefix-cls}-status-select.has-error {
+      .#{$namespace}-input__inner {
+        border-color: $--color-danger !important;
+      }
+    }
+  }
+
+  .#{$namespace}-table {
+    overflow: visible;
+
+    &__body-wrapper {
+      overflow: visible;
+    }
+
+    .cell {
+      overflow: visible;
+    }
+
+    .cell.el-tooltip {
+      overflow: hidden;
+    }
+
+    &__fixed {
+      box-shadow: 10px 0 10px -10px rgb(0 0 0 / 12%);
+    }
+
+    &__fixed-right {
+      box-shadow: -10px 0 10px -10px rgb(0 0 0 / 12%);
+    }
+  }
+
+  .#{$formily-prefix}-form-item-help {
+    position: absolute;
+    font-size: 12px;
+    top: 100%;
+    background: #fff;
+    width: 100%;
+    margin-top: 3px;
+    padding: 3px;
+    z-index: 2;
+    border-radius: 3px;
+    box-shadow: 0 0 10px #eee;
+  }
+
+  .#{$formily-prefix}-array-base-addition {
+    margin-top: 8px;
+    width: 100%;
+    border: $--border-width-base dashed $--border-color-base;
+
+    &:hover {
+      background-color: $--color-white;
+      border-color: $--border-color-hover;
+    }
+
+    &:active,
+    &:focus {
+      background-color: $--color-white;
+      border-color: $--color-primary;
+    }
+  }
+
+  .#{$formily-prefix}-form-item-feedback-layout-popover {
+    margin-bottom: 0;
+  }
+
+  &-inner-asterisk {
+    color: $--color-danger;
+    font-weight: $--font-weight-primary;
+  }
+}

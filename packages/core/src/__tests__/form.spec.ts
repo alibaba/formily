@@ -1,5 +1,9 @@
 import { createForm } from '../'
-import { onFieldValueChange } from '../effects'
+import {
+  onFieldValueChange,
+  onFormInitialValuesChange,
+  onFormValuesChange,
+} from '../effects'
 import { attach, sleep } from './shared'
 import { LifeCycleTypes } from '../types'
 import { observable, batch } from '@formily/reactive'
@@ -122,6 +126,34 @@ test('setValues/setInitialValues', () => {
   expect(form.values.aa).toBeUndefined()
 })
 
+test('setValues with null', () => {
+  const form = attach(createForm())
+  form.setInitialValues({
+    'object-1': {
+      'array-1': null,
+    },
+    'object-2': {
+      'array-2': null,
+    },
+  })
+  form.setValues({
+    'object-1': {
+      'array-1': null,
+    },
+    'object-2': {
+      'array-2': null,
+    },
+  })
+  expect(form.values).toEqual({
+    'object-1': {
+      'array-1': null,
+    },
+    'object-2': {
+      'array-2': null,
+    },
+  })
+})
+
 test('observable values/initialValues', () => {
   const values: any = observable({
     aa: 123,
@@ -145,7 +177,10 @@ test('observable values/initialValues', () => {
 
 test('deleteValuesIn/deleteInitialValuesIn', () => {
   const form = attach(
-    createForm({
+    createForm<{
+      aa?: number
+      bb?: number
+    }>({
       values: {
         aa: 123,
       },
@@ -157,7 +192,7 @@ test('deleteValuesIn/deleteInitialValuesIn', () => {
   expect(form.values.aa).toEqual(123)
   expect(form.values.bb).toEqual(123)
   form.deleteValuesIn('aa')
-  form.deleteIntialValuesIn('bb')
+  form.deleteInitialValuesIn('bb')
   expect(form.existValuesIn('aa')).toBeFalsy()
   expect(form.existInitialValuesIn('bb')).toBeFalsy()
 })
@@ -763,7 +798,10 @@ test('submit', async () => {
 
 test('reset', async () => {
   const form = attach(
-    createForm({
+    createForm<{
+      aa?: number
+      bb?: number
+    }>({
       values: {
         bb: 123,
       },
@@ -925,13 +963,12 @@ test('initialValues merge values before create field', () => {
   expect(arr_0_aa.value).toEqual('321')
 })
 
-
 test('initialValues merge values after create field', () => {
   const form = attach(createForm())
   const aa = attach(
     form.createArrayField({
       name: 'aa',
-      initialValue:'111'
+      initialValue: '111',
     })
   )
   const array = attach(
@@ -951,4 +988,161 @@ test('initialValues merge values after create field', () => {
   expect(array.value).toEqual([{ aa: '321' }])
   expect(arr_0_aa.value).toEqual('321')
   expect(aa.value).toEqual('222')
+})
+
+test('remove property of form values with undefined value', () => {
+  const form = attach(createForm())
+  const field = attach(
+    form.createField({
+      name: 'aaa',
+      initialValue: 123,
+    })
+  )
+  expect(form.values).toMatchObject({ aaa: 123 })
+  field.display = 'none'
+  expect(form.values.hasOwnProperty('aaa')).toBeFalsy()
+  field.display = 'visible'
+  expect(form.values.hasOwnProperty('aaa')).toBeTruthy()
+  field.setValue(undefined)
+  expect(form.values.hasOwnProperty('aaa')).toBeTruthy()
+})
+
+test('empty array initialValues', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        aa: [0],
+        bb: [''],
+        cc: [],
+        dd: [null],
+        ee: [undefined],
+      },
+    })
+  )
+  form.createArrayField({
+    name: 'aa',
+  })
+  form.createArrayField({
+    name: 'bb',
+  })
+  form.createArrayField({
+    name: 'cc',
+  })
+  form.createArrayField({
+    name: 'dd',
+  })
+  form.createArrayField({
+    name: 'ee',
+  })
+  expect(form.values.aa).toEqual([0])
+  expect(form.values.bb).toEqual([''])
+  expect(form.values.cc).toEqual([])
+  expect(form.values.dd).toEqual([])
+  expect(form.values.ee).toEqual([])
+})
+
+test('form lifecycle can be triggered after call form.setXXX', () => {
+  let initialValuesTriggerNum = 0
+  let valuesTriggerNum = 0
+
+  const form = attach(
+    createForm<{
+      aa?: number
+      bb?: number
+    }>({
+      initialValues: {
+        aa: 1,
+      },
+      values: {
+        bb: 1,
+      },
+    })
+  )
+
+  form.setEffects(() => {
+    onFormInitialValuesChange(() => {
+      initialValuesTriggerNum++
+    })
+
+    onFormValuesChange(() => {
+      valuesTriggerNum++
+    })
+  })
+
+  expect(initialValuesTriggerNum).toEqual(0)
+  expect(valuesTriggerNum).toEqual(0)
+
+  form.initialValues.aa = 2
+  form.values.bb = 2
+
+  expect(initialValuesTriggerNum).toEqual(1)
+  // initialValues 会通过 applyValuesPatch 改变 values，导致 onFormValuesChange 多触发一次
+  expect(valuesTriggerNum).toEqual(2)
+
+  form.setInitialValues({ aa: 3 })
+  form.setValues({ bb: 3 })
+
+  expect(initialValuesTriggerNum).toEqual(2)
+  expect(valuesTriggerNum).toEqual(4)
+
+  // 测试 form.setXXX 之后还能正常触发：https://github.com/alibaba/formily/issues/1675
+  form.initialValues.aa = 4
+  form.values.bb = 4
+
+  expect(initialValuesTriggerNum).toEqual(3)
+  expect(valuesTriggerNum).toEqual(6)
+})
+
+test('form values change with array field(default value)', async () => {
+  const handler = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFormValuesChange(handler)
+      },
+    })
+  )
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+      initialValue: [
+        {
+          hello: 'world',
+        },
+      ],
+    })
+  )
+  await array.push({})
+  expect(handler).toBeCalledTimes(2)
+})
+
+test('setValues deep merge', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        aa: {
+          bb: 123,
+          cc: 321,
+        },
+      },
+    })
+  )
+  expect(form.values).toEqual({
+    aa: {
+      bb: 123,
+      cc: 321,
+    },
+  })
+  form.setValues({
+    aa: {
+      bb: '',
+      cc: '',
+    },
+  })
+  expect(form.values).toEqual({
+    aa: {
+      bb: '',
+      cc: '',
+    },
+  })
 })

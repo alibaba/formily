@@ -1,13 +1,11 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
-import { isVoidField } from '@formily/core'
+import { isVoidField, Field } from '@formily/core'
 import { useField, observer } from '@formily/react'
-import { Form, Balloon } from '@alifd/next'
+import { Balloon } from '@alifd/next'
 import { EditOutlined, CloseOutlined, MessageOutlined } from '@ant-design/icons'
 import { BalloonProps as PopoverProps } from '@alifd/next/lib/balloon'
 import { BaseItem, IFormItemProps } from '../form-item'
 import { useClickAway, usePrefixCls } from '../__builtins__'
-import { Space } from '../space'
-import cls from 'classnames'
 /**
  * 默认Inline展示
  */
@@ -19,13 +17,13 @@ type ComposedEditable = React.FC<IFormItemProps> & {
 }
 
 const useParentPattern = () => {
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   return field?.parent?.pattern || field?.form?.pattern
 }
 
 const useEditable = (): [boolean, (payload: boolean) => void] => {
   const pattern = useParentPattern()
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   useLayoutEffect(() => {
     if (pattern === 'editable') {
       field.setPattern('readPretty')
@@ -62,7 +60,7 @@ export const Editable: ComposedEditable = observer((props) => {
   const [editable, setEditable] = useEditable()
   const pattern = useParentPattern()
   const itemProps = useFormItemProps()
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   const basePrefixCls = usePrefixCls()
   const prefixCls = usePrefixCls('formily-editable')
   const ref = useRef<boolean>()
@@ -132,7 +130,7 @@ export const Editable: ComposedEditable = observer((props) => {
 })
 
 Editable.Popover = observer(({ ...props }) => {
-  const field = useField<Formily.Core.Models.Field>()
+  const field = useField<Field>()
   const pattern = useParentPattern()
   const [visible, setVisible] = useState(false)
   const prefixCls = usePrefixCls('formily-editable')
@@ -189,3 +187,5 @@ Editable.Popover = observer(({ ...props }) => {
     </Balloon>
   )
 })
+
+export default Editable

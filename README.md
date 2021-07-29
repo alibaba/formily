@@ -2,10 +2,13 @@ English | [简体中文](./README.zh-cn.md)
 
 <p align="center">
 <img src="https://img.alicdn.com/tfs/TB1fHhZu4D1gK0jSZFyXXciOVXa-2500-1200.png">
+<img src="https://img.shields.io/npm/dt/@formily/antd"/>
+<img src="https://img.shields.io/npm/dm/@formily/antd"/>
 <a href="https://www.npmjs.com/package/@formily/core"><img src="https://img.shields.io/npm/v/@formily/core.svg"></a>
-<a href="https://www.npmjs.com/package/@formily/react"><img src="https://img.shields.io/npm/v/@formily/react.svg"></a>
-<a href="https://travis-ci.com/alibaba/formily"><img src="https://travis-ci.com/alibaba/formily.svg?branch=master"></a>
-<a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
+<a href="https://codecov.io/gh/alibaba/formily">
+  <img src="https://codecov.io/gh/alibaba/formily/branch/formily_next/graph/badge.svg?token=3V9RU8Wh9d"/>
+</a>
+<img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"/>
 <a href="https://app.netlify.com/sites/formily/deploys"><img src="https://api.netlify.com/api/v1/badges/7145918b-9cb5-47f8-8a42-111969e232ef/deploy-status"/></a>
 </p>
 
@@ -17,24 +20,40 @@ In React, the whole tree rendering performance problem of the form is very obvio
 
 ## Features
 
+- 🖼 Designable, You can quickly develop forms at low cost through [Form Builder](https://designable-antd.formilyjs.org/).
 - 🚀 High performance, fields managed independently, rather rerender the whole tree.
 - 💡 Integrated Alibaba Fusion and Ant Design components are guaranteed to work out of the box.
 - 🎨 JSON Schema applied for BackEnd. JSchema applied for FrontEnd. Two paradigms can be converted to each other.
 - 🏅 Side effects are managed independently, making form data linkages easier than ever before.
 - 🌯 Override most complicated form layout use cases.
 
-## Documents
+## Form Builder
 
-- [formilyjs.org](https://formilyjs.org)
+![https://designable-antd.formilyjs.org/](https://img.alicdn.com/imgextra/i3/O1CN01xAJj1y1wcGzXYc1Uq_!!6000000006328-2-tps-2980-1740.png)
+
+## WebSite
+
+2.0
+
+https://v2.formilyjs.org
+
+1.0
+
+https://formilyjs.org
 
 ## Community
 
+- [designable](https://github.com/alibaba/designable)
 - [icejs](https://github.com/alibaba/ice)
+
+## How to contribute?
+
+- [Contribute document](https://v2.formilyjs.org/zh-CN/guide/contribution)
 
 ## Contributors
 
 This project exists thanks to all the people who contribute.
-<a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://opencollective.com/formily/contributors.svg?width=890" /></a>
+<a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://contrib.rocks/image?repo=alibaba/formily" /></a>
 
 ## LICENSE
 

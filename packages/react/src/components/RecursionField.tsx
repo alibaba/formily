@@ -1,5 +1,6 @@
 import React, { Fragment, useContext, useMemo } from 'react'
 import { isFn, isValid } from '@formily/shared'
+import { GeneralField } from '@formily/core'
 import { Schema } from '@formily/json-schema'
 import {
   SchemaContext,
@@ -19,14 +20,12 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const options = useContext(SchemaOptionsContext)
   const scope = useContext(SchemaExpressionScopeContext)
   const fieldSchema = useMemo(() => {
-    return schema?.compile({
-      ...options.scope,
-      ...scope,
-    })
+    return schema?.compile(scope)
   }, [schema])
-  const fieldProps = useMemo(() => fieldSchema?.toFieldProps(options) as any, [
-    fieldSchema,
-  ])
+  const fieldProps = useMemo(
+    () => fieldSchema?.toFieldProps({ ...options, scope }) as any,
+    [fieldSchema]
+  )
   const getBasePath = () => {
     if (props.onlyRenderProperties) {
       return props.basePath || parent?.address.concat(props.name)
@@ -34,7 +33,9 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
     return props.basePath || parent?.address
   }
   const basePath = getBasePath()
-  const renderProperties = (field?: Formily.Core.Types.GeneralField) => {
+  const children =
+    fieldSchema['x-content'] || fieldSchema['x-component-props']?.['children']
+  const renderProperties = (field?: GeneralField) => {
     if (props.onlyRenderSelf) return
     return (
       <Fragment>
@@ -55,13 +56,13 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
           return (
             <RecursionField
               schema={schema}
-              key={index}
+              key={`${index}-${name}`}
               name={name}
               basePath={base}
             />
           )
         })}
-        {fieldSchema['x-content']}
+        {children}
       </Fragment>
     )
   }
@@ -77,7 +78,9 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
       )
     } else if (fieldSchema.type === 'array') {
       return (
-        <ArrayField {...fieldProps} name={props.name} basePath={basePath} />
+        <ArrayField {...fieldProps} name={props.name} basePath={basePath}>
+          {children}
+        </ArrayField>
       )
     } else if (fieldSchema.type === 'void') {
       if (props.onlyRenderProperties) return renderProperties()
@@ -89,7 +92,7 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
     }
     return (
       <Field {...fieldProps} name={props.name} basePath={basePath}>
-        {fieldSchema['x-content']}
+        {children}
       </Field>
     )
   }

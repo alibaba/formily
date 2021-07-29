@@ -20,8 +20,6 @@ export type AnyFunction = (...args: any[]) => any
 
 export type JSXComponent = any
 
-export type JSXComponenntProps<P> = Record<string, any>
-
 export type LifeCycleHandler<T> = (payload: T, context: any) => void
 
 export type LifeCyclePayload<T> = (
@@ -228,7 +226,7 @@ export interface IFormProps<T extends object = any> {
   readPretty?: boolean
   effects?: (form: Form<T>) => void
   validateFirst?: boolean
-  controlled?: boolean
+  designable?: boolean
 }
 
 export type IFormMergeStrategy =
@@ -266,7 +264,7 @@ export interface IFieldCaches {
   value?: any
   initialValue?: any
   feedbacks?: IFieldFeedback[]
-  inputing?: boolean
+  inputting?: boolean
 }
 
 export type FieldDisplayTypes = 'none' | 'hidden' | 'visible' | ({} & string)
@@ -281,26 +279,24 @@ export type FieldPatternTypes =
 export type FieldValidator = Validator
 
 export type FieldDataSource = {
-  label?: string
-  value?: string
-  title?: string
-  key?: string
-  text?: string
+  label?: any
+  value?: any
+  title?: any
+  key?: any
+  text?: any
   children?: FieldDataSource
   [key: string]: any
 }[]
 
-export type FieldComponent<Component extends JSXComponent> =
-  | [Component]
-  | [Component, JSXComponenntProps<Component>]
-  | boolean
-  | any[]
+export type FieldComponent<
+  Component extends JSXComponent,
+  ComponentProps = any
+> = [Component] | [Component, ComponentProps] | boolean | any[]
 
-export type FieldDecorator<Decorator extends JSXComponent> =
-  | [Decorator]
-  | [Decorator, JSXComponenntProps<Decorator>]
-  | boolean
-  | any[]
+export type FieldDecorator<
+  Decorator extends JSXComponent,
+  ComponentProps = any
+> = [Decorator] | [Decorator, ComponentProps] | boolean | any[]
 
 export type FieldReaction = (field: Field) => void
 export interface IFieldProps<
@@ -397,13 +393,12 @@ export type FieldMatchPattern = FormPathPattern | Query | GeneralField
 export interface IFieldStateSetter {
   (pattern: FieldMatchPattern, setter: (state: IFieldState) => void): void
   (pattern: FieldMatchPattern, setter: Partial<IFieldState>): void
-  (pattern: FieldMatchPattern): void
 }
 
 export interface IFieldStateGetter {
-  <Getter extends (state: IFieldState) => any>(
+  <Getter extends (state: IGeneralFieldState) => any>(
     pattern: FieldMatchPattern,
     getter: Getter
   ): ReturnType<Getter>
-  (pattern: FieldMatchPattern): IFieldState
+  (pattern: FieldMatchPattern): IGeneralFieldState
 }

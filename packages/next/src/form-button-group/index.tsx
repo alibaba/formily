@@ -40,10 +40,10 @@ type ComposedButtonGroup = React.FC<IFormButtonGroupProps> & {
 
 function getInheritedBackgroundColor(el: HTMLElement) {
   // get default style for current browser
-  var defaultStyle = getDefaultBackground() // typically "rgba(0, 0, 0, 0)"
+  let defaultStyle = getDefaultBackground() // typically "rgba(0, 0, 0, 0)"
 
   // get computed color for el
-  var backgroundColor = window.getComputedStyle(el).backgroundColor
+  let backgroundColor = window.getComputedStyle(el).backgroundColor
 
   // if we got a real value, return it
   if (backgroundColor != defaultStyle) return backgroundColor
@@ -57,9 +57,9 @@ function getInheritedBackgroundColor(el: HTMLElement) {
 
 function getDefaultBackground() {
   // have to add to the document in order to use getComputedStyle
-  var div = document.createElement('div')
+  let div = document.createElement('div')
   document.head.appendChild(div)
-  var bg = window.getComputedStyle(div).backgroundColor
+  let bg = window.getComputedStyle(div).backgroundColor
   document.head.removeChild(div)
   return bg
 }

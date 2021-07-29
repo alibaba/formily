@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { globalThisPolyfill } from '@formily/shared'
 
 const env = {
-  portalDOM: null
+  portalDOM: null,
 }
 
 export const render = (element: React.ReactElement) => {

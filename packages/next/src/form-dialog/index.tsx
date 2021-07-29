@@ -1,17 +1,32 @@
 import React, { Fragment, useRef, useLayoutEffect, useState } from 'react'
-import ReactDOM, { createPortal } from 'react-dom'
-import { createForm } from '@formily/core'
-import { FormProvider } from '@formily/react'
-import { isNum, isStr, isBool, isFn } from '@formily/shared'
-import { Dialog } from '@alifd/next'
+import { createPortal } from 'react-dom'
+import { createForm, IFormProps, Form } from '@formily/core'
+import { toJS } from '@formily/reactive'
+import { FormProvider, Observer, observer } from '@formily/react'
+import {
+  isNum,
+  isStr,
+  isBool,
+  isFn,
+  applyMiddleware,
+  IMiddleware,
+} from '@formily/shared'
+import { Dialog, ConfigProvider, Button } from '@alifd/next'
 import { DialogProps } from '@alifd/next/lib/dialog'
-import { usePrefixCls } from '../__builtins__'
+import {
+  usePrefixCls,
+  loading,
+  createPortalProvider,
+  createPortalRoot,
+} from '../__builtins__'
 
-type FormDialogContent =
+type FormDialogRenderer =
   | React.ReactElement
-  | ((resolve: () => any, reject: () => any) => React.ReactElement)
+  | ((form: Form) => React.ReactElement)
 
 type ModalTitle = string | number | React.ReactElement
+
+const getContext: () => any = ConfigProvider['getContext']
 
 const isModalTitle = (props: any): props is ModalTitle => {
   return (
@@ -19,7 +34,7 @@ const isModalTitle = (props: any): props is ModalTitle => {
   )
 }
 
-const getModelProps = (props: any): DialogProps => {
+const getModelProps = (props: any): IDialogProps => {
   if (isModalTitle(props)) {
     return {
       title: props,
@@ -29,31 +44,52 @@ const getModelProps = (props: any): DialogProps => {
   }
 }
 
+export interface IDialogProps extends DialogProps {
+  onOk?: (event: React.MouseEvent) => void | boolean
+  onCancel?: (event: React.MouseEvent) => void | boolean
+  loadingText?: React.ReactText
+}
+
 export interface IFormDialog {
-  open(props?: Formily.Core.Types.IFormProps): Promise<any>
+  forOpen(middleware: IMiddleware<IFormProps>): IFormDialog
+  forConfirm(middleware: IMiddleware<IFormProps>): IFormDialog
+  forCancel(middleware: IMiddleware<IFormProps>): IFormDialog
+  open(props?: IFormProps): Promise<any>
   close(): void
 }
 
-export interface IFormDialogComponentProps {
-  content: FormDialogContent
-  resolve: () => any
-  reject: () => any
-}
-
 export function FormDialog(
-  title: DialogProps,
-  content: FormDialogContent
+  title: IDialogProps,
+  id: string,
+  renderer: FormDialogRenderer
+): IFormDialog
+export function FormDialog(
+  title: IDialogProps,
+  renderer: FormDialogRenderer
 ): IFormDialog
 export function FormDialog(
   title: ModalTitle,
-  content: FormDialogContent
+  id: string,
+  renderer: FormDialogRenderer
 ): IFormDialog
-export function FormDialog(title: any, content: any): IFormDialog {
+export function FormDialog(
+  title: ModalTitle,
+  renderer: FormDialogRenderer
+): IFormDialog
+export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
+  if (isFn(id) || React.isValidElement(id)) {
+    renderer = id
+    id = 'form-dialog'
+  }
   const env = {
-    root: document.createElement('div'),
+    host: document.createElement('div'),
     form: null,
     promise: null,
+    openMiddlewares: [],
+    confirmMiddlewares: [],
+    cancelMiddlewares: [],
   }
+  const root = createPortalRoot(env.host, id)
   const props = getModelProps(title)
   const modal = {
     ...props,
@@ -63,73 +99,125 @@ export function FormDialog(title: any, content: any): IFormDialog {
     },
     afterClose: () => {
       props?.afterClose?.()
-      ReactDOM.unmountComponentAtNode(env.root)
-      env.root?.parentNode?.removeChild(env.root)
-      env.root = undefined
+      root.unmount()
     },
   }
-  const component = (props: IFormDialogComponentProps) => {
+  const DialogContent = observer(() => {
+    return <Fragment>{isFn(renderer) ? renderer(env.form) : renderer}</Fragment>
+  })
+  const renderDialog = (
+    visible = true,
+    resolve?: () => any,
+    reject?: () => any
+  ) => {
+    const ctx = getContext()
+    const prefix = modal.prefix || ctx.prefix || 'next'
     return (
-      <Fragment>
-        {isFn(props.content)
-          ? props.content(props.resolve, props.reject)
-          : props.content}
-      </Fragment>
+      <ConfigProvider {...ctx}>
+        <Observer>
+          {() => (
+            <Dialog
+              {...modal}
+              visible={visible}
+              footer={
+                <Fragment>
+                  <Button
+                    type="primary"
+                    className={prefix + '-dialog-btn'}
+                    loading={env.form.submitting}
+                    onClick={(e) => {
+                      if (modal?.onOk?.(e) !== false) {
+                        resolve()
+                      }
+                    }}
+                  >
+                    {modal?.locale?.ok || ctx?.locale?.Dialog?.ok || '确定'}
+                  </Button>
+                  <Button
+                    className={prefix + '-dialog-btn'}
+                    onClick={(e) => {
+                      if (modal?.onCancel?.(e) !== false) {
+                        reject()
+                      }
+                    }}
+                  >
+                    {modal?.locale?.cancel ||
+                      ctx?.locale?.Dialog?.cancel ||
+                      '取消'}
+                  </Button>
+                </Fragment>
+              }
+              onClose={(trigger, e) => {
+                modal?.onClose?.(trigger, e)
+                reject()
+              }}
+            >
+              <FormProvider form={env.form}>
+                <DialogContent />
+              </FormProvider>
+            </Dialog>
+          )}
+        </Observer>
+      </ConfigProvider>
     )
   }
-  const render = (visible = true, resolve?: () => any, reject?: () => any) => {
-    ReactDOM.render(
-      <Dialog
-        {...modal}
-        visible={visible}
-        onClose={(trigger, e) => {
-          modal?.onClose?.(trigger, e)
-          formDialog.close()
-        }}
-        onCancel={(e) => {
-          modal?.onCancel?.(e)
-          formDialog.close()
-        }}
-        onOk={async (e) => {
-          modal?.onOk?.(e)
-          resolve()
-        }}
-      >
-        <FormProvider form={env.form}>
-          {React.createElement(component, {
-            content,
-            resolve,
-            reject,
-          })}
-        </FormProvider>
-      </Dialog>,
-      env.root
-    )
-  }
-  document.body.appendChild(env.root)
+  document.body.appendChild(env.host)
   const formDialog = {
-    open: (props: Formily.Core.Types.IFormProps) => {
+    forOpen: (middleware: IMiddleware<IFormProps>) => {
+      if (isFn(middleware)) {
+        env.openMiddlewares.push(middleware)
+      }
+      return formDialog
+    },
+    forConfirm: (middleware: IMiddleware<Form>) => {
+      if (isFn(middleware)) {
+        env.confirmMiddlewares.push(middleware)
+      }
+      return formDialog
+    },
+    forCancel: (middleware: IMiddleware<Form>) => {
+      if (isFn(middleware)) {
+        env.cancelMiddlewares.push(middleware)
+      }
+      return formDialog
+    },
+    open: async (props: IFormProps) => {
       if (env.promise) return env.promise
-      env.form = env.form || createForm(props)
-      env.promise = new Promise((resolve) => {
-        render(
-          true,
-          () => {
-            env.form.submit((values: any) => {
-              resolve(values)
+      env.promise = new Promise(async (resolve, reject) => {
+        try {
+          props = await loading(modal.loadingText, () =>
+            applyMiddleware(props, env.openMiddlewares)
+          )
+          env.form = env.form || createForm(props)
+        } catch (e) {
+          reject(e)
+        }
+        root.render(() =>
+          renderDialog(
+            true,
+            () => {
+              env.form
+                .submit(async () => {
+                  await applyMiddleware(env.form, env.confirmMiddlewares)
+                  resolve(toJS(env.form.values))
+                  formDialog.close()
+                })
+                .catch(() => {})
+            },
+            async () => {
+              await loading(modal.loadingText, () =>
+                applyMiddleware(env.form, env.cancelMiddlewares)
+              )
               formDialog.close()
-            })
-          },
-          () => {
-            formDialog.close()
-          }
+            }
+          )
         )
       })
       return env.promise
     },
     close: () => {
-      if (!env.root) return
-      render(false)
+      if (!env.host) return
+      root.render(() => renderDialog(false))
     },
   }
   return formDialog
@@ -165,5 +253,7 @@ const DialogFooter: React.FC = (props) => {
 }
 
 FormDialog.Footer = DialogFooter
+
+FormDialog.Portal = createPortalProvider('form-dialog')
 
 export default FormDialog

@@ -4,19 +4,19 @@ order: 3
 
 # ObjectField
 
-调用[createObjectField](/api/models/form#createobjectfield)所返回的 ObjectField 模型。
+Call the ObjectField model returned by [createObjectField](/api/models/form#createobjectfield).
 
-因为 ObjectField 是继承至 [Field](/api/models/field) 模型的，所以大部分 API 参考 Field 模型即可，该文档只讲解扩展方法
+Because ObjectField is inherited from the [Field](/api/models/field) model, most APIs can refer to the Field model. This document only explains the extension method
 
-## 方法
+## Method
 
 ### addProperty
 
-#### 描述
+#### Description
 
-给对象添加属性，并触发 onInput
+Add attributes to the object and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface addProperty {
@@ -26,11 +26,11 @@ interface addProperty {
 
 ### removeProperty
 
-#### 描述
+#### Description
 
-移除对象属性，并触发 onInput
+Remove object properties and trigger onInput
 
-#### 签名
+#### Signature
 
 ```ts
 interface removeProperty {
@@ -40,11 +40,11 @@ interface removeProperty {
 
 ### existProperty
 
-#### 描述
+#### Description
 
-判断属性是否存在
+Determine whether the attribute exists
 
-#### 签名
+#### Signature
 
 ```ts
 interface existProperty {
@@ -52,8 +52,8 @@ interface existProperty {
 }
 ```
 
-## 类型
+## Types of
 
 ### IObjectFieldState
 
-主要属性参考[IFieldState](/api/models/field#ifieldstate)，只是 value 的数据类型要求是对象
+The main attributes refer to [IFieldState](/api/models/field#ifieldstate), but the data type of value is required to be an object

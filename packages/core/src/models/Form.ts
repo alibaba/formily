@@ -14,9 +14,11 @@ import {
   isValid,
   uid,
   globalThisPolyfill,
-  defaults,
+  merge,
   clone,
   isPlainObj,
+  isArr,
+  isObj,
 } from '@formily/shared'
 import { Heart } from './Heart'
 import { Field } from './Field'
@@ -43,14 +45,16 @@ import {
   IFormMergeStrategy,
 } from '../types'
 import {
-  isVoidField,
-  runEffects,
   modelStateGetter,
   modelStateSetter,
   createFieldStateSetter,
   createFieldStateGetter,
   applyValuesPatch,
-} from '../shared'
+  triggerFormInitialValuesChange,
+  triggerFormValuesChange,
+} from '../shared/internals'
+import { isVoidField } from '../shared/checkers'
+import { runEffects } from '../shared/effectbox'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
 import { VoidField } from './VoidField'
@@ -125,7 +129,6 @@ export class Form<ValueType extends object = any> {
   }
 
   protected makeObservable() {
-    if (this.props.controlled) return
     define(this, {
       fields: observable.shallow,
       initialized: observable.ref,
@@ -156,7 +159,7 @@ export class Form<ValueType extends object = any> {
       setPattern: batch,
       setDisplay: batch,
       setState: batch,
-      deleteIntialValuesIn: batch,
+      deleteInitialValuesIn: batch,
       deleteValuesIn: batch,
       setSubmitting: batch,
       setValidating: batch,
@@ -169,17 +172,16 @@ export class Form<ValueType extends object = any> {
   }
 
   protected makeReactive() {
-    if (this.props.controlled) return
+    if (this.props.designable) return
     this.disposers.push(
-      observe(this.initialValues, (change) => {
-        if (change.type === 'add' || change.type === 'set') {
-          applyValuesPatch(this, change.path.slice(1), change.value)
-        }
-        this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
-      }),
-      observe(this.values, () => {
-        this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
-      })
+      observe(
+        this,
+        (change) => {
+          triggerFormInitialValuesChange(this, change)
+          triggerFormValuesChange(this, change)
+        },
+        true
+      )
     )
   }
 
@@ -302,13 +304,13 @@ export class Form<ValueType extends object = any> {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
-    if (!this.fields[identifier] || this.props.controlled) {
+    if (!this.fields[identifier] || this.props.designable) {
       batch(() => {
         this.fields[identifier] = new Field(
           address,
           props,
           this,
-          this.props.controlled
+          this.props.designable
         )
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -325,13 +327,16 @@ export class Form<ValueType extends object = any> {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
-    if (!this.fields[identifier] || this.props.controlled) {
+    if (!this.fields[identifier] || this.props.designable) {
       batch(() => {
         this.fields[identifier] = new ArrayField(
           address,
-          props,
+          {
+            ...props,
+            value: isArr(props.value) ? props.value : [],
+          },
           this,
-          this.props.controlled
+          this.props.designable
         )
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -348,13 +353,16 @@ export class Form<ValueType extends object = any> {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
-    if (!this.fields[identifier] || this.props.controlled) {
+    if (!this.fields[identifier] || this.props.designable) {
       batch(() => {
         this.fields[identifier] = new ObjectField(
           address,
-          props,
+          {
+            ...props,
+            value: isObj(props.value) ? props.value : {},
+          },
           this,
-          this.props.controlled
+          this.props.designable
         )
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -371,13 +379,13 @@ export class Form<ValueType extends object = any> {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
-    if (!this.fields[identifier] || this.props.controlled) {
+    if (!this.fields[identifier] || this.props.designable) {
       batch(() => {
         this.fields[identifier] = new VoidField(
           address,
           props,
           this,
-          this.props.controlled
+          this.props.designable
         )
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -391,7 +399,7 @@ export class Form<ValueType extends object = any> {
     if (!isPlainObj(values)) return
     untracked(() => {
       if (strategy === 'merge' || strategy === 'deepMerge') {
-        this.values = defaults(this.values, values)
+        this.values = merge(this.values, values)
       } else if (strategy === 'shallowMerge') {
         this.values = Object.assign(this.values, values)
       } else {
@@ -407,7 +415,7 @@ export class Form<ValueType extends object = any> {
     if (!isPlainObj(initialValues)) return
     untracked(() => {
       if (strategy === 'merge' || strategy === 'deepMerge') {
-        this.initialValues = defaults(this.initialValues, initialValues)
+        this.initialValues = merge(this.initialValues, initialValues)
       } else if (strategy === 'shallowMerge') {
         this.initialValues = Object.assign(this.initialValues, initialValues)
       } else {
@@ -442,7 +450,7 @@ export class Form<ValueType extends object = any> {
     })
   }
 
-  deleteIntialValuesIn = (pattern: FormPathPattern) => {
+  deleteInitialValuesIn = (pattern: FormPathPattern) => {
     untracked(() => {
       FormPath.deleteIn(this.initialValues, pattern)
     })
@@ -596,18 +604,19 @@ export class Form<ValueType extends object = any> {
   onMount = () => {
     this.mounted = true
     this.notify(LifeCycleTypes.ON_FORM_MOUNT)
-    if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+    if (globalThisPolyfill[DEV_TOOLS_HOOK] && !this.props.designable) {
       globalThisPolyfill[DEV_TOOLS_HOOK].inject(this.id, this)
     }
   }
 
   onUnmount = () => {
-    this.query('*').forEach((field) => field.dispose())
-    this.unmounted = true
-    this.fields = {}
-    this.indexes.clear()
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
-    if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+    this.query('*').forEach((field) => field.destroy())
+    this.disposers.forEach((dispose) => dispose())
+    this.unmounted = true
+    this.indexes.clear()
+    this.heart.clear()
+    if (globalThisPolyfill[DEV_TOOLS_HOOK] && !this.props.designable) {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)
     }
   }
@@ -632,8 +641,10 @@ export class Form<ValueType extends object = any> {
     this.graph.setGraph(graph)
   }
 
-  clearFormGraph = () => {
-    this.fields = {}
+  clearFormGraph = (pattern: FormPathPattern = '*') => {
+    this.query(pattern).forEach((field) => {
+      field.destroy()
+    })
   }
 
   validate = async (pattern: FormPathPattern = '*') => {

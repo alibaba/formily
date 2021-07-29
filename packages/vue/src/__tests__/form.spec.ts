@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import { render } from '@testing-library/vue'
 import { createForm } from '@formily/core'
-import { FormProvider } from '../'
-import { FormConsumer } from '../components'
+import { FormProvider, FormConsumer } from '../vue2-components'
 
 Vue.component('FormProvider', FormProvider)
 Vue.component('FormConsumer', FormConsumer)
@@ -10,7 +9,9 @@ Vue.component('FormConsumer', FormConsumer)
 test('render form', () => {
   const form = createForm()
   render({
-    data() { return { form } },
+    data() {
+      return { form }
+    },
     template: `<FormProvider :form="form">
       <FormConsumer>
         <template #default="{ form }">
@@ -18,7 +19,14 @@ test('render form', () => {
         </template>
       </FormConsumer>
       <FormConsumer />
-    </FormProvider>`
+    </FormProvider>`,
   })
+
+  const errorRender = () =>
+    render({
+      template: `<FormConsumer />`,
+    })
+
   expect(form.mounted).toBeTruthy()
+  expect(errorRender).toThrow('Can not found form instance from context.')
 })

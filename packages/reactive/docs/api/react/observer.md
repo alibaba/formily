@@ -1,20 +1,22 @@
 # observer
 
-## 描述
+## observer
 
-在 React 中，将 Function Component 变成 Reaction，每次视图重新渲染就会收集依赖，依赖更新会自动重渲染
+### Description
+
+In React, turn Function Component into Reaction, and dependencies will be collected every time the view is re-rendered, and dependency updates will be automatically re-rendered
 
 <Alert>
-注意：只支持Function Component
+Note: Only Function Component is supported
 </Alert>
 
-## 签名
+### Signature
 
 ```ts
 interface IObserverOptions {
-  forwardRef?: boolean //是否透传引用
-  scheduler?: (updater: () => void) => void //调度器，可以手动控制更新时机
-  displayName?: string //包装后的组件的displayName
+  forwardRef?: boolean //Whether to pass the reference transparently
+  scheduler?: (updater: () => void) => void //The scheduler, you can manually control the timing of the update
+  displayName?: string //displayName of the packaged component
 }
 
 interface observer<T extends React.FC> {
@@ -22,7 +24,7 @@ interface observer<T extends React.FC> {
 }
 ```
 
-## 用例
+### Example
 
 ```tsx
 /**
@@ -57,4 +59,61 @@ export default observer(() => {
     </div>
   )
 })
+```
+
+## Observer
+
+### Description
+
+Similar to Vue's responsive slot, it receives a Function RenderProps, as long as any responsive data consumed inside the Function, it will be automatically re-rendered as the data changes, and it is easier to achieve local accurate rendering
+
+### Signature
+
+```ts
+interface IObserverProps {
+  children?: () => React.ReactElement
+}
+
+type Observer = React.FC<IObserverProps>
+```
+
+### Example
+
+```tsx
+/**
+ * defaultShowCode: true
+ */
+import React from 'react'
+import { observable } from '@formily/reactive'
+import { Observer } from '@formily/reactive-react'
+
+const obs = observable({
+  value: 'Hello world',
+})
+
+export default () => {
+  return (
+    <div>
+      <div>
+        <Observer>
+          {() => (
+            <input
+              style={{
+                height: 28,
+                padding: '0 8px',
+                border: '2px solid #888',
+                borderRadius: 3,
+              }}
+              value={obs.value}
+              onChange={(e) => {
+                obs.value = e.target.value
+              }}
+            />
+          )}
+        </Observer>
+      </div>
+      <Observer>{() => <div>{obs.value}</div>}</Observer>
+    </div>
+  )
+}
 ```

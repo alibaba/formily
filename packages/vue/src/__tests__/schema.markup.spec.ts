@@ -1,13 +1,12 @@
 import { createForm } from '@formily/core'
+import { useFieldSchema, useField, Schema } from '../'
 import {
   FormProvider,
-  createSchemaField,
-  useFieldSchema,
-  useField,
   RecursionField,
-  Schema
-} from '../index'
+  createSchemaField,
+} from '../vue2-components'
 import { render } from '@testing-library/vue'
+import { mount, createLocalVue } from '@vue/test-utils'
 import Vue, { CreateElement } from 'vue'
 import { defineComponent, h } from '@vue/composition-api'
 
@@ -16,21 +15,21 @@ Vue.component('RecursionField', RecursionField)
 
 const Input = defineComponent({
   props: ['value'],
-  setup (props, { attrs, listeners }) {
+  setup(props, { attrs, listeners }) {
     return () => {
-      return h('input', { 
+      return h('input', {
         attrs: {
           ...attrs,
           value: props.value,
-          'data-testid': 'input'
+          'data-testid': 'input',
         },
         on: {
           ...listeners,
-          input: listeners.change
-        }
+          input: listeners.change,
+        },
       })
     }
-  }
+  },
 })
 
 describe('markup schema field', () => {
@@ -43,16 +42,16 @@ describe('markup schema field', () => {
     })
     const { queryByTestId } = render({
       components: { SchemaField, SchemaStringField },
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
         <SchemaField>
           <SchemaStringField x-component="Input" />
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryByTestId('input')).toBeVisible()
   })
@@ -66,16 +65,16 @@ describe('markup schema field', () => {
     })
     const { queryByTestId } = render({
       components: { SchemaField, SchemaBooleanField },
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
         <SchemaField>
           <SchemaBooleanField x-component="Input" />
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryByTestId('input')).toBeVisible()
   })
@@ -89,16 +88,16 @@ describe('markup schema field', () => {
     })
     const { queryByTestId } = render({
       components: { SchemaField, SchemaNumberField },
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
         <SchemaField>
           <SchemaNumberField x-component="Input" />
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryByTestId('input')).toBeVisible()
   })
@@ -112,16 +111,16 @@ describe('markup schema field', () => {
     })
     const { queryByTestId } = render({
       components: { SchemaField, SchemaDateField },
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
         <SchemaField>
           <SchemaDateField x-component="Input" />
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryByTestId('input')).toBeVisible()
   })
@@ -135,16 +134,16 @@ describe('markup schema field', () => {
     })
     const { queryByTestId } = render({
       components: { SchemaField, SchemaDateTimeField },
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
         <SchemaField>
           <SchemaDateTimeField x-component="Input" />
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryByTestId('input')).toBeVisible()
   })
@@ -152,9 +151,13 @@ describe('markup schema field', () => {
   test('void', () => {
     const form = createForm()
     const VoidComponent = {
-      render (h: CreateElement) {
-        return h('div', { attrs: { 'data-testid': 'void-component' } }, this.$slots.default)
-      }
+      render(h: CreateElement) {
+        return h(
+          'div',
+          { attrs: { 'data-testid': 'void-component' } },
+          this.$slots.default
+        )
+      },
     }
     const { SchemaField, SchemaVoidField } = createSchemaField({
       components: {
@@ -163,16 +166,16 @@ describe('markup schema field', () => {
     })
     const { queryByTestId } = render({
       components: { SchemaField, SchemaVoidField },
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
         <SchemaField>
           <SchemaVoidField x-component="VoidComponent" />
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryByTestId('void-component')).toBeVisible()
   })
@@ -186,9 +189,9 @@ describe('markup schema field', () => {
     })
     render({
       components: { ...components },
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
@@ -200,7 +203,7 @@ describe('markup schema field', () => {
             <SchemaVoidField />
           </SchemaArrayField>
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
   })
 
@@ -213,9 +216,9 @@ describe('markup schema field', () => {
     })
     render({
       components: { ...components },
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
@@ -224,7 +227,7 @@ describe('markup schema field', () => {
             <SchemaMarkupField />
           </SchemaMarkupField>
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
   })
 
@@ -237,16 +240,16 @@ describe('markup schema field', () => {
     })
     render({
       components: { ...components },
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
         <SchemaMarkupField type="other">
           <SchemaMarkupField />
         </SchemaMarkupField>
-      </FormProvider>`
+      </FormProvider>`,
     })
   })
 })
@@ -256,33 +259,35 @@ describe('recursion field', () => {
     const form = createForm()
 
     const CustomObject = defineComponent({
-      setup () {
+      setup() {
         const schemaRef = useFieldSchema()
         return () => {
           return h('div', { attrs: { 'data-testid': 'object' } }, [
-            h('RecursionField', { props: { schema: schemaRef.value } })
+            h('RecursionField', { props: { schema: schemaRef.value } }),
           ])
         }
-      }
+      },
     })
 
     const CustomObject2 = defineComponent({
-      setup () {
-      const fieldRef = useField()
-      const schemaRef = useFieldSchema()
+      setup() {
+        const fieldRef = useField()
+        const schemaRef = useFieldSchema()
         return () => {
           const schema = schemaRef.value
           const field = fieldRef.value
           return h('div', { attrs: { 'data-testid': 'only-properties' } }, [
-            h('RecursionField', { props: {
-              name: schema.name,
-              basePath: field.address,
-              schema,
-              onlyRenderProperties: true
-            } })
+            h('RecursionField', {
+              props: {
+                name: schema.name,
+                basePath: field.address,
+                schema,
+                onlyRenderProperties: true,
+              },
+            }),
           ])
         }
-      }
+      },
     })
 
     const components = createSchemaField({
@@ -295,9 +300,9 @@ describe('recursion field', () => {
 
     const { queryAllByTestId } = render({
       components: components,
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
@@ -312,7 +317,7 @@ describe('recursion field', () => {
             <SchemaStringField x-component="Input" />
           </SchemaVoidField>
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryAllByTestId('input').length).toEqual(3)
     expect(queryAllByTestId('object').length).toEqual(1)
@@ -323,33 +328,35 @@ describe('recursion field', () => {
     const form = createForm()
 
     const CustomObject = defineComponent({
-      setup () {
+      setup() {
         const schemaRef = useFieldSchema()
         return () => {
           return h('div', { attrs: { 'data-testid': 'object' } }, [
-            h('RecursionField', { props: { schema: schemaRef.value } })
+            h('RecursionField', { props: { schema: schemaRef.value } }),
           ])
         }
-      }
+      },
     })
 
     const CustomObject2 = defineComponent({
-      setup () {
-      const fieldRef = useField()
-      const schemaRef = useFieldSchema()
+      setup() {
+        const fieldRef = useField()
+        const schemaRef = useFieldSchema()
         return () => {
           const schema = schemaRef.value
           const field = fieldRef.value
           return h('div', { attrs: { 'data-testid': 'only-properties' } }, [
-            h('RecursionField', { props: {
-              name: schema.name,
-              basePath: field.address,
-              schema,
-              onlyRenderProperties: true
-            } })
+            h('RecursionField', {
+              props: {
+                name: schema.name,
+                basePath: field.address,
+                schema,
+                onlyRenderProperties: true,
+              },
+            }),
           ])
         }
-      }
+      },
     })
 
     const components = createSchemaField({
@@ -362,9 +369,9 @@ describe('recursion field', () => {
 
     const { queryAllByTestId } = render({
       components: components,
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
@@ -379,7 +386,7 @@ describe('recursion field', () => {
             <SchemaStringField x-component="Input" />
           </SchemaVoidField>
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryAllByTestId('input').length).toEqual(3)
     expect(queryAllByTestId('object').length).toEqual(1)
@@ -390,37 +397,41 @@ describe('recursion field', () => {
     const form = createForm()
 
     const CustomObject = defineComponent({
-      setup () {
+      setup() {
         const schemaRef = useFieldSchema()
         return () => {
           return h('div', { attrs: { 'data-testid': 'object' } }, [
-            h('RecursionField', { props: {
-              schema: schemaRef.value,
-              filterProperties: (schema: Schema) => {
-                if (schema['x-component'] === 'Input') return false
-                return true
-              }
-            } })
+            h('RecursionField', {
+              props: {
+                schema: schemaRef.value,
+                filterProperties: (schema: Schema) => {
+                  if (schema['x-component'] === 'Input') return false
+                  return true
+                },
+              },
+            }),
           ])
         }
-      }
+      },
     })
 
     const CustomObject2 = defineComponent({
-      setup () {
+      setup() {
         const schemaRef = useFieldSchema()
         return () => {
           return h('div', { attrs: { 'data-testid': 'object' } }, [
-            h('RecursionField', { props: {
-              schema: schemaRef.value,
-              filterProperties: (schema: Schema) => {
-                if (schema['x-component'] === 'Input') return
-                return true
-              }
-            } })
+            h('RecursionField', {
+              props: {
+                schema: schemaRef.value,
+                filterProperties: (schema: Schema) => {
+                  if (schema['x-component'] === 'Input') return
+                  return true
+                },
+              },
+            }),
           ])
         }
-      }
+      },
     })
 
     const components = createSchemaField({
@@ -433,9 +444,9 @@ describe('recursion field', () => {
 
     const { queryAllByTestId } = render({
       components: components,
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
@@ -447,7 +458,7 @@ describe('recursion field', () => {
             <SchemaStringField x-component="Input" />
           </SchemaObjectField>
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryAllByTestId('input').length).toEqual(1)
     expect(queryAllByTestId('object').length).toEqual(2)
@@ -457,31 +468,33 @@ describe('recursion field', () => {
     const form = createForm()
 
     const CustomObject = defineComponent({
-      setup () {
+      setup() {
         const schemaRef = useFieldSchema()
         return () => {
           return h('div', { attrs: { 'data-testid': 'object' } }, [
-            h('RecursionField', { props: {
-              schema: schemaRef.value,
-              onlyRenderSelf: true
-            } })
+            h('RecursionField', {
+              props: {
+                schema: schemaRef.value,
+                onlyRenderSelf: true,
+              },
+            }),
           ])
         }
-      }
+      },
     })
 
     const components = createSchemaField({
       components: {
         Input,
-        CustomObject
+        CustomObject,
       },
     })
 
     const { queryAllByTestId } = render({
       components: components,
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
@@ -490,7 +503,7 @@ describe('recursion field', () => {
             <SchemaStringField x-component="Input" />
           </SchemaObjectField>
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryAllByTestId('input').length).toEqual(0)
     expect(queryAllByTestId('object').length).toEqual(1)
@@ -500,42 +513,46 @@ describe('recursion field', () => {
     const form = createForm()
 
     const CustomObject = defineComponent({
-      setup () {
+      setup() {
         return () => {
           return h('div', { attrs: { 'data-testid': 'object' } }, [
-            h('RecursionField', { props: {
-              schema: null
-            } })
+            h('RecursionField', {
+              props: {
+                schema: null,
+              },
+            }),
           ])
         }
-      }
+      },
     })
 
     const CustomObject2 = defineComponent({
-      setup () {
+      setup() {
         return () => {
           return h('div', { attrs: { 'data-testid': 'object' } }, [
-            h('RecursionField', { props: {
-              schema: {}
-            } })
+            h('RecursionField', {
+              props: {
+                schema: {},
+              },
+            }),
           ])
         }
-      }
+      },
     })
 
     const components = createSchemaField({
       components: {
         Input,
         CustomObject,
-        CustomObject2
+        CustomObject2,
       },
     })
 
     const { queryByTestId } = render({
       components: components,
-      data () {
+      data() {
         return {
-          form
+          form,
         }
       },
       template: `<FormProvider :form="form">
@@ -547,93 +564,99 @@ describe('recursion field', () => {
             <SchemaStringField x-component="Input" />
           </SchemaObjectField>
         </SchemaField>
-      </FormProvider>`
+      </FormProvider>`,
     })
     expect(queryByTestId('input')).toBeNull()
   })
 
-  // test('schema reactions', async () => {
-  //   const form = createForm()
-  //   const components = createSchemaField({
-  //     components: {
-  //       Input,
-  //     },
-  //   })
-  //   const { queryByTestId } = render({
-  //     components: components,
-  //     data () {
-  //       return {
-  //         form,
-  //         reactions: [
-  //           {
-  //             when: '{{$form.values.aaa === "123"}}',
-  //             fulfill: {
-  //               state: {
-  //                 visible: true,
-  //               },
-  //             },
-  //             otherwise: {
-  //               state: {
-  //                 visible: false,
-  //               },
-  //             },
-  //           },
-  //           {
-  //             when: '{{$self.value === "123"}}',
-  //             target: 'ccc',
-  //             fulfill: {
-  //               schema: {
-  //                 'x-visible': true,
-  //               },
-  //             },
-  //             otherwise: {
-  //               schema: {
-  //                 'x-visible': false,
-  //               },
-  //             },
-  //           },
-  //         ]
-  //       }
-  //     },
-  //     template: `<FormProvider :form="form">
-  //     <SchemaField>
-  //       <SchemaStringField
-  //         name="aaa"
-  //         x-component="Input"
-  //         :x-component-props="{
-  //           'data-testid': 'aaa',
-  //         }"
-  //       />
-  //       <SchemaStringField
-  //         name="bbb"
-  //         x-component="Input"
-  //         :x-component-props="{
-  //           'data-testid': 'bbb',
-  //         }"
-  //         :x-reactions="reactions"
-  //       />
-  //       <SchemaStringField
-  //         name="ccc"
-  //         x-component="Input"
-  //         :x-component-props="{
-  //           'data-testid': 'ccc',
-  //         }"
-  //       />
-  //     </SchemaField>
-  //   </FormProvider>`
-  //   })
-  //   expect(queryByTestId('bbb')).toBeNull()
-  //   fireEvent.update(queryByTestId('aaa'), '123')
-  //   expect(form.query('aaa').get('value')).toEqual('123')
-  //   await waitFor(() => {
-  //     expect(queryByTestId('bbb')).toBeVisible()
-  //   })
-  //   expect(queryByTestId('ccc')).toBeNull()
-  //   fireEvent.update(queryByTestId('bbb'), '123')
-  //   expect(form.query('bbb').get('value')).toEqual('123')
-  //   await waitFor(() => {
-  //     expect(queryByTestId('ccc')).toBeVisible()
-  //   })
-  // })
-
+  test('schema reactions', async () => {
+    const div = document.createElement('div')
+    document.body.appendChild(div)
+    const form = createForm()
+    const components = createSchemaField({
+      components: {
+        Input,
+      },
+    })
+    const localVue = createLocalVue()
+    localVue.component('FormProvider', FormProvider)
+    const TestComponent = {
+      components: components,
+      data() {
+        return {
+          form,
+          reactions: [
+            {
+              when: '{{$form.values.aaa === "123"}}',
+              fulfill: {
+                state: {
+                  visible: true,
+                },
+              },
+              otherwise: {
+                state: {
+                  visible: false,
+                },
+              },
+            },
+            {
+              when: '{{$self.value === "123"}}',
+              target: 'ccc',
+              fulfill: {
+                schema: {
+                  'x-visible': true,
+                },
+              },
+              otherwise: {
+                schema: {
+                  'x-visible': false,
+                },
+              },
+            },
+          ],
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField>
+          <SchemaStringField
+            name="aaa"
+            x-component="Input"
+            :x-component-props="{
+              'class': 'aaa',
+            }"
+          />
+          <SchemaStringField
+            name="bbb"
+            x-component="Input"
+            :x-component-props="{
+              'class': 'bbb',
+            }"
+            :x-reactions="reactions"
+          />
+          <SchemaStringField
+            name="ccc"
+            x-component="Input"
+            :x-component-props="{
+              'class': 'ccc',
+            }"
+          />
+        </SchemaField>
+      </FormProvider>`,
+    } as any
+    const wrapper = mount(TestComponent, {
+      attachTo: div,
+      localVue,
+    })
+    expect(wrapper.find('.bbb').exists()).toBeFalsy()
+    wrapper.find('.aaa').setValue('123')
+    expect(form.query('aaa').get('value')).toEqual('123')
+    await wrapper.vm.$forceUpdate()
+    expect(wrapper.find('.bbb').exists()).toBeTruthy()
+    expect(wrapper.find('.ccc').exists()).toBeFalsy()
+    wrapper.find('.bbb').setValue('123')
+    expect(form.query('bbb').get('value')).toEqual('123')
+    await wrapper.vm.$forceUpdate()
+    expect(wrapper.find('.ccc').exists()).toBeTruthy()
+    wrapper.destroy()
+  })
 })

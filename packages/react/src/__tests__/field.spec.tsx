@@ -1,6 +1,13 @@
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 import { render, fireEvent, waitFor } from '@testing-library/react'
 import { createForm } from '@formily/core'
+import {
+  isField,
+  Field as FieldType,
+  isVoidField,
+  onFieldChange,
+} from '@formily/core'
 import {
   FormProvider,
   ArrayField,
@@ -13,10 +20,10 @@ import {
   connect,
   mapProps,
   mapReadPretty,
-} from '../'
+} from '..'
 import { ReactiveField } from '../components/ReactiveField'
 import { expectThrowError } from './shared'
-import { isField, isVoidField, onFieldChange } from '@formily/core'
+
 type InputProps = {
   value?: string
   onChange?: (...args: any) => void
@@ -124,7 +131,7 @@ test('ReactiveField', () => {
   render(<ReactiveField field={null}>{() => <div></div>}</ReactiveField>)
 })
 
-test('useAttch', () => {
+test('useAttach', () => {
   const form = createForm()
   const MyComponent = (props: any) => {
     return (
@@ -142,8 +149,8 @@ test('useAttch', () => {
 
 test('useFormEffects', async () => {
   const form = createForm()
-  const CustomField = observer((props: { tag?: string }) => {
-    const field = useField<Formily.Core.Models.Field>()
+  const CustomField = observer(() => {
+    const field = useField<FieldType>()
     useFormEffects(() => {
       onFieldChange('aa', ['value'], (target) => {
         if (isVoidField(target)) return
@@ -152,27 +159,30 @@ test('useFormEffects', async () => {
     })
     return <div data-testid="custom-value">{field.value}</div>
   })
-  const { queryByTestId, rerender } = render(
-    <FormProvider form={form}>
-      <Field name="aa" decorator={[Decorator]} component={[Input]} />
-      <Field name="bb" component={[CustomField, { tag: 'xxx' }]} />
-    </FormProvider>
-  )
-  expect(queryByTestId('custom-value').textContent).toEqual('')
-  form.query('aa').take((aa) => {
-    if (isField(aa)) {
-      aa.setValue('123')
-    }
+  act(async () => {
+    const { queryByTestId, rerender } = render(
+      <FormProvider form={form}>
+        <Field name="aa" decorator={[Decorator]} component={[Input]} />
+        <Field name="bb" component={[CustomField, { tag: 'xxx' }]} />
+      </FormProvider>
+    )
+
+    expect(queryByTestId('custom-value').textContent).toEqual('')
+    form.query('aa').take((aa) => {
+      if (isField(aa)) {
+        aa.setValue('123')
+      }
+    })
+    await waitFor(() => {
+      expect(queryByTestId('custom-value').textContent).toEqual('123')
+    })
+    rerender(
+      <FormProvider form={form}>
+        <Field name="aa" decorator={[Decorator]} component={[Input]} />
+        <Field name="bb" component={[CustomField, { tag: 'yyy' }]} />
+      </FormProvider>
+    )
   })
-  await waitFor(() => {
-    expect(queryByTestId('custom-value').textContent).toEqual('123')
-  })
-  rerender(
-    <FormProvider form={form}>
-      <Field name="aa" decorator={[Decorator]} component={[Input]} />
-      <Field name="bb" component={[CustomField, { tag: 'yyy' }]} />
-    </FormProvider>
-  )
 })
 
 test('connect', async () => {

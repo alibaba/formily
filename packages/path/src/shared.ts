@@ -74,3 +74,8 @@ export const isEqual = (a: any, b: any) => {
   }
   return a !== a && b !== b
 }
+export const isSegmentEqual = (a: any, b: any) => {
+  a = typeof a === 'symbol' ? a : `${a}`
+  b = typeof b === 'symbol' ? b : `${b}`
+  return a === b
+}

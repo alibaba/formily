@@ -7,7 +7,7 @@ import {
   deleteInByDestructor,
   existInByDestructor,
 } from './destructor'
-import { Segments, Node, Pattern, IRegistry, IAccessors } from './types'
+import { Segments, Node, Pattern } from './types'
 import { LRUMap } from './lru'
 import { Matcher } from './matcher'
 
@@ -482,6 +482,18 @@ export class Path {
     matcher[isMatcher] = true
     matcher.path = path
     return matcher
+  }
+
+  static isPathPattern(target: any): target is Pattern {
+    if (
+      isStr(target) ||
+      isArr(target) ||
+      isRegExp(target) ||
+      (isFn(target) && target[isMatcher])
+    ) {
+      return true
+    }
+    return false
   }
 
   static transform<T>(

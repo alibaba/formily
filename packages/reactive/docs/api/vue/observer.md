@@ -1,10 +1,10 @@
 # observer
 
-## 描述
+## describe
 
-在 Vue 中，将组件渲染方法变成 Reaction，每次视图重新渲染就会收集依赖，依赖更新会自动重渲染。
+In Vue, the component rendering method is changed to Reaction, and dependencies are collected every time the view is re-rendered, and dependencies are updated automatically to re-render.
 
-## 用例
+## Example
 
 ```html
 <template>
@@ -12,15 +12,15 @@
     <div>
       <input
         :style="{
-          height: 28,
-          padding: '0 8px',
-          border: '2px solid #888',
-          borderRadius: 3,
-        }"
+           height: 28,
+           padding: '0 8px',
+           border: '2px solid #888',
+           borderRadius: 3,
+         }"
         :value="obs.value"
         @input="(e) => {
-          obs.value = e.target.value
-        }"
+           obs.value = e.target.value
+         }"
       />
     </div>
     <div>{{obs.value}}</div>
@@ -33,7 +33,7 @@
 
   export default observer({
     data() {
-      // 能与 vue 的响应系统共存
+      // can coexist with vue's response system
       const obs = observable({
         value: 'Hello world',
       })

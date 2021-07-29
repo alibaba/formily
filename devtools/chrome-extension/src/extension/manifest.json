@@ -35,41 +35,24 @@
     "128": "img/logo/128x128.png"
   },
   "background": {
-    "scripts": [
-      "js/background.bundle.js"
-    ],
+    "scripts": ["js/background.bundle.js"],
     "persistent": false
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "exclude_globs": [
-        "https://www.google*"
-      ],
-      "js": [
-        "js/content.bundle.js",
-        "js/inject.bundle.js"
-      ],
+      "matches": ["<all_urls>"],
+      "exclude_globs": ["https://www.google*"],
+      "js": ["js/content.bundle.js", "js/inject.bundle.js"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
   "devtools_page": "devtools.html",
-  "web_accessible_resources": [
-    "js/backend.bundle.js"
-  ],
+  "web_accessible_resources": ["js/backend.bundle.js"],
   "externally_connectable": {
-    "ids": [
-      "*"
-    ]
+    "ids": ["*"]
   },
-  "permissions": [
-    "file:///*",
-    "http://*/*",
-    "https://*/*"
-  ],
+  "permissions": ["file:///*", "http://*/*", "https://*/*"],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; style-src * 'unsafe-inline'; img-src 'self' data:;",
   "update_url": "https://clients2.google.com/service/update2/crx"
 }

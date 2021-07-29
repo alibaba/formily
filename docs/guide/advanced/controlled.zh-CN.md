@@ -245,6 +245,120 @@ export default () => {
 }
 ```
 
+## Schema 片段联动
+
+注意，这种模式存在几个问题
+
+1. 片段切换的时候，之前输入的值还会保留，因为没有任何显示隐藏的控制，所以不会自动删值
+
+2. 因为将 values 提到了外面，且把它变成了 observable 数据，那么 Form 内部的 onFormValuesChange 不会再触发，因为 values 是作为引用传给 Form 的
+
+虽然存在这两个问题，但是在某些场景上还是很实用的，比如 Formily 表单设计器的配置面板，它对于 x-component-props 和 x-decorator-props 是基于 x-component/x-decorator 类型来动态切换的，对于 schema 可维护性提升还是很大
+
+```tsx
+import React, { useMemo } from 'react'
+import { observable } from '@formily/reactive'
+import { createForm } from '@formily/core'
+import { createSchemaField, observer } from '@formily/react'
+import { Form, FormItem, Input, Select } from '@formily/antd'
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+    FormItem,
+    Select,
+  },
+})
+
+const DYNAMIC_INJECT_SCHEMA = {
+  type_1: {
+    type: 'void',
+    properties: {
+      aa: {
+        type: 'string',
+        title: 'AA',
+        'x-decorator': 'FormItem',
+        'x-component': 'Input',
+        'x-component-props': {
+          placeholder: 'Input',
+        },
+      },
+    },
+  },
+  type_2: {
+    type: 'void',
+    properties: {
+      aa: {
+        type: 'string',
+        title: 'AA',
+        'x-decorator': 'FormItem',
+        enum: [
+          {
+            label: '111',
+            value: '111',
+          },
+          { label: '222', value: '222' },
+        ],
+        'x-component': 'Select',
+        'x-component-props': {
+          placeholder: 'Select',
+        },
+      },
+      bb: {
+        type: 'string',
+        title: 'BB',
+        'x-decorator': 'FormItem',
+        'x-component': 'Input',
+      },
+    },
+  },
+}
+
+const SchemaForm = observer(({ values }) => {
+  const form = useMemo(
+    () =>
+      createForm({
+        values,
+      }),
+    [values.type]
+  )
+
+  const schema = {
+    type: 'object',
+    properties: {
+      type: {
+        type: 'string',
+        title: '类型',
+        enum: [
+          { label: '类型1', value: 'type_1' },
+          { label: '类型2', value: 'type_2' },
+        ],
+        'x-decorator': 'FormItem',
+        'x-component': 'Select',
+      },
+      container: DYNAMIC_INJECT_SCHEMA[values.type],
+    },
+  }
+
+  return (
+    <Form form={form} layout="vertical">
+      <SchemaField schema={schema} />
+    </Form>
+  )
+})
+
+export default () => {
+  const values = useMemo(
+    () =>
+      observable({
+        type: 'type_1',
+      }),
+    []
+  )
+  return <SchemaForm values={values} />
+}
+```
+
 ## 字段级受控
 
 ### 最佳实践

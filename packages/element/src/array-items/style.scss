@@ -1,0 +1,75 @@
+@import '../__builtins__/styles/common.scss';
+
+$array-items-prefix-cls: '#{$formily-prefix}-array-items';
+
+.#{$array-items-prefix-cls}-item-inner {
+  visibility: visible;
+}
+
+.#{$array-items-prefix-cls} {
+  .#{$formily-prefix}-array-base-addition {
+    width: 100%;
+    border: $--border-width-base dashed $--border-color-base;
+
+    &:hover {
+      background-color: $--color-white;
+      border-color: $--border-color-hover;
+    }
+
+    &:active,
+    &:focus {
+      background-color: $--color-white;
+      border-color: $--color-primary;
+    }
+  }
+}
+
+.#{$array-items-prefix-cls}-card {
+  display: flex;
+  border: 1px solid $--card-border-color;
+  margin-bottom: 10px;
+  padding: 3px 6px;
+  background: $--color-white;
+  justify-content: space-between;
+
+  .#{$formily-prefix}-form-item:not(.#{$formily-prefix}-form-item-feedback-layout-popover) {
+    margin-bottom: 0 !important;
+
+    .#{$formily-prefix}-form-item-help {
+      position: absolute;
+      font-size: 12px;
+      top: 100%;
+      background: $--color-white;
+      width: 100%;
+      margin-top: 3px;
+      padding: 3px;
+      z-index: 1;
+      border-radius: 3px;
+      box-shadow: 0 0 10px $--border-color-base;
+    }
+  }
+}
+
+.#{$array-items-prefix-cls}-divide {
+  display: flex;
+  border-bottom: 1px solid $--card-border-color;
+  padding: 10px 0;
+  justify-content: space-between;
+
+  .#{$formily-prefix}-form-item:not(.#{$formily-prefix}-form-item-feedback-layout-popover) {
+    margin-bottom: 0 !important;
+
+    .#{$formily-prefix}-form-item-help {
+      position: absolute;
+      font-size: 12px;
+      top: 100%;
+      background: $--color-white;
+      width: 100%;
+      margin-top: 3px;
+      padding: 3px;
+      z-index: 1;
+      border-radius: 3px;
+      box-shadow: 0 0 10px $--card-border-color;
+    }
+  }
+}

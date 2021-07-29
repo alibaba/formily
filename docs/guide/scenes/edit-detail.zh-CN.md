@@ -26,8 +26,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -115,8 +113,7 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
@@ -347,8 +344,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -615,8 +610,7 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
@@ -682,8 +676,7 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
+import './index.less'
 
 const form = createForm({
   validateFirst: true,
@@ -755,8 +748,7 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
@@ -994,8 +986,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   readPretty: true,
@@ -1085,8 +1075,7 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
@@ -1312,8 +1301,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   readPretty: true,
@@ -1582,8 +1569,7 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
@@ -1645,8 +1631,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 import './index.less'
 
 const form = createForm({
@@ -1721,8 +1705,7 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [

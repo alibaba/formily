@@ -1,7 +1,6 @@
 export default {
   mode: 'site',
-  logo:
-    '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
+  logo: '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
   title: 'Formily',
   hash: true,
   favicon:
@@ -50,6 +49,10 @@ export default {
             path: 'https://fusion.formilyjs.org',
           },
           {
+            title: '@formily/element',
+            path: 'https://element.formilyjs.org',
+          },
+          {
             title: 'aliyun teamix',
             path: 'https://formily.dg.aliyun-inc.com/',
           },
@@ -59,13 +62,16 @@ export default {
         title: 'Tools',
         children: [
           {
-            title: 'Form Editor',
-            path: 'https://github.com/alibaba/formily-editor',
+            title: 'Formily Designer',
+            path: 'https://designable-antd.formilyjs.org/',
+          },
+          {
+            title: 'Designable',
+            path: 'https://github.com/alibaba/designable',
           },
           {
             title: 'Chrome Extension',
-            path:
-              'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
+            path: 'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
           },
         ],
       },
@@ -126,6 +132,10 @@ export default {
             path: 'https://fusion.formilyjs.org',
           },
           {
+            title: '@formily/element',
+            path: 'https://element.formilyjs.org',
+          },
+          {
             title: 'aliyun teamix',
             path: 'https://formily.dg.aliyun-inc.com/',
           },
@@ -135,13 +145,16 @@ export default {
         title: '工具',
         children: [
           {
-            title: '表单编辑器',
-            path: 'https://github.com/alibaba/formily-editor',
+            title: 'Formily 设计器',
+            path: 'https://designable-antd.formilyjs.org/',
+          },
+          {
+            title: '通用搭建引擎',
+            path: 'https://github.com/alibaba/designable',
           },
           {
             title: 'Chrome扩展',
-            path:
-              'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
+            path: 'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
           },
         ],
       },
@@ -165,6 +178,12 @@ export default {
       },
     ],
   },
+  links: [
+    {
+      rel: 'stylesheet',
+      href: 'https://unpkg.com/antd/dist/antd.css',
+    },
+  ],
   styles: [
     `.__dumi-default-navbar-logo{
       height: 60px !important;
@@ -202,6 +221,14 @@ export default {
       {
         title: 'V2 Upgrade Guide',
         path: '/guide/upgrade',
+      },
+      {
+        title: 'Contribution Guide',
+        path: '/guide/contribution',
+      },
+      {
+        title: 'Issue Helper',
+        path: '/guide/issue-helper',
       },
       {
         title: 'Scenes',
@@ -281,11 +308,6 @@ export default {
           },
         ],
       },
-
-      {
-        title: 'Contribution Guide',
-        path: '/guide/contribution',
-      },
     ],
 
     '/zh-CN/guide': [
@@ -306,10 +328,18 @@ export default {
         path: '/zh-CN/guide/upgrade',
       },
       {
+        title: '贡献指南',
+        path: '/zh-CN/guide/contribution',
+      },
+      {
+        title: '问题反馈',
+        path: '/zh-CN/guide/issue-helper',
+      },
+      {
         title: '场景案例',
         children: [
           {
-            title: '登陆注册',
+            title: '登录注册',
             path: '/zh-CN/guide/scenes/login-register',
           },
           {
@@ -382,11 +412,6 @@ export default {
             path: '/zh-CN/guide/advanced/build',
           },
         ],
-      },
-
-      {
-        title: '贡献指南',
-        path: '/zh-CN/guide/contribution',
       },
     ],
   },

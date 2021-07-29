@@ -2,10 +2,11 @@ import { FormPath } from '@formily/shared'
 import { Form } from '../models'
 import { IFormProps } from '../types'
 import {
+  getValidateLocaleIOSCode,
   setValidateLanguage,
   registerValidateFormats,
   registerValidateLocale,
-  registerValidateMessageTemplateEnigne,
+  registerValidateMessageTemplateEngine,
   registerValidateRules,
 } from '@formily/validator'
 import {
@@ -31,9 +32,7 @@ import {
   isVoidFieldState,
 } from './checkers'
 
-const createForm = <T extends object = any>(
-  options?: IFormProps<T>
-) => {
+const createForm = <T extends object = any>(options?: IFormProps<T>) => {
   return new Form(options)
 }
 
@@ -55,10 +54,11 @@ export {
   isQuery,
   isVoidField,
   isVoidFieldState,
+  getValidateLocaleIOSCode,
   setValidateLanguage,
   registerValidateFormats,
   registerValidateLocale,
-  registerValidateMessageTemplateEnigne,
+  registerValidateMessageTemplateEngine,
   registerValidateRules,
   createEffectHook,
   createEffectContext,

@@ -22,58 +22,61 @@ class Schema {
 
 ## 属性
 
-| 属性                 | 描述                                   | 类型                                                                               | 字段模型映射                                                             |
-| -------------------- | -------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| type                 | 类型                                   | [SchemaTypes](#schematypes)                                                        | [GeneralField](https://core.formilyjs.org/api/models/field#generalfield) |
-| title                | 标题                                   | String                                                                    | `title`                                                                  |
-| description          | 描述                                   | String                                                                    | `description`                                                            |
-| default              | 默认值                                 | Any                                                                                | `initialValue`                                                           |
-| readOnly             | 是否只读                               | Boolean                                                                            | `readOnly`                                                               |
-| writeOnly            | 是否只写                               | Boolean                                                                            | `editable`                                                               |
-| enum                 | 枚举                                   | [SchemaEnum](#schemaenum)                                                          | `dataSource`                                                             |
-| const                | 校验字段值是否与 const 的值相等        | Any                                                                                | `validator`                                                              |
-| multipleOf           | 校验字段值是否可被 multipleOf 的值整除 | Number                                                                             | `validator`                                                              |
-| maximum              | 校验最大值(大于)                       | Number                                                                             | `validator`                                                              |
-| exclusiveMaximum     | 校验最大值（大于等于                   | Number                                                                             | `validator`                                                              |
-| minimum              | 校验最小值(小于)                       | Number                                                                             | `validator`                                                              |
-| exclusiveMinimum     | 最小值（小于等于）                     | Number                                                                             | `validator`                                                              |
-| maxLength            | 校验最大长度                           | Number                                                                             | `validator`                                                              |
-| minLength            | 校验最小长度                           | Number                                                                             | `validator`                                                              |
-| pattern              | 正则校验规则                           | RegExpString                                                                       | `validator`                                                              |
-| maxItems             | 最大条目数                             | Number                                                                             | `validator`                                                              |
-| minItems             | 最小条目数                             | Number                                                                             | `validator`                                                              |
-| uniqueItems          | 是否校验重复                           | Boolean                                                                            | `validator`                                                              |
-| maxProperties        | 最大属性数量                           | Number                                                                             | `validator`                                                              |
-| minProperties        | 最小属性数量                           | Number                                                                             | `validator`                                                              |
-| required             | 必填                                   | Boolean                                                                            | `validator`                                                              |
-| format               | 正则校验格式                           | [ValidatorFormats](https://core.formilyjs.org/api/models/field#fieldvalidator)     | `validator`                                                              |
-| properties           | 属性描述                               | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
-| items                | 数组描述                               | [SchemaItems](#schemaitems)                                                        | -                                                                        |
-| additionalItems      | 额外数组元素描述                       | Schema                                                                             | -                                                                        |
-| patternProperties    | 动态匹配对象的某个属性的 Schema        | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
-| additionalProperties | 匹配对象额外属性的 Schema              | Schema                                                                             | -                                                                        |
-| x-index              | UI 展示顺序                            | Number                                                                             | -                                                                        |
-| x-pattern            | UI 交互模式                            | [FieldPatternTypes](https://core.formilyjs.org/api/models/field#fieldpatterntypes) | `pattern`                                                                |
-| x-display            | UI 展示                                | [FieldDisplayTypes](https://core.formilyjs.org/api/models/field#fielddisplaytypes) | `display`                                                                |
-| x-validator          | 字段校验器                             | [FieldValidator](https://core.formilyjs.org/api/models/field#fieldvalidator)       | `validator`                                                              |
-| x-decorator          | 字段 UI 包装器组件                     | String                                                                             | `decorator`                                                              |
-| x-decorator-props    | 字段 UI 包装器组件属性                 | Any                                                                                | `decorator`                                                              |
-| x-component          | 字段 UI 组件                           | String                                                                             | `component`                                                              |
-| x-component-props    | 字段 UI 组件属性                       | Any                                                                                | `component`                                                              |
-| x-reactions          | 字段联动协议                           | [SchemaReactions](#schemareactions)                                                | `reactions`                                                              |
-| x-content            | 字段内容，用来传入某个组件的子节点     | String / Vue.Component                                                                   | Slot                                                            |
-| x-visible            | 字段显示隐藏                           | Boolean                                                                            | `visible`                                                                |
-| x-hidden             | 字段 UI 隐藏(保留数据)                 | Boolean                                                                            | `hidden`                                                                 |
-| x-disabled           | 字段禁用                               | Boolean                                                                            | `disabled`                                                               |
-| x-editable           | 字段可编辑                             | Boolean                                                                            | `editable`                                                               |
-| x-read-only          | 字段只读                               | Boolean                                                                            | `readOnly`                                                               |
-| x-read-pretty        | 字段阅读态                             | Boolean                                                                            | `readPretty`                                                             |
+| 属性                 | 描述                                              | 类型                                                                               | 字段模型映射                                                             |
+| -------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| type                 | 类型                                              | [SchemaTypes](#schematypes)                                                        | [GeneralField](https://core.formilyjs.org/api/models/field#generalfield) |
+| title                | 标题                                              | React.ReactNode                                                                    | `title`                                                                  |
+| description          | 描述                                              | React.ReactNode                                                                    | `description`                                                            |
+| default              | 默认值                                            | Any                                                                                | `initialValue`                                                           |
+| readOnly             | 是否只读                                          | Boolean                                                                            | `readOnly`                                                               |
+| writeOnly            | 是否只写                                          | Boolean                                                                            | `editable`                                                               |
+| enum                 | 枚举                                              | [SchemaEnum](#schemaenum)                                                          | `dataSource`                                                             |
+| const                | 校验字段值是否与 const 的值相等                   | Any                                                                                | `validator`                                                              |
+| multipleOf           | 校验字段值是否可被 multipleOf 的值整除            | Number                                                                             | `validator`                                                              |
+| maximum              | 校验最大值(大于)                                  | Number                                                                             | `validator`                                                              |
+| exclusiveMaximum     | 校验最大值（大于等于                              | Number                                                                             | `validator`                                                              |
+| minimum              | 校验最小值(小于)                                  | Number                                                                             | `validator`                                                              |
+| exclusiveMinimum     | 最小值（小于等于）                                | Number                                                                             | `validator`                                                              |
+| maxLength            | 校验最大长度                                      | Number                                                                             | `validator`                                                              |
+| minLength            | 校验最小长度                                      | Number                                                                             | `validator`                                                              |
+| pattern              | 正则校验规则                                      | RegExpString                                                                       | `validator`                                                              |
+| maxItems             | 最大条目数                                        | Number                                                                             | `validator`                                                              |
+| minItems             | 最小条目数                                        | Number                                                                             | `validator`                                                              |
+| uniqueItems          | 是否校验重复                                      | Boolean                                                                            | `validator`                                                              |
+| maxProperties        | 最大属性数量                                      | Number                                                                             | `validator`                                                              |
+| minProperties        | 最小属性数量                                      | Number                                                                             | `validator`                                                              |
+| required             | 必填                                              | Boolean                                                                            | `validator`                                                              |
+| format               | 正则校验格式                                      | [ValidatorFormats](https://core.formilyjs.org/api/models/field#fieldvalidator)     | `validator`                                                              |
+| properties           | 属性描述                                          | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
+| items                | 数组描述                                          | [SchemaItems](#schemaitems)                                                        | -                                                                        |
+| additionalItems      | 额外数组元素描述                                  | Schema                                                                             | -                                                                        |
+| patternProperties    | 动态匹配对象的某个属性的 Schema                   | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
+| additionalProperties | 匹配对象额外属性的 Schema                         | Schema                                                                             | -                                                                        |
+| x-index              | UI 展示顺序                                       | Number                                                                             | -                                                                        |
+| x-pattern            | UI 交互模式                                       | [FieldPatternTypes](https://core.formilyjs.org/api/models/field#fieldpatterntypes) | `pattern`                                                                |
+| x-display            | UI 展示                                           | [FieldDisplayTypes](https://core.formilyjs.org/api/models/field#fielddisplaytypes) | `display`                                                                |
+| x-validator          | 字段校验器                                        | [FieldValidator](https://core.formilyjs.org/api/models/field#fieldvalidator)       | `validator`                                                              |
+| x-decorator          | 字段 UI 包装器组件                                | `String \| React.FC`                                                               | `decorator`                                                              |
+| x-decorator-props    | 字段 UI 包装器组件属性                            | Any                                                                                | `decorator`                                                              |
+| x-component          | 字段 UI 组件                                      | `String \| React.FC`                                                               | `component`                                                              |
+| x-component-props    | 字段 UI 组件属性                                  | Any                                                                                | `component`                                                              |
+| x-reactions          | 字段联动协议                                      | [SchemaReactions](#schemareactions)                                                | `reactions`                                                              |
+| x-content            | 字段内容，用来传入某个组件的子节点                | React.ReactNode                                                                    | ReactChildren                                                            |
+| x-visible            | 字段显示隐藏                                      | Boolean                                                                            | `visible`                                                                |
+| x-hidden             | 字段 UI 隐藏(保留数据)                            | Boolean                                                                            | `hidden`                                                                 |
+| x-disabled           | 字段禁用                                          | Boolean                                                                            | `disabled`                                                               |
+| x-editable           | 字段可编辑                                        | Boolean                                                                            | `editable`                                                               |
+| x-read-only          | 字段只读                                          | Boolean                                                                            | `readOnly`                                                               |
+| x-read-pretty        | 字段阅读态                                        | Boolean                                                                            | `readPretty`                                                             |
+| definitions          | Schema 预定义                                     | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
+| $ref                 | 从 Schema 预定义中读取 Schema 并合并至当前 Schema | String                                                                             | -                                                                        |
 
 #### 详细说明
 
 - x-component 的组件标识与[createSchemaField](/api/components/schema-field#签名)传入的组件集合的 Key 匹配
 - x-decorator 的组件标识与[createSchemaField](/api/components/schema-field#签名)传入的组件集合的 Key 匹配
 - Schema 的每个属性都能使用字符串表达式<code v-pre>{{expression}}</code>，表达式变量可以从 createSchemaField 中传入，也可以从 SchemaField 组件中传入
+- $ref 指定 Schema 预定义的格式必须是<code v-pre>#/definitions/address</code>这种格式，不支持加载远程 JSON Schema
 
 ## 方法
 
@@ -326,8 +329,10 @@ interface toJSON {
 #### 签名
 
 ```ts
+import { IFieldFactoryProps } from '@formily/core'
+
 interface toFieldProps {
-  (): Formily.Core.Types.IFieldFactoryProps
+  (): IFieldFactoryProps
 }
 ```
 
@@ -377,6 +382,20 @@ interface shallowCompile {
 }
 ```
 
+### silent
+
+#### 描述
+
+是否静默编译，如果是，则表达式报错不会有任何提醒
+
+#### 签名
+
+```ts
+interface silent {
+  (value?: boolean): void
+}
+```
+
 ### isSchemaInstance
 
 #### 描述
@@ -414,13 +433,11 @@ interface registerCompiler {
 #### 签名
 
 ```ts
-
 type SchemaPatch = (schema: ISchema) => ISchema
 
 interface registerPatches {
-  (...args: SchemaPatch[]) => void
+  (...args: SchemaPatch[]): void
 }
-
 ```
 
 ### registerVoidComponents
@@ -440,10 +457,15 @@ interface registerVoidComponents {
 #### 用例
 
 ```ts
-import { Schema } from '@formily/vue'
+import { Schema } from '@formily/react'
 
 Schema.registerVoidComponents(['card', 'tab', 'step'])
 ```
+
+::: warning
+
+  <p>注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用</p>
+:::
 
 ### registerTypeDefaultComponents
 
@@ -455,7 +477,7 @@ Schema.registerVoidComponents(['card', 'tab', 'step'])
 
 ```ts
 interface registerTypeDefaultComponents {
-  (maps: Record<string, string>) => void
+  (maps: Record<string, string>): void
 }
 ```
 
@@ -469,6 +491,65 @@ Schema.registerTypeDefaultComponents({
   number: 'NumberPicker',
   array: 'ArrayTable',
 })
+```
+
+注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用
+
+### registerPolyfills
+
+#### 描述
+
+注册协议兼容垫片
+
+#### 签名
+
+```ts
+type SchemaPatch = (schema: ISchema) => ISchema
+
+interface registerPolyfills {
+  (version: string, patch: SchemaPatch): void
+}
+```
+
+#### 用例
+
+```ts
+import { Schema } from '@formily/react'
+
+Schema.registerPolyfills('1.0', (schema) => {
+  schema['x-decorator'] = 'FormItem'
+  return schema
+})
+```
+
+### enablePolyfills
+
+#### 描述
+
+开启协议垫片，默认内置 1.0 版本协议兼容垫片，主要兼容特性：
+
+- x-decorator 不声明，自动作为 FormItem
+- x-linkages 转换为 x-reactions
+- x-props 自动转换为 x-decorator-props
+- x-rules 转换为 x-validator
+- editable 转换为 x-editable
+- visible 转换为 x-visible
+- x-component 为 card/block/grid-row/grid-col/grid/layout/step/tab/text-box 自动转换 VoidField，
+
+#### 签名
+
+```ts
+interface enablePolyfills {
+  (versions: string[]): void
+}
+```
+
+#### 用例
+
+```ts
+import { Schema } from '@formily/vue'
+
+Schema.enablePolyfills(['1.0'])
 ```
 
 ## 类型
@@ -551,6 +632,8 @@ Schema 联动协议，如果 reaction 对象里包含 target，则代表主动�
 #### 签名
 
 ```ts
+import { IGeneralFieldState } from '@formily/core'
+
 type SchemaReactionEffect =
   | 'onFieldInit'
   | 'onFieldMount'
@@ -565,19 +648,19 @@ type SchemaReactionEffect =
 
 type SchemaReaction<Field = any> =
   | {
-      dependencies?: string[] | Record<string, string> //依赖的字段路径列表，只能以点路径描述依赖，如果是数组格式，那么读的时候也是数组格式，如果是对象格式，读的时候也是对象格式，只是对象格式相当于是一个alias
+      dependencies?: string[] | Record<string, string> //依赖的字段路径列表，只能以点路径描述依赖，支持相对路径，如果是数组格式，那么读的时候也是数组格式，如果是对象格式，读的时候也是对象格式，只是对象格式相当于是一个alias
       when?: string | boolean //联动条件
-      target?: string //要操作的字段路径，支持FormPathPattern路径语法
+      target?: string //要操作的字段路径，支持FormPathPattern路径语法，注意：不支持相对路径！！
       effects?: SchemaReactionEffect[] //主动模式下的独立生命周期钩子
       fulfill?: {
         //满足条件
-        state?: Formily.Core.Types.IGeneralFieldState //更新状态
+        state?: IGeneralFieldState //更新状态
         schema?: ISchema //更新Schema
         run?: string //执行语句
       }
       otherwise?: {
         //不满足条件
-        state?: Formily.Core.Types.IGeneralFieldState //更新状态
+        state?: IGeneralFieldState //更新状态
         schema?: ISchema //更新Schema
         run?: string //执行语句
       }
@@ -875,7 +958,7 @@ type SchemaReactions<Field = any> =
 
 ### $form
 
-只能在 x-reactions 中的表达式消费，代表当前字段实例
+只能在 x-reactions 中的表达式消费，代表当前 Form 实例
 
 ### $target
 

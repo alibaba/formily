@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, Empty } from 'antd'
 import { CardProps } from 'antd/lib/card'
+import { ArrayField } from '@formily/core'
 import {
   useField,
   observer,
@@ -44,7 +45,7 @@ const isOperationComponent = (schema: ISchema) => {
 }
 
 export const ArrayCards: ComposedArrayCards = observer((props) => {
-  const field = useField<Formily.Core.Models.ArrayField>()
+  const field = useField<ArrayField>()
   const schema = useFieldSchema()
   const dataSource = Array.isArray(field.value) ? field.value : []
   const prefixCls = usePrefixCls('formily-array-cards', props)
@@ -112,9 +113,9 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
   }
 
   const renderAddition = () => {
-    return schema.reduceProperties((addition, schema) => {
+    return schema.reduceProperties((addition, schema, key) => {
       if (isAdditionComponent(schema)) {
-        return <RecursionField schema={schema} name="addition" />
+        return <RecursionField schema={schema} name={key} />
       }
       return addition
     }, null)

@@ -6,7 +6,7 @@
 
 但从前端组件化角度来看，数组结构又是最佳的；
 
-所以哪一边都有其道理，可惜的是，每次都只能前端取消化这样一个不平等条约，不过，有了 Formily，你就完全不需要为这样一个尴尬局面而难受了，**Formily 提供了解构路径的能力，可以帮助用户快速解决这类问题。**，下面可以看看例子
+所以哪一边都有其道理，可惜的是，每次都只能前端去消化这样一个不平等条约，不过，有了 Formily，你就完全不需要为这样一个尴尬局面而难受了，**Formily 提供了解构路径的能力，可以帮助用户快速解决这类问题。**，下面可以看看例子
 
 ## Markup Schema 案例
 
@@ -22,7 +22,6 @@ import {
 } from '@formily/antd'
 import { createForm, onFieldValueChange } from '@formily/core'
 import { createSchemaField, FormConsumer } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
   components: {
@@ -100,7 +99,6 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { createSchemaField, FormConsumer } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
   components: {
@@ -183,7 +181,6 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { Field, FormConsumer } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const form = createForm()
 
@@ -213,7 +210,7 @@ export default () => {
         initialValue={['2020-11-20', '2021-12-30']}
         decorator={[FormItem]}
         component={[DatePicker.RangePicker]}
-        reactions={(field)=>{
+        reactions={(field) => {
           field.visible = !!field.query('visible_destructor').value()
         }}
       />

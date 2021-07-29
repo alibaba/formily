@@ -1,8 +1,8 @@
 # Checkbox
 
-> 复选框
+> Checkbox
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -24,20 +24,20 @@ export default () => (
     <SchemaField>
       <SchemaField.Boolean
         name="single"
-        title="是否确认"
+        title="Are you sure"
         x-decorator="FormItem"
         x-component="Checkbox"
       />
       <SchemaField.String
         name="multiple"
-        title="复选"
+        title="Check"
         enum={[
           {
-            label: '选项1',
+            label: 'Option 1',
             value: 1,
           },
           {
-            label: '选项2',
+            label: 'Option 2',
             value: 2,
           },
         ]}
@@ -46,13 +46,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -74,20 +74,20 @@ const schema = {
   properties: {
     single: {
       type: 'boolean',
-      title: '是否确认',
+      title: 'Are you sure?',
       'x-decorator': 'FormItem',
       'x-component': 'Checkbox',
     },
     multiple: {
       type: 'array',
-      title: '复选',
+      title: 'Check',
       enum: [
         {
-          label: '选项1',
+          label: 'Option 1',
           value: 1,
         },
         {
-          label: '选项2',
+          label: 'Option 2',
           value: 2,
         },
       ],
@@ -101,13 +101,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -121,20 +121,20 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="single"
-      title="是否确认"
+      title="Are you sure"
       decorator={[FormItem]}
       component={[Checkbox]}
     />
     <Field
       name="multiple"
-      title="复选"
+      title="Check"
       dataSource={[
         {
-          label: '选项1',
+          label: 'Option 1',
           value: 1,
         },
         {
-          label: '选项2',
+          label: 'Option 2',
           value: 2,
         },
       ]}
@@ -142,7 +142,7 @@ export default () => (
       component={[Checkbox.Group]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
@@ -150,4 +150,4 @@ export default () => (
 
 ## API
 
-参考 https://fusion.design/pc/component/basic/checkbox
+Reference https://fusion.design/pc/component/basic/checkbox

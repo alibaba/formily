@@ -1,0 +1,81 @@
+@import '~antd/lib/style/themes/default.less';
+
+.dn-data-source-setter {
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    transition: all 0.25s ease-in-out;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  &-node-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &-icon {
+      transition: all 0.15s ease-in-out;
+      opacity: 0;
+
+      &:hover {
+        color: @primary-color;
+      }
+    }
+  }
+
+  &-layout {
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid @border-color-split;
+    border-radius: 3px;
+
+    .ant-tree-treenode {
+      padding-right: 10px;
+      white-space: nowrap;
+
+      &:hover {
+        .dn-data-source-setter-node-title-icon {
+          opacity: 1;
+        }
+      }
+    }
+
+    &-item {
+      position: relative;
+
+      &.left {
+        width: 40%;
+        border-right: 1px solid @border-color-split;
+      }
+
+      &.right {
+        width: 60%;
+      }
+
+      &-header {
+        display: flex;
+        flex: none;
+        align-items: center;
+        justify-content: space-between;
+        height: 40px;
+        padding: 8px 12px 9px;
+        border-bottom: 1px solid @border-color-split;
+        border-radius: 2px 2px 0 0;
+      }
+
+      &-content {
+        padding: 2%;
+        height: 300px;
+        max-height: 300px;
+        overflow: scroll;
+      }
+    }
+  }
+}

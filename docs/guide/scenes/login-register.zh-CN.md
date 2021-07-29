@@ -1,6 +1,6 @@
-# 登陆注册
+# 登录注册
 
-## 登陆
+## 登录
 
 #### Markup Schema 案例
 
@@ -12,8 +12,6 @@ import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
 import { Tabs, Card } from 'antd'
 import * as ICONS from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const normalForm = createForm({
   validateFirst: true,
@@ -49,7 +47,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="账密登陆">
+          <Tabs.TabPane key="1" tab="账密登录">
             <Form
               form={normalForm}
               layout="vertical"
@@ -82,11 +80,11 @@ export default () => {
                 />
               </SchemaField>
               <Submit block size="large">
-                登陆
+                登录
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="手机登陆">
+          <Tabs.TabPane key="2" tab="手机登录">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -128,7 +126,7 @@ export default () => {
                 />
               </SchemaField>
               <Submit block size="large">
-                登陆
+                登录
               </Submit>
             </Form>
           </Tabs.TabPane>
@@ -158,8 +156,6 @@ import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
 import { Tabs, Card } from 'antd'
 import * as ICONS from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const normalForm = createForm({
   validateFirst: true,
@@ -259,7 +255,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="账密登陆">
+          <Tabs.TabPane key="1" tab="账密登录">
             <Form
               form={normalForm}
               layout="vertical"
@@ -268,11 +264,11 @@ export default () => {
             >
               <SchemaField schema={normalSchema} />
               <Submit block size="large">
-                登陆
+                登录
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="手机登陆">
+          <Tabs.TabPane key="2" tab="手机登录">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -281,7 +277,7 @@ export default () => {
             >
               <SchemaField schema={phoneSchema} />
               <Submit block size="large">
-                登陆
+                登录
               </Submit>
             </Form>
           </Tabs.TabPane>
@@ -311,8 +307,6 @@ import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
 import { Tabs, Card } from 'antd'
 import { UserOutlined, LockOutlined, PhoneOutlined } from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const normalForm = createForm({
   validateFirst: true,
@@ -334,7 +328,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="账密登陆">
+          <Tabs.TabPane key="1" tab="账密登录">
             <Form
               form={normalForm}
               layout="vertical"
@@ -366,11 +360,11 @@ export default () => {
                 ]}
               />
               <Submit block size="large">
-                登陆
+                登录
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="手机登陆">
+          <Tabs.TabPane key="2" tab="手机登录">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -410,7 +404,7 @@ export default () => {
                 ]}
               />
               <Submit block size="large">
-                登陆
+                登录
               </Submit>
             </Form>
           </Tabs.TabPane>
@@ -458,8 +452,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -795,8 +787,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1142,8 +1132,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1376,7 +1364,6 @@ import {
   FormButtonGroup,
 } from '@formily/antd'
 import { Card } from 'antd'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1500,7 +1487,6 @@ import {
   FormButtonGroup,
 } from '@formily/antd'
 import { Card } from 'antd'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1629,7 +1615,6 @@ import {
   FormButtonGroup,
 } from '@formily/antd'
 import { Card } from 'antd'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,

@@ -1,8 +1,8 @@
 # FormDrawer
 
-> 抽屉表单，主要用在简单的事件打开表单场景
+> Drawer form, mainly used in simple event to open form scene
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -29,63 +29,76 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('抽屉表单', (resolve) => {
+        FormDrawer('Drawer Form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField>
                 <SchemaField.String
                   name="aaa"
                   required
-                  title="输入框1"
+                  title="input box 1"
                   x-decorator="FormItem"
                   x-component="Input"
                 />
                 <SchemaField.String
                   name="bbb"
                   required
-                  title="输入框2"
+                  title="input box 2"
                   x-decorator="FormItem"
                   x-component="Input"
                 />
                 <SchemaField.String
                   name="ccc"
                   required
-                  title="输入框3"
+                  title="input box 3"
                   x-decorator="FormItem"
                   x-component="Input"
                 />
                 <SchemaField.String
                   name="ddd"
                   required
-                  title="输入框4"
+                  title="input box 4"
                   x-decorator="FormItem"
                   x-component="Input"
                 />
               </SchemaField>
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>提交</Submit>
-                  <Reset>重置</Reset>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    Submit
+                  </Submit>
+                  <Reset>Reset</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
             </FormLayout>
           )
         })
-          .open({
-            initialValues: {
-              aaa: '123',
-            },
+          .forOpen((props, next) => {
+            setTimeout(() => {
+              next({
+                initialValues: {
+                  aaa: '123',
+                },
+              })
+            }, 1000)
           })
+          .open()
           .then(console.log)
       }}
     >
-      点我打开表单
+      Click me to open the form
     </Button>
   )
 }
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -113,28 +126,28 @@ const schema = {
   properties: {
     aaa: {
       type: 'string',
-      title: '输入框1',
+      title: 'input box 1',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     bbb: {
       type: 'string',
-      title: '输入框2',
+      title: 'input box 2',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     ccc: {
       type: 'string',
-      title: '输入框3',
+      title: 'input box 3',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     ddd: {
       type: 'string',
-      title: '输入框4',
+      title: 'input box 4',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
@@ -146,14 +159,22 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('弹窗表单', (resolve) => {
+        FormDrawer('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField schema={schema} />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>提交</Submit>
-                  <Reset>重置</Reset>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    Submit
+                  </Submit>
+                  <Reset>Reset</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
             </FormLayout>
@@ -167,13 +188,13 @@ export default () => {
           .then(console.log)
       }}
     >
-      点我打开表单
+      Click me to open the form
     </Button>
   )
 }
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -193,41 +214,49 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('弹窗表单', (resolve) => {
+        FormDrawer('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <Field
                 name="aaa"
                 required
-                title="输入框1"
+                title="input box 1"
                 decorator={[FormItem]}
                 component={[Input]}
               />
               <Field
                 name="bbb"
                 required
-                title="输入框2"
+                title="input box 2"
                 decorator={[FormItem]}
                 component={[Input]}
               />
               <Field
                 name="ccc"
                 required
-                title="输入框3"
+                title="input box 3"
                 decorator={[FormItem]}
                 component={[Input]}
               />
               <Field
                 name="ddd"
                 required
-                title="输入框4"
+                title="input box 4"
                 decorator={[FormItem]}
                 component={[Input]}
               />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>提交</Submit>
-                  <Reset>重置</Reset>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    Submit
+                  </Submit>
+                  <Reset>Reset</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
             </FormLayout>
@@ -241,7 +270,7 @@ export default () => {
           .then(console.log)
       }}
     >
-      点我打开表单
+      Click me to open the form
     </Button>
   )
 }
@@ -252,25 +281,44 @@ export default () => {
 ### FormDrawer
 
 ```ts pure
-type FormDrawerHandler = {
-  //打开弹窗，接收表单属性，可以传入initialValues/values/effects etc.
-  open(props: Formily.Core.Types.IFormProps): Promise<any> //返回表单数据
-  //关闭弹窗
+import { IFormProps, Form } from '@formily/core'
+
+type FormDrawerRenderer =
+  | React.ReactElement
+  | ((form: Form) => React.ReactElement)
+
+interface IFormDrawer {
+  forOpen(
+    middleware: (
+      props: IFormProps,
+      next: (props?: IFormProps) => Promise<any>
+    ) => any
+  ): any //Middleware interceptor, can intercept Drawer to open
+  //Open the pop-up window to receive form attributes, you can pass in initialValues/values/effects etc.
+  open(props: IFormProps): Promise<any> //return form data
+  //Close the pop-up window
   close(): void
 }
 
-interface IFormDrawer {
-  (
-    title: React.ReactNode, //如果是ReactNode，则作为弹窗title传入
-    renderer: (resolve: () => void, reject: () => void) => React.ReactElement
-  ): FormDrawerHandler
-  (
-    title: ModalProps, //如果是对象，则作为DrawerProps传入
-    renderer: (resolve: () => void, reject: () => void) => React.ReactElement
-  ): FormDrawerHandler
+export interface IDrawerProps extends DrawerProps {
+  onClose?: (e: EventType) => void | boolean // return false can prevent onClose
+  loadingText?: React.ReactNode
+}
+
+interface FormDrawer {
+  (title: IDrawerProps, id: string, renderer: FormDrawerRenderer): IFormDrawer
+  (title: IDrawerProps, renderer: FormDrawerRenderer): IFormDrawer
+  (title: ModalTitle, id: string, renderer: FormDrawerRenderer): IFormDrawer
+  (title: ModalTitle, renderer: FormDrawerRenderer): IFormDrawer
 }
 ```
 
+`DrawerProps` type definition reference ant design [Drawer API](https://ant.design/components/drawer-cn/#API)
+
 ### FormDrawer.Footer
 
-无属性，只接收子节点
+No attributes, only child nodes are received
+
+### FormDrawer.Portal
+
+Receive an optional id attribute, the default value is `form-drawer`, if there are multiple prefixCls in an application, and the prefixCls in the pop-up window of different regions are different, then it is recommended to specify the id as the region-level id

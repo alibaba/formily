@@ -5,25 +5,31 @@
  * @homepage https://github.com/kuitos/
  * @since 2018-05-22 16:39
  */
-import { Tracker } from '@formily/reactive';
-import collectDataForVue from './collectData';
+import { Tracker } from '@formily/reactive'
+import collectDataForVue from './collectData'
 import { Vue2 as Vue } from 'vue-demi'
 import { IObserverOptions } from '../types'
 
-const noop = () => { };
-const disposerSymbol = Symbol('disposerSymbol');
+const noop = () => {}
+const disposerSymbol = Symbol('disposerSymbol')
 
 function observer(Component: any, observerOptions?: IObserverOptions): any {
-  const name = observerOptions?.name ||(Component as any).name || (Component as any)._componentTag || (Component.constructor && Component.constructor.name) || '<component>';
+  const name =
+    observerOptions?.name ||
+    (Component as any).name ||
+    (Component as any)._componentTag ||
+    (Component.constructor && Component.constructor.name) ||
+    '<component>'
 
-  const originalOptions = typeof Component === 'object' ? Component : (Component as any).options;
+  const originalOptions =
+    typeof Component === 'object' ? Component : (Component as any).options
   // To not mutate the original component options, we need to construct a new one
   const dataDefinition = originalOptions.data
   const options = {
     name,
     ...originalOptions,
     data(vm: any) {
-      return collectDataForVue(vm || this, dataDefinition);
+      return collectDataForVue(vm || this, dataDefinition)
     },
     // overrider the cached constructor to avoid extending skip
     // @see https://github.com/vuejs/vue/blob/6cc070063bd211229dff5108c99f7d11b6778550/src/core/global-api/extend.js#L24
@@ -31,9 +37,12 @@ function observer(Component: any, observerOptions?: IObserverOptions): any {
   }
 
   // we couldn't use the Component as super class when Component was a VueClass, that will invoke the lifecycle twice after we called Component.extend
-  const superProto = typeof Component === 'function' && Object.getPrototypeOf(Component.prototype);
-  const Super = superProto instanceof (Vue as any) ? superProto.constructor : Vue;
-  const ExtendedComponent = Super.extend(options);
+  const superProto =
+    typeof Component === 'function' &&
+    Object.getPrototypeOf(Component.prototype)
+  const Super =
+    superProto instanceof (Vue as any) ? superProto.constructor : Vue
+  const ExtendedComponent = Super.extend(options)
 
   const { $mount, $destroy } = ExtendedComponent.prototype
 
@@ -68,9 +77,9 @@ function observer(Component: any, observerOptions?: IObserverOptions): any {
   }
 
   ExtendedComponent.prototype.$destroy = function (this: any) {
-    (this as any)[disposerSymbol]();
-    $destroy.apply(this);
-  };
+    ;(this as any)[disposerSymbol]()
+    $destroy.apply(this)
+  }
 
   const extendedComponentNamePropertyDescriptor =
     Object.getOwnPropertyDescriptor(ExtendedComponent, 'name') || {}

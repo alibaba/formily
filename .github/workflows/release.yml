@@ -1,0 +1,27 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - formily_next
+
+jobs:
+  release:
+    if: contains(github.event.head_commit.message, 'chore(versions)')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: [11.x]
+        os: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v1
+      - run: | 
+          echo "registry=\"https://registry.npmjs.org/:_authToken=$NPM_TOKEN\"" > .yarnrc
+          yarn -v
+          yarn --ignore-engines
+          yarn build
+          lerna publish from-package --yes --dist-tag next && ts-node scripts/release release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NODE_OPTIONS: --max_old_space_size=4096

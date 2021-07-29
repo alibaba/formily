@@ -1,8 +1,8 @@
 # FormItem
 
-> 全新的 FormItem 组件，相比于 Antd 的 FormItem，它支持的功能更多，同时它的定位是纯样式组件，不管理表单状态，所以也会更轻量，更方便定制
+> The brand-new FormItem component, compared to Antd's FormItem, it supports more functions. At the same time, it is positioned as a pure style component and does not manage the state of the form, so it will be lighter and more convenient for customization
 
-## Markup Schema 案例
+## Markup Schema example
 
 ```tsx
 import React from 'react'
@@ -25,20 +25,20 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="input"
-        title="输入框"
+        title="input box"
         x-decorator="FormItem"
         x-component="Input"
         required
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## JSON Schema 案例
+## JSON Schema case
 
 ```tsx
 import React from 'react'
@@ -60,7 +60,7 @@ const schema = {
   properties: {
     input: {
       type: 'string',
-      title: '输入框',
+      title: 'input box',
       'x-decorator': 'FormItem',
       'x-component': 'Input',
       'x-component-props': {
@@ -76,13 +76,13 @@ export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
@@ -96,7 +96,7 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="input"
-      title="输入框"
+      title="input box"
       required
       decorator={[FormItem]}
       component={[
@@ -109,13 +109,13 @@ export default () => (
       ]}
     />
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 常用属性案例
+## Commonly used attribute cases
 
 ```tsx
 import React from 'react'
@@ -158,7 +158,7 @@ export default () => {
       <SchemaField>
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text: 'label为空时的展示' }}
+          x-component-props={{ text: 'Display when label is empty' }}
         />
         <SchemaField.String
           x-decorator="FormItem"
@@ -177,15 +177,15 @@ export default () => {
         />
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text: '冒号' }}
+          x-component-props={{ text: 'colon' }}
         />
         <SchemaField.String
-          title="默认"
+          title="default"
           x-decorator="FormItem"
           x-component="Input"
         />
         <SchemaField.String
-          title="无冒号(colon=false)"
+          title="no colon (colon=false)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -195,10 +195,10 @@ export default () => {
 
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text: '固定宽度设置' }}
+          x-component-props={{ text: 'Fixed width settings' }}
         />
         <SchemaField.String
-          title="固定label宽度(labelWidth)"
+          title="Fixed label width (labelWidth)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -206,29 +206,29 @@ export default () => {
           }}
         />
         <SchemaField.String
-          title="固定label宽度(labelWidth)溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出"
-          description="描述描述"
+          title="Fixed label width (labelWidth) overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow overflow"
+          description="description description"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
             labelWidth: 300,
-            tooltip: '提示提示',
+            tooltip: 'Prompt Tip',
             tooltipLayout: 'text',
           }}
         />
         <SchemaField.String
-          title="固定label宽度(labelWidth)换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行"
-          description="描述描述"
+          title="Fixed label width (labelWidth) newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline newline"
+          description="description description"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
             labelWidth: 300,
             labelWrap: true,
-            tooltip: '提示提示',
+            tooltip: 'Prompt Tip',
           }}
         />
         <SchemaField.String
-          title="固定内容宽度(wraperWidth)"
+          title="fixed content width (wraperWidth)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -239,10 +239,10 @@ export default () => {
 
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text: '对齐方式设置' }}
+          x-component-props={{ text: 'Alignment settings' }}
         />
         <SchemaField.String
-          title="label左对齐(labelAlign=left)"
+          title="labelLeft Alignment(labelAlign=left)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -251,7 +251,7 @@ export default () => {
           }}
         />
         <SchemaField.String
-          title="label右对齐(labelAlign=right默认)"
+          title="label right alignment (labelAlign=right default)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -261,7 +261,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="内容左对齐(wrapperAlign=left默认)"
+          title="Content left aligned (wrapperAlign=left default)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -271,7 +271,7 @@ export default () => {
           }}
         />
         <SchemaField.String
-          title="内容右对齐(wrapperAlign=right)"
+          title="Content align right (wrapperAlign=right)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -292,16 +292,16 @@ export default () => {
 
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text: '是否撑满' }}
+          x-component-props={{ text: 'Is it full?' }}
         />
 
         <SchemaField.String
-          title="默认不撑满(fullness=false)"
+          title="The default is not full (fullness=false)"
           x-decorator="FormItem"
           x-component="Select"
         />
         <SchemaField.String
-          title="撑满(fullness=true)"
+          title="Fullness(fullness=true)"
           x-decorator="FormItem"
           x-component="Select"
           x-decorator-props={{
@@ -311,11 +311,11 @@ export default () => {
 
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text: '辅助信息' }}
+          x-component-props={{ text: 'auxiliary information' }}
         />
 
         <SchemaField.String
-          title="必填星号"
+          title="Required asterisk"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -326,7 +326,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="前缀"
+          title="prefix"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -336,7 +336,7 @@ export default () => {
           }}
         />
         <SchemaField.String
-          title="后缀"
+          title="suffix"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -347,7 +347,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="帮助信息feedbackText"
+          title="Help information feedbackText"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -358,7 +358,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="额外信息extra"
+          title="extra information extra"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -374,9 +374,9 @@ export default () => {
 }
 ```
 
-## 无边框案例
+## Borderless case
 
-设置去除组件边框
+Set to remove the component border
 
 ```tsx
 import React from 'react'
@@ -503,9 +503,9 @@ export default () => {
 }
 ```
 
-## 内嵌模式案例
+## Embedded mode case
 
-设置表单组件为内嵌模式
+Set the form component to inline mode
 
 ```tsx
 import React from 'react'
@@ -632,9 +632,9 @@ export default () => {
 }
 ```
 
-## 反馈信息定制案例
+## Feedback Customization Case
 
-可通过 `feedbackIcon` 传入指定反馈的按钮
+The button for specifying feedback can be passed in through `feedbackIcon`
 
 ```tsx
 import React from 'react'
@@ -680,7 +680,7 @@ export default () => {
     <FormProvider form={form}>
       <SchemaField>
         <SchemaField.String
-          title="错误状态(feedbackStatus=error)"
+          title="error status (feedbackStatus=error)"
           x-decorator="FormItem"
           x-component="Input"
           description="description"
@@ -690,7 +690,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="警告状态(feedbackStatus=warning)"
+          title="Warning Status(feedbackStatus=warning)"
           x-decorator="FormItem"
           x-component="Input"
           description="description"
@@ -700,7 +700,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="成功状态(feedbackStatus=success)"
+          title="Success Status (feedbackStatus=success)"
           x-decorator="FormItem"
           x-component="Input"
           description="description"
@@ -711,7 +711,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="加载状态(feedbackStatus=pending)"
+          title="Loading Status(feedbackStatus=pending)"
           x-decorator="FormItem"
           x-component="Input"
           description="description"
@@ -723,11 +723,11 @@ export default () => {
 
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text: '反馈信息的布局' }}
+          x-component-props={{ text: 'Layout of feedback information' }}
         />
 
         <SchemaField.String
-          title="紧凑模式required"
+          title="Compact mode required"
           x-decorator="FormItem"
           x-component="Input"
           required
@@ -737,7 +737,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="紧凑模式有feedback(feedbackLayout=terse)"
+          title="Compact mode has feedback(feedbackLayout=terse)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -748,7 +748,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="紧凑模式无feedback(feedbackLayout=terse)"
+          title="Compact mode without feedback(feedbackLayout=terse)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -757,7 +757,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="松散模式(feedbackLayout=loose)"
+          title="loose mode (feedbackLayout=loose)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -768,7 +768,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="弹出模式(feedbackLayout=popover)"
+          title="Popup Mode (feedbackLayout=popover)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -779,7 +779,7 @@ export default () => {
         />
 
         <SchemaField.String
-          title="弹出模式(feedbackLayout=popover)"
+          title="Popup Mode (feedbackLayout=popover)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -789,7 +789,7 @@ export default () => {
           }}
         />
         <SchemaField.String
-          title="弹出模式(feedbackLayout=popover)"
+          title="Popup Mode (feedbackLayout=popover)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
@@ -801,7 +801,7 @@ export default () => {
 
         <SchemaField.Void
           x-component="Title"
-          x-component-props={{ text: '组件的适配情况' }}
+          x-component-props={{ text: 'Component adaptation' }}
         />
         <SchemaField.Void
           x-component="FormLayout"
@@ -898,7 +898,7 @@ export default () => {
 }
 ```
 
-## 尺寸控制案例
+## Size control case
 
 ```tsx
 import React from 'react'
@@ -978,17 +978,17 @@ export default () => {
             x-component="Select"
             enum={[
               {
-                label: '选项1',
+                label: 'Option 1',
                 value: 1,
               },
               {
-                label: '选项2',
+                label: 'Option 2',
                 value: 2,
               },
             ]}
             x-component-props={{
               mode: 'multiple',
-              placeholder: '请选择',
+              placeholder: 'Please choose',
             }}
             required
           />
@@ -999,16 +999,16 @@ export default () => {
             x-component="Select"
             enum={[
               {
-                label: '选项1',
+                label: 'Option 1',
                 value: 1,
               },
               {
-                label: '选项2',
+                label: 'Option 2',
                 value: 2,
               },
             ]}
             x-component-props={{
-              placeholder: '请选择',
+              placeholder: 'Please choose',
             }}
             required
           />
@@ -1058,38 +1058,38 @@ export default () => {
 
 ### FormItem
 
-| 属性名         | 类型                                                   | 描述                                        | 默认值    |
-| -------------- | ------------------------------------------------------ | ------------------------------------------- | --------- |
-| label          | ReactNode                                              | 标签                                        | -         |
-| style          | CSSProperties                                          | 样式                                        | -         |
-| labelStyle     | CSSProperties                                          | 标签样式                                    | -         |
-| wrapperStyle   | CSSProperties                                          | 组件容器样式                                | -         |
-| className      | string                                                 | 组件样式类名                                | -         |
-| colon          | boolean                                                | 冒号                                        | true      |
-| tooltip        | ReactNode                                              | 问号提示                                    | -         |
-| tooltipLayout  | `"icon" \| "text"`                                     | 问提示布局                                  | `"icon"`  |
-| labelAlign     | `"left"` \| `"right"`                                  | 标签文本对齐方式                            | `"right"` |
-| labelWrap      | boolean                                                | 标签换⾏，否则出现省略号，hover 有 tooltip  | false     |
-| labelWidth     | `number \| string`                                     | 标签固定宽度                                | -         |
-| wrapperWidth   | `number \| string`                                     | 内容固定宽度                                | -         |
-| labelCol       | number                                                 | 标签⽹格所占列数，和内容列数加起来总和为 24 | -         |
-| wrapperCol     | number                                                 | 内容⽹格所占列数，和标签列数加起来总和为 24 | -         |
-| wrapperAlign   | `"left"` \| `"right"`                                  | 内容文本对齐方式⻬                          | `"left"`  |
-| wrapperWrap    | boolean                                                | 内容换⾏，否则出现省略号，hover 有 tooltip  | false     |
-| fullness       | boolean                                                | 内容撑满                                    | false     |
-| addonBefore    | ReactNode                                              | 前缀内容                                    | -         |
-| addonAfter     | ReactNode                                              | 后缀内容                                    | -         |
-| size           | `"small"` \| `"default"` \| `"large"`                  | 尺⼨                                        | -         |
-| inset          | boolean                                                | 是否是内嵌布局                              | false     |
-| extra          | ReactNode                                              | 扩展描述⽂案                                | -         |
-| feedbackText   | ReactNode                                              | 反馈⽂案                                    | -         |
-| feedbackLayout | `"loose"` \| `"terse"` \| `"popover" \| "none"`        | 反馈布局                                    | -         |
-| feedbackStatus | `"error"` \| `"warning"` \| `"success"` \| `"pending"` | 反馈布局                                    | -         |
-| feedbackIcon   | ReactNode                                              | 反馈图标                                    | -         |
-| asterisk       | boolean                                                | 星号提醒                                    | -         |
-| gridSpan       | number                                                 | ⽹格布局占宽                                | -         |
-| bordered       | boolean                                                | 是否有边框                                  | -         |
+| Property name  | Type                                                   | Description                                                                                      | Default value |
+| -------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------- |
+| label          | ReactNode                                              | label                                                                                            | -             |
+| style          | CSSProperties                                          | Style                                                                                            | -             |
+| labelStyle     | CSSProperties                                          | Label style                                                                                      | -             |
+| wrapperStyle   | CSSProperties                                          | Component container style                                                                        | -             |
+| className      | string                                                 | Component style class name                                                                       | -             |
+| colon          | boolean                                                | colon                                                                                            | true          |
+| tooltip        | ReactNode                                              | Question mark prompt                                                                             | -             |
+| tooltipLayout  | `"icon" \| "text"`                                     | Ask the prompt layout                                                                            | `"icon"`      |
+| labelAlign     | `"left"` \| `"right"`                                  | Label text alignment                                                                             | `"right"`     |
+| labelWrap      | boolean                                                | Label change, otherwise an ellipsis appears, hover has tooltip                                   | false         |
+| labelWidth     | `number \| string`                                     | Label fixed width                                                                                | -             |
+| wrapperWidth   | `number \| string`                                     | Content fixed width                                                                              | -             |
+| labelCol       | number                                                 | The number of columns occupied by the label grid, and the number of content columns add up to 24 | -             |
+| wrapperCol     | number                                                 | The number of columns occupied by the content grid, and the number of label columns add up to 24 | -             |
+| wrapperAlign   | `"left"` \| `"right"`                                  | Content text alignment ⻬                                                                        | `"left"`      |
+| wrapperWrap    | boolean                                                | Change the content, otherwise an ellipsis appears, and hover has tooltip                         | false         |
+| fullness       | boolean                                                | fullness                                                                                         | false         |
+| addonBefore    | ReactNode                                              | Prefix content                                                                                   | -             |
+| addonAfter     | ReactNode                                              | Suffix content                                                                                   | -             |
+| size           | `"small"` \| `"default"` \| `"large"`                  | 尺⼨                                                                                             | -             |
+| inset          | boolean                                                | Is it an inline layout                                                                           | false         |
+| extra          | ReactNode                                              | Extended description script                                                                      | -             |
+| feedbackText   | ReactNode                                              | Feedback Case                                                                                    | -             |
+| feedbackLayout | `"loose"` \| `"terse"` \| `"popover" \| "none"`        | Feedback layout                                                                                  | -             |
+| feedbackStatus | `"error"` \| `"warning"` \| `"success"` \| `"pending"` | Feedback layout                                                                                  | -             |
+| feedbackIcon   | ReactNode                                              | Feedback icon                                                                                    | -             |
+| asterisk       | boolean                                                | Asterisk reminder                                                                                | -             |
+| gridSpan       | number                                                 | Grid layout occupies width                                                                       | -             |
+| bordered       | boolean                                                | Is there a border                                                                                | -             |
 
 ### FormItem.BaseItem
 
-纯样式组件，属性与 FormItem 一样，与 Formily Core 不做状态桥接，主要用于一些需要依赖 FormItem 的样式布局能力，但不希望接入 Field 状态的场景
+Pure style components, the properties are the same as FormItem, and Formily Core does not do state bridging. It is mainly used for scenarios that need to rely on the style layout capabilities of FormItem but do not want to access the Field state.

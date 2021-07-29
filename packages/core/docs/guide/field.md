@@ -1,212 +1,212 @@
-# 字段模型
+# Field model
 
-Formily 的字段模型核心包含了两类字段模型：
+Formily's field model core contains two types of field models:
 
-- 数据型字段
-- 虚数据型字段
+- Data type field
+- Dummy data type field
 
-数据型字段(Field)，核心是负责维护表单数据(表单提交时候的值)。
+Data type field (Field), the core is responsible for maintaining the form data (the value when the form is submitted).
 
-虚数据型字段(VoidField)，你可以理解为它就是一个阉割了数据维护能力的 Field，所以它更多的是作为容器维护一批字段的 UI 形式。
+VoidField, you can understand that it is a Field that has castrated data maintenance capabilities, so it is more of a UI form that maintains a batch of fields as a container.
 
-下面我们具体分析这两种类型字段。
+Let's analyze these two types of fields in detail.
 
-## 数据型字段
+## Data field
 
-在 字段模型 中有 3 种数据型字段：
+There are 3 data type fields in the field model:
 
 - Field
 - ArrayField
 - ObjectField
 
-ArrayField 和 ObjectField 都是继承自 Field，Field 的定位就是维护非自增型数据字段，对比 ArrayField/Object，并不是说 Field 就不能存数组类型或者对象类型的数据，Field 其实可以存任意数据类型的数据，只是，如果用户期望实现数组的添加删除移动这样的交互，则需要使用 ArrayField，对象属性的添加删除交互，则需要使用 ObjectField，如果没有这样的需求，所有数据类型统一用 Field 即可。
+ArrayField and ObjectField are both inherited from Field. The positioning of Field is to maintain non-incremental data fields. Compared with ArrayField/Object, it does not mean that Field cannot store data of array type or object type. Field can store data of any data type. However, if the user expects to realize the interaction of adding, deleting, and moving arrays, they need to use ArrayField, and for the interaction of adding and deleting object properties, they need to use ObjectField. If there is no such requirement, all data types can be unified with Field.
 
-然后咱们再看具体 Field 领域规则：
+Then let's look at the specific Field rules:
 
-- 路径规则
-- 显隐规则
-- 数据读写规则
-- 数据源规则
-- 字段组件规则
-- 字段装饰器规则
-- 校验规则
+- Path rules
+- Explicit and implicit rules
+- Data read and write rules
+- Data source rules
+- Field component rules
+- Field decorator rules
+- Validation rules
 
-### 路径规则
+### Path Rules
 
-因为我们实际业务的表单结构本身就是一个树结构，所以在 Formily 中，每个字段在表单模型中都会有一个绝对路径，这个绝对路径大致描述了字段在表单数据中的位置(为什么用大致，后面会讲)，通过绝对路径可以找到任意一个字段，同时还能表达字段间的父子关系，所以字段模型中，我们定义了 address 属性来表达字段的绝对路径，主要用点语法来描述，比如 a.b.c 这样的路径代表了字段 c 的父亲是字段 b，字段 b 的父亲是 a。
+Because the form structure of our actual business itself is a tree structure, in Formily, each field will have an absolute path in the form model. This absolute path roughly describes the position of the field in the form data (why use roughly, later I will talk about it), any field can be found through the absolute path, and at the same time the parent-child relationship between the fields can be expressed. Therefore, in the field model, we define the address attribute to express the absolute path of the field, which is mainly described by dot syntax, such as abc The path of represents that the father of field c is field b, and the father of field b is a.
 
-当然，事情并没有这么简单，因为我们还有 VoidField，VoidField 作为虚数据字段，它同样也有自己的绝对路径，因为它可以作为数据字段的父亲，如果我们只有绝对路径， 就无法让一个数据字段正确的往表单数据里写入字段数据。读取数据也会读错位置。
+Of course, things are not that simple, because we also have a VoidField, which is a dummy data field, and it also has its own absolute path, because it can be the father of the data field. If we only have an absolute path, we cannot make a data field correct. Write field data to the form data. Reading data will also read the wrong position.
 
-所以，我们其实还需要一个数据路径作为专门用于数据字段写入数据和读取数据的，这里我们用 path 来描述字段的数据路径，大概的规则可以看看这张图：
+Therefore, we actually need a data path as a dedicated data field for writing data and reading data. Here we use path to describe the data path of the field. You can look at this picture for general rules:
 
 ![](//img.alicdn.com/imgextra/i1/O1CN01cdzULJ1et4PBak8si_!!6000000003928-2-tps-3506-2042.png)
 
-总结下来就是，Address 永远是代表节点的绝对路径，Path 是会跳过 VoidField 的节点路径，但是如果是 VoidField 的 Path，是会保留它自身的路径位置。
+In summary, Address is always the absolute path representing the node, and Path is the node path that skips the VoidField, but if it is the Path of the VoidField, it will retain its own path position.
 
-所以，不管是 Field 还是 VoidField，都会有它的 Address 和 Path，所以我们在用 query 方法查询字段的时候，既可以用 Address 规则查询，也可以用 Path 规则查询，比如`query("b.c")`可以查询到 c 字段，同样用`query("a.b.c")`也能查询到 c 字段。
+Therefore, whether it is a Field or a VoidField, it will have its Address and Path, so when we use the query method to query the field, we can either use the Address rule to query, or use the Path rule to query, such as `query("bc")` The c field can be queried, and the c field can also be queried with `query("abc")`.
 
-### 显隐规则
+### Explicit and Implicit Rules
 
-字段的显示隐藏，主要用 display 属性来表达：
+The display and hiding of the fields are mainly expressed by the display attribute:
 
-- display 为 none 代表字段 UI 隐藏，同时不保留字段数据
-- display 为 hidden 代表字段 UI 隐藏，保留字段数据
-- display 为 visible 代表字段 UI 显示，同时恢复字段数据
+- If display is none, it means that the field UI is hidden and the field data is not retained
+- display is hidden, which means that the field UI is hidden and the field data is preserved
+- display is visible, which means the field UI is displayed, and the field data is restored at the same time
 
-在 display 属性之上，我们还提供了两个便捷属性
+On top of the display property, we also provide two convenient properties
 
-1. visible，如果为 true 代表 display 等于 visible，如果为 false 代表 display 等于 none
-2. hidden，如果为 true 代表 display 等于 hidden，如果为 false 代表 display 等于 visible
+1. visible, if true, display is equal to visible, if false, display is equal to none
+2. hidden, if true, display is equal to hidden, if false, display is equal to visible
 
-上面讲的是显隐属性的写规则，读取规则就会更复杂一些，这里有一个默认继承逻辑：
+The above is about the writing rules of explicit and implicit attributes. The reading rules will be more complicated. Here is a default inheritance logic:
 
-如果父节点主动设置了 display 属性，子节点没有主动设置 display 属性，那么子节点会继承父节点的 display
+If the parent node actively sets the display property, and the child node does not actively set the display property, then the child node will inherit the display of the parent node
 
-那什么才是主动设置 display 呢？主要包括：
+So what is the active setting of display? mainly includes:
 
-- 给字段配置了初始化属性 display/visible/hidden
-- 如果初始化时没有配置，但是在后期又给字段设置了 display/visible/hidden
+- Configure the initial attributes display/visible/hidden for the field
+- If there is no configuration during initialization, but display/visible/hidden is set to the field later
 
-那如果希望从不继承变为继承怎么办？把 display 设置为 null 即可。
+So what if you want to change from no inheritance to inheritance? Just set display to null.
 
-### 数据读写规则
+### Data read and write rules
 
-因为 Field 是数据型字段，它负责维护表单数据的某个节点的数据，这里的读取，其实是直接读取的表单数据，通过 path 属性来寻址，这样也保证了表单数据与字段数据的绝对幂等，读取的方式直接读取 value/initialValue 即可。
+Because Field is a data-type field, it is responsible for maintaining the data of a certain node of the form data. The reading here is actually the form data read directly, which is addressed through the path attribute, which also guarantees the form data and field data. Absolutely idempotent, just read value/initialValue directly.
 
-数据写入规则与读取规则一致，Field 不会独立维护一份数据，它操作的直接就是具体表单的数据，通过 path 属性来寻址，写入的方式主要有：
+The data writing rules are consistent with the reading rules. Field does not independently maintain a copy of data. It directly operates on the data of the specific form, which is addressed through the path attribute. The main writing methods are:
 
-- 直接修改 value/initialValue 属性
-- 调用 onInput 会写入数据，同时设置字段的 inputValue 为入参数据，inputValues 为多参数据，然后设置 modified 属性为 true，代表该字段被手动修改过，最后触发 triggerType 为 onInput 的校验规则
-- 调用 setValue 方法
+- Modify the value/initialValue attribute directly
+- Calling onInput will write data, and at the same time, set the inputValue of the field as input parameter data, inputValues as multi-parameter data, and then set the modified attribute to true, which means that the field has been manually modified, and finally trigger the verification rule that triggerType is onInput
+- Call the setValue method
 
-### 数据源规则
+### Data source rules
 
-考虑到字段的值来源不是只有通过 Input 输入框输入的，还有会从一个数据源中选取的，比如下拉框之类的，所以字段模型加了一个数据源的属性 dataSource，专门用于读取数据源。只是在组件消费端需要做一层映射。写入数据源的方式可以直接修改 dataSource 属性，也可以调用 setDataSource 方法
+Considering that the value source of the field is not only input through the Input input box, but also selected from a data source, such as a drop-down box, the field model adds a data source attribute dataSource, which is dedicated to reading data source. Only a layer of mapping needs to be done on the component consumer side. The method of writing to the data source can directly modify the dataSource property, or call the setDataSource method
 
-### 组件规则
+### Component Rules
 
-字段模型，如果没有代理 UI 组件信息，那就没法实现更加精细化的联动控制了，比如 A 字段的值变化要控制 B 字段的 placeholder，那就必须将字段的属性给代理起来，所以 formily 提供了 component 属性，专门用于代理 UI 组件信息，component 是一个数组`[Component,ComponentProps]`，第一个元素代表是哪个组件，第二个代表组件的属性有哪些，为什么用数组，主要原因是这样方便类型提示，同时写法也比较简单。
+Field model, if there is no proxy UI component information, then more refined linkage control cannot be achieved. For example, if the value of A field changes to control the placeholder of B field, then the field attributes must be proxyed, so formily provides The component property is used to proxy UI component information. The component is an array `[Component,ComponentProps]`. The first element represents which component it is, and the second represents the properties of the component. Why use an array? This is convenient for type prompting, and the writing method is relatively simple.
 
-读取组件信息的方式直接读取 component 属性即可。
+The way to read component information is to read the component property directly.
 
-写入组件信息的方式主要有：
+The main ways to write component information are:
 
-- 直接修改 component 属性，传入数组
-- 调用 setComponent 方法，第一个参数是组件，第二个是组件属性
-- 调用 setComponentProps 方法，直接会设置组件属性
+- Modify the component property directly and pass in the array
+- Call the setComponent method, the first parameter is the component, the second is the component property
+- Call the setComponentProps method to directly set the component properties
 
-### 装饰器规则
+### Decorator rules
 
-与字段组件规则相似，字段装饰器主要用来维护字段的包裹容器，比如 FormItem，更偏 UI 布局的控制，这里我们用 decorator 属性来描述字段装饰器。
+Similar to the field component rules, the field decorator is mainly used to maintain the package container of the field, such as FormItem, which is more partial to the control of the UI layout. Here we use the decorator attribute to describe the field decorator.
 
-读取装饰器信息的方式直接读取 decorator 属性即可。
+The way to read the decorator information is to directly read the decorator attribute.
 
-写入装饰器信息的方式主要有：
+The main ways to write decorator information are:
 
-- 直接修改 decorator 属性，传入数组
-- 调用 setDecorator 方法，第一个参数是组件，第二个是组件属性
-- 调用 setDecoratorProps 方法，直接会设置组件属性
+- Modify the decorator property directly and pass in an array
+- Call the setDecorator method, the first parameter is the component, and the second is the component property
+- Call the setDecoratorProps method to directly set the component properties
 
-### 校验规则
+### Validation rules
 
-校验规则主要包含：
+The verification rules mainly include:
 
-- 校验器
-- 校验时机
-- 校验策略
-- 校验结果
+- Verifier
+- Timing of calibration
+- Verification strategy
+- Verification result
 
-#### 校验器
+#### Validator
 
-在字段模型中的校验器主要用 validator 属性描述，在字段初始化的时候可以给字段传入 validator，初始化之后也可以再次修改 validator
+The validator in the field model is mainly described by the validator attribute. The validator can be passed to the field when the field is initialized, and the validator can be modified again after initialization.
 
-一个 validator 主要有以下几种形态：
+A validator mainly has the following forms:
 
-- 纯字符串格式校验，比如`"phone" | validator = "url" | validator= "email"` ，这样的格式校验是正则规则的简写形式，formily 内部提供了一些标准的正则规则，当然用户也能通过 registerValidateFormats 来手动创建规则，方便复用
-- 自定义函数校验，有 3 种返回值模式：
-  - `(value)=>"message"`，返回字符串代表有错误，不返回字符串代表无错误
-  - `(value)=>({type:"error",message:"message"})`，返回对象形式，可以指定 type 是 error 或 warning 或 success
-  - `{validator:()=>false,message:"message"}`，返回布尔形式，错误消息会复用对象结构的 message 字段
-- 对象结构校验，是一种更完备的表达，比如：
-  - `{format:"url"}` 这样可以指定正则格式
-  - `{required:true}`这样可以指定必填
-  - 还有更多的规则属性可以参考 API 文档，同时我们还能通过 registerValidateRules 来注册类似的校验规则
-- 对象数组结构校验，是前面三种的组合表达，其实前 3 种，都会转换成对象数组结构，比如：
-  - `["url",{required:true},(value)=>"message"]`其实相当于 `[{format:"url"},{required:true},{validator:(value)=>"message"}]`
+- Pure string format verification, such as `"phone" | validator = "url" | validator= "email"`. This format verification is a short form of regular rules. Formily provides some standard regular rules. Of course Users can also manually create rules through registerValidateFormats to facilitate reuse
+- Custom function verification, there are 3 return value modes:
+  - `(value)=>"message"`, a string returned means there is an error, and no string means no error
+  - `(value)=>({type:"error",message:"message"})`, return object form, you can specify type as error or warning or success
+  - `{validator:()=>false,message:"message"}`, returns a boolean form, the error message will reuse the message field of the object structure
+- Object structure verification is a more complete expression, such as:
+  - `{format:"url"}` This can specify the regular format
+  - `{required:true}` This can specify required fields
+  - There are more rule attributes can refer to the API documentation, and we can also register similar validation rules through registerValidateRules
+- Object array structure verification is a combination of the previous three types. In fact, the first three types will all be converted into object array structures, such as:
+  - `["url",{required:true},(value)=>"message"]` is actually equivalent to `[{format:"url"},{required:true},{validator:(value)=> "message"}]`
 
-#### 校验时机
+#### Check timing
 
-有些时候，我们希望某些校验规则只在聚焦或者失焦的时候触发，我们可以在每个校验规则对象中加一个 triggerType，比如`{validator:(value)=>"message",triggerType:"onBlur"}` 这样就可以精确的控制某个校验规则只在某个事件中执行校验，这里的 triggerType 主要有`"onInput" | "onBlur" | "onFocus"` ，如果调用`form.validate`，是会一次性校验所有 triggerType 的规则，如果手动调用`field.validate`，则可以在入参中指定 triggerType，不传参就会校验所有。
+Sometimes, we want certain verification rules to be triggered only when focusing or out of focus. We can add a triggerType to each verification rule object, such as `{validator:(value)=>"message",triggerType: "onBlur"}` In this way, you can precisely control a verification rule to perform verification only in a certain event. The triggerType here mainly includes `"onInput" | "onBlur" | "onFocus"`, if you call `form. validate` is a rule that verifies all triggerTypes at once. If you manually call `field.validate`, you can specify the triggerType in the input parameters, and all triggerTypes will be verified if you don’t pass them.
 
-#### 校验策略
+#### Verification Strategy
 
-有些时候，我们希望某个字段的校验策略是，执行所有校验规则的时候，如果某个校验规则校验失败则立即返回结果，我们只需要在 field 初始化的时候传入参数 validateFirst 为 true 即可，默认是 false，也就是校验失败也会继续校验，拿到的校验结果是一个数组。
+Sometimes, we hope that the verification strategy of a certain field is that when all the verification rules are executed, if a verification rule fails, the result will be returned immediately. We only need to pass the parameter validateFirst to true when the field is initialized. That is, the default is false, that is, the verification will continue if the verification fails, and the verification result obtained is an array.
 
-#### 校验结果读取
+#### Read the verification result
 
-对于校验结果，在字段模型中主要是存放在 feedbacks 属性中的，feedbacks 是由 Feedback 对象组成的数组，每个 Feedback 的结构是：
+The verification results are mainly stored in the feedbacks property in the field model. Feedbacks is an array of Feedback objects. The structure of each Feedback is:
 
 ```ts
 interface Feedback {
-  path: string //字段数据路径
-  address: string //字段绝对路径
-  type: 'error' | 'success' | 'warning' //校验结果类型
-  code: //校验结果编码
+  path: string //Field data path
+  address: string //field absolute path
+  type: 'error' | 'success' | 'warning' //Verification result type
+  code: //Check result code
   | 'ValidateError'
     | 'ValidateSuccess'
     | 'ValidateWarning'
     | 'EffectError'
     | 'EffectSuccess'
     | 'EffectWarning'
-  messages: string[] //校验消息
+  messages: string[] //Check the message
 }
 ```
 
-读取方式主要有 4 种：
+There are four main ways to read:
 
-- 直接读取 feedbacks 属性
-- 读取 errors 属性，相当于是从 feedbacks 中过滤出 type 为 error 的所有校验结果
-- 读取 warnings 属性，相当于是从 feedbacks 中过滤出 type 为 warning 的所有校验结果
-- 读取 successes 属性，相当于是从 feedbacks 中过滤出 type 为 success 的所有校验结果
+- Read feedbacks properties directly
+- Reading the errors attribute is equivalent to filtering out all verification results with type error from feedbacks
+- Reading the warnings attribute is equivalent to filtering out all the verification results whose type is warning from feedbacks
+- Reading the successes attribute is equivalent to filtering out all verification results with type success from feedbacks
 
-#### 校验结果写入
+#### Write verification result
 
-写入方式有 3 种：
+There are 3 ways to write:
 
-- 调用 validate 方法，触发字段校验器执行校验动作，校验结果的 Code 统一是 Validate\*`
-  - 调用 onInput 会触发 validate
-  - 调用 onFoucs 会触发 validate
-  - 调用 onBlur 会触发 validate
-  - 调用 reset，并指定 validate 为 true 会触发 validate
-- 直接修改 feedbacks 属性
-- 直接修改 errors 属性，会转换成 feedbacks 对象数组，同时 Feedback 的 code 会被强制覆盖为 EffectError
-- 直接修改 warnings 属性，会转换成 feedbacks 对象数组，同时 Feedback 的 code 会被强制覆盖为 EffectWarning
-- 直接修改 successes 属性，会转换成 feedbacks 对象数组，同时 Feedback 的 code 会被强制覆盖为 EffectSuccess
+- Call the validate method to trigger the field validator to perform the validation action, and the code of the validation result is uniformly Validate\*`
+  - Calling onInput will trigger validate
+  - Calling onFocus will trigger validate
+  - Calling onBlur will trigger validate
+  - Call reset and specify validate as true to trigger validate
+- Modify the feedbacks attribute directly
+- Modify the errors property directly, it will be converted into an array of feedbacks objects, and the code of Feedback will be forcibly overwritten as EffectError
+- Modify the warnings attribute directly, it will be converted into an array of feedbacks objects, and the code of Feedback will be forcibly overwritten as EffectWarning
+- Modify the successes property directly, it will be converted into an array of feedbacks objects, and the code of Feedback will be forcibly overwritten as EffectSuccess
 
-这样的写入逻辑主要是为了防止用户修改校验结果污染本身校验器的校验结果，做严格分离，容易恢复现场。
+Such writing logic is mainly to prevent users from modifying the verification results from polluting the verification results of their own verifiers, strictly separating them, and easy to restore the scene.
 
-#### 校验结果查询
+#### Verification result query
 
-校验结果的查询主要通过 queryFeedbacks 来查询，查询的入参与 Feedback 对象一致，可以按照 type 或者 code，也可以按照路径进行过滤。
+The query of the verification result is mainly queried through queryFeedbacks. The query has the same participating Feedback objects, which can be filtered by type or code, or by path.
 
 ## ArrayField
 
-ArrayField 相比于 Field，仅仅只是在继承 Field 的基础上扩展了数组相关的方法，比如 push/pop/insert/move 这些，为什么要提供这些方法，它的能力不只是对字段的数据做处理，它内部还提供了对 ArrayField 子节点的状态转置处理主要为了保证字段的顺序与数据的顺序是一致。可以举个例子：
+Compared with Field, ArrayField only extends array-related methods on the basis of inheriting Field, such as push/pop/insert/move. Why should these methods be provided? Its ability is not only to process the field data, it It also provides internal state transposition processing for the sub-nodes of ArrayField mainly to ensure that the order of the fields is consistent with the order of the data. Can cite an example:
 
 ![](//img.alicdn.com/imgextra/i3/O1CN01mpGugu1QFlnfQ4qfo_!!6000000001947-2-tps-3506-1794.png)
 
-这是一个 move 调用的过程，数组元素的值会发生移动，同时对应字段的状态也会发生移动。
+This is a move call process, the value of the array element will move, and the state of the corresponding field will also move.
 
 ## ObjectField
 
-因为 object 类型是无序的，也就不存在状态转置，所以 ObjectField 就提供了 addProperty/removeProperty/existProperty 3 个 API 给用户使用。
+Because the object type is disordered, there is no state transposition, so ObjectField provides addProperty/removeProperty/existProperty three APIs for users to use.
 
 ## VoidField
 
-VoidField 相比于 Field，主要是阉割了数据读写规则、数据源规则和校验规则，用户使用的时候，主要还是使用显隐规则和组件，装饰器规则。
+Compared with Field, VoidField mainly castrates data read and write rules, data source rules, and verification rules. When users use it, they mainly use explicit and implicit rules, components, and decorator rules.
 
 <Alert>
 
-前面讲的一系列字段领域规则，并没有提到详细的 API 使用细节，更多的是从思路上帮助用户梳理 formily，如果对 API 不熟悉的，最好先看 API 文档。
+The series of field rules mentioned above did not mention the detailed API usage details. It is more to help users sort out formily from the perspective of ideas. If you are not familiar with the API, it is best to read the API documentation first.
 
 </Alert>

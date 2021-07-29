@@ -1,8 +1,8 @@
 # Submit
 
-> 提交按钮
+> Submit button
 
-## 普通提交
+## Ordinary submission
 
 ```tsx
 import React from 'react'
@@ -24,14 +24,14 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="input"
-        title="输入框"
+        title="input box"
         required
         x-decorator="FormItem"
         x-component="Input"
       />
       <SchemaField.String
         name="input2"
-        title="输入框"
+        title="input box"
         default="123"
         required
         x-decorator="FormItem"
@@ -39,13 +39,13 @@ export default () => (
       />
     </SchemaField>
     <FormButtonGroup>
-      <Submit onSubmit={console.log}>提交</Submit>
+      <Submit onSubmit={console.log}>Submit</Submit>
     </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-## 防重复提交(Loading)
+## Prevent Duplicate Submission (Loading)
 
 ```tsx
 import React from 'react'
@@ -67,14 +67,14 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="input"
-        title="输入框"
+        title="input box"
         required
         x-decorator="FormItem"
         x-component="Input"
       />
       <SchemaField.String
         name="input2"
-        title="输入框"
+        title="input box"
         default="123"
         required
         x-decorator="FormItem"
@@ -91,8 +91,9 @@ export default () => (
             }, 2000)
           })
         }}
+        onSubmitFailed={console.log}
       >
-        提交
+        submit
       </Submit>
     </FormButtonGroup>
   </FormProvider>
@@ -101,4 +102,11 @@ export default () => (
 
 ## API
 
-参考 https://ant.design/components/button-cn/
+For button-related API properties, we can refer to https://ant.design/components/button-cn/, and the rest are the unique API properties of the Submit component
+
+| Property name   | Type                                                                                             | Description                                               | Default value |
+| --------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------- | ------------- |
+| onClick         | `(event: MouseEvent) => void \| boolean`                                                         | Click event, if it returns false, it can block submission | -             |
+| onSubmit        | `(values: any) => Promise<any> \| any`                                                           | Submit event callback                                     | -             |
+| onSubmitSuccess | (payload: any) => void                                                                           | Submit successful response event                          | -             |
+| onSubmitFailed  | (feedbacks: [IFormFeedback](https://core.formilyjs.org/api/models/form#iformfeedback)[]) => void | Submit verification failure event callback                | -             |

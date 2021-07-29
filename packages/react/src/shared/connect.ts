@@ -1,7 +1,7 @@
 import React from 'react'
-import { isFn, isStr, FormPath, each } from '@formily/shared'
+import { isFn, isStr, FormPath, each, isValid } from '@formily/shared'
 import { isVoidField } from '@formily/core'
-import { observer } from '@formily/reactive-react'
+import { observer, Observer } from '@formily/reactive-react'
 import { JSXComponent, IComponentMapper, IStateMapper } from '../types'
 import { useField } from '../hooks'
 import hoistNonReactStatics from 'hoist-non-react-statics'
@@ -21,11 +21,13 @@ export function mapProps<T extends JSXComponent>(
               each(mapper, (to, extract) => {
                 const extractValue = FormPath.getIn(field, extract)
                 const targetValue = isStr(to) ? to : (extract as any)
+                const originalValue = FormPath.getIn(props, targetValue)
                 if (extract === 'value') {
                   if (to !== extract) {
                     delete props.value
                   }
                 }
+                if (isValid(originalValue) && !isValid(extractValue)) return
                 FormPath.setIn(props, targetValue, extractValue)
               })
             }
@@ -43,18 +45,20 @@ export function mapProps<T extends JSXComponent>(
 }
 
 export function mapReadPretty<T extends JSXComponent, C extends JSXComponent>(
-  component: C
+  component: C,
+  readPrettyProps?: React.ComponentProps<C>
 ) {
   return (target: T) => {
     return observer(
       (props) => {
         const field = useField()
-        return React.createElement(
-          !isVoidField(field) && field?.pattern === 'readPretty'
-            ? component
-            : target,
-          props
-        )
+        if (!isVoidField(field) && field?.pattern === 'readPretty') {
+          return React.createElement(component, {
+            ...readPrettyProps,
+            ...props,
+          })
+        }
+        return React.createElement(target, props)
       },
       {
         forwardRef: true,
@@ -72,7 +76,7 @@ export function connect<T extends JSXComponent>(
   }, target)
 
   const Destination = React.forwardRef(
-    (props: React.ComponentProps<T>, ref) => {
+    (props: Partial<React.ComponentProps<T>>, ref) => {
       return React.createElement(Target, { ...props, ref })
     }
   )
@@ -82,4 +86,4 @@ export function connect<T extends JSXComponent>(
   return Destination
 }
 
-export { observer }
+export { observer, Observer }

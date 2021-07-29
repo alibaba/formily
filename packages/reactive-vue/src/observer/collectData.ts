@@ -6,30 +6,31 @@
  * @since 2018-06-08 10:16
  */
 
-import { isObservable } from '@formily/reactive';
+import { isObservable } from '@formily/reactive'
 
 export default function collectData(vm: any, data?: any) {
+  const dataDefinition =
+    typeof data === 'function' ? data.call(vm, vm) : data || {}
+  const filteredData = Object.keys(dataDefinition).reduce(
+    (result: any, field) => {
+      const value = dataDefinition[field]
 
-  const dataDefinition = typeof data === 'function' ? data.call(vm, vm) : (data || {});
-  const filteredData = Object.keys(dataDefinition).reduce((result: any, field) => {
-    
-    const value = dataDefinition[field];
+      if (isObservable(value)) {
+        Object.defineProperty(vm, field, {
+          configurable: true,
+          get() {
+            return value
+          },
+          set() {},
+        })
+      } else {
+        result[field] = value
+      }
 
-    if (isObservable(value)) {
-      Object.defineProperty(vm, field, {
-        configurable: true,
-        get() {
-          return value;
-        },
-        set() {}
-      });
-    } else {
-      result[field] = value;
-    }
+      return result
+    },
+    {}
+  )
 
-    return result;
-
-  }, {});
-
-  return filteredData;
+  return filteredData
 }

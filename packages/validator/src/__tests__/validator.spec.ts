@@ -3,7 +3,7 @@ import {
   registerValidateRules,
   registerValidateFormats,
   setValidateLanguage,
-  registerValidateMessageTemplateEnigne,
+  registerValidateMessageTemplateEngine,
 } from '../index'
 
 registerValidateRules({
@@ -67,7 +67,7 @@ test('empty number validate', async () => {
 test('multi validate', async () => {
   const results = await validate('', {
     required: true,
-    validator(value) {
+    validator() {
       return 'validate error'
     },
   })
@@ -83,7 +83,7 @@ test('first validate', async () => {
     '',
     {
       required: true,
-      validator(value) {
+      validator() {
         return 'validate error'
       },
     },
@@ -185,7 +185,7 @@ test('filter trigger type(unmatch)', async () => {
       {
         triggerType: 'onBlur',
         required: true,
-        validator(value) {
+        validator() {
           return 'validate error'
         },
       },
@@ -208,7 +208,7 @@ test('filter trigger type(match first validte)', async () => {
       {
         triggerType: 'onBlur',
         required: true,
-        validator(value) {
+        validator() {
           return 'validate error'
         },
       },
@@ -231,7 +231,7 @@ test('filter trigger type(match multi validte)', async () => {
       {
         triggerType: 'onBlur',
         required: true,
-        validator(value) {
+        validator() {
           return 'validate error'
         },
       },
@@ -328,7 +328,7 @@ test('language', async () => {
 })
 
 test('validator template', async () => {
-  registerValidateMessageTemplateEnigne((message) => {
+  registerValidateMessageTemplateEngine((message) => {
     if (typeof message !== 'string') return message
     return message.replace(/\<\<\s*([\w.]+)\s*\>\>/g, (_, $0) => {
       return { aa: 123 }[$0]

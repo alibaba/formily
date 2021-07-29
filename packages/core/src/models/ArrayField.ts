@@ -1,6 +1,10 @@
 import { isArr } from '@formily/shared'
-import { batch } from '@formily/reactive'
-import { spliceArrayState, exchangeArrayState } from '../shared'
+import { batch, reaction } from '@formily/reactive'
+import {
+  spliceArrayState,
+  exchangeArrayState,
+  cleanupArrayChildren,
+} from '../shared/internals'
 import { Field } from './Field'
 import { Form } from './Form'
 import { JSXComponent, IFieldProps, FormPathPattern } from '../types'
@@ -15,22 +19,32 @@ export class ArrayField<
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component>,
     form: Form,
-    controlled: boolean
+    designable: boolean
   ) {
-    super(
-      address,
-      {
-        ...props,
-        value: isArr(props.value) ? props.value : [],
-      },
-      form,
-      controlled
+    super(address, props, form, designable)
+    this.addAutoCleaner()
+  }
+
+  protected addAutoCleaner() {
+    this.disposers.push(
+      reaction(
+        () => this.value?.length,
+        (newLength, oldLength) => {
+          if (oldLength && !newLength) {
+            cleanupArrayChildren(this, 0)
+          } else if (newLength < oldLength) {
+            cleanupArrayChildren(this, newLength)
+          }
+        }
+      )
     )
   }
 
   push = async (...items: any[]) => {
-    if (!isArr(this.value)) return
     return batch(() => {
+      if (!isArr(this.value)) {
+        this.value = []
+      }
       this.value.push(...items)
       return this.onInput(this.value)
     })
@@ -40,23 +54,25 @@ export class ArrayField<
     if (!isArr(this.value)) return
     return batch(() => {
       const index = this.value.length - 1
-      this.value.pop()
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1,
       })
+      this.value.pop()
       return this.onInput(this.value)
     })
   }
 
   insert = async (index: number, ...items: any[]) => {
-    if (!isArr(this.value)) return
     return batch(() => {
-      this.value.splice(index, 0, ...items)
+      if (!isArr(this.value)) {
+        this.value = []
+      }
       spliceArrayState(this, {
         startIndex: index,
         insertCount: items.length,
       })
+      this.value.splice(index, 0, ...items)
       return this.onInput(this.value)
     })
   }
@@ -64,11 +80,11 @@ export class ArrayField<
   remove = async (index: number) => {
     if (!isArr(this.value)) return
     return batch(() => {
-      this.value.splice(index, 1)
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1,
       })
+      this.value.splice(index, 1)
       return this.onInput(this.value)
     })
   }
@@ -82,13 +98,15 @@ export class ArrayField<
   }
 
   unshift = async (...items: any[]) => {
-    if (!isArr(this.value)) return
     return batch(() => {
-      this.value.unshift(...items)
+      if (!isArr(this.value)) {
+        this.value = []
+      }
       spliceArrayState(this, {
         startIndex: 0,
         insertCount: items.length,
       })
+      this.value.unshift(...items)
       return this.onInput(this.value)
     })
   }

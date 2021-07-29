@@ -1,6 +1,6 @@
 {
   "name": "@formily/reactive",
-  "version": "2.0.0-beta.53",
+  "version": "2.0.0-beta.83",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -22,10 +22,11 @@
   },
   "scripts": {
     "start": "dumi dev",
-    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
+    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:global",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
     "build:umd": "rollup --config",
+    "build:global": "ts-node ../../scripts/build-global",
     "build:docs": "dumi build",
     "benchmark": "ts-node ./benchmark"
   },
@@ -39,5 +40,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "2c44ae410a73f02735c63c6430e021a50e21f3ec"
+  "gitHead": "ac79c196ae9324889aca5e0501146f9b37b04283"
 }

@@ -1,31 +1,31 @@
-# 介绍
+# Introduction
 
-@formily/react 的核心定位是将 ViewModel([@formily/core](//core.formilyjs.org))与组件实现一个状态绑定关系，它不负责管理表单数据，表单校验，它仅仅是一个渲染胶水层，但是这样一层胶水，并不脏，它会把很多脏逻辑优雅的解耦，变得可维护。
+The core positioning of @formily/react is to realize a state binding relationship between ViewModel ([@formily/core](//core.formilyjs.org)) and components. It is not responsible for managing form data and form verification. It is only A rendering glue layer, but such a layer of glue is not dirty, it will elegantly decouple a lot of dirty logic and become maintainable.
 
-## 超高性能
+## Ultra high performance
 
-借助 [@formily/core](//core.formilyjs.org) 的响应式模型，@formily/react 无需做任何优化即可获得超高的性能优势，依赖追踪，精确更新，按需渲染，让我们的表单真正做到了只需关注业务逻辑，无需考虑性能问题。
+With the responsive model of [@formily/core](//core.formilyjs.org), @formily/react can obtain super high performance advantages without any optimization, relying on tracking, accurate updates, on-demand rendering, let us The form of really does only need to focus on business logic, without considering performance issues.
 
-## 开箱即用
+## Out of the box
 
-@formily/react 提供了一系列的 React 组件，比如 Field/ArrayField/ObjectField/VoidField，用户在使用的时候，只需要给 Field 组件传入 component 属性(支持 value/onChange 这样的双向绑定约定)即可快速接入@formily/react，接入成本极低。
+@formily/react provides a series of React components, such as Field/ArrayField/ObjectField/VoidField. When using it, users only need to pass the component property to the Field component (supporting two-way binding conventions such as value/onChange). Quick access to @formily/react, the access cost is extremely low.
 
-## 协议驱动
+## JSON Schema Driver
 
-@formily/react 提供了 SchemaField 这样的协议驱动组件，同时是基于标准 JSON-Schema 的驱动，让表单开发可以变得更加动态化，可配置化，更甚，我们可以做到一份协议，让多端渲染表单。
+@formily/react provides protocol-driven components such as SchemaField. It is also driven by the standard JSON-Schema, so that form development can become more dynamic and configurable. What's more, we can achieve a protocol that allows multiple terminals Render the form.
 
-## 场景复用
+## Scene Reuse
 
-借助协议驱动的能力，我们可以将一个携带业务逻辑的协议片段抽象成一个场景组件，帮助用户在某些场景上高效开发，比如 FormTab、FormStep 这类场景组件。
+With the help of protocol-driven capabilities, we can abstract a protocol fragment carrying business logic into a scene component to help users develop efficiently in certain scenes, such as scene components such as FormTab and FormStep.
 
-## 智能提示
+## Smart tips
 
-因为 formily 是完全的 Typescript 项目，所以用户在 VSCode 上开发可以获得最大化的智能提示体验
+Because formily is a complete Typescript project, users can develop on VSCode to get the maximum intelligent prompt experience
 
 ![img](https://img.alicdn.com/imgextra/i2/O1CN01yiREHk1X95KJPPz1c_!!6000000002880-2-tps-2014-868.png)
 
-## 状态可观测
+## Status observable
 
-安装 [FormilyDevtools](https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN) 可以实时观测模型状态变化，排查问题
+Install [FormilyDevtools](https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN) to observe the model status changes in real time and troubleshoot problems
 
 ![img](https://img.alicdn.com/imgextra/i4/O1CN01DSci5h1rAGfRafpXw_!!6000000005590-2-tps-2882-1642.png)

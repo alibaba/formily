@@ -24,7 +24,6 @@ import {
 import { Form } from './Form'
 import {
   JSXComponent,
-  JSXComponenntProps,
   LifeCycleTypes,
   IFieldFeedback,
   FeedbackMessage,
@@ -55,9 +54,8 @@ import {
   modelStateGetter,
   isHTMLInputEvent,
   initFieldValue,
-  isArrayField,
-  isObjectField,
-} from '../shared'
+} from '../shared/internals'
+import { isArrayField, isObjectField } from '../shared/checkers'
 import { Query } from './Query'
 
 const RESPONSE_REQUEST_DURATION = 100
@@ -96,21 +94,21 @@ export class Field<
   form: Form
   props: IFieldProps<Decorator, Component, TextType, ValueType>
 
-  private caches: IFieldCaches = {}
-  private requests: IFieldRequests = {}
-  private disposers: (() => void)[] = []
+  protected caches: IFieldCaches = {}
+  protected requests: IFieldRequests = {}
+  protected disposers: (() => void)[] = []
 
   constructor(
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component, TextType, ValueType>,
     form: Form,
-    controlled: boolean
+    designable: boolean
   ) {
     this.initialize(props, form)
     this.makeIndexes(address)
-    this.makeObservable(controlled)
-    this.makeReactive(controlled)
-    this.onInit()
+    this.makeObservable(designable)
+    this.makeReactive(designable)
+    this.onInit(designable)
   }
 
   protected makeIndexes(address: FormPathPattern) {
@@ -151,8 +149,8 @@ export class Field<
     this.component = toArr(this.props.component)
   }
 
-  protected makeObservable(controlled: boolean) {
-    if (controlled) return
+  protected makeObservable(designable: boolean) {
+    if (designable) return
     define(this, {
       title: observable.ref,
       description: observable.ref,
@@ -223,14 +221,14 @@ export class Field<
     })
   }
 
-  protected makeReactive(controlled: boolean) {
-    if (controlled) return
+  protected makeReactive(designable: boolean) {
+    if (designable) return
     this.disposers.push(
       reaction(
         () => this.value,
         (value) => {
           this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
-          if (isValid(value) && this.modified && !this.caches.inputing) {
+          if (isValid(value) && this.modified && !this.caches.inputting) {
             this.validate()
           }
         }
@@ -244,13 +242,15 @@ export class Field<
       reaction(
         () => this.display,
         (display) => {
-          if (display === 'none') {
-            this.caches.value = toJS(this.value)
-            this.setValue()
-          } else if (display === 'visible') {
+          if (display === 'visible') {
             if (isEmpty(this.value)) {
               this.setValue(this.caches.value)
               this.caches.value = undefined
+            }
+          } else {
+            this.caches.value = toJS(this.value)
+            if (display === 'none') {
+              this.form.deleteValuesIn(this.path)
             }
           }
           if (display === 'none' || display === 'hidden') {
@@ -351,13 +351,18 @@ export class Field<
 
   get display(): FieldDisplayTypes {
     const parentDisplay = this.parent?.display
-    if (isValid(this.selfDisplay)) return this.selfDisplay
+    if (parentDisplay && parentDisplay !== 'visible') {
+      if (this.selfDisplay && this.selfDisplay !== 'visible')
+        return this.selfDisplay
+      return parentDisplay
+    }
+    if (this.selfDisplay) return this.selfDisplay
     return parentDisplay || this.form.display || 'visible'
   }
 
   get pattern(): FieldPatternTypes {
     const parentPattern = this.parent?.pattern
-    if (isValid(this.selfPattern)) return this.selfPattern
+    if (this.selfPattern) return this.selfPattern
     return parentPattern || this.form.pattern || 'editable'
   }
 
@@ -613,9 +618,9 @@ export class Field<
     }
   }
 
-  setComponent = <C extends JSXComponent>(
+  setComponent = <C extends JSXComponent, ComponentProps extends object = {}>(
     component?: C,
-    props?: JSXComponenntProps<C>
+    props?: ComponentProps
   ) => {
     if (component) {
       this.componentType = component as any
@@ -626,8 +631,8 @@ export class Field<
     }
   }
 
-  setComponentProps = <C extends JSXComponent = Component>(
-    props?: JSXComponenntProps<C>
+  setComponentProps = <ComponentProps extends object = {}>(
+    props?: ComponentProps
   ) => {
     if (props) {
       this.componentProps = this.componentProps || {}
@@ -635,9 +640,9 @@ export class Field<
     }
   }
 
-  setDecorator = <D extends JSXComponent>(
+  setDecorator = <D extends JSXComponent, ComponentProps extends object = {}>(
     component?: D,
-    props?: JSXComponenntProps<D>
+    props?: ComponentProps
   ) => {
     if (component) {
       this.decoratorType = component as any
@@ -648,8 +653,8 @@ export class Field<
     }
   }
 
-  setDecoratorProps = <D extends JSXComponent = Decorator>(
-    props?: JSXComponenntProps<D>
+  setDecoratorProps = <ComponentProps extends object = {}>(
+    props?: ComponentProps
   ) => {
     if (props) {
       this.decoratorProps = this.decoratorProps || {}
@@ -661,10 +666,10 @@ export class Field<
 
   getState: IModelGetter<IFieldState> = modelStateGetter(this)
 
-  onInit = () => {
+  onInit = (designable: boolean) => {
     this.initialized = true
     batch.scope(() => {
-      initFieldValue(this)
+      initFieldValue(this, designable)
     })
     batch.scope(() => {
       initFieldUpdate(this)
@@ -690,7 +695,7 @@ export class Field<
     }
     const values = getValuesFromEvent(args)
     const value = values[0]
-    this.caches.inputing = true
+    this.caches.inputting = true
     this.inputValue = value
     this.inputValues = values
     this.value = value
@@ -699,7 +704,7 @@ export class Field<
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     await this.validate('onInput')
-    this.caches.inputing = false
+    this.caches.inputting = false
   }
 
   onFocus = async (...args: any[]) => {
@@ -795,6 +800,11 @@ export class Field<
       dispose()
     })
     this.form.removeEffects(this)
+  }
+
+  destroy = () => {
+    this.dispose()
+    delete this.form.fields[this.address.toString()]
   }
 
   match = (pattern: FormPathPattern) => {

@@ -12,7 +12,7 @@ import 'ant-design-vue/dist/antd.css'
 
 const { SchemaField } = createSchemaField({
   components: {
-    Button
+    Button,
   },
 })
 
@@ -22,7 +22,7 @@ const schema = {
     button: {
       type: 'void',
       'x-component': 'Button',
-      'x-content': '一个普通的按钮'
+      'x-content': '一个普通的按钮',
     },
   },
 }
@@ -32,8 +32,8 @@ export default {
   data() {
     return {
       form: createForm(),
-      schema
+      schema,
     }
-  }
+  },
 }
 </script>
