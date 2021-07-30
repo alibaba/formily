@@ -8,7 +8,7 @@ import {
   ref,
 } from '@vue/composition-api'
 import { Fragment, useField, useFieldSchema, h } from '@formily/vue'
-import { isValid, uid } from '@formily/shared'
+import { isValid, uid, clone } from '@formily/shared'
 import { ArrayField } from '@formily/core'
 import { stylePrefix } from '../__builtins__/configs'
 
@@ -79,7 +79,7 @@ const useKey = () => {
 }
 
 const getDefaultValue = (defaultValue: any, schema: Schema): any => {
-  if (isValid(defaultValue)) return defaultValue
+  if (isValid(defaultValue)) return clone(defaultValue)
   if (Array.isArray(schema?.items))
     return getDefaultValue(defaultValue, schema.items[0])
   if (schema?.items?.type === 'array') return []

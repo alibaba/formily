@@ -11,7 +11,7 @@ import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from 'antd/lib/button'
 import { ArrayField } from '@formily/core'
 import { useField, useFieldSchema, Schema, JSXComponent } from '@formily/react'
-import { isValid } from '@formily/shared'
+import { isValid, clone } from '@formily/shared'
 import { SortableHandle } from 'react-sortable-hoc'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
@@ -71,7 +71,7 @@ const useIndex = (index?: number) => {
 }
 
 const getDefaultValue = (defaultValue: any, schema: Schema) => {
-  if (isValid(defaultValue)) return defaultValue
+  if (isValid(defaultValue)) return clone(defaultValue)
   if (Array.isArray(schema?.items))
     return getDefaultValue(defaultValue, schema.items[0])
   if (schema?.items?.type === 'array') return []
