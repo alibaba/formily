@@ -7,7 +7,7 @@ import {
   PlusOutlined,
   MenuOutlined,
 } from '@ant-design/icons'
-import { isValid } from '@formily/shared'
+import { isValid, clone } from '@formily/shared'
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from '@alifd/next/lib/button'
 import { ArrayField } from '@formily/core'
@@ -71,7 +71,7 @@ const useIndex = (index?: number) => {
 }
 
 const getDefaultValue = (defaultValue: any, schema: Schema) => {
-  if (isValid(defaultValue)) return defaultValue
+  if (isValid(defaultValue)) return clone(defaultValue)
   if (Array.isArray(schema?.items))
     return getDefaultValue(defaultValue, schema.items[0])
   if (schema?.items?.type === 'array') return []
