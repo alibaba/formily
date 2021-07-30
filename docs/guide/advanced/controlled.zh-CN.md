@@ -257,7 +257,6 @@ export default () => {
 
 ```tsx
 import React, { useMemo } from 'react'
-import { observable } from '@formily/reactive'
 import { createForm } from '@formily/core'
 import { createSchemaField, observer } from '@formily/react'
 import { Form, FormItem, Input, Select } from '@formily/antd'
@@ -314,14 +313,8 @@ const DYNAMIC_INJECT_SCHEMA = {
   },
 }
 
-const SchemaForm = observer(({ values }) => {
-  const form = useMemo(
-    () =>
-      createForm({
-        values,
-      }),
-    [values.type]
-  )
+export default observer(() => {
+  const form = useMemo(() => createForm(), [])
 
   const schema = {
     type: 'object',
@@ -336,27 +329,16 @@ const SchemaForm = observer(({ values }) => {
         'x-decorator': 'FormItem',
         'x-component': 'Select',
       },
-      container: DYNAMIC_INJECT_SCHEMA[values.type],
+      container: DYNAMIC_INJECT_SCHEMA[form.values.type],
     },
   }
 
   return (
     <Form form={form} layout="vertical">
-      <SchemaField schema={schema} />
+      <SchemaField schema={schema} autoCleanup />
     </Form>
   )
 })
-
-export default () => {
-  const values = useMemo(
-    () =>
-      observable({
-        type: 'type_1',
-      }),
-    []
-  )
-  return <SchemaForm values={values} />
-}
 ```
 
 ## 字段级受控
