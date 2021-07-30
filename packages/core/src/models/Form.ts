@@ -399,7 +399,9 @@ export class Form<ValueType extends object = any> {
     if (!isPlainObj(values)) return
     untracked(() => {
       if (strategy === 'merge' || strategy === 'deepMerge') {
-        this.values = merge(this.values, values)
+        this.values = merge(this.values, values, {
+          arrayMerge: (target, source) => source,
+        })
       } else if (strategy === 'shallowMerge') {
         this.values = Object.assign(this.values, values)
       } else {
@@ -415,7 +417,9 @@ export class Form<ValueType extends object = any> {
     if (!isPlainObj(initialValues)) return
     untracked(() => {
       if (strategy === 'merge' || strategy === 'deepMerge') {
-        this.initialValues = merge(this.initialValues, initialValues)
+        this.initialValues = merge(this.initialValues, initialValues, {
+          arrayMerge: (target, source) => source,
+        })
       } else if (strategy === 'shallowMerge') {
         this.initialValues = Object.assign(this.initialValues, initialValues)
       } else {
