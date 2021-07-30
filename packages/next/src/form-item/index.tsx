@@ -419,6 +419,10 @@ export const FormItem: ComposeFormItem = connect(
   )
 )
 
+FormItem.defaultProps = {
+  fullness: true,
+}
+
 FormItem.BaseItem = BaseItem
 
 export default FormItem
