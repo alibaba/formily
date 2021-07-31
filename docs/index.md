@@ -127,7 +127,7 @@ export default () => (
     <QrCodeGroup>
       <QrCode link="//img.alicdn.com/imgextra/i2/O1CN010HJI5V1nFWmwSvj1q_!!6000000005060-0-tps-1284-1644.jpg" />
       <QrCode
-        title="该群已满"
+        title="Already Full"
         link="//img.alicdn.com/imgextra/i3/O1CN018neaqX1HvbT6SUIbp_!!6000000000820-0-tps-1284-1644.jpg"
       />
     </QrCodeGroup>
