@@ -3,7 +3,7 @@ title: Formily-Alibaba unified front-end form solution
 order: 10
 hero:
   title: Formily Fusion
-  desc: Formily 2.x Component System Based on Alibaba Fusion Encapsulation
+  desc: Formily Component System Based on Alibaba Fusion Encapsulation
   actions:
     - text: Home Site
       link: //v2.formilyjs.org

@@ -3,7 +3,7 @@ title: Formily-Alibaba unified front-end form solution
 order: 10
 hero:
   title: Formily Antd
-  desc: Formily 2.x Component System Based on Ant Design Encapsulation
+  desc: Formily Component System Based on Ant Design Encapsulation
   actions:
     - text: Home Site
       link: //v2.formilyjs.org
