@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.0.0-beta.83(2021-07-27)
+
+### :tada: Enhancements
+
+1. [feat(antd/next): improve FormDialog/FormDrawer typings and api (#1886)](https://github.com/alibaba/formily/commit/e3d7d264) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [feat(setters): add ValidatorSetter (#1885)](https://github.com/alibaba/formily/commit/4e2203e7) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :memo: Documents Changes
+
+1. [docs(reactive): update translated docs](https://github.com/alibaba/formily/commit/a403cd32) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(designable-setters): improve ui](https://github.com/alibaba/formily/commit/83df3ac8) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/6b839fa5) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.82(2021-07-24)
 
 ### :tada: Enhancements
@@ -977,9 +995,3 @@
 1. [fix(core): fix unmount remove errors (#976)](https://github.com/alibaba/formily/commit/3da2765b) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix: mutator insert (#977)](https://github.com/alibaba/formily/commit/f3356321) :point_right: ( [xiaowanzi](https://github.com/xiaowanzi) )
-
-## v1.2.9(2020-07-24)
-
-### :tada: Enhancements
-
-1. [feat(schema): add nested form polyfill (#972)](https://github.com/alibaba/formily/commit/6deb86d9) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
