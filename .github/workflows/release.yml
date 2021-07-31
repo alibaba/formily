@@ -20,7 +20,7 @@ jobs:
           yarn -v
           yarn --ignore-engines
           yarn build
-          lerna publish from-package --yes --dist-tag next && ts-node scripts/release release
+          lerna publish from-package --yes --dist-tag --ignore-changes next && ts-node scripts/release release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
