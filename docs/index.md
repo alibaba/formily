@@ -82,7 +82,7 @@ export default () => (
     titleStyle={{ paddingBottom: 100, fontWeight: 'bold' }}
   >
     <a href="//core.formilyjs.org" target="_blank" rel="noreferrer">
-      <img src="//img.alicdn.com/imgextra/i4/O1CN01XebYW51E96eP1AcwZ_!!6000000000308-55-tps-1939-1199.svg" />
+      <img src="//img.alicdn.com/imgextra/i3/O1CN0191vNVu1TYxFZA3KGN_!!6000000002395-55-tps-1939-1199.svg" />
     </a>
   </Section>
 )
