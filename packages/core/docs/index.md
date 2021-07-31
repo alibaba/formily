@@ -2,7 +2,7 @@
 title: Formily-Alibaba unified front-end form solution
 order: 10
 hero:
-  title: Formily Core
+  title: Core Library
   desc: Alibaba Unified Form Solution
   actions:
     - text: Home Site
