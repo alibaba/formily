@@ -98,6 +98,19 @@ test('first validate', async () => {
   })
 })
 
+test('custom validate results', async () => {
+  const results = await validate('', {
+    validator() {
+      return { type: 'error', message: 'validate error' }
+    },
+  })
+  expect(results).toEqual({
+    error: ['validate error'],
+    success: [],
+    warning: [],
+  })
+})
+
 test('exception validate', async () => {
   const results1 = await validate('', {
     validator() {
@@ -363,5 +376,20 @@ test('validator template', async () => {
       return `<<aa>>=123`
     }),
     '123=123'
+  )
+})
+
+test('validator template with format', async () => {
+  registerValidateMessageTemplateEngine((message) => {
+    if (typeof message !== 'string') return message
+    return message.replace(/\<\<\s*([\w.]+)\s*\>\>/g, (_, $0) => {
+      return { aa: 123 }[$0]
+    })
+  })
+  hasError(
+    await validate('', (value, rules, ctx, format) => {
+      return `<<aa>>=123&${format('<<aa>>')}`
+    }),
+    '123=123&123'
   )
 })
