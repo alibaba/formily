@@ -1161,7 +1161,9 @@ test('exception validate', async () => {
       },
     })
   )
-  await form.validate()
+  try {
+    await form.validate()
+  } catch {}
   expect(form.invalid).toBeTruthy()
   expect(form.validating).toBeFalsy()
 })
