@@ -141,6 +141,20 @@
           border: none !important;
           box-shadow: none !important;
           outline: none;
+
+          .#{$css-prefix}input-control {
+            margin-right: 0;
+            padding-right: 0;
+            .#{$css-prefix}icon {
+              display: none;
+            }
+
+            .#{$css-prefix}input-hint-wrap {
+              .#{$css-prefix}icon {
+                display: block;
+              }
+            }
+          }
         }
       }
     }
