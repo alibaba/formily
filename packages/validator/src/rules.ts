@@ -21,6 +21,7 @@ const isValidateEmpty = (value: any) => {
   } else {
     //compat to draft-js
     if (value?.getCurrentContent) {
+      /* istanbul ignore next */
       return !value.getCurrentContent()?.hasText()
     }
     return isEmpty(value)

@@ -98,6 +98,30 @@ test('first validate', async () => {
   })
 })
 
+test('exception validate', async () => {
+  const results1 = await validate('', {
+    validator() {
+      throw new Error('validate error')
+    },
+  })
+  expect(results1).toEqual({
+    error: ['validate error'],
+    success: [],
+    warning: [],
+  })
+
+  const results2 = await validate('', {
+    validator() {
+      throw 'custom string'
+    },
+  })
+  expect(results2).toEqual({
+    error: ['custom string'],
+    success: [],
+    warning: [],
+  })
+})
+
 test('max/min/maximum/exclusiveMaximum/minimum/exclusiveMinimum/len', async () => {
   hasError(await validate(6, { max: 5 }))
   noError(await validate(5, { max: 5 }))

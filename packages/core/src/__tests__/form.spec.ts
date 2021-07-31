@@ -1150,3 +1150,18 @@ test('setValues deep merge', () => {
     },
   })
 })
+
+test('exception validate', async () => {
+  const form = attach(createForm())
+  attach(
+    form.createField({
+      name: 'aa',
+      validator() {
+        throw new Error('runtime error')
+      },
+    })
+  )
+  await form.validate()
+  expect(form.invalid).toBeTruthy()
+  expect(form.validating).toBeFalsy()
+})

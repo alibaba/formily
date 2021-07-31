@@ -60,6 +60,14 @@ export default {
       background-size: cover;
       background-repeat: no-repeat;
     }
+    .__dumi-default-layout-hero h1{
+      color:#45124e !important;
+      font-size:80px !important;
+      padding-bottom: 10px !important;
+    }
+    .__dumi-default-dark-switch {
+      display:none
+    }
     nav a{
       text-decoration: none !important;
     }
