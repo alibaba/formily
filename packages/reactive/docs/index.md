@@ -2,8 +2,8 @@
 title: Formily-Alibaba unified front-end form solution
 order: 10
 hero:
-  title: FORMILY REACTIVE
-  desc: DDD-oriented responsive state management solution
+  title: Formily Reactive
+  desc: DDD-oriented Responsive State Management Solution
   actions:
     - text: Home Site
       link: //v2.formilyjs.org

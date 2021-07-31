@@ -1,6 +1,6 @@
 ---
 home: true
-heroText: FORMILY ELEMENT
+heroText: Formily Element
 tagline: 基于 Element UI 封装的Formily2.x组件体系
 actionText: 开发指南
 actionLink: /guide/

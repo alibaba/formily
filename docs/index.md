@@ -58,6 +58,7 @@ export default () => (
   <Section
     title="Form Builder,Efficient Development"
     style={{ marginTop: 140, fontWeight: 'bold' }}
+    titleStyle={{ paddingBottom: 140 }}
     scale={1.2}
   >
     <a href="//designable-antd.formilyjs.org" target="_blank" rel="noreferrer">
@@ -99,7 +100,7 @@ import './site/styles.less'
 export default () => (
   <Section
     title="Active Community & Genius People"
-    style={{ marginTop: 140 }}
+    style={{ marginTop: 100 }}
     titleStyle={{ paddingBottom: 140, fontWeight: 'bold' }}
   >
     <a href="https://github.com/alibaba/formily/graphs/contributors">
