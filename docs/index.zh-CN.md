@@ -5,8 +5,10 @@ hero:
   title: Alibaba Formily
   desc: 阿里巴巴统一前端表单解决方案
   actions:
-    - text: 快速开始
+    - text: 查看文档
       link: /zh-CN/guide
+    - text: 快速开始
+      link: /zh-CN/guide/quick-start
 features:
   - icon: https://img.alicdn.com/imgextra/i2/O1CN016i72sH1c5wh1kyy9U_!!6000000003550-55-tps-800-800.svg
     title: 更易用
@@ -53,12 +55,14 @@ import { Section } from './site/Section'
 import './site/styles.less'
 
 export default () => (
-  <Section title="拖拽搭建，高效开发" style={{ marginTop: 140 }}>
+  <Section
+    title="拖拽搭建，高效开发"
+    style={{ marginTop: 140 }}
+    titleStyle={{ paddingBottom: 140 }}
+    scale={1.2}
+  >
     <a href="//designable-antd.formilyjs.org" target="_blank" rel="noreferrer">
-      <img
-        style={{ transform: 'scale(1.2)', boxShadow: 'none' }}
-        src="//img.alicdn.com/imgextra/i2/O1CN01eI9FLz22tZek2jv7E_!!6000000007178-2-tps-3683-2272.png"
-      />
+      <img src="//img.alicdn.com/imgextra/i2/O1CN01eI9FLz22tZek2jv7E_!!6000000007178-2-tps-3683-2272.png" />
     </a>
   </Section>
 )
@@ -96,7 +100,7 @@ import './site/styles.less'
 export default () => (
   <Section
     title="社区活跃，能者众多"
-    style={{ marginTop: 140 }}
+    style={{ marginTop: 100 }}
     titleStyle={{ paddingBottom: 140 }}
   >
     <a href="https://github.com/alibaba/formily/graphs/contributors">

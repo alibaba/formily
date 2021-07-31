@@ -17,6 +17,7 @@
     "start": "dumi dev",
     "test": "jest --coverage",
     "test:reactive": "jest packages/reactive",
+    "test:validator": "jest packages/validator",
     "test:core": "jest packages/core",
     "test:core:watch": "npm run test:core --- --watch",
     "test:schema": "jest packages/json-schema",

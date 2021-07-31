@@ -2,7 +2,7 @@
 title: Formily - 阿里巴巴统一前端表单解决方案
 order: 10
 hero:
-  title: FORMILY ANTD
+  title: Formily Antd
   desc: 基于Ant Design封装的优雅且易用的Formily2.x组件体系
   actions:
     - text: 主站文档

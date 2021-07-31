@@ -2,7 +2,7 @@
 title: Formily - 阿里巴巴统一前端表单解决方案
 order: 10
 hero:
-  title: FORMILY REACT
+  title: React Library
   desc: 阿里巴巴统一前端表单解决方案
   actions:
     - text: 主站文档

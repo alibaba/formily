@@ -1,6 +1,6 @@
 ---
 home: true
-heroText: FORMILY VUE
+heroText: Vue Library
 tagline: 阿里巴巴统一前端表单解决方案
 actionText: 开发指南
 actionLink: /guide/

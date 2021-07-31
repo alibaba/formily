@@ -38,7 +38,7 @@ export type ValidatorFunction<Context = any> = (
   value: any,
   rule: IValidatorRules<Context>,
   ctx: Context,
-  format: (name: string, scope: any) => string
+  render: (message: string, scope?: any) => string
 ) => ValidatorFunctionResponse | Promise<ValidatorFunctionResponse> | null
 
 export type ValidatorParsedFunction<Context = any> = (
