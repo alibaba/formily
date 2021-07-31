@@ -64,7 +64,7 @@ export default {
     .__dumi-default-layout-hero h1{
       color:#45124e !important;
       font-size:80px !important;
-      padding-bottom: 10px !important;
+      padding-bottom: 30px !important;
     }
     .__dumi-default-dark-switch {
       display:none
