@@ -327,7 +327,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
               [`${prefix}-focus`]: active,
             })}
           >
-            <FormLayoutShallowContext.Provider value={undefined}>
+            <FormLayoutShallowContext.Provider value={{ size }}>
               {formatChildren}
             </FormLayoutShallowContext.Provider>
             {feedbackIcon && (
