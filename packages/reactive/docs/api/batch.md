@@ -4,6 +4,8 @@
 
 Receive an operation function and execute it immediately. The execution process is executed in batch mode, that is, each time the operation function is executed once, the Reaction will only respond once. If the batch is nested, the topmost batch will end as the response time, on the contrary , Batch.scope, will not wait for the execution of the top-level batch to complete the response, but immediately respond after the execution of the current scope. At the same time, batch can also mark a method in the define as batch mode by way of annotation.
 
+Note: If batch/action is used as define annotation, untracked mode will be built-in by default
+
 ## Signature
 
 ```ts

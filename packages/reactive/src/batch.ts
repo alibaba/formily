@@ -7,6 +7,7 @@ import {
 } from './reaction'
 import { createAnnotation } from './internals'
 import { MakeObservableSymbol } from './environment'
+import { untracked } from './untracked'
 
 interface IAction {
   <T extends (...args: any[]) => any>(callback?: T): T
@@ -16,8 +17,10 @@ const createBatchAnnotation = <F extends (...args: any[]) => any>(method: F) =>
   createAnnotation(({ target, key, value }) => {
     const action = <T extends (...args: any[]) => any>(callback?: T) => {
       return function (...args: Parameters<T>): ReturnType<T> {
-        return method(() =>
-          isFn(callback) ? callback.apply(target, args) : undefined
+        return untracked(() =>
+          method(() =>
+            isFn(callback) ? callback.apply(target, args) : undefined
+          )
         )
       }
     }

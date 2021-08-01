@@ -4,6 +4,8 @@
 
 Internally wrap a function with [batch](/api/batch), making the function a batch operation mode, solving the problem of multiple atomic operation reactions triggering multiple times, and at the same time, the action can also be marked as an annotation in the define The method is batch mode.
 
+Note: If batch/action is used as define annotation, untracked mode will be built-in by default
+
 ## Signature
 
 ```ts

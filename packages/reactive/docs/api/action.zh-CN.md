@@ -4,6 +4,8 @@
 
 内部用[batch](/api/batch)包装一个函数，使得函数变成一个批量操作模式，解决多个原子操作 reaction 触发多次的问题，同时 action 还能在 define 中以 annotation 的方式标注某个方法是 batch 模式。
 
+注意：如果 batch/action 作为 define 的 annotation，会默认内置 untracked 模式
+
 ## 签名
 
 ```ts
