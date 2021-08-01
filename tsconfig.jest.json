@@ -3,7 +3,11 @@
   "compilerOptions": {
     "jsx": "react",
     "paths": {
-      "@formily/*": ["./packages/*/src"]
+      "@formily/*": [
+        "./packages/*/src",
+        "./designable/*/src",
+        "./devtools/*/src"
+      ]
     }
   },
   "exclude": ["./packages/*/esm", "./packages/*/lib"]

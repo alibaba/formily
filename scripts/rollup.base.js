@@ -33,7 +33,7 @@ const presets = () => {
   }
   return [
     typescript({
-      tsconfig: './tsconfig.json',
+      tsconfig: './tsconfig.build.json',
       tsconfigOverride: {
         compilerOptions: {
           module: 'ESNext',
