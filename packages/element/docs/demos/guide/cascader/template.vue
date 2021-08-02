@@ -54,7 +54,7 @@ const useAddress = (pattern) => {
     axios('//unpkg.com/china-location/dist/location.json')
       .then((res) => res.data)
       .then(
-        action((data) => {
+        action.bound((data) => {
           field.dataSource = transformAddress(data)
           field.loading = false
         })

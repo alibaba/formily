@@ -1,8 +1,8 @@
-import { observable, batch, autorun } from '..'
+import { observable, action, autorun } from '..'
 import { define } from '../model'
 
-describe('normal batch', () => {
-  test('no batch', () => {
+describe('normal action', () => {
+  test('no action', () => {
     const obs = observable({
       aa: {
         bb: 123,
@@ -22,7 +22,7 @@ describe('normal batch', () => {
     expect(handler).toBeCalledTimes(5)
   })
 
-  test('batch', () => {
+  test('action', () => {
     const obs = observable({
       aa: {
         bb: 123,
@@ -35,16 +35,16 @@ describe('normal batch', () => {
     obs.aa.bb = 111
     obs.aa.bb = 222
     expect(handler).toBeCalledTimes(3)
-    batch(() => {
+    action(() => {
       obs.aa.bb = 333
       obs.aa.bb = 444
     })
-    batch(() => {})
-    batch()
+    action(() => {})
+    action()
     expect(handler).toBeCalledTimes(4)
   })
 
-  test('batch track', () => {
+  test('action track', () => {
     const obs = observable({
       aa: {
         bb: 123,
@@ -53,7 +53,7 @@ describe('normal batch', () => {
     })
     const handler = jest.fn()
     autorun(() => {
-      batch(() => {
+      action(() => {
         if (obs.cc > 0) {
           handler(obs.aa.bb)
           obs.cc = obs.cc + 20
@@ -63,18 +63,18 @@ describe('normal batch', () => {
     expect(handler).toBeCalledTimes(1)
     expect(obs.cc).toEqual(21)
     obs.aa.bb = 321
-    expect(handler).toBeCalledTimes(2)
-    expect(obs.cc).toEqual(41)
+    expect(handler).toBeCalledTimes(1)
+    expect(obs.cc).toEqual(21)
   })
 
-  test('batch.bound', () => {
+  test('action.bound', () => {
     const obs = observable({
       aa: {
         bb: 123,
       },
     })
     const handler = jest.fn()
-    const setData = batch.bound(() => {
+    const setData = action.bound(() => {
       obs.aa.bb = 333
       obs.aa.bb = 444
     })
@@ -85,11 +85,11 @@ describe('normal batch', () => {
     obs.aa.bb = 222
     expect(handler).toBeCalledTimes(3)
     setData()
-    batch(() => {})
+    action.bound(() => {})
     expect(handler).toBeCalledTimes(4)
   })
 
-  test('batch.bound track', () => {
+  test('action.bound track', () => {
     const obs = observable({
       aa: {
         bb: 123,
@@ -98,7 +98,7 @@ describe('normal batch', () => {
     })
     const handler = jest.fn()
     autorun(() => {
-      batch.bound(() => {
+      action.bound(() => {
         if (obs.cc > 0) {
           handler(obs.aa.bb)
           obs.cc = obs.cc + 20
@@ -108,11 +108,11 @@ describe('normal batch', () => {
     expect(handler).toBeCalledTimes(1)
     expect(obs.cc).toEqual(21)
     obs.aa.bb = 321
-    expect(handler).toBeCalledTimes(2)
-    expect(obs.cc).toEqual(41)
+    expect(handler).toBeCalledTimes(1)
+    expect(obs.cc).toEqual(21)
   })
 
-  test('batch.scope', () => {
+  test('action.scope xxx', () => {
     const obs = observable<any>({})
 
     const handler = jest.fn()
@@ -121,11 +121,11 @@ describe('normal batch', () => {
       handler(obs.aa, obs.bb, obs.cc, obs.dd)
     })
 
-    batch(() => {
-      batch.scope(() => {
+    action(() => {
+      action.scope(() => {
         obs.aa = 123
       })
-      batch.scope(() => {
+      action.scope(() => {
         obs.cc = 'ccccc'
       })
       obs.bb = 321
@@ -135,7 +135,7 @@ describe('normal batch', () => {
     expect(handler).toBeCalledTimes(4)
   })
 
-  test('batch.scope bound', () => {
+  test('action.scope bound', () => {
     const obs = observable<any>({})
 
     const handler = jest.fn()
@@ -144,12 +144,12 @@ describe('normal batch', () => {
       handler(obs.aa, obs.bb, obs.cc, obs.dd)
     })
 
-    const scope1 = batch.scope.bound(() => {
+    const scope1 = action.scope.bound(() => {
       obs.aa = 123
     })
-    batch(() => {
+    action(() => {
       scope1()
-      batch.scope.bound(() => {
+      action.scope.bound(() => {
         obs.cc = 'ccccc'
       })()
       obs.bb = 321
@@ -159,7 +159,7 @@ describe('normal batch', () => {
     expect(handler).toBeCalledTimes(4)
   })
 
-  test('batch.scope track', () => {
+  test('action.scope track', () => {
     const obs = observable({
       aa: {
         bb: 123,
@@ -168,7 +168,7 @@ describe('normal batch', () => {
     })
     const handler = jest.fn()
     autorun(() => {
-      batch.scope(() => {
+      action.scope(() => {
         if (obs.cc > 0) {
           handler(obs.aa.bb)
           obs.cc = obs.cc + 20
@@ -178,11 +178,11 @@ describe('normal batch', () => {
     expect(handler).toBeCalledTimes(1)
     expect(obs.cc).toEqual(21)
     obs.aa.bb = 321
-    expect(handler).toBeCalledTimes(2)
-    expect(obs.cc).toEqual(41)
+    expect(handler).toBeCalledTimes(1)
+    expect(obs.cc).toEqual(21)
   })
 
-  test('batch.scope bound track', () => {
+  test('action.scope bound track', () => {
     const obs = observable({
       aa: {
         bb: 123,
@@ -191,7 +191,7 @@ describe('normal batch', () => {
     })
     const handler = jest.fn()
     autorun(() => {
-      batch.scope.bound(() => {
+      action.scope.bound(() => {
         if (obs.cc > 0) {
           handler(obs.aa.bb)
           obs.cc = obs.cc + 20
@@ -201,13 +201,13 @@ describe('normal batch', () => {
     expect(handler).toBeCalledTimes(1)
     expect(obs.cc).toEqual(21)
     obs.aa.bb = 321
-    expect(handler).toBeCalledTimes(2)
-    expect(obs.cc).toEqual(41)
+    expect(handler).toBeCalledTimes(1)
+    expect(obs.cc).toEqual(21)
   })
 })
 
-describe('annotation batch', () => {
-  test('batch', () => {
+describe('annotation action', () => {
+  test('action', () => {
     const obs = define(
       {
         aa: {
@@ -220,7 +220,7 @@ describe('annotation batch', () => {
       },
       {
         aa: observable,
-        setData: batch,
+        setData: action,
       }
     )
     const handler = jest.fn()
@@ -234,7 +234,7 @@ describe('annotation batch', () => {
     expect(handler).toBeCalledTimes(4)
   })
 
-  test('batch track', () => {
+  test('action track', () => {
     const obs = define(
       {
         aa: {
@@ -250,7 +250,7 @@ describe('annotation batch', () => {
       },
       {
         aa: observable,
-        setData: batch,
+        setData: action,
       }
     )
     const handler = jest.fn()
@@ -260,11 +260,11 @@ describe('annotation batch', () => {
     expect(handler).toBeCalledTimes(1)
     expect(obs.cc).toEqual(21)
     obs.aa.bb = 321
-    expect(handler).toBeCalledTimes(2)
-    expect(obs.cc).toEqual(41)
+    expect(handler).toBeCalledTimes(1)
+    expect(obs.cc).toEqual(21)
   })
 
-  test('batch.bound', () => {
+  test('action.bound', () => {
     const obs = define(
       {
         aa: {
@@ -277,7 +277,7 @@ describe('annotation batch', () => {
       },
       {
         aa: observable,
-        setData: batch.bound,
+        setData: action.bound,
       }
     )
     const handler = jest.fn()
@@ -291,7 +291,7 @@ describe('annotation batch', () => {
     expect(handler).toBeCalledTimes(4)
   })
 
-  test('batch.bound track', () => {
+  test('action.bound track', () => {
     const obs = define(
       {
         aa: {
@@ -307,7 +307,7 @@ describe('annotation batch', () => {
       },
       {
         aa: observable,
-        setData: batch.bound,
+        setData: action.bound,
       }
     )
     const handler = jest.fn()
@@ -317,11 +317,11 @@ describe('annotation batch', () => {
     expect(handler).toBeCalledTimes(1)
     expect(obs.cc).toEqual(21)
     obs.aa.bb = 321
-    expect(handler).toBeCalledTimes(2)
-    expect(obs.cc).toEqual(41)
+    expect(handler).toBeCalledTimes(1)
+    expect(obs.cc).toEqual(21)
   })
 
-  test('batch.scope', () => {
+  test('action.scope', () => {
     const obs = define(
       {
         aa: null,
@@ -340,8 +340,8 @@ describe('annotation batch', () => {
         bb: observable,
         cc: observable,
         dd: observable,
-        scope1: batch.scope,
-        scope2: batch.scope,
+        scope1: action.scope,
+        scope2: action.scope,
       }
     )
 
@@ -351,7 +351,7 @@ describe('annotation batch', () => {
       handler(obs.aa, obs.bb, obs.cc, obs.dd)
     })
 
-    batch(() => {
+    action(() => {
       obs.scope1()
       obs.scope2()
       obs.bb = 321
@@ -361,7 +361,7 @@ describe('annotation batch', () => {
     expect(handler).toBeCalledTimes(4)
   })
 
-  test('batch.scope bound', () => {
+  test('action.scope bound', () => {
     const obs = define(
       {
         aa: null,
@@ -380,8 +380,8 @@ describe('annotation batch', () => {
         bb: observable,
         cc: observable,
         dd: observable,
-        scope1: batch.scope.bound,
-        scope2: batch.scope.bound,
+        scope1: action.scope.bound,
+        scope2: action.scope.bound,
       }
     )
 
@@ -391,7 +391,7 @@ describe('annotation batch', () => {
       handler(obs.aa, obs.bb, obs.cc, obs.dd)
     })
 
-    batch(() => {
+    action(() => {
       obs.scope1()
       obs.scope2()
       obs.bb = 321
@@ -401,7 +401,7 @@ describe('annotation batch', () => {
     expect(handler).toBeCalledTimes(4)
   })
 
-  test('batch.scope track', () => {
+  test('action.scope track', () => {
     const obs = define(
       {
         aa: {
@@ -418,7 +418,7 @@ describe('annotation batch', () => {
       {
         aa: observable,
         cc: observable,
-        scope: batch.scope,
+        scope: action.scope,
       }
     )
     const handler = jest.fn()
@@ -428,11 +428,11 @@ describe('annotation batch', () => {
     expect(handler).toBeCalledTimes(1)
     expect(obs.cc).toEqual(21)
     obs.aa.bb = 321
-    expect(handler).toBeCalledTimes(2)
-    expect(obs.cc).toEqual(41)
+    expect(handler).toBeCalledTimes(1)
+    expect(obs.cc).toEqual(21)
   })
 
-  test('batch.scope bound track', () => {
+  test('action.scope bound track', () => {
     const obs = define(
       {
         aa: {
@@ -449,7 +449,7 @@ describe('annotation batch', () => {
       {
         aa: observable,
         cc: observable,
-        scope: batch.scope.bound,
+        scope: action.scope.bound,
       }
     )
     const handler = jest.fn()
@@ -459,7 +459,7 @@ describe('annotation batch', () => {
     expect(handler).toBeCalledTimes(1)
     expect(obs.cc).toEqual(21)
     obs.aa.bb = 321
-    expect(handler).toBeCalledTimes(2)
-    expect(obs.cc).toEqual(41)
+    expect(handler).toBeCalledTimes(1)
+    expect(obs.cc).toEqual(21)
   })
 })

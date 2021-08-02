@@ -174,7 +174,10 @@ export const batchStart = () => {
 export const batchEnd = () => {
   BatchCount.value--
   if (BatchCount.value === 0) {
+    const prevUntrackCount = UntrackCount.value
+    UntrackCount.value = 0
     executePendingReactions()
+    UntrackCount.value = prevUntrackCount
   }
 }
 
@@ -183,7 +186,9 @@ export const batchScopeStart = () => {
 }
 
 export const batchScopeEnd = () => {
+  const prevUntrackCount = UntrackCount.value
   BatchScope.value = false
+  UntrackCount.value = 0
   PendingScopeReactions.forEach((reaction) => {
     PendingScopeReactions.delete(reaction)
     if (isFn(reaction._scheduler)) {
@@ -192,6 +197,7 @@ export const batchScopeEnd = () => {
       reaction()
     }
   })
+  UntrackCount.value = prevUntrackCount
 }
 
 export const untrackStart = () => {

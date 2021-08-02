@@ -42,7 +42,7 @@ const useAsyncDataSource = (pattern, service) => {
   onFieldReact(pattern, (field) => {
     field.loading = true
     service(field).then(
-      action((data) => {
+      action.bound((data) => {
         field.dataSource = data
         field.loading = false
       })

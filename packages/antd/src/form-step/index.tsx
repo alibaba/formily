@@ -67,7 +67,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
     steps: [],
   }
 
-  const setDisplay = action((target: number) => {
+  const setDisplay = action.bound((target: number) => {
     const currentStep = env.steps[target]
     env.steps.forEach(({ name }) => {
       env.form.query(`${env.field.address}.${name}`).take((field) => {
@@ -80,14 +80,14 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
     })
   })
 
-  const next = action(() => {
+  const next = action.bound(() => {
     if (formStep.allowNext) {
       setDisplay(formStep.current + 1)
       formStep.setCurrent(formStep.current + 1)
     }
   })
 
-  const back = action(() => {
+  const back = action.bound(() => {
     if (formStep.allowBack) {
       setDisplay(formStep.current - 1)
       formStep.setCurrent(formStep.current - 1)

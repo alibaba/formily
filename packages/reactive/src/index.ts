@@ -1,4 +1,5 @@
 export * from './batch'
+export * from './action'
 export * from './untracked'
 export * from './observable'
 export * from './model'

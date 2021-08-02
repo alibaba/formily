@@ -13,7 +13,7 @@ import {
   shallowClone,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
-import { action, batch, toJS, DataChange } from '@formily/reactive'
+import { batch, toJS, DataChange } from '@formily/reactive'
 import { Field, ArrayField, Form, ObjectField } from '../models'
 import {
   ISpliceArrayStateProps,
@@ -570,7 +570,7 @@ export const getModelState = (model: any, getter?: any) => {
 }
 
 export const modelStateSetter = (model: any) => {
-  return action((state?: any) => setModelState(model, state))
+  return batch.bound((state?: any) => setModelState(model, state))
 }
 
 export const modelStateGetter = (model: any) => {
@@ -578,7 +578,7 @@ export const modelStateGetter = (model: any) => {
 }
 
 export const createFieldStateSetter = (form: Form) => {
-  return action((pattern: FieldMatchPattern, payload?: any) => {
+  return batch.bound((pattern: FieldMatchPattern, payload?: any) => {
     if (isQuery(pattern)) {
       pattern.forEach((field) => {
         field.setState(payload)

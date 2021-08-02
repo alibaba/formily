@@ -514,7 +514,7 @@ const SchemaField = createSchemaField({
       fetch('//unpkg.com/china-location/dist/location.json')
         .then((res) => res.json())
         .then(
-          action((data) => {
+          action.bound((data) => {
             field.dataSource = transform(data)
             field.loading = false
           })
@@ -849,7 +849,7 @@ const SchemaField = createSchemaField({
       fetch('//unpkg.com/china-location/dist/location.json')
         .then((res) => res.json())
         .then(
-          action((data) => {
+          action.bound((data) => {
             field.dataSource = transform(data)
             field.loading = false
           })
@@ -1321,7 +1321,7 @@ export default () => {
               fetch('//unpkg.com/china-location/dist/location.json')
                 .then((res) => res.json())
                 .then(
-                  action((data) => {
+                  action.bound((data) => {
                     field.dataSource = transform(data)
                     field.loading = false
                   })

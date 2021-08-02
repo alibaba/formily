@@ -82,7 +82,7 @@ batch(() => {
 ```ts
 import { observable, autorun, action } from '@formily/reactive'
 const obs = observable({})
-const handler = action(() => {
+const handler = action.bound(() => {
   obs.aa = 123
   obs.bb = 321
 })

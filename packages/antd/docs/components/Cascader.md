@@ -45,7 +45,7 @@ const useAddress = (pattern: FormPathPattern) => {
     fetch('//unpkg.com/china-location/dist/location.json')
       .then((res) => res.json())
       .then(
-        action((data) => {
+        action.bound((data) => {
           field.dataSource = transform(data)
           field.loading = false
         })
@@ -126,7 +126,7 @@ const useAsyncDataSource =
     fetch(url)
       .then((res) => res.json())
       .then(
-        action((data) => {
+        action.bound((data) => {
           field.dataSource = transform(data)
           field.loading = false
         })
@@ -204,7 +204,7 @@ const useAddress = (pattern: FormPathPattern) => {
     fetch('//unpkg.com/china-location/dist/location.json')
       .then((res) => res.json())
       .then(
-        action((data) => {
+        action.bound((data) => {
           field.dataSource = transform(data)
           field.loading = false
         })
