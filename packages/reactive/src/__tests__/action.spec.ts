@@ -1,4 +1,6 @@
 import { observable, action, autorun } from '..'
+import { reaction } from '../autorun'
+import { batch } from '../batch'
 import { define } from '../model'
 
 describe('normal action', () => {
@@ -462,4 +464,68 @@ describe('annotation action', () => {
     expect(handler).toBeCalledTimes(1)
     expect(obs.cc).toEqual(21)
   })
+})
+
+test('nested action to reaction', () => {
+  const obs = observable({
+    aa: 0,
+  })
+  const handler = jest.fn()
+  reaction(
+    () => obs.aa,
+    (v) => handler(v)
+  )
+  action(() => {
+    obs.aa = 1
+    action(() => {
+      obs.aa = 2
+    })
+  })
+  action(() => {
+    obs.aa = 3
+    action(() => {
+      obs.aa = 4
+    })
+  })
+  expect(handler).toBeCalledWith(2)
+  expect(handler).toBeCalledWith(4)
+  expect(handler).toBeCalledTimes(2)
+})
+
+test('nested action/batch to reaction', () => {
+  const obs = define(
+    {
+      bb: 0,
+      get aa() {
+        return this.bb
+      },
+      set aa(v) {
+        this.bb = v
+      },
+    },
+    {
+      aa: observable.computed,
+      bb: observable,
+    }
+  )
+  const handler = jest.fn()
+  reaction(
+    () => obs.aa,
+    (v) => handler(v)
+  )
+  action(() => {
+    obs.aa = 1
+    batch(() => {
+      obs.aa = 2
+    })
+  })
+  action(() => {
+    obs.aa = 3
+    batch(() => {
+      obs.aa = 4
+    })
+  })
+  expect(handler).toBeCalledWith(2)
+  expect(handler).toBeCalledWith(4)
+  expect(handler).toBeCalledTimes(2)
 })

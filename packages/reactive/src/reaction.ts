@@ -65,6 +65,8 @@ const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
 
 const runReactions = (target: any, key: PropertyKey) => {
   const reactions = getReactionsFromTargetKey(target, key)
+  const prevUntrackCount = UntrackCount.value
+  UntrackCount.value = 0
   for (let i = 0, len = reactions.length; i < len; i++) {
     const reaction = reactions[i]
     if (reaction._isComputed) {
@@ -81,6 +83,7 @@ const runReactions = (target: any, key: PropertyKey) => {
       }
     }
   }
+  UntrackCount.value = prevUntrackCount
 }
 
 const notifyObservers = (operation: IOperation) => {

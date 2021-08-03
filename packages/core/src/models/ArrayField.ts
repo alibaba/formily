@@ -40,7 +40,7 @@ export class ArrayField<
     )
   }
 
-  push = async (...items: any[]) => {
+  push = (...items: any[]) => {
     return action(() => {
       if (!isArr(this.value)) {
         this.value = []
@@ -50,7 +50,7 @@ export class ArrayField<
     })
   }
 
-  pop = async () => {
+  pop = () => {
     if (!isArr(this.value)) return
     return action(() => {
       const index = this.value.length - 1
@@ -63,7 +63,7 @@ export class ArrayField<
     })
   }
 
-  insert = async (index: number, ...items: any[]) => {
+  insert = (index: number, ...items: any[]) => {
     return action(() => {
       if (!isArr(this.value)) {
         this.value = []
@@ -77,7 +77,7 @@ export class ArrayField<
     })
   }
 
-  remove = async (index: number) => {
+  remove = (index: number) => {
     if (!isArr(this.value)) return
     return action(() => {
       spliceArrayState(this, {
@@ -89,7 +89,7 @@ export class ArrayField<
     })
   }
 
-  shift = async () => {
+  shift = () => {
     if (!isArr(this.value)) return
     return action(() => {
       this.value.shift()
@@ -97,7 +97,7 @@ export class ArrayField<
     })
   }
 
-  unshift = async (...items: any[]) => {
+  unshift = (...items: any[]) => {
     return action(() => {
       if (!isArr(this.value)) {
         this.value = []
@@ -111,7 +111,7 @@ export class ArrayField<
     })
   }
 
-  move = async (fromIndex: number, toIndex: number) => {
+  move = (fromIndex: number, toIndex: number) => {
     if (!isArr(this.value)) return
     if (fromIndex === toIndex) return
     return action(() => {
@@ -126,12 +126,12 @@ export class ArrayField<
     })
   }
 
-  moveUp = async (index: number) => {
+  moveUp = (index: number) => {
     if (!isArr(this.value)) return
     return this.move(index, index - 1 < 0 ? this.value.length - 1 : index - 1)
   }
 
-  moveDown = async (index: number) => {
+  moveDown = (index: number) => {
     if (!isArr(this.value)) return
     return this.move(index, index + 1 >= this.value.length ? 0 : index + 1)
   }
