@@ -1,5 +1,5 @@
 import { isArr } from '@formily/shared'
-import { batch, reaction } from '@formily/reactive'
+import { action, reaction } from '@formily/reactive'
 import {
   spliceArrayState,
   exchangeArrayState,
@@ -22,10 +22,10 @@ export class ArrayField<
     designable: boolean
   ) {
     super(address, props, form, designable)
-    this.addAutoCleaner()
+    this.makeAutoCleanable()
   }
 
-  protected addAutoCleaner() {
+  protected makeAutoCleanable() {
     this.disposers.push(
       reaction(
         () => this.value?.length,
@@ -41,7 +41,7 @@ export class ArrayField<
   }
 
   push = async (...items: any[]) => {
-    return batch(() => {
+    return action(() => {
       if (!isArr(this.value)) {
         this.value = []
       }
@@ -52,7 +52,7 @@ export class ArrayField<
 
   pop = async () => {
     if (!isArr(this.value)) return
-    return batch(() => {
+    return action(() => {
       const index = this.value.length - 1
       spliceArrayState(this, {
         startIndex: index,
@@ -64,7 +64,7 @@ export class ArrayField<
   }
 
   insert = async (index: number, ...items: any[]) => {
-    return batch(() => {
+    return action(() => {
       if (!isArr(this.value)) {
         this.value = []
       }
@@ -79,7 +79,7 @@ export class ArrayField<
 
   remove = async (index: number) => {
     if (!isArr(this.value)) return
-    return batch(() => {
+    return action(() => {
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1,
@@ -91,14 +91,14 @@ export class ArrayField<
 
   shift = async () => {
     if (!isArr(this.value)) return
-    return batch(() => {
+    return action(() => {
       this.value.shift()
       return this.onInput(this.value)
     })
   }
 
   unshift = async (...items: any[]) => {
-    return batch(() => {
+    return action(() => {
       if (!isArr(this.value)) {
         this.value = []
       }
@@ -114,7 +114,7 @@ export class ArrayField<
   move = async (fromIndex: number, toIndex: number) => {
     if (!isArr(this.value)) return
     if (fromIndex === toIndex) return
-    return batch(() => {
+    return action(() => {
       const fromItem = this.value[fromIndex]
       this.value.splice(fromIndex, 1)
       this.value.splice(toIndex, 0, fromItem)

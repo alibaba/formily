@@ -1,4 +1,4 @@
-import { reaction } from '@formily/reactive'
+import { action, reaction } from '@formily/reactive'
 import { cleanupObjectChildren } from '../shared/internals'
 import { JSXComponent, IFieldProps, FormPathPattern } from '../types'
 import { Field } from './Field'
@@ -17,10 +17,10 @@ export class ObjectField<
     designable: boolean
   ) {
     super(address, props, form, designable)
-    this.addAutoCleaner()
+    this.makeAutoCleanable()
   }
 
-  protected addAutoCleaner() {
+  protected makeAutoCleanable() {
     this.disposers.push(
       reaction(
         () => Object.keys(this.value || {}),
@@ -35,15 +35,22 @@ export class ObjectField<
   }
 
   addProperty = async (key: string, value: any) => {
-    this.form.setValuesIn(this.path.concat(key), value)
-    this.additionalProperties.push(key)
-    return this.onInput(this.value)
+    return action(() => {
+      this.form.setValuesIn(this.path.concat(key), value)
+      this.additionalProperties.push(key)
+      return this.onInput(this.value)
+    })
   }
 
   removeProperty = async (key: string) => {
-    this.form.deleteValuesIn(this.path.concat(key))
-    this.additionalProperties.splice(this.additionalProperties.indexOf(key), 1)
-    return this.onInput(this.value)
+    return action(() => {
+      this.form.deleteValuesIn(this.path.concat(key))
+      this.additionalProperties.splice(
+        this.additionalProperties.indexOf(key),
+        1
+      )
+      return this.onInput(this.value)
+    })
   }
 
   existProperty = (key: string) => {

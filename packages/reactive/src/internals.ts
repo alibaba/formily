@@ -94,13 +94,15 @@ export const createBoundaryFunction = (
   end: (...args: any) => void
 ) => {
   function boundary<F extends (...args: any) => any>(fn?: F): ReturnType<F> {
+    let results: ReturnType<F>
+    start()
     try {
-      start()
       if (isFn(fn)) {
-        return fn()
+        results = fn()
       }
     } finally {
       end()
+      return results
     }
   }
 
