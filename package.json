@@ -62,6 +62,7 @@
     "@testing-library/jest-dom": "^5.0.0",
     "@testing-library/react": "^11.2.3",
     "@testing-library/vue": "^5.6.2",
+    "@netlify/functions": "^0.7.2",
     "@types/fs-extra": "^8.1.0",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/jest": "^24.0.18",
