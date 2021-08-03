@@ -25,7 +25,8 @@ export const Form: React.FC<FormProps> = ({
   previewTextPlaceholder,
   ...props
 }) => {
-  const lang = (ConfigProvider as any).getContext()?.locale?.momentLocale
+  const lang =
+    (ConfigProvider as any).getContext()?.locale?.momentLocale ?? 'zh-CN'
   useMemo(() => {
     const validateLanguage = getValidateLocaleIOSCode(lang)
     setValidateLanguage(validateLanguage)
