@@ -95,6 +95,7 @@ export default () => (
  */
 import React from 'react'
 import { Section } from './site/Section'
+import { Contributors } from './site/Contributors'
 import './site/styles.less'
 
 export default () => (
@@ -103,9 +104,7 @@ export default () => (
     style={{ marginTop: 100 }}
     titleStyle={{ paddingBottom: 140 }}
   >
-    <a href="https://github.com/alibaba/formily/graphs/contributors">
-      <img src="https://contrib.rocks/image?repo=alibaba/formily" />
-    </a>
+    <Contributors />
   </Section>
 )
 ```
