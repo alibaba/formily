@@ -74,7 +74,7 @@ test('ref annotation', () => {
 
 test('action annotation', () => {
   const obs = observable<any>({})
-  const setData = action(() => {
+  const setData = action.bound(() => {
     obs.aa = 123
     obs.bb = 321
   })

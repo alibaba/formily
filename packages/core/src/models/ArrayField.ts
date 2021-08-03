@@ -1,5 +1,5 @@
 import { isArr } from '@formily/shared'
-import { batch, reaction } from '@formily/reactive'
+import { action, reaction } from '@formily/reactive'
 import {
   spliceArrayState,
   exchangeArrayState,
@@ -22,10 +22,10 @@ export class ArrayField<
     designable: boolean
   ) {
     super(address, props, form, designable)
-    this.addAutoCleaner()
+    this.makeAutoCleanable()
   }
 
-  protected addAutoCleaner() {
+  protected makeAutoCleanable() {
     this.disposers.push(
       reaction(
         () => this.value?.length,
@@ -40,8 +40,8 @@ export class ArrayField<
     )
   }
 
-  push = async (...items: any[]) => {
-    return batch(() => {
+  push = (...items: any[]) => {
+    return action(() => {
       if (!isArr(this.value)) {
         this.value = []
       }
@@ -50,9 +50,9 @@ export class ArrayField<
     })
   }
 
-  pop = async () => {
+  pop = () => {
     if (!isArr(this.value)) return
-    return batch(() => {
+    return action(() => {
       const index = this.value.length - 1
       spliceArrayState(this, {
         startIndex: index,
@@ -63,8 +63,8 @@ export class ArrayField<
     })
   }
 
-  insert = async (index: number, ...items: any[]) => {
-    return batch(() => {
+  insert = (index: number, ...items: any[]) => {
+    return action(() => {
       if (!isArr(this.value)) {
         this.value = []
       }
@@ -77,9 +77,9 @@ export class ArrayField<
     })
   }
 
-  remove = async (index: number) => {
+  remove = (index: number) => {
     if (!isArr(this.value)) return
-    return batch(() => {
+    return action(() => {
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1,
@@ -89,16 +89,16 @@ export class ArrayField<
     })
   }
 
-  shift = async () => {
+  shift = () => {
     if (!isArr(this.value)) return
-    return batch(() => {
+    return action(() => {
       this.value.shift()
       return this.onInput(this.value)
     })
   }
 
-  unshift = async (...items: any[]) => {
-    return batch(() => {
+  unshift = (...items: any[]) => {
+    return action(() => {
       if (!isArr(this.value)) {
         this.value = []
       }
@@ -111,10 +111,10 @@ export class ArrayField<
     })
   }
 
-  move = async (fromIndex: number, toIndex: number) => {
+  move = (fromIndex: number, toIndex: number) => {
     if (!isArr(this.value)) return
     if (fromIndex === toIndex) return
-    return batch(() => {
+    return action(() => {
       const fromItem = this.value[fromIndex]
       this.value.splice(fromIndex, 1)
       this.value.splice(toIndex, 0, fromItem)
@@ -126,12 +126,12 @@ export class ArrayField<
     })
   }
 
-  moveUp = async (index: number) => {
+  moveUp = (index: number) => {
     if (!isArr(this.value)) return
     return this.move(index, index - 1 < 0 ? this.value.length - 1 : index - 1)
   }
 
-  moveDown = async (index: number) => {
+  moveDown = (index: number) => {
     if (!isArr(this.value)) return
     return this.move(index, index + 1 >= this.value.length ? 0 : index + 1)
   }

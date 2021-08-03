@@ -44,7 +44,7 @@ const useAsyncDataSource = (url, transform) => {
       .get(url)
       .then((res) => res.data)
       .then(
-        action((data) => {
+        action.bound((data) => {
           field.dataSource = transform(data)
           field.loading = false
         })

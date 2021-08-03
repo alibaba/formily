@@ -2,14 +2,15 @@
 
 ## Description
 
-Receive an operation function and execute it immediately. The execution process is executed in batch mode, that is, each time the operation function is executed once, the Reaction will only respond once. If the batch is nested, the topmost batch will end as the response time, on the contrary , Batch.scope, will not wait for the execution of the top-level batch to complete the response, but immediately respond after the execution of the current scope. At the same time, batch can also mark a method in the define as batch mode by way of annotation.
+Define batch operations, internal dependencies can be collected
 
 ## Signature
 
 ```ts
-interface batch<T extends (...args: any[]) => any> {
-  (callback?: T): ReturnType<T>
-  scope<T extends (...args: any[]) => any>(callback?: T): ReturnType<T>
+interface batch {
+  <T>(callback?: () => T): T //In-place batch
+  scope<T>(callback?: () => T): T //In-situ local batch
+  bound<T extends (...args: any[]) => any>(callback: T, context?: any): T //High-level binding
 }
 ```
 

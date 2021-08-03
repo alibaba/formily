@@ -86,3 +86,20 @@ export interface IReactionOptions<T> {
   equals?: (oldValue: T, newValue: T) => boolean
   fireImmediately?: boolean
 }
+
+export type BindFunction<F = (...args: any[]) => any> = (
+  callback?: F,
+  context?: any
+) => F
+
+export type BoundaryFunction = <F extends (...args: any) => any>(
+  fn?: F
+) => ReturnType<F>
+
+export interface IBoundable {
+  bound?: <T extends (...args: any[]) => any>(callback: T, context?: any) => T //高阶绑定
+}
+export interface IAction extends IBoundable {
+  <T>(callback?: () => T): T //原地action
+  scope?: (<T>(callback?: () => T) => T) & IBoundable //原地局部action
+}

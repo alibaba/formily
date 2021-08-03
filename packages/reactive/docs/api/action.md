@@ -2,13 +2,15 @@
 
 ## Description
 
-Internally wrap a function with [batch](/api/batch), making the function a batch operation mode, solving the problem of multiple atomic operation reactions triggering multiple times, and at the same time, the action can also be marked as an annotation in the define The method is batch mode.
+Define a batch action. The only difference with batch is that dependencies cannot be collected inside an action
 
 ## Signature
 
 ```ts
-interface action<T extends (...args: any[]) => any> {
-  (callback?: T): T
+interface action {
+  <T>(callback?: () => T): T //In-situ action
+  scope<T>(callback?: () => T): T //In-situ local action
+  bound<T extends (...args: any[]) => any>(callback: T, context?: any): T //High-level binding
 }
 ```
 
@@ -19,7 +21,7 @@ import { observable, action } from '@formily/reactive'
 
 const obs = observable({})
 
-const method = action(() => {
+const method = action.bound(() => {
   obs.aa = 123
   obs.bb = 321
 })
