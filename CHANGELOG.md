@@ -1,5 +1,41 @@
 # Changelog
 
+## v2.0.0-beta.84(2021-07-31)
+
+### :tada: Enhancements
+
+1. [feat(core): support field destroy method (#1895)](https://github.com/alibaba/formily/commit/52457e10) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :beetle: Bug Fixes
+
+1. [fix(antd/next/element): fix array base addition default value (#1913)](https://github.com/alibaba/formily/commit/5d88e29a) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): fix setValues/setInitialValues array merge strategy](https://github.com/alibaba/formily/commit/0773b06a) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(next): fix size style in FormItem/main.scss && set default fullness true (#1908)](https://github.com/alibaba/formily/commit/c0e2c126) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+1. [fix(element): fix protal destroy (#1898)](https://github.com/alibaba/formily/commit/1036440c) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [fix(designable-antd): add default name value](https://github.com/alibaba/formily/commit/a07f1c9a) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :memo: Documents Changes
+
+1. [docs(site): improve home page](https://github.com/alibaba/formily/commit/1109e9be) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs(site): update fragment linkage case](https://github.com/alibaba/formily/commit/7e5e2625) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rose: Improve code quality
+
+1. [refactor(element): refactor FormDialog/FormDrawer & refactor component export type (#1892)](https://github.com/alibaba/formily/commit/cc3cb360) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :blush: Other Changes
+
+1. [chore(dn): update dn](https://github.com/alibaba/formily/commit/d04c757a) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable-antd): switch to dark mode](https://github.com/alibaba/formily/commit/c19d22d8) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(settings): improve ValidatorSetter ui](https://github.com/alibaba/formily/commit/be9776f0) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.83(2021-07-27)
 
 ### :tada: Enhancements
@@ -987,11 +1023,3 @@
 ### :rose: Improve code quality
 
 1. [refactor(doc): update doc](https://github.com/alibaba/formily/commit/d4ed9187) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v1.2.10(2020-07-28)
-
-### :beetle: Bug Fixes
-
-1. [fix(core): fix unmount remove errors (#976)](https://github.com/alibaba/formily/commit/3da2765b) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix: mutator insert (#977)](https://github.com/alibaba/formily/commit/f3356321) :point_right: ( [xiaowanzi](https://github.com/xiaowanzi) )
