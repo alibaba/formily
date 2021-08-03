@@ -1,6 +1,7 @@
 import React, { Fragment, useMemo } from 'react'
 import { Tab as Tabs, Badge } from '@alifd/next'
 import { model } from '@formily/reactive'
+import { isValid } from '@formily/shared'
 import {
   ItemProps as TabPaneProps,
   TabProps as TabsProps,
@@ -90,8 +91,8 @@ export const FormTab: ComposedFormTab = observer(({ formTab, ...props }) => {
   return (
     <Tabs
       {...props}
+      {...(isValid(activeKey) && { activeKey })}
       className={cls(prefixCls, props.className)}
-      activeKey={activeKey}
       onChange={(key) => {
         props.onChange?.(key)
         formTab?.setActiveKey?.(key)
