@@ -102,7 +102,12 @@ const App = () => {
   useEffect(() => {
     //The business layer gets the schema to echo the data
     fetchSchema().then((schema) => {
-      engine.setCurrentTree(transformToTreeNode(schema))
+      engine.setCurrentTree(
+        transformToTreeNode(schema, {
+          designableFieldName: 'DesignableField',
+          designableFormName: 'Root',
+        })
+      )
     })
   }, [])
 
@@ -114,7 +119,10 @@ const App = () => {
           <Button
             onClick={() => {
               submitSchema({
-                schema: transformToSchema(engine.getCurrentTree()),
+                schema: transformToSchema(engine.getCurrentTree(), {
+                  designableFieldName: 'DesignableField',
+                  designableFormName: 'Root',
+                }),
               })
             }}
           >
