@@ -236,6 +236,10 @@ export default {
         path: '/guide/contribution',
       },
       {
+        title: 'Form Builder Guide',
+        path: '/guide/form-builder',
+      },
+      {
         title: 'Issue Helper',
         path: '/guide/issue-helper',
       },
@@ -339,6 +343,10 @@ export default {
       {
         title: '贡献指南',
         path: '/zh-CN/guide/contribution',
+      },
+      {
+        title: '表单设计器开发指南',
+        path: '/zh-CN/guide/form-builder',
       },
       {
         title: '问题反馈',

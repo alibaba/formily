@@ -1,6 +1,6 @@
 import { ISchema } from '@formily/react'
 import { ComponentNameMatcher } from '../../shared'
-export interface IDesignableFieldProps {
+export interface IDesignableFieldFactoryProps {
   registryName: string
   components?: Record<string, React.JSXElementConstructor<unknown>>
   componentsPropsSchema?: Record<string, ISchema>
