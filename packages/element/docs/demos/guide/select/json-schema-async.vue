@@ -49,7 +49,7 @@ const schema = {
 const useAsyncDataSource = (service) => (field) => {
   field.loading = true
   service(field).then(
-    action((data) => {
+    action.bound((data) => {
       field.dataSource = data
       field.loading = false
     })

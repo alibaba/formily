@@ -2,8 +2,8 @@
 title: Formily-Alibaba unified front-end form solution
 order: 10
 hero:
-  title: FORMILY REACT
-  desc: Alibaba unified front-end form solution
+  title: React Library
+  desc: Alibaba Unified Form Solution
   actions:
     - text: Home Site
       link: //v2.formilyjs.org

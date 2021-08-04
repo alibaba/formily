@@ -9,7 +9,7 @@ import {
 import { baseHandlers, collectionHandlers } from './handlers'
 import { buildDataTree } from './datatree'
 import { isSupportObservable } from './externals'
-import { PropertyKey, IVisitor } from './types'
+import { PropertyKey, IVisitor, BoundaryFunction } from './types'
 
 const createNormalProxy = (target: any, shallow?: boolean) => {
   const proxy = new Proxy(target, baseHandlers)
@@ -68,9 +68,9 @@ export const createObservable = (
   return value
 }
 
-export function createAnnotation<T extends (visitor: IVisitor) => any>(
+export const createAnnotation = <T extends (visitor: IVisitor) => any>(
   maker: T
-) {
+) => {
   const annotation = (target: any): ReturnType<T> => {
     return maker({ value: target })
   }
@@ -80,11 +80,59 @@ export function createAnnotation<T extends (visitor: IVisitor) => any>(
   return annotation
 }
 
-export function getObservableMaker(target: any) {
+export const getObservableMaker = (target: any) => {
   if (target[MakeObservableSymbol]) {
     if (!target[MakeObservableSymbol][MakeObservableSymbol]) {
       return target[MakeObservableSymbol]
     }
     return getObservableMaker(target[MakeObservableSymbol])
   }
+}
+
+export const createBoundaryFunction = (
+  start: (...args: any) => void,
+  end: (...args: any) => void
+) => {
+  function boundary<F extends (...args: any) => any>(fn?: F): ReturnType<F> {
+    let results: ReturnType<F>
+    start()
+    try {
+      if (isFn(fn)) {
+        results = fn()
+      }
+    } finally {
+      end()
+      return results
+    }
+  }
+
+  boundary.bound = createBindFunction(boundary)
+  return boundary
+}
+
+export const createBindFunction = <Boundary extends BoundaryFunction>(
+  boundary: Boundary
+) => {
+  function bind<F extends (...args: any[]) => any>(
+    callback?: F,
+    context?: any
+  ): F {
+    return ((...args: any[]) =>
+      boundary(() => callback.apply(context, args))) as any
+  }
+  return bind
+}
+
+export const createBoundaryAnnotation = (
+  start: (...args: any) => void,
+  end: (...args: any) => void
+) => {
+  const boundary = createBoundaryFunction(start, end)
+  const annotation = createAnnotation(({ target, key }) => {
+    target[key] = boundary.bound(target[key], target)
+    return target
+  })
+  boundary[MakeObservableSymbol] = annotation
+  boundary.bound[MakeObservableSymbol] = annotation
+  return boundary
 }

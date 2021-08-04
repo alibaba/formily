@@ -8,20 +8,21 @@ on:
 jobs:
   release:
     if: contains(github.event.head_commit.message, 'chore(versions)')
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        node_version: [11.x]
-        os: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v1
-      - run: | 
-          echo "registry=\"https://registry.npmjs.org/:_authToken=$NPM_TOKEN\"" > .yarnrc
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - run: |
           yarn -v
           yarn --ignore-engines
           yarn build
           lerna publish from-package --yes --dist-tag next && ts-node scripts/release release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
           NODE_OPTIONS: --max_old_space_size=4096
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
+          ACCESS_KEY_SECRET: ${{ secrets.ACCESS_KEY_SECRET }}
+          REGISTRY: https://registry.npmjs.org

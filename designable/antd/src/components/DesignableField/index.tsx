@@ -21,13 +21,15 @@ import { clone } from '@formily/shared'
 import { FormItemSwitcher } from '../FormItemSwitcher'
 import { DesignableObject } from '../DesignableObject'
 import { createOptions } from './options'
-import { IDesignableFieldProps } from './types'
+import { IDesignableFieldFactoryProps } from './types'
 import { includesComponent } from '../../shared'
 import * as defaultSchemas from '../../schemas'
 
 Schema.silent()
 
-export const createDesignableField = (options: IDesignableFieldProps) => {
+export const createDesignableField = (
+  options: IDesignableFieldFactoryProps
+) => {
   const realOptions = createOptions(options)
 
   const tabs = {}
@@ -201,6 +203,8 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
         },
       })
     }
+
+    base['$namespace'] = `namespace.${component}`
 
     return base
   }

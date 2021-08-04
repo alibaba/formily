@@ -177,6 +177,7 @@ export type ISchema<
   required?: string[] | boolean | string
   format?: string
   $ref?: string
+  $namespace?: string
   /** nested json schema spec **/
   definitions?: SchemaProperties<
     Decorator,

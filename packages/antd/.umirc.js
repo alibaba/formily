@@ -61,6 +61,15 @@ export default {
       background-image: url(//img.alicdn.com/imgextra/i4/O1CN01ZcvS4e26XMsdsCkf9_!!6000000007671-2-tps-6001-4001.png);
       background-size: cover;
       background-repeat: no-repeat;
+      padding: 120px 0 !important;
+    }
+    .__dumi-default-layout-hero h1{
+      color:#45124e !important;
+      font-size:80px !important;
+      padding-bottom: 30px !important;
+    }
+    .__dumi-default-dark-switch {
+      display:none
     }
     nav a{
       text-decoration: none !important;

@@ -65,6 +65,8 @@ const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
 
 const runReactions = (target: any, key: PropertyKey) => {
   const reactions = getReactionsFromTargetKey(target, key)
+  const prevUntrackCount = UntrackCount.value
+  UntrackCount.value = 0
   for (let i = 0, len = reactions.length; i < len; i++) {
     const reaction = reactions[i]
     if (reaction._isComputed) {
@@ -81,6 +83,7 @@ const runReactions = (target: any, key: PropertyKey) => {
       }
     }
   }
+  UntrackCount.value = prevUntrackCount
 }
 
 const notifyObservers = (operation: IOperation) => {
@@ -174,7 +177,10 @@ export const batchStart = () => {
 export const batchEnd = () => {
   BatchCount.value--
   if (BatchCount.value === 0) {
+    const prevUntrackCount = UntrackCount.value
+    UntrackCount.value = 0
     executePendingReactions()
+    UntrackCount.value = prevUntrackCount
   }
 }
 
@@ -183,7 +189,9 @@ export const batchScopeStart = () => {
 }
 
 export const batchScopeEnd = () => {
+  const prevUntrackCount = UntrackCount.value
   BatchScope.value = false
+  UntrackCount.value = 0
   PendingScopeReactions.forEach((reaction) => {
     PendingScopeReactions.delete(reaction)
     if (isFn(reaction._scheduler)) {
@@ -192,6 +200,7 @@ export const batchScopeEnd = () => {
       reaction()
     }
   })
+  UntrackCount.value = prevUntrackCount
 }
 
 export const untrackStart = () => {

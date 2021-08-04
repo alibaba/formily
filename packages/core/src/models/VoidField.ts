@@ -5,7 +5,7 @@ import {
   isValid,
   toArr,
 } from '@formily/shared'
-import { define, observable, autorun, batch } from '@formily/reactive'
+import { define, observable, autorun, batch, action } from '@formily/reactive'
 import {
   JSXComponent,
   LifeCycleTypes,
@@ -116,15 +116,14 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
       editable: observable.computed,
       component: observable.computed,
       decorator: observable.computed,
-      setTitle: batch,
-      setDescription: batch,
-      setDisplay: batch,
-      setPattern: batch,
-      setComponent: batch,
-      setComponentProps: batch,
-      setDecorator: batch,
-      setDecoratorProps: batch,
-      setState: batch,
+      setTitle: action,
+      setDescription: action,
+      setDisplay: action,
+      setPattern: action,
+      setComponent: action,
+      setComponentProps: action,
+      setDecorator: action,
+      setDecoratorProps: action,
       onInit: batch,
       onMount: batch,
       onUnmount: batch,

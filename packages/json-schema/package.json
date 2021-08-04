@@ -1,6 +1,6 @@
 {
   "name": "@formily/json-schema",
-  "version": "2.0.0-beta.83",
+  "version": "2.0.0-beta.85",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -22,15 +22,15 @@
   },
   "scripts": {
     "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:global",
-    "build:cjs": "tsc --declaration",
-    "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:cjs": "tsc --project tsconfig.build.json",
+    "build:esm": "tsc --project tsconfig.build.json --module es2015 --outDir esm",
     "build:umd": "rollup --config",
     "build:global": "ts-node ../../scripts/build-global"
   },
   "dependencies": {
-    "@formily/core": "2.0.0-beta.83",
-    "@formily/reactive": "2.0.0-beta.83",
-    "@formily/shared": "2.0.0-beta.83"
+    "@formily/core": "2.0.0-beta.85",
+    "@formily/reactive": "2.0.0-beta.85",
+    "@formily/shared": "2.0.0-beta.85"
   },
   "publishConfig": {
     "access": "public"

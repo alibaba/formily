@@ -1123,6 +1123,7 @@ test('setValues deep merge', () => {
         aa: {
           bb: 123,
           cc: 321,
+          dd: [11, 22, 33],
         },
       },
     })
@@ -1131,18 +1132,38 @@ test('setValues deep merge', () => {
     aa: {
       bb: 123,
       cc: 321,
+      dd: [11, 22, 33],
     },
   })
   form.setValues({
     aa: {
       bb: '',
       cc: '',
+      dd: [44, 55, 66],
     },
   })
   expect(form.values).toEqual({
     aa: {
       bb: '',
       cc: '',
+      dd: [44, 55, 66],
     },
   })
+})
+
+test('exception validate', async () => {
+  const form = attach(createForm())
+  attach(
+    form.createField({
+      name: 'aa',
+      validator() {
+        throw new Error('runtime error')
+      },
+    })
+  )
+  try {
+    await form.validate()
+  } catch {}
+  expect(form.invalid).toBeTruthy()
+  expect(form.validating).toBeFalsy()
 })

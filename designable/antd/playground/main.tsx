@@ -57,7 +57,7 @@ const App = () => {
   const engine = useMemo(() => createDesigner(), [])
 
   return (
-    <Designer engine={engine}>
+    <Designer engine={engine} theme="dark">
       <MainPanel logo={<LogoWidget />} actions={<ActionsWidget />}>
         <CompositePanel>
           <CompositePanel.Item

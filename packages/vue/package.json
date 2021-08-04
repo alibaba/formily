@@ -1,6 +1,6 @@
 {
   "name": "@formily/vue",
-  "version": "2.0.0-beta.83",
+  "version": "2.0.0-beta.85",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -15,8 +15,8 @@
   "scripts": {
     "start": "vuepress dev docs",
     "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:global",
-    "build:cjs": "tsc --declaration",
-    "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:cjs": "tsc --project tsconfig.build.json",
+    "build:esm": "tsc --project tsconfig.build.json --module es2015 --outDir esm",
     "build:umd": "rollup --config",
     "build:global": "ts-node ../../scripts/build-global",
     "build:docs": "vuepress build docs"
@@ -36,12 +36,12 @@
     "vuepress-plugin-typescript": "^0.3.1"
   },
   "dependencies": {
-    "@formily/core": "2.0.0-beta.83",
-    "@formily/json-schema": "2.0.0-beta.83",
-    "@formily/reactive": "2.0.0-beta.83",
-    "@formily/reactive-vue": "2.0.0-beta.83",
-    "@formily/shared": "2.0.0-beta.83",
-    "@formily/validator": "2.0.0-beta.83",
+    "@formily/core": "2.0.0-beta.85",
+    "@formily/json-schema": "2.0.0-beta.85",
+    "@formily/reactive": "2.0.0-beta.85",
+    "@formily/reactive-vue": "2.0.0-beta.85",
+    "@formily/shared": "2.0.0-beta.85",
+    "@formily/validator": "2.0.0-beta.85",
     "@type-helper/vue2": "npm:vue@2",
     "@type-helper/vue3": "npm:vue@3",
     "vue-demi": "^0.9.0",

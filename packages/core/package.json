@@ -1,6 +1,6 @@
 {
   "name": "@formily/core",
-  "version": "2.0.0-beta.83",
+  "version": "2.0.0-beta.85",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -23,8 +23,8 @@
   "scripts": {
     "start": "dumi dev",
     "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:global",
-    "build:cjs": "tsc --declaration",
-    "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:cjs": "tsc --project tsconfig.build.json",
+    "build:esm": "tsc --project tsconfig.build.json --module es2015 --outDir esm",
     "build:umd": "rollup --config",
     "build:global": "ts-node ../../scripts/build-global",
     "build:docs": "dumi build"
@@ -33,9 +33,9 @@
     "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
-    "@formily/reactive": "2.0.0-beta.83",
-    "@formily/shared": "2.0.0-beta.83",
-    "@formily/validator": "2.0.0-beta.83"
+    "@formily/reactive": "2.0.0-beta.85",
+    "@formily/shared": "2.0.0-beta.85",
+    "@formily/validator": "2.0.0-beta.85"
   },
   "publishConfig": {
     "access": "public"

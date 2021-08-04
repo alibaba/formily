@@ -7,13 +7,13 @@ import { usePrefix } from '@designable/react'
 import { Form as FormPropsSchema } from '../../schemas'
 import './styles.less'
 
-export interface IDesignableFormProps extends IDesignerProps {
+export interface IDesignableFormFactoryProps extends IDesignerProps {
   registryName: string
   component?: React.JSXElementConstructor<unknown>
 }
 
-export const createDesignableForm = (options: IDesignableFormProps) => {
-  const realOptions: IDesignableFormProps = {
+export const createDesignableForm = (options: IDesignableFormFactoryProps) => {
+  const realOptions: IDesignableFormFactoryProps = {
     component: Form,
     droppable: true,
     draggable: false,
