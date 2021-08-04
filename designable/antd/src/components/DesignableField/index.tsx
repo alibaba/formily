@@ -202,7 +202,7 @@ export const createDesignableField = (options: IDesignableFieldProps) => {
       })
     }
 
-    base['$namespace'] = `${realOptions.registryName}_${decorator}_${component}`
+    base['$namespace'] = `namespace.${component}`
 
     return base
   }
