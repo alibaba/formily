@@ -3,7 +3,7 @@ export interface IMiddleware<Payload = any, Result = any> {
 }
 
 export const applyMiddleware = (payload: any, fns: IMiddleware[] = []) => {
-  const compose = (payload: any, fns: IMiddleware[]) => {
+  const compose = (payload: any, fns: IMiddleware[]): Promise<any> => {
     const prevPayload = payload
     return Promise.resolve(
       fns[0](payload, (payload) =>
@@ -11,12 +11,12 @@ export const applyMiddleware = (payload: any, fns: IMiddleware[] = []) => {
       )
     )
   }
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     compose(
       payload,
       fns.concat((payload) => {
         resolve(payload)
       })
-    )
+    ).catch(reject)
   })
 }
