@@ -1,6 +1,6 @@
 {
   "name": "@formily/reactive",
-  "version": "2.0.0-beta.85",
+  "version": "2.0.0-beta.86",
   "license": "MIT",
   "main": "lib",
   "module": "esm",

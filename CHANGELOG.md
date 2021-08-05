@@ -1,5 +1,33 @@
 # Changelog
 
+## v2.0.0-beta.85(2021-08-03)
+
+### :beetle: Bug Fixes
+
+1. [fix(next): add the default language when the language is undefined (#1939)](https://github.com/alibaba/formily/commit/c74e7f91) :point_right: ( [Grapedge](https://github.com/Grapedge) )
+
+1. [fix(next/designable-antd): fix Select bug && designable-antd spelling error (#1934)](https://github.com/alibaba/formily/commit/739e8c18) :point_right: ( [Grapedge](https://github.com/Grapedge) )
+
+1. [fix(next): fix FormItem styles (#1916)](https://github.com/alibaba/formily/commit/9850f766) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :memo: Documents Changes
+
+1. [docs(reactive): improve home page styles](https://github.com/alibaba/formily/commit/799f4226) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rose: Improve code quality
+
+1. [refactor(reactive): break change to redefine action semantics (#1930)](https://github.com/alibaba/formily/commit/1b0a7539) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore(designable-antd): upgrade designable](https://github.com/alibaba/formily/commit/02b056ec) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(ts): map @formily/\* to src folder during development (#1917)](https://github.com/alibaba/formily/commit/65259a06) :point_right: ( [JuFeng Zhang](https://github.com/JuFeng Zhang) )
+
+1. [chore(validator): improve validator (#1918)](https://github.com/alibaba/formily/commit/b1681bff) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/3e99574a) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.84(2021-07-31)
 
 ### :tada: Enhancements
@@ -1005,21 +1033,3 @@
 ### :memo: Documents Changes
 
 1. [doc:improve validate documents (#1000)](https://github.com/alibaba/formily/commit/3a145304) :point_right: ( [wangmingxu](https://github.com/wangmingxu) )
-
-## v1.2.11(2020-08-03)
-
-### :tada: Enhancements
-
-1. [feat(antd/next): add stop propagation to form (#978)](https://github.com/alibaba/formily/commit/804908ec) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-### :beetle: Bug Fixes
-
-1. [fix(schema-renderer): Fix expression complie perf bug (#986)](https://github.com/alibaba/formily/commit/0e8383ee) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix: compat ie10-11 for antd3 (#985)](https://github.com/alibaba/formily/commit/74fa86c9) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix: 回滚 mutators.move 行为 (#984)](https://github.com/alibaba/formily/commit/010e1495) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-### :rose: Improve code quality
-
-1. [refactor(doc): update doc](https://github.com/alibaba/formily/commit/d4ed9187) :point_right: ( [janrywang](https://github.com/janrywang) )
