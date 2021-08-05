@@ -18,7 +18,7 @@ jobs:
           yarn -v
           yarn --ignore-engines
           yarn build
-          lerna publish from-package --yes && ts-node scripts/release release
+          yarn run release:force
         env:
           HEADLESS: false
           PROGRESS: none
