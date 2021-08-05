@@ -19,9 +19,10 @@ jobs:
           yarn -v
           yarn --ignore-engines
           yarn build
-          lerna publish from-package --yes --dist-tag next && ts-node scripts/release release
+          lerna publish from-package --yes && ts-node scripts/release release
         env:
-          NODE_OPTIONS: --max_old_space_size=4096
+          HEADLESS: false
+          PROGRESS: none
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}

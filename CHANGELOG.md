@@ -1,5 +1,35 @@
 # Changelog
 
+## v2.0.0-beta.86(2021-08-05)
+
+### :beetle: Bug Fixes
+
+1. [fix(next): fix mapStatus takeState](https://github.com/alibaba/formily/commit/576c9b56) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(antd): fix dark label color](https://github.com/alibaba/formily/commit/c1e5b0f4) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(shared): fix applyMiddleware can not catch error (#1952)](https://github.com/alibaba/formily/commit/22f0379a) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(next): fix FormItem vertical style (#1948)](https://github.com/alibaba/formily/commit/97991801) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+### :memo: Documents Changes
+
+1. [docs(designable): add designable form docs](https://github.com/alibaba/formily/commit/fef3600d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs(site): improve home site contributors ui](https://github.com/alibaba/formily/commit/7592bafe) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs(site): add serverless functions](https://github.com/alibaba/formily/commit/d872ea4c) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(core): improve heart](https://github.com/alibaba/formily/commit/de97e76f) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable): add save service to playground](https://github.com/alibaba/formily/commit/badd7f9a) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable-antd): update locale namespace](https://github.com/alibaba/formily/commit/6b2bb938) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/1de0f56f) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.85(2021-08-03)
 
 ### :beetle: Bug Fixes
@@ -1019,17 +1049,3 @@
 ### :tada: Enhancements
 
 1. [feat(layout/docs): update docs and fix layout (#1003)](https://github.com/alibaba/formily/commit/16be58cc) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-## v1.3.0(2020-08-17)
-
-### :beetle: Bug Fixes
-
-1. [fix(schema-renderer): fix schema field lazy state (#999)](https://github.com/alibaba/formily/commit/8faab444) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd): fix previewPlaceholder errors (#993)](https://github.com/alibaba/formily/commit/eda988c0) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(shared): update cool-path version, ensure bug to be fixed (#988)](https://github.com/alibaba/formily/commit/5ae37fe0) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-### :memo: Documents Changes
-
-1. [doc:improve validate documents (#1000)](https://github.com/alibaba/formily/commit/3a145304) :point_right: ( [wangmingxu](https://github.com/wangmingxu) )
