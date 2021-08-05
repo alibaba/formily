@@ -3,10 +3,12 @@ export interface IMiddleware<Payload = any, Result = any> {
 }
 
 export const applyMiddleware = (payload: any, fns: IMiddleware[] = []) => {
-  const compose = async (payload: any, fns: IMiddleware[]) => {
+  const compose = (payload: any, fns: IMiddleware[]): Promise<any> => {
     const prevPayload = payload
-    return fns[0](payload, (payload) =>
-      compose(payload ?? prevPayload, fns.slice(1))
+    return Promise.resolve(
+      fns[0](payload, (payload) =>
+        compose(payload ?? prevPayload, fns.slice(1))
+      )
     )
   }
   return new Promise((resolve, reject) => {
