@@ -7,8 +7,10 @@ export const loading = async (
   let loading = setTimeout(() => {
     Message.loading(title as any)
   }, 100)
-  const results = await processor()
-  Message.hide()
-  clearTimeout(loading)
-  return results
+  try {
+    return await processor()
+  } finally {
+    Message.hide()
+    clearTimeout(loading)
+  }
 }
