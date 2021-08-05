@@ -11,8 +11,10 @@ export const loading = async (
       background: 'transparent',
     })
   }, 100)
-  const results = await processor()
-  loadingInstance?.close()
-  clearTimeout(loading)
-  return results
+  try {
+    return await processor()
+  } finally {
+    loadingInstance?.close()
+    clearTimeout(loading)
+  }
 }

@@ -1,4 +1,4 @@
-import { IDesignableFieldProps } from './types'
+import { IDesignableFieldFactoryProps } from './types'
 import {
   FormItem,
   DatePicker,
@@ -71,8 +71,8 @@ const allowDropWithEmpty = (name: string, node: TreeNode, target: TreeNode) => {
 }
 
 export const createOptions = (
-  options: IDesignableFieldProps
-): IDesignableFieldProps => {
+  options: IDesignableFieldFactoryProps
+): IDesignableFieldFactoryProps => {
   return {
     ...options,
     dropFormItemComponents: [

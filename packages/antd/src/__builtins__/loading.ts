@@ -8,8 +8,10 @@ export const loading = async (
   let loading = setTimeout(() => {
     hide = message.loading(title)
   }, 100)
-  const results = await processor()
-  hide?.()
-  clearTimeout(loading)
-  return results
+  try {
+    return await processor()
+  } finally {
+    hide?.()
+    clearTimeout(loading)
+  }
 }

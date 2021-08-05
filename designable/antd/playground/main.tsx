@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   Designer,
@@ -18,7 +18,12 @@ import {
   ComponentTreeWidget,
 } from '@designable/react'
 import { SettingsForm } from '@designable/react-settings-form'
-import { createDesigner, GlobalRegistry } from '@designable/core'
+import {
+  createDesigner,
+  GlobalRegistry,
+  Shortcut,
+  KeyCode,
+} from '@designable/core'
 import { createDesignableField, createDesignableForm } from '../src'
 import {
   LogoWidget,
@@ -27,6 +32,7 @@ import {
   SchemaEditorWidget,
   MarkupSchemaWidget,
 } from './widgets'
+import { saveSchema } from './service'
 import 'antd/dist/antd.less'
 GlobalRegistry.registerDesignerLocales({
   'zh-CN': {
@@ -53,9 +59,21 @@ const DesignableField = createDesignableField({
   registryName: 'DesignableField',
 })
 
-const App = () => {
-  const engine = useMemo(() => createDesigner(), [])
+const SaveShortCut = new Shortcut({
+  codes: [
+    [KeyCode.Meta, KeyCode.S],
+    [KeyCode.Control, KeyCode.S],
+  ],
+  handler(ctx) {
+    saveSchema(ctx.engine)
+  },
+})
 
+const engine = createDesigner({
+  shortcuts: [SaveShortCut],
+})
+
+const App = () => {
   return (
     <Designer engine={engine} theme="dark">
       <MainPanel logo={<LogoWidget />} actions={<ActionsWidget />}>

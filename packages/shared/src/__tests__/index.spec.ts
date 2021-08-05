@@ -724,3 +724,15 @@ test('applyMiddleware', async () => {
   await sleep(16)
   expect(resolved).toBeCalledTimes(0)
 })
+
+test('applyMiddleware with error', async () => {
+  try {
+    await applyMiddleware(0, [
+      () => {
+        throw 'this is error'
+      },
+    ])
+  } catch (e) {
+    expect(e).toEqual('this is error')
+  }
+})
