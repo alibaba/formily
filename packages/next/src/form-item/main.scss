@@ -94,6 +94,7 @@
   .#{$form-item-cls}-label {
     label {
       white-space: pre-line;
+      word-break: break-all;
     }
   }
 }
