@@ -109,7 +109,7 @@ export const createEnsureTypeItemsNode = (type: string) => (node: TreeNode) => {
         type,
       },
     })
-    node.prependNode(newObjectNode)
+    node.prepend(newObjectNode)
     return newObjectNode
   }
 }

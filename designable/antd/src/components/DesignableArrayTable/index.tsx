@@ -247,7 +247,7 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                     },
                   ],
                 })
-                ensureObjectItemsNode(node).prependNode(tableColumn)
+                ensureObjectItemsNode(node).prepend(tableColumn)
               },
             },
             {
@@ -290,7 +290,7 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                 if (sortNode) {
                   sortNode.parent.insertAfter(tableColumn)
                 } else {
-                  ensureObjectItemsNode(node).prependNode(tableColumn)
+                  ensureObjectItemsNode(node).prepend(tableColumn)
                 }
               },
             },
@@ -322,7 +322,7 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                 if (operationNode) {
                   operationNode.parent.insertBefore(tableColumn)
                 } else {
-                  ensureObjectItemsNode(node).appendNode(tableColumn)
+                  ensureObjectItemsNode(node).append(tableColumn)
                 }
               },
             },
@@ -379,7 +379,7 @@ export const DesignableArrayTable: React.FC<TableProps<any>> = observer(
                       },
                     ],
                   })
-                  ensureObjectItemsNode(node).appendNode(operationNode)
+                  ensureObjectItemsNode(node).append(operationNode)
                 }
                 if (!oldAdditionNode) {
                   const additionNode = new TreeNode({

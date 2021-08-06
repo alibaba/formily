@@ -2,12 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   Designer,
-  IconWidget,
   DesignerToolsWidget,
   ViewToolsWidget,
   Workspace,
   OutlineTreeWidget,
   DragSourceWidget,
+  HistoryWidget,
   MainPanel,
   CompositePanel,
   WorkspacePanel,
@@ -78,19 +78,16 @@ const App = () => {
     <Designer engine={engine} theme="dark">
       <MainPanel logo={<LogoWidget />} actions={<ActionsWidget />}>
         <CompositePanel>
-          <CompositePanel.Item
-            title="panels.Component"
-            icon={<IconWidget infer="Component" />}
-          >
+          <CompositePanel.Item title="panels.Component" icon="Component">
             <DragSourceWidget title="sources.Inputs" name="inputs" />
             <DragSourceWidget title="sources.Layouts" name="layouts" />
             <DragSourceWidget title="sources.Arrays" name="arrays" />
           </CompositePanel.Item>
-          <CompositePanel.Item
-            title="panels.OutlinedTree"
-            icon={<IconWidget infer="Outline" />}
-          >
+          <CompositePanel.Item title="panels.OutlinedTree" icon="Outline">
             <OutlineTreeWidget />
+          </CompositePanel.Item>
+          <CompositePanel.Item title="panels.History" icon="History">
+            <HistoryWidget />
           </CompositePanel.Item>
         </CompositePanel>
         <Workspace id="form">

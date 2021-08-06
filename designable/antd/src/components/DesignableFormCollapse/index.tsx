@@ -117,7 +117,7 @@ export const DesignableFormCollapse: React.FC<CollapseProps> & {
                   },
                 },
               })
-              node.appendNode(tabPane)
+              node.append(tabPane)
               const keys = toArr(activeKey)
               setActiveKey(keys.concat(tabPane.id))
             },
