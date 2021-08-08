@@ -75,7 +75,7 @@ const engine = createDesigner({
 
 const App = () => {
   return (
-    <Designer engine={engine} theme="dark">
+    <Designer engine={engine}>
       <MainPanel logo={<LogoWidget />} actions={<ActionsWidget />}>
         <CompositePanel>
           <CompositePanel.Item title="panels.Component" icon="Component">
