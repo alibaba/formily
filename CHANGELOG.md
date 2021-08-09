@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.0-beta.87(2021-08-05)
+
+### :blush: Other Changes
+
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/e5b239df) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.86(2021-08-05)
 
 ### :beetle: Bug Fixes
@@ -1043,9 +1049,3 @@
 1. [fix(shared): Fix merge undefined is not work (#1009)](https://github.com/alibaba/formily/commit/40489ac1) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix: compat legal props (#1007)](https://github.com/alibaba/formily/commit/5dde72ae) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-## v1.3.1(2020-08-20)
-
-### :tada: Enhancements
-
-1. [feat(layout/docs): update docs and fix layout (#1003)](https://github.com/alibaba/formily/commit/16be58cc) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
