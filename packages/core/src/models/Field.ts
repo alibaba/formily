@@ -109,7 +109,7 @@ export class Field<
     this.makeIndexes(address)
     this.makeObservable(designable)
     this.makeReactive(designable)
-    this.onInit(designable)
+    this.onInit()
   }
 
   protected makeIndexes(address: FormPathPattern) {
@@ -668,10 +668,10 @@ export class Field<
 
   getState: IModelGetter<IFieldState> = modelStateGetter(this)
 
-  onInit = (designable: boolean) => {
+  onInit = () => {
     this.initialized = true
     batch.scope(() => {
-      initFieldValue(this, designable)
+      initFieldValue(this)
     })
     batch.scope(() => {
       initFieldUpdate(this)
