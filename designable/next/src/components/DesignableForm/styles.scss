@@ -18,4 +18,23 @@ $next-prefix: $css-prefix;
   }
 }
 
-@include designable-bootstrap('input');
+@include designable-bootstrap(
+  'input',
+  'input-textarea',
+  'select',
+  'radio-group',
+  'range',
+  'cascader',
+  'switch',
+  'checkbox-group',
+  'date-picker',
+  'range-picker',
+  'month-picker',
+  'year-picker',
+  'week-picker',
+  'time-picker',
+  'rating',
+  'transfer',
+  'tree-select',
+  'upload'
+);
