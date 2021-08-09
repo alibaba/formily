@@ -1407,3 +1407,9 @@ test('auto clean with ObjectField', () => {
   obj2.removeProperty('cc')
   expect(form.fields['obj2.cc']).toBeUndefined()
 })
+
+test('initial value with empty', () => {
+  const form = attach(createForm())
+  const array = attach(form.createField({ name: 'array', initialValue: '' }))
+  expect(array.value).toEqual('')
+})

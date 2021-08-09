@@ -29,7 +29,6 @@ import {
 } from '../types'
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
 import { ReservedProperties, GlobalState } from './constants'
-import { isObjectField } from './checkers'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
@@ -414,13 +413,11 @@ export const cleanupObjectChildren = (field: ObjectField, keys: string[]) => {
 
 export const initFieldValue = (field: Field) => {
   GlobalState.initializing = true
-  const fromValue = (value: any) => {
-    const valid = isValid(value)
-    if (isArrayField(field) || isObjectField(field)) {
-      return [valid, isEmpty(value, true), value]
-    }
-    return [valid, !valid, value]
-  }
+  const fromValue = (value: any) => [
+    isValid(value),
+    isEmpty(value, true),
+    value,
+  ]
   const [, isEmptySelfValue, selfValue] = fromValue(field.value)
   const [, isEmptySelfInitialValue, selfInitialValue] = fromValue(
     field.initialValue
@@ -449,19 +446,11 @@ export const initFieldValue = (field: Field) => {
       if (!isEmptyPropsInitialValue) {
         field.value = shallowClone(propsInitialValue)
       } else if (isValidPropsValue) {
-        if (isEmptyPropsValue) {
-          if (!isEqual(selfValue, propsValue)) {
-            field.value = shallowClone(propsValue)
-          }
-        } else {
+        if (!isEqual(selfValue, propsValue)) {
           field.value = shallowClone(propsValue)
         }
       } else if (isValidPropsInitialValue) {
-        if (isEmptyPropsInitialValue) {
-          if (!isEqual(selfValue, propsInitialValue)) {
-            field.value = shallowClone(propsInitialValue)
-          }
-        } else {
+        if (!isEqual(selfValue, propsInitialValue)) {
           field.value = shallowClone(propsInitialValue)
         }
       }

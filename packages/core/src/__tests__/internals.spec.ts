@@ -3,6 +3,7 @@ import {
   matchFeedback,
   applyFieldPatches,
   setModelState,
+  isHTMLInputEvent,
 } from '../shared/internals'
 
 test('getValuesFromEvent', () => {
@@ -37,4 +38,13 @@ test('setModelState', () => {
       }
     )
   ).toEqual({})
+})
+
+test('isHTMLInputEvent', () => {
+  expect(isHTMLInputEvent({ target: { checked: true } })).toBeTruthy()
+  expect(isHTMLInputEvent({ target: { value: 123 } })).toBeTruthy()
+  expect(isHTMLInputEvent({ target: { tagName: 'INPUT' } })).toBeTruthy()
+  expect(isHTMLInputEvent({ target: { tagName: 'DIV' } })).toBeFalsy()
+  expect(isHTMLInputEvent({ target: {}, stopPropagation() {} })).toBeTruthy()
+  expect(isHTMLInputEvent({})).toBeFalsy()
 })
