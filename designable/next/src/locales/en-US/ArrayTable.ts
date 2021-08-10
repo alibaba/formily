@@ -1,49 +1,49 @@
 import type { ISettingsLocale } from '../types'
 
 export const ArrayTable: ISettingsLocale = {
-  primaryKey: 'Primary key',
+  primaryKey: 'Primary Key',
   tableLayout: {
-    title: 'Table layout',
-    dataSource: ['Automatic', 'Fixed'],
+    title: 'Table Layout',
+    dataSource: ['Auto', 'Fixed'],
   },
   size: {
     title: 'Size',
     dataSource: ['Small', 'Medium', 'Inherit', 'Nothing'],
   },
-  tableWidth: 'Table width',
-  hasHeader: 'Head',
-  isZebra: 'Zebra crossing',
-  emptyContent: 'Empty content copy',
-  fixedHeader: 'Fixed head',
-  maxBodyHeight: 'Maximum body height',
-  stickyHeader: 'Viscous head',
+  tableWidth: 'Table Width',
+  hasHeader: 'Header',
+  isZebra: 'Zebra',
+  emptyContent: 'Empty Content',
+  fixedHeader: 'Fixed Header',
+  maxBodyHeight: 'Max Body Height',
+  stickyHeader: 'Sticky Header',
 }
 
 ArrayTable.Column = {
   align: {
-    title: 'Cell alignment',
+    title: 'Cell Alignment',
     dataSource: ['Left', 'Medium', 'Right'],
   },
   alignHeader: {
-    title: 'Head alignment',
+    title: 'Header alignment',
     tooltip: 'If not set, the alignment will be the same as that of the cell',
     dataSource: ['Left', 'Medium', 'Right'],
   },
   lock: {
-    title: 'Lock column',
-    dataSource: ['No lock', 'Left', 'Right', 'Lock'],
+    title: 'Lock',
+    dataSource: ['None', 'Left', 'Right', 'Lock'],
   },
-  colSpan: 'Lattice number',
+  colSpan: 'Col Span',
   wordBreak: {
-    title: 'Word break',
-    dataSource: ['Whole', 'Word'],
+    title: 'Word Break',
+    dataSource: ['All', 'Word'],
   },
 }
 
 ArrayTable.Addition = {
   method: {
-    title: 'Add method',
-    dataSource: ['Tail', 'Head'],
+    title: 'Method',
+    dataSource: ['Push', 'Unshift'],
   },
-  defaultValue: 'Default value',
+  defaultValue: 'Default Value',
 }

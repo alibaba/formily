@@ -3,8 +3,8 @@ import type { ISettingsLocale } from '../types'
 export const Space: ISettingsLocale = {
   align: {
     title: 'Alignment',
-    dataSource: ['Start', 'Ending', 'Middle', 'Baseline'],
+    dataSource: ['Start', 'End', 'Center', 'Baseline'],
   },
-  split: 'Split content',
-  wrap: 'Auto wrap',
+  split: 'Split',
+  wrap: 'Auto Wrap',
 }

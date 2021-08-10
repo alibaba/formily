@@ -23,10 +23,6 @@ export const Input: ISettingsLocale = {
 
 Input.TextArea = {
   ...Input,
-  state: {
-    title: '状态',
-    dataSource: ['正常', '错误', '警告'],
-  },
   autoHeight: '自动高度',
   rows: '文本框高度',
 }

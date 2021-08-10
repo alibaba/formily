@@ -1,34 +1,30 @@
 import type { ISettingsLocale } from '../types'
 
 export const Input: ISettingsLocale = {
-  showLimitHint: 'Length limit prompt',
+  showLimitHint: 'Show Limit Hint',
   cutString: {
-    title: 'Truncation',
+    title: 'Cut String',
     tooltip:
-      'When the maximum length is set, whether to truncate the string is exceeded',
+      'When the maxLength is set, whether to truncate the string is exceeded',
   },
   trim: {
     title: 'Trim',
     tooltip: 'Remove leading and trailing spaces',
   },
-  composition: 'Filter ime middle letters',
+  composition: 'Filter Ime Middle Letters',
   hint: {
-    title: 'Watermark',
+    title: 'Hint',
     tooltip:
-      'The value is taken from the type of icon and is in the same position as the clear button',
+      'The value is taken from the type of Icon and is in the same position as the clear button',
   },
-  innerBefore: 'In box prefix',
-  innerAfter: 'In box suffix',
-  addonTextBefore: 'Prefix label',
-  addonTextAfter: 'Suffix label',
+  innerBefore: 'Inner Before',
+  innerAfter: 'Inner After',
+  addonTextBefore: 'Addon Text Before',
+  addonTextAfter: 'Addon Text After',
 }
 
 Input.TextArea = {
   ...Input,
-  state: {
-    title: 'State',
-    dataSource: ['Normal', 'Error', 'Warning'],
-  },
-  autoHeight: 'Automatic height',
-  rows: 'Text box height',
+  autoHeight: 'Auto Height',
+  rows: 'Rows',
 }

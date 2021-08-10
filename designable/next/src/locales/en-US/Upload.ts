@@ -1,29 +1,29 @@
 import type { ISettingsLocale } from '../types'
 
 export const Upload: ISettingsLocale = {
-  action: 'Upload address',
+  action: 'Upload Url',
   shape: {
-    title: 'Appearance',
+    title: 'Shape',
     dataSource: ['Normal', 'Card'],
   },
-  accept: 'Accept file type',
-  data: 'Upload additional parameters',
-  headers: 'Upload request header',
-  withCredentials: 'Carry cookies',
-  timeout: 'Timeout (ms)',
+  accept: 'Accept File Type',
+  data: 'Upload Extra Data',
+  headers: 'Upload Headers',
+  withCredentials: 'With Credentials',
+  timeout: 'Timeout(ms)',
   method: {
-    title: 'Upload method',
-    dataSource: ['Post', 'Put'],
+    title: 'Upload Method',
+    dataSource: ['POST', 'PUT'],
   },
-  name: 'File name',
+  name: 'Name',
   listType: {
-    title: 'Upload list style',
-    dataSource: ['Default', 'Text', 'Picture', 'Card'],
+    title: 'Upload List Type',
+    dataSource: ['Default', 'Text', 'Image', 'Card'],
   },
-  limit: 'Maximum number of file uploads',
-  dragable: 'Support drag upload',
-  useDataURL: 'Local preview',
-  autoUpload: 'Auto upload',
+  limit: 'Max Upload count',
+  dragable: 'Dragable',
+  useDataURL: 'Local Preview',
+  autoUpload: 'Auto Upload',
 }
 
 Upload.Dragger = { ...Upload }

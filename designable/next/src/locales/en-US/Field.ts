@@ -4,33 +4,33 @@ import type { ISettingsLocale } from '../types'
 import { Common } from './Common'
 
 export const Field: ISettingsLocale = {
-  name: 'Field identification',
+  name: 'Name',
   title: 'Title',
   required: 'Required',
-  description: 'Describe',
-  default: 'Default value',
-  enum: 'Data source',
-  'X-display': {
-    title: 'Display status',
+  description: 'Description',
+  default: 'Default',
+  enum: 'Data Source',
+  'x-display': {
+    title: 'Display State',
     tooltip:
-      'Half hiding will only hide the ui, and full hiding will delete the data',
-    dataSource: ['Display', 'Semi hidden', 'All hidden', 'Inherit'],
+      'When the display value is "None", the data will be "Hidden" and deleted. When the display value is hidden, only the UI will be hidden',
+    dataSource: ['Visible', 'Hidden', 'None', 'Inherit'],
   },
-  'X-pattern': {
-    title: 'Ui form',
-    dataSource: ['Editable', 'Disable', 'Read-only', 'Read', 'Inherit'],
+  'x-pattern': {
+    title: 'UI Pattern',
+    dataSource: ['Editable', 'Disabled', 'ReadOnly', 'ReadPretty', 'Inherit'],
   },
-  'X-validator': 'Verification rules',
-  'X-reactions': 'Responder rule',
-  'X-decorator': 'Enable container components',
-  'X-decorator-props': {
+  'x-validator': 'Validator',
+  'x-reactions': 'Reactions',
+  'x-decorator': 'Decorator',
+  'x-decorator-props': {
     ...Common,
     ...FormItem,
     style: Style,
     tab_property: 'Decorator',
     tab_style: 'Style',
   },
-  'X-component-props': {
+  'x-component-props': {
     ...Common,
     tab_property: 'Component',
     tab_style: 'Style',

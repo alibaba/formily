@@ -18,8 +18,7 @@ export const Select: ISettingsLocale = {
     tooltip: '弹层内容为空的文案',
   },
   showDataSourceChildren: {
-    title: '选中自动清除',
-    tooltip: '仅在多选或者标签模式下支持',
+    title: '展示数据源子节点',
   },
   hasSelectAll: '多选模式下是否可全选',
   cacheValue: {

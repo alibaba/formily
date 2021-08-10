@@ -2,30 +2,30 @@ import type { ISettingsLocale } from '../types'
 
 const ArrayOperations: ISettingsLocale = {
   Index: 'Indexes',
-  SortHandle: 'Sort handle',
-  Addition: 'Add button',
-  Remove: 'Delete button',
-  MoveDown: 'Move down button',
-  MoveUp: 'Upward button',
+  SortHandle: 'Sort Handle',
+  Addition: 'Addition',
+  Remove: 'Remove',
+  MoveDown: 'Move Down',
+  MoveUp: 'Move Up',
 }
 
 export const ArrayTable: ISettingsLocale = {
   ...ArrayOperations,
-  title: 'Self increment table',
-  Column: 'Table column',
+  title: 'ArrayTable',
+  Column: 'Column',
 }
 
 export const ArrayCards: ISettingsLocale = {
   ...ArrayOperations,
-  title: 'Self adding card',
+  title: 'Array Cards',
 }
 
 export const ArrayTabs = {
   ...ArrayOperations,
-  title: 'Auto increment tab',
+  title: 'Array Tabs',
 }
 
 export const ArrayCollapse: ISettingsLocale = {
   ...ArrayOperations,
-  title: 'Self increasing accordion',
+  title: 'Array Collapse',
 }

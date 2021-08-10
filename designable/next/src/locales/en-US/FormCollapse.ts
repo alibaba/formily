@@ -2,7 +2,7 @@ import type { ISettingsLocale } from '../types'
 
 export const FormCollapse: ISettingsLocale = {
   accordion: {
-    title: 'Accordion mode',
+    title: 'Accordion',
     tooltip: 'When enabled, only one can be expanded at a time',
   },
 }

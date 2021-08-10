@@ -5,12 +5,12 @@ export const NumberPicker: ISettingsLocale = {
     title: 'Type',
     dataSource: ['Normal', 'Inline'],
   },
-  precision: 'Keep the number of digits after the decimal point',
-  innerAfter: 'Suffix',
+  precision: 'Precision',
+  innerAfter: 'Inner After',
   device: {
-    title: 'Preset device',
-    dataSource: ['Desktop', 'Mobile phone', 'Flat'],
+    title: 'Preset Device',
+    dataSource: ['Desktop', 'Phone', 'Pad'],
   },
-  hasTrigger: 'Show click button',
-  alwaysShowTrigger: 'Always show click button (no hover required)',
+  hasTrigger: 'Trigger',
+  alwaysShowTrigger: 'Always Show Trigger',
 }

@@ -3,9 +3,9 @@ import type { ISettingsLocale } from '../types'
 const CommonDatePickerLocale: ISettingsLocale = {
   format: {
     title: 'Format',
-    placeholder: 'Such as yyyy-mm-dd',
+    placeholder: 'e.g. YYYY-MM-DD',
   },
-  showTime: 'Use time control',
+  showTime: 'Show Time',
   resetTime: 'Reset time on selection',
 }
 export const DatePicker: ISettingsLocale = {
@@ -16,6 +16,6 @@ DatePicker.RangePicker = {
   ...CommonDatePickerLocale,
   type: {
     title: 'Type',
-    dataSource: ['Day', 'Month', 'Year'],
+    dataSource: ['Date', 'Month', 'Year'],
   },
 }

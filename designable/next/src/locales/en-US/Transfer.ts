@@ -1,16 +1,16 @@
 import type { ISettingsLocale } from '../types'
 
 export const Transfer: ISettingsLocale = {
-  id: 'Identification',
+  id: 'Id',
   mode: {
-    title: 'Pattern',
+    title: 'Mode',
     dataSource: ['Normal', 'Simple'],
   },
-  leftDisabled: 'Disable left panel',
-  rightDisabled: 'Disable right panel',
-  filter: 'Filter function',
+  leftDisabled: 'Disable Left Panel',
+  rightDisabled: 'Disable Right Panel',
+  filter: 'Filter Function',
   searchPlaceholder: 'Search placeholder tips',
-  titles: 'Left and right panel titles',
-  sortable: 'Drag sort',
-  showCheckAll: 'Bottom select all',
+  titles: 'Titles',
+  sortable: 'Sortable',
+  showCheckAll: 'Show Check All',
 }

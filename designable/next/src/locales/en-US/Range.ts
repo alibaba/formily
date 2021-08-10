@@ -2,30 +2,31 @@ import type { ISettingsLocale } from '../types'
 
 export const Range: ISettingsLocale = {
   slider: {
-    title: 'Number of sliders',
-    dataSource: ['Single', 'Two'],
+    title: 'Slider',
+    dataSource: ['Single', 'Double'],
   },
   step: {
     title: 'Step',
-    tooltip: 'The value must be greater than 0 and can be divided by (max min)',
+    tooltip:
+      'The value must be greater than 0 and can be divided by (max - min)',
   },
   marks: {
-    title: 'Sign',
+    title: 'Marks',
     tooltip:
       'Scale value display logic (false means not to display, array enumeration shows the value, number means to divide equally by number, object means to divide by key, and value value is displayed)',
   },
   marksPosition: {
-    title: 'Mark position',
-    dataSource: ['Upper', 'Below'],
+    title: 'Marks Position',
+    dataSource: ['Top', 'Bottom'],
   },
-  hasTip: 'Show tips',
+  hasTip: 'Show Tips',
   reverse: {
     title: 'Reversal',
     tooltip: 'Selected state inversion',
   },
-  pure: 'Pure rendering',
+  pure: 'Pure Rendering',
   fixedWidth: {
-    title: 'Drag segment type',
+    title: 'Fixed Width',
   },
-  tooltipVisible: 'Default presentation tips',
+  tooltipVisible: 'Tooltips Visible',
 }

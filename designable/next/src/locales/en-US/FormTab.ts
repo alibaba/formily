@@ -6,28 +6,26 @@ export const FormTab: ISettingsLocale = {
     dataSource: ['Small', 'Medium', 'Inherit'],
   },
   shape: {
-    title: 'Appearance',
-    dataSource: ['Pure', 'Package', 'Text', 'Capsule'],
+    title: 'Shape',
+    dataSource: ['Pure', 'Wrapper', 'Text', 'Capsule'],
   },
-  animation: 'Animation transition',
+  animation: 'Transition',
   excessMode: {
-    title: 'Sliding mode',
+    title: 'Excess Mode',
     tooltip: 'Sliding mode when there are too many tabs',
-    dataSource: ['Slider', 'Drop down list'],
+    dataSource: ['Slider', 'Dropdown'],
   },
   tabPosition: {
-    title: 'Tab location',
-    tooltip:
-      'The location of the navigation tab, which applies only to tabs that look like parcels',
-    dataSource: ['Upper', 'Lower', 'Left', 'Right'],
+    title: 'Tab Position',
+    dataSource: ['Top', 'Bottom', 'Left', 'Right'],
   },
   triggerType: {
-    title: 'Tab activation method',
+    title: 'Trigger Type',
     tooltip: 'Trigger method of activation tab',
-    dataSource: ['Click', 'Move in'],
+    dataSource: ['Click', 'Hover'],
   },
   disableKeyboard: {
-    title: 'Disable keyboard switching',
+    title: 'Disable Keyboard',
     tooltip:
       'Disable keyboard events. after setting, you cannot switch the currently selected tab through the up, down, left and right keys of the keyboard',
   },

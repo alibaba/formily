@@ -1,39 +1,38 @@
 import type { ISettingsLocale } from '../types'
 
 export const Select: ISettingsLocale = {
-  placeholder: 'Space occupying prompt',
+  placeholder: 'Placeholder',
   autoWidth: {
-    title: 'Automatic width',
+    title: 'Auto width',
     tooltip: 'Is the drop-down menu aligned with the selector',
   },
-  filterLocal: 'Local filtering',
-  filter: 'Filtering method',
+  filterLocal: 'Local Filter',
+  filter: 'Filter Function',
   autoHighlightFirstItem: 'Auto highlight first item',
   mode: {
-    title: 'Pattern',
-    dataSource: ['Single choice', 'Multiple choice', 'Label'],
+    title: 'Mode',
+    dataSource: ['Single', 'Multiple', 'Tags'],
   },
   notFoundContent: {
-    title: 'No content prompt',
+    title: 'No Content Prompt',
     tooltip: 'Copy with empty bullet layer content',
   },
   showDataSourceChildren: {
-    title: 'Check auto clear',
-    tooltip: 'It is only supported in multi selection or label mode',
+    title: 'Show Data Source Children',
   },
-  hasSelectAll: 'Can i select all in multiple selection mode',
+  hasSelectAll: 'Can Select All',
   cacheValue: {
-    title: 'Cache selected values',
+    title: 'Cache Value',
     tooltip:
       'Do you want to keep the selected content when the data source changes',
   },
-  tagInline: 'Label in line display',
-  tagClosable: 'The label can be closed',
+  tagInline: 'Tag Inline',
+  tagClosable: 'Tag Closable',
   adjustTagSize: {
-    title: 'Resize label',
-    tooltip: 'Resize the label the same as the selector',
+    title: 'Adjust Tag Size',
+    tooltip: 'Adjust the tag the same as the selector',
   },
-  maxTagCount: 'Maximum number of display labels',
-  hiddenSelected: 'Hide menu immediately after selection',
-  popupAutoFocus: 'Auto focus on pop-up menu',
+  maxTagCount: 'Max Tag Count',
+  hiddenSelected: 'Hidden Selected',
+  popupAutoFocus: 'Popup Auto Focus',
 }

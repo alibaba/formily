@@ -5,6 +5,6 @@ export const Switch: ISettingsLocale = {
     title: 'Size',
     dataSource: ['Small', 'Medium', 'Inherit', 'Nothing'],
   },
-  checkedChildren: 'Content on open',
-  unCheckedChildren: 'Content when closing',
+  checkedChildren: 'Open Content',
+  unCheckedChildren: 'Close Content',
 }
