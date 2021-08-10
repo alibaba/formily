@@ -4,23 +4,24 @@ on:
   push:
     branches:
       - formily_next
-
 jobs:
   release:
+    runs-on: ubuntu-latest
     if: contains(github.event.head_commit.message, 'chore(versions)')
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 11
           registry-url: https://registry.npmjs.org/
       - run: |
           yarn -v
           yarn --ignore-engines
           yarn build
-          lerna publish from-package --yes --dist-tag next && ts-node scripts/release release
+          yarn run release:force
         env:
-          NODE_OPTIONS: --max_old_space_size=4096
+          HEADLESS: false
+          PROGRESS: none
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}

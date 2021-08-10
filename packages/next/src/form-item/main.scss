@@ -10,6 +10,10 @@
   line-height: $form-element-medium-height;
   font-size: $form-element-medium-font-size;
 
+  &-layout-vertical {
+    display: block;
+  }
+
   &-label-content {
     min-height: $form-element-medium-height;
   }
@@ -90,6 +94,7 @@
   .#{$form-item-cls}-label {
     label {
       white-space: pre-line;
+      word-break: break-all;
     }
   }
 }

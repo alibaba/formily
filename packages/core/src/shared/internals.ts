@@ -11,6 +11,7 @@ import {
   toArr,
   isNumberLike,
   shallowClone,
+  isEqual,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { batch, toJS, DataChange } from '@formily/reactive'
@@ -28,7 +29,6 @@ import {
 } from '../types'
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
 import { ReservedProperties, GlobalState } from './constants'
-import { isObjectField } from './checkers'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
@@ -411,40 +411,58 @@ export const cleanupObjectChildren = (field: ObjectField, keys: string[]) => {
   })
 }
 
-export const isEmptyWithField = (field: GeneralField, value: any) => {
-  if (isArrayField(field) || isObjectField(field)) {
-    return isEmpty(value, true)
-  }
-  return !isValid(value)
-}
-
 export const initFieldValue = (field: Field, designable: boolean) => {
   GlobalState.initializing = true
-  if (isEmptyWithField(field, field.initialValue)) {
-    if (isValid(field.props.initialValue)) {
-      field.initialValue = field.props.initialValue
-    }
-  }
-  if (isEmptyWithField(field, field.value)) {
-    const isEmptyValue = isEmptyWithField(field, field.props.value)
-    const isEmptyInitialValue = isEmptyWithField(
-      field,
-      field.props.initialValue
-    )
-    if (isEmptyValue && !isEmptyInitialValue) {
-      field.value = shallowClone(field.props.initialValue)
-    } else if (isValid(field.props.value)) {
-      field.value = field.props.value
-    } else if (isValid(field.props.initialValue)) {
-      field.value = shallowClone(field.props.initialValue)
-    }
-  }
   if (designable) {
     if (isValid(field.props.initialValue)) {
       field.initialValue = shallowClone(field.props.initialValue)
     }
     if (isValid(field.props.value)) {
       field.value = field.props.value
+    }
+  } else {
+    const fromValue = (value: any) => [
+      isValid(value),
+      isEmpty(value, true),
+      value,
+    ]
+    const [, isEmptySelfValue, selfValue] = fromValue(field.value)
+    const [, isEmptySelfInitialValue, selfInitialValue] = fromValue(
+      field.initialValue
+    )
+    const [isValidPropsValue, isEmptyPropsValue, propsValue] = fromValue(
+      field.props.value
+    )
+    const [
+      isValidPropsInitialValue,
+      isEmptyPropsInitialValue,
+      propsInitialValue,
+    ] = fromValue(field.props.initialValue)
+    if (isEmptySelfInitialValue) {
+      if (isEmptyPropsInitialValue) {
+        if (!isEqual(selfInitialValue, propsInitialValue)) {
+          field.initialValue = shallowClone(propsInitialValue)
+        }
+      } else if (isValidPropsInitialValue) {
+        field.initialValue = shallowClone(propsInitialValue)
+      }
+    }
+    if (isEmptySelfValue) {
+      if (!isEmptyPropsValue) {
+        field.value = shallowClone(propsValue)
+      } else {
+        if (!isEmptyPropsInitialValue) {
+          field.value = shallowClone(propsInitialValue)
+        } else if (isValidPropsValue) {
+          if (!isEqual(selfValue, propsValue)) {
+            field.value = shallowClone(propsValue)
+          }
+        } else if (isValidPropsInitialValue) {
+          if (!isEqual(selfValue, propsInitialValue)) {
+            field.value = shallowClone(propsInitialValue)
+          }
+        }
+      }
     }
   }
   GlobalState.initializing = false

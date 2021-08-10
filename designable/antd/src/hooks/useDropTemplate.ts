@@ -20,7 +20,7 @@ export const useDropTemplate = (
         ) &&
         target.children.length === 0
       ) {
-        target.setNodeChildren(...getChildren(source))
+        target.setChildren(...getChildren(source))
         return false
       }
     })

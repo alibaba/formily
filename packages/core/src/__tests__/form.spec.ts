@@ -1167,3 +1167,37 @@ test('exception validate', async () => {
   expect(form.invalid).toBeTruthy()
   expect(form.validating).toBeFalsy()
 })
+
+test('designable form', () => {
+  const form = attach(
+    createForm({
+      designable: true,
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      initialValue: 123,
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      initialValue: 321,
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      value: 123,
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      value: 321,
+    })
+  )
+  expect(form.values.aa).toEqual(321)
+  expect(form.initialValues.bb).toEqual(321)
+})

@@ -102,7 +102,12 @@ const App = () => {
   useEffect(() => {
     //业务层拿到schema用于回显数据
     fetchSchema().then((schema) => {
-      engine.setCurrentTree(transformToTreeNode(schema))
+      engine.setCurrentTree(
+        transformToTreeNode(schema, {
+          designableFieldName: 'DesignableField',
+          designableFormName: 'Root',
+        })
+      )
     })
   }, [])
 
@@ -114,7 +119,10 @@ const App = () => {
           <Button
             onClick={() => {
               submitSchema({
-                schema: transformToSchema(engine.getCurrentTree()),
+                schema: transformToSchema(engine.getCurrentTree(), {
+                  designableFieldName: 'DesignableField',
+                  designableFormName: 'Root',
+                }),
               })
             }}
           >

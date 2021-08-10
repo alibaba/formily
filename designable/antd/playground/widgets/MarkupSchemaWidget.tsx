@@ -15,7 +15,8 @@ const transformToMarkupSchemaCode = (tree: TreeNode) => {
         if (
           key === '_designableId' ||
           key === '_isJSONSchemaObject' ||
-          key === 'version'
+          key === 'version' ||
+          key === 'type'
         )
           return ''
         const value = node.props[key]
@@ -33,11 +34,22 @@ const transformToMarkupSchemaCode = (tree: TreeNode) => {
       })
       .join('')
   }
+  const printTag = (node: TreeNode) => {
+    if (node.props.type === 'string') return 'SchemaField.String'
+    if (node.props.type === 'number') return 'SchemaField.Number'
+    if (node.props.type === 'boolean') return 'SchemaField.Boolean'
+    if (node.props.type === 'date') return 'SchemaField.Date'
+    if (node.props.type === 'datetime') return 'SchemaField.DateTime'
+    if (node.props.type === 'array') return 'SchemaField.Array'
+    if (node.props.type === 'object') return 'SchemaField.Object'
+    if (node.props.type === 'void') return 'SchemaField.Void'
+    return 'SchemaField.Markup'
+  }
   const printNode = (node: TreeNode) => {
     if (!node) return ''
-    return `<SchemaField.Markup ${printAttribute(node)} ${
+    return `<${printTag(node)} ${printAttribute(node)} ${
       node.children.length
-        ? `>${printChildren(node)}</SchemaField.Markup>`
+        ? `>${printChildren(node)}</${printTag(node)}>`
         : '/>'
     }`
   }
