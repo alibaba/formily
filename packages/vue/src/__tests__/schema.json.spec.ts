@@ -1,6 +1,6 @@
-import { createForm } from '@formily/core'
+import { createForm, isField } from '@formily/core'
 import { Schema } from '@formily/json-schema'
-import { render } from '@testing-library/vue'
+import { render, waitFor } from '@testing-library/vue'
 import Vue, { FunctionalComponentOptions } from 'vue'
 import { FormProvider, createSchemaField } from '../vue2-components'
 
@@ -13,6 +13,21 @@ const Input: FunctionalComponentOptions = {
       attrs: {
         value: context.props.value,
         'data-testid': 'input',
+      },
+      on: {
+        input: context.listeners.change,
+      },
+    })
+  },
+}
+
+const Input2: FunctionalComponentOptions = {
+  functional: true,
+  render(h, context) {
+    return h('input', {
+      attrs: {
+        value: context.props.value,
+        'data-testid': 'input2',
       },
       on: {
         input: context.listeners.change,
@@ -294,5 +309,105 @@ describe('x-content', () => {
     })
     expect(queryByTestId('previewer2')).toBeVisible()
     expect(queryByTestId('previewer2').textContent).toEqual('123')
+  })
+})
+
+describe('scope', () => {
+  test('scope in <SchemaField> prop', async () => {
+    const form = createForm()
+    const { SchemaField } = createSchemaField({
+      components: {
+        Input,
+        Input2,
+        Previewer,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: {
+            type: 'object',
+            properties: {
+              input1: {
+                type: 'string',
+                'x-component': 'Input',
+                'x-reactions': {
+                  target: 'input2',
+                  fulfill: {
+                    state: {
+                      value: '{{ test }}',
+                    },
+                  },
+                },
+              },
+              input2: {
+                type: 'string',
+                'x-component': 'Input2',
+              },
+            },
+          },
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          :schema="schema"
+          :scope="{
+            test: '123'
+          }"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('input2').getAttribute('value')).toEqual('123')
+  })
+
+  test('scope in options of createSchemaField', async () => {
+    const form = createForm()
+    const { SchemaField } = createSchemaField({
+      components: {
+        Input,
+        Input2,
+        Previewer,
+      },
+      scope: {
+        test: '123',
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: {
+            type: 'object',
+            properties: {
+              input1: {
+                type: 'string',
+                'x-component': 'Input',
+                'x-reactions': {
+                  target: 'input2',
+                  fulfill: {
+                    state: {
+                      value: '{{ test }}',
+                    },
+                  },
+                },
+              },
+              input2: {
+                type: 'string',
+                'x-component': 'Input2',
+              },
+            },
+          },
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('input2').getAttribute('value')).toEqual('123')
   })
 })
