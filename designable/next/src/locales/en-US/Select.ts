@@ -1,38 +1,39 @@
 import type { ISettingsLocale } from '../types'
 
 export const Select: ISettingsLocale = {
-  placeholder: '占位提示',
+  placeholder: 'Space occupying prompt',
   autoWidth: {
-    title: '自动宽度',
-    tooltip: '下拉菜单是否与选择器对齐',
+    title: 'Automatic width',
+    tooltip: 'Is the drop-down menu aligned with the selector',
   },
-  filterLocal: '本地过滤',
-  filter: '过滤方法',
-  autoHighlightFirstItem: '自动高亮首项',
+  filterLocal: 'Local filtering',
+  filter: 'Filtering method',
+  autoHighlightFirstItem: 'Auto highlight first item',
   mode: {
-    title: '模式',
-    dataSource: ['单选', '多选', '标签'],
+    title: 'Pattern',
+    dataSource: ['Single choice', 'Multiple choice', 'Label'],
   },
   notFoundContent: {
-    title: '无内容提示',
-    tooltip: '弹层内容为空的文案',
+    title: 'No content prompt',
+    tooltip: 'Copy with empty bullet layer content',
   },
   showDataSourceChildren: {
-    title: '选中自动清除',
-    tooltip: '仅在多选或者标签模式下支持',
+    title: 'Check auto clear',
+    tooltip: 'It is only supported in multi selection or label mode',
   },
-  hasSelectAll: '多选模式下是否可全选',
+  hasSelectAll: 'Can i select all in multiple selection mode',
   cacheValue: {
-    title: '缓存选中值',
-    tooltip: '数据源变化的时是否保留已选的内容',
+    title: 'Cache selected values',
+    tooltip:
+      'Do you want to keep the selected content when the data source changes',
   },
-  tagInline: '标签行内展示',
-  tagClosable: '标签可关闭',
+  tagInline: 'Label in line display',
+  tagClosable: 'The label can be closed',
   adjustTagSize: {
-    title: '调整标签大小',
-    tooltip: '调整标签大小与选择器相同',
+    title: 'Resize label',
+    tooltip: 'Resize the label the same as the selector',
   },
-  maxTagCount: '最多展示标签数量',
-  hiddenSelected: '选择后立即隐藏菜单',
-  popupAutoFocus: '弹出菜单时自动聚焦',
+  maxTagCount: 'Maximum number of display labels',
+  hiddenSelected: 'Hide menu immediately after selection',
+  popupAutoFocus: 'Auto focus on pop-up menu',
 }

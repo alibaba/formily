@@ -2,30 +2,30 @@ import type { ISettingsLocale } from '../types'
 
 export const Range: ISettingsLocale = {
   slider: {
-    title: '滑块个数',
-    dataSource: ['单个', '两个'],
+    title: 'Number of sliders',
+    dataSource: ['Single', 'Two'],
   },
   step: {
-    title: '步长',
-    tooltip: '取值必须大于 0，并且可被 (最大值 - 最小值) 整除',
+    title: 'Step',
+    tooltip: 'The value must be greater than 0 and can be divided by (max min)',
   },
   marks: {
-    title: '标记',
+    title: 'Sign',
     tooltip:
-      '刻度数值显示逻辑（false 代表不显示，array 枚举显示的值，number 代表按 number 平分，object 表示按 key 划分，value 值显示）',
+      'Scale value display logic (false means not to display, array enumeration shows the value, number means to divide equally by number, object means to divide by key, and value value is displayed)',
   },
   marksPosition: {
-    title: '标记位置',
-    dataSource: ['上方', '下方'],
+    title: 'Mark position',
+    dataSource: ['Upper', 'Below'],
   },
-  hasTip: '显示提示',
+  hasTip: 'Show tips',
   reverse: {
-    title: '反转',
-    tooltip: '选中态反转',
+    title: 'Reversal',
+    tooltip: 'Selected state inversion',
   },
-  pure: '纯净渲染',
+  pure: 'Pure rendering',
   fixedWidth: {
-    title: '是否为拖动线段类型',
+    title: 'Drag segment type',
   },
-  tooltipVisible: '默认展示提示',
+  tooltipVisible: 'Default presentation tips',
 }

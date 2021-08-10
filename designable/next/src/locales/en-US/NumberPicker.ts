@@ -2,15 +2,15 @@ import type { ISettingsLocale } from '../types'
 
 export const NumberPicker: ISettingsLocale = {
   type: {
-    title: '类型',
-    dataSource: ['正常', '内联'],
+    title: 'Type',
+    dataSource: ['Normal', 'Inline'],
   },
-  precision: '保留小数点后位数',
-  innerAfter: '后缀',
+  precision: 'Keep the number of digits after the decimal point',
+  innerAfter: 'Suffix',
   device: {
-    title: '预设设备',
-    dataSource: ['桌面', '手机', '平板'],
+    title: 'Preset device',
+    dataSource: ['Desktop', 'Mobile phone', 'Flat'],
   },
-  hasTrigger: '展示点击按钮',
-  alwaysShowTrigger: '一直展示点击按钮（无需hover）',
+  hasTrigger: 'Show click button',
+  alwaysShowTrigger: 'Always show click button (no hover required)',
 }

@@ -4,18 +4,23 @@ import type { ISettingsLocale } from '../types'
 export const TreeSelect: ISettingsLocale = {
   ...Select,
   treeCheckable: {
-    title: '勾选树',
-    tooltip: '下拉框中的树是否支持勾选节点的复选框',
+    title: 'Check tree',
+    tooltip:
+      'Whether the tree in the drop-down box supports checking the check box of the node',
   },
   treeCheckStrictly: {
-    title: '严格树勾选',
+    title: 'Strict tree check',
     tooltip:
-      '下拉框中的树勾选节点复选框是否完全受控（父子节点选中状态不再关联）',
+      'Check whether the node check box in the tree in the drop-down box is completely controlled (the selected status of parent and child nodes is no longer associated)',
   },
   treeCheckedStrategy: {
-    title: '勾选树策略',
-    tooltip: '选中时回填的方式',
-    dataSource: ['只返回父节点', '只返回子节点', '返回所有选中的节点'],
+    title: 'Tick tree strategy',
+    tooltip: 'How to backfill when selected',
+    dataSource: [
+      'Return only parent nodes',
+      'Return only child nodes',
+      'Returns all selected nodes',
+    ],
   },
-  treeDefaultExpandAll: '默认展开所有节点',
+  treeDefaultExpandAll: 'Expand all nodes by default',
 }

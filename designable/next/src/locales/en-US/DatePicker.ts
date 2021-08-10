@@ -2,11 +2,11 @@ import type { ISettingsLocale } from '../types'
 
 const CommonDatePickerLocale: ISettingsLocale = {
   format: {
-    title: '格式',
-    placeholder: '如 YYYY-MM-DD',
+    title: 'Format',
+    placeholder: 'Such as yyyy-mm-dd',
   },
-  showTime: '使用时间控件',
-  resetTime: '选择时重置时间',
+  showTime: 'Use time control',
+  resetTime: 'Reset time on selection',
 }
 export const DatePicker: ISettingsLocale = {
   ...CommonDatePickerLocale,
@@ -15,7 +15,7 @@ export const DatePicker: ISettingsLocale = {
 DatePicker.RangePicker = {
   ...CommonDatePickerLocale,
   type: {
-    title: '类型',
-    dataSource: ['日', '月', '年'],
+    title: 'Type',
+    dataSource: ['Day', 'Month', 'Year'],
   },
 }

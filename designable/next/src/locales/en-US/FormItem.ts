@@ -3,9 +3,9 @@ import type { ISettingsLocale } from '../types'
 
 export const FormItem: ISettingsLocale = {
   ...FormLayout,
-  addonBefore: '前缀',
-  addonAfter: '后缀',
-  tooltip: '提示',
-  asterisk: '星号',
-  gridSpan: '网格跨列',
+  addonBefore: 'Prefix',
+  addonAfter: 'Suffix',
+  tooltip: 'Tips',
+  asterisk: 'Asterisk',
+  gridSpan: 'Grid cross column',
 }

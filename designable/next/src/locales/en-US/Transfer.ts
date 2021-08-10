@@ -1,16 +1,16 @@
 import type { ISettingsLocale } from '../types'
 
 export const Transfer: ISettingsLocale = {
-  id: '标识',
+  id: 'Identification',
   mode: {
-    title: '模式',
-    dataSource: ['正常', '简单'],
+    title: 'Pattern',
+    dataSource: ['Normal', 'Simple'],
   },
-  leftDisabled: '禁用左侧面板',
-  rightDisabled: '禁用右侧面板',
-  filter: '过滤函数',
-  searchPlaceholder: '搜索占位提示',
-  titles: '左右面板标题',
-  sortable: '拖拽排序',
-  showCheckAll: '底部全选',
+  leftDisabled: 'Disable left panel',
+  rightDisabled: 'Disable right panel',
+  filter: 'Filter function',
+  searchPlaceholder: 'Search placeholder tips',
+  titles: 'Left and right panel titles',
+  sortable: 'Drag sort',
+  showCheckAll: 'Bottom select all',
 }

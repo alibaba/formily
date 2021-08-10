@@ -2,10 +2,10 @@ import type { ISettingsLocale } from '../types'
 
 export const Cascader: ISettingsLocale = {
   expandTriggerType: {
-    title: '展开触发方式',
-    dataSource: ['点击', '移入'],
+    title: 'Expand trigger method',
+    dataSource: ['Click', 'Move in'],
   },
-  canOnlySelectLeaf: '单选只能选叶节点',
-  canOnlyCheckLeaf: '多选只能选叶节点',
-  checkStrictly: '父子节点选中不关联',
+  canOnlySelectLeaf: 'Single selection can only select leaf nodes',
+  canOnlyCheckLeaf: 'Multiple selection can only select leaf nodes',
+  checkStrictly: 'Parent and child nodes selected are not associated',
 }

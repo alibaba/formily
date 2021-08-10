@@ -1,32 +1,34 @@
 import type { ISettingsLocale } from '../types'
 
 export const Input: ISettingsLocale = {
-  showLimitHint: '长度限制提示',
+  showLimitHint: 'Length limit prompt',
   cutString: {
-    title: '截断',
-    tooltip: '当设置最大长度后，超出是否截断字符串',
+    title: 'Truncation',
+    tooltip:
+      'When the maximum length is set, whether to truncate the string is exceeded',
   },
   trim: {
-    title: '修剪',
-    tooltip: '移除首尾空格',
+    title: 'Trim',
+    tooltip: 'Remove leading and trailing spaces',
   },
-  composition: '过滤输入法中间字母',
+  composition: 'Filter ime middle letters',
   hint: {
-    title: '水印',
-    tooltip: '值取自 Icon 的 type，与清除按钮在同一位置',
+    title: 'Watermark',
+    tooltip:
+      'The value is taken from the type of icon and is in the same position as the clear button',
   },
-  innerBefore: '框内前缀',
-  innerAfter: '框内后缀',
-  addonTextBefore: '前缀标签',
-  addonTextAfter: '后缀标签',
+  innerBefore: 'In box prefix',
+  innerAfter: 'In box suffix',
+  addonTextBefore: 'Prefix label',
+  addonTextAfter: 'Suffix label',
 }
 
 Input.TextArea = {
   ...Input,
   state: {
-    title: '状态',
-    dataSource: ['正常', '错误', '警告'],
+    title: 'State',
+    dataSource: ['Normal', 'Error', 'Warning'],
   },
-  autoHeight: '自动高度',
-  rows: '文本框高度',
+  autoHeight: 'Automatic height',
+  rows: 'Text box height',
 }
