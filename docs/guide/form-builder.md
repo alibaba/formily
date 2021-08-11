@@ -213,7 +213,7 @@ interface IDesignableFieldFactoryProps {
   inlineChildrenLayoutComponents?: ComponentNameMatcher[] //Identify which canvas component's child component layout mode is inline mode
   inlineLayoutComponents?: ComponentNameMatcher[] //Identify which canvas components are in inline mode
   restrictChildrenComponents?: Record<string, ComponentNameMatcher[]> //Node constraints, identify the upper and lower constraints between canvas components, for example, the child nodes of A component can only be B/C components
-  restrictSiblingsComponents?: Record<string, ComponentNameMatcher[]> //Node constraint, identifies the adjacent constraint relationship of canvas components, for example, adjacent nodes of component A can only be B/C components
+  restrictSiblingComponents?: Record<string, ComponentNameMatcher[]> //Node constraint, identifies the adjacent constraint relationship of canvas components, for example, adjacent nodes of component A can only be B/C components
 }
 
 interface createDesignableField {

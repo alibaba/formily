@@ -107,7 +107,7 @@ export const createOptions = (
       ArrayTable: [allowDropWithEmpty, isObjectNode, 'ArrayTable.Addition'],
       'ArrayTable.Column': [isNotArrayColumn],
     },
-    restrictSiblingsComponents: {
+    restrictSiblingComponents: {
       'FormTab.TabPane': ['FormTab.TabPane'],
       'FormCollapse.CollapsePanel': [
         allowDropWithEmpty,

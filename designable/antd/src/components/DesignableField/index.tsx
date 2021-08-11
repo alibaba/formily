@@ -228,12 +228,12 @@ export const createDesignableField = (
 
   const calculateSiblingsRestricts = (target: TreeNode, source: TreeNode[]) => {
     const targetComponent = target.props['x-component']
-    const restrictSiblingsComponents =
-      realOptions.restrictSiblingsComponents?.[targetComponent]
-    if (restrictSiblingsComponents?.length) {
+    const restrictSiblingComponents =
+      realOptions.restrictSiblingComponents?.[targetComponent]
+    if (restrictSiblingComponents?.length) {
       if (
         source.every((node) =>
-          includesComponent(node, restrictSiblingsComponents, target)
+          includesComponent(node, restrictSiblingComponents, target)
         )
       ) {
         return true
