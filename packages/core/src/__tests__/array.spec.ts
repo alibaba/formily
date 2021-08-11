@@ -394,3 +394,76 @@ test('array field remove memo leak', async () => {
   expect(handler).toBeCalledTimes(1)
   expect(valuesChange).toBeCalledTimes(4)
 })
+
+test('nest array remove', async () => {
+  const form = attach(createForm())
+
+  const metrics = attach(
+    form.createArrayField({
+      name: 'metrics',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'metrics',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: '1',
+      basePath: 'metrics',
+    })
+  )
+
+  attach(
+    form.createArrayField({
+      name: 'content',
+      basePath: 'metrics.0',
+    })
+  )
+
+  attach(
+    form.createArrayField({
+      name: 'content',
+      basePath: 'metrics.1',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'metrics.0.content',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'metrics.1.content',
+    })
+  )
+
+  attach(
+    form.createField({
+      name: 'attr',
+      basePath: 'metrics.0.content.0',
+      initialValue: '123',
+    })
+  )
+
+  attach(
+    form.createField({
+      name: 'attr',
+      basePath: 'metrics.1.content.0',
+      initialValue: '123',
+    })
+  )
+
+  await (form.query('metrics.1.content').take() as any).remove(0)
+  expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
+  await metrics.remove(1)
+  expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
+})
