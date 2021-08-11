@@ -56,13 +56,11 @@ export const autorun = (tracker: Reaction, name = 'AutoRun') => {
       cursor: 0,
     }
   }
-  reaction._disposed = false
   reaction._boundary = 0
   reaction._name = name
   cleanRefs()
   reaction()
   return () => {
-    reaction._disposed = true
     disposeBindingReactions(reaction)
     disposeEffects(reaction)
     cleanRefs()
