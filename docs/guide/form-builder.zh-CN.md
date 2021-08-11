@@ -213,6 +213,7 @@ interface IDesignableFieldFactoryProps {
   inlineChildrenLayoutComponents?: ComponentNameMatcher[] //标识哪些画布组件的子组件布局模式是内联模式
   inlineLayoutComponents?: ComponentNameMatcher[] //标识哪些画布组件本身是内联模式
   restrictChildrenComponents?: Record<string, ComponentNameMatcher[]> //节点约束，标识画布组件之间的上下级约束关系，比如A组件的子节点只能是B/C组件
+  restrictSiblingsComponents?: Record<string, ComponentNameMatcher[]> //节点约束，标识画布组件相邻约束关系，比如A组件的相邻节点只能是B/C组件
 }
 
 interface createDesignableField {

@@ -10,4 +10,5 @@ export interface IDesignableFieldFactoryProps {
   inlineChildrenLayoutComponents?: ComponentNameMatcher[]
   inlineLayoutComponents?: ComponentNameMatcher[]
   restrictChildrenComponents?: Record<string, ComponentNameMatcher[]>
+  restrictSiblingsComponents?: Record<string, ComponentNameMatcher[]>
 }
