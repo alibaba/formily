@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.0.0-beta.88(2021-08-09)
+
+### :tada: Enhancements
+
+1. [feat(designable-antd): support HistoryWidget](https://github.com/alibaba/formily/commit/8b0705e8) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix euqal initial empty value will trigger change (#1967)](https://github.com/alibaba/formily/commit/4ccf4e41) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(antd/next): fix FormItem styles (#1966)](https://github.com/alibaba/formily/commit/b4d10955) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore(designable): improve markup printer](https://github.com/alibaba/formily/commit/9233f99d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/278e496d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.87(2021-08-05)
 
 ### :blush: Other Changes
@@ -1041,11 +1059,3 @@
 1. [fix: docs typo (#1012)](https://github.com/alibaba/formily/commit/3ffb1731) :point_right: ( [Tianci He](https://github.com/Tianci He) )
 
 1. [fix(antd-components): missing 'key' prop warning when table draggable (#1011)](https://github.com/alibaba/formily/commit/a69cdad1) :point_right: ( [daief](https://github.com/daief) )
-
-## v1.3.2(2020-09-07)
-
-### :beetle: Bug Fixes
-
-1. [fix(shared): Fix merge undefined is not work (#1009)](https://github.com/alibaba/formily/commit/40489ac1) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix: compat legal props (#1007)](https://github.com/alibaba/formily/commit/5dde72ae) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )

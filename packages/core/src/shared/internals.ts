@@ -255,11 +255,12 @@ export const spliceArrayState = (
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return false
     const index = Number(number)
-    const target = `${preStr}${afterStr.replace(
-      /^\.\d+/,
-      `.${index + deleteCount}`
-    )}`
-    return !fields[target]
+    return (
+      index >= startIndex &&
+      !fields[
+        `${preStr}${afterStr.replace(/^\.\d+/, `.${index + deleteCount}`)}`
+      ]
+    )
   }
   const moveIndex = (identifier: string) => {
     if (offset === 0) return identifier
