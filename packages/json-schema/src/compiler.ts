@@ -6,15 +6,17 @@ const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/
 const actionsSymbol = Symbol.for('__REVA_ACTIONS')
 const ENVS = {
   silent: false,
-  compile(expression: string, scope: any) {
-    const vars = Object.keys(scope || {})
-    const params = vars.map((key) => scope[key])
+  compile(expression: string, scope = {}) {
     if (ENVS.silent) {
       try {
-        return new Function(...vars, `return (${expression});`)(...params)
+        return new Function('$root', `with($root) { return (${expression}); }`)(
+          scope
+        )
       } catch {}
     } else {
-      return new Function(...vars, `return (${expression});`)(...params)
+      return new Function('$root', `with($root) { return (${expression}); }`)(
+        scope
+      )
     }
   },
 }
