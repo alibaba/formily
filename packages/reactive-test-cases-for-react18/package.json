@@ -1,6 +1,6 @@
 {
   "name": "@formily/reactive-test-cases-for-react18",
-  "version": "2.0.0-beta.88",
+  "version": "2.0.0-beta.89",
   "license": "MIT",
   "private": true,
   "repository": {
@@ -36,8 +36,8 @@
     "react-is": "next"
   },
   "dependencies": {
-    "@formily/reactive": "2.0.0-beta.88",
-    "@formily/reactive-react": "2.0.0-beta.88",
+    "@formily/reactive": "2.0.0-beta.89",
+    "@formily/reactive-react": "2.0.0-beta.89",
     "react": "next",
     "react-dom": "next",
     "react-is": "next"
