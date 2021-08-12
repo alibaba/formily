@@ -208,7 +208,7 @@ export const createDesignableField = (
     return base
   }
 
-  const calculateRestricts = (target: TreeNode, source: TreeNode[]) => {
+  const calculateChildrenRestricts = (target: TreeNode, source: TreeNode[]) => {
     const targetComponent = target.props['x-component']
     const restrictChildrenComponents =
       realOptions.restrictChildrenComponents?.[targetComponent]
@@ -216,6 +216,23 @@ export const createDesignableField = (
       if (
         source.every((node) =>
           includesComponent(node, restrictChildrenComponents, target)
+        )
+      ) {
+        return true
+      }
+      return false
+    }
+    return true
+  }
+
+  const calculateSiblingsRestricts = (target: TreeNode, source: TreeNode[]) => {
+    const targetComponent = target.props['x-component']
+    const restrictSiblingComponents =
+      realOptions.restrictSiblingComponents?.[targetComponent]
+    if (restrictSiblingComponents?.length) {
+      if (
+        source.every((node) =>
+          includesComponent(node, restrictSiblingComponents, target)
         )
       ) {
         return true
@@ -259,12 +276,15 @@ export const createDesignableField = (
           node,
           realOptions.inlineChildrenLayoutComponents
         ),
+        allowSiblings(target, source) {
+          return calculateSiblingsRestricts(target, source)
+        },
         allowAppend(target, source) {
           return (
             (target.props.type === 'void' ||
               target.props.type === 'array' ||
               target.props.type === 'object') &&
-            calculateRestricts(target, source)
+            calculateChildrenRestricts(target, source)
           )
         },
         propsSchema: getFieldPropsSchema(node),

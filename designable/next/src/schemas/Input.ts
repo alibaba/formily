@@ -121,12 +121,6 @@ Input.TextArea = {
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
-    state: {
-      type: 'string',
-      enum: [null, 'error', 'warning'],
-      'x-decorator': 'FormItem',
-      'x-component': 'Select',
-    },
     composition: {
       type: 'boolean',
       'x-decorator': 'FormItem',
