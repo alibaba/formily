@@ -1167,17 +1167,6 @@
     "@formily/reactive" "^2.0.0-beta.84"
     "@juggle/resize-observer" "^3.3.1"
 
-"@designable/core@^0.1.10":
-  version "0.1.51"
-  resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.1.51.tgz#8c0ddfe7e3bdee5a7f3bf0f403aea720b4a54cf2"
-  integrity sha512-7gq8+vcjrSg+d3erAmiHxsInL67NFpCJgtQvdU5BHkWjFBVZcdyeLZw2eTP2yyoYCJ4sTjityFN1Xw7hbs+bHw==
-  dependencies:
-    "@designable/shared" "0.1.51"
-    "@formily/json-schema" "^2.0.0-beta.50"
-    "@formily/path" "^2.0.0-beta.50"
-    "@formily/reactive" "^2.0.0-beta.50"
-    "@juggle/resize-observer" "^3.3.1"
-
 "@designable/formily@^0.4.34":
   version "0.4.34"
   resolved "https://registry.yarnpkg.com/@designable/formily/-/formily-0.4.34.tgz#d73c34c925d6c40d9438130d2482e3bcc2e217a1"
@@ -1220,13 +1209,6 @@
     "@formily/reactive-react" "^2.0.0-beta.84"
     "@juggle/resize-observer" "^3.3.1"
     dateformat "^4.5.1"
-
-"@designable/shared@0.1.51":
-  version "0.1.51"
-  resolved "https://registry.yarnpkg.com/@designable/shared/-/shared-0.1.51.tgz#8fcfee4450242744a9b14c204580a9ad2f3d6a46"
-  integrity sha512-09vbep5T2raVynQY68qymXz/6w0afj6TKyrLfCj1x/HJeRe6Ncrbg87J5rWa+Liq0sA8hEFa4Brd2o0QTTN90A==
-  dependencies:
-    requestidlecallback "^0.3.0"
 
 "@designable/shared@0.4.34":
   version "0.4.34"
