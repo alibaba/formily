@@ -2,10 +2,10 @@ import type { ISettingsLocale } from '../types'
 
 export const Cascader: ISettingsLocale = {
   expandTriggerType: {
-    title: 'Expand Trigger Method',
+    title: 'Expand Trigger',
     dataSource: ['Click', 'Hover'],
   },
-  canOnlySelectLeaf: 'Can Only Select Leaf',
-  canOnlyCheckLeaf: 'Can Only Check Leaf',
-  checkStrictly: 'Parent and child nodes selected are not associated',
+  canOnlySelectLeaf: 'Only Select Leaf',
+  canOnlyCheckLeaf: 'Only Check Leaf',
+  checkStrictly: 'Check Strictly',
 }

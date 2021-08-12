@@ -17,9 +17,9 @@ export const TreeSelect: ISettingsLocale = {
     title: 'Tree Checked Strategy',
     tooltip: 'How to backfill when selected',
     dataSource: [
-      'Return only parent nodes',
-      'Return only child nodes',
-      'Returns all selected nodes',
+      'Return only parents',
+      'Return only children',
+      'Returns all selected',
     ],
   },
   treeDefaultExpandAll: 'Expand All By Default',

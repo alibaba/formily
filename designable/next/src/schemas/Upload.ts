@@ -60,6 +60,14 @@ export const Upload: ISchema & { Dragger?: ISchema } = {
         optionType: 'button',
       },
     },
+    request: {
+      'x-decorator': 'FormItem',
+      'x-component': 'ValueInput',
+      'x-component-props': {
+        include: ['EXPRESSION'],
+        helpCode: `// Function(option: Object) => Object`,
+      },
+    },
     name: {
       type: 'string',
       'x-decorator': 'FormItem',

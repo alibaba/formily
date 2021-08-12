@@ -31,6 +31,10 @@ export const NumberPicker: ISchema = {
       type: 'number',
       'x-decorator': 'FormItem',
       'x-component': 'NumberPicker',
+      'x-component-props': {
+        min: 0,
+        precision: 0,
+      },
     },
     autoFocus: {
       type: 'boolean',
@@ -66,14 +70,20 @@ export const NumberPicker: ISchema = {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
-      'x-component-props': {
-        defaultChecked: true,
-      },
+      default: true,
     },
     alwaysShowTrigger: {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      'x-reactions': {
+        dependencies: ['.hasTrigger'],
+        fulfill: {
+          state: {
+            visible: '{{$deps[0]}}',
+          },
+        },
+      },
     },
   },
 }

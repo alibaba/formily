@@ -12,10 +12,10 @@ export const FormLayout: ISettingsLocale = {
   },
   layout: {
     title: 'Layout',
-    dataSource: ['Vertical', 'Horizontal', 'Inline', 'Inherit'],
+    dataSource: ['Horizontal', 'Vertical', 'Inline', 'Inherit'],
   },
   tooltipLayout: {
-    title: 'Prompt layout',
+    title: 'Tooltip Layout',
     dataSource: ['Icon', 'Text', 'Inherit'],
   },
   labelAlign: {

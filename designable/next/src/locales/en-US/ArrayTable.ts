@@ -8,14 +8,18 @@ export const ArrayTable: ISettingsLocale = {
   },
   size: {
     title: 'Size',
-    dataSource: ['Small', 'Medium', 'Inherit', 'Nothing'],
+    dataSource: ['Small', 'Medium', 'Inherit', 'None'],
   },
   tableWidth: 'Table Width',
   hasHeader: 'Header',
   isZebra: 'Zebra',
   emptyContent: 'Empty Content',
   fixedHeader: 'Fixed Header',
-  maxBodyHeight: 'Max Body Height',
+  maxBodyHeight: {
+    title: 'Max Body Height',
+    tooltip:
+      'When Fixed Header is enabled, scroll bars will appear when the height exceeds this height',
+  },
   stickyHeader: 'Sticky Header',
 }
 
@@ -26,11 +30,12 @@ ArrayTable.Column = {
   },
   alignHeader: {
     title: 'Header alignment',
-    tooltip: 'If not set, the alignment will be the same as that of the cell',
-    dataSource: ['Left', 'Medium', 'Right'],
+    tooltip:
+      'If not set, the alignment will be the same as that of the Cell Alignment',
+    dataSource: ['Left', 'Center', 'Right'],
   },
   lock: {
-    title: 'Lock',
+    title: 'Lock Column',
     dataSource: ['None', 'Left', 'Right', 'Lock'],
   },
   colSpan: 'Col Span',

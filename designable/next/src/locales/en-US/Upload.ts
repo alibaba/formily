@@ -15,7 +15,8 @@ export const Upload: ISettingsLocale = {
     title: 'Upload Method',
     dataSource: ['POST', 'PUT'],
   },
-  name: 'Name',
+  request: 'Custom Upload Function',
+  name: 'Name Key',
   listType: {
     title: 'Upload List Type',
     dataSource: ['Default', 'Text', 'Image', 'Card'],

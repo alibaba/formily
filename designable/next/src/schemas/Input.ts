@@ -83,6 +83,11 @@ export const Input: ISchema & { TextArea?: ISchema } = {
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
+    autoFocus: {
+      type: 'boolean',
+      'x-decorator': 'FormItem',
+      'x-component': 'Switch',
+    },
   },
 }
 
@@ -138,6 +143,7 @@ Input.TextArea = {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      default: false,
     },
     rows: {
       type: 'number',
@@ -150,6 +156,10 @@ Input.TextArea = {
             visible: '{{!$deps[0]}}',
           },
         },
+      },
+      'x-component-props': {
+        min: 0,
+        precision: 0,
       },
     },
   },

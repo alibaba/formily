@@ -12,7 +12,7 @@ export const FormLayout: ISettingsLocale = {
   },
   layout: {
     title: '布局',
-    dataSource: ['垂直', '水平', '内联', '继承'],
+    dataSource: ['水平', '垂直', '内联', '继承'],
   },
   tooltipLayout: {
     title: '提示布局',
@@ -20,11 +20,11 @@ export const FormLayout: ISettingsLocale = {
   },
   labelAlign: {
     title: '标签对齐',
-    dataSource: ['左对齐', '右对齐', '继承'],
+    dataSource: ['左', '右', '继承'],
   },
   wrapperAlign: {
     title: '组件对齐',
-    dataSource: ['左对齐', '右对齐', '继承'],
+    dataSource: ['左', '右', '继承'],
   },
   labelWrap: '标签换行',
   wrapperWrap: '组件换行',

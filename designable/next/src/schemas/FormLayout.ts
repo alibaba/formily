@@ -49,7 +49,7 @@ export const FormLayout: ISchema = {
     },
     layout: {
       type: 'string',
-      enum: ['vertical', 'horizontal', 'inline', null],
+      enum: ['horizontal', 'vertical', 'inline', null],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
       'x-component-props': {

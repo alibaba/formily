@@ -12,7 +12,7 @@ export const FormTab: ISettingsLocale = {
   animation: 'Transition',
   excessMode: {
     title: 'Excess Mode',
-    tooltip: 'Sliding mode when there are too many tabs',
+    tooltip: 'When there are too many tabs, how to slide?',
     dataSource: ['Slider', 'Dropdown'],
   },
   tabPosition: {
@@ -23,11 +23,6 @@ export const FormTab: ISettingsLocale = {
     title: 'Trigger Type',
     tooltip: 'Trigger method of activation tab',
     dataSource: ['Click', 'Hover'],
-  },
-  disableKeyboard: {
-    title: 'Disable Keyboard',
-    tooltip:
-      'Disable keyboard events. after setting, you cannot switch the currently selected tab through the up, down, left and right keys of the keyboard',
   },
 }
 

@@ -22,16 +22,33 @@ export const Cascader: ISchema = {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      default: false,
     },
     canOnlySelectLeaf: {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      'x-reactions': {
+        dependencies: ['.multiple'],
+        fulfill: {
+          state: {
+            visible: '{{!$deps[0]}}',
+          },
+        },
+      },
     },
     canOnlyCheckLeaf: {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      'x-reactions': {
+        dependencies: ['.multiple'],
+        fulfill: {
+          state: {
+            visible: '{{$deps[0]}}',
+          },
+        },
+      },
     },
     checkStrictly: {
       type: 'boolean',

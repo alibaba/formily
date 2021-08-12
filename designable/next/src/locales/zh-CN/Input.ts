@@ -15,10 +15,6 @@ export const Input: ISettingsLocale = {
     title: '水印',
     tooltip: '值取自 Icon 的 type，与清除按钮在同一位置',
   },
-  innerBefore: '框内前缀',
-  innerAfter: '框内后缀',
-  addonTextBefore: '前缀标签',
-  addonTextAfter: '后缀标签',
 }
 
 Input.TextArea = {

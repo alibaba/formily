@@ -7,6 +7,9 @@ export const ArrayTable: ISchema & { Addition?: ISchema; Column?: ISchema } = {
       type: 'string',
       'x-decorator': 'FormItem',
       'x-component': 'Input',
+      'x-component-props': {
+        defaultValue: 'id',
+      },
     },
     tableLayout: {
       type: 'string',
@@ -62,11 +65,20 @@ export const ArrayTable: ISchema & { Addition?: ISchema; Column?: ISchema } = {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
+      default: false,
     },
     maxBodyHeight: {
       type: 'number',
       'x-decorator': 'FormItem',
       'x-component': 'NumberPicker',
+      'x-reactions': {
+        dependencies: ['.fixedHeader'],
+        fulfill: {
+          state: {
+            visible: '{{$deps[0]}}',
+          },
+        },
+      },
     },
     stickyHeader: {
       type: 'boolean',

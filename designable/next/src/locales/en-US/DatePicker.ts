@@ -3,10 +3,10 @@ import type { ISettingsLocale } from '../types'
 const CommonDatePickerLocale: ISettingsLocale = {
   format: {
     title: 'Format',
-    placeholder: 'e.g. YYYY-MM-DD',
+    placeholder: 'YYYY-MM-DD',
   },
   showTime: 'Show Time',
-  resetTime: 'Reset time on selection',
+  resetTime: 'Reset On Select',
 }
 export const DatePicker: ISettingsLocale = {
   ...CommonDatePickerLocale,

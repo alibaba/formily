@@ -1,11 +1,6 @@
 import type { ISettingsLocale } from '../types'
 
 export const Select: ISettingsLocale = {
-  placeholder: '占位提示',
-  autoWidth: {
-    title: '自动宽度',
-    tooltip: '下拉菜单是否与选择器对齐',
-  },
   filterLocal: '本地过滤',
   filter: '过滤方法',
   autoHighlightFirstItem: '自动高亮首项',

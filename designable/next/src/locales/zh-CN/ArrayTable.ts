@@ -11,11 +11,14 @@ export const ArrayTable: ISettingsLocale = {
     dataSource: ['小', '中', '继承', '无'],
   },
   tableWidth: '表格宽度',
-  hasHeader: '头部',
+  hasHeader: '表格头',
   isZebra: '斑马线',
   emptyContent: '空内容文案',
-  fixedHeader: '固定头部',
-  maxBodyHeight: '最大主体高度',
+  fixedHeader: '固定表格头',
+  maxBodyHeight: {
+    title: '最大主体高度',
+    tooltip: '启用固定表格头时，超过此高度时会出现滚动条',
+  },
   stickyHeader: '粘性头部',
 }
 
@@ -25,7 +28,7 @@ ArrayTable.Column = {
     dataSource: ['左', '中', '右'],
   },
   alignHeader: {
-    title: '头部对齐',
+    title: '表格头对齐',
     tooltip: '不设置将与单元格对齐方式相同',
     dataSource: ['左', '中', '右'],
   },

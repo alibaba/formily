@@ -11,6 +11,6 @@ export const NumberPicker: ISettingsLocale = {
     title: '预设设备',
     dataSource: ['桌面', '手机', '平板'],
   },
-  hasTrigger: '展示点击按钮',
-  alwaysShowTrigger: '一直展示点击按钮（无需hover）',
+  hasTrigger: '展示调整按钮',
+  alwaysShowTrigger: '总是展示调整按钮',
 }

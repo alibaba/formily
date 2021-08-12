@@ -65,7 +65,7 @@ export const FormItem: ISchema = {
     },
     size: {
       type: 'string',
-      enum: ['large', 'small', 'default', null],
+      enum: ['small', 'default', 'large', null],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
       'x-component-props': {
@@ -74,14 +74,13 @@ export const FormItem: ISchema = {
     },
     layout: {
       type: 'string',
-      enum: ['vertical', 'horizontal', 'inline', null],
+      enum: ['horizontal', 'vertical', 'inline', null],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
       'x-component-props': {
         defaultValue: 'horizontal',
       },
     },
-
     tooltipLayout: {
       type: 'string',
       enum: ['icon', 'text', null],

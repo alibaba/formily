@@ -3,7 +3,7 @@ import type { ISettingsLocale } from '../types'
 const CommonDatePickerLocale: ISettingsLocale = {
   format: {
     title: '格式',
-    placeholder: '如 YYYY-MM-DD',
+    placeholder: 'YYYY-MM-DD',
   },
   showTime: '使用时间控件',
   resetTime: '选择时重置时间',

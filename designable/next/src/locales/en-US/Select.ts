@@ -1,11 +1,6 @@
 import type { ISettingsLocale } from '../types'
 
 export const Select: ISettingsLocale = {
-  placeholder: 'Placeholder',
-  autoWidth: {
-    title: 'Auto width',
-    tooltip: 'Is the drop-down menu aligned with the selector',
-  },
   filterLocal: 'Local Filter',
   filter: 'Filter Function',
   autoHighlightFirstItem: 'Auto highlight first item',
@@ -13,18 +8,13 @@ export const Select: ISettingsLocale = {
     title: 'Mode',
     dataSource: ['Single', 'Multiple', 'Tags'],
   },
-  notFoundContent: {
-    title: 'No Content Prompt',
-    tooltip: 'Copy with empty bullet layer content',
-  },
-  showDataSourceChildren: {
-    title: 'Show Data Source Children',
-  },
+  notFoundContent: 'No Content Prompt',
+  showDataSourceChildren: 'Show Data Source Children',
   hasSelectAll: 'Can Select All',
   cacheValue: {
     title: 'Cache Value',
     tooltip:
-      'Do you want to keep the selected content when the data source changes',
+      'Do you want to keep the selected value when the data source changes',
   },
   tagInline: 'Tag Inline',
   tagClosable: 'Tag Closable',

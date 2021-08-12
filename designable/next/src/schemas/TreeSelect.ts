@@ -60,9 +60,6 @@ export const TreeSelect: ISchema = {
       type: 'boolean',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',
-      'x-component-props': {
-        defaultChecked: false,
-      },
     },
     treeCheckable: {
       type: 'boolean',

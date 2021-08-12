@@ -13,7 +13,7 @@ export const Range: ISettingsLocale = {
   marks: {
     title: 'Marks',
     tooltip:
-      'Scale value display logic (false means not to display, array enumeration shows the value, number means to divide equally by number, object means to divide by key, and value value is displayed)',
+      'False means not to display, Array enumeration shows the value, Number means to divide equally by number, Object means to divide by key, and value is displayed)',
   },
   marksPosition: {
     title: 'Marks Position',

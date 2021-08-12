@@ -24,7 +24,6 @@ Radio.Group = {
       'x-component': 'Radio.Group',
       default: 'normal',
       'x-component-props': {
-        defaultValue: 'normal',
         optionType: 'button',
       },
     },
@@ -37,10 +36,14 @@ Radio.Group = {
         defaultValue: 'hoz',
         optionType: 'button',
       },
-      // 'x-reactions': {
-      //   dependencies: ['.shape'],
-      //   fu
-      // },
+      'x-reactions': {
+        dependencies: ['.shape'],
+        fulfill: {
+          state: {
+            visible: `{{$deps[0] === 'normal'}}`,
+          },
+        },
+      },
     },
   },
 }

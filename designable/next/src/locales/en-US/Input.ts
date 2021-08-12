@@ -17,10 +17,6 @@ export const Input: ISettingsLocale = {
     tooltip:
       'The value is taken from the type of Icon and is in the same position as the clear button',
   },
-  innerBefore: 'Inner Before',
-  innerAfter: 'Inner After',
-  addonTextBefore: 'Addon Text Before',
-  addonTextAfter: 'Addon Text After',
 }
 
 Input.TextArea = {

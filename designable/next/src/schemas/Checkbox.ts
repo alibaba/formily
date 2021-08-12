@@ -2,18 +2,7 @@ import type { ISchema } from '@formily/react'
 
 export const Checkbox: ISchema & { Group?: ISchema } = {
   type: 'object',
-  properties: {
-    indeterminate: {
-      type: 'boolean',
-      'x-decorator': 'FormItem',
-      'x-component': 'Switch',
-    },
-    defaultIndeterminate: {
-      type: 'boolean',
-      'x-decorator': 'FormItem',
-      'x-component': 'Switch',
-    },
-  },
+  properties: {},
 }
 
 Checkbox.Group = {

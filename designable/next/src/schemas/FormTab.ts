@@ -17,9 +17,7 @@ export const FormTab: ISchema & { TabPane?: ISchema } = {
       enum: ['pure', 'wrapped', 'text', 'capsule'],
       'x-decorator': 'FormItem',
       'x-component': 'Select',
-      'x-component-props': {
-        defaultValue: 'pure',
-      },
+      default: 'pure',
     },
     animation: {
       type: 'boolean',
@@ -60,7 +58,7 @@ export const FormTab: ISchema & { TabPane?: ISchema } = {
             enum: ['top', 'bottom'],
           },
           state: {
-            value: 'top',
+            value: `{{$self.value !== 'bottom' ? 'top' : 'bottom'}}`,
           },
         },
       },
@@ -79,11 +77,6 @@ export const FormTab: ISchema & { TabPane?: ISchema } = {
       type: 'string',
       'x-decorator': 'FormItem',
       'x-component': 'Input',
-    },
-    disableKeyboard: {
-      type: 'boolean',
-      'x-decorator': 'FormItem',
-      'x-component': 'Switch',
     },
   },
 }

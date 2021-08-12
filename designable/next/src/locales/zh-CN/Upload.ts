@@ -15,7 +15,8 @@ export const Upload: ISettingsLocale = {
     title: '上传方法',
     dataSource: ['POST', 'PUT'],
   },
-  name: '文件名',
+  request: '自定义上传函数',
+  name: '文件名键值',
   listType: {
     title: '上传列表样式',
     dataSource: ['默认', '文本', '图片', '卡片'],
