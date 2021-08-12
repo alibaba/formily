@@ -138,7 +138,6 @@ export const hasRunningReaction = () => {
 }
 
 export const releaseBindingReactions = (reaction: Reaction) => {
-  reaction._disposed = true
   reaction._reactionsSet?.forEach((reactionsMap) => {
     reactionsMap.forEach((reactions) => {
       reactions.delete(reaction)
@@ -163,6 +162,7 @@ export const suspendComputedReactions = (current: Reaction) => {
 }
 
 export const disposeBindingReactions = (reaction: Reaction) => {
+  reaction._disposed = true
   releaseBindingReactions(reaction)
   suspendComputedReactions(reaction)
 }
