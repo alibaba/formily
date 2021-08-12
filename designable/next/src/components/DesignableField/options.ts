@@ -21,8 +21,8 @@ import {
   Upload,
   FormGrid,
   FormLayout,
-} from '@formily/antd'
-import { Card, Slider, Rate } from 'antd'
+} from '@formily/next'
+import { Card, Range, Rating } from '@alifd/next'
 import { createDesignableContainer } from '../DesignableContainer'
 import { DesignableFormTab } from '../DesignableFormTab'
 import { DesignableFormCollapse } from '../DesignableFormCollapse'
@@ -101,6 +101,7 @@ export const createOptions = (
       isArrayTableInlineChildren,
       isArrayCardsInlineChildren,
     ],
+
     restrictChildrenComponents: {
       FormTab: [allowDropWithEmpty, 'FormTab.TabPane'],
       FormCollapse: [allowDropWithEmpty, 'FormCollapse.CollapsePanel'],
@@ -140,8 +141,8 @@ export const createOptions = (
       TreeSelect,
       Upload,
       Card,
-      Slider,
-      Rate,
+      Range,
+      Rating,
     },
   }
 }
