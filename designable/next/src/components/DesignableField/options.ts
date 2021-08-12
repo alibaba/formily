@@ -110,10 +110,7 @@ export const createOptions = (
     },
     restrictSiblingComponents: {
       'FormTab.TabPane': ['FormTab.TabPane'],
-      'FormCollapse.CollapsePanel': [
-        allowDropWithEmpty,
-        'FormCollapse.CollapsePanel',
-      ],
+      'FormCollapse.CollapsePanel': ['FormCollapse.CollapsePanel'],
       'ArrayTable.Column': ['ArrayTable.Column'],
     },
     components: {
