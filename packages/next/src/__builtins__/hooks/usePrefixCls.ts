@@ -1,8 +1,11 @@
+import { ConfigProvider } from '@alifd/next'
+
 export const usePrefixCls = (
   tag?: string,
   props?: {
     prefix?: string
   }
 ) => {
-  return props?.prefix ? props?.prefix : `next${tag ? `-${tag}` : ''}`
+  const getContext = ConfigProvider['getContext']
+  return props?.prefix ?? getContext()?.prefix ?? `next${tag ? `-${tag}` : ''}`
 }
