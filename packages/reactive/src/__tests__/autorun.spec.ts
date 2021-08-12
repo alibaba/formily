@@ -504,3 +504,19 @@ test('autorun.effect not in autorun', () => {
 test('autorun.effect with invalid params', () => {
   autorun.effect({} as any)
 })
+
+test('autorun dispose in batch', () => {
+  const obs = observable({
+    value: 123,
+  })
+  const handler = jest.fn()
+  const dispose = autorun(() => {
+    handler(obs.value)
+  })
+
+  batch(() => {
+    obs.value = 321
+    dispose()
+  })
+  expect(handler).toBeCalledTimes(1)
+})
