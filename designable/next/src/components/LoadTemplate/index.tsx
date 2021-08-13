@@ -1,5 +1,6 @@
 import React from 'react'
-import { Box, Button } from '@alifd/next'
+import { Button } from '@alifd/next'
+import { Space, Divider } from 'antd'
 import { usePrefix, TextWidget } from '@designable/react'
 import cls from 'classnames'
 import './styles.scss'
@@ -22,7 +23,7 @@ export const LoadTemplate: React.FC<ILoadTemplateProps> = (props) => {
   return (
     <div className={cls(prefix, props.className)} style={props.style}>
       <div className={prefix + '-actions'}>
-        <Box>
+        <Space split={<Divider type="vertical" />}>
           {props.actions?.map((action, key) => {
             return (
               <Button
@@ -39,7 +40,7 @@ export const LoadTemplate: React.FC<ILoadTemplateProps> = (props) => {
               </Button>
             )
           })}
-        </Box>
+        </Space>
       </div>
     </div>
   )
