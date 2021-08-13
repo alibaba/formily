@@ -12,8 +12,6 @@ The core concept of Designable is to turn the designer into a modular combinatio
 
 ## Install
 
-> Status: Unpublished
-
 Ant Design users
 
 ```bash
