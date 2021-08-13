@@ -13,6 +13,9 @@ export const ActionsWidget = observer(() => {
   }, [])
   return (
     <Space style={{ marginRight: 10 }}>
+      <Button href="https://designable-fusion.formilyjs.org">
+        Alibaba Fusion
+      </Button>
       <Radio.Group
         value={GlobalRegistry.getDesignerLanguage()}
         optionType="button"
