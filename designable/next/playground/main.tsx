@@ -1,13 +1,13 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   Designer,
-  IconWidget,
   DesignerToolsWidget,
   ViewToolsWidget,
   Workspace,
   OutlineTreeWidget,
   DragSourceWidget,
+  HistoryWidget,
   MainPanel,
   CompositePanel,
   WorkspacePanel,
@@ -18,7 +18,12 @@ import {
   ComponentTreeWidget,
 } from '@designable/react'
 import { SettingsForm } from '@designable/react-settings-form'
-import { createDesigner, GlobalRegistry } from '@designable/core'
+import {
+  createDesigner,
+  GlobalRegistry,
+  Shortcut,
+  KeyCode,
+} from '@designable/core'
 import { createDesignableField, createDesignableForm } from '../src'
 import {
   LogoWidget,
@@ -27,6 +32,7 @@ import {
   SchemaEditorWidget,
   MarkupSchemaWidget,
 } from './widgets'
+import { saveSchema } from './service'
 import 'antd/dist/antd.less'
 import '@alifd/next/dist/next.css'
 
@@ -55,26 +61,35 @@ const DesignableField = createDesignableField({
   registryName: 'DesignableField',
 })
 
-const App = () => {
-  const engine = useMemo(() => createDesigner(), [])
+const SaveShortCut = new Shortcut({
+  codes: [
+    [KeyCode.Meta, KeyCode.S],
+    [KeyCode.Control, KeyCode.S],
+  ],
+  handler(ctx) {
+    saveSchema(ctx.engine)
+  },
+})
 
+const engine = createDesigner({
+  shortcuts: [SaveShortCut],
+})
+
+const App = () => {
   return (
     <Designer engine={engine}>
       <MainPanel logo={<LogoWidget />} actions={<ActionsWidget />}>
         <CompositePanel>
-          <CompositePanel.Item
-            title="panels.Component"
-            icon={<IconWidget infer="Component" />}
-          >
+          <CompositePanel.Item title="panels.Component" icon="Component">
             <DragSourceWidget title="sources.Inputs" name="inputs" />
             <DragSourceWidget title="sources.Layouts" name="layouts" />
             <DragSourceWidget title="sources.Arrays" name="arrays" />
           </CompositePanel.Item>
-          <CompositePanel.Item
-            title="panels.OutlinedTree"
-            icon={<IconWidget infer="Outline" />}
-          >
+          <CompositePanel.Item title="panels.OutlinedTree" icon="Outline">
             <OutlineTreeWidget />
+          </CompositePanel.Item>
+          <CompositePanel.Item title="panels.History" icon="History">
+            <HistoryWidget />
           </CompositePanel.Item>
         </CompositePanel>
         <Workspace id="form">

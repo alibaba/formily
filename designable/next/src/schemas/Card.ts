@@ -30,9 +30,11 @@ export const Card: ISchema & { Addition?: ISchema } = {
       },
     },
     contentHeight: {
-      type: 'number',
       'x-decorator': 'FormItem',
-      'x-component': 'NumberPicker',
+      'x-component': 'ValueInput',
+      'x-component-props': {
+        include: ['NUMBER', 'TEXT'],
+      },
     },
     extra: {
       type: 'string',

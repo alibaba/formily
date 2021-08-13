@@ -102,6 +102,7 @@ export const DesignableArrayCards: React.FC<CardProps> = observer((props) => {
       <ArrayBase disabled>
         <ArrayBase.Item index={0}>
           <Card
+            contentHeight="auto"
             {...props}
             title={
               <span>
