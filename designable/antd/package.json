@@ -1,7 +1,6 @@
 {
   "name": "@formily/designable-antd",
-  "version": "2.0.0-rc.0",
-  "private": true,
+  "version": "2.0.0-rc.1",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -59,11 +58,11 @@
     "@designable/core": "^0.4.34",
     "@designable/formily": "^0.4.34",
     "@designable/react": "^0.4.34",
-    "@formily/antd": "2.0.0-rc.0",
-    "@formily/core": "2.0.0-rc.0",
-    "@formily/designable-setters": "2.0.0-rc.0",
-    "@formily/react": "2.0.0-rc.0",
-    "@formily/shared": "2.0.0-rc.0"
+    "@formily/antd": "2.0.0-rc.1",
+    "@formily/core": "2.0.0-rc.1",
+    "@formily/designable-setters": "2.0.0-rc.1",
+    "@formily/react": "2.0.0-rc.1",
+    "@formily/shared": "2.0.0-rc.1"
   },
   "publishConfig": {
     "access": "public"
