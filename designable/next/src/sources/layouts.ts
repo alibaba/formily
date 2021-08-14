@@ -8,6 +8,7 @@ GlobalDragSource.appendSourcesByGroup('layouts', [
       'x-component': 'Card',
       'x-component-props': {
         title: 'Title',
+        contentHeight: 'auto',
       },
     },
   },
