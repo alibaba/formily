@@ -369,7 +369,13 @@ const Custom = observer(() => {
     setSchema(DYNAMIC_INJECT_SCHEMA[form.values.type])
   }, [form.values.type])
 
-  return <RecursionField schema={schema} onlyRenderProperties />
+  return (
+    <RecursionField
+      basePath={field.address}
+      schema={schema}
+      onlyRenderProperties
+    />
+  )
 })
 
 const SchemaField = createSchemaField({
