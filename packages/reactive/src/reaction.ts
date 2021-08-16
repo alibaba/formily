@@ -117,22 +117,6 @@ export const bindComputedReactions = (reaction: Reaction) => {
   }
 }
 
-export const suspendComputedReactions = (reaction: Reaction) => {
-  const computes = reaction._computesSet
-  if (computes) {
-    computes.forEach((reaction) => {
-      const reactions = getReactionsFromTargetKey(
-        reaction._context,
-        reaction._property
-      )
-      if (reactions.length === 0) {
-        disposeBindingReactions(reaction)
-        reaction._dirty = true
-      }
-    })
-  }
-}
-
 export const runReactionsFromTargetKey = (operation: IOperation) => {
   let { key, type, target, oldTarget } = operation
   notifyObservers(operation)
@@ -154,18 +138,31 @@ export const hasRunningReaction = () => {
 }
 
 export const releaseBindingReactions = (reaction: Reaction) => {
-  const bindingSet = reaction._reactionsSet
-  if (bindingSet) {
-    bindingSet.forEach((reactionsMap) => {
-      reactionsMap.forEach((reactions) => {
-        reactions.delete(reaction)
-      })
+  reaction._reactionsSet?.forEach((reactionsMap) => {
+    reactionsMap.forEach((reactions) => {
+      reactions.delete(reaction)
     })
-  }
+  })
+  PendingReactions.delete(reaction)
+  PendingScopeReactions.delete(reaction)
   delete reaction._reactionsSet
 }
 
+export const suspendComputedReactions = (current: Reaction) => {
+  current._computesSet?.forEach((reaction) => {
+    const reactions = getReactionsFromTargetKey(
+      reaction._context,
+      reaction._property
+    )
+    if (reactions.length === 0) {
+      disposeBindingReactions(reaction)
+      reaction._dirty = true
+    }
+  })
+}
+
 export const disposeBindingReactions = (reaction: Reaction) => {
+  reaction._disposed = true
   releaseBindingReactions(reaction)
   suspendComputedReactions(reaction)
 }

@@ -101,12 +101,16 @@ export const createOptions = (
       isArrayTableInlineChildren,
       isArrayCardsInlineChildren,
     ],
-
     restrictChildrenComponents: {
       FormTab: [allowDropWithEmpty, 'FormTab.TabPane'],
       FormCollapse: [allowDropWithEmpty, 'FormCollapse.CollapsePanel'],
       ArrayTable: [allowDropWithEmpty, isObjectNode, 'ArrayTable.Addition'],
       'ArrayTable.Column': [isNotArrayColumn],
+    },
+    restrictSiblingComponents: {
+      'FormTab.TabPane': ['FormTab.TabPane'],
+      'FormCollapse.CollapsePanel': ['FormCollapse.CollapsePanel'],
+      'ArrayTable.Column': ['ArrayTable.Column'],
     },
     components: {
       ...options.components,

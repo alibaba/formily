@@ -4,7 +4,7 @@ import { observable } from './observable'
 import { getObservableMaker } from './internals'
 import { isObservable, isAnnotation, isSupportObservable } from './externals'
 import { Annotations } from './types'
-import { batch } from './batch'
+import { action } from './action'
 import { ProxyRaw, RawProxy } from './environment'
 
 export function define<Target extends object = any>(
@@ -34,7 +34,7 @@ export function model<Target extends object = any>(target: Target): Target {
     if (descriptor && descriptor.get) {
       buf[key] = observable.computed
     } else if (isFn(target[key])) {
-      buf[key] = batch
+      buf[key] = action
     } else {
       buf[key] = observable
     }

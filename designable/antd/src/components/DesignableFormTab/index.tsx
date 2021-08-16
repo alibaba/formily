@@ -101,7 +101,7 @@ export const DesignableFormTab: React.FC<TabsProps> & {
                   },
                 },
               })
-              node.appendNode(tabPane)
+              node.append(tabPane)
               setActiveKey(tabPane.id)
             },
           },

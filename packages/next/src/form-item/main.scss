@@ -79,13 +79,13 @@
 }
 
 .#{$form-item-cls}-label-align-left {
-  > .#{$form-item-cls}-label {
+  >.#{$form-item-cls}-label {
     justify-content: flex-start;
   }
 }
 
 .#{$form-item-cls}-label-align-right {
-  > .#{$form-item-cls}-label {
+  >.#{$form-item-cls}-label {
     justify-content: flex-end;
   }
 }
@@ -94,6 +94,7 @@
   .#{$form-item-cls}-label {
     label {
       white-space: pre-line;
+      word-break: break-all;
     }
   }
 }
@@ -149,6 +150,7 @@
           .#{$css-prefix}input-control {
             margin-right: 0;
             padding-right: 0;
+
             .#{$css-prefix}icon {
               display: none;
             }
@@ -160,6 +162,15 @@
             }
           }
         }
+      }
+
+      .#{$css-prefix}range {
+        height: 100%;
+        padding-left: 2px;
+      }
+      .#{$css-prefix}transfer{
+        display: flex;
+        align-items: center;
       }
     }
 
@@ -233,7 +244,7 @@
     min-height: $form-element-small-height;
   }
 
-  .#{$form-item-cls}-label > label {
+  .#{$form-item-cls}-label>label {
     height: $form-element-small-height;
   }
 }
@@ -282,7 +293,7 @@
     min-height: $form-element-large-height;
   }
 
-  .#{$form-item-cls}-label > label {
+  .#{$form-item-cls}-label>label {
     height: $form-element-large-height;
   }
 }
@@ -339,10 +350,10 @@
 }
 
 .#{$form-item-cls}-fullness {
-  > .#{$form-item-cls}-control {
-    > .#{$form-item-cls}-control-content {
-      > .#{$form-item-cls}-control-content-component {
-        > *:first-child:not(.#{$css-prefix}switch) {
+  >.#{$form-item-cls}-control {
+    >.#{$form-item-cls}-control-content {
+      >.#{$form-item-cls}-control-content-component {
+        >*:first-child:not(.#{$css-prefix}switch) {
           width: 100%;
         }
       }

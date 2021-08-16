@@ -1,5 +1,143 @@
 # Changelog
 
+## v2.0.0-rc.0(2021-08-13)
+
+### :beetle: Bug Fixes
+
+1. [fix(antd): fix form size=large bug (#1998) (#2008)](https://github.com/alibaba/formily/commit/3edd6e89) :point_right: ( [Grapedge](https://github.com/Grapedge) )
+
+1. [fix(designable-next): fix style and support history (#2007)](https://github.com/alibaba/formily/commit/7e9c9cbd) :point_right: ( [Grapedge](https://github.com/Grapedge) )
+
+1. [fix(next): fix range and transfer styles in FormItem](https://github.com/alibaba/formily/commit/cd9c2159) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(next): fix config provider prefix bug (#2000) (#2002)](https://github.com/alibaba/formily/commit/32746f77) :point_right: ( [Grapedge](https://github.com/Grapedge) )
+
+### :memo: Documents Changes
+
+1. [docs(site): update form builder docs](https://github.com/alibaba/formily/commit/05799d48) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rose: Improve code quality
+
+1. [refactor(json-schema): use with statement for compiler](https://github.com/alibaba/formily/commit/f913b35b) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(designable): add links](https://github.com/alibaba/formily/commit/507bcfe9) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+## v2.0.0-beta.89(2021-08-12)
+
+### :tada: Enhancements
+
+1. [feat(designable-antd): support restrictSiblingsComponents (#1984)](https://github.com/alibaba/formily/commit/1b72d11c) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :beetle: Bug Fixes
+
+1. [fix(next): fix node scss error (#1995)](https://github.com/alibaba/formily/commit/266e916a) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(reactive): fix dispose omission clean pendding reactions (#1994)](https://github.com/alibaba/formily/commit/a60134b2) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): fix array nested remove (#1989)](https://github.com/alibaba/formily/commit/2e065593) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(vue): prop "scope" of SchemaField not work with x-reactions (#1976)](https://github.com/alibaba/formily/commit/05e14cea) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+### :rose: Improve code quality
+
+1. [refactor(reactive): change model default batch annotation to action annotation](https://github.com/alibaba/formily/commit/6162639b) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :construction: Add/Update Test Cases
+
+1. [test(core): add designable tests (#1972)](https://github.com/alibaba/formily/commit/6a437c8b) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore(docs): add antd-formily-boost link](https://github.com/alibaba/formily/commit/4fb9ff8d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(dn): update designable](https://github.com/alibaba/formily/commit/8af0467f) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(pkg): update package.json](https://github.com/alibaba/formily/commit/d96dcfa9) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+## v2.0.0-beta.88(2021-08-09)
+
+### :tada: Enhancements
+
+1. [feat(designable-antd): support HistoryWidget](https://github.com/alibaba/formily/commit/8b0705e8) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix euqal initial empty value will trigger change (#1967)](https://github.com/alibaba/formily/commit/4ccf4e41) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(antd/next): fix FormItem styles (#1966)](https://github.com/alibaba/formily/commit/b4d10955) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore(designable): improve markup printer](https://github.com/alibaba/formily/commit/9233f99d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/278e496d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+## v2.0.0-beta.87(2021-08-05)
+
+### :blush: Other Changes
+
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/e5b239df) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+## v2.0.0-beta.86(2021-08-05)
+
+### :beetle: Bug Fixes
+
+1. [fix(next): fix mapStatus takeState](https://github.com/alibaba/formily/commit/576c9b56) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(antd): fix dark label color](https://github.com/alibaba/formily/commit/c1e5b0f4) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(shared): fix applyMiddleware can not catch error (#1952)](https://github.com/alibaba/formily/commit/22f0379a) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(next): fix FormItem vertical style (#1948)](https://github.com/alibaba/formily/commit/97991801) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+### :memo: Documents Changes
+
+1. [docs(designable): add designable form docs](https://github.com/alibaba/formily/commit/fef3600d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs(site): improve home site contributors ui](https://github.com/alibaba/formily/commit/7592bafe) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs(site): add serverless functions](https://github.com/alibaba/formily/commit/d872ea4c) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(core): improve heart](https://github.com/alibaba/formily/commit/de97e76f) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable): add save service to playground](https://github.com/alibaba/formily/commit/badd7f9a) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable-antd): update locale namespace](https://github.com/alibaba/formily/commit/6b2bb938) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/1de0f56f) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+## v2.0.0-beta.85(2021-08-03)
+
+### :beetle: Bug Fixes
+
+1. [fix(next): add the default language when the language is undefined (#1939)](https://github.com/alibaba/formily/commit/c74e7f91) :point_right: ( [Grapedge](https://github.com/Grapedge) )
+
+1. [fix(next/designable-antd): fix Select bug && designable-antd spelling error (#1934)](https://github.com/alibaba/formily/commit/739e8c18) :point_right: ( [Grapedge](https://github.com/Grapedge) )
+
+1. [fix(next): fix FormItem styles (#1916)](https://github.com/alibaba/formily/commit/9850f766) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :memo: Documents Changes
+
+1. [docs(reactive): improve home page styles](https://github.com/alibaba/formily/commit/799f4226) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rose: Improve code quality
+
+1. [refactor(reactive): break change to redefine action semantics (#1930)](https://github.com/alibaba/formily/commit/1b0a7539) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore(designable-antd): upgrade designable](https://github.com/alibaba/formily/commit/02b056ec) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(ts): map @formily/\* to src folder during development (#1917)](https://github.com/alibaba/formily/commit/65259a06) :point_right: ( [JuFeng Zhang](https://github.com/JuFeng Zhang) )
+
+1. [chore(validator): improve validator (#1918)](https://github.com/alibaba/formily/commit/b1681bff) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/3e99574a) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.84(2021-07-31)
 
 ### :tada: Enhancements
@@ -947,79 +1085,3 @@
 ### :memo: Documents Changes
 
 1. [docs(codesandbox): update dependencies](https://github.com/alibaba/formily/commit/e8260eda) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v1.3.4(2020-10-09)
-
-### :tada: Enhancements
-
-1. [feat: add registerPreviewTextComponent (#1041)](https://github.com/alibaba/formily/commit/4b0f9768) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-1. [feat: Add ja validation language (#1028) (#1029)](https://github.com/alibaba/formily/commit/6b65fbb9) :point_right: ( [Yaodong Li](https://github.com/Yaodong Li) )
-
-1. [feat(next): support inline form (#1026)](https://github.com/alibaba/formily/commit/5329d889) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :beetle: Bug Fixes
-
-1. [fix(next-components): Replace ArrayList.Item with Table.Column. Fix #1034 (#1045)](https://github.com/alibaba/formily/commit/e116838a) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-1. [fix(core): fix hasChanged return type (#1036)](https://github.com/alibaba/formily/commit/d0eb66b6) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix Upload preview image (#1031)](https://github.com/alibaba/formily/commit/e2bfcce9) :point_right: ( [liunian](https://github.com/liunian) )
-
-## v1.3.3(2020-09-21)
-
-### :tada: Enhancements
-
-1. [feat: add style lineheight (#1022)](https://github.com/alibaba/formily/commit/bd9cb867) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-### :beetle: Bug Fixes
-
-1. [fix: docs typo (#1012)](https://github.com/alibaba/formily/commit/3ffb1731) :point_right: ( [Tianci He](https://github.com/Tianci He) )
-
-1. [fix(antd-components): missing 'key' prop warning when table draggable (#1011)](https://github.com/alibaba/formily/commit/a69cdad1) :point_right: ( [daief](https://github.com/daief) )
-
-## v1.3.2(2020-09-07)
-
-### :beetle: Bug Fixes
-
-1. [fix(shared): Fix merge undefined is not work (#1009)](https://github.com/alibaba/formily/commit/40489ac1) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix: compat legal props (#1007)](https://github.com/alibaba/formily/commit/5dde72ae) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-## v1.3.1(2020-08-20)
-
-### :tada: Enhancements
-
-1. [feat(layout/docs): update docs and fix layout (#1003)](https://github.com/alibaba/formily/commit/16be58cc) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-## v1.3.0(2020-08-17)
-
-### :beetle: Bug Fixes
-
-1. [fix(schema-renderer): fix schema field lazy state (#999)](https://github.com/alibaba/formily/commit/8faab444) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd): fix previewPlaceholder errors (#993)](https://github.com/alibaba/formily/commit/eda988c0) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(shared): update cool-path version, ensure bug to be fixed (#988)](https://github.com/alibaba/formily/commit/5ae37fe0) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-### :memo: Documents Changes
-
-1. [doc:improve validate documents (#1000)](https://github.com/alibaba/formily/commit/3a145304) :point_right: ( [wangmingxu](https://github.com/wangmingxu) )
-
-## v1.2.11(2020-08-03)
-
-### :tada: Enhancements
-
-1. [feat(antd/next): add stop propagation to form (#978)](https://github.com/alibaba/formily/commit/804908ec) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-### :beetle: Bug Fixes
-
-1. [fix(schema-renderer): Fix expression complie perf bug (#986)](https://github.com/alibaba/formily/commit/0e8383ee) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix: compat ie10-11 for antd3 (#985)](https://github.com/alibaba/formily/commit/74fa86c9) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix: 回滚 mutators.move 行为 (#984)](https://github.com/alibaba/formily/commit/010e1495) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-### :rose: Improve code quality
-
-1. [refactor(doc): update doc](https://github.com/alibaba/formily/commit/d4ed9187) :point_right: ( [janrywang](https://github.com/janrywang) )

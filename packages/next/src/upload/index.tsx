@@ -2,10 +2,18 @@ import React, { useEffect } from 'react'
 import { Field } from '@formily/core'
 import { useField } from '@formily/react'
 import { reaction } from '@formily/reactive'
-import { Upload as NextUpload } from '@alifd/next'
-import { UploadProps, CardProps } from '@alifd/next/lib/upload'
+import { Upload as NextUpload, Button, Icon } from '@alifd/next'
+import {
+  UploadProps as NextUploadProps,
+  CardProps,
+} from '@alifd/next/lib/upload'
 import { isArr, toArr } from '@formily/shared'
 import { UPLOAD_PLACEHOLDER } from './placeholder'
+
+type UploadProps = NextUploadProps & {
+  textContent?: React.ReactNode
+  serviceErrorMessage?: string
+}
 
 type FileList = Parameters<UploadProps['onChange']>[0]
 
@@ -108,7 +116,7 @@ const normalizeFileList = (fileList: UploadProps['value']) => {
           }
         ),
       }
-    }) as any[]
+    })
   }
   return []
 }
@@ -172,8 +180,24 @@ function useUploadProps<T extends IUploadProps = ExtendUploadProps>({
   }
 }
 
+const getPlaceholder = (props: UploadProps) => {
+  if (props.shape !== 'card') {
+    return (
+      <Button>
+        <Icon type="upload" />
+        {props.textContent}
+      </Button>
+    )
+  }
+  return <Icon type="upload" style={{ fontSize: 20 }} />
+}
+
 export const Upload: ComposedUpload = (props) => {
-  return <NextUpload listType="text" {...useUploadProps(props)} />
+  return (
+    <NextUpload listType="text" {...useUploadProps(props)}>
+      {props.children || getPlaceholder(props)}
+    </NextUpload>
+  )
 }
 
 Upload.Dragger = (props) => {

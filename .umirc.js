@@ -56,6 +56,10 @@ export default {
             title: 'aliyun teamix',
             path: 'https://formily.dg.aliyun-inc.com/',
           },
+          {
+            title: 'antd-formily-boost',
+            path: 'https://github.com/fishedee/antd-formily-boost',
+          },
         ],
       },
       {
@@ -138,6 +142,10 @@ export default {
           {
             title: 'aliyun teamix',
             path: 'https://formily.dg.aliyun-inc.com/',
+          },
+          {
+            title: 'antd-formily-boost',
+            path: 'https://github.com/fishedee/antd-formily-boost',
           },
         ],
       },
