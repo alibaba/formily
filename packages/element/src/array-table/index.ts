@@ -413,7 +413,7 @@ const ArrayTableInner = observer(
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
       const prefixCls = `${stylePrefix}-array-table`
-      const getKey = ArrayBase.useKey()
+      const { getKey, keyMap } = ArrayBase.useKey(schemaRef.value)
 
       const defaultRowKey = (record: any) => {
         return getKey(record)
@@ -496,7 +496,11 @@ const ArrayTableInner = observer(
               default: () =>
                 h(
                   ArrayBase,
-                  {},
+                  {
+                    props: {
+                      keyMap,
+                    },
+                  },
                   {
                     default: () => [
                       h(

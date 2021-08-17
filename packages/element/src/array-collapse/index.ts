@@ -109,7 +109,7 @@ export const ArrayCollapseInner = observer(
         }
       })
 
-      const getKey = ArrayBase.useKey()
+      const { getKey, keyMap } = ArrayBase.useKey(schemaRef.value)
 
       return () => {
         const field = fieldRef.value
@@ -126,7 +126,7 @@ export const ArrayCollapseInner = observer(
             const items = Array.isArray(schema.items)
               ? schema.items[index] || schema.items[0]
               : schema.items
-            const key = getKey(item)
+            const key = getKey(item, index)
             const panelProps = field
               .query(`${field.address}.${index}`)
               .get('componentProps')
@@ -334,6 +334,9 @@ export const ArrayCollapseInner = observer(
               h(
                 ArrayBase,
                 {
+                  props: {
+                    keyMap,
+                  },
                   on: {
                     add: (index: number) => {
                       activeKeys.value = insertActiveKeys(
@@ -367,7 +370,7 @@ export const ArrayCollapseItem = defineComponent<CollapseItemProps>({
 })
 
 export const ArrayCollapse = composeExport(ArrayCollapseInner, {
-  collapseItem: ArrayCollapseItem,
+  Item: ArrayCollapseItem,
   Index: ArrayBase.Index,
   SortHandle: ArrayBase.SortHandle,
   Addition: ArrayBase.Addition,

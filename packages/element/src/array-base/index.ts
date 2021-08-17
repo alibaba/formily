@@ -6,6 +6,8 @@ import {
   inject,
   toRefs,
   ref,
+  onBeforeUnmount,
+  PropType,
 } from '@vue/composition-api'
 import { Fragment, useField, useFieldSchema, h } from '@formily/vue'
 import { isValid, uid, clone } from '@formily/shared'
@@ -37,6 +39,7 @@ export type ArrayBaseMixins = {
 
 export interface IArrayBaseProps {
   disabled?: boolean
+  keyMap?: WeakMap<Object, String> | String[] | null
 }
 
 export interface IArrayBaseItemProps {
@@ -50,6 +53,7 @@ export interface IArrayBaseContext {
   listeners: {
     [key in string]?: Function
   }
+  keyMap?: WeakMap<Object, String> | String[] | null
 }
 
 const ArrayBaseSymbol: InjectionKey<IArrayBaseContext> =
@@ -65,16 +69,45 @@ const useIndex = (index?: number) => {
   return indexRef ?? ref(index)
 }
 
-const useKey = () => {
-  const keyMap = new WeakMap()
+const isObjectValue = (schema: Schema) => {
+  if (Array.isArray(schema?.items)) return isObjectValue(schema.items[0])
 
-  return (record: any) => {
-    record =
-      record === null || typeof record !== 'object' ? Object(record) : record
-    if (!keyMap.has(record)) {
-      keyMap.set(record, uid())
-    }
-    return keyMap.get(record)
+  if (schema?.items?.type === 'array' || schema?.items?.type === 'object') {
+    return true
+  }
+  return false
+}
+
+const useKey = (schema: Schema) => {
+  const isObject = isObjectValue(schema)
+  let keyMap: WeakMap<Object, String> | String[] | null = null
+
+  if (isObject) {
+    keyMap = new WeakMap()
+  } else {
+    keyMap = []
+  }
+
+  onBeforeUnmount(() => {
+    keyMap = null
+  })
+
+  return {
+    keyMap,
+    getKey: (record: any, index?: number) => {
+      if (keyMap instanceof WeakMap) {
+        if (!keyMap.has(record)) {
+          keyMap.set(record, uid())
+        }
+        return keyMap.get(record)
+      }
+
+      if (!keyMap[index]) {
+        keyMap[index] = uid()
+      }
+
+      return keyMap[index]
+    },
   }
 }
 
@@ -92,14 +125,28 @@ const getDefaultValue = (defaultValue: any, schema: Schema): any => {
   return null
 }
 
-const ArrayBaseInner = defineComponent({
+const ArrayBaseInner = defineComponent<IArrayBaseProps>({
   name: 'ArrayBase',
-  props: ['disabled'],
-  setup(props: IArrayBaseProps, { slots, listeners }) {
+  props: {
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    keyMap: {
+      type: [WeakMap, Array] as PropType<WeakMap<Object, String> | String[]>,
+    },
+  },
+  setup(props, { slots, listeners }) {
     const field = useField<ArrayField>()
     const schema = useFieldSchema()
 
-    provide(ArrayBaseSymbol, { field, schema, props, listeners })
+    provide(ArrayBaseSymbol, {
+      field,
+      schema,
+      props,
+      listeners,
+      keyMap: props.keyMap,
+    })
     return () => {
       return h(Fragment, {}, slots)
     }
@@ -241,6 +288,10 @@ const ArrayBaseRemove = defineComponent<
             ...listeners,
             click: (e: MouseEvent) => {
               e.stopPropagation()
+              if (Array.isArray(base?.keyMap)) {
+                base?.keyMap?.splice(indexRef.value, 1)
+              }
+
               base?.field.value.remove(indexRef.value as number)
               base?.listeners?.remove?.(indexRef.value as number)
 
@@ -283,6 +334,14 @@ const ArrayBaseMoveDown = defineComponent<
             ...listeners,
             click: (e: MouseEvent) => {
               e.stopPropagation()
+              if (Array.isArray(base?.keyMap)) {
+                base.keyMap.splice(
+                  indexRef.value + 1,
+                  0,
+                  base.keyMap.splice(indexRef.value, 1)[0]
+                )
+              }
+
               base?.field.value.moveDown(indexRef.value as number)
               base?.listeners?.moveDown?.(indexRef.value as number)
 
@@ -325,6 +384,14 @@ const ArrayBaseMoveUp = defineComponent<
             ...listeners,
             click: (e: MouseEvent) => {
               e.stopPropagation()
+              if (Array.isArray(base?.keyMap)) {
+                base.keyMap.splice(
+                  indexRef.value - 1,
+                  0,
+                  base.keyMap.splice(indexRef.value, 1)[0]
+                )
+              }
+
               base?.field.value.moveUp(indexRef.value as number)
               base?.listeners?.moveUp?.(indexRef.value as number)
 
