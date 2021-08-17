@@ -45,13 +45,12 @@ const ArrayCardsInner = observer(
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
       const prefixCls = `${stylePrefix}-array-cards`
-      const getKey = ArrayBase.useKey()
+      const { getKey, keyMap } = ArrayBase.useKey(schemaRef.value)
 
       return () => {
         const field = fieldRef.value
         const schema = schemaRef.value
-        const dataSource = Array.isArray(field.value) ? field.value.slice() : []
-
+        const dataSource = Array.isArray(field.value) ? field.value : []
         if (!schema) throw new Error('can not found schema object')
 
         const renderItems = () => {
@@ -123,10 +122,11 @@ const ArrayCardsInner = observer(
               },
               {}
             )
+
             return h(
               ArrayBase.Item,
               {
-                key: getKey(item),
+                key: getKey(item, index),
                 props: {
                   index,
                 },
@@ -214,7 +214,11 @@ const ArrayCardsInner = observer(
             default: () =>
               h(
                 ArrayBase,
-                {},
+                {
+                  props: {
+                    keyMap,
+                  },
+                },
                 {
                   default: () => [
                     renderEmpty(),
