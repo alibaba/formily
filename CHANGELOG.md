@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.0-rc.1(2021-08-13)
+
+### No Change Log
+
 ## v2.0.0-rc.0(2021-08-13)
 
 ### :beetle: Bug Fixes
@@ -1061,27 +1065,3 @@
 ### :blush: Other Changes
 
 1. [chore: improve github pull request template (#1328)](https://github.com/alibaba/formily/commit/353e87a7) :point_right: ( [liuwei](https://github.com/liuwei) )
-
-## v1.3.7(2020-11-12)
-
-### :tada: Enhancements
-
-1. [feat(react-schema-renderer): add componentPropsInterceptor (#1062)](https://github.com/alibaba/formily/commit/656056b4) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [feat: update alignment (#1060)](https://github.com/alibaba/formily/commit/fadb3f7d) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [feat(core): support enableUnmountRemoveNode/disableUnmountRemoveNode API](https://github.com/alibaba/formily/commit/8f99e5b3) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :beetle: Bug Fixes
-
-1. [fix(react): fix form render dirty check (#1056)](https://github.com/alibaba/formily/commit/5aeed554) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix form step validate failed (#1054)](https://github.com/alibaba/formily/commit/9db2eeb7) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd-components): fix format nan (#1052)](https://github.com/alibaba/formily/commit/1a727590) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix input change trigger order](https://github.com/alibaba/formily/commit/1cebca66) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :memo: Documents Changes
-
-1. [docs(codesandbox): update dependencies](https://github.com/alibaba/formily/commit/e8260eda) :point_right: ( [janrywang](https://github.com/janrywang) )
