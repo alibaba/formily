@@ -16,6 +16,7 @@ import {
   createEnsureTypeItemsNode,
 } from '../../shared'
 import { useDropTemplate } from '../../hooks'
+import './styles.less'
 
 const ensureObjectItemsNode = createEnsureTypeItemsNode('object')
 
@@ -120,15 +121,9 @@ export const DesignableArrayTable: React.FC<TableProps> = observer((props) => {
     return node.id
   }
 
-  useDropTemplate('ArrayTable.Column', (source) => {
-    return source.map((node) => {
-      node.props.title = undefined
-      return node
-    })
-  })
-
-  return (
-    <div {...nodeId}>
+  const renderTable = () => {
+    if (node.children.length === 0) return <Droppable />
+    return (
       <ArrayBase disabled>
         <Table
           size="small"
@@ -166,6 +161,19 @@ export const DesignableArrayTable: React.FC<TableProps> = observer((props) => {
           return <TreeNodeWidget node={child} key={child.id} />
         })}
       </ArrayBase>
+    )
+  }
+
+  useDropTemplate('ArrayTable.Column', (source) => {
+    return source.map((node) => {
+      node.props.title = undefined
+      return node
+    })
+  })
+
+  return (
+    <div {...nodeId} className="dn-array-table">
+      {renderTable()}
       <LoadTemplate
         actions={[
           {

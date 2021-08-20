@@ -24,7 +24,7 @@ const ArrayItemsInner = observer(
       const schemaRef = useFieldSchema()
 
       const prefixCls = `${stylePrefix}-array-items`
-      const getKey = ArrayBase.useKey()
+      const { getKey, keyMap } = ArrayBase.useKey(schemaRef.value)
 
       return () => {
         const field = fieldRef.value
@@ -36,7 +36,7 @@ const ArrayItemsInner = observer(
             const items = Array.isArray(schema.items)
               ? schema.items[index] || schema.items[0]
               : schema.items
-            const key = getKey(item)
+            const key = getKey(item, index)
             return h(
               ArrayBase.Item,
               {
@@ -82,10 +82,15 @@ const ArrayItemsInner = observer(
                 useDragHandle: true,
                 lockAxis: 'y',
                 helperClass: `${prefixCls}-sort-helper`,
-                onSortEnd: ({ oldIndex, newIndex }) => {
+                value: [],
+              },
+              on: {
+                'sort-end': ({ oldIndex, newIndex }) => {
+                  if (Array.isArray(keyMap)) {
+                    keyMap.splice(newIndex, 0, keyMap.splice(oldIndex, 1)[0])
+                  }
                   field.move(oldIndex, newIndex)
                 },
-                value: [],
               },
             },
             { default: () => items }
@@ -111,7 +116,11 @@ const ArrayItemsInner = observer(
 
         return h(
           ArrayBase,
-          {},
+          {
+            props: {
+              keyMap,
+            },
+          },
           {
             default: () =>
               h(

@@ -7,5 +7,6 @@ export const usePrefixCls = (
   }
 ) => {
   const getContext = ConfigProvider['getContext']
-  return props?.prefix ?? getContext()?.prefix ?? `next${tag ? `-${tag}` : ''}`
+  const prefix = props?.prefix ?? getContext()?.prefix ?? 'next-'
+  return `${prefix}${tag}`
 }

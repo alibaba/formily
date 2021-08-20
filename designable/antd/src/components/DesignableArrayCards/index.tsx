@@ -15,6 +15,7 @@ import {
   findNodeByComponentPath,
   createNodeId,
 } from '../../shared'
+import './styles.less'
 
 const ensureVoidItemsNode = createEnsureTypeItemsNode('void')
 
@@ -139,7 +140,7 @@ export const DesignableArrayCards: React.FC<CardProps> = observer((props) => {
   }
 
   return (
-    <div {...nodeId}>
+    <div {...nodeId} className="dn-array-cards">
       {renderCard()}
       <LoadTemplate
         actions={[

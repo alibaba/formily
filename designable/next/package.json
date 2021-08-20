@@ -1,6 +1,6 @@
 {
   "name": "@formily/designable-next",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.3",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -29,7 +29,7 @@
     "start": "webpack-dev-server --config playground/webpack.dev.ts"
   },
   "devDependencies": {
-    "@designable/react-settings-form": "^0.4.34",
+    "@designable/react-settings-form": "^0.4.39",
     "autoprefixer": "^9.0",
     "file-loader": "^5.0.2",
     "fs-extra": "^8.1.0",
@@ -56,14 +56,14 @@
     "react-is": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
-    "@designable/core": "^0.4.34",
-    "@designable/formily": "^0.4.34",
-    "@designable/react": "^0.4.34",
-    "@formily/core": "2.0.0-rc.1",
-    "@formily/designable-setters": "2.0.0-rc.1",
-    "@formily/next": "2.0.0-rc.1",
-    "@formily/react": "2.0.0-rc.1",
-    "@formily/shared": "2.0.0-rc.1"
+    "@designable/core": "^0.4.39",
+    "@designable/formily": "^0.4.39",
+    "@designable/react": "^0.4.39",
+    "@formily/core": "2.0.0-rc.3",
+    "@formily/designable-setters": "2.0.0-rc.3",
+    "@formily/next": "2.0.0-rc.3",
+    "@formily/react": "2.0.0-rc.3",
+    "@formily/shared": "2.0.0-rc.3"
   },
   "publishConfig": {
     "access": "public"

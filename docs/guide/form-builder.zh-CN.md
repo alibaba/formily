@@ -205,6 +205,8 @@ interface IDesignableFieldFactoryProps {
   registryName: string //必填项，注册名称，标识DesignableField在组件树中的componentName
   components?: Record<string, React.JSXElementConstructor<unknown>> //自定义画布组件，用于传入x-component/x-decorator
   componentsPropsSchema?: Record<string, ISchema> //自定义画布组件属性schema配置
+  componentsIcon?: Record<string, React.ReactNode> //组件Icon
+  componentsSourceIcon?: Record<string, React.ReactNode> //组件拖拽源Icon
   dropFormItemComponents?: ComponentNameMatcher[] //标识哪些组件不需要支持FormItem
   dropReactionComponents?: ComponentNameMatcher[] //标识哪些组件不需要支持响应器配置
   selfRenderChildrenComponents?: ComponentNameMatcher[] //标识哪些画布组件是由组件自身渲染子树，目前内部ArrayTable/FormTab这类组件是默认标识了

@@ -264,6 +264,8 @@ export const createDesignableField = (
           : '')
       return {
         title: nodeTitle,
+        sourceIcon: realOptions.componentsSourceIcon?.[componentName],
+        icon: realOptions.componentsIcon?.[componentName],
         draggable: true,
         droppable: isObjectNode || isArrayNode || isVoidNode,
         selfRenderChildren:
