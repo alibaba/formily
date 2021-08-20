@@ -435,6 +435,15 @@ export default {
     Settings: {
       ...FieldLocale,
       ...ComponentLocale,
+      namespace: {
+        Text: {
+          content: 'Text Content',
+          mode: {
+            title: 'Text Mode',
+            dataSource: ['H1', 'H2', 'H3', 'Paragraph', 'Normal'],
+          },
+        },
+      },
     },
     Common: {
       droppable: 'Droppable',

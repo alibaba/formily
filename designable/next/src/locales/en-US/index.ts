@@ -23,6 +23,7 @@ import { Upload } from './Upload'
 import { Switch } from './Switch'
 import { ArrayTable } from './ArrayTable'
 import { ArrayCards } from './ArrayCards'
+import { Text } from './Text'
 import * as ArrayComponents from './Array'
 import type { ISettingsLocale } from '../types'
 
@@ -50,6 +51,7 @@ const Components: ISettingsLocale = {
   Transfer,
   Upload,
   Switch,
+  Text,
   ArrayTable,
   ArrayCards,
 }
@@ -85,6 +87,7 @@ const enUS: ISettingsLocale = {
     FormCollapse: { title: 'FormCollapse', CollapsePanel: 'Collapse Panel' },
     Object: 'Object',
     Void: 'Void Element',
+    Text: 'Text',
     ...ArrayComponents,
     FormItem: 'Form Item',
   },

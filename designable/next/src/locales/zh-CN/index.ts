@@ -21,6 +21,7 @@ import { Password } from './Password'
 import { Transfer } from './Transfer'
 import { Upload } from './Upload'
 import { Switch } from './Switch'
+import { Text } from './Text'
 import { ArrayTable } from './ArrayTable'
 import { ArrayCards } from './ArrayCards'
 import * as ArrayComponents from './Array'
@@ -43,6 +44,7 @@ const Components: ISettingsLocale = {
   Checkbox,
   Range,
   Rating,
+  Text,
   DatePicker,
   TimePicker,
   NumberPicker,
@@ -85,6 +87,7 @@ const zhCN: ISettingsLocale = {
     FormCollapse: { title: '手风琴布局', CollapsePanel: '手风琴面板' },
     Object: '数据对象',
     Void: '虚拟容器',
+    Text: '文本',
     ...ArrayComponents,
     FormItem: '表单项容器',
   },

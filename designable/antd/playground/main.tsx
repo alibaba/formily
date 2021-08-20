@@ -40,6 +40,7 @@ GlobalRegistry.registerDesignerLocales({
       Inputs: '输入控件',
       Layouts: '布局组件',
       Arrays: '自增组件',
+      Displays: '展示组件',
     },
   },
   'en-US': {
@@ -47,6 +48,7 @@ GlobalRegistry.registerDesignerLocales({
       Inputs: 'Inputs',
       Layouts: 'Layouts',
       Arrays: 'Arrays',
+      Displays: 'Displays',
     },
   },
 })
@@ -82,6 +84,7 @@ const App = () => {
             <DragSourceWidget title="sources.Inputs" name="inputs" />
             <DragSourceWidget title="sources.Layouts" name="layouts" />
             <DragSourceWidget title="sources.Arrays" name="arrays" />
+            <DragSourceWidget title="sources.Displays" name="displays" />
           </CompositePanel.Item>
           <CompositePanel.Item title="panels.OutlinedTree" icon="Outline">
             <OutlineTreeWidget />

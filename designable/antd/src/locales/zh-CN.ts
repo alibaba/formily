@@ -406,6 +406,7 @@ export default {
       FormCollapse: { title: '手风琴布局', CollapsePanel: '手风琴面板' },
       Object: '数据对象',
       Void: '虚拟容器',
+      Text: '文本',
       ArrayTable: {
         title: '自增表格',
         Column: '表格列',
@@ -428,6 +429,15 @@ export default {
     Settings: {
       ...FieldLocale,
       ...ComponentLocale,
+      namespace: {
+        Text: {
+          content: '文本内容',
+          mode: {
+            title: '文本类型',
+            dataSource: ['H1', 'H2', 'H3', 'Paragraph', 'Normal'],
+          },
+        },
+      },
     },
     Common: {
       droppable: '可以拖入组件',

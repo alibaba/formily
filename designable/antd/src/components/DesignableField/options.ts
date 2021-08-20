@@ -28,6 +28,7 @@ import { DesignableFormTab } from '../DesignableFormTab'
 import { DesignableFormCollapse } from '../DesignableFormCollapse'
 import { DesignableArrayTable } from '../DesignableArrayTable'
 import { DesignableArrayCards } from '../DesignableArrayCards'
+import { DesignableText } from '../DesignableText'
 import { TreeNode } from '@designable/core'
 
 const isChildrenComponents =
@@ -70,6 +71,8 @@ const allowDropWithEmpty = (name: string, node: TreeNode, target: TreeNode) => {
   return false
 }
 
+const noChildren = () => false
+
 export const createOptions = (
   options: IDesignableFieldFactoryProps
 ): IDesignableFieldFactoryProps => {
@@ -106,6 +109,7 @@ export const createOptions = (
       FormCollapse: [allowDropWithEmpty, 'FormCollapse.CollapsePanel'],
       ArrayTable: [allowDropWithEmpty, isObjectNode, 'ArrayTable.Addition'],
       'ArrayTable.Column': [isNotArrayColumn],
+      Text: [noChildren],
     },
     restrictSiblingComponents: {
       'FormTab.TabPane': ['FormTab.TabPane'],
@@ -121,6 +125,7 @@ export const createOptions = (
       FormCollapse: DesignableFormCollapse,
       ArrayTable: DesignableArrayTable,
       ArrayCards: DesignableArrayCards,
+      Text: DesignableText,
       FormItem,
       DatePicker,
       Checkbox,
