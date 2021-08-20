@@ -1,6 +1,6 @@
 {
   "name": "@formily/designable-next",
-  "version": "2.0.0-rc.2",
+  "version": "2.0.0-rc.3",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -59,11 +59,11 @@
     "@designable/core": "^0.4.39",
     "@designable/formily": "^0.4.39",
     "@designable/react": "^0.4.39",
-    "@formily/core": "2.0.0-rc.2",
-    "@formily/designable-setters": "2.0.0-rc.2",
-    "@formily/next": "2.0.0-rc.2",
-    "@formily/react": "2.0.0-rc.2",
-    "@formily/shared": "2.0.0-rc.2"
+    "@formily/core": "2.0.0-rc.3",
+    "@formily/designable-setters": "2.0.0-rc.3",
+    "@formily/next": "2.0.0-rc.3",
+    "@formily/react": "2.0.0-rc.3",
+    "@formily/shared": "2.0.0-rc.3"
   },
   "publishConfig": {
     "access": "public"
