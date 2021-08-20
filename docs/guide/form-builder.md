@@ -205,6 +205,8 @@ interface IDesignableFieldFactoryProps {
   registryName: string //Required, registered name, componentName that identifies DesignableField in the component tree
   components?: Record<string, React.JSXElementConstructor<unknown>> //Custom canvas components, used to pass in x-component/x-decorator
   componentsPropsSchema?: Record<string, ISchema> //Custom canvas component property schema configuration
+  componentsIcon?: Record<string, React.ReactNode> //Custom canvas component's icon
+  componentsSourceIcon?: Record<string, React.ReactNode> //Custom canvas component's drag source icon
   dropFormItemComponents?: ComponentNameMatcher[] //Identify which components do not need to support FormItem
   dropReactionComponents?: ComponentNameMatcher[] //Identify which components do not need to support responder configuration
   selfRenderChildrenComponents?: ComponentNameMatcher[] //Identify which canvas components are rendered by the component itself, and currently internal components such as ArrayTable/FormTab are identified by default
