@@ -1,10 +1,10 @@
 .dn-text {
-  border: none;
-  outline: none;
-  min-height: 14px;
+  min-height: 22px !important;
   padding: 4px;
-  display: block;
-  &.active {
-    cursor: text;
+
+  &:empty::before {
+    content: 'Please Input';
+    display: block;
+    opacity: 0.6;
   }
 }
