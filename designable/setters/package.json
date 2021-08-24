@@ -39,10 +39,10 @@
     "react-is": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
-    "@designable/core": "^0.5.3",
-    "@designable/formily": "^0.5.3",
-    "@designable/react": "^0.5.3",
-    "@designable/react-settings-form": "^0.5.3",
+    "@designable/core": "^0.5.4",
+    "@designable/formily": "^0.5.4",
+    "@designable/react": "^0.5.4",
+    "@designable/react-settings-form": "^0.5.4",
     "@formily/antd": "2.0.0-rc.3",
     "@formily/core": "2.0.0-rc.3",
     "@formily/react": "2.0.0-rc.3",

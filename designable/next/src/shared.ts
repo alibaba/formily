@@ -25,6 +25,7 @@ export const matchChildComponent = (
 ) => {
   if (name === '*') return true
   const componentName = node?.props?.['x-component']
+  if (!componentName) return false
   if (typeof name === 'function')
     return name(componentName || '', node, context)
   if (Array.isArray(name)) return name.includes(componentName)
