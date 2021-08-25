@@ -145,6 +145,10 @@ export const createOptions = (
       'Upload.Dragger': 'UploadDraggerSource',
       Card: 'CardSource',
       FormLayout: 'FormLayoutSource',
+      Text: 'TextSource',
+      Image: 'ImageSource',
+      Button: 'ButtonSource',
+      Video: 'MediaSource',
     },
     components: {
       ...options.components,
