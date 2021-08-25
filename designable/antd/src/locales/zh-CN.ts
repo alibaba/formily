@@ -274,7 +274,6 @@ const FormGridLocale = {
 }
 
 const SpaceLocale = {
-  align: '对齐',
   direction: { title: '方向', dataSource: ['垂直', '水平'] },
   split: '分割内容',
   wrap: '自动换行',
@@ -435,6 +434,12 @@ export default {
           mode: {
             title: '文本类型',
             dataSource: ['H1', 'H2', 'H3', 'Paragraph', 'Normal'],
+          },
+        },
+        Space: {
+          align: {
+            title: '对齐',
+            dataSource: ['头部', '尾部', '居中', '基准线'],
           },
         },
       },

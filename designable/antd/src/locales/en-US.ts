@@ -280,7 +280,6 @@ const FormGridLocale = {
 }
 
 const SpaceLocale = {
-  align: 'Align',
   direction: { title: 'Direction', dataSource: ['Vertical', 'Horizontal'] },
   split: 'Split',
   wrap: 'Word Wrap',
@@ -442,6 +441,12 @@ export default {
           mode: {
             title: 'Text Mode',
             dataSource: ['H1', 'H2', 'H3', 'Paragraph', 'Normal'],
+          },
+        },
+        Space: {
+          align: {
+            title: 'Align',
+            dataSource: ['Start', 'End', 'Center', 'Baseline'],
           },
         },
       },
