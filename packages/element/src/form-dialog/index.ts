@@ -335,7 +335,7 @@ export function FormDialog(
       }
       return formDialog
     },
-    open: (props: Formily.Core.Types.IFormProps) => {
+    open: (props: IFormProps) => {
       if (env.promise) return env.promise
 
       env.promise = new Promise(async (resolve, reject) => {
