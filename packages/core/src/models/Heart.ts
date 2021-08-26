@@ -68,6 +68,7 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
 
   clear = () => {
     this.lifecycles = []
+    this.outerLifecycles.clear()
     this.unsubscribe()
   }
 }
