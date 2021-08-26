@@ -310,6 +310,46 @@ describe('x-content', () => {
     expect(queryByTestId('previewer2')).toBeVisible()
     expect(queryByTestId('previewer2').textContent).toEqual('123')
   })
+
+  test('named slot in void field', () => {
+    const form = createForm()
+    const Content = {
+      render(h) {
+        return h('span', '123')
+      },
+    }
+    const { SchemaField } = createSchemaField({
+      components: {
+        Previewer2,
+      },
+      scope: {
+        Content,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'void',
+            'x-component': 'Previewer2',
+            'x-content': {
+              content: '{{Content}}',
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('previewer2')).toBeVisible()
+    expect(queryByTestId('previewer2').textContent).toEqual('123')
+  })
 })
 
 describe('scope', () => {
