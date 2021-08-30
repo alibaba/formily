@@ -3,7 +3,10 @@ import hoistNonReactStatics from 'hoist-non-react-statics'
 import { useObserver } from './hooks'
 import { IObserverOptions, IObserverProps } from './types'
 
-export function observer<P, Options extends IObserverOptions>(
+export function observer<
+  P,
+  Options extends IObserverOptions = IObserverOptions
+>(
   component: React.FunctionComponent<P>,
   options?: Options
 ): React.MemoExoticComponent<
