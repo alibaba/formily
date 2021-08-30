@@ -37,8 +37,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   selfDisplay: FieldDisplayTypes
   selfPattern: FieldPatternTypes
   initialized: boolean
-  mounted: boolean
-  unmounted: boolean
+  selfMounted: boolean
+  selfUnmounted: boolean
 
   decoratorType: Decorator
   decoratorProps: Record<string, any>
@@ -100,8 +100,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
       selfDisplay: observable.ref,
       selfPattern: observable.ref,
       initialized: observable.ref,
-      mounted: observable.ref,
-      unmounted: observable.ref,
+      selfMounted: observable.ref,
+      selfUnmounted: observable.ref,
       decoratorType: observable.ref,
       componentType: observable.ref,
       decoratorProps: observable,
@@ -116,6 +116,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
       editable: observable.computed,
       component: observable.computed,
       decorator: observable.computed,
+      mounted: observable.computed,
+      unmounted: observable.computed,
       setTitle: action,
       setDescription: action,
       setDisplay: action,
@@ -183,6 +185,22 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     return parentDisplay || this.form.display || 'visible'
   }
 
+  get mounted() {
+    const parentMounted = this.parent?.mounted
+    if (parentMounted) {
+      return this.selfUnmounted
+    }
+    return false
+  }
+
+  get unmounted() {
+    const parentUnmounted = this.parent?.unmounted
+    if (parentUnmounted) {
+      return true
+    }
+    return this.selfUnmounted
+  }
+
   get pattern(): FormPatternTypes {
     const parentPattern = this.parent?.pattern
     if (isValid(this.selfPattern)) return this.selfPattern
@@ -229,6 +247,18 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     } else {
       this.display = 'none'
     }
+  }
+
+  set mounted(mounted: boolean) {
+    if (!isValid(mounted)) return
+    this.selfMounted = mounted
+    this.selfUnmounted = !mounted
+  }
+
+  set unmounted(unmounted: boolean) {
+    if (!isValid(unmounted)) return
+    this.selfUnmounted = unmounted
+    this.selfMounted = !unmounted;
   }
 
   set editable(editable: boolean) {
