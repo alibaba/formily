@@ -81,8 +81,8 @@ export class Field<
   inputValues: any[]
   initialized: boolean
   dataSource: FieldDataSource
-  selfMounted: boolean
-  selfUnmounted: boolean
+  mounted: boolean
+  unmounted: boolean
   validator: FieldValidator
   decoratorType: Decorator
   decoratorProps: Record<string, any>
@@ -164,8 +164,8 @@ export class Field<
       active: observable.ref,
       visited: observable.ref,
       initialized: observable.ref,
-      selfMounted: observable.ref,
-      selfUnmounted: observable.ref,
+      mounted: observable.ref,
+      unmounted: observable.ref,
       inputValue: observable.ref,
       inputValues: observable.ref,
       decoratorType: observable.ref,
@@ -193,8 +193,6 @@ export class Field<
       readOnly: observable.computed,
       readPretty: observable.computed,
       editable: observable.computed,
-      mounted: observable.computed,
-      unmounted: observable.computed,
       setDisplay: action,
       setTitle: action,
       setDescription: action,
@@ -364,22 +362,6 @@ export class Field<
     return parentDisplay || this.form.display || 'visible'
   }
 
-  get mounted() {
-    const parentMounted = this.parent?.mounted
-    if (parentMounted) {
-      return this.selfUnmounted
-    }
-    return false
-  }
-
-  get unmounted() {
-    const parentUnmounted = this.parent?.unmounted
-    if (parentUnmounted) {
-      return true
-    }
-    return this.selfUnmounted
-  }
-
   get pattern(): FieldPatternTypes {
     const parentPattern = this.parent?.pattern
     if (this.selfPattern) return this.selfPattern
@@ -483,18 +465,6 @@ export class Field<
 
   set display(display: FieldDisplayTypes) {
     this.selfDisplay = display
-  }
-
-  set mounted(mounted: boolean) {
-    if (!isValid(mounted)) return
-    this.selfMounted = mounted
-    this.selfUnmounted = !mounted
-  }
-
-  set unmounted(unmounted: boolean) {
-    if (!isValid(unmounted)) return
-    this.selfUnmounted = unmounted
-    this.selfMounted = !unmounted;
   }
 
   set required(required: boolean) {

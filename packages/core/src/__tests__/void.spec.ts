@@ -162,7 +162,7 @@ test('setState/getState', () => {
   expect(aa.parent).toBeUndefined()
 })
 
-test('nested display/mounted/pattern', () => {
+test('nested display/pattern', () => {
   const form = attach(createForm())
   attach(
     form.createObjectField({
@@ -223,14 +223,6 @@ test('nested display/mounted/pattern', () => {
   expect(aaa.display).toEqual('visible')
   expect(bbb.display).toEqual('visible')
   void_.onUnmount()
-  expect(void_.unmounted).toEqual(true);
-  expect(void_.mounted).toEqual(false);
-  expect(void2_.unmounted).toEqual(true);
-  expect(void2_.mounted).toEqual(false);
-  expect(aaa.unmounted).toEqual(true);
-  expect(aaa.mounted).toEqual(false);
-  expect(bbb.unmounted).toEqual(true);
-  expect(bbb.mounted).toEqual(false);
   expect(void2_.parent === void_).toBeTruthy()
 })
 
