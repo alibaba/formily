@@ -280,7 +280,6 @@ const FormGridLocale = {
 }
 
 const SpaceLocale = {
-  align: 'Align',
   direction: { title: 'Direction', dataSource: ['Vertical', 'Horizontal'] },
   split: 'Split',
   wrap: 'Word Wrap',
@@ -407,27 +406,28 @@ export default {
       Password: 'Password',
       Transfer: 'Transfer',
       TreeSelect: 'TreeSelect',
-      Upload: { title: 'Upload', Dragger: 'DraggerUpload' },
+      Upload: { title: 'Upload', Dragger: 'Dragger Upload' },
       Switch: 'Switch',
-      FormTab: { title: 'FormTab', TabPane: 'Tab Panel' },
-      FormCollapse: { title: 'FormCollapse', CollapsePanel: 'Collapse Panel' },
+      FormTab: { title: 'Form Tab', TabPane: 'Tab Panel' },
+      FormCollapse: { title: 'Form Collapse', CollapsePanel: 'Collapse Panel' },
       Object: 'Object',
       Void: 'Void Element',
+      Text: 'Text',
       ArrayTable: {
-        title: 'ArrayTable',
+        title: 'Array Table',
         Column: 'Column',
         ...ArrayOperationsLocale,
       },
       ArrayCards: {
-        title: 'ArrayCards',
+        title: 'Array Cards',
         ...ArrayOperationsLocale,
       },
       ArrayTabs: {
-        title: 'ArrayTabs',
+        title: 'Array Tabs',
         ...ArrayOperationsLocale,
       },
       ArrayCollapse: {
-        title: 'ArrayCollpase',
+        title: 'Array Collapse',
         ...ArrayOperationsLocale,
       },
       FormItem: 'FormItem',
@@ -435,6 +435,21 @@ export default {
     Settings: {
       ...FieldLocale,
       ...ComponentLocale,
+      namespace: {
+        Text: {
+          content: 'Text Content',
+          mode: {
+            title: 'Text Mode',
+            dataSource: ['H1', 'H2', 'H3', 'Paragraph', 'Normal'],
+          },
+        },
+        Space: {
+          align: {
+            title: 'Align',
+            dataSource: ['Start', 'End', 'Center', 'Baseline'],
+          },
+        },
+      },
     },
     Common: {
       droppable: 'Droppable',

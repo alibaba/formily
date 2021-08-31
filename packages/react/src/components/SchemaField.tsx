@@ -39,6 +39,7 @@ export function createSchemaField<Components extends SchemaReactComponents>(
         })
     const renderMarkup = () => {
       env.nonameId = 0
+      if (props.schema) return null
       return render(
         <SchemaMarkupContext.Provider value={schema}>
           {props.children}

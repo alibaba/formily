@@ -1224,6 +1224,23 @@ test('deep nested fields hidden and validate with middle hidden', async () => {
   expect(form.invalid).toBeFalsy()
 })
 
+test('fields unmount and validate', async () => {
+  const form = attach(createForm())
+  const field = attach(
+    form.createField({
+      name: 'parent',
+      required: true,
+    })
+  )
+  try {
+    await form.validate()
+  } catch {}
+  expect(form.invalid).toBeTruthy()
+  field.onUnmount();
+  await form.validate()
+  expect(form.invalid).toBeFalsy()
+})
+
 test('auto clean with ArrayField', () => {
   const form = attach(createForm())
   attach(

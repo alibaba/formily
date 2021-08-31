@@ -261,10 +261,11 @@ export const createDesignableField = (
           : isVoidNode
           ? GlobalRegistry.getDesignerMessage('components.Void')
           : '')
+      const sourceIcon = realOptions.componentsSourceIcon?.[componentName]
       return {
         title: nodeTitle,
-        sourceIcon: realOptions.componentsSourceIcon[componentName],
-        icon: realOptions.componentsIcon[componentName],
+        sourceIcon: isObjectNode ? 'ObjectSource' : sourceIcon,
+        icon: realOptions.componentsIcon?.[componentName],
         draggable: true,
         droppable: isObjectNode || isArrayNode || isVoidNode,
         selfRenderChildren:

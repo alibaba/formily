@@ -1,6 +1,6 @@
 {
   "name": "@formily/designable-antd",
-  "version": "2.0.0-rc.3",
+  "version": "2.0.0-rc.4",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -29,7 +29,7 @@
     "start": "webpack-dev-server --config playground/webpack.dev.ts"
   },
   "devDependencies": {
-    "@designable/react-settings-form": "^0.4.39",
+    "@designable/react-settings-form": "^0.x",
     "autoprefixer": "^9.0",
     "file-loader": "^5.0.2",
     "fs-extra": "^8.1.0",
@@ -55,14 +55,14 @@
     "react-is": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
-    "@designable/core": "^0.4.39",
-    "@designable/formily": "^0.4.39",
-    "@designable/react": "^0.4.39",
-    "@formily/antd": "2.0.0-rc.3",
-    "@formily/core": "2.0.0-rc.3",
-    "@formily/designable-setters": "2.0.0-rc.3",
-    "@formily/react": "2.0.0-rc.3",
-    "@formily/shared": "2.0.0-rc.3"
+    "@designable/core": "^0.x",
+    "@designable/formily": "^0.x",
+    "@designable/react": "^0.x",
+    "@formily/antd": "2.0.0-rc.4",
+    "@formily/core": "2.0.0-rc.4",
+    "@formily/designable-setters": "2.0.0-rc.4",
+    "@formily/react": "2.0.0-rc.4",
+    "@formily/shared": "2.0.0-rc.4"
   },
   "publishConfig": {
     "access": "public"

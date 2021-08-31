@@ -23,6 +23,7 @@ import { Upload } from './Upload'
 import { Switch } from './Switch'
 import { ArrayTable } from './ArrayTable'
 import { ArrayCards } from './ArrayCards'
+import { Text } from './Text'
 import * as ArrayComponents from './Array'
 import type { ISettingsLocale } from '../types'
 
@@ -50,6 +51,7 @@ const Components: ISettingsLocale = {
   Transfer,
   Upload,
   Switch,
+  Text,
   ArrayTable,
   ArrayCards,
 }
@@ -79,12 +81,13 @@ const enUS: ISettingsLocale = {
     Password: 'Password',
     Transfer: 'Transfer',
     TreeSelect: 'TreeSelect',
-    Upload: { title: 'Upload', Dragger: 'DraggerUpload' },
+    Upload: { title: 'Upload', Dragger: 'Dragger Upload' },
     Switch: 'Switch',
-    FormTab: { title: 'FormTab', TabPane: 'Tab Panel' },
-    FormCollapse: { title: 'FormCollapse', CollapsePanel: 'Collapse Panel' },
+    FormTab: { title: 'Form Tab', TabPane: 'Tab Panel' },
+    FormCollapse: { title: 'Form Collapse', CollapsePanel: 'Collapse Panel' },
     Object: 'Object',
     Void: 'Void Element',
+    Text: 'Text',
     ...ArrayComponents,
     FormItem: 'Form Item',
   },

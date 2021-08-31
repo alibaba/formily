@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.0.0-rc.3(2021-08-20)
+
+### :blush: Other Changes
+
+1. [chore(project): update yarn.lock](https://github.com/alibaba/formily/commit/be3a1939) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable): update dn](https://github.com/alibaba/formily/commit/3ef53458) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-rc.2(2021-08-19)
 
 ### :beetle: Bug Fixes
@@ -815,15 +823,3 @@
 1. [chore(scripts): slice changelog counts](https://github.com/alibaba/formily/commit/fead7843) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(project): add automatic changelog generator](https://github.com/alibaba/formily/commit/b9bef50a) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.53(2021-05-20)
-
-### :rose: Improve code quality
-
-1. [refactor(project): remove designable package](https://github.com/alibaba/formily/commit/623a8623) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :blush: Other Changes
-
-1. [chore(project): update pkg scripts](https://github.com/alibaba/formily/commit/26c61252) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [chore(antd/next): update resize-observer-polyfill](https://github.com/alibaba/formily/commit/71542b08) :point_right: ( [janrywang](https://github.com/janrywang) )

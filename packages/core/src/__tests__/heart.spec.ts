@@ -40,3 +40,15 @@ test('add/remove lifecycle', () => {
   heart.publish('event')
   expect(handler).toBeCalledTimes(1)
 })
+
+test('add/clear lifecycle', () => {
+  const handler = jest.fn()
+  const heart = new Heart()
+  heart.addLifeCycles('xxx', [new LifeCycle('event', handler)])
+  heart.addLifeCycles('yyy')
+  heart.publish('event')
+  expect(handler).toBeCalledTimes(1)
+  heart.clear()
+  heart.publish('event')
+  expect(handler).toBeCalledTimes(1)
+})

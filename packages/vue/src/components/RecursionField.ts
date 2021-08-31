@@ -154,7 +154,11 @@ const RecursionField = observer(
             }
           )
 
-          const slots = getSlots(children)
+          const slots: Record<string, () => any> = {}
+          const allSlots = getSlots(children)
+          if (allSlots.default) {
+            slots.default = allSlots.default
+          }
 
           return h(Fragment, {}, slots)
         }
@@ -163,6 +167,7 @@ const RecursionField = observer(
           if (!isValid(props.name)) return renderProperties()
           if (fieldSchemaRef.value.type === 'object') {
             if (props.onlyRenderProperties) return renderProperties()
+            const slots = getSlots()
             return h(
               ObjectField,
               {
@@ -173,6 +178,7 @@ const RecursionField = observer(
                 },
               },
               {
+                ...slots,
                 default: ({ field }) => [renderProperties(field)],
               }
             )
@@ -191,6 +197,7 @@ const RecursionField = observer(
             )
           } else if (fieldSchemaRef.value.type === 'void') {
             if (props.onlyRenderProperties) return renderProperties()
+            const slots = getSlots()
             return h(
               VoidField,
               {
@@ -201,6 +208,7 @@ const RecursionField = observer(
                 },
               },
               {
+                ...slots,
                 default: ({ field }) => [renderProperties(field)],
               }
             )

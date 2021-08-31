@@ -340,7 +340,7 @@ export function FormDrawer(
       }
       return formDrawer
     },
-    open: (props: Formily.Core.Types.IFormProps) => {
+    open: (props: IFormProps) => {
       if (env.promise) return env.promise
 
       env.promise = new Promise(async (resolve, reject) => {

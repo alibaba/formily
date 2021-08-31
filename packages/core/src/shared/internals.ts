@@ -200,6 +200,7 @@ export const validateToFeedbacks = async (
   const takeSkipCondition = () => {
     if (field.display !== 'visible') return true
     if (field.pattern !== 'editable') return true
+    if (field.unmounted) return true
     return false
   }
 

@@ -11,7 +11,7 @@ const ArrayOperations: ISettingsLocale = {
 
 export const ArrayTable: ISettingsLocale = {
   ...ArrayOperations,
-  title: 'ArrayTable',
+  title: 'Array Table',
   Column: 'Column',
 }
 

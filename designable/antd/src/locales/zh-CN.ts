@@ -274,7 +274,6 @@ const FormGridLocale = {
 }
 
 const SpaceLocale = {
-  align: '对齐',
   direction: { title: '方向', dataSource: ['垂直', '水平'] },
   split: '分割内容',
   wrap: '自动换行',
@@ -406,6 +405,7 @@ export default {
       FormCollapse: { title: '手风琴布局', CollapsePanel: '手风琴面板' },
       Object: '数据对象',
       Void: '虚拟容器',
+      Text: '文本',
       ArrayTable: {
         title: '自增表格',
         Column: '表格列',
@@ -428,6 +428,21 @@ export default {
     Settings: {
       ...FieldLocale,
       ...ComponentLocale,
+      namespace: {
+        Text: {
+          content: '文本内容',
+          mode: {
+            title: '文本类型',
+            dataSource: ['H1', 'H2', 'H3', 'Paragraph', 'Normal'],
+          },
+        },
+        Space: {
+          align: {
+            title: '对齐',
+            dataSource: ['头部', '尾部', '居中', '基准线'],
+          },
+        },
+      },
     },
     Common: {
       droppable: '可以拖入组件',

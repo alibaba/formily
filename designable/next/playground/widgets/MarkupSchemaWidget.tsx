@@ -89,6 +89,14 @@ import {
 } from '@formily/next'
 import { Card, Range, Rating } from '@alifd/next'
 
+const Text: React.FC<{
+  content?: string
+  mode?: 'normal' | 'h1' | 'h2' | 'h3' | 'p'
+}> = ({ mode, content, ...props }) => {
+  const tagName = mode === 'normal' || !mode ? 'div' : mode
+  return React.createElement(tagName, props, content)
+}
+
 const SchemaField = createSchemaField({
   components: {
     Space,
