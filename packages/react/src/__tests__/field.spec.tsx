@@ -1,7 +1,7 @@
 import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { render, fireEvent, waitFor } from '@testing-library/react'
-import { createForm } from '@formily/core'
+import { createForm, onFieldUnmount } from '@formily/core'
 import {
   isField,
   Field as FieldType,
@@ -233,5 +233,55 @@ test('connect', async () => {
   await waitFor(() => {
     expect(queryByText('123')).toBeNull()
     expect(queryByText('read pretty')).toBeVisible()
+  })
+})
+
+test('fields unmount and validate', async () => {
+  const fn = jest.fn();
+  const form = createForm({
+    initialValues: {
+      parent: {
+        type: 'mounted',
+      }
+    },
+    effects: () => {
+      onFieldUnmount('parent.child', () => {
+        fn()
+      })
+    }
+  })
+  const Parent = observer(() => {
+    const field = useField()
+    if (field.value.type === 'mounted') {
+      return <Field name='child' component={[Input]} validator={{required: true}} />
+    }
+    return <div data-testid='unmounted'></div>
+  })
+  act(async () => {
+    const MyComponent = () => {
+      return (
+        <FormProvider form={form}>
+          <Field name='parent' component={[Parent]} />
+        </FormProvider>
+      )
+    }
+    render(<MyComponent />)
+    try {
+      await form.validate()
+    } catch {}
+  
+    expect(form.invalid).toBeTruthy()
+  
+    form.query('parent').take((field) => {
+      field.setState((state) => {
+        state.value.type = 'unmounted'
+      })
+    })
+  
+    await waitFor(() => {
+      expect(fn.mock.calls.length).toBe(1)
+    });
+    await form.validate()
+    expect(form.invalid).toBeFalsy()
   })
 })
