@@ -179,4 +179,5 @@ export default () => (
 | shallow        | boolean                                  | shallow context transfer              | true          |
 | feedbackLayout | `'loose' \|'terse' \|'popover' \|'none'` | feedback layout                       | true          |
 | tooltipLayout  | `"icon" \| "text"`                       | Ask the prompt layout                 | `"icon"`      |
+| tooltipIcon    | ReactNode                                | Ask the prompt icon                   | -             |
 | bordered       | boolean                                  | Is there a border                     | true          |

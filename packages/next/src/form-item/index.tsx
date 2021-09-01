@@ -22,6 +22,7 @@ export interface IFormItemProps {
   layout?: 'vertical' | 'horizontal' | 'inline'
   tooltip?: React.ReactNode
   tooltipLayout?: 'icon' | 'text'
+  tooltipIcon?: React.ReactNode
   labelStyle?: React.CSSProperties
   labelAlign?: 'left' | 'right'
   labelWrap?: boolean
@@ -76,6 +77,9 @@ const useFormItemLayout = (props: IFormItemProps) => {
     feedbackIcon: props.feedbackIcon,
     feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
     tooltipLayout: props.tooltipLayout ?? layout.tooltipLayout ?? 'icon',
+    tooltipIcon: props.tooltipIcon ?? layout.tooltipIcon ?? (
+      <QuestionCircleOutlined />
+    ),
   }
 }
 
@@ -148,6 +152,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     wrapperWrap,
     tooltip,
     tooltipLayout,
+    tooltipIcon,
   } = formLayout
   const labelStyle = { ...formLayout.labelStyle }
   const wrapperStyle = { ...formLayout.wrapperStyle }
@@ -235,7 +240,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     if (tooltip && tooltipLayout === 'icon' && !overflow) {
       return (
         <span className={cls(`${prefixCls}-label-tooltip-icon`)}>
-          <Balloon.Tooltip align="t" trigger={<QuestionCircleOutlined />}>
+          <Balloon.Tooltip align="t" trigger={tooltipIcon}>
             {tooltip}
           </Balloon.Tooltip>
         </span>

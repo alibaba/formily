@@ -20,6 +20,7 @@ export interface IFormItemProps {
   label?: React.ReactNode
   colon?: boolean
   tooltip?: React.ReactNode
+  tooltipIcon?: React.ReactNode
   layout?: 'vertical' | 'horizontal' | 'inline'
   tooltipLayout?: 'icon' | 'text'
   labelStyle?: React.CSSProperties
@@ -76,6 +77,9 @@ const useFormItemLayout = (props: IFormItemProps) => {
     feedbackIcon: props.feedbackIcon,
     feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
     tooltipLayout: props.tooltipLayout ?? layout.tooltipLayout ?? 'icon',
+    tooltipIcon: props.tooltipIcon ?? layout.tooltipIcon ?? (
+      <QuestionCircleOutlined />
+    ),
   }
 }
 
@@ -148,6 +152,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     wrapperWrap,
     tooltipLayout,
     tooltip,
+    tooltipIcon,
   } = formLayout
   const labelStyle = { ...formLayout.labelStyle }
   const wrapperStyle = { ...formLayout.wrapperStyle }
@@ -241,7 +246,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       return (
         <span className={cls(`${prefixCls}-label-tooltip-icon`)}>
           <Tooltip placement="top" align={{ offset: [0, 2] }} title={tooltip}>
-            <QuestionCircleOutlined />
+            {tooltipIcon}
           </Tooltip>
         </span>
       )
