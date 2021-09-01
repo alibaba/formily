@@ -1068,6 +1068,7 @@ export default () => {
 | colon          | boolean                                                | colon                                                                                            | true          |
 | tooltip        | ReactNode                                              | Question mark prompt                                                                             | -             |
 | tooltipLayout  | `"icon" \| "text"`                                     | Ask the prompt layout                                                                            | `"icon"`      |
+| tooltipIcon    | ReactNode                                              | Ask the prompt icon                                                                              | `?`           |
 | labelAlign     | `"left"` \| `"right"`                                  | Label text alignment                                                                             | `"right"`     |
 | labelWrap      | boolean                                                | Label change, otherwise an ellipsis appears, hover has tooltip                                   | false         |
 | labelWidth     | `number \| string`                                     | Label fixed width                                                                                | -             |

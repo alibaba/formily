@@ -22,6 +22,7 @@ export interface IFormLayoutProps {
   inset?: boolean
   shallow?: boolean
   tooltipLayout?: 'icon' | 'text'
+  tooltipIcon?: React.ReactNode
   feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none'
   bordered?: boolean
 }
