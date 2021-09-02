@@ -16,7 +16,7 @@ import VoidField from './VoidField'
 import { h } from '../shared/h'
 import { Fragment } from '../shared/fragment'
 
-import type { IRecursionFieldProps, DefineComponent } from '../types'
+import type { IRecursionFieldProps, DefineComponent, VueComponentProps } from '../types'
 
 function isVueOptions(options: any) {
   if (!options) {
@@ -85,27 +85,27 @@ const RecursionField = observer(
         const basePath = getBasePath()
         const fieldProps = fieldPropsRef.value
         const xContent = fieldSchemaRef.value['x-content']
-        const xContentMap: Record<string, any[]> = {}
+        const xContentMap: Record<string, (props?: VueComponentProps<any>) => any[]> = {}
 
         if (typeof xContent === 'string') {
-          xContentMap['default'] = [xContent]
+          xContentMap['default'] = () => [xContent]
         } else if (isVueOptions(xContent) || typeof xContent === 'function') {
           // is vue component or functional component
-          xContentMap['default'] = [h(xContent, {}, {})]
+          xContentMap['default'] = props => [h(xContent, { props }, {})]
         } else if (xContent && typeof xContent === 'object') {
           // for named slots
           Object.keys(xContent).forEach((key) => {
             const child = xContent[key]
             if (typeof child === 'string') {
-              xContentMap[key] = [child]
+              xContentMap[key] = () => [child]
             } else if (isVueOptions(child) || typeof child === 'function') {
-              xContentMap[key] = [h(child, {}, {})]
+              xContentMap[key] = props => [h(child, { props }, {})]
             }
           })
         }
 
         const getSlots = (children = []) => {
-          const slots: Record<string, () => any> = {}
+          const slots: Record<string, (props: VueComponentProps<any>) => any> = {}
 
           if (children.length > 0) {
             slots.default = () => [...children]
@@ -113,9 +113,10 @@ const RecursionField = observer(
 
           Object.keys(xContentMap).forEach((key) => {
             if (key === 'default') {
-              slots[key] = () => [...children, ...xContentMap[key]]
+              slots[key] = props => [...children, ...xContentMap[key](props)]
             } else {
-              slots[key] = () => [...xContentMap[key]]
+              const child = xContent[key]
+              slots[key] = props => [...xContentMap[key](props)]
             }
           })
 
