@@ -6,7 +6,6 @@
   },
   "workspaces": [
     "packages/*",
-    "designable/*",
     "devtools/*"
   ],
   "scripts": {
