@@ -118,7 +118,12 @@ ArrayBase.SortHandle = (props) => {
 
 ArrayBase.Index = (props) => {
   const index = useIndex()
-  return <span {...props}>#{index + 1}.</span>
+  const prefixCls = usePrefixCls('formily-array-base')
+  return (
+    <span {...props} className={`${prefixCls}-index`}>
+      #{index + 1}.
+    </span>
+  )
 }
 
 ArrayBase.Addition = (props) => {
