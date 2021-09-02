@@ -82,7 +82,7 @@
           x-component="InputNumber"
           required
         />
-        <SchemaStringField
+        <SchemaBooleanField
           name="Switch"
           title="Switch"
           x-decorator="FormItem"

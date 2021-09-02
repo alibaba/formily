@@ -487,7 +487,7 @@ export default () => {
             bordered: false,
           }}
         />
-        <SchemaField.String
+        <SchemaField.Boolean
           name="Switch"
           title="Switch"
           x-decorator="FormItem"
@@ -616,7 +616,7 @@ export default () => {
             inset: true,
           }}
         />
-        <SchemaField.String
+        <SchemaField.Boolean
           name="Switch"
           title="Switch"
           x-decorator="FormItem"
@@ -1023,7 +1023,7 @@ export default () => {
             x-component="TreeSelect"
             required
           />
-          <SchemaField.String
+          <SchemaField.Boolean
             name="Switch"
             title="Switch"
             x-decorator="FormItem"

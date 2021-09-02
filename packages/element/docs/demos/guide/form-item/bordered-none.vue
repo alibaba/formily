@@ -51,7 +51,7 @@
           bordered: false,
         }"
       />
-      <SchemaStringField
+      <SchemaBooleanField
         name="Switch"
         title="Switch"
         x-decorator="FormItem"
