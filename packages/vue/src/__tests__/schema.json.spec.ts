@@ -66,6 +66,23 @@ const Previewer2: FunctionalComponentOptions = {
   },
 }
 
+const Previewer3: FunctionalComponentOptions = {
+  functional: true,
+  render(h, context) {
+    return h(
+      'div',
+      {
+        attrs: {
+          'data-testid': 'previewer3',
+        },
+      },
+      [context.scopedSlots.defaultSlot({
+        scopedData: '123'
+      })]
+    )
+  },
+}
+
 describe('json schema field', () => {
   test('string field', () => {
     const form = createForm()
@@ -349,6 +366,47 @@ describe('x-content', () => {
     })
     expect(queryByTestId('previewer2')).toBeVisible()
     expect(queryByTestId('previewer2').textContent).toEqual('123')
+  })
+
+  test('scoped slot with scope', () => {
+    const form = createForm()
+    const Content = {
+      functional: true,
+      render(h, context) {
+        return h('span', context.props.scopedData)
+      },
+    }
+    const { SchemaField } = createSchemaField({
+      components: {
+        Previewer3,
+      },
+      scope: {
+        Content,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'string',
+            'x-component': 'Previewer3',
+            'x-content': {
+              defaultSlot: '{{Content}}',
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('previewer3')).toBeVisible()
+    expect(queryByTestId('previewer3').textContent).toEqual('123')
   })
 })
 
