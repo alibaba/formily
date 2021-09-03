@@ -581,3 +581,68 @@ test('expression x-content', async () => {
     expect(queryByTestId('child')).not.toBeUndefined()
   })
 })
+
+test('expression x-visible', async () => {
+  const form = createForm()
+  const SchemaField = createSchemaField({
+    components: {
+      AAA: () => <div>AAA</div>,
+      BBB: () => <div>BBB</div>,
+    },
+  })
+
+  const { queryByText } = render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.String name="aaa" x-component="AAA" />
+        <SchemaField.String
+          name="bbb"
+          x-component="BBB"
+          x-visible="{{$form.values.aaa === 123}}"
+        />
+      </SchemaField>
+    </FormProvider>
+  )
+
+  await waitFor(() => {
+    expect(queryByText('BBB')).toBeUndefined()
+  })
+  form.values.aaa = 123
+  await waitFor(() => {
+    expect(queryByText('BBB')).not.toBeUndefined()
+  })
+})
+
+test('expression x-value', async () => {
+  const form = createForm({
+    values: {
+      aaa: 1,
+    },
+  })
+  const SchemaField = createSchemaField({
+    components: {
+      Text: (props) => <div>{props.value}</div>,
+    },
+  })
+
+  const { queryByText } = render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.String name="aaa" x-component="Text" />
+        <SchemaField.String
+          name="bbb"
+          x-component="Text"
+          x-value="{{$form.values.aaa * 10}}"
+        />
+      </SchemaField>
+    </FormProvider>
+  )
+
+  await waitFor(() => {
+    expect(queryByText('10')).not.toBeUndefined()
+  })
+  form.values.aaa = 10
+  await waitFor(() => {
+    expect(queryByText('100')).not.toBeUndefined()
+  })
+})
