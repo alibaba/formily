@@ -56,18 +56,16 @@ const RecursionField = observer(
       const scopeRef = inject(SchemaExpressionScopeSymbol)
       const createSchema = (schemaProp: IRecursionFieldProps['schema']) =>
         new Schema(schemaProp)
-      const createFieldSchema = (schema: Schema) =>
-        schema.compile?.(scopeRef.value)
-      const schemaRef = shallowRef(createSchema(props.schema))
-      const fieldSchemaRef = shallowRef(createFieldSchema(schemaRef.value))
-      watch([() => props.schema, scopeRef, optionsRef], () => {
-        schemaRef.value = createSchema(props.schema)
-        fieldSchemaRef.value = createFieldSchema(schemaRef.value)
+      const fieldSchemaRef = shallowRef(createSchema(props.schema))
+
+      watch([() => props.schema], () => {
+        fieldSchemaRef.value = createSchema(props.schema)
       })
 
       const getPropsFromSchema = (schema: Schema) =>
         schema?.toFieldProps?.({ ...optionsRef.value, scope: scopeRef.value })
       const fieldPropsRef = shallowRef(getPropsFromSchema(fieldSchemaRef.value))
+
       watch([fieldSchemaRef, optionsRef], () => {
         fieldPropsRef.value = getPropsFromSchema(fieldSchemaRef.value)
       })
