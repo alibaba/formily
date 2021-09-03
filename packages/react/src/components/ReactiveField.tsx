@@ -10,19 +10,26 @@ interface IReactiveFieldProps {
     | React.ReactNode
 }
 
+const mergeChildren = (children: React.ReactNode, content: React.ReactNode) => {
+  if (!children && !content) return
+  return (
+    <Fragment>
+      {children}
+      {content}
+    </Fragment>
+  )
+}
+
 const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   const options = useContext(SchemaOptionsContext)
+  const children = isFn(props.children)
+    ? props.children(null, null)
+    : props.children
   if (!props.field) {
-    return (
-      <Fragment>
-        {isFn(props.children) ? props.children(null, null) : props.children}
-      </Fragment>
-    )
+    return <Fragment>{children}</Fragment>
   }
   const field = props.field
-  const children = isFn(props.children)
-    ? props.children(props.field, props.field.form)
-    : props.children
+  const content = mergeChildren(children, field.content)
   if (field.display !== 'visible') return null
 
   const renderDecorator = (children: React.ReactNode) => {
@@ -46,7 +53,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   }
 
   const renderComponent = () => {
-    if (!field.component[0]) return <Fragment>{children}</Fragment>
+    if (!field.component[0]) return content
     const value = !isVoidField(field) ? field.value : undefined
     const onChange = !isVoidField(field)
       ? (...args: any[]) => {
@@ -90,7 +97,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
         onFocus,
         onBlur,
       },
-      children
+      content
     )
   }
 

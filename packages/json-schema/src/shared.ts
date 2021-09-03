@@ -25,6 +25,7 @@ export const SchemaStateMap = {
   enum: 'dataSource',
   readOnly: 'readOnly',
   writeOnly: 'editable',
+  'x-content': 'content',
   'x-value': 'value',
   'x-editable': 'editable',
   'x-disabled': 'disabled',

@@ -326,6 +326,7 @@ export interface IFieldProps<
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
   reactions?: FieldReaction[] | FieldReaction
+  content?: any
 }
 
 export interface IVoidFieldProps<
@@ -348,6 +349,7 @@ export interface IVoidFieldProps<
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
   reactions?: FieldReaction[] | FieldReaction
+  content?: any
 }
 
 export interface IFieldResetOptions {

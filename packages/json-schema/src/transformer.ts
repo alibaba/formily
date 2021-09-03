@@ -194,7 +194,7 @@ const getUserReactions =
           scope,
         })
         if (isStr(runner)) {
-          shallowCompile(`{{function(){${runner}}}}`)()
+          shallowCompile(`{{function(){${runner}}}}`, scope)()
         }
       }
 

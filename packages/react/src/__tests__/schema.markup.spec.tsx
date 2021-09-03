@@ -531,7 +531,7 @@ test('expression scope', async () => {
         'x-reactions': {
           dependencies: ['aa'],
           fulfill: {
-            run: '{{ cc() }}',
+            run: 'cc()',
           },
         },
       },
@@ -552,4 +552,32 @@ test('expression scope', async () => {
 
   await waitFor(() => queryByTestId('cc'))
   expect(cc).toBeTruthy()
+})
+
+test('expression x-content', async () => {
+  const form = createForm()
+  const SchemaField = createSchemaField({
+    components: {
+      Wrapper: (props) => props.children,
+    },
+    scope: {
+      child: <div data-testid="child"></div>,
+    },
+  })
+
+  const { queryByTestId } = render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.String
+          name="aaa"
+          x-component="Wrapper"
+          x-content="{{child}}"
+        />
+      </SchemaField>
+    </FormProvider>
+  )
+
+  await waitFor(() => {
+    expect(queryByTestId('child')).not.toBeUndefined()
+  })
 })

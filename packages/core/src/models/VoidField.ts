@@ -40,6 +40,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   mounted: boolean
   unmounted: boolean
 
+  content: any
+
   decoratorType: Decorator
   decoratorProps: Record<string, any>
   componentType: Component
@@ -88,6 +90,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     this.readOnly = this.props.readOnly
     this.readPretty = this.props.readPretty
     this.visible = this.props.visible
+    this.content = this.props.content
     this.decorator = toArr(this.props.decorator)
     this.component = toArr(this.props.component)
   }
@@ -104,6 +107,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
       unmounted: observable.ref,
       decoratorType: observable.ref,
       componentType: observable.ref,
+      content: observable.ref,
       decoratorProps: observable,
       componentProps: observable,
       display: observable.computed,
