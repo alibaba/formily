@@ -87,6 +87,7 @@ const RecursionField = observer(
         const xContent = fieldSchemaRef.value['x-content']
         const xContentMap: Record<string, (props?: VueComponentProps<any>) => any[]> = {}
 
+        // higher-order function for scoped slot to pass value
         if (typeof xContent === 'string') {
           xContentMap['default'] = () => [xContent]
         } else if (isVueOptions(xContent) || typeof xContent === 'function') {
@@ -105,7 +106,7 @@ const RecursionField = observer(
         }
 
         const getSlots = (children = []) => {
-          const slots: Record<string, (props: VueComponentProps<any>) => any> = {}
+          const slots: Record<string, (props?: VueComponentProps<any>) => any> = {}
 
           if (children.length > 0) {
             slots.default = () => [...children]
@@ -113,9 +114,8 @@ const RecursionField = observer(
 
           Object.keys(xContentMap).forEach((key) => {
             if (key === 'default') {
-              slots[key] = props => [...children, ...xContentMap[key](props)]
+              slots[key] = () => [...children, ...xContentMap[key]()]
             } else {
-              const child = xContent[key]
               slots[key] = props => [...xContentMap[key](props)]
             }
           })
