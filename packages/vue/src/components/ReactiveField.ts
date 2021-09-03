@@ -1,9 +1,9 @@
-import { defineComponent } from 'vue-demi'
+import { defineComponent, inject } from 'vue-demi'
 import { isVoidField } from '@formily/core'
-import { clone } from '@formily/shared'
+import { clone, FormPath } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
 import { toJS } from '@formily/reactive'
-
+import { SchemaOptionsSymbol } from '../shared'
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
 
@@ -18,6 +18,7 @@ export default observer(
     name: 'ReactiveField',
     props: ['field'],
     setup(props: IReactiveFieldProps, { slots }) {
+      const optionsRef = inject(SchemaOptionsSymbol)
       const key = Math.floor(Date.now() * Math.random()).toString(16)
       return () => {
         const field = props.field
@@ -36,7 +37,10 @@ export default observer(
                 default: () => childNodes,
               }
             } else {
-              const decorator = field.decorator[0] as VueComponent
+              const decorator = (FormPath.getIn(
+                optionsRef.value?.components,
+                field.decorator[0]
+              ) ?? field.decorator[0]) as VueComponent
               const decoratorData = clone(field.decorator[1]) || {}
               const style = decoratorData?.style
               delete decoratorData.style
@@ -71,7 +75,10 @@ export default observer(
               )
             }
 
-            const component = field.component[0] as VueComponent
+            const component = (FormPath.getIn(
+              optionsRef.value?.components,
+              field.component[0]
+            ) ?? field.component[0]) as VueComponent
             const originData = clone(field.component[1]) || {}
             const events = {} as Record<string, any>
             const originChange = originData['@change'] || originData['onChange']
