@@ -13,7 +13,11 @@ import {
   shallowClone,
   isEqual,
 } from '@formily/shared'
-import { ValidatorTriggerType, validate } from '@formily/validator'
+import {
+  ValidatorTriggerType,
+  validate,
+  parseValidatorDescriptions,
+} from '@formily/validator'
 import { batch, toJS, DataChange } from '@formily/reactive'
 import { Field, ArrayField, Form, ObjectField } from '../models'
 import {
@@ -215,6 +219,57 @@ export const validateToFeedbacks = async (
     })
   })
   return results
+}
+
+export const setValidatorRule = (field: Field, name: string, value: any) => {
+  if (!isValid(value)) return
+  const hasRule = parseValidatorDescriptions(field.validator).some(
+    (desc) => name in desc
+  )
+  const rule = {
+    [name]: value,
+  }
+  if (hasRule) {
+    if (isArr(field.validator)) {
+      field.validator = field.validator.map((desc: any) => {
+        if (Object.prototype.hasOwnProperty.call(desc, name)) {
+          desc[name] = value
+          return desc
+        }
+        return desc
+      })
+    } else {
+      field.validator[name] = value
+    }
+  } else {
+    if (isArr(field.validator)) {
+      if (name === 'required') {
+        field.validator.unshift(rule)
+      } else {
+        field.validator.push(rule)
+      }
+    } else if (typeof field.validator === 'object') {
+      field.validator[name] = value
+    } else if (field.validator) {
+      if (name === 'required') {
+        field.validator = [
+          {
+            [name]: value,
+          },
+          field.validator,
+        ]
+      } else {
+        field.validator = [
+          field.validator,
+          {
+            [name]: value,
+          },
+        ]
+      }
+    } else {
+      field.validator = [rule]
+    }
+  }
 }
 
 export const spliceArrayState = (

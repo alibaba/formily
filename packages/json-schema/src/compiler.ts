@@ -1,13 +1,27 @@
-import { isArr, isFn, isPlainObj, isStr, reduce } from '@formily/shared'
-import { isObservable } from '@formily/reactive'
-import { Schema } from './schema'
+import {
+  isArr,
+  isFn,
+  isPlainObj,
+  isStr,
+  reduce,
+  FormPath,
+} from '@formily/shared'
+import { IGeneralFieldState } from '@formily/core'
+import { untracked, test } from '@formily/reactive'
+import {
+  isNoNeedCompileObject,
+  SchemaNestedKeys,
+  hasOwnProperty,
+  patchStateFormSchema,
+} from './shared'
+import { traverse } from './traverse'
+import { ISchema } from './types'
 
 const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/
-const actionsSymbol = Symbol.for('__REVA_ACTIONS')
-const ENVS = {
+const Registry = {
   silent: false,
   compile(expression: string, scope = {}) {
-    if (ENVS.silent) {
+    if (Registry.silent) {
       try {
         return new Function('$root', `with($root) { return (${expression}); }`)(
           scope
@@ -21,15 +35,26 @@ const ENVS = {
   },
 }
 
+const traverseSchema = (
+  schema: ISchema,
+  visitor: (value: any, path: any[]) => void
+) => {
+  traverse(schema, visitor, (value, path) => {
+    if (String(path[0]).indexOf('x-') == -1 && isFn(value)) return false
+    if (SchemaNestedKeys[path[0]]) return false
+    return true
+  })
+}
+
 export const silent = (value = true) => {
-  ENVS.silent = !!value
+  Registry.silent = !!value
 }
 
 export const registerCompiler = (
   compiler: (expression: string, scope: any) => any
 ) => {
   if (isFn(compiler)) {
-    ENVS.compile = compiler
+    Registry.compile = compiler
   }
 }
 
@@ -40,9 +65,7 @@ export const shallowCompile = <Source = any, Scope = any>(
   if (isStr(source)) {
     const matched = source.match(ExpRE)
     if (!matched) return source
-    return ENVS.compile(matched[1], scope)
-  } else if (isArr(source)) {
-    return source.map((item) => shallowCompile(item, scope))
+    return Registry.compile(matched[1], scope)
   }
   return source
 }
@@ -58,27 +81,7 @@ export const compile = <Source = any, Scope = any>(
     } else if (isArr(source)) {
       return source.map((value: any) => compile(value))
     } else if (isPlainObj(source)) {
-      if ('$$typeof' in source && '_owner' in source) {
-        return source
-      }
-      if (source[actionsSymbol]) {
-        return source
-      }
-      if (source['_isAMomentObject']) {
-        return source
-      }
-      if (Schema.isSchemaInstance(source)) {
-        return source.compile(scope)
-      }
-      if (isFn(source['toJS'])) {
-        return source
-      }
-      if (isFn(source['toJSON'])) {
-        return source
-      }
-      if (isObservable(source)) {
-        return source
-      }
+      if (isNoNeedCompileObject(source)) return source
       if (seenObjects.get(source)) {
         return source
       }
@@ -97,4 +100,40 @@ export const compile = <Source = any, Scope = any>(
     return source
   }
   return compile(source)
+}
+
+export const patchCompile = (
+  targetState: IGeneralFieldState,
+  sourceState: any,
+  scope: any
+) => {
+  traverse(sourceState, (value, path) => {
+    const compiled = compile(value, scope)
+    if (compiled === undefined) return
+    if (hasOwnProperty.call(sourceState, path[0])) {
+      untracked(() => FormPath.setIn(targetState, path, compiled))
+    }
+  })
+}
+
+export const patchSchemaCompile = (
+  targetState: IGeneralFieldState,
+  sourceSchema: ISchema,
+  scope: any,
+  demand = false
+) => {
+  traverseSchema(sourceSchema, (value, path) => {
+    let compiled = value
+    let hasCollected = test(() => {
+      compiled = compile(value, scope)
+    })
+    if (compiled === undefined) return
+    if (demand) {
+      if (hasCollected || !targetState.initialized) {
+        patchStateFormSchema(targetState, path, compiled)
+      }
+    } else {
+      patchStateFormSchema(targetState, path, compiled)
+    }
+  })
 }

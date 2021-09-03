@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { observer } from '@formily/reactive-react'
-import { isFn } from '@formily/shared'
+import { isFn, FormPath } from '@formily/shared'
 import { isVoidField, GeneralField, Form } from '@formily/core'
+import { SchemaOptionsContext } from '../shared'
 interface IReactiveFieldProps {
   field: GeneralField
   children?:
@@ -10,6 +11,7 @@ interface IReactiveFieldProps {
 }
 
 const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
+  const options = useContext(SchemaOptionsContext)
   if (!props.field) {
     return (
       <Fragment>
@@ -27,8 +29,12 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     if (!field.decorator[0]) {
       return <Fragment>{children}</Fragment>
     }
+    const finalComponent =
+      FormPath.getIn(options?.components, field.decorator[0]) ??
+      field.decorator[0]
+
     return React.createElement(
-      field.decorator[0],
+      finalComponent,
       {
         ...field.decorator[1],
         style: {
@@ -66,8 +72,12 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     const readOnly = !isVoidField(field)
       ? field.pattern === 'readOnly'
       : undefined
+    const finalComponent =
+      FormPath.getIn(options?.components, field.component[0]) ??
+      field.component[0]
+
     return React.createElement(
-      field.component[0],
+      finalComponent,
       {
         disabled,
         readOnly,

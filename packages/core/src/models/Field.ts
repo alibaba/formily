@@ -1,9 +1,7 @@
 import {
   FormPath,
   isValid,
-  isArr,
   FormPathPattern,
-  isBool,
   each,
   isFn,
   isEmpty,
@@ -55,6 +53,7 @@ import {
   modelStateGetter,
   isHTMLInputEvent,
   initFieldValue,
+  setValidatorRule,
 } from '../shared/internals'
 import { isArrayField, isObjectField } from '../shared/checkers'
 import { Query } from './Query'
@@ -468,44 +467,8 @@ export class Field<
   }
 
   set required(required: boolean) {
-    if (!isBool(required)) return
-    const hasRequired = parseValidatorDescriptions(this.validator).some(
-      (desc) => 'required' in desc
-    )
-    if (hasRequired) {
-      if (isArr(this.validator)) {
-        this.validator = this.validator.map((desc: any) => {
-          if (Object.prototype.hasOwnProperty.call(desc, 'required')) {
-            desc.required = required
-            return desc
-          }
-          return desc
-        })
-      } else {
-        this.validator['required'] = required
-      }
-    } else {
-      if (isArr(this.validator)) {
-        this.validator.unshift({
-          required,
-        })
-      } else if (typeof this.validator === 'object') {
-        this.validator['required'] = required
-      } else if (this.validator) {
-        this.validator = [
-          {
-            required,
-          },
-          this.validator,
-        ]
-      } else if (required) {
-        this.validator = [
-          {
-            required,
-          },
-        ]
-      }
-    }
+    if (this.required === required) return
+    this.setValidatorRule('required', required)
   }
 
   set value(value: ValueType) {
@@ -570,6 +533,10 @@ export class Field<
 
   setValidator = (validator?: FieldValidator) => {
     this.validator = validator
+  }
+
+  setValidatorRule = (name: string, value: any) => {
+    setValidatorRule(this, name, value)
   }
 
   setRequired = (required?: boolean) => {

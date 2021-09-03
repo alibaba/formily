@@ -1,27 +1,21 @@
 /* istanbul ignore file */
 import { untracked, autorun, observable } from '@formily/reactive'
 import {
-  isBool,
   isArr,
   isStr,
-  FormPath,
   isValid,
   toArr,
-  isEqual,
   each,
   isFn,
   isPlainObj,
   reduce,
-  isEmpty,
-  FormPathPattern,
 } from '@formily/shared'
-import { getValidateLocale } from '@formily/validator'
 import { Schema } from './schema'
 import {
   ISchema,
-  ISchemaFieldFactoryOptions,
-  ISchemaFieldUpdateRequest,
-  SchemaReactions,
+  ISchemaTransformerOptions,
+  IFieldStateSetterOptions,
+  SchemaReaction,
 } from './types'
 import {
   onFieldInit,
@@ -34,13 +28,10 @@ import {
   onFieldValidateEnd,
   onFieldValidateFailed,
   onFieldValidateSuccess,
-  FieldValidator,
-  IFieldState,
   IFieldFactoryProps,
-  GeneralField,
-  Form,
   Field,
 } from '@formily/core'
+import { patchCompile, patchSchemaCompile, shallowCompile } from './compiler'
 
 const FieldEffects = {
   onFieldInit,
@@ -55,491 +46,184 @@ const FieldEffects = {
   onFieldValidateSuccess,
 }
 
-const getValidator = (schema: Schema): FieldValidator => {
-  let rules = []
-  if (schema.format) {
-    rules.push({ format: schema.format })
-  }
-  if (isValid(schema.maxItems)) {
-    rules.push({ max: schema.maxItems })
-  }
-  if (isValid(schema.minItems)) {
-    rules.push({ min: schema.minItems })
-  }
-  if (isValid(schema.maxLength)) {
-    rules.push({ max: schema.maxLength })
-  }
-  if (isValid(schema.minLength)) {
-    rules.push({ min: schema.minLength })
-  }
-  if (isValid(schema.maximum)) {
-    rules.push({ maximum: schema.maximum })
-  }
-  if (isValid(schema.minimum)) {
-    rules.push({ minimum: schema.minimum })
-  }
-  if (isValid(schema.exclusiveMaximum)) {
-    rules.push({ exclusiveMaximum: schema.exclusiveMaximum })
-  }
-  if (isValid(schema.exclusiveMinimum)) {
-    rules.push({ exclusiveMinimum: schema.exclusiveMinimum })
-  }
-  if (isValid(schema.pattern)) {
-    rules.push({ pattern: schema.pattern })
-  }
-  if (isValid(schema.const)) {
-    rules.push({
-      validator: (
-        value: any,
-        rule: any,
-        ctx: any,
-        format: (message: string, scope: any) => string
-      ) => {
-        if (isEmpty(value)) return ''
-        return value === schema.const
-          ? ''
-          : format(getValidateLocale('schema.const'), schema)
-      },
-    })
-  }
-  if (isValid(schema.multipleOf)) {
-    rules.push({
-      validator: (
-        value: any,
-        rule: any,
-        ctx: any,
-        format: (message: string, scope: any) => string
-      ) => {
-        if (isEmpty(value)) return ''
-        return value % schema.multipleOf === 0
-          ? ''
-          : format(getValidateLocale('schema.multipleOf'), schema)
-      },
-    })
-  }
-  if (isValid(schema.maxProperties)) {
-    rules.push({
-      validator: (
-        value: any,
-        rule: any,
-        ctx: any,
-        format: (message: string, scope: any) => string
-      ) => {
-        if (isEmpty(value)) return ''
-        return Object.keys(value || {}).length <= schema.maxProperties
-          ? ''
-          : format(getValidateLocale('schema.maxProperties'), schema)
-      },
-    })
-  }
-  if (isValid(schema.minProperties)) {
-    rules.push({
-      validator: (
-        value: any,
-        rule: any,
-        ctx: any,
-        format: (message: string, scope: any) => string
-      ) => {
-        if (isEmpty(value)) return ''
-        return Object.keys(value || {}).length >= schema.minProperties
-          ? ''
-          : format(getValidateLocale('schema.minProperties'), schema)
-      },
-    })
-  }
-  if (isValid(schema.uniqueItems)) {
-    rules.push({
-      validator: (
-        value: any,
-        rule: any,
-        ctx: any,
-        format: (message: string, scope: any) => string
-      ) => {
-        value = toArr(value)
-        return value.some((item: any, index: number) => {
-          for (let start = index; start < value.length; start++) {
-            if (isEqual(value[start], item)) {
-              return false
-            }
-          }
-        })
-          ? format(getValidateLocale('schema.uniqueItems'), schema)
-          : ''
-      },
-    })
-  }
+const DefaultFieldEffects = ['onFieldInit', 'onFieldValueChange']
 
-  if (isValid(schema['x-validator'])) {
-    rules = rules.concat(schema['x-validator'])
-  }
-  if (rules.length) return rules
+const getDependencyValue = (
+  field: Field,
+  pattern: string,
+  property?: string
+) => {
+  const [target, path] = String(pattern).split(/\s*#\s*/)
+  return field.query(target).getIn(path || property || 'value')
 }
 
-const getDataSource = (schema: Schema) => {
-  if (isArr(schema['enum'])) {
-    return schema['enum'].map((item) => {
-      if (typeof item === 'object') {
-        return item
-      } else {
-        return {
-          label: item,
-          value: item,
+const getDependencies = (
+  field: Field,
+  dependencies:
+    | Array<string | { name?: string; source?: string; property?: string }>
+    | object
+) => {
+  if (isArr(dependencies)) {
+    const results = []
+    dependencies.forEach((pattern) => {
+      if (isStr(pattern)) {
+        results.push(getDependencyValue(field, pattern))
+      } else if (isPlainObj(pattern)) {
+        if (pattern.name && pattern.source) {
+          results[pattern.name] = getDependencyValue(
+            field,
+            pattern.source,
+            pattern.property
+          )
         }
       }
     })
+    return results
+  } else if (isPlainObj(dependencies)) {
+    return reduce(
+      dependencies,
+      (buf, pattern, key) => {
+        buf[key] = getDependencyValue(field, pattern)
+        return buf
+      },
+      {}
+    )
   }
+  return []
 }
 
-const findComponent = (
-  type: 'component' | 'decorator',
-  path: FormPathPattern,
-  options: ISchemaFieldFactoryOptions,
-  state: IFieldState
+const setSchemaFieldState = (
+  options: IFieldStateSetterOptions,
+  demand = false
 ) => {
-  let component: any = state?.[type]?.[0]
-
-  if (path && options?.components) {
-    if (FormPath.isPathPattern(path)) {
-      component = FormPath.getIn(options.components, path)
-      if (!component) {
-        //Todo: need to use __DEV__ keyword
-        console.error(
-          `[Formily JSON Schema]: Cannot find the '${path}' component mapped by Schema.x-${type}`
-        )
-      }
-    }
-  }
-  if (isFn(path) || (path?.['$$typeof'] && isFn(path['type']))) {
-    return path
-  }
-  return component
-}
-
-const getBaseProps = (
-  schema: Schema,
-  options: ISchemaFieldFactoryOptions,
-  state?: IFieldState
-) => {
-  const props: Partial<IFieldFactoryProps<any, any>> = {}
-
-  const validator = getValidator(schema)
-
-  const dataSource = getDataSource(schema)
-
-  const editable = isValid(schema['x-editable'])
-    ? schema['x-editable']
-    : schema['writeOnly']
-
-  const readOnly = isValid(schema['x-read-only'])
-    ? schema['x-read-only']
-    : schema['readOnly']
-
-  const decoratorType = findComponent(
-    'decorator',
-    schema['x-decorator'],
-    options,
-    state
-  )
-
-  const decoratorProps = schema['x-decorator-props'] || state?.decorator?.[1]
-
-  const componentType = findComponent(
-    'component',
-    schema['x-component'],
-    options,
-    state
-  )
-  const componentProps = schema['x-component-props'] || state?.component?.[1]
-
-  if (isValid(schema.default)) {
-    props.initialValue = schema.default
-  }
-
-  if (isValid(schema.title)) {
-    props.title = schema.title
-  }
-
-  if (isValid(schema.description)) {
-    props.description = schema.description
-  }
-
-  if (isValid(schema['x-disabled'])) {
-    props.disabled = schema['x-disabled']
-  }
-
-  if (isValid(schema['x-read-pretty'])) {
-    props.readPretty = schema['x-read-pretty']
-  }
-
-  if (isValid(schema['x-visible'])) {
-    props.visible = schema['x-visible']
-  }
-
-  if (isValid(schema['x-hidden'])) {
-    props.hidden = schema['x-hidden']
-  }
-
-  if (isValid(schema['x-display'])) {
-    props.display = schema['x-display']
-  }
-
-  if (isValid(schema['x-pattern'])) {
-    props.pattern = schema['x-pattern']
-  }
-
-  if (isValid(validator)) {
-    props.validator = validator
-  }
-
-  if (isValid(dataSource)) {
-    props.dataSource = dataSource
-  }
-
-  if (isValid(editable)) {
-    props.editable = editable
-  }
-
-  if (isValid(readOnly)) {
-    props.readOnly = readOnly
-  }
-
-  if (isValid(decoratorType)) {
-    props.decorator = [decoratorType, decoratorProps]
-  }
-
-  if (isValid(componentType)) {
-    props.component = [componentType, componentProps]
-  }
-
-  return props
-}
-
-const patchState = (state: any, target: any) => {
-  const patch = (target: any, path: string[]) => {
-    if (isPlainObj(target)) {
-      each(target, (value, key) => {
-        patch(value, path.concat(key))
-      })
-    } else {
-      FormPath.setIn(state, path, target)
-    }
-  }
-  untracked(() => {
-    patch(target, [])
-  })
-  return state
-}
-
-const getRequired = (schema: Schema) => {
-  if (isBool(schema.required)) {
-    return schema.required
-  }
-  let parent: Schema = schema.parent
-  while (parent) {
-    if (isStr(parent.required)) {
-      if (FormPath.parse(parent.required).match(schema.name)) return true
-    } else if (isArr(parent.required)) {
-      if (
-        parent.required.some((parent) =>
-          FormPath.parse(parent).match(schema.name)
-        )
-      ) {
-        return true
-      }
-    }
-    parent = parent.parent
-  }
-  return undefined
-}
-
-const getReactions = (schema: ISchema, options: ISchemaFieldFactoryOptions) => {
-  const setSchemaFieldState = (
-    field: GeneralField,
-    request: ISchemaFieldUpdateRequest,
-    compile: (expression: any) => any
-  ) => {
-    if (!request) return
+  const { request, target, field, scope } = options || {}
+  if (!request) return
+  if (target) {
     if (request.state) {
-      field.setState((state) => patchState(state, compile(request.state)))
+      field.form.setFieldState(target, (state) =>
+        patchCompile(state, request.state, {
+          ...scope,
+          $target: state,
+        })
+      )
+    }
+    if (request.schema) {
+      field.form.setFieldState(target, (state) =>
+        patchSchemaCompile(
+          state,
+          request.schema,
+          {
+            ...scope,
+            $target: state,
+          },
+          demand
+        )
+      )
+    }
+  } else {
+    if (request.state) {
+      field.setState((state) => patchCompile(state, request.state, scope))
     }
     if (request.schema) {
       field.setState((state) =>
-        patchState(
-          state,
-          getBaseProps(patchState({}, compile(request.schema)), options, state)
-        )
+        patchSchemaCompile(state, request.schema, scope, demand)
       )
     }
   }
+}
 
-  const setSchemaFieldStateByTarget = (
-    form: Form,
-    target: FormPathPattern,
-    request: ISchemaFieldUpdateRequest,
-    compile: (expression: any, state?: any) => any
-  ) => {
-    if (!request) return
-    if (request.state) {
-      form.setFieldState(target, (state) =>
-        patchState(state, compile(request.state, state))
-      )
-    }
-    if (request.schema) {
-      form.setFieldState(target, (state) =>
-        patchState(
-          state,
-          getBaseProps(
-            patchState({}, compile(request.schema, state)),
-            options,
-            state
-          )
-        )
-      )
-    }
+const getBaseScope = (field: Field, options: ISchemaTransformerOptions) => {
+  const $observable = (target: any, deps?: any[]) =>
+    autorun.memo(() => observable(target), deps)
+  const $props = (props: any) => field.setComponentProps(props)
+  const $effect = autorun.effect
+  const $memo = autorun.memo
+  const $self = field
+  const $form = field.form
+  return {
+    ...options.scope,
+    $form,
+    $self,
+    $observable,
+    $effect,
+    $memo,
+    $props,
+  }
+}
+
+const getBaseReactions =
+  (schema: ISchema, options: ISchemaTransformerOptions) => (field: Field) => {
+    setSchemaFieldState(
+      {
+        field,
+        request: { schema },
+        scope: getBaseScope(field, options),
+      },
+      true
+    )
   }
 
-  const queryDependency = (
-    field: Field,
-    pattern: string,
-    property?: string
-  ) => {
-    const [target, path] = String(pattern).split(/\s*#\s*/)
-    return field.query(target).getIn(path || property || 'value')
-  }
-
-  const parseDependencies = (
-    field: Field,
-    dependencies:
-      | Array<string | { name?: string; source?: string; property?: string }>
-      | object
-  ) => {
-    if (isArr(dependencies)) {
-      const results = []
-      dependencies.forEach((pattern) => {
-        if (isStr(pattern)) {
-          results.push(queryDependency(field, pattern))
-        } else if (isPlainObj(pattern)) {
-          if (pattern.name && pattern.source) {
-            results[pattern.name] = queryDependency(
-              field,
-              pattern.source,
-              pattern.property
-            )
-          }
-        }
-      })
-      return results
-    } else if (isPlainObj(dependencies)) {
-      return reduce(
-        dependencies,
-        (buf, pattern, key) => {
-          buf[key] = queryDependency(field, pattern)
-          return buf
-        },
-        {}
-      )
-    }
-    return []
-  }
-
-  return (field: Field) => {
-    const reactions: SchemaReactions = toArr(schema['x-reactions'])
-    reactions.forEach((reaction) => {
+const getUserReactions =
+  (schema: ISchema, options: ISchemaTransformerOptions) => (field: Field) => {
+    const reactions: SchemaReaction[] = toArr(schema['x-reactions'])
+    const baseScope = getBaseScope(field, options)
+    reactions.forEach((unCompiled) => {
+      const reaction = shallowCompile(unCompiled, baseScope)
       if (!reaction) return
       if (isFn(reaction)) {
         return reaction(field)
       }
+      const { when, fulfill, otherwise, target, effects } = reaction
       const run = () => {
-        const $self = field
-        const $form = field.form
-        const $deps = parseDependencies(field, reaction.dependencies)
+        const $deps = getDependencies(field, reaction.dependencies)
         const $dependencies = $deps
-        const $observable = (target: any, deps?: any[]) =>
-          autorun.memo(() => observable(target), deps)
-        const $props = (props: any) => field.setComponentProps(props)
-        const $effect = autorun.effect
-        const $memo = autorun.memo
         const scope = {
-          ...options.scope,
+          ...baseScope,
           $target: null,
-          $form,
-          $self,
           $deps,
           $dependencies,
-          $observable,
-          $effect,
-          $memo,
-          $props,
         }
-        const compile = (expression: any, target?: any) => {
-          if (target) {
-            scope.$target = target
-          }
-          return Schema.compile(expression, scope)
-        }
-        const when = Schema.compile(reaction?.when, scope)
-        const condition = isValid(reaction?.when) ? when : true
-        if (condition) {
-          if (reaction.target) {
-            setSchemaFieldStateByTarget(
-              field.form,
-              reaction.target,
-              reaction.fulfill,
-              compile
-            )
-          } else {
-            setSchemaFieldState(field, reaction.fulfill, compile)
-          }
-          if (isStr(reaction.fulfill?.run)) {
-            compile(`{{function(){${reaction.fulfill?.run}}}}`)()
-          }
-        } else {
-          if (reaction.target) {
-            setSchemaFieldStateByTarget(
-              field.form,
-              reaction.target,
-              reaction.otherwise,
-              compile
-            )
-          } else {
-            setSchemaFieldState(field, reaction.otherwise, compile)
-          }
-          if (isStr(reaction.otherwise?.run)) {
-            compile(`{{async function(){${reaction.otherwise?.run}}}}`)()
-          }
+        const compiledWhen = shallowCompile(when, scope)
+        const condition = isValid(compiledWhen) ? compiledWhen : true
+        const request = condition ? fulfill : otherwise
+        const runner = condition ? fulfill?.run : otherwise?.run
+        setSchemaFieldState({
+          field,
+          target,
+          request,
+          scope,
+        })
+        if (isStr(runner)) {
+          shallowCompile(`{{function(){${runner}}}}`)()
         }
       }
-      if (reaction.target) {
-        reaction.effects = reaction.effects?.length
-          ? reaction.effects
-          : ['onFieldInit', 'onFieldValueChange']
+
+      if (target) {
+        reaction.effects = effects?.length ? effects : DefaultFieldEffects
       }
       if (reaction.effects) {
-        each(reaction.effects, (type) => {
-          if (FieldEffects[type]) {
-            untracked(() => {
+        untracked(() => {
+          each(reaction.effects, (type) => {
+            if (FieldEffects[type]) {
               FieldEffects[type](field.address, run)
-            })
-          }
+            }
+          })
         })
       } else {
         run()
       }
     })
   }
-}
 
-export const transformSchemaToFieldProps = (
+export const transformFieldProps = (
   schema: Schema,
-  options: ISchemaFieldFactoryOptions
+  options: ISchemaTransformerOptions
 ): IFieldFactoryProps<any, any> => {
-  const required = getRequired(schema)
-  const reactions = getReactions(schema, options)
-  const props = getBaseProps(schema, options)
-
-  props.required = required
-  props.name = schema.name
-  props.reactions = [reactions]
-
-  return props as any
+  return {
+    name: schema.name,
+    reactions: [
+      getBaseReactions(schema, options),
+      getUserReactions(schema, options),
+    ],
+  }
 }

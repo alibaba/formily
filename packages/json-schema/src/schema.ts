@@ -10,7 +10,7 @@ import {
 import { IFieldFactoryProps } from '@formily/core'
 import { map, each, isFn, instOf, FormPath, isStr } from '@formily/shared'
 import { compile, silent, shallowCompile, registerCompiler } from './compiler'
-import { transformSchemaToFieldProps } from './transformer'
+import { transformFieldProps } from './transformer'
 import {
   reducePatches,
   registerPatches,
@@ -21,16 +21,8 @@ import {
   registerVoidComponents,
   registerTypeDefaultComponents,
 } from './polyfills'
+import { SchemaNestedKeys } from './shared'
 
-const ShallowCompileKeys = [
-  'properties',
-  'patternProperties',
-  'additionalProperties',
-  'items',
-  'additionalItems',
-  'x-linkages',
-  'x-reactions',
-]
 export class Schema<
   Decorator = any,
   Component = any,
@@ -473,7 +465,7 @@ export class Schema<
     each(this, (value, key) => {
       if (isFn(value) && !key.includes('x-')) return
       if (key === 'parent' || key === 'root') return
-      if (!ShallowCompileKeys.includes(key)) {
+      if (!SchemaNestedKeys[key]) {
         schema[key] = value ? compile(value, scope) : value
       } else {
         schema[key] = value ? shallowCompile(value, scope) : value
@@ -560,7 +552,7 @@ export class Schema<
   toFieldProps = (
     options?: ISchemaTransformerOptions
   ): IFieldFactoryProps<any, any> => {
-    return transformSchemaToFieldProps(this, options)
+    return transformFieldProps(this, options)
   }
 
   static getOrderProperties = (

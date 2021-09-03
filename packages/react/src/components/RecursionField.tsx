@@ -15,13 +15,10 @@ import { Field } from './Field'
 import { VoidField } from './VoidField'
 
 export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
-  const schema = new Schema(props.schema)
+  const fieldSchema = new Schema(props.schema)
   const parent = useField()
   const options = useContext(SchemaOptionsContext)
   const scope = useContext(SchemaExpressionScopeContext)
-  const fieldSchema = useMemo(() => {
-    return schema?.compile(scope)
-  }, [schema])
   const fieldProps = useMemo(
     () => fieldSchema?.toFieldProps({ ...options, scope }) as any,
     [fieldSchema]
