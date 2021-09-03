@@ -7,7 +7,7 @@ import {
   useField,
   RecursionField,
 } from '../index'
-import { render, fireEvent, waitFor } from '@testing-library/react'
+import { render, fireEvent, waitFor, act } from '@testing-library/react'
 
 const Input: React.FC<{
   value?: string
@@ -605,11 +605,13 @@ test('expression x-visible', async () => {
   )
 
   await waitFor(() => {
-    expect(queryByText('BBB')).toBeUndefined()
+    expect(queryByText('BBB')).toBeNull()
   })
-  form.values.aaa = 123
+  act(() => {
+    form.values.aaa = 123
+  })
   await waitFor(() => {
-    expect(queryByText('BBB')).not.toBeUndefined()
+    expect(queryByText('BBB')).not.toBeNull()
   })
 })
 
@@ -639,10 +641,12 @@ test('expression x-value', async () => {
   )
 
   await waitFor(() => {
-    expect(queryByText('10')).not.toBeUndefined()
+    expect(queryByText('10')).not.toBeNull()
   })
-  form.values.aaa = 10
+  act(() => {
+    form.values.aaa = 10
+  })
   await waitFor(() => {
-    expect(queryByText('100')).not.toBeUndefined()
+    expect(queryByText('100')).not.toBeNull()
   })
 })

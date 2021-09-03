@@ -83,7 +83,7 @@ export const raw = <T>(target: T): T => ProxyRaw.get(target as any)
 
 export const toJS = <T>(values: T): T => {
   const visited = new WeakSet<any>()
-  const tojs: typeof toJS = (values: any) => {
+  const _toJS: typeof toJS = (values: any) => {
     if (isArr(values)) {
       if (visited.has(values)) {
         return values
@@ -95,7 +95,7 @@ export const toJS = <T>(values: T): T => {
       visited.add(originValues)
       const res: any = []
       values.forEach((item: any) => {
-        res.push(tojs(item))
+        res.push(_toJS(item))
       })
       return res
     } else if (isPlainObj(values)) {
@@ -121,7 +121,7 @@ export const toJS = <T>(values: T): T => {
         const res: any = {}
         for (const key in values) {
           if (hasOwnProperty.call(values, key)) {
-            res[key] = tojs(values[key])
+            res[key] = _toJS(values[key])
           }
         }
         return res
@@ -131,7 +131,7 @@ export const toJS = <T>(values: T): T => {
     }
   }
 
-  return tojs(values)
+  return _toJS(values)
 }
 
 export const hasCollected = (callback?: () => void) => {
