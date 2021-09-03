@@ -548,7 +548,7 @@ const schema = {
             'x-component-props': { width: 100, title: 'Explicitly hidden->A2' },
             properties: {
               a1: {
-                type: 'string',
+                type: 'boolean',
                 'x-decorator': 'FormItem',
                 'x-component': 'Switch',
               },

@@ -102,12 +102,12 @@ const ValidatorSchema: ISchema = {
             'x-component': 'NumberPicker',
           },
           whitespace: {
-            type: 'string',
+            type: 'boolean',
             'x-decorator': 'FormItem',
             'x-component': 'Switch',
           },
           required: {
-            type: 'string',
+            type: 'boolean',
             'x-decorator': 'FormItem',
             'x-component': 'Switch',
           },
