@@ -8,7 +8,11 @@ import {
   isPlainObj,
   isArr,
 } from './checkers'
-import { ProxyRaw, MakeObservableSymbol } from './environment'
+import {
+  ProxyRaw,
+  MakeObservableSymbol,
+  DependencyCollected,
+} from './environment'
 import { Annotation } from './types'
 
 const RAW_TYPE = Symbol('RAW_TYPE')
@@ -128,4 +132,10 @@ export const toJS = <T>(values: T): T => {
   }
 
   return tojs(values)
+}
+
+export const hasCollected = (callback?: () => void) => {
+  DependencyCollected.value = false
+  callback?.()
+  return DependencyCollected.value
 }

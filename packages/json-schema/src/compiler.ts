@@ -7,7 +7,7 @@ import {
   FormPath,
 } from '@formily/shared'
 import { IGeneralFieldState } from '@formily/core'
-import { untracked, test } from '@formily/reactive'
+import { untracked, hasCollected } from '@formily/reactive'
 import {
   isNoNeedCompileObject,
   hasOwnProperty,
@@ -112,12 +112,12 @@ export const patchSchemaCompile = (
 ) => {
   traverseSchema(sourceSchema, (value, path) => {
     let compiled = value
-    let hasCollected = test(() => {
+    let collected = hasCollected(() => {
       compiled = compile(value, scope)
     })
     if (compiled === undefined) return
     if (demand) {
-      if (hasCollected || !targetState.initialized) {
+      if (collected || !targetState.initialized) {
         patchStateFormSchema(targetState, path, compiled)
       }
     } else {
