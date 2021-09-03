@@ -92,7 +92,7 @@ const RecursionField = observer(
           xContentMap['default'] = () => [xContent]
         } else if (isVueOptions(xContent) || typeof xContent === 'function') {
           // is vue component or functional component
-          xContentMap['default'] = props => [h(xContent, { props }, {})]
+          xContentMap['default'] = () => [h(xContent, {}, {})]
         } else if (xContent && typeof xContent === 'object') {
           // for named slots
           Object.keys(xContent).forEach((key) => {
