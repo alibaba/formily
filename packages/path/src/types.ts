@@ -75,7 +75,7 @@ export type ArrayPatternNode = {
   elements: ObjectPatternNode[] | ArrayPatternNode[] | IdentifierNode[]
 } & INode
 
-export type DestrcutorRule = {
+export type DestructorRule = {
   key?: string | number
   path?: Array<number | string>
 }
@@ -92,7 +92,7 @@ export type Pattern =
   | MatcherFunction
   | RegExp
 
-export type DestrcutorRules = DestrcutorRule[]
+export type DestructorRules = DestructorRule[]
 
 export type Segments = Array<string | number>
 

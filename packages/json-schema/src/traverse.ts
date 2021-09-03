@@ -1,4 +1,4 @@
-import { each, isArr, isFn } from '@formily/shared'
+import { each, isFn, isPlainObj } from '@formily/shared'
 import { SchemaNestedKeys } from './shared'
 import { ISchema } from './types'
 
@@ -10,7 +10,7 @@ export const traverse = (
   const seenObjects = new WeakMap()
   const traverse = (target: any, path = [], address = '') => {
     if (filter?.(target, path) === false) return
-    if (typeof target === 'object' && !isArr(target)) {
+    if (isPlainObj(target)) {
       if (seenObjects.get(target)) {
         return
       }

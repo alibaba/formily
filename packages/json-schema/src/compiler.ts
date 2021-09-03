@@ -98,7 +98,7 @@ export const patchCompile = (
   traverse(sourceState, (value, path) => {
     const compiled = compile(value, scope)
     if (compiled === undefined) return
-    if (hasOwnProperty.call(sourceState, path[0])) {
+    if (hasOwnProperty.call(targetState, path[0])) {
       untracked(() => FormPath.setIn(targetState, path, compiled))
     }
   })
