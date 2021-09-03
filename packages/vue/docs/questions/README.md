@@ -32,10 +32,10 @@ sidebar: auto
 
 ## 如何使用作用域插槽？
 
-插槽中传入函数式组件，并在 `render(h, context)` 通过 `context.props` 访问作用域插槽传入属性。
+插槽中传入函数式组件，并调用渲染函数时传入 `context` ，可以通过 `context.props` 访问作用域插槽传入的属性。
 
 ::: danger
-暂不支持 default 的作用域插槽，可以以 `defaultSlot` 语义上代替，但需在响应式组件中作转换。
+暂不支持 `default` 作用域插槽，可以以 `defaultSlot` 语义上代替，但需在组件设置响应式时作转换。
 :::
 
 <dumi-previewer demoPath="questions/scoped-slot" />
