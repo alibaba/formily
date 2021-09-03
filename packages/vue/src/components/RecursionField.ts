@@ -18,17 +18,6 @@ import { Fragment } from '../shared/fragment'
 
 import type { IRecursionFieldProps, DefineComponent } from '../types'
 
-function isVueOptions(options: any) {
-  if (!options) {
-    return false
-  }
-  return (
-    typeof options.template === 'string' ||
-    typeof options.render === 'function' ||
-    typeof options.setup === 'function'
-  )
-}
-
 const RecursionField = observer(
   defineComponent<IRecursionFieldProps>({
     name: 'RecursionField',
@@ -63,7 +52,15 @@ const RecursionField = observer(
       })
 
       const getPropsFromSchema = (schema: Schema) =>
-        schema?.toFieldProps?.({ ...optionsRef.value, scope: scopeRef.value })
+        schema?.toFieldProps?.({
+          ...optionsRef.value,
+          get scope() {
+            return {
+              ...optionsRef.value.scope,
+              ...scopeRef.value,
+            }
+          },
+        })
       const fieldPropsRef = shallowRef(getPropsFromSchema(fieldSchemaRef.value))
 
       watch([fieldSchemaRef, optionsRef], () => {
@@ -82,43 +79,6 @@ const RecursionField = observer(
       return () => {
         const basePath = getBasePath()
         const fieldProps = fieldPropsRef.value
-        const xContent = fieldSchemaRef.value['x-content']
-        const xContentMap: Record<string, any[]> = {}
-
-        if (typeof xContent === 'string') {
-          xContentMap['default'] = [xContent]
-        } else if (isVueOptions(xContent) || typeof xContent === 'function') {
-          // is vue component or functional component
-          xContentMap['default'] = [h(xContent, {}, {})]
-        } else if (xContent && typeof xContent === 'object') {
-          // for named slots
-          Object.keys(xContent).forEach((key) => {
-            const child = xContent[key]
-            if (typeof child === 'string') {
-              xContentMap[key] = [child]
-            } else if (isVueOptions(child) || typeof child === 'function') {
-              xContentMap[key] = [h(child, {}, {})]
-            }
-          })
-        }
-
-        const getSlots = (children = []) => {
-          const slots: Record<string, () => any> = {}
-
-          if (children.length > 0) {
-            slots.default = () => [...children]
-          }
-
-          Object.keys(xContentMap).forEach((key) => {
-            if (key === 'default') {
-              slots[key] = () => [...children, ...xContentMap[key]]
-            } else {
-              slots[key] = () => [...xContentMap[key]]
-            }
-          })
-
-          return slots
-        }
 
         const renderProperties = (field?: GeneralField) => {
           if (props.onlyRenderSelf) return
@@ -153,9 +113,8 @@ const RecursionField = observer(
           )
 
           const slots: Record<string, () => any> = {}
-          const allSlots = getSlots(children)
-          if (allSlots.default) {
-            slots.default = allSlots.default
+          if (children.length > 0) {
+            slots.default = () => [...children]
           }
 
           return h(Fragment, {}, slots)
@@ -165,7 +124,6 @@ const RecursionField = observer(
           if (!isValid(props.name)) return renderProperties()
           if (fieldSchemaRef.value.type === 'object') {
             if (props.onlyRenderProperties) return renderProperties()
-            const slots = getSlots()
             return h(
               ObjectField,
               {
@@ -176,12 +134,10 @@ const RecursionField = observer(
                 },
               },
               {
-                ...slots,
                 default: ({ field }) => [renderProperties(field)],
               }
             )
           } else if (fieldSchemaRef.value.type === 'array') {
-            const slots = getSlots()
             return h(
               ArrayField,
               {
@@ -191,11 +147,10 @@ const RecursionField = observer(
                   basePath: basePath,
                 },
               },
-              slots
+              {}
             )
           } else if (fieldSchemaRef.value.type === 'void') {
             if (props.onlyRenderProperties) return renderProperties()
-            const slots = getSlots()
             return h(
               VoidField,
               {
@@ -206,13 +161,11 @@ const RecursionField = observer(
                 },
               },
               {
-                ...slots,
                 default: ({ field }) => [renderProperties(field)],
               }
             )
           }
 
-          const slots = getSlots()
           return h(
             Field,
             {
@@ -222,7 +175,7 @@ const RecursionField = observer(
                 basePath: basePath,
               },
             },
-            slots
+            {}
           )
         }
 
