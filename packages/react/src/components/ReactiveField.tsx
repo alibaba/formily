@@ -20,16 +20,19 @@ const mergeChildren = (children: React.ReactNode, content: React.ReactNode) => {
   )
 }
 
+const renderChildren = (children: React.ReactNode, ...args: any[]) =>
+  isFn(children) ? children(...args) : children
+
 const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   const options = useContext(SchemaOptionsContext)
-  const children = isFn(props.children)
-    ? props.children(null, null)
-    : props.children
   if (!props.field) {
-    return <Fragment>{children}</Fragment>
+    return <Fragment>{renderChildren(props.children)}</Fragment>
   }
   const field = props.field
-  const content = mergeChildren(children, field.content)
+  const content = mergeChildren(
+    renderChildren(props.children, field, field.form),
+    field.content
+  )
   if (field.display !== 'visible') return null
 
   const renderDecorator = (children: React.ReactNode) => {
