@@ -10,11 +10,10 @@ import { IGeneralFieldState } from '@formily/core'
 import { untracked, test } from '@formily/reactive'
 import {
   isNoNeedCompileObject,
-  SchemaNestedKeys,
   hasOwnProperty,
   patchStateFormSchema,
 } from './shared'
-import { traverse } from './traverse'
+import { traverse, traverseSchema } from './traverse'
 import { ISchema } from './types'
 
 const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/
@@ -33,17 +32,6 @@ const Registry = {
       )
     }
   },
-}
-
-const traverseSchema = (
-  schema: ISchema,
-  visitor: (value: any, path: any[]) => void
-) => {
-  traverse(schema, visitor, (value, path) => {
-    if (String(path[0]).indexOf('x-') == -1 && isFn(value)) return false
-    if (SchemaNestedKeys[path[0]]) return false
-    return true
-  })
 }
 
 export const silent = (value = true) => {

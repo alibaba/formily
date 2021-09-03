@@ -159,5 +159,5 @@ test('v1 polyfill', () => {
     type: 'string',
     'x-rules': ['phone'],
   } as any)
-  expect(schema8.toFieldProps().validator).toEqual(['phone'])
+  expect(schema8['x-validator']).toEqual(['phone'])
 })

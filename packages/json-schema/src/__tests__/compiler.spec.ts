@@ -108,7 +108,7 @@ test('shallowCompile', () => {
   ).toEqual({
     array: ['{{123}}'],
   })
-  expect(shallowCompile(['{{123}}'])).toEqual([123])
+  expect(shallowCompile(['{{123}}'])).toEqual(['{{123}}'])
   expect(shallowCompile([{ kk: '{{123}}' }])).toEqual([{ kk: '{{123}}' }])
 })
 

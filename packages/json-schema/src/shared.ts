@@ -2,6 +2,8 @@ import { isFn, isArr, toArr, FormPath } from '@formily/shared'
 import { isObservable, untracked } from '@formily/reactive'
 import { Schema } from './schema'
 
+const REVA_ACTIONS_KEY = Symbol.for('__REVA_ACTIONS')
+
 export const hasOwnProperty = Object.prototype.hasOwnProperty
 
 export const SchemaNestedKeys = {
@@ -66,6 +68,9 @@ export const isNoNeedCompileObject = (source: any) => {
     return true
   }
   if (Schema.isSchemaInstance(source)) {
+    return true
+  }
+  if (source[REVA_ACTIONS_KEY]) {
     return true
   }
   if (isFn(source['toJS'])) {

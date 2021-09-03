@@ -1,4 +1,7 @@
-import { each, isArr } from '@formily/shared'
+import { each, isArr, isFn } from '@formily/shared'
+import { SchemaNestedKeys } from './shared'
+import { ISchema } from './types'
+
 export const traverse = (
   target: any,
   visitor: (value: any, path: Array<string | number>, address: string) => void,
@@ -21,4 +24,15 @@ export const traverse = (
   }
 
   traverse(target)
+}
+
+export const traverseSchema = (
+  schema: ISchema,
+  visitor: (value: any, path: any[]) => void
+) => {
+  traverse(schema, visitor, (value, path) => {
+    if (String(path[0]).indexOf('x-') == -1 && isFn(value)) return false
+    if (SchemaNestedKeys[path[0]]) return false
+    return true
+  })
 }
