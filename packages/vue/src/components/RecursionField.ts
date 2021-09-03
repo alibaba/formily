@@ -100,7 +100,7 @@ const RecursionField = observer(
             if (typeof child === 'string') {
               xContentMap[key] = () => [child]
             } else if (isVueOptions(child) || typeof child === 'function') {
-              xContentMap[key] = props => [h(child, { props }, {})]
+              xContentMap[key] = (props) => [h(child, { props }, {})]
             }
           })
         }
@@ -116,7 +116,7 @@ const RecursionField = observer(
             if (key === 'default') {
               slots[key] = () => [...children, ...xContentMap[key]()]
             } else {
-              slots[key] = props => [...xContentMap[key](props)]
+              slots[key] = (props) => [...xContentMap[key](props)]
             }
           })
 
