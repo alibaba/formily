@@ -253,7 +253,7 @@ export const setValidatorRule = (field: Field, name: string, value: any) => {
       } else {
         field.validator.push(rule)
       }
-    } else if (typeof field.validator === 'object') {
+    } else if (isPlainObj(field.validator)) {
       field.validator[name] = value
     } else if (field.validator) {
       if (name === 'required') {
@@ -621,7 +621,7 @@ export const setModelState = (model: any, setter: any) => {
     Object.keys(setter || {}).forEach((key: string) => {
       const value = setter[key]
       if (isFn(value)) return
-      if (ReservedProperties.includes(key)) return
+      if (ReservedProperties.has(key)) return
       if (isSkipProperty(key)) return
       model[key] = value
     })
@@ -638,7 +638,7 @@ export const getModelState = (model: any, getter?: any) => {
       if (isFn(value)) {
         return buf
       }
-      if (ReservedProperties.includes(key)) return buf
+      if (ReservedProperties.has(key)) return buf
       if (key === 'address' || key === 'path') {
         buf[key] = value.toString()
         return buf
@@ -766,15 +766,6 @@ const getValues = (target: Form | Field) => {
   return toJS(target.value)
 }
 
-const getErrors = (target: Form | Field) => {
-  if (isForm(target)) {
-    return target.errors
-  }
-  return target.form.errors.filter(({ address }) => {
-    return target.address.includes(address)
-  })
-}
-
 const notify = (
   target: Form | Field,
   formType: LifeCycleTypes,
@@ -897,7 +888,7 @@ export const batchSubmit = async <T>(
   let results: any
   try {
     if (target.invalid) {
-      throw getErrors(target)
+      throw target.errors
     }
     if (isFn(onSubmit)) {
       results = await onSubmit(getValues(target))
@@ -948,7 +939,7 @@ export const batchValidate = async (
       LifeCycleTypes.ON_FORM_VALIDATE_FAILED,
       LifeCycleTypes.ON_FIELD_VALIDATE_FAILED
     )
-    throw getErrors(target)
+    throw target.errors
   }
   notify(
     target,

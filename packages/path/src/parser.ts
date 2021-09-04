@@ -16,6 +16,7 @@ import {
   commaTok,
   expandTok,
   eofTok,
+  dbStarTok,
 } from './tokens'
 import { bracketArrayContext, destructorContext } from './contexts'
 import {
@@ -130,6 +131,7 @@ export class Parser extends Tokenizer {
         return this.parseIdentifier()
       case expandTok:
         return this.parseExpandOperator()
+      case dbStarTok:
       case starTok:
         return this.parseWildcardOperator()
       case bracketDLTok:
@@ -207,6 +209,10 @@ export class Parser extends Tokenizer {
   parseWildcardOperator(): WildcardOperatorNode {
     const node: WildcardOperatorNode = {
       type: 'WildcardOperator',
+    }
+
+    if (this.state.type === dbStarTok) {
+      node.optional = true
     }
 
     this.isMatchPattern = true

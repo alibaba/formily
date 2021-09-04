@@ -51,7 +51,18 @@ export const starTok = TokenType('*', {
   expectNext(next) {
     return (
       next === dotTok ||
-      next === starTok ||
+      next === parenLTok ||
+      next === bracketLTok ||
+      next === eofTok ||
+      next === commaTok ||
+      next === parenRTok
+    )
+  },
+})
+export const dbStarTok = TokenType('**', {
+  expectNext(next) {
+    return (
+      next === dotTok ||
       next === parenLTok ||
       next === bracketLTok ||
       next === eofTok ||
@@ -67,6 +78,7 @@ export const dotTok = TokenType('.', {
       next === nameTok ||
       next === bracketDLTok ||
       next === starTok ||
+      next === dbStarTok ||
       next === bracketLTok ||
       next === braceLTok ||
       next === eofTok

@@ -189,6 +189,11 @@ export class Field<
       successes: observable.computed,
       valid: observable.computed,
       invalid: observable.computed,
+      selfErrors: observable.computed,
+      selfWarnings: observable.computed,
+      selfSuccesses: observable.computed,
+      selfValid: observable.computed,
+      selfInvalid: observable.computed,
       validateStatus: observable.computed,
       value: observable.computed,
       initialValue: observable.computed,
@@ -211,9 +216,9 @@ export class Field<
       setLoading: action,
       setValidating: action,
       setFeedback: action,
-      setErrors: action,
-      setWarnings: action,
-      setSuccesses: action,
+      setSelfErrors: action,
+      setSelfWarnings: action,
+      setSelfSuccesses: action,
       setValidator: action,
       setRequired: action,
       setComponent: action,
@@ -325,26 +330,55 @@ export class Field<
     this.decoratorProps = decorator[1] || {}
   }
 
-  get errors() {
+  get selfErrors() {
     return queryFeedbackMessages(this, {
       type: 'error',
     })
   }
 
-  get warnings() {
+  get errors() {
+    return this.form.queryFeedbacks({
+      address: `${this.address}.**`,
+      type: 'error',
+    })
+  }
+
+  get selfWarnings() {
     return queryFeedbackMessages(this, {
       type: 'warning',
     })
   }
 
-  get successes() {
+  get warnings() {
+    return this.form.queryFeedbacks({
+      address: `${this.address}.**`,
+      type: 'warning',
+    })
+  }
+
+  get selfSuccesses() {
     return queryFeedbackMessages(this, {
       type: 'success',
     })
   }
 
+  get successes() {
+    return this.form.queryFeedbacks({
+      address: `${this.address}.**`,
+      type: 'success',
+    })
+  }
+
+  get selfValid() {
+    return !this.selfErrors.length
+  }
+
   get valid() {
     return !this.errors.length
+  }
+
+  get selfInvalid() {
+    return !this.selfValid
   }
 
   get invalid() {
@@ -426,9 +460,9 @@ export class Field<
 
   get validateStatus() {
     if (this.validating) return 'validating'
-    if (this.invalid) return 'error'
-    if (this.warnings.length) return 'warning'
-    if (this.successes.length) return 'success'
+    if (this.selfInvalid) return 'error'
+    if (this.selfWarnings.length) return 'warning'
+    if (this.selfSuccesses.length) return 'success'
   }
 
   set readOnly(readOnly: boolean) {
@@ -488,7 +522,7 @@ export class Field<
     this.form.setInitialValuesIn(this.path, initialValue)
   }
 
-  set errors(messages: FeedbackMessage) {
+  set selfErrors(messages: FeedbackMessage) {
     this.setFeedback({
       type: 'error',
       code: 'EffectError',
@@ -496,7 +530,7 @@ export class Field<
     })
   }
 
-  set warnings(messages: FeedbackMessage) {
+  set selfWarnings(messages: FeedbackMessage) {
     this.setFeedback({
       type: 'warning',
       code: 'EffectWarning',
@@ -504,7 +538,7 @@ export class Field<
     })
   }
 
-  set successes(messages: FeedbackMessage) {
+  set selfSuccesses(messages: FeedbackMessage) {
     this.setFeedback({
       type: 'success',
       code: 'EffectSuccess',
@@ -528,16 +562,16 @@ export class Field<
     updateFeedback(this, feedback)
   }
 
-  setErrors = (messages?: FeedbackMessage) => {
-    this.errors = messages
+  setSelfErrors = (messages?: FeedbackMessage) => {
+    this.selfErrors = messages
   }
 
-  setWarnings = (messages?: FeedbackMessage) => {
-    this.warnings = messages
+  setSelfWarnings = (messages?: FeedbackMessage) => {
+    this.selfWarnings = messages
   }
 
-  setSuccesses = (messages?: FeedbackMessage) => {
-    this.successes = messages
+  setSelfSuccesses = (messages?: FeedbackMessage) => {
+    this.selfSuccesses = messages
   }
 
   setValidator = (validator?: FieldValidator) => {
@@ -692,7 +726,7 @@ export class Field<
     }
     const end = () => {
       this.setValidating(false)
-      if (this.valid) {
+      if (this.selfValid) {
         this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS)
       } else {
         this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED)
@@ -720,11 +754,7 @@ export class Field<
   }
 
   validate = (triggerType?: ValidatorTriggerType) => {
-    return batchValidate(
-      this,
-      `*(${this.address},${this.address}.*)`,
-      triggerType
-    )
+    return batchValidate(this, `${this.address}.**`, triggerType)
   }
 
   submit = <T>(onSubmit?: (values: any) => Promise<T> | void): Promise<T> => {
@@ -756,7 +786,7 @@ export class Field<
   }
 
   reset = (options?: IFieldResetOptions) => {
-    return batchReset(this, `*(${this.address},${this.address}.*)`, options)
+    return batchReset(this, `${this.address}.**`, options)
   }
 
   query = (pattern: FormPathPattern) => {

@@ -1,5 +1,5 @@
 import { each, isFn, isPlainObj } from '@formily/shared'
-import { SchemaNestedKeys } from './shared'
+import { isNoNeedCompileObject, SchemaNestedKeys } from './shared'
 import { ISchema } from './types'
 
 export const traverse = (
@@ -8,13 +8,19 @@ export const traverse = (
   filter?: (value: any, path: Array<string | number>) => boolean
 ) => {
   const seenObjects = new WeakMap()
+  const root = target
   const traverse = (target: any, path = [], address = '') => {
     if (filter?.(target, path) === false) return
+
     if (isPlainObj(target)) {
       if (seenObjects.get(target)) {
         return
       }
       seenObjects.set(target, true)
+      if (isNoNeedCompileObject(target) && root !== target) {
+        visitor(target, path, address)
+        return
+      }
       each(target, (value, key) => {
         traverse(value, path.concat(key), address + '.' + key)
       })
@@ -22,7 +28,6 @@ export const traverse = (
       visitor(target, path, address)
     }
   }
-
   traverse(target)
 }
 

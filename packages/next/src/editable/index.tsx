@@ -43,9 +43,9 @@ const useFormItemProps = (): IFormItemProps => {
   if (isVoidField(field)) return {}
   if (!field) return {}
   const takeMessage = () => {
-    if (field.errors.length) return field.errors
-    if (field.warnings.length) return field.warnings
-    if (field.successes.length) return field.successes
+    if (field.selfErrors.length) return field.selfErrors
+    if (field.selfWarnings.length) return field.selfWarnings
+    if (field.selfSuccesses.length) return field.selfSuccesses
   }
 
   return {

@@ -410,25 +410,28 @@ test('selfValidate/errors/warnings/successes/valid/invalid/validateStatus/queryF
   await field.selfValidate()
   await field2.selfValidate()
   expect(field.invalid).toBeTruthy()
-  expect(field.errors.length).toEqual(1)
+  expect(field.selfErrors.length).toEqual(1)
   expect(field2.invalid).toBeTruthy()
-  expect(field2.errors.length).toEqual(3)
+  expect(field2.selfErrors.length).toEqual(3)
   await field.onInput('123')
-  expect(field.successes).toEqual(['success'])
+  expect(field.selfSuccesses).toEqual(['success'])
   await field.onInput('321')
-  expect(field.warnings).toEqual(['warning'])
+  expect(field.selfWarnings).toEqual(['warning'])
   await field.onInput('111')
-  expect(field.errors).toEqual(['error'])
+  expect(field.selfErrors).toEqual(['error'])
   await field.onBlur()
-  expect(field.errors).toEqual(['The field value is a invalid url', 'error'])
+  expect(field.selfErrors).toEqual([
+    'The field value is a invalid url',
+    'error',
+  ])
   await field.onFocus()
-  expect(field.errors).toEqual([
+  expect(field.selfErrors).toEqual([
     'The field value is a invalid url',
     'The field value is not a valid date format',
     'error',
   ])
   field.setFeedback()
-  expect(field.errors).toEqual([
+  expect(field.selfErrors).toEqual([
     'The field value is a invalid url',
     'The field value is not a valid date format',
     'error',
@@ -460,7 +463,7 @@ test('selfValidate/errors/warnings/successes/valid/invalid/validateStatus/queryF
   field3.setFeedback({ messages: [], code: 'EffectError' })
   field4.setDisplay('none')
   await field4.selfValidate()
-  expect(field4.errors).toEqual([])
+  expect(field4.selfErrors).toEqual([])
 })
 
 test('query', () => {
@@ -856,20 +859,20 @@ test('setErrors/setWarnings/setSuccesses/setValidator', async () => {
       },
     })
   )
-  aa.setErrors(['error'])
-  aa.setWarnings(['warning'])
-  aa.setSuccesses(['success'])
-  bb.setSuccesses(['success'])
-  cc.setWarnings(['warning'])
-  expect(aa.errors).toEqual(['error'])
+  aa.setSelfErrors(['error'])
+  aa.setSelfWarnings(['warning'])
+  aa.setSelfSuccesses(['success'])
+  bb.setSelfSuccesses(['success'])
+  cc.setSelfWarnings(['warning'])
+  expect(aa.selfErrors).toEqual(['error'])
   expect(aa.valid).toBeFalsy()
-  expect(aa.warnings).toEqual(['warning'])
-  expect(aa.successes).toEqual(['success'])
+  expect(aa.selfWarnings).toEqual(['warning'])
+  expect(aa.selfSuccesses).toEqual(['success'])
   expect(bb.validateStatus).toEqual('success')
   expect(cc.validateStatus).toEqual('warning')
   aa.setValidator('date')
   await aa.onInput('123')
-  expect(aa.errors.length).toEqual(2)
+  expect(aa.selfErrors.length).toEqual(2)
   dd.onInput('123')
   await sleep()
   expect(dd.validateStatus).toEqual('validating')
@@ -1429,4 +1432,33 @@ test('initial value with empty', () => {
   const form = attach(createForm())
   const array = attach(form.createField({ name: 'array', initialValue: '' }))
   expect(array.value).toEqual('')
+})
+
+test('field submit', async () => {
+  const form = attach(createForm())
+  const childForm = attach(
+    form.createObjectField({
+      name: 'aa',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      required: true,
+    })
+  )
+  attach(
+    form.createField({
+      name: 'cc',
+      basePath: 'aa',
+      required: true,
+    })
+  )
+  const onSubmit = jest.fn()
+  try {
+    await childForm.submit(onSubmit)
+  } catch (e) {
+    expect(e).not.toBeUndefined()
+  }
+  expect(onSubmit).toBeCalledTimes(0)
 })

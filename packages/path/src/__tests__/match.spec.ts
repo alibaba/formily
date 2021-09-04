@@ -101,6 +101,36 @@ test('test zero', () => {
   expect(Path.parse('t.0.value~').match(['t', 0, 'value_list'])).toEqual(true)
 })
 
+test('test optional wild match', () => {
+  expect(Path.parse('aa.**').match(['aa'])).toEqual(true)
+  expect(Path.parse('aa.**').match(['aa', 'bb', 'cc'])).toEqual(true)
+  expect(Path.parse('aa.*').match(['aa'])).toEqual(false)
+  expect(Path.parse('aa.\\*\\*\\.aa').match(['aa', '**.aa'])).toEqual(true)
+  expect(Path.parse('aa.[[**.aa]]').match(['aa', '**.aa'])).toEqual(true)
+  expect(() => Path.parse('aa.**.aa').match(['aa'])).toThrowError()
+  expect(() => Path.parse('aa.**(bb)').match(['aa'])).toThrowError()
+  expect(Path.parse('*(aa.**)').match(['aa'])).toEqual(true)
+  expect(Path.parse('*(aa.**,bb.**)').match(['aa'])).toEqual(true)
+  expect(Path.parse('*(aa.**,bb.**)').match(['aa', 'bb', 'cc'])).toEqual(true)
+  expect(Path.parse('*(aa.**,bb.**)').match(['bb'])).toEqual(true)
+  expect(Path.parse('*(aa.**,bb.**)').match(['bb', 'cc', 'dd'])).toEqual(true)
+  expect(Path.parse('*(aa.**,bb.**)').match(['cc'])).toEqual(false)
+  expect(Path.parse('*(aa.**,bb.**).bb').match(['aa', 'oo'])).toEqual(false)
+  expect(Path.parse('*(aa.**,bb.**).bb').match(['bb', 'oo'])).toEqual(false)
+  expect(Path.parse('*(aa.**,bb.**).bb').match(['aa', 'oo', 'bb'])).toEqual(
+    true
+  )
+  expect(Path.parse('*(aa.**,bb.**).bb').match(['bb', 'oo', 'bb'])).toEqual(
+    true
+  )
+  expect(
+    Path.parse('*(aa.**,bb.**).bb').match(['aa', 'oo', 'kk', 'dd', 'bb'])
+  ).toEqual(false)
+  expect(
+    Path.parse('*(aa.**,bb.**).bb').match(['bb', 'oo', 'kk', 'dd', 'bb'])
+  ).toEqual(false)
+})
+
 test('test expand', () => {
   expect(
     Path.parse('t.0.value~').match(['t', 0, 'value_list', 'hello'])

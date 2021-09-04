@@ -35,6 +35,7 @@ export type DotOperatorNode = {
 export type WildcardOperatorNode = {
   type: 'WildcardOperator'
   filter?: GroupExpressionNode | RangeExpressionNode
+  optional?: boolean
 } & INode
 
 export type ExpandOperatorNode = {
