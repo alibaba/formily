@@ -689,7 +689,6 @@ export class Field<
   selfValidate = async (triggerType?: ValidatorTriggerType) => {
     const start = () => {
       this.setValidating(true)
-      this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START)
     }
     const end = () => {
       this.setValidating(false)
@@ -698,7 +697,6 @@ export class Field<
       } else {
         this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED)
       }
-      this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END)
     }
     start()
     if (!triggerType) {
