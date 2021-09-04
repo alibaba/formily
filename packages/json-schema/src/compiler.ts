@@ -63,14 +63,13 @@ export const compile = <Source = any, Scope = any>(
   scope?: Scope
 ): any => {
   const seenObjects = new WeakMap()
-  const root: any = source
   const compile = (source: any) => {
     if (isStr(source)) {
       return shallowCompile(source, scope)
     } else if (isArr(source)) {
       return source.map((value: any) => compile(value))
     } else if (isPlainObj(source)) {
-      if (isNoNeedCompileObject(source) && source !== root) return source
+      if (isNoNeedCompileObject(source)) return source
       if (seenObjects.get(source)) {
         return source
       }
