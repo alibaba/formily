@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, useRef } from 'react'
 import { isFn, isValid } from '@formily/shared'
 import { GeneralField } from '@formily/core'
 import { Schema } from '@formily/json-schema'
@@ -14,27 +14,34 @@ import { ArrayField } from './ArrayField'
 import { Field } from './Field'
 import { VoidField } from './VoidField'
 
-export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
-  const fieldSchema = new Schema(props.schema)
-  const parent = useField()
+const useFieldProps = (schema: Schema) => {
   const options = useContext(SchemaOptionsContext)
-  const currentScope = useContext(SchemaExpressionScopeContext)
-  const fieldProps = fieldSchema.toFieldProps({
+  const scope = useContext(SchemaExpressionScopeContext)
+  const scopeRef = useRef<any>()
+  scopeRef.current = scope
+  return schema.toFieldProps({
     ...options,
     get scope() {
       return {
         ...options.scope,
-        ...currentScope,
+        ...scopeRef.current,
       }
     },
   }) as any
-  const getBasePath = () => {
-    if (props.onlyRenderProperties) {
-      return props.basePath || parent?.address.concat(props.name)
-    }
-    return props.basePath || parent?.address
+}
+
+const useBasePath = (props: IRecursionFieldProps) => {
+  const parent = useField()
+  if (props.onlyRenderProperties) {
+    return props.basePath || parent?.address.concat(props.name)
   }
-  const basePath = getBasePath()
+  return props.basePath || parent?.address
+}
+
+export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
+  const basePath = useBasePath(props)
+  const fieldSchema = new Schema(props.schema)
+  const fieldProps = useFieldProps(fieldSchema)
   const renderProperties = (field?: GeneralField) => {
     if (props.onlyRenderSelf) return
     return (
