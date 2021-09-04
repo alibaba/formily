@@ -330,7 +330,7 @@ test('setDecorator/setDecoratorProps', () => {
   expect(field.decorator[1]).toEqual({ props: 123, hello: 'world' })
 })
 
-test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedbacks', async () => {
+test('selfValidate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedbacks', async () => {
   const form = attach(createForm())
   const field = attach(
     form.createField({
@@ -407,8 +407,8 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
       required: true,
     })
   )
-  await field.validate()
-  await field2.validate()
+  await field.selfValidate()
+  await field2.selfValidate()
   expect(field.invalid).toBeTruthy()
   expect(field.errors.length).toEqual(1)
   expect(field2.invalid).toBeTruthy()
@@ -459,7 +459,7 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
   field3.setFeedback({ messages: null, code: 'EffectError' })
   field3.setFeedback({ messages: [], code: 'EffectError' })
   field4.setDisplay('none')
-  await field4.validate()
+  await field4.selfValidate()
   expect(field4.errors).toEqual([])
 })
 
@@ -1114,7 +1114,7 @@ test('reaction in reaction', () => {
   expect(field2.display).toEqual('none')
 })
 
-test('nested fields hidden and validate', async () => {
+test('nested fields hidden and selfValidate', async () => {
   const form = attach(createForm())
   const parent = attach(
     form.createVoidField({
@@ -1144,7 +1144,7 @@ test('nested fields hidden and validate', async () => {
   expect(form.invalid).toBeFalsy()
 })
 
-test('deep nested fields hidden and validate', async () => {
+test('deep nested fields hidden and selfValidate', async () => {
   const form = attach(createForm())
   const parent1 = attach(
     form.createVoidField({
@@ -1184,7 +1184,7 @@ test('deep nested fields hidden and validate', async () => {
   expect(form.invalid).toBeFalsy()
 })
 
-test('deep nested fields hidden and validate with middle hidden', async () => {
+test('deep nested fields hidden and selfValidate with middle hidden', async () => {
   const form = attach(createForm())
   const parent1 = attach(
     form.createVoidField({
@@ -1224,7 +1224,7 @@ test('deep nested fields hidden and validate with middle hidden', async () => {
   expect(form.invalid).toBeFalsy()
 })
 
-test('fields unmount and validate', async () => {
+test('fields unmount and selfValidate', async () => {
   const form = attach(createForm())
   const field = attach(
     form.createField({
@@ -1236,7 +1236,7 @@ test('fields unmount and validate', async () => {
     await form.validate()
   } catch {}
   expect(form.invalid).toBeTruthy()
-  field.onUnmount();
+  field.onUnmount()
   await form.validate()
   expect(form.invalid).toBeFalsy()
 })

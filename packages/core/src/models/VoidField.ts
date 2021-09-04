@@ -348,19 +348,19 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     batch.scope(() => {
       initFieldUpdate(this)
     })
-    this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_INIT, this)
   }
 
   onMount = () => {
     this.mounted = true
     this.unmounted = false
-    this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
   }
 
   onUnmount = () => {
     this.mounted = false
     this.unmounted = true
-    this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
   }
 
   query = (pattern: FormPathPattern | RegExp) => {
@@ -369,6 +369,10 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
       base: this.address,
       form: this.form,
     })
+  }
+
+  notify = (type: LifeCycleTypes, payload?: any) => {
+    return this.form.notify(type, payload)
   }
 
   dispose = () => {

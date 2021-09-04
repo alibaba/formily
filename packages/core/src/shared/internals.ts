@@ -33,6 +33,7 @@ import {
 } from '../types'
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
 import { ReservedProperties, GlobalState } from './constants'
+import { IFieldResetOptions, isForm } from '..'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
@@ -752,4 +753,96 @@ export const triggerFormValuesChange = (form: Form, change: DataChange) => {
   if (path[0] === 'values') {
     form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
   }
+}
+
+export const batchSubmit = async <T>(
+  target: Form | Field,
+  onSubmit?: (values: any) => Promise<T> | void
+): Promise<T> => {
+  const setSubmitting = (submitting: boolean) => {
+    if (isForm(target)) {
+      target.setSubmitting(submitting)
+    } else {
+      target.form.setSubmitting(submitting)
+    }
+  }
+  const getValues = () => {
+    if (isForm(target)) {
+      return toJS(target.values)
+    }
+    return toJS(target.value)
+  }
+  const getErrors = () => {
+    if (isForm(target)) {
+      return target.errors
+    }
+    return target.form.errors.filter(({ address }) => {
+      return target.address.includes(address)
+    })
+  }
+  setSubmitting(true)
+  try {
+    target.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START)
+    await target.validate()
+    target.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS)
+  } catch (e) {
+    target.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED)
+  }
+  target.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_END)
+  let results: any
+  try {
+    if (target.invalid) {
+      throw getErrors()
+    }
+    if (isFn(onSubmit)) {
+      results = await onSubmit(getValues())
+    } else {
+      results = getValues()
+    }
+    target.notify(LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS)
+  } catch (e) {
+    setSubmitting(false)
+    target.notify(LifeCycleTypes.ON_FORM_SUBMIT_FAILED)
+    target.notify(LifeCycleTypes.ON_FORM_SUBMIT)
+    throw e
+  }
+  setSubmitting(false)
+  target.notify(LifeCycleTypes.ON_FORM_SUBMIT)
+  return results
+}
+
+export const batchValidate = async (
+  target: Form | Field,
+  pattern: FormPathPattern,
+  triggerType?: ValidatorTriggerType
+) => {
+  target.setValidating(true)
+  const tasks = []
+  target.query(pattern).forEach((field) => {
+    if (!isVoidField(field)) {
+      tasks.push(field.selfValidate(triggerType))
+    }
+  })
+  await Promise.all(tasks)
+  target.setValidating(false)
+  if (target.invalid) {
+    target.notify(LifeCycleTypes.ON_FORM_VALIDATE_FAILED)
+    throw target.errors
+  }
+  target.notify(LifeCycleTypes.ON_FORM_VALIDATE_SUCCESS)
+}
+
+export const batchReset = async (
+  target: Form | Field,
+  pattern: FormPathPattern,
+  options?: IFieldResetOptions
+) => {
+  const tasks = []
+  target.query(pattern).forEach((field) => {
+    if (!isVoidField(field)) {
+      tasks.push(field.selfReset(options))
+    }
+  })
+  target.notify(LifeCycleTypes.ON_FORM_RESET)
+  await Promise.all(tasks)
 }
