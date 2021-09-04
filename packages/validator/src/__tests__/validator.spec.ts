@@ -206,6 +206,39 @@ test('max/maxItems/maxLength/minItems/minLength/min/maximum/exclusiveMaximum/min
   noError(await validate({ aa: 1, cc: 3 }, { maxProperties: 2 }))
 })
 
+test('const', async () => {
+  noError(await validate('', { const: '123' }))
+  noError(await validate('123', { const: '123' }))
+  hasError(await validate('xxx', { const: '123' }))
+})
+
+test('multipleOf', async () => {
+  noError(await validate('', { multipleOf: 2 }))
+  noError(await validate(4, { multipleOf: 2 }))
+  hasError(await validate(3, { multipleOf: 2 }))
+})
+
+test('uniqueItems', async () => {
+  noError(await validate('', { uniqueItems: true }))
+  noError(await validate(4, { uniqueItems: true }))
+  hasError(await validate([1, 2], { uniqueItems: true }))
+  hasError(
+    await validate([{ label: '11', value: '11' }, { label: '11' }], {
+      uniqueItems: true,
+    })
+  )
+  noError(await validate([1, 1], { uniqueItems: true }))
+  noError(
+    await validate(
+      [
+        { label: '11', value: '11' },
+        { label: '11', value: '11' },
+      ],
+      { uniqueItems: true }
+    )
+  )
+})
+
 test('pattern', async () => {
   hasError(await validate('aaa', { pattern: /^\d+$/ }))
 })

@@ -126,14 +126,15 @@ const RULES: IRegistryRules = {
     if (isValidateEmpty(value)) return ''
     value = toArr(value)
     return value.some((item: any, index: number) => {
-      for (let start = index; start < value.length; start++) {
-        if (isEqual(value[start], item)) {
+      for (let i = 0; i < value.length; i++) {
+        if (i !== index && !isEqual(value[i], item)) {
           return false
         }
       }
+      return true
     })
-      ? rule.message
-      : ''
+      ? ''
+      : rule.message
   },
   maxProperties(value, rule) {
     if (isValidateEmpty(value)) return ''
