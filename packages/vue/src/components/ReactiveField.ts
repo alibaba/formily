@@ -11,6 +11,7 @@ import type {
   IReactiveFieldProps,
   VueComponent,
   DefineComponent,
+  VueComponentProps,
 } from '../types'
 
 function isVueOptions(options: any) {
@@ -31,28 +32,41 @@ export default observer(
     setup(props: IReactiveFieldProps, { slots }) {
       const optionsRef = inject(SchemaOptionsSymbol, ref(null))
       const key = Math.floor(Date.now() * Math.random()).toString(16)
-      const mergeChildren = (slots: Record<string, any>, content: any[]) => {
+      const mergeChildren = (slots: Record<string, any>, content: any) => {
         if (!Object.keys(slots).length && !content) return {}
 
-        if (
-          typeof content === 'string' ||
-          isVueOptions(content) ||
-          typeof content === 'function'
-        ) {
-          const defaultSlot = slots?.default
-          slots['default'] = () => [
-            ...(defaultSlot ? defaultSlot(props.field, props.field.form) : []),
-            typeof content === 'string' ? content : h(content, {}, {}),
-          ]
+        const defaultSlot = slots?.default
+          ? slots?.default(props.field, props.field.form)
+          : []
+        if (typeof content === 'string') {
+          slots['default'] = () => [...defaultSlot, content]
+        } else if (isVueOptions(content) || typeof content === 'function') {
+          // scoped slot for class component
+          if (isVueOptions(content) && content?.render?.length > 1) {
+            slots['default'] = (scopedProps: VueComponentProps<any>) => [
+              ...defaultSlot,
+              h(content, { props: scopedProps }, {}),
+            ]
+          } else {
+            slots['default'] = () => [...defaultSlot, h(content, {}, {})]
+          }
         } else if (content && typeof content === 'object') {
           // for named slots
           Object.keys(content).forEach((key) => {
             const child = content[key]
-            const slot = slots?.[key]
+            const slot = slots?.[key] ? slots?.[key]() : []
             if (typeof child === 'string') {
-              slots[key] = () => [...(slot ? slot() : []), child]
+              slots[key] = () => [...slot, child]
             } else if (isVueOptions(child) || typeof child === 'function') {
-              slots[key] = () => [...(slot ? slot() : []), h(child, {}, {})]
+              // scoped slot for class component
+              if (isVueOptions(child) && child?.render?.length > 1) {
+                slots[key] = (scopedProps: VueComponentProps<any>) => [
+                  ...slot,
+                  h(child, { props: scopedProps }, {}),
+                ]
+              } else {
+                slots[key] = () => [...slot, h(child, {}, {})]
+              }
             }
           })
         }
