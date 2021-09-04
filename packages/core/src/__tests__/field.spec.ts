@@ -407,8 +407,12 @@ test('selfValidate/errors/warnings/successes/valid/invalid/validateStatus/queryF
       required: true,
     })
   )
-  await field.selfValidate()
-  await field2.selfValidate()
+  try {
+    await field.validate()
+  } catch {}
+  try {
+    await field2.validate()
+  } catch {}
   expect(field.invalid).toBeTruthy()
   expect(field.selfErrors.length).toEqual(1)
   expect(field2.invalid).toBeTruthy()
@@ -462,7 +466,7 @@ test('selfValidate/errors/warnings/successes/valid/invalid/validateStatus/queryF
   field3.setFeedback({ messages: null, code: 'EffectError' })
   field3.setFeedback({ messages: [], code: 'EffectError' })
   field4.setDisplay('none')
-  await field4.selfValidate()
+  await field4.validate()
   expect(field4.selfErrors).toEqual([])
 })
 

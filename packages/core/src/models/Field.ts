@@ -2,7 +2,6 @@ import {
   FormPath,
   isValid,
   FormPathPattern,
-  each,
   isFn,
   isEmpty,
   toArr,
@@ -43,7 +42,6 @@ import {
 } from '../types'
 import {
   buildNodeIndexes,
-  validateToFeedbacks,
   initFieldUpdate,
   updateFeedback,
   queryFeedbacks,
@@ -60,8 +58,8 @@ import {
   setValidating,
   setSubmitting,
   setLoading,
+  selfValidate,
 } from '../shared/internals'
-import { isArrayField, isObjectField } from '../shared/checkers'
 import { Query } from './Query'
 export class Field<
   Decorator extends JSXComponent = any,
@@ -244,7 +242,7 @@ export class Field<
         (value) => {
           this.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
           if (isValid(value) && this.modified && !this.caches.inputting) {
-            this.selfValidate()
+            selfValidate(this)
           }
         }
       ),
@@ -699,7 +697,7 @@ export class Field<
     this.form.modified = true
     this.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE)
     this.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
-    await this.selfValidate('onInput')
+    await selfValidate(this, 'onInput')
     this.caches.inputting = false
   }
 
@@ -709,7 +707,7 @@ export class Field<
     }
     this.active = true
     this.visited = true
-    await this.selfValidate('onFocus')
+    await selfValidate(this, 'onFocus')
   }
 
   onBlur = async (...args: any[]) => {
@@ -717,40 +715,7 @@ export class Field<
       if (!isHTMLInputEvent(args[0], false)) return
     }
     this.active = false
-    await this.selfValidate('onBlur')
-  }
-
-  selfValidate = async (triggerType?: ValidatorTriggerType) => {
-    const start = () => {
-      this.setValidating(true)
-    }
-    const end = () => {
-      this.setValidating(false)
-      if (this.selfValid) {
-        this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS)
-      } else {
-        this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED)
-      }
-    }
-    start()
-    if (!triggerType) {
-      const allTriggerTypes = parseValidatorDescriptions(this.validator).map(
-        (desc) => desc.triggerType
-      )
-      const results = {}
-      for (let i = 0; i < allTriggerTypes.length; i++) {
-        const payload = await validateToFeedbacks(this, allTriggerTypes[i])
-        each(payload, (result, key) => {
-          results[key] = results[key] || []
-          results[key] = results[key].concat(result)
-        })
-      }
-      end()
-      return results
-    }
-    const results = await validateToFeedbacks(this, triggerType)
-    end()
-    return results
+    await selfValidate(this, 'onBlur')
   }
 
   validate = (triggerType?: ValidatorTriggerType) => {
@@ -759,30 +724,6 @@ export class Field<
 
   submit = <T>(onSubmit?: (values: any) => Promise<T> | void): Promise<T> => {
     return batchSubmit(this, onSubmit)
-  }
-
-  selfReset = async (options?: IFieldResetOptions) => {
-    this.modified = false
-    this.visited = false
-    this.feedbacks = []
-    this.inputValue = undefined
-    this.inputValues = []
-    if (options?.forceClear) {
-      if (isArrayField(this)) {
-        this.value = [] as any
-      } else if (isObjectField(this)) {
-        this.value = {} as any
-      } else {
-        this.value = undefined
-      }
-    } else if (isValid(this.value)) {
-      this.value = toJS(this.initialValue)
-    }
-    this.notify(LifeCycleTypes.ON_FIELD_RESET)
-
-    if (options?.validate) {
-      return await this.selfValidate()
-    }
   }
 
   reset = (options?: IFieldResetOptions) => {

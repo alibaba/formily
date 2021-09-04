@@ -23,6 +23,7 @@ import { Field, ArrayField, Form, ObjectField } from '../models'
 import {
   ISpliceArrayStateProps,
   IExchangeArrayStateProps,
+  IFieldResetOptions,
   ISearchFeedback,
   IFieldFeedback,
   INodePatch,
@@ -31,13 +32,19 @@ import {
   LifeCycleTypes,
   FieldMatchPattern,
 } from '../types'
-import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
+import {
+  isArrayField,
+  isObjectField,
+  isGeneralField,
+  isForm,
+  isQuery,
+  isVoidField,
+} from './externals'
 import {
   RESPONSE_REQUEST_DURATION,
   ReservedProperties,
   GlobalState,
 } from './constants'
-import { IFieldResetOptions, isForm } from '..'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
@@ -204,7 +211,7 @@ export const validateToFeedbacks = async (
   const results = await validate(field.value, field.validator, {
     triggerType,
     validateFirst: field.props.validateFirst || field.form.props.validateFirst,
-    context: this,
+    context: field,
   })
   const takeSkipCondition = () => {
     if (field.display !== 'visible') return true
@@ -924,15 +931,15 @@ export const batchValidate = async (
   pattern: FormPathPattern,
   triggerType?: ValidatorTriggerType
 ) => {
-  target.setValidating(true)
+  if (isForm(target)) target.setValidating(true)
   const tasks = []
   target.query(pattern).forEach((field) => {
     if (!isVoidField(field)) {
-      tasks.push(field.selfValidate(triggerType))
+      tasks.push(selfValidate(field, triggerType, field === target))
     }
   })
   await Promise.all(tasks)
-  target.setValidating(false)
+  if (isForm(target)) target.setValidating(false)
   if (target.invalid) {
     notify(
       target,
@@ -956,9 +963,72 @@ export const batchReset = async (
   const tasks = []
   target.query(pattern).forEach((field) => {
     if (!isVoidField(field)) {
-      tasks.push(field.selfReset(options))
+      tasks.push(selfReset(field, options, target === field))
     }
   })
   notify(target, LifeCycleTypes.ON_FORM_RESET, LifeCycleTypes.ON_FIELD_RESET)
   await Promise.all(tasks)
 }
+
+export const selfValidate = batch.bound(
+  async (target: Field, triggerType?: ValidatorTriggerType, noEmit = false) => {
+    const start = () => {
+      setValidating(target, true)
+    }
+    const end = () => {
+      setValidating(target, false)
+      if (noEmit) return
+      if (target.selfValid) {
+        target.notify(LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS)
+      } else {
+        target.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED)
+      }
+    }
+    start()
+    if (!triggerType) {
+      const allTriggerTypes = parseValidatorDescriptions(target.validator).map(
+        (desc) => desc.triggerType
+      )
+      const results = {}
+      for (let i = 0; i < allTriggerTypes.length; i++) {
+        const payload = await validateToFeedbacks(target, allTriggerTypes[i])
+        each(payload, (result, key) => {
+          results[key] = results[key] || []
+          results[key] = results[key].concat(result)
+        })
+      }
+      end()
+      return results
+    }
+    const results = await validateToFeedbacks(target, triggerType)
+    end()
+    return results
+  }
+)
+
+export const selfReset = batch.bound(
+  async (target: Field, options?: IFieldResetOptions, noEmit = false) => {
+    target.modified = false
+    target.visited = false
+    target.feedbacks = []
+    target.inputValue = undefined
+    target.inputValues = []
+    if (options?.forceClear) {
+      if (isArrayField(target)) {
+        target.value = [] as any
+      } else if (isObjectField(target)) {
+        target.value = {} as any
+      } else {
+        target.value = undefined
+      }
+    } else if (isValid(target.value)) {
+      target.value = toJS(target.initialValue)
+    }
+    if (!noEmit) {
+      target.notify(LifeCycleTypes.ON_FIELD_RESET)
+    }
+    if (options?.validate) {
+      return await selfValidate(target)
+    }
+  }
+)
