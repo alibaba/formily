@@ -57,12 +57,12 @@ import {
   batchValidate,
   batchSubmit,
   batchReset,
+  setValidating,
+  setSubmitting,
+  setLoading,
 } from '../shared/internals'
 import { isArrayField, isObjectField } from '../shared/checkers'
 import { Query } from './Query'
-
-const RESPONSE_REQUEST_DURATION = 100
-
 export class Field<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
@@ -76,6 +76,7 @@ export class Field<
   selfPattern: FieldPatternTypes
   loading: boolean
   validating: boolean
+  submitting: boolean
   modified: boolean
   active: boolean
   visited: boolean
@@ -98,9 +99,9 @@ export class Field<
   form: Form
   props: IFieldProps<Decorator, Component, TextType, ValueType>
 
-  protected caches: IFieldCaches = {}
-  protected requests: IFieldRequests = {}
-  protected disposers: (() => void)[] = []
+  caches: IFieldCaches = {}
+  requests: IFieldRequests = {}
+  disposers: (() => void)[] = []
 
   constructor(
     address: FormPathPattern,
@@ -128,6 +129,7 @@ export class Field<
     this.initialized = false
     this.loading = false
     this.validating = false
+    this.submitting = false
     this.modified = false
     this.active = false
     this.visited = false
@@ -164,6 +166,7 @@ export class Field<
       selfPattern: observable.ref,
       loading: observable.ref,
       validating: observable.ref,
+      submitting: observable.ref,
       modified: observable.ref,
       active: observable.ref,
       visited: observable.ref,
@@ -234,7 +237,7 @@ export class Field<
       reaction(
         () => this.value,
         (value) => {
-          this.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
+          this.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
           if (isValid(value) && this.modified && !this.caches.inputting) {
             this.selfValidate()
           }
@@ -243,7 +246,7 @@ export class Field<
       reaction(
         () => this.initialValue,
         () => {
-          this.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, this)
+          this.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE)
         }
       ),
       reaction(
@@ -566,31 +569,15 @@ export class Field<
   }
 
   setLoading = (loading?: boolean) => {
-    clearTimeout(this.requests.loading)
-    if (loading) {
-      this.requests.loading = setTimeout(() => {
-        batch(() => {
-          this.loading = loading
-          this.notify(LifeCycleTypes.ON_FIELD_LOADING, this)
-        })
-      }, RESPONSE_REQUEST_DURATION)
-    } else if (this.loading !== loading) {
-      this.loading = loading
-    }
+    setLoading(this, loading)
   }
 
   setValidating = (validating?: boolean) => {
-    clearTimeout(this.requests.validating)
-    if (validating) {
-      this.requests.validating = setTimeout(() => {
-        batch(() => {
-          this.validating = validating
-          this.notify(LifeCycleTypes.ON_FIELD_VALIDATING, this)
-        })
-      }, RESPONSE_REQUEST_DURATION)
-    } else if (this.validating !== validating) {
-      this.validating = validating
-    }
+    setValidating(this, validating)
+  }
+
+  setSubmitting = (submitting?: boolean) => {
+    setSubmitting(this, submitting)
   }
 
   setComponent = <C extends JSXComponent, ComponentProps extends object = {}>(
@@ -649,19 +636,19 @@ export class Field<
     batch.scope(() => {
       initFieldUpdate(this)
     })
-    this.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_INIT)
   }
 
   onMount = () => {
     this.mounted = true
     this.unmounted = false
-    this.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_MOUNT)
   }
 
   onUnmount = () => {
     this.mounted = false
     this.unmounted = true
-    this.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_UNMOUNT)
   }
 
   onInput = async (...args: any[]) => {
@@ -676,7 +663,7 @@ export class Field<
     this.value = value
     this.modified = true
     this.form.modified = true
-    this.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
+    this.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE)
     this.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     await this.selfValidate('onInput')
     this.caches.inputting = false
@@ -702,16 +689,16 @@ export class Field<
   selfValidate = async (triggerType?: ValidatorTriggerType) => {
     const start = () => {
       this.setValidating(true)
-      this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
+      this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START)
     }
     const end = () => {
       this.setValidating(false)
       if (this.valid) {
-        this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS, this)
+        this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS)
       } else {
-        this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED, this)
+        this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED)
       }
-      this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
+      this.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END)
     }
     start()
     if (!triggerType) {
@@ -763,7 +750,7 @@ export class Field<
     } else if (isValid(this.value)) {
       this.value = toJS(this.initialValue)
     }
-    this.notify(LifeCycleTypes.ON_FIELD_RESET, this)
+    this.notify(LifeCycleTypes.ON_FIELD_RESET)
 
     if (options?.validate) {
       return await this.selfValidate()
@@ -787,7 +774,7 @@ export class Field<
   }
 
   notify = (type: LifeCycleTypes, payload?: any) => {
-    return this.form.notify(type, payload)
+    return this.form.notify(type, payload ?? this)
   }
 
   dispose = () => {

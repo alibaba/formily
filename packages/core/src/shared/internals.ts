@@ -32,7 +32,11 @@ import {
   FieldMatchPattern,
 } from '../types'
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
-import { ReservedProperties, GlobalState } from './constants'
+import {
+  RESPONSE_REQUEST_DURATION,
+  ReservedProperties,
+  GlobalState,
+} from './constants'
 import { IFieldResetOptions, isForm } from '..'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
@@ -755,59 +759,172 @@ export const triggerFormValuesChange = (form: Form, change: DataChange) => {
   }
 }
 
+const getValues = (target: Form | Field) => {
+  if (isForm(target)) {
+    return toJS(target.values)
+  }
+  return toJS(target.value)
+}
+
+const getErrors = (target: Form | Field) => {
+  if (isForm(target)) {
+    return target.errors
+  }
+  return target.form.errors.filter(({ address }) => {
+    return target.address.includes(address)
+  })
+}
+
+const notify = (
+  target: Form | Field,
+  formType: LifeCycleTypes,
+  fieldType: LifeCycleTypes
+) => {
+  if (isForm(target)) {
+    target.notify(formType)
+  } else {
+    target.notify(fieldType)
+  }
+}
+
+export const setValidating = (target: Form | Field, validating: boolean) => {
+  clearTimeout(target.requests.validate)
+  if (validating) {
+    target.requests.validate = setTimeout(() => {
+      batch(() => {
+        target.validating = validating
+        notify(
+          target,
+          LifeCycleTypes.ON_FORM_VALIDATING,
+          LifeCycleTypes.ON_FIELD_VALIDATING
+        )
+      })
+    }, RESPONSE_REQUEST_DURATION)
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_VALIDATE_START,
+      LifeCycleTypes.ON_FIELD_VALIDATE_START
+    )
+  } else {
+    if (target.validating !== validating) {
+      target.validating = validating
+    }
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_VALIDATE_END,
+      LifeCycleTypes.ON_FIELD_VALIDATE_END
+    )
+  }
+}
+
+export const setSubmitting = (target: Form | Field, submitting: boolean) => {
+  clearTimeout(target.requests.submit)
+  if (submitting) {
+    target.requests.submit = setTimeout(() => {
+      batch(() => {
+        target.submitting = submitting
+        notify(
+          target,
+          LifeCycleTypes.ON_FORM_SUBMITTING,
+          LifeCycleTypes.ON_FIELD_SUBMITTING
+        )
+      })
+    }, RESPONSE_REQUEST_DURATION)
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_START,
+      LifeCycleTypes.ON_FIELD_SUBMIT_START
+    )
+  } else {
+    if (target.submitting !== submitting) {
+      target.submitting = submitting
+    }
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_END,
+      LifeCycleTypes.ON_FIELD_SUBMIT_END
+    )
+  }
+}
+
+export const setLoading = (target: Form | Field, loading: boolean) => {
+  clearTimeout(target.requests.loading)
+  if (loading) {
+    target.requests.loading = setTimeout(() => {
+      batch(() => {
+        target.loading = loading
+        notify(
+          target,
+          LifeCycleTypes.ON_FORM_LOADING,
+          LifeCycleTypes.ON_FIELD_LOADING
+        )
+      })
+    }, RESPONSE_REQUEST_DURATION)
+  } else if (target.loading !== loading) {
+    target.loading = loading
+  }
+}
+
 export const batchSubmit = async <T>(
   target: Form | Field,
   onSubmit?: (values: any) => Promise<T> | void
 ): Promise<T> => {
-  const setSubmitting = (submitting: boolean) => {
-    if (isForm(target)) {
-      target.setSubmitting(submitting)
-    } else {
-      target.form.setSubmitting(submitting)
-    }
-  }
-  const getValues = () => {
-    if (isForm(target)) {
-      return toJS(target.values)
-    }
-    return toJS(target.value)
-  }
-  const getErrors = () => {
-    if (isForm(target)) {
-      return target.errors
-    }
-    return target.form.errors.filter(({ address }) => {
-      return target.address.includes(address)
-    })
-  }
-  setSubmitting(true)
+  target.setSubmitting(true)
   try {
-    target.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START)
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START,
+      LifeCycleTypes.ON_FIELD_SUBMIT_VALIDATE_START
+    )
     await target.validate()
-    target.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS)
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS,
+      LifeCycleTypes.ON_FIELD_SUBMIT_VALIDATE_SUCCESS
+    )
   } catch (e) {
-    target.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED)
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED,
+      LifeCycleTypes.ON_FIELD_SUBMIT_VALIDATE_FAILED
+    )
   }
-  target.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_END)
+  notify(
+    target,
+    LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_END,
+    LifeCycleTypes.ON_FIELD_SUBMIT_VALIDATE_END
+  )
   let results: any
   try {
     if (target.invalid) {
-      throw getErrors()
+      throw getErrors(target)
     }
     if (isFn(onSubmit)) {
-      results = await onSubmit(getValues())
+      results = await onSubmit(getValues(target))
     } else {
-      results = getValues()
+      results = getValues(target)
     }
-    target.notify(LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS)
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS,
+      LifeCycleTypes.ON_FIELD_SUBMIT_SUCCESS
+    )
   } catch (e) {
-    setSubmitting(false)
-    target.notify(LifeCycleTypes.ON_FORM_SUBMIT_FAILED)
-    target.notify(LifeCycleTypes.ON_FORM_SUBMIT)
+    target.setSubmitting(false)
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_FAILED,
+      LifeCycleTypes.ON_FIELD_SUBMIT_FAILED
+    )
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT,
+      LifeCycleTypes.ON_FIELD_SUBMIT
+    )
     throw e
   }
-  setSubmitting(false)
-  target.notify(LifeCycleTypes.ON_FORM_SUBMIT)
+  target.setSubmitting(false)
+  notify(target, LifeCycleTypes.ON_FORM_SUBMIT, LifeCycleTypes.ON_FIELD_SUBMIT)
   return results
 }
 
@@ -826,10 +943,18 @@ export const batchValidate = async (
   await Promise.all(tasks)
   target.setValidating(false)
   if (target.invalid) {
-    target.notify(LifeCycleTypes.ON_FORM_VALIDATE_FAILED)
-    throw target.errors
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_VALIDATE_FAILED,
+      LifeCycleTypes.ON_FIELD_VALIDATE_FAILED
+    )
+    throw getErrors(target)
   }
-  target.notify(LifeCycleTypes.ON_FORM_VALIDATE_SUCCESS)
+  notify(
+    target,
+    LifeCycleTypes.ON_FORM_VALIDATE_SUCCESS,
+    LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS
+  )
 }
 
 export const batchReset = async (
@@ -843,6 +968,6 @@ export const batchReset = async (
       tasks.push(field.selfReset(options))
     }
   })
-  target.notify(LifeCycleTypes.ON_FORM_RESET)
+  notify(target, LifeCycleTypes.ON_FORM_RESET, LifeCycleTypes.ON_FIELD_RESET)
   await Promise.all(tasks)
 }

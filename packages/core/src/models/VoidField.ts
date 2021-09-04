@@ -52,7 +52,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   form: Form
   props: IVoidFieldProps<Decorator, Component>
 
-  protected disposers: (() => void)[] = []
+  disposers: (() => void)[] = []
 
   constructor(
     address: FormPathPattern,
@@ -348,19 +348,19 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     batch.scope(() => {
       initFieldUpdate(this)
     })
-    this.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_INIT)
   }
 
   onMount = () => {
     this.mounted = true
     this.unmounted = false
-    this.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_MOUNT)
   }
 
   onUnmount = () => {
     this.mounted = false
     this.unmounted = true
-    this.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_UNMOUNT)
   }
 
   query = (pattern: FormPathPattern | RegExp) => {
@@ -372,7 +372,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   }
 
   notify = (type: LifeCycleTypes, payload?: any) => {
-    return this.form.notify(type, payload)
+    return this.form.notify(type, payload ?? this)
   }
 
   dispose = () => {
