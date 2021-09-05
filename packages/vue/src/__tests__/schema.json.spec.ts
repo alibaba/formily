@@ -3,7 +3,6 @@ import { Schema } from '@formily/json-schema'
 import { render, waitFor } from '@testing-library/vue'
 import Vue, { FunctionalComponentOptions } from 'vue'
 import { FormProvider, createSchemaField } from '../vue2-components'
-import { h } from 'vue-demi'
 
 Vue.component('FormProvider', FormProvider)
 
