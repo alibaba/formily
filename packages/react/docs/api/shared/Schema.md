@@ -947,7 +947,11 @@ Built-in expression scope is mainly used to realize various linkage relationship
 
 ### $self
 
-Can only be consumed by expressions in x-reactions, representing the current field instance
+Represents the current field instance, can be used in ordinary attribute expressions, and can also be used in x-reactions
+
+### $form
+
+Represents the current Form instance, which can be used in ordinary attribute expressions, and can also be used in x-reactions
 
 ### $dependencies
 
@@ -956,10 +960,6 @@ It can only be consumed by expressions in x-reactions, corresponding to the depe
 ### $deps
 
 It can only be consumed by expressions in x-reactions, corresponding to the dependencies defined by x-reactions, and the sequence of the array is the same
-
-### $form
-
-Can only be consumed by expressions in x-reactions, representing the current Form instance
 
 ### $target
 
