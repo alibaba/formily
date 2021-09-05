@@ -1,4 +1,4 @@
-import { createForm, isField } from '@formily/core'
+import { createForm } from '@formily/core'
 import { Schema } from '@formily/json-schema'
 import { render, waitFor } from '@testing-library/vue'
 import Vue, { FunctionalComponentOptions } from 'vue'
@@ -671,5 +671,107 @@ describe('scope', () => {
       </FormProvider>`,
     })
     expect(queryByTestId('input2').getAttribute('value')).toEqual('123')
+  })
+})
+
+describe('expression', () => {
+  test('expression x-visible', async () => {
+    const form = createForm()
+    const { SchemaField } = createSchemaField({
+      components: {
+        Input,
+        Input2,
+        Previewer,
+      },
+    })
+
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: {
+            type: 'object',
+            properties: {
+              input: {
+                type: 'string',
+                'x-component': 'Input',
+              },
+              input2: {
+                type: 'string',
+                'x-component': 'Input2',
+                'x-visible': '{{$form.values.input === "123"}}',
+              },
+            },
+          },
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+
+    expect(queryByTestId('input')).not.toBeNull()
+    expect(queryByTestId('input2')).toBeNull()
+
+    form.values.input = '123'
+
+    await waitFor(() => {
+      expect(queryByTestId('input').getAttribute('value')).toEqual('123')
+      expect(queryByTestId('input2')).not.toBeNull()
+    })
+  })
+
+  test('expression x-value', async () => {
+    const form = createForm({
+      values: {
+        input: 1,
+      },
+    })
+    const { SchemaField } = createSchemaField({
+      components: {
+        Input,
+        Input2,
+        Previewer,
+      },
+    })
+
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: {
+            type: 'object',
+            properties: {
+              input: {
+                type: 'string',
+                'x-component': 'Input',
+              },
+              input2: {
+                type: 'string',
+                'x-component': 'Input2',
+                'x-value': '{{$form.values.input * 10}}',
+              },
+            },
+          },
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+
+    await waitFor(() => {
+      expect(queryByTestId('input2').getAttribute('value')).toEqual('10')
+    })
+    form.values.input = 10
+    await waitFor(() => {
+      expect(queryByTestId('input2').getAttribute('value')).toEqual('100')
+    })
   })
 })
