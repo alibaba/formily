@@ -40,7 +40,6 @@ const Input2: FunctionalComponentOptions = {
 const Previewer: FunctionalComponentOptions = {
   functional: true,
   render(h, context) {
-    console.log(context.children)
     return h(
       'div',
       {
