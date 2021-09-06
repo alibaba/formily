@@ -32,6 +32,8 @@ const compatibleCreateElement = (
           scopedSlots[key] = func
         } else if (key !== 'default') {
           scopedSlots[key] = func
+          // compatible with slots usage
+          children.push(hInVue2(FragmentComponent, { slot: key }, func()))
         } else {
           children.push(func())
         }

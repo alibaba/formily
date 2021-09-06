@@ -104,6 +104,21 @@ const Previewer4: FunctionalComponentOptions = {
   },
 }
 
+const Previewer5: FunctionalComponentOptions = {
+  functional: true,
+  render(h, context) {
+    return h(
+      'div',
+      {
+        attrs: {
+          'data-testid': 'previewer5',
+        },
+      },
+      context.slots()?.append
+    )
+  },
+}
+
 describe('json schema field', () => {
   test('string field', () => {
     const form = createForm()
@@ -571,6 +586,38 @@ describe('x-content', () => {
     })
     expect(queryByTestId('previewer4')).toBeVisible()
     expect(queryByTestId('previewer4').textContent).toEqual('123')
+  })
+
+  test('slot compitible', () => {
+    const form = createForm()
+    const { SchemaField } = createSchemaField({
+      components: {
+        Previewer5,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'string',
+            'x-component': 'Previewer5',
+            'x-content': {
+              append: '123',
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('previewer5')).toBeVisible()
+    expect(queryByTestId('previewer5').textContent).toEqual('123')
   })
 })
 
