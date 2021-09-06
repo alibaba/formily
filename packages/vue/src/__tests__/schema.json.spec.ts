@@ -1,6 +1,7 @@
 import { createForm } from '@formily/core'
 import { Schema } from '@formily/json-schema'
 import { render, waitFor } from '@testing-library/vue'
+import { mount } from '@vue/test-utils'
 import Vue, { FunctionalComponentOptions } from 'vue'
 import { FormProvider, createSchemaField } from '../vue2-components'
 
@@ -10,6 +11,7 @@ const Input: FunctionalComponentOptions = {
   functional: true,
   render(h, context) {
     return h('input', {
+      class: 'input',
       attrs: {
         value: context.props.value,
         'data-testid': 'input',
@@ -25,6 +27,7 @@ const Input2: FunctionalComponentOptions = {
   functional: true,
   render(h, context) {
     return h('input', {
+      class: 'input2',
       attrs: {
         value: context.props.value,
         'data-testid': 'input2',
@@ -732,43 +735,46 @@ describe('expression', () => {
       },
     })
 
-    const { queryByTestId } = render({
-      components: { SchemaField },
-      data() {
-        return {
-          form,
-          schema: {
-            type: 'object',
-            properties: {
-              input: {
-                type: 'string',
-                'x-component': 'Input',
-              },
-              input2: {
-                type: 'string',
-                'x-component': 'Input2',
-                'x-visible': '{{$form.values.input === "123"}}',
+    const wrapper = mount(
+      {
+        components: { SchemaField },
+        data() {
+          return {
+            form,
+            schema: {
+              type: 'object',
+              properties: {
+                input: {
+                  type: 'string',
+                  'x-component': 'Input',
+                },
+                input2: {
+                  type: 'string',
+                  'x-component': 'Input2',
+                  'x-visible': '{{$form.values.input === "123"}}',
+                },
               },
             },
-          },
-        }
-      },
-      template: `<FormProvider :form="form">
+          }
+        },
+        template: `<FormProvider :form="form">
         <SchemaField
           :schema="schema"
         />
       </FormProvider>`,
-    })
+      },
+      {
+        attachToDocument: true,
+      }
+    )
 
-    expect(queryByTestId('input')).not.toBeNull()
-    expect(queryByTestId('input2')).toBeNull()
+    expect(wrapper.find('.input').exists()).toBeTruthy()
+    expect(wrapper.find('.input2').exists()).not.toBeTruthy()
 
     form.values.input = '123'
 
-    await waitFor(() => {
-      expect(queryByTestId('input').getAttribute('value')).toEqual('123')
-      expect(queryByTestId('input2')).not.toBeNull()
-    })
+    expect(wrapper.find('.input2').exists()).toBeTruthy()
+    wrapper.destroy()
   })
 
   test('expression x-value', async () => {
@@ -785,40 +791,40 @@ describe('expression', () => {
       },
     })
 
-    const { queryByTestId } = render({
-      components: { SchemaField },
-      data() {
-        return {
-          form,
-          schema: {
-            type: 'object',
-            properties: {
-              input: {
-                type: 'string',
-                'x-component': 'Input',
-              },
-              input2: {
-                type: 'string',
-                'x-component': 'Input2',
-                'x-value': '{{$form.values.input * 10}}',
+    const wrapper = mount(
+      {
+        components: { SchemaField },
+        data() {
+          return {
+            form,
+            schema: {
+              type: 'object',
+              properties: {
+                input: {
+                  type: 'string',
+                  'x-component': 'Input',
+                },
+                input2: {
+                  type: 'string',
+                  'x-component': 'Input2',
+                  'x-value': '{{$form.values.input * 10}}',
+                },
               },
             },
-          },
-        }
-      },
-      template: `<FormProvider :form="form">
+          }
+        },
+        template: `<FormProvider :form="form">
         <SchemaField
           :schema="schema"
         />
       </FormProvider>`,
-    })
+      },
+      { attachToDocument: true }
+    )
 
-    await waitFor(() => {
-      expect(queryByTestId('input2').getAttribute('value')).toEqual('10')
-    })
+    expect(wrapper.find('.input2').attributes().value).toEqual('10')
     form.values.input = 10
-    await waitFor(() => {
-      expect(queryByTestId('input2').getAttribute('value')).toEqual('100')
-    })
+    expect(wrapper.find('.input2').attributes().value).toEqual('100')
+    wrapper.destroy()
   })
 })
