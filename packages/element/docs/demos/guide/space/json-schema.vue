@@ -17,7 +17,6 @@ import {
   FormLayout,
   FormItem,
   Input,
-  TextArea,
   Submit,
   Space,
 } from '@formily/element'
@@ -27,7 +26,6 @@ const { SchemaField } = createSchemaField({
     FormLayout,
     FormItem,
     Input,
-    TextArea,
     Space,
   },
 })
@@ -112,7 +110,7 @@ export default {
           type: 'string',
           title: '文本框',
           'x-decorator': 'FormItem',
-          'x-component': 'TextArea',
+          'x-component': 'Input.TextArea',
           'x-component-props': {
             style: {
               width: 400,

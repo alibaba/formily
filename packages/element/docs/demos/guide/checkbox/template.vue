@@ -14,8 +14,12 @@
         { label: '选项2', value: 2 },
       ]"
       :decorator="[FormItem]"
-      :component="[Checkbox.Group]"
-    />
+      :component="[Checkbox.Group, { optionType: 'button' }]"
+    >
+      <template v-slot:option="{ option }">
+        <div>{{ option.label }}</div>
+      </template>
+    </ArrayField>
     <Submit @submit="onSubmit">提交</Submit>
   </Form>
 </template>
