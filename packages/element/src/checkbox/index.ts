@@ -1,6 +1,11 @@
 import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
-import { defineComponent } from '@vue/composition-api'
-import { composeExport, getComponentByTag } from '../__builtins__/shared'
+import { defineComponent, PropType } from '@vue/composition-api'
+import {
+  composeExport,
+  getComponentByTag,
+  resolveComponent,
+  SlotTypes,
+} from '../__builtins__/shared'
 import type {
   Checkbox as _ElCheckboxProps,
   CheckboxGroup as ElCheckboxGroupProps,
@@ -8,6 +13,7 @@ import type {
 import {
   Checkbox as ElCheckbox,
   CheckboxGroup as ElCheckboxGroup,
+  CheckboxButton as ElCheckboxButton,
 } from 'element-ui'
 import { PreviewText } from '../preview-text'
 
@@ -18,12 +24,13 @@ type ElCheckboxProps = Omit<_ElCheckboxProps, 'value'> & {
 export interface CheckboxProps extends ElCheckboxProps {
   option: Omit<_ElCheckboxProps, 'value'> & {
     value: ElCheckboxProps['label']
-    label: string
+    label: SlotTypes
   }
 }
 
 const CheckboxOption = defineComponent<CheckboxProps>({
   name: 'Checkbox',
+  inheritAttrs: false,
   props: {
     option: {
       type: Object,
@@ -35,16 +42,18 @@ const CheckboxOption = defineComponent<CheckboxProps>({
       const props = attrs as unknown as CheckboxProps
       const option = curtomProps?.option
       if (option) {
-        const children = option.label
-          ? { default: () => [option.label] }
-          : slots
+        const children = {
+          default: () => [
+            resolveComponent(slots.default ?? option.label, { option }),
+          ],
+        }
         const newProps = {} as Partial<ElCheckboxProps>
         Object.assign(newProps, option)
         newProps.label = option.value
         delete newProps.value
 
         return h(
-          ElCheckbox,
+          attrs.optionType === 'button' ? ElCheckboxButton : ElCheckbox,
           {
             attrs: {
               ...newProps,
@@ -71,6 +80,7 @@ const CheckboxOption = defineComponent<CheckboxProps>({
 export type CheckboxGroupProps = ElCheckboxGroupProps & {
   value: any[]
   options?: Array<CheckboxProps | string>
+  optionType: 'default' | 'button'
 }
 
 const TransformElCheckboxGroup = getComponentByTag(ElCheckboxGroup, {
@@ -84,6 +94,10 @@ const CheckboxGroupOption = defineComponent<CheckboxGroupProps>({
       type: Array,
       default: () => [],
     },
+    optionType: {
+      type: String as PropType<CheckboxGroupProps['optionType']>,
+      default: 'default',
+    },
   },
   setup(customProps, { attrs, slots, listeners }) {
     return () => {
@@ -96,11 +110,36 @@ const CheckboxGroupOption = defineComponent<CheckboxGroupProps>({
                   if (typeof option === 'string') {
                     return h(
                       Checkbox,
-                      { props: { option: { label: option, value: option } } },
-                      {}
+                      {
+                        props: {
+                          option: {
+                            label: option,
+                            value: option,
+                          },
+                        },
+                        attrs: {
+                          optionType: customProps.optionType,
+                        },
+                      },
+                      slots?.option
+                        ? { default: () => slots.option({ option }) }
+                        : {}
                     )
                   } else {
-                    return h(Checkbox, { props: { option } }, {})
+                    return h(
+                      Checkbox,
+                      {
+                        props: {
+                          option,
+                        },
+                        attrs: {
+                          optionType: customProps.optionType,
+                        },
+                      },
+                      slots?.option
+                        ? { default: () => slots.option({ option }) }
+                        : {}
+                    )
                   }
                 }),
             }
