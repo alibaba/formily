@@ -948,6 +948,10 @@ type SchemaReactions<Field = any> =
 
 代表当前字段实例，可以在普通属性表达式中使用，也能在 x-reactions 中使用
 
+### $values
+
+代表顶层表单数据，可以在普通属性表达式中使用，也能在 x-reactions 中使用
+
 ### $form
 
 代表当前 Form 实例，可以在普通属性表达式中使用，也能在 x-reactions 中使用

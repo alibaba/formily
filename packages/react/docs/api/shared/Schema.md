@@ -949,6 +949,10 @@ Built-in expression scope is mainly used to realize various linkage relationship
 
 Represents the current field instance, can be used in ordinary attribute expressions, and can also be used in x-reactions
 
+### $values
+
+Represents the top-level form data, which can be used in ordinary attribute expressions, and can also be used in x-reactions
+
 ### $form
 
 Represents the current Form instance, which can be used in ordinary attribute expressions, and can also be used in x-reactions

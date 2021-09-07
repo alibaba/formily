@@ -140,6 +140,7 @@ const getBaseScope = (field: Field, options: ISchemaTransformerOptions) => {
   const $memo = autorun.memo
   const $self = field
   const $form = field.form
+  const $values = field.form.values
   return {
     ...options.scope,
     $form,
@@ -148,6 +149,7 @@ const getBaseScope = (field: Field, options: ISchemaTransformerOptions) => {
     $effect,
     $memo,
     $props,
+    $values,
   }
 }
 
