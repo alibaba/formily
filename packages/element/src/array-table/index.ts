@@ -230,7 +230,7 @@ const StatusSelect = observer(
       options: Array,
       pageSize: Number,
     },
-    setup(props, { attrs }) {
+    setup(props) {
       const formRef = useForm()
       const fieldRef = useField<ArrayField>()
       const prefixCls = `${stylePrefix}-array-table`

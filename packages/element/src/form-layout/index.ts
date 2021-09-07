@@ -3,6 +3,10 @@ import {
   inject,
   InjectionKey,
   defineComponent,
+  Ref,
+  ref,
+  watch,
+  computed,
 } from '@vue/composition-api'
 import { h } from '@formily/vue'
 import { stylePrefix } from '../__builtins__/configs'
@@ -29,22 +33,24 @@ export type FormLayoutProps = {
   inset?: boolean
 }
 
-export const FormLayoutDeepContext: InjectionKey<FormLayoutProps> = Symbol(
+export const FormLayoutDeepContext: InjectionKey<Ref<FormLayoutProps>> = Symbol(
   'FormLayoutDeepContext'
 )
 
-export const FormLayoutShallowContext: InjectionKey<FormLayoutProps> = Symbol(
-  'FormLayoutShallowContext'
-)
+export const FormLayoutShallowContext: InjectionKey<Ref<FormLayoutProps>> =
+  Symbol('FormLayoutShallowContext')
 
-export const useFormDeepLayout = () => inject(FormLayoutDeepContext, null)
+export const useFormDeepLayout = () => inject(FormLayoutDeepContext, ref(null))
 
-export const useFormShallowLayout = () => inject(FormLayoutShallowContext, null)
+export const useFormShallowLayout = () =>
+  inject(FormLayoutShallowContext, ref(null))
 
-export const useFormLayout = () => ({
-  ...useFormDeepLayout(),
-  ...useFormShallowLayout(),
-})
+export const useFormLayout = () => {
+  return ref({
+    ...useFormDeepLayout().value,
+    ...useFormShallowLayout().value,
+  })
+}
 
 export const FormLayout = defineComponent<FormLayoutProps>({
   name: 'FFormLayout',
@@ -69,25 +75,32 @@ export const FormLayout = defineComponent<FormLayoutProps>({
     bordered: { default: true },
     inset: { default: false },
   },
-  setup(props, { slots, attrs }) {
+  setup(props, { slots }) {
     const deepLayout = useFormDeepLayout()
-
-    const newDeepLayout = {
+    const newDeepLayout = ref({
       ...deepLayout,
-    }
-    if (!props.shallow) {
-      Object.assign(newDeepLayout, props)
-    } else {
-      if (props.size) {
-        newDeepLayout.size = props.size
-      }
-      if (props.colon) {
-        newDeepLayout.colon = props.colon
-      }
-    }
+    })
+    const shallowProps = computed(() => (props.shallow ? props : undefined))
+
+    watch(
+      [props, deepLayout],
+      () => {
+        if (!props.shallow) {
+          Object.assign(newDeepLayout.value, props)
+        } else {
+          if (props.size) {
+            newDeepLayout.value.size = props.size
+          }
+          if (props.colon) {
+            newDeepLayout.value.colon = props.colon
+          }
+        }
+      },
+      { deep: true, immediate: true }
+    )
 
     provide(FormLayoutDeepContext, newDeepLayout)
-    provide(FormLayoutShallowContext, props.shallow ? props : undefined)
+    provide(FormLayoutShallowContext, shallowProps)
 
     const formPrefixCls = `${stylePrefix}-form`
     return () => {

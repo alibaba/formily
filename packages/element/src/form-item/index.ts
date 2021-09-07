@@ -5,10 +5,11 @@ import {
   Ref,
   onBeforeUnmount,
   watch,
+  provide,
 } from '@vue/composition-api'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps, h } from '@formily/vue'
-import { useFormLayout } from '../form-layout'
+import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
 import { composeExport, resolveComponent } from '../__builtins__/shared'
 import { stylePrefix } from '../__builtins__/configs'
 import { Component } from 'vue'
@@ -137,7 +138,7 @@ export const FormBaseItem = defineComponent<FormItemProps>({
   },
   setup(props, { slots, attrs, refs }) {
     const active = ref(false)
-    const deepLayout = useFormLayout()
+    const deepLayoutRef = useFormLayout()
 
     const prefixCls = `${stylePrefix}-form-item`
 
@@ -148,7 +149,10 @@ export const FormBaseItem = defineComponent<FormItemProps>({
       containerRef.value = refs.labelContainer
     })
 
+    provide(FormLayoutShallowContext, ref(null))
+
     return () => {
+      const deepLayout = deepLayoutRef.value
       const {
         label,
         colon = deepLayout.colon ?? true,
