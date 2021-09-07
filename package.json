@@ -72,7 +72,7 @@
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.8.2",
     "@umijs/plugin-sass": "^1.1.1",
-    "@vue/test-utils": "^1.2.0",
+    "@vue/test-utils": "1.0.0-beta.22",
     "antd": "^4.0.0",
     "chalk": "^2.4.2",
     "chokidar": "^2.1.2",
