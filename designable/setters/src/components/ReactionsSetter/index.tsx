@@ -320,6 +320,7 @@ export const ReactionsSetter: React.FC<IReactionsSetterProps> = (props) => {
                               const property = field
                                 .query('.property')
                                 .get('inputValues')
+                              property[0] = property[0] ?? 'value'
                               field.query('.source').take((source) => {
                                 if (isVoidField(source)) return
                                 if (source.value) {
