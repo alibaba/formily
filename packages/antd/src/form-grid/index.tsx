@@ -236,6 +236,7 @@ const useGridLayout = (outerProps: IFormGridProps): ILayout => {
         childList: true,
       })
     }
+    updateUI()
     return () => {
       resizeObserver.unobserve(ref.current)
       mutationObserver.disconnect()

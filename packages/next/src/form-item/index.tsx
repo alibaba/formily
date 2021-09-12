@@ -272,6 +272,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   return (
     <div
       {...pickDataProps(props)}
+      data-span={gridSpan || 1}
       style={{
         ...style,
         ...gridStyles,
