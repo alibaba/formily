@@ -66,6 +66,8 @@ interface IStyleProps extends IFormGridProps {
 
 export interface IGridColumnProps {
   gridSpan?: number
+  style?: React.CSSProperties
+  className?: string
 }
 
 type ComposedFormGrid = React.FC<IFormGridProps> & {
@@ -361,10 +363,15 @@ export const FormGrid: ComposedFormGrid = (props) => {
 export const GridColumn: React.FC<IGridColumnProps> = ({
   gridSpan,
   children,
+  ...props
 }) => {
   const span = FormGrid.useGridSpan(gridSpan)
   return (
-    <div style={{ gridColumnStart: `span ${span}` }} data-span={span || 1}>
+    <div
+      {...props}
+      style={{ ...props.style, gridColumnStart: `span ${span}` }}
+      data-span={span || 1}
+    >
       {children}
     </div>
   )
