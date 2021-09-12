@@ -37,6 +37,8 @@ interface ILayoutProps {
 }
 
 export interface IFormGridProps {
+  style?: React.CSSProperties
+  className?: string
   minWidth?: number | number[]
   maxWidth?: number | number[]
   minColumns?: number | number[]
@@ -347,8 +349,8 @@ export const FormGrid: ComposedFormGrid = (props) => {
       value={{ columnGap: props.columnGap, ...layoutParams }}
     >
       <div
-        className={cls(`${formGridPrefixCls}-layout`)}
-        style={styles}
+        className={cls(`${formGridPrefixCls}-layout`, props.className)}
+        style={{ ...props.style, ...styles }}
         ref={ref}
       >
         {props.children}
