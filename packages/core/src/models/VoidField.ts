@@ -40,6 +40,10 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   mounted: boolean
   unmounted: boolean
 
+  content: any
+
+  data: any
+
   decoratorType: Decorator
   decoratorProps: Record<string, any>
   componentType: Component
@@ -50,7 +54,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   form: Form
   props: IVoidFieldProps<Decorator, Component>
 
-  protected disposers: (() => void)[] = []
+  disposers: (() => void)[] = []
 
   constructor(
     address: FormPathPattern,
@@ -88,6 +92,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     this.readOnly = this.props.readOnly
     this.readPretty = this.props.readPretty
     this.visible = this.props.visible
+    this.content = this.props.content
+    this.data = this.props.data
     this.decorator = toArr(this.props.decorator)
     this.component = toArr(this.props.component)
   }
@@ -104,6 +110,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
       unmounted: observable.ref,
       decoratorType: observable.ref,
       componentType: observable.ref,
+      content: observable.ref,
+      data: observable.shallow,
       decoratorProps: observable,
       componentProps: observable,
       display: observable.computed,
@@ -344,19 +352,19 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     batch.scope(() => {
       initFieldUpdate(this)
     })
-    this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_INIT)
   }
 
   onMount = () => {
     this.mounted = true
     this.unmounted = false
-    this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_MOUNT)
   }
 
   onUnmount = () => {
     this.mounted = false
     this.unmounted = true
-    this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_UNMOUNT)
   }
 
   query = (pattern: FormPathPattern | RegExp) => {
@@ -365,6 +373,10 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
       base: this.address,
       form: this.form,
     })
+  }
+
+  notify = (type: LifeCycleTypes, payload?: any) => {
+    return this.form.notify(type, payload ?? this)
   }
 
   dispose = () => {

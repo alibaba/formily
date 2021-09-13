@@ -13,12 +13,17 @@ import {
   shallowClone,
   isEqual,
 } from '@formily/shared'
-import { ValidatorTriggerType, validate } from '@formily/validator'
+import {
+  ValidatorTriggerType,
+  validate,
+  parseValidatorDescriptions,
+} from '@formily/validator'
 import { batch, toJS, DataChange } from '@formily/reactive'
 import { Field, ArrayField, Form, ObjectField } from '../models'
 import {
   ISpliceArrayStateProps,
   IExchangeArrayStateProps,
+  IFieldResetOptions,
   ISearchFeedback,
   IFieldFeedback,
   INodePatch,
@@ -27,8 +32,20 @@ import {
   LifeCycleTypes,
   FieldMatchPattern,
 } from '../types'
-import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
-import { ReservedProperties, GlobalState, NumberIndexReg } from './constants'
+import {
+  isArrayField,
+  isObjectField,
+  isGeneralField,
+  isForm,
+  isQuery,
+  isVoidField,
+} from './externals'
+import {
+  RESPONSE_REQUEST_DURATION,
+  ReservedProperties,
+  GlobalState,
+  NumberIndexReg
+} from './constants'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
@@ -196,7 +213,7 @@ export const validateToFeedbacks = async (
   const results = await validate(field.value, field.validator, {
     triggerType,
     validateFirst: field.props.validateFirst || field.form.props.validateFirst,
-    context: this,
+    context: field,
   })
   const takeSkipCondition = () => {
     if (field.display !== 'visible') return true
@@ -216,6 +233,61 @@ export const validateToFeedbacks = async (
     })
   })
   return results
+}
+
+export const setValidatorRule = (field: Field, name: string, value: any) => {
+  if (!isValid(value)) return
+  const hasRule = parseValidatorDescriptions(field.validator).some(
+    (desc) => name in desc
+  )
+  const rule = {
+    [name]: value,
+  }
+  if (hasRule) {
+    if (isArr(field.validator)) {
+      field.validator = field.validator.map((desc: any) => {
+        if (Object.prototype.hasOwnProperty.call(desc, name)) {
+          desc[name] = value
+          return desc
+        }
+        return desc
+      })
+    } else if (isPlainObj(field.validator)) {
+      field.validator[name] = value
+    } else {
+      field.validator = {
+        [name]: value,
+      }
+    }
+  } else {
+    if (isArr(field.validator)) {
+      if (name === 'required') {
+        field.validator.unshift(rule)
+      } else {
+        field.validator.push(rule)
+      }
+    } else if (isPlainObj(field.validator)) {
+      field.validator[name] = value
+    } else if (field.validator) {
+      if (name === 'required') {
+        field.validator = [
+          {
+            [name]: value,
+          },
+          field.validator,
+        ]
+      } else {
+        field.validator = [
+          field.validator,
+          {
+            [name]: value,
+          },
+        ]
+      }
+    } else {
+      field.validator = [rule]
+    }
+  }
 }
 
 export const spliceArrayState = (
@@ -562,7 +634,7 @@ export const setModelState = (model: any, setter: any) => {
     Object.keys(setter || {}).forEach((key: string) => {
       const value = setter[key]
       if (isFn(value)) return
-      if (ReservedProperties.includes(key)) return
+      if (ReservedProperties.has(key)) return
       if (isSkipProperty(key)) return
       model[key] = value
     })
@@ -579,7 +651,7 @@ export const getModelState = (model: any, getter?: any) => {
       if (isFn(value)) {
         return buf
       }
-      if (ReservedProperties.includes(key)) return buf
+      if (ReservedProperties.has(key)) return buf
       if (key === 'address' || key === 'path') {
         buf[key] = value.toString()
         return buf
@@ -699,3 +771,270 @@ export const triggerFormValuesChange = (form: Form, change: DataChange) => {
     form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
   }
 }
+
+const getValues = (target: Form | Field) => {
+  if (isForm(target)) {
+    return toJS(target.values)
+  }
+  return toJS(target.value)
+}
+
+const notify = (
+  target: Form | Field,
+  formType: LifeCycleTypes,
+  fieldType: LifeCycleTypes
+) => {
+  if (isForm(target)) {
+    target.notify(formType)
+  } else {
+    target.notify(fieldType)
+  }
+}
+
+export const setValidating = (target: Form | Field, validating: boolean) => {
+  clearTimeout(target.requests.validate)
+  if (validating) {
+    target.requests.validate = setTimeout(() => {
+      batch(() => {
+        target.validating = validating
+        notify(
+          target,
+          LifeCycleTypes.ON_FORM_VALIDATING,
+          LifeCycleTypes.ON_FIELD_VALIDATING
+        )
+      })
+    }, RESPONSE_REQUEST_DURATION)
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_VALIDATE_START,
+      LifeCycleTypes.ON_FIELD_VALIDATE_START
+    )
+  } else {
+    if (target.validating !== validating) {
+      target.validating = validating
+    }
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_VALIDATE_END,
+      LifeCycleTypes.ON_FIELD_VALIDATE_END
+    )
+  }
+}
+
+export const setSubmitting = (target: Form | Field, submitting: boolean) => {
+  clearTimeout(target.requests.submit)
+  if (submitting) {
+    target.requests.submit = setTimeout(() => {
+      batch(() => {
+        target.submitting = submitting
+        notify(
+          target,
+          LifeCycleTypes.ON_FORM_SUBMITTING,
+          LifeCycleTypes.ON_FIELD_SUBMITTING
+        )
+      })
+    }, RESPONSE_REQUEST_DURATION)
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_START,
+      LifeCycleTypes.ON_FIELD_SUBMIT_START
+    )
+  } else {
+    if (target.submitting !== submitting) {
+      target.submitting = submitting
+    }
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_END,
+      LifeCycleTypes.ON_FIELD_SUBMIT_END
+    )
+  }
+}
+
+export const setLoading = (target: Form | Field, loading: boolean) => {
+  clearTimeout(target.requests.loading)
+  if (loading) {
+    target.requests.loading = setTimeout(() => {
+      batch(() => {
+        target.loading = loading
+        notify(
+          target,
+          LifeCycleTypes.ON_FORM_LOADING,
+          LifeCycleTypes.ON_FIELD_LOADING
+        )
+      })
+    }, RESPONSE_REQUEST_DURATION)
+  } else if (target.loading !== loading) {
+    target.loading = loading
+  }
+}
+
+export const batchSubmit = async <T>(
+  target: Form | Field,
+  onSubmit?: (values: any) => Promise<T> | void
+): Promise<T> => {
+  target.setSubmitting(true)
+  try {
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START,
+      LifeCycleTypes.ON_FIELD_SUBMIT_VALIDATE_START
+    )
+    await target.validate()
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS,
+      LifeCycleTypes.ON_FIELD_SUBMIT_VALIDATE_SUCCESS
+    )
+  } catch (e) {
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED,
+      LifeCycleTypes.ON_FIELD_SUBMIT_VALIDATE_FAILED
+    )
+  }
+  notify(
+    target,
+    LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_END,
+    LifeCycleTypes.ON_FIELD_SUBMIT_VALIDATE_END
+  )
+  let results: any
+  try {
+    if (target.invalid) {
+      throw target.errors
+    }
+    if (isFn(onSubmit)) {
+      results = await onSubmit(getValues(target))
+    } else {
+      results = getValues(target)
+    }
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS,
+      LifeCycleTypes.ON_FIELD_SUBMIT_SUCCESS
+    )
+  } catch (e) {
+    target.setSubmitting(false)
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT_FAILED,
+      LifeCycleTypes.ON_FIELD_SUBMIT_FAILED
+    )
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_SUBMIT,
+      LifeCycleTypes.ON_FIELD_SUBMIT
+    )
+    throw e
+  }
+  target.setSubmitting(false)
+  notify(target, LifeCycleTypes.ON_FORM_SUBMIT, LifeCycleTypes.ON_FIELD_SUBMIT)
+  return results
+}
+
+export const batchValidate = async (
+  target: Form | Field,
+  pattern: FormPathPattern,
+  triggerType?: ValidatorTriggerType
+) => {
+  if (isForm(target)) target.setValidating(true)
+  const tasks = []
+  target.query(pattern).forEach((field) => {
+    if (!isVoidField(field)) {
+      tasks.push(selfValidate(field, triggerType, field === target))
+    }
+  })
+  await Promise.all(tasks)
+  if (isForm(target)) target.setValidating(false)
+  if (target.invalid) {
+    notify(
+      target,
+      LifeCycleTypes.ON_FORM_VALIDATE_FAILED,
+      LifeCycleTypes.ON_FIELD_VALIDATE_FAILED
+    )
+    throw target.errors
+  }
+  notify(
+    target,
+    LifeCycleTypes.ON_FORM_VALIDATE_SUCCESS,
+    LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS
+  )
+}
+
+export const batchReset = async (
+  target: Form | Field,
+  pattern: FormPathPattern,
+  options?: IFieldResetOptions
+) => {
+  const tasks = []
+  target.query(pattern).forEach((field) => {
+    if (!isVoidField(field)) {
+      tasks.push(selfReset(field, options, target === field))
+    }
+  })
+  notify(target, LifeCycleTypes.ON_FORM_RESET, LifeCycleTypes.ON_FIELD_RESET)
+  await Promise.all(tasks)
+}
+
+export const selfValidate = batch.bound(
+  async (target: Field, triggerType?: ValidatorTriggerType, noEmit = false) => {
+    const start = () => {
+      setValidating(target, true)
+    }
+    const end = () => {
+      setValidating(target, false)
+      if (noEmit) return
+      if (target.selfValid) {
+        target.notify(LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS)
+      } else {
+        target.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED)
+      }
+    }
+    start()
+    if (!triggerType) {
+      const allTriggerTypes = parseValidatorDescriptions(target.validator).map(
+        (desc) => desc.triggerType
+      )
+      const results = {}
+      for (let i = 0; i < allTriggerTypes.length; i++) {
+        const payload = await validateToFeedbacks(target, allTriggerTypes[i])
+        each(payload, (result, key) => {
+          results[key] = results[key] || []
+          results[key] = results[key].concat(result)
+        })
+      }
+      end()
+      return results
+    }
+    const results = await validateToFeedbacks(target, triggerType)
+    end()
+    return results
+  }
+)
+
+export const selfReset = batch.bound(
+  async (target: Field, options?: IFieldResetOptions, noEmit = false) => {
+    target.modified = false
+    target.visited = false
+    target.feedbacks = []
+    target.inputValue = undefined
+    target.inputValues = []
+    if (options?.forceClear) {
+      if (isArrayField(target)) {
+        target.value = [] as any
+      } else if (isObjectField(target)) {
+        target.value = {} as any
+      } else {
+        target.value = undefined
+      }
+    } else if (isValid(target.value)) {
+      target.value = toJS(target.initialValue)
+    }
+    if (!noEmit) {
+      target.notify(LifeCycleTypes.ON_FIELD_RESET)
+    }
+    if (options?.validate) {
+      return await selfValidate(target)
+    }
+  }
+)

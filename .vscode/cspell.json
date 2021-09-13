@@ -3,6 +3,7 @@
   "language": "en",
   "ignoreWords": [
     "autorun",
+    "mutators",
     "Formily",
     "formily",
     "untrack",

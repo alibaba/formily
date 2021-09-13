@@ -3,14 +3,12 @@ import {
   observable,
   batch,
   action,
-  toJS,
   isObservable,
   observe,
 } from '@formily/reactive'
 import {
   FormPath,
   FormPathPattern,
-  isFn,
   isValid,
   uid,
   globalThisPolyfill,
@@ -52,6 +50,12 @@ import {
   applyValuesPatch,
   triggerFormInitialValuesChange,
   triggerFormValuesChange,
+  batchValidate,
+  batchReset,
+  batchSubmit,
+  setValidating,
+  setSubmitting,
+  setLoading,
 } from '../shared/internals'
 import { isVoidField } from '../shared/checkers'
 import { runEffects } from '../shared/effectbox'
@@ -63,14 +67,13 @@ import { Graph } from './Graph'
 
 const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
-const RESPONSE_REQUEST_DURATION = 100
-
 export class Form<ValueType extends object = any> {
   displayName = 'Form'
   id: string
   initialized: boolean
   validating: boolean
   submitting: boolean
+  loading: boolean
   modified: boolean
   pattern: FormPatternTypes
   display: FormDisplayTypes
@@ -100,6 +103,7 @@ export class Form<ValueType extends object = any> {
     this.initialized = false
     this.submitting = false
     this.validating = false
+    this.loading = false
     this.modified = false
     this.mounted = false
     this.unmounted = false
@@ -134,6 +138,7 @@ export class Form<ValueType extends object = any> {
       initialized: observable.ref,
       validating: observable.ref,
       submitting: observable.ref,
+      loading: observable.ref,
       modified: observable.ref,
       pattern: observable.ref,
       display: observable.ref,
@@ -459,40 +464,16 @@ export class Form<ValueType extends object = any> {
     return FormPath.getIn(this.initialValues, pattern)
   }
 
+  setLoading = (loading: boolean) => {
+    setLoading(this, loading)
+  }
+
   setSubmitting = (submitting: boolean) => {
-    clearTimeout(this.requests.submit)
-    if (submitting) {
-      this.requests.submit = setTimeout(() => {
-        batch(() => {
-          this.submitting = submitting
-          this.notify(LifeCycleTypes.ON_FORM_SUBMITTING)
-        })
-      }, RESPONSE_REQUEST_DURATION)
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_START)
-    } else {
-      if (this.submitting !== submitting) {
-        this.submitting = submitting
-      }
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_END)
-    }
+    setSubmitting(this, submitting)
   }
 
   setValidating = (validating: boolean) => {
-    clearTimeout(this.requests.validate)
-    if (validating) {
-      this.requests.validate = setTimeout(() => {
-        batch(() => {
-          this.validating = validating
-          this.notify(LifeCycleTypes.ON_FORM_VALIDATING)
-        })
-      }, RESPONSE_REQUEST_DURATION)
-      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
-    } else {
-      if (this.validating !== validating) {
-        this.validating = validating
-      }
-      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
-    }
+    setValidating(this, validating)
   }
 
   setDisplay = (display: FormDisplayTypes) => {
@@ -578,7 +559,7 @@ export class Form<ValueType extends object = any> {
   }
 
   notify = (type: string, payload?: any) => {
-    this.heart.publish(type, isValid(payload) ? payload : this)
+    this.heart.publish(type, payload ?? this)
   }
 
   subscribe = (subscriber?: HeartSubscriber) => {
@@ -642,68 +623,15 @@ export class Form<ValueType extends object = any> {
     })
   }
 
-  validate = async (pattern: FormPathPattern = '*') => {
-    this.setValidating(true)
-    const tasks = []
-    this.query(pattern).forEach((field) => {
-      if (!isVoidField(field)) {
-        tasks.push(field.validate())
-      }
-    })
-    await Promise.all(tasks)
-    this.setValidating(false)
-    if (this.invalid) {
-      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_FAILED)
-      throw this.errors
-    }
-    this.notify(LifeCycleTypes.ON_FORM_VALIDATE_SUCCESS)
+  validate = (pattern: FormPathPattern = '*') => {
+    return batchValidate(this, pattern)
   }
 
-  submit = async <T>(
-    onSubmit?: (values: any) => Promise<T> | void
-  ): Promise<T> => {
-    this.setSubmitting(true)
-    try {
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START)
-      await this.validate()
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS)
-    } catch (e) {
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED)
-    }
-    this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_END)
-    let results: any
-    try {
-      if (this.invalid) {
-        throw this.errors
-      }
-      if (isFn(onSubmit)) {
-        results = await onSubmit(toJS(this.values))
-      } else {
-        results = toJS(this.values)
-      }
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS)
-    } catch (e) {
-      this.setSubmitting(false)
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_FAILED)
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT)
-      throw e
-    }
-    this.setSubmitting(false)
-    this.notify(LifeCycleTypes.ON_FORM_SUBMIT)
-    return results
+  submit = <T>(onSubmit?: (values: any) => Promise<T> | void): Promise<T> => {
+    return batchSubmit(this, onSubmit)
   }
 
-  reset = async (
-    pattern: FormPathPattern = '*',
-    options?: IFieldResetOptions
-  ) => {
-    const tasks = []
-    this.query(pattern).forEach((field) => {
-      if (!isVoidField(field)) {
-        tasks.push(field.reset(options))
-      }
-    })
-    this.notify(LifeCycleTypes.ON_FORM_RESET)
-    await Promise.all(tasks)
+  reset = (pattern: FormPathPattern = '*', options?: IFieldResetOptions) => {
+    return batchReset(this, pattern, options)
   }
 }

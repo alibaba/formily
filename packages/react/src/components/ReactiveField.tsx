@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { observer } from '@formily/reactive-react'
-import { isFn } from '@formily/shared'
+import { isFn, FormPath } from '@formily/shared'
 import { isVoidField, GeneralField, Form } from '@formily/core'
+import { SchemaOptionsContext } from '../shared'
 interface IReactiveFieldProps {
   field: GeneralField
   children?:
@@ -9,26 +10,41 @@ interface IReactiveFieldProps {
     | React.ReactNode
 }
 
+const mergeChildren = (children: React.ReactNode, content: React.ReactNode) => {
+  if (!children && !content) return
+  return (
+    <Fragment>
+      {children}
+      {content}
+    </Fragment>
+  )
+}
+
+const renderChildren = (children: React.ReactNode, ...args: any[]) =>
+  isFn(children) ? children(...args) : children
+
 const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
+  const options = useContext(SchemaOptionsContext)
   if (!props.field) {
-    return (
-      <Fragment>
-        {isFn(props.children) ? props.children(null, null) : props.children}
-      </Fragment>
-    )
+    return <Fragment>{renderChildren(props.children)}</Fragment>
   }
   const field = props.field
-  const children = isFn(props.children)
-    ? props.children(props.field, props.field.form)
-    : props.children
+  const content = mergeChildren(
+    renderChildren(props.children, field, field.form),
+    field.content
+  )
   if (field.display !== 'visible') return null
 
   const renderDecorator = (children: React.ReactNode) => {
     if (!field.decorator[0]) {
       return <Fragment>{children}</Fragment>
     }
+    const finalComponent =
+      FormPath.getIn(options?.components, field.decorator[0]) ??
+      field.decorator[0]
+
     return React.createElement(
-      field.decorator[0],
+      finalComponent,
       {
         ...field.decorator[1],
         style: {
@@ -40,7 +56,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   }
 
   const renderComponent = () => {
-    if (!field.component[0]) return <Fragment>{children}</Fragment>
+    if (!field.component[0]) return content
     const value = !isVoidField(field) ? field.value : undefined
     const onChange = !isVoidField(field)
       ? (...args: any[]) => {
@@ -66,8 +82,12 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     const readOnly = !isVoidField(field)
       ? field.pattern === 'readOnly'
       : undefined
+    const finalComponent =
+      FormPath.getIn(options?.components, field.component[0]) ??
+      field.component[0]
+
     return React.createElement(
-      field.component[0],
+      finalComponent,
       {
         disabled,
         readOnly,
@@ -80,7 +100,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
         onFocus,
         onBlur,
       },
-      children
+      content
     )
   }
 

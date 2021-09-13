@@ -1,10 +1,7 @@
 import {
   FormPath,
   isValid,
-  isArr,
   FormPathPattern,
-  isBool,
-  each,
   isFn,
   isEmpty,
   toArr,
@@ -45,7 +42,6 @@ import {
 } from '../types'
 import {
   buildNodeIndexes,
-  validateToFeedbacks,
   initFieldUpdate,
   updateFeedback,
   queryFeedbacks,
@@ -55,12 +51,16 @@ import {
   modelStateGetter,
   isHTMLInputEvent,
   initFieldValue,
+  setValidatorRule,
+  batchValidate,
+  batchSubmit,
+  batchReset,
+  setValidating,
+  setSubmitting,
+  setLoading,
+  selfValidate,
 } from '../shared/internals'
-import { isArrayField, isObjectField } from '../shared/checkers'
 import { Query } from './Query'
-
-const RESPONSE_REQUEST_DURATION = 100
-
 export class Field<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
@@ -74,6 +74,7 @@ export class Field<
   selfPattern: FieldPatternTypes
   loading: boolean
   validating: boolean
+  submitting: boolean
   modified: boolean
   active: boolean
   visited: boolean
@@ -83,6 +84,8 @@ export class Field<
   dataSource: FieldDataSource
   mounted: boolean
   unmounted: boolean
+  content: any
+  data: any
   validator: FieldValidator
   decoratorType: Decorator
   decoratorProps: Record<string, any>
@@ -95,9 +98,9 @@ export class Field<
   form: Form
   props: IFieldProps<Decorator, Component, TextType, ValueType>
 
-  protected caches: IFieldCaches = {}
-  protected requests: IFieldRequests = {}
-  protected disposers: (() => void)[] = []
+  caches: IFieldCaches = {}
+  requests: IFieldRequests = {}
+  disposers: (() => void)[] = []
 
   constructor(
     address: FormPathPattern,
@@ -125,6 +128,7 @@ export class Field<
     this.initialized = false
     this.loading = false
     this.validating = false
+    this.submitting = false
     this.modified = false
     this.active = false
     this.visited = false
@@ -146,6 +150,8 @@ export class Field<
     this.dataSource = this.props.dataSource
     this.validator = this.props.validator
     this.required = this.props.required
+    this.content = this.props.content
+    this.data = this.props.data
     this.decorator = toArr(this.props.decorator)
     this.component = toArr(this.props.component)
   }
@@ -160,6 +166,7 @@ export class Field<
       selfPattern: observable.ref,
       loading: observable.ref,
       validating: observable.ref,
+      submitting: observable.ref,
       modified: observable.ref,
       active: observable.ref,
       visited: observable.ref,
@@ -170,10 +177,12 @@ export class Field<
       inputValues: observable.ref,
       decoratorType: observable.ref,
       componentType: observable.ref,
+      content: observable.ref,
       decoratorProps: observable,
       componentProps: observable,
       validator: observable.shallow,
       feedbacks: observable.shallow,
+      data: observable.shallow,
       component: observable.computed,
       decorator: observable.computed,
       errors: observable.computed,
@@ -181,6 +190,11 @@ export class Field<
       successes: observable.computed,
       valid: observable.computed,
       invalid: observable.computed,
+      selfErrors: observable.computed,
+      selfWarnings: observable.computed,
+      selfSuccesses: observable.computed,
+      selfValid: observable.computed,
+      selfInvalid: observable.computed,
       validateStatus: observable.computed,
       value: observable.computed,
       initialValue: observable.computed,
@@ -203,9 +217,9 @@ export class Field<
       setLoading: action,
       setValidating: action,
       setFeedback: action,
-      setErrors: action,
-      setWarnings: action,
-      setSuccesses: action,
+      setSelfErrors: action,
+      setSelfWarnings: action,
+      setSelfSuccesses: action,
       setValidator: action,
       setRequired: action,
       setComponent: action,
@@ -229,16 +243,16 @@ export class Field<
       reaction(
         () => this.value,
         (value) => {
-          this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
+          this.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
           if (isValid(value) && this.modified && !this.caches.inputting) {
-            this.validate()
+            selfValidate(this)
           }
         }
       ),
       reaction(
         () => this.initialValue,
         () => {
-          this.form.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, this)
+          this.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE)
         }
       ),
       reaction(
@@ -317,26 +331,55 @@ export class Field<
     this.decoratorProps = decorator[1] || {}
   }
 
-  get errors() {
+  get selfErrors() {
     return queryFeedbackMessages(this, {
       type: 'error',
     })
   }
 
-  get warnings() {
+  get errors() {
+    return this.form.queryFeedbacks({
+      address: `${this.address}.**`,
+      type: 'error',
+    })
+  }
+
+  get selfWarnings() {
     return queryFeedbackMessages(this, {
       type: 'warning',
     })
   }
 
-  get successes() {
+  get warnings() {
+    return this.form.queryFeedbacks({
+      address: `${this.address}.**`,
+      type: 'warning',
+    })
+  }
+
+  get selfSuccesses() {
     return queryFeedbackMessages(this, {
       type: 'success',
     })
   }
 
+  get successes() {
+    return this.form.queryFeedbacks({
+      address: `${this.address}.**`,
+      type: 'success',
+    })
+  }
+
+  get selfValid() {
+    return !this.selfErrors.length
+  }
+
   get valid() {
     return !this.errors.length
+  }
+
+  get selfInvalid() {
+    return !this.selfValid
   }
 
   get invalid() {
@@ -418,9 +461,9 @@ export class Field<
 
   get validateStatus() {
     if (this.validating) return 'validating'
-    if (this.invalid) return 'error'
-    if (this.warnings.length) return 'warning'
-    if (this.successes.length) return 'success'
+    if (this.selfInvalid) return 'error'
+    if (this.selfWarnings.length) return 'warning'
+    if (this.selfSuccesses.length) return 'success'
   }
 
   set readOnly(readOnly: boolean) {
@@ -468,44 +511,8 @@ export class Field<
   }
 
   set required(required: boolean) {
-    if (!isBool(required)) return
-    const hasRequired = parseValidatorDescriptions(this.validator).some(
-      (desc) => 'required' in desc
-    )
-    if (hasRequired) {
-      if (isArr(this.validator)) {
-        this.validator = this.validator.map((desc: any) => {
-          if (Object.prototype.hasOwnProperty.call(desc, 'required')) {
-            desc.required = required
-            return desc
-          }
-          return desc
-        })
-      } else {
-        this.validator['required'] = required
-      }
-    } else {
-      if (isArr(this.validator)) {
-        this.validator.unshift({
-          required,
-        })
-      } else if (typeof this.validator === 'object') {
-        this.validator['required'] = required
-      } else if (this.validator) {
-        this.validator = [
-          {
-            required,
-          },
-          this.validator,
-        ]
-      } else if (required) {
-        this.validator = [
-          {
-            required,
-          },
-        ]
-      }
-    }
+    if (this.required === required) return
+    this.setValidatorRule('required', required)
   }
 
   set value(value: ValueType) {
@@ -516,7 +523,7 @@ export class Field<
     this.form.setInitialValuesIn(this.path, initialValue)
   }
 
-  set errors(messages: FeedbackMessage) {
+  set selfErrors(messages: FeedbackMessage) {
     this.setFeedback({
       type: 'error',
       code: 'EffectError',
@@ -524,7 +531,7 @@ export class Field<
     })
   }
 
-  set warnings(messages: FeedbackMessage) {
+  set selfWarnings(messages: FeedbackMessage) {
     this.setFeedback({
       type: 'warning',
       code: 'EffectWarning',
@@ -532,7 +539,7 @@ export class Field<
     })
   }
 
-  set successes(messages: FeedbackMessage) {
+  set selfSuccesses(messages: FeedbackMessage) {
     this.setFeedback({
       type: 'success',
       code: 'EffectSuccess',
@@ -556,20 +563,24 @@ export class Field<
     updateFeedback(this, feedback)
   }
 
-  setErrors = (messages?: FeedbackMessage) => {
-    this.errors = messages
+  setSelfErrors = (messages?: FeedbackMessage) => {
+    this.selfErrors = messages
   }
 
-  setWarnings = (messages?: FeedbackMessage) => {
-    this.warnings = messages
+  setSelfWarnings = (messages?: FeedbackMessage) => {
+    this.selfWarnings = messages
   }
 
-  setSuccesses = (messages?: FeedbackMessage) => {
-    this.successes = messages
+  setSelfSuccesses = (messages?: FeedbackMessage) => {
+    this.selfSuccesses = messages
   }
 
   setValidator = (validator?: FieldValidator) => {
     this.validator = validator
+  }
+
+  setValidatorRule = (name: string, value: any) => {
+    setValidatorRule(this, name, value)
   }
 
   setRequired = (required?: boolean) => {
@@ -593,31 +604,15 @@ export class Field<
   }
 
   setLoading = (loading?: boolean) => {
-    clearTimeout(this.requests.loading)
-    if (loading) {
-      this.requests.loading = setTimeout(() => {
-        batch(() => {
-          this.loading = loading
-          this.form.notify(LifeCycleTypes.ON_FIELD_LOADING, this)
-        })
-      }, RESPONSE_REQUEST_DURATION)
-    } else if (this.loading !== loading) {
-      this.loading = loading
-    }
+    setLoading(this, loading)
   }
 
   setValidating = (validating?: boolean) => {
-    clearTimeout(this.requests.validating)
-    if (validating) {
-      this.requests.validating = setTimeout(() => {
-        batch(() => {
-          this.validating = validating
-          this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATING, this)
-        })
-      }, RESPONSE_REQUEST_DURATION)
-    } else if (this.validating !== validating) {
-      this.validating = validating
-    }
+    setValidating(this, validating)
+  }
+
+  setSubmitting = (submitting?: boolean) => {
+    setSubmitting(this, submitting)
   }
 
   setComponent = <C extends JSXComponent, ComponentProps extends object = {}>(
@@ -676,19 +671,19 @@ export class Field<
     batch.scope(() => {
       initFieldUpdate(this)
     })
-    this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_INIT)
   }
 
   onMount = () => {
     this.mounted = true
     this.unmounted = false
-    this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_MOUNT)
   }
 
   onUnmount = () => {
     this.mounted = false
     this.unmounted = true
-    this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
+    this.notify(LifeCycleTypes.ON_FIELD_UNMOUNT)
   }
 
   onInput = async (...args: any[]) => {
@@ -703,9 +698,9 @@ export class Field<
     this.value = value
     this.modified = true
     this.form.modified = true
-    this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
-    this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
-    await this.validate('onInput')
+    this.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE)
+    this.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
+    await selfValidate(this, 'onInput')
     this.caches.inputting = false
   }
 
@@ -715,7 +710,7 @@ export class Field<
     }
     this.active = true
     this.visited = true
-    await this.validate('onFocus')
+    await selfValidate(this, 'onFocus')
   }
 
   onBlur = async (...args: any[]) => {
@@ -723,66 +718,19 @@ export class Field<
       if (!isHTMLInputEvent(args[0], false)) return
     }
     this.active = false
-    await this.validate('onBlur')
+    await selfValidate(this, 'onBlur')
   }
 
-  validate = async (triggerType?: ValidatorTriggerType) => {
-    const start = () => {
-      this.setValidating(true)
-      this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
-    }
-    const end = () => {
-      this.setValidating(false)
-      if (this.valid) {
-        this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS, this)
-      } else {
-        this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED, this)
-      }
-      this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
-    }
-    start()
-    if (!triggerType) {
-      const allTriggerTypes = parseValidatorDescriptions(this.validator).map(
-        (desc) => desc.triggerType
-      )
-      const results = {}
-      for (let i = 0; i < allTriggerTypes.length; i++) {
-        const payload = await validateToFeedbacks(this, allTriggerTypes[i])
-        each(payload, (result, key) => {
-          results[key] = results[key] || []
-          results[key] = results[key].concat(result)
-        })
-      }
-      end()
-      return results
-    }
-    const results = await validateToFeedbacks(this, triggerType)
-    end()
-    return results
+  validate = (triggerType?: ValidatorTriggerType) => {
+    return batchValidate(this, `${this.address}.**`, triggerType)
   }
 
-  reset = async (options?: IFieldResetOptions) => {
-    this.modified = false
-    this.visited = false
-    this.feedbacks = []
-    this.inputValue = undefined
-    this.inputValues = []
-    if (options?.forceClear) {
-      if (isArrayField(this)) {
-        this.value = [] as any
-      } else if (isObjectField(this)) {
-        this.value = {} as any
-      } else {
-        this.value = undefined
-      }
-    } else if (isValid(this.value)) {
-      this.value = toJS(this.initialValue)
-    }
-    this.form.notify(LifeCycleTypes.ON_FIELD_RESET, this)
+  submit = <T>(onSubmit?: (values: any) => Promise<T> | void): Promise<T> => {
+    return batchSubmit(this, onSubmit)
+  }
 
-    if (options?.validate) {
-      return await this.validate()
-    }
+  reset = (options?: IFieldResetOptions) => {
+    return batchReset(this, `${this.address}.**`, options)
   }
 
   query = (pattern: FormPathPattern) => {
@@ -795,6 +743,10 @@ export class Field<
 
   queryFeedbacks = (search?: ISearchFeedback): IFieldFeedback[] => {
     return queryFeedbacks(this, search)
+  }
+
+  notify = (type: LifeCycleTypes, payload?: any) => {
+    return this.form.notify(type, payload ?? this)
   }
 
   dispose = () => {

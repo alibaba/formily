@@ -118,6 +118,10 @@ test('render field', async () => {
         :decorator="[Decorator]"
         :component="[Input, { '@change': atChange, '@focus': atFocus, '@blur': atBlur }]"
       />
+      <Field
+        name="mm"
+        :decorator="[Decorator]"
+      ><div data-testid="mm-children"></div></Field>
     </FormProvider>`,
     })
   )
@@ -140,6 +144,7 @@ test('render field', async () => {
   expect(queryByTestId('ee')).toBeNull()
   expect(form.query('aa').get('value')).toEqual('123')
   expect(form.query('kk').get('value')).toEqual('123')
+  expect(getByTestId('mm-children')).not.toBeUndefined()
 })
 
 test('ReactiveField', () => {

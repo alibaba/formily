@@ -124,6 +124,31 @@ test('setValues/setInitialValues', () => {
   expect(form.initialValues?.cc?.pp).toBeUndefined()
   form.setValues({}, 'overwrite')
   expect(form.values.aa).toBeUndefined()
+  form.setInitialValues({ aa: { bb: [{ cc: 123 }] } }, 'deepMerge')
+  expect(form.values).toEqual({ aa: { bb: [{ cc: 123 }] } })
+  form.setValues({ bb: { bb: [{ cc: 123 }] } }, 'deepMerge')
+  expect(form.values).toEqual({
+    aa: { bb: [{ cc: 123 }] },
+    bb: { bb: [{ cc: 123 }] },
+  })
+  form.setInitialValues({ aa: [123] }, 'shallowMerge')
+  expect(form.values).toEqual({
+    aa: [123],
+    bb: { bb: [{ cc: 123 }] },
+  })
+  form.setValues({ bb: [123] }, 'shallowMerge')
+  expect(form.values).toEqual({
+    aa: [123],
+    bb: [123],
+  })
+})
+
+test('setLoading', async () => {
+  const form = attach(createForm())
+  expect(form.loading).toBeFalsy()
+  form.setLoading(true)
+  await sleep(100)
+  expect(form.loading).toBeTruthy()
 })
 
 test('setValues with null', () => {

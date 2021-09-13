@@ -1,4 +1,4 @@
-export const ReservedProperties = [
+export const ReservedProperties = new Set([
   'form',
   'parent',
   'props',
@@ -15,7 +15,9 @@ export const ReservedProperties = [
   'componentProps',
   'decoratorType',
   'decoratorProps',
-]
+])
+
+export const RESPONSE_REQUEST_DURATION = 100
 
 export const GlobalState = {
   initializing: false,

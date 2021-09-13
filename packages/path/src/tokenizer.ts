@@ -4,6 +4,7 @@ import {
   colonTok,
   dotTok,
   starTok,
+  dbStarTok,
   bangTok,
   bracketLTok,
   bracketRTok,
@@ -287,6 +288,10 @@ export class Tokenizer {
       this.finishToken(braceRTok)
     } else if (code === 42) {
       this.state.pos++
+      if (this.getCode() === 42) {
+        this.state.pos++
+        return this.finishToken(dbStarTok)
+      }
       this.finishToken(starTok)
     } else if (code === 33) {
       this.state.pos++

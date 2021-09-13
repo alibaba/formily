@@ -37,7 +37,7 @@ export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
     const path = field.address.concat(index)
     const errors = field.form.queryFeedbacks({
       type: 'error',
-      address: `*(${path},${path}.*)`,
+      address: `${path}.**`,
     })
     if (errors.length) {
       return (

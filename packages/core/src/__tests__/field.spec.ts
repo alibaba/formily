@@ -330,7 +330,7 @@ test('setDecorator/setDecoratorProps', () => {
   expect(field.decorator[1]).toEqual({ props: 123, hello: 'world' })
 })
 
-test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedbacks', async () => {
+test('selfValidate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedbacks', async () => {
   const form = attach(createForm())
   const field = attach(
     form.createField({
@@ -407,28 +407,35 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
       required: true,
     })
   )
-  await field.validate()
-  await field2.validate()
+  try {
+    await field.validate()
+  } catch {}
+  try {
+    await field2.validate()
+  } catch {}
   expect(field.invalid).toBeTruthy()
-  expect(field.errors.length).toEqual(1)
+  expect(field.selfErrors.length).toEqual(1)
   expect(field2.invalid).toBeTruthy()
-  expect(field2.errors.length).toEqual(3)
+  expect(field2.selfErrors.length).toEqual(3)
   await field.onInput('123')
-  expect(field.successes).toEqual(['success'])
+  expect(field.selfSuccesses).toEqual(['success'])
   await field.onInput('321')
-  expect(field.warnings).toEqual(['warning'])
+  expect(field.selfWarnings).toEqual(['warning'])
   await field.onInput('111')
-  expect(field.errors).toEqual(['error'])
+  expect(field.selfErrors).toEqual(['error'])
   await field.onBlur()
-  expect(field.errors).toEqual(['The field value is a invalid url', 'error'])
+  expect(field.selfErrors).toEqual([
+    'The field value is a invalid url',
+    'error',
+  ])
   await field.onFocus()
-  expect(field.errors).toEqual([
+  expect(field.selfErrors).toEqual([
     'The field value is a invalid url',
     'The field value is not a valid date format',
     'error',
   ])
   field.setFeedback()
-  expect(field.errors).toEqual([
+  expect(field.selfErrors).toEqual([
     'The field value is a invalid url',
     'The field value is not a valid date format',
     'error',
@@ -460,7 +467,35 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
   field3.setFeedback({ messages: [], code: 'EffectError' })
   field4.setDisplay('none')
   await field4.validate()
-  expect(field4.errors).toEqual([])
+  expect(field4.selfErrors).toEqual([])
+})
+
+test('setValidateRule', () => {
+  const form = attach(createForm())
+  const field1 = attach(
+    form.createField({
+      name: 'aa',
+      validator: [{ required: true }],
+    })
+  )
+  const field2 = attach(
+    form.createField({
+      name: 'bb',
+      validator: 'phone',
+    })
+  )
+  const field3 = attach(
+    form.createField({
+      name: 'cc',
+      validator: 'phone',
+    })
+  )
+  field1.setValidatorRule('format', 'phone')
+  field2.setValidatorRule('max', 3)
+  field3.setValidatorRule('format', 'url')
+  expect(field1.validator).toEqual([{ required: true }, { format: 'phone' }])
+  expect(field3.validator).toEqual({ format: 'url' })
+  expect(field2.validator).toEqual(['phone', { max: 3 }])
 })
 
 test('query', () => {
@@ -856,20 +891,20 @@ test('setErrors/setWarnings/setSuccesses/setValidator', async () => {
       },
     })
   )
-  aa.setErrors(['error'])
-  aa.setWarnings(['warning'])
-  aa.setSuccesses(['success'])
-  bb.setSuccesses(['success'])
-  cc.setWarnings(['warning'])
-  expect(aa.errors).toEqual(['error'])
+  aa.setSelfErrors(['error'])
+  aa.setSelfWarnings(['warning'])
+  aa.setSelfSuccesses(['success'])
+  bb.setSelfSuccesses(['success'])
+  cc.setSelfWarnings(['warning'])
+  expect(aa.selfErrors).toEqual(['error'])
   expect(aa.valid).toBeFalsy()
-  expect(aa.warnings).toEqual(['warning'])
-  expect(aa.successes).toEqual(['success'])
+  expect(aa.selfWarnings).toEqual(['warning'])
+  expect(aa.selfSuccesses).toEqual(['success'])
   expect(bb.validateStatus).toEqual('success')
   expect(cc.validateStatus).toEqual('warning')
   aa.setValidator('date')
   await aa.onInput('123')
-  expect(aa.errors.length).toEqual(2)
+  expect(aa.selfErrors.length).toEqual(2)
   dd.onInput('123')
   await sleep()
   expect(dd.validateStatus).toEqual('validating')
@@ -1114,7 +1149,7 @@ test('reaction in reaction', () => {
   expect(field2.display).toEqual('none')
 })
 
-test('nested fields hidden and validate', async () => {
+test('nested fields hidden and selfValidate', async () => {
   const form = attach(createForm())
   const parent = attach(
     form.createVoidField({
@@ -1144,7 +1179,7 @@ test('nested fields hidden and validate', async () => {
   expect(form.invalid).toBeFalsy()
 })
 
-test('deep nested fields hidden and validate', async () => {
+test('deep nested fields hidden and selfValidate', async () => {
   const form = attach(createForm())
   const parent1 = attach(
     form.createVoidField({
@@ -1184,7 +1219,7 @@ test('deep nested fields hidden and validate', async () => {
   expect(form.invalid).toBeFalsy()
 })
 
-test('deep nested fields hidden and validate with middle hidden', async () => {
+test('deep nested fields hidden and selfValidate with middle hidden', async () => {
   const form = attach(createForm())
   const parent1 = attach(
     form.createVoidField({
@@ -1224,7 +1259,7 @@ test('deep nested fields hidden and validate with middle hidden', async () => {
   expect(form.invalid).toBeFalsy()
 })
 
-test('fields unmount and validate', async () => {
+test('fields unmount and selfValidate', async () => {
   const form = attach(createForm())
   const field = attach(
     form.createField({
@@ -1236,7 +1271,7 @@ test('fields unmount and validate', async () => {
     await form.validate()
   } catch {}
   expect(form.invalid).toBeTruthy()
-  field.onUnmount();
+  field.onUnmount()
   await form.validate()
   expect(form.invalid).toBeFalsy()
 })
@@ -1429,4 +1464,33 @@ test('initial value with empty', () => {
   const form = attach(createForm())
   const array = attach(form.createField({ name: 'array', initialValue: '' }))
   expect(array.value).toEqual('')
+})
+
+test('field submit', async () => {
+  const form = attach(createForm())
+  const childForm = attach(
+    form.createObjectField({
+      name: 'aa',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      required: true,
+    })
+  )
+  attach(
+    form.createField({
+      name: 'cc',
+      basePath: 'aa',
+      required: true,
+    })
+  )
+  const onSubmit = jest.fn()
+  try {
+    await childForm.submit(onSubmit)
+  } catch (e) {
+    expect(e).not.toBeUndefined()
+  }
+  expect(onSubmit).toBeCalledTimes(0)
 })

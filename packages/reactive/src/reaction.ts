@@ -3,6 +3,7 @@ import { IOperation, ReactionsMap, Reaction, PropertyKey } from './types'
 import {
   ReactionStack,
   PendingScopeReactions,
+  DependencyCollected,
   RawReactionsMap,
   PendingReactions,
   BatchCount,
@@ -99,6 +100,7 @@ export const bindTargetKeyWithCurrentReaction = (operation: IOperation) => {
   const current = ReactionStack[ReactionStack.length - 1]
   if (isUntracking()) return
   if (current) {
+    DependencyCollected.value = true
     addReactionsMapToReaction(current, addRawReactionsMap(target, key, current))
   }
 }

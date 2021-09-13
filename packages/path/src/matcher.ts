@@ -144,6 +144,8 @@ export class Matcher {
       } else {
         matched = this.matchAtom(path, node.filter)
       }
+    } else if (node.optional) {
+      matched = true
     } else {
       matched = this.matchNext(node, path)
     }

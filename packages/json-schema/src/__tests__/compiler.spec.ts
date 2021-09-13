@@ -1,4 +1,11 @@
-import { compile, silent, registerCompiler, shallowCompile } from '../compiler'
+import {
+  compile,
+  silent,
+  registerCompiler,
+  shallowCompile,
+  patchCompile,
+  patchSchemaCompile,
+} from '../compiler'
 import { Schema } from '../schema'
 
 test('compile', () => {
@@ -108,7 +115,7 @@ test('shallowCompile', () => {
   ).toEqual({
     array: ['{{123}}'],
   })
-  expect(shallowCompile(['{{123}}'])).toEqual([123])
+  expect(shallowCompile(['{{123}}'])).toEqual(['{{123}}'])
   expect(shallowCompile([{ kk: '{{123}}' }])).toEqual([{ kk: '{{123}}' }])
 })
 
@@ -123,6 +130,142 @@ test('silent', () => {
   silent(false)
 })
 
+test('patchCompile', () => {
+  const targetState = {
+    title: '',
+    description: '',
+    dataSource: [22],
+  }
+  patchCompile(
+    targetState as any,
+    {
+      title: '132',
+      description: '{{"Hello world"}}',
+      dataSource: [1, 2, 3, '{{333}}'],
+      extend: '333',
+    },
+    {}
+  )
+  expect(targetState).toEqual({
+    title: '132',
+    description: 'Hello world',
+    dataSource: [1, 2, 3, 333],
+  })
+})
+
+test('patchSchemaCompile', () => {
+  const targetState = {
+    title: '',
+    description: '',
+    dataSource: [22],
+  }
+  patchSchemaCompile(
+    targetState as any,
+    {
+      title: '132',
+      description: '{{"Hello world"}}',
+      enum: [1, 2, 3, '{{333}}'],
+      'x-reactions': {
+        fulfill: {
+          schema: {
+            title: 'hello',
+          },
+        },
+      },
+      version: '1.2.3',
+    },
+    {}
+  )
+  expect(targetState).toEqual({
+    title: '132',
+    description: 'Hello world',
+    dataSource: [
+      { label: 1, value: 1 },
+      { label: 2, value: 2 },
+      { label: 3, value: 3 },
+      { label: 333, value: 333 },
+    ],
+  })
+})
+
+test('patchSchemaCompile demand un initialized', () => {
+  const setValidatorRule = (name: string, value: any) => {
+    targetState[name] = value
+  }
+  const targetState = {
+    title: '',
+    description: '',
+    dataSource: [22],
+    setValidatorRule,
+  }
+  patchSchemaCompile(
+    targetState as any,
+    {
+      title: '132',
+      'x-display': undefined,
+      'x-hidden': null,
+      description: '{{"Hello world"}}',
+      enum: [1, 2, 3, '{{333}}'],
+      format: 'phone',
+      'x-reactions': {
+        fulfill: {
+          schema: {
+            title: 'hello',
+          },
+        },
+      },
+      version: '1.2.3',
+    },
+    {},
+    true
+  )
+  expect(targetState).toEqual({
+    title: '132',
+    description: 'Hello world',
+    hidden: null,
+    format: 'phone',
+    setValidatorRule,
+    dataSource: [
+      { label: 1, value: 1 },
+      { label: 2, value: 2 },
+      { label: 3, value: 3 },
+      { label: 333, value: 333 },
+    ],
+  })
+})
+
+test('patchSchemaCompile demand initialized', () => {
+  const targetState = {
+    initialized: true,
+    title: '',
+    description: '',
+    dataSource: [22],
+  }
+  patchSchemaCompile(
+    targetState as any,
+    {
+      title: '132',
+      description: '{{"Hello world"}}',
+      enum: [1, 2, 3, '{{333}}'],
+      'x-reactions': {
+        fulfill: {
+          schema: {
+            title: 'hello',
+          },
+        },
+      },
+      version: '1.2.3',
+    },
+    {},
+    true
+  )
+  expect(targetState).toEqual({
+    initialized: true,
+    title: '',
+    description: '',
+    dataSource: [22],
+  })
+})
 test('registerCompiler', () => {
   registerCompiler(() => {
     return 'compiled'

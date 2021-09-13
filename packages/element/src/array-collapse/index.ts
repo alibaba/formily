@@ -135,7 +135,7 @@ export const ArrayCollapseInner = observer(
             const path = field.address.concat(index)
             const errors = field.form.queryFeedbacks({
               type: 'error',
-              address: `*(${path},${path}.*)`,
+              address: `${path}.**`,
             })
 
             const title = h(
