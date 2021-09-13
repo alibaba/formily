@@ -467,3 +467,50 @@ test('nest array remove', async () => {
   await metrics.remove(1)
   expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
 })
+
+test('incomplete insertion of array elements', async () => {
+  const form = attach(
+    createForm({
+      values: {
+        array: [{ aa: 1 }, { aa: 2 }, { aa: 3 }],
+      },
+    })
+  )
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'array.0',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '2',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'array.2',
+    })
+  )
+  expect(form.fields['array.0.aa']).not.toBeUndefined()
+  expect(form.fields['array.1.aa']).toBeUndefined()
+  expect(form.fields['array.2.aa']).not.toBeUndefined()
+  await array.unshift({})
+  expect(form.fields['array.0.aa']).toBeUndefined()
+  expect(form.fields['array.1.aa']).not.toBeUndefined()
+  expect(form.fields['array.2.aa']).toBeUndefined()
+  expect(form.fields['array.3.aa']).not.toBeUndefined()
+})
