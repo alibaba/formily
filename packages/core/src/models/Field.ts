@@ -85,6 +85,7 @@ export class Field<
   mounted: boolean
   unmounted: boolean
   content: any
+  data: any
   validator: FieldValidator
   decoratorType: Decorator
   decoratorProps: Record<string, any>
@@ -150,6 +151,7 @@ export class Field<
     this.validator = this.props.validator
     this.required = this.props.required
     this.content = this.props.content
+    this.data = this.props.data
     this.decorator = toArr(this.props.decorator)
     this.component = toArr(this.props.component)
   }
@@ -180,6 +182,7 @@ export class Field<
       componentProps: observable,
       validator: observable.shallow,
       feedbacks: observable.shallow,
+      data: observable.shallow,
       component: observable.computed,
       decorator: observable.computed,
       errors: observable.computed,

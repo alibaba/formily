@@ -344,6 +344,7 @@ export interface IFieldProps<
   component?: FieldComponent<Component>
   reactions?: FieldReaction[] | FieldReaction
   content?: any
+  data?: any
 }
 
 export interface IVoidFieldProps<
@@ -367,6 +368,7 @@ export interface IVoidFieldProps<
   component?: FieldComponent<Component>
   reactions?: FieldReaction[] | FieldReaction
   content?: any
+  data?: any
 }
 
 export interface IFieldResetOptions {

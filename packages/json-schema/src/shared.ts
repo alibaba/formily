@@ -26,6 +26,7 @@ export const SchemaStateMap = {
   readOnly: 'readOnly',
   writeOnly: 'editable',
   'x-content': 'content',
+  'x-data': 'data',
   'x-value': 'value',
   'x-editable': 'editable',
   'x-disabled': 'disabled',

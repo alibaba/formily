@@ -250,8 +250,12 @@ export const setValidatorRule = (field: Field, name: string, value: any) => {
         }
         return desc
       })
-    } else {
+    } else if (isPlainObj(field.validator)) {
       field.validator[name] = value
+    } else {
+      field.validator = {
+        [name]: value,
+      }
     }
   } else {
     if (isArr(field.validator)) {

@@ -70,6 +70,7 @@ class Schema {
 | x-read-pretty        | 字段阅读态                                        | Boolean                                                                            | `readPretty`                                                             |
 | definitions          | Schema 预定义                                     | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
 | $ref                 | 从 Schema 预定义中读取 Schema 并合并至当前 Schema | String                                                                             | -                                                                        |
+| x-data               | 扩展属性                                          | Object                                                                             | data                                                                     |
 
 #### 详细说明
 

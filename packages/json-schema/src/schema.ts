@@ -164,6 +164,8 @@ export class Schema<
 
   ['x-content']?: any;
 
+  ['x-data']?: any;
+
   ['x-visible']?: boolean;
 
   ['x-hidden']?: boolean;

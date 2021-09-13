@@ -267,6 +267,8 @@ export type ISchema<
   //内容
   ['x-content']?: any
 
+  ['x-data']?: any
+
   ['x-visible']?: boolean
 
   ['x-hidden']?: boolean

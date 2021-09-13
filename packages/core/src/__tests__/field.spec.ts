@@ -470,6 +470,34 @@ test('selfValidate/errors/warnings/successes/valid/invalid/validateStatus/queryF
   expect(field4.selfErrors).toEqual([])
 })
 
+test('setValidateRule', () => {
+  const form = attach(createForm())
+  const field1 = attach(
+    form.createField({
+      name: 'aa',
+      validator: [{ required: true }],
+    })
+  )
+  const field2 = attach(
+    form.createField({
+      name: 'bb',
+      validator: 'phone',
+    })
+  )
+  const field3 = attach(
+    form.createField({
+      name: 'cc',
+      validator: 'phone',
+    })
+  )
+  field1.setValidatorRule('format', 'phone')
+  field2.setValidatorRule('max', 3)
+  field3.setValidatorRule('format', 'url')
+  expect(field1.validator).toEqual([{ required: true }, { format: 'phone' }])
+  expect(field3.validator).toEqual({ format: 'url' })
+  expect(field2.validator).toEqual(['phone', { max: 3 }])
+})
+
 test('query', () => {
   const form = attach(createForm())
   const object_ = attach(

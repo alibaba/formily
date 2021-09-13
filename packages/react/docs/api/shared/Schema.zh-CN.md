@@ -61,7 +61,7 @@ class Schema {
 | x-component          | 字段 UI 组件                                      | `String \| React.FC`                                                               | `component`                                                              |
 | x-component-props    | 字段 UI 组件属性                                  | Any                                                                                | `component`                                                              |
 | x-reactions          | 字段联动协议                                      | [SchemaReactions](#schemareactions)                                                | `reactions`                                                              |
-| x-content            | 字段内容，用来传入某个组件的子节点                | React.ReactNode                                                                    | ReactChildren                                                            |
+| x-content            | 字段内容，用来传入某个组件的子节点                | React.ReactNode                                                                    | content                                                                  |
 | x-visible            | 字段显示隐藏                                      | Boolean                                                                            | `visible`                                                                |
 | x-hidden             | 字段 UI 隐藏(保留数据)                            | Boolean                                                                            | `hidden`                                                                 |
 | x-disabled           | 字段禁用                                          | Boolean                                                                            | `disabled`                                                               |
@@ -70,6 +70,7 @@ class Schema {
 | x-read-pretty        | 字段阅读态                                        | Boolean                                                                            | `readPretty`                                                             |
 | definitions          | Schema 预定义                                     | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
 | $ref                 | 从 Schema 预定义中读取 Schema 并合并至当前 Schema | String                                                                             | -                                                                        |
+| x-data               | 扩展属性                                          | Object                                                                             | data                                                                     |
 
 #### 详细说明
 
