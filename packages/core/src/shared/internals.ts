@@ -28,7 +28,7 @@ import {
   FieldMatchPattern,
 } from '../types'
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
-import { ReservedProperties, GlobalState } from './constants'
+import { ReservedProperties, GlobalState, NumberIndexReg } from './constants'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
@@ -104,13 +104,14 @@ export const applyFieldPatches = (
   target: Record<string, GeneralField>,
   patches: INodePatch<GeneralField>[]
 ) => {
-  patches.forEach(({ type, address, payload }) => {
+  patches.forEach(({ type, address, oldAddress, payload }) => {
     if (type === 'remove') {
-      target[address].dispose()
+      target[address]?.dispose()
       delete target[address]
     } else if (type === 'update') {
       if (payload) {
         target[address] = payload
+        if (target[oldAddress] === payload) delete target[oldAddress]
       }
       if (address && payload) {
         buildNodeIndexes(payload, address)
@@ -228,32 +229,31 @@ export const spliceArrayState = (
     ...props,
   }
   const address = field.address.toString()
+  const addrLength = address.length
   const fields = field.form.fields
   const fieldPatches: INodePatch<GeneralField>[] = []
   const offset = insertCount - deleteCount
   const isArrayChildren = (identifier: string) => {
-    return (
-      identifier.indexOf(address) === 0 && identifier.length > address.length
-    )
+    return identifier.indexOf(address) === 0 && identifier.length > addrLength
   }
   const isAfterNode = (identifier: string) => {
-    const afterStr = identifier.slice(address.length)
-    const number = afterStr.match(/^\.(\d+)/)?.[1]
+    const afterStr = identifier.substring(addrLength)
+    const number = afterStr.match(NumberIndexReg)?.[1]
     if (number === undefined) return false
     const index = Number(number)
     return index > startIndex + deleteCount - 1
   }
   const isInsertNode = (identifier: string) => {
-    const afterStr = identifier.slice(address.length)
-    const number = afterStr.match(/^\.(\d+)/)?.[1]
+    const afterStr = identifier.substring(addrLength)
+    const number = afterStr.match(NumberIndexReg)?.[1]
     if (number === undefined) return false
     const index = Number(number)
     return index >= startIndex && index < startIndex + insertCount
   }
   const isDeleteNode = (identifier: string) => {
-    const preStr = identifier.slice(0, address.length)
-    const afterStr = identifier.slice(address.length)
-    const number = afterStr.match(/^\.(\d+)/)?.[1]
+    const preStr = identifier.substring(0, addrLength)
+    const afterStr = identifier.substring(addrLength)
+    const number = afterStr.match(NumberIndexReg)?.[1]
     if (number === undefined) return false
     const index = Number(number)
     return (
@@ -265,9 +265,9 @@ export const spliceArrayState = (
   }
   const moveIndex = (identifier: string) => {
     if (offset === 0) return identifier
-    const preStr = identifier.slice(0, address.length)
-    const afterStr = identifier.slice(address.length)
-    const number = afterStr.match(/^\.(\d+)/)?.[1]
+    const preStr = identifier.substring(0, addrLength)
+    const afterStr = identifier.substring(addrLength)
+    const number = afterStr.match(NumberIndexReg)?.[1]
     if (number === undefined) return identifier
     const index = Number(number) + offset
     return `${preStr}${afterStr.replace(/^\.\d+/, `.${index}`)}`
@@ -281,6 +281,7 @@ export const spliceArrayState = (
           fieldPatches.push({
             type: 'update',
             address: newIdentifier,
+            oldAddress: identifier,
             payload: field,
           })
         }
@@ -305,25 +306,24 @@ export const exchangeArrayState = (
   }
   const address = field.address.toString()
   const fields = field.form.fields
+  const addrLength = address.length
   const fieldPatches: INodePatch<GeneralField>[] = []
   const isArrayChildren = (identifier: string) => {
-    return (
-      identifier.indexOf(address) === 0 && identifier.length > address.length
-    )
+    return identifier.indexOf(address) === 0 && identifier.length > addrLength
   }
 
   const isFromOrToNode = (identifier: string) => {
-    const afterStr = identifier.slice(address.length)
-    const number = afterStr.match(/^\.(\d+)/)?.[1]
+    const afterStr = identifier.substring(addrLength)
+    const number = afterStr.match(NumberIndexReg)?.[1]
     if (number === undefined) return false
     const index = Number(number)
     return index === toIndex || index === fromIndex
   }
 
   const moveIndex = (identifier: string) => {
-    const preStr = identifier.slice(0, address.length)
-    const afterStr = identifier.slice(address.length)
-    const number = afterStr.match(/^\.(\d+)/)[1]
+    const preStr = identifier.substring(0, addrLength)
+    const afterStr = identifier.substring(addrLength)
+    const number = afterStr.match(NumberIndexReg)[1]
     const current = Number(number)
     let index = current
     if (index === fromIndex) {
@@ -343,6 +343,7 @@ export const exchangeArrayState = (
           fieldPatches.push({
             type: 'update',
             address: newIdentifier,
+            oldAddress: identifier,
             payload: field,
           })
           if (!fields[newIdentifier]) {
@@ -371,7 +372,7 @@ export const cleanupArrayChildren = (field: ArrayField, start: number) => {
 
   const isNeedCleanup = (identifier: string) => {
     const afterStr = identifier.slice(address.length)
-    const number = afterStr.match(/^\.(\d+)/)?.[1]
+    const number = afterStr.match(NumberIndexReg)?.[1]
     if (number === undefined) return false
     const index = Number(number)
     return index >= start

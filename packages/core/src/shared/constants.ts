@@ -24,3 +24,5 @@ export const GlobalState = {
   effectStart: false,
   effectEnd: false,
 }
+
+export const NumberIndexReg = /^\.(\d+)/
