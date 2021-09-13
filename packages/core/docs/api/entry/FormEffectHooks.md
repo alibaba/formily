@@ -203,6 +203,10 @@ export default () => {
 
 Side effect hooks for monitoring form value changes
 
+<Alert>
+It should be noted that this hook is triggered synchronously. For some behaviors that trigger `set` operation of `Proxy` multiple times, the results may not be as expected. For example, when deleting elements from array by `splice`, the array length will be the same as before deletion. (<a href="https://github.com/alibaba/formily/issues/2128">#2128</a>)
+</Alert>
+
 #### Signature
 
 ```ts
