@@ -52,13 +52,16 @@ test('relative', () => {
         },
         source: '2',
         after: {
-          type: 'Identifier',
-          value: 'dd',
+          type: 'DotOperator',
           after: {
-            type: 'DotOperator',
+            type: 'Identifier',
+            value: 'dd',
             after: {
-              type: 'Identifier',
-              value: 'bb',
+              type: 'DotOperator',
+              after: {
+                type: 'Identifier',
+                value: 'bb',
+              },
             },
           },
         },

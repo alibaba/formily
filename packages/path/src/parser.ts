@@ -238,7 +238,6 @@ export class Parser extends Tokenizer {
         : this.parseArrayPattern()
     const endPos = this.state.pos
     this.state.context.pop()
-    this.next()
     node.source = this.input
       .substring(startPos, endPos)
       .replace(
@@ -269,6 +268,7 @@ export class Parser extends Tokenizer {
     }
     this.relative = undefined
     this.pushSegments(node.source)
+    this.next()
     this.append(node, this.parseAtom(this.state.type))
     return node
   }
@@ -288,8 +288,10 @@ export class Parser extends Tokenizer {
     while (this.state.type !== bracketRTok && this.state.type !== eofTok) {
       nodes.push(this.parseAtom(this.state.type))
       if (this.state.type === bracketRTok) {
-        this.next()
-        break
+        if (this.includesContext(destructorContext)) {
+          this.next()
+        }
+        return nodes
       }
       this.next()
     }
@@ -322,8 +324,10 @@ export class Parser extends Tokenizer {
           | ArrayPatternNode[]
       }
       if (this.state.type === braceRTok) {
-        this.next()
-        break
+        if (this.includesContext(destructorContext)) {
+          this.next()
+        }
+        return nodes
       }
       this.next()
     }
