@@ -1166,7 +1166,7 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.0.tgz#c3c5ae543c897caa9c2a68630bed355be5f9990f"
   integrity sha512-JZButFdZ1+/xAfpguQHoabIXkcqRRKpMrWKBkpEZZyxfY9C1DpADFB8PEqGSTeFr135SaTRfKqGKx5xSCLI7ZQ==
 
-"@designable/core@0.5.29", "@designable/core@^0.5.29":
+"@designable/core@0.5.29", "@designable/core@^0.x":
   version "0.5.29"
   resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.5.29.tgz#de866560fb62bf644d650cf35c718234e377022e"
   integrity sha512-SZDaIwg853C08MrNQAksCgVZjxY/qgPxpomBwkSJyjs9v4FOEMOgrkjMelofNCzfnuRQeBWnHrQoWXy0F9GEpQ==
@@ -1177,7 +1177,7 @@
     "@formily/reactive" "^2.0.0-beta.84"
     "@juggle/resize-observer" "^3.3.1"
 
-"@designable/formily@^0.5.29":
+"@designable/formily@^0.x":
   version "0.5.29"
   resolved "https://registry.yarnpkg.com/@designable/formily/-/formily-0.5.29.tgz#33e4d2c482af05e85ccf10439c748261e9fab2ba"
   integrity sha512-JCTYEKOuDH1Yr82GC6pAF9zSQxN1PaHSruam4AyrsTWygr5uotcAPObYVWT13IZIfWiSWQSuryBKXDC05PnXVQ==
@@ -1187,7 +1187,7 @@
     "@formily/core" "^2.0.0-beta.84"
     "@formily/json-schema" "^2.0.0-beta.84"
 
-"@designable/react-settings-form@^0.5.29":
+"@designable/react-settings-form@^0.x":
   version "0.5.29"
   resolved "https://registry.yarnpkg.com/@designable/react-settings-form/-/react-settings-form-0.5.29.tgz#09dab2de564a2eaa8fe746b18e259309fe83bf84"
   integrity sha512-1WbA1ALzUOvQ9FRYY10kHyhXqL0ZBCHZF/8XSpDdy7p30arYm4hifDhabJet4D2I18Mijd7VaZQ2dC1R1iKM2A==
@@ -1208,7 +1208,7 @@
     react-color "^2.19.3"
     react-tiny-popover "^6.0.5"
 
-"@designable/react@0.5.29", "@designable/react@^0.5.29":
+"@designable/react@0.5.29", "@designable/react@^0.x":
   version "0.5.29"
   resolved "https://registry.yarnpkg.com/@designable/react/-/react-0.5.29.tgz#7cc99c65ab4205436a16803c06c27d9b94016e6a"
   integrity sha512-zTdFxG/8EykSavwxdI4n10aTQxRv8w0OTIT6Zng3+rumSnXxPlvwXbVE+HtUTVVrG7luKyjnAXW1XT74Xb4dSA==
