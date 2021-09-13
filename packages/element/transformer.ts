@@ -1,4 +1,3 @@
-import * as ts from 'typescript'
 import createTransformer from 'ts-import-plugin'
 
 const transformer = createTransformer({
@@ -8,6 +7,6 @@ const transformer = createTransformer({
   style: false,
 })
 
-export default function (program: ts.Program, pluginOptions: {}) {
+export default function () {
   return transformer
 }

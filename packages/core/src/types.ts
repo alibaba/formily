@@ -105,6 +105,7 @@ export type HeartSubscriber = ({
 export interface INodePatch<T> {
   type: 'remove' | 'update'
   address: string
+  oldAddress?: string
   payload?: T
 }
 

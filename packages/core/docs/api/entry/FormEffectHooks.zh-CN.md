@@ -203,6 +203,10 @@ export default () => {
 
 用于监听表单值变化的副作用钩子
 
+<Alert>
+需要注意此钩子是同步触发的，对于某些会多次触发 Proxy set 操作的行为，得到的结果可能会与预期不符。例如: 数组 splice 删除元素时，数组长度会和删除之前相同，只是被删除元素被置为了 undefined。此时需要使用方按需添加 debounce 或 setTimeout。(<a href="https://github.com/alibaba/formily/issues/2128">#2128</a>)
+</Alert>
+
 #### 签名
 
 ```ts

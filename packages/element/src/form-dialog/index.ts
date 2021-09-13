@@ -171,7 +171,6 @@ export function FormDialog(
               cancelText,
               okButtonProps,
               cancelButtonProps,
-              loadingText,
               ...dialogProps
             } = this.dialogProps
 

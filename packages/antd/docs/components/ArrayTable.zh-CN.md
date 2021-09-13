@@ -533,7 +533,7 @@ const schema = {
             'x-component-props': { width: 100, title: '显隐->A2' },
             properties: {
               a1: {
-                type: 'string',
+                type: 'boolean',
                 'x-decorator': 'FormItem',
                 'x-component': 'Switch',
               },

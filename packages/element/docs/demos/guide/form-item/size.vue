@@ -5,7 +5,7 @@
         name="size"
         title="Radio.Group"
         x-decorator="FormItem"
-        x-component="RadioGroup"
+        x-component="Radio.Group"
         :enum="[
           { value: 'small', label: 'Small' },
           { value: 'default', label: 'Default' },
@@ -82,7 +82,7 @@
           x-component="InputNumber"
           required
         />
-        <SchemaStringField
+        <SchemaBooleanField
           name="Switch"
           title="Switch"
           x-decorator="FormItem"
@@ -106,7 +106,7 @@ import {
   DatePicker,
   Switch,
   InputNumber,
-  RadioGroup,
+  Radio,
 } from '@formily/element'
 
 const Div = {
@@ -139,7 +139,7 @@ const fields = createSchemaField({
     DatePicker,
     Switch,
     InputNumber,
-    RadioGroup,
+    Radio,
     Div,
   },
 })

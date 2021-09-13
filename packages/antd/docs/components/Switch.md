@@ -22,7 +22,7 @@ const form = createForm()
 export default () => (
   <FormProvider form={form}>
     <SchemaField>
-      <SchemaField.Number
+      <SchemaField.Boolean
         name="switch"
         title="Switch"
         x-decorator="FormItem"
@@ -57,7 +57,7 @@ const schema = {
   type: 'object',
   properties: {
     switch: {
-      type: 'number',
+      type: 'boolean',
       title: 'Switch',
       'x-decorator': 'FormItem',
       'x-component': 'Switch',

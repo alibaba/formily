@@ -20,6 +20,7 @@
 
 ### 扩展属性
 
-| 属性名  | 类型                                                                                       | 描述 | 默认值 |
-| ------- | ------------------------------------------------------------------------------------------ | ---- | ------ |
-| options | [CheckboxProps](https://element.eleme.io/#/zh-CN/component/checkbox#checkbox-attributes)[] | 选项 | []     |
+| 属性名     | 类型                                                                                       | 描述     | 默认值  |
+| ---------- | ------------------------------------------------------------------------------------------ | -------- | ------- |
+| options    | [CheckboxProps](https://element.eleme.io/#/zh-CN/component/checkbox#checkbox-attributes)[] | 选项     | []      |
+| optionType | default/button                                                                             | 样式类型 | default |

@@ -88,7 +88,7 @@ const SchemaField = createSchemaField({
     Input,
   },
 })
-const formStep = FormStep.createFormStep
+const formStep = FormStep.createFormStep()
 
 export default {
   components: {

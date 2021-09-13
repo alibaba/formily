@@ -151,6 +151,27 @@ test('test segments', () => {
   expect(node.match(['a', 0, 'b'])).toEqual(true)
 })
 
+test('group match with destructor', () => {
+  expect(Path.parse('*([startDate,endDate],date,weak)').match('date')).toEqual(
+    true
+  )
+  expect(Path.parse('*({startDate,endDate},date,weak)').match('date')).toEqual(
+    true
+  )
+  expect(Path.parse('*([startDate,endDate],date,weak)').match('xxx')).toEqual(
+    false
+  )
+  expect(Path.parse('*({startDate,endDate},date,weak)').match('xxx')).toEqual(
+    false
+  )
+  expect(
+    Path.parse('*([startDate,endDate],date,weak)').match('[startDate,endDate]')
+  ).toEqual(true)
+  expect(
+    Path.parse('*({startDate,endDate},date,weak)').match('{startDate,endDate}')
+  ).toEqual(true)
+})
+
 match({
   '*': [[], ['aa'], ['aa', 'bb', 'cc'], ['aa', 'dd', 'gg']],
   '*.a.b': [
@@ -239,6 +260,7 @@ match({
   '*(!aa,bb,bb.aa)': [['xx'], ['yyy']],
   '*(!aaa)': [['bbb']],
   '*(!aaa,bbb)': [['ccc'], ['ggg']],
+  '*([startDate,endDate],date,weak)': [['date']],
 })
 
 unmatch({

@@ -201,10 +201,12 @@ const ArrayBaseIndex = defineComponent({
   name: 'ArrayBaseIndex',
   setup(props, { attrs }) {
     const index = useIndex()
+    const prefixCls = `${stylePrefix}-array-base`
     return () => {
       return h(
         'span',
         {
+          class: `${prefixCls}-index`,
           attrs,
         },
         {
