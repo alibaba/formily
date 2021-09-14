@@ -39,6 +39,7 @@ interface ILayoutProps {
 export interface IFormGridProps {
   className?: string
   style?: React.CSSProperties
+  prefixCls?: string
   minWidth?: number | number[]
   maxWidth?: number | number[]
   minColumns?: number | number[]
@@ -123,7 +124,7 @@ const normalizeProps = (props: IFormGridProps): ILayoutProps => {
 const useGridLayout = (outerProps: IFormGridProps): ILayout => {
   const ref = useRef<HTMLDivElement>(null)
   const props = useRef<ILayoutProps>()
-  const formGridPrefixCls = usePrefixCls('formily-grid')
+  const formGridPrefixCls = usePrefixCls('formily-grid', outerProps)
   const [layoutParams, setLayout] = useState({})
   const [styles, setStyles] = useState({})
   const normalizedProps = normalizeProps(outerProps)
