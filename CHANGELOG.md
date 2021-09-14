@@ -1,5 +1,49 @@
 # Changelog
 
+## v2.0.0-rc.5(2021-09-14)
+
+### :tada: Enhancements
+
+1. [feat(element): add FormCollapse component (#2119)](https://github.com/alibaba/formily/commit/48ed7b08) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [feat(element): radio/checkbox add optionType prop (#2114)](https://github.com/alibaba/formily/commit/54072a67) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [feat(next/antd): add tooltipIcon props to FormLayout & FormItem (#2085)](https://github.com/alibaba/formily/commit/1a817918) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+### :beetle: Bug Fixes
+
+1. [fix(antd/next): fix props.prefix is not work for FormGrid/FormLayout (#2151)](https://github.com/alibaba/formily/commit/bcdac582) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): fix array unshift with incomplete elements (#2150)](https://github.com/alibaba/formily/commit/64633714) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(path): fix path match destructor (#2148)](https://github.com/alibaba/formily/commit/f621d989) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(next/antd/vue): fix Switch type & add classname to ArrayItems.Index (#2093)](https://github.com/alibaba/formily/commit/9f875692) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+1. [fix(designable): fix Uncaught SyntaxError (#1997) (#2089)](https://github.com/alibaba/formily/commit/b56b5b28) :point_right: ( [youshao](https://github.com/youshao) )
+
+1. [fix(reactive-react): fix observer 2nd generic type (#2071)](https://github.com/alibaba/formily/commit/4b18a6ba) :point_right: ( [Yanlin Jiang](https://github.com/Yanlin Jiang) )
+
+1. [fix(core): unmounted field skip validation (#2066)](https://github.com/alibaba/formily/commit/5739fdad) :point_right: ( [null](https://github.com/null) )
+
+### :memo: Documents Changes
+
+1. [docs(core): add data docs](https://github.com/alibaba/formily/commit/e684bb71) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs: add notice for onFormValuesChange (#2146)](https://github.com/alibaba/formily/commit/c8176e53) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+1. [docs(site): update Pack on Demand doc (#2086)](https://github.com/alibaba/formily/commit/c0c50ace) :point_right: ( [vimvinter](https://github.com/vimvinter) )
+
+### :rose: Improve code quality
+
+1. [refactor(project): support more features for page description (#2099)](https://github.com/alibaba/formily/commit/6162ad5d) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore(project): improve code](https://github.com/alibaba/formily/commit/bc4945e6) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable): remove designable workspace](https://github.com/alibaba/formily/commit/0da67a3e) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-rc.4(2021-08-26)
 
 ### :tada: Enhancements
@@ -833,9 +877,3 @@
 1. [chore(actions): update commit checker action](https://github.com/alibaba/formily/commit/573b60fe) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [chore(pkg): add preversion/version lerna scripts hook](https://github.com/alibaba/formily/commit/d933f1fe) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.55(2021-05-21)
-
-### :blush: Other Changes
-
-1. [chore(pkg): change the execution timing of the changelog generator](https://github.com/alibaba/formily/commit/0ff511f6) :point_right: ( [janrywang](https://github.com/janrywang) )
