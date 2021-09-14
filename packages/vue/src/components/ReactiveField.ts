@@ -1,6 +1,6 @@
 import { defineComponent, inject, ref } from 'vue-demi'
 import { isVoidField } from '@formily/core'
-import { clone, FormPath } from '@formily/shared'
+import { FormPath } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
 import { toJS } from '@formily/reactive'
 import { SchemaOptionsSymbol } from '../shared'
@@ -95,7 +95,7 @@ export default observer(
                 optionsRef.value?.components,
                 field.decorator[0]
               ) ?? field.decorator[0]) as VueComponent
-              const decoratorData = clone(field.decorator[1]) || {}
+              const decoratorData = toJS(field.decorator[1]) || {}
               const style = decoratorData?.style
               delete decoratorData.style
               return {
@@ -133,7 +133,7 @@ export default observer(
               optionsRef.value?.components,
               field.component[0]
             ) ?? field.component[0]) as VueComponent
-            const originData = clone(field.component[1]) || {}
+            const originData = toJS(field.component[1]) || {}
             const events = {} as Record<string, any>
             const originChange = originData['@change'] || originData['onChange']
             const originFocus = originData['@focus'] || originData['onFocus']

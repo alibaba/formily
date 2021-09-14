@@ -95,10 +95,12 @@ export const patchCompile = (
   sourceState: any,
   scope: any
 ) => {
-  traverse(sourceState, (value, path) => {
+  traverse(sourceState, (value, pattern) => {
+    const path = FormPath.parse(pattern)
     const compiled = compile(value, scope)
+    const key = path.segments[0]
     if (compiled === undefined) return
-    if (hasOwnProperty.call(targetState, path[0])) {
+    if (hasOwnProperty.call(targetState, key)) {
       untracked(() => FormPath.setIn(targetState, path, compiled))
     }
   })

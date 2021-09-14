@@ -1,4 +1,5 @@
 import React, { Fragment, useContext } from 'react'
+import { toJS } from '@formily/reactive'
 import { observer } from '@formily/reactive-react'
 import { isFn, FormPath } from '@formily/shared'
 import { isVoidField, GeneralField, Form } from '@formily/core'
@@ -45,12 +46,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
 
     return React.createElement(
       finalComponent,
-      {
-        ...field.decorator[1],
-        style: {
-          ...field.decorator[1]?.style,
-        },
-      },
+      toJS(field.decorator[1]),
       children
     )
   }
@@ -85,16 +81,12 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     const finalComponent =
       FormPath.getIn(options?.components, field.component[0]) ??
       field.component[0]
-
     return React.createElement(
       finalComponent,
       {
         disabled,
         readOnly,
-        ...field.component[1],
-        style: {
-          ...field.component[1]?.style,
-        },
+        ...toJS(field.component[1]),
         value,
         onChange,
         onFocus,

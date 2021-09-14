@@ -102,22 +102,25 @@ export const createDataSource = (source: any[]) => {
 
 export const patchStateFormSchema = (
   targetState: any,
-  path: any[],
+  pattern: any[],
   compiled: any
 ) => {
   untracked(() => {
-    const isEnum = path[0] === 'enum' && isArr(compiled)
-    const schemaMapKey = SchemaStateMap[path[0]]
+    const path = FormPath.parse(pattern)
+    const segments = path.segments
+    const key = segments[0]
+    const isEnum = key === 'enum' && isArr(compiled)
+    const schemaMapKey = SchemaStateMap[key]
     if (schemaMapKey) {
       FormPath.setIn(
         targetState,
-        [schemaMapKey].concat(path.slice(1)),
+        [schemaMapKey].concat(segments.slice(1)),
         isEnum ? createDataSource(compiled) : compiled
       )
     } else {
-      const isValidatorKey = SchemaValidatorKeys[path[0]]
+      const isValidatorKey = SchemaValidatorKeys[key]
       if (isValidatorKey) {
-        targetState['setValidatorRule'](path[0], compiled)
+        targetState['setValidatorRule'](key, compiled)
       }
     }
   })

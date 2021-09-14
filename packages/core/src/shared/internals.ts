@@ -11,6 +11,7 @@ import {
   toArr,
   isNumberLike,
   shallowClone,
+  clone,
   isEqual,
 } from '@formily/shared'
 import {
@@ -44,7 +45,7 @@ import {
   RESPONSE_REQUEST_DURATION,
   ReservedProperties,
   GlobalState,
-  NumberIndexReg
+  NumberIndexReg,
 } from './constants'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
@@ -711,11 +712,11 @@ export const applyValuesPatch = (
   path: Array<string | number>,
   source: any
 ) => {
-  const merge = (path: Array<string | number>, source: any) => {
+  const update = (path: Array<string | number>, source: any) => {
     if (path.length) {
-      form.setValuesIn(path, toJS(source))
+      form.setValuesIn(path, clone(source))
     } else {
-      Object.assign(form.values, toJS(source))
+      Object.assign(form.values, clone(source))
     }
   }
 
@@ -724,7 +725,7 @@ export const applyValuesPatch = (
     const targetField = form.query(path).take()
     if (isEmpty(targetValue)) {
       if (isEmpty(source)) return
-      merge(path, source)
+      update(path, source)
     } else {
       const arrA = isArr(targetValue)
       const arrB = isArr(source)
@@ -738,10 +739,10 @@ export const applyValuesPatch = (
       } else {
         if (targetField) {
           if (!isVoidField(targetField) && !targetField.modified) {
-            merge(path, source)
+            update(path, source)
           }
         } else {
-          merge(path, source)
+          update(path, source)
         }
       }
     }

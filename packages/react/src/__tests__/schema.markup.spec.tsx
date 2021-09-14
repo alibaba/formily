@@ -650,3 +650,79 @@ test('expression x-value', async () => {
     expect(queryByText('100')).not.toBeNull()
   })
 })
+
+test('nested update component props with expression', async () => {
+  const form = createForm({
+    values: {
+      aaa: 'xxx',
+    },
+  })
+  const SchemaField = createSchemaField({
+    components: {
+      Text: (props) => <div>{props.aa?.bb?.cc}</div>,
+    },
+  })
+
+  const { queryByText } = render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.String name="aaa" x-component="Text" />
+        <SchemaField.String
+          name="bbb"
+          x-component="Text"
+          x-component-props={{ aa: { bb: { cc: '{{$form.values.aaa}}' } } }}
+        />
+      </SchemaField>
+    </FormProvider>
+  )
+  await waitFor(() => {
+    expect(queryByText('xxx')).not.toBeNull()
+  })
+  act(() => {
+    form.values.aaa = '10'
+  })
+  await waitFor(() => {
+    expect(queryByText('10')).not.toBeNull()
+  })
+})
+
+test('nested update component props with x-reactions', async () => {
+  const form = createForm({
+    values: {
+      aaa: 'xxx',
+    },
+  })
+  const SchemaField = createSchemaField({
+    components: {
+      Text: (props) => <div>{props.aa?.bb?.cc}</div>,
+    },
+  })
+
+  const { queryByText } = render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.String name="aaa" x-component="Text" />
+        <SchemaField.String
+          name="bbb"
+          x-component="Text"
+          x-reactions={{
+            fulfill: {
+              schema: {
+                'x-component-props.aa.bb.cc': '{{$form.values.aaa}}',
+              } as any,
+            },
+          }}
+        />
+      </SchemaField>
+    </FormProvider>
+  )
+  await waitFor(() => {
+    expect(queryByText('xxx')).not.toBeNull()
+  })
+  act(() => {
+    form.values.aaa = '10'
+  })
+  await waitFor(() => {
+    expect(queryByText('10')).not.toBeNull()
+  })
+})
