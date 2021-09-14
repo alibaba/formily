@@ -50,6 +50,7 @@ order: 1
 | editable       | 字段是可编辑                 | Boolean                                            | 否       | `true`       |
 | validateStatus | 字段校验状态                 | [FieldValidateStatus](#fieldvalidatestatus)        | 是       | `null`       |
 | content        | 字段内容，一般作为子节点     | any                                                | 否       | `null`       |
+| data           | 字段扩展属性                 | Object                                             | 否       | `null`       |
 | selfErrors     | 字段自身错误消息             | [FieldMessage](#fieldmessage)[]                    | 否       | `[]`         |
 | selfWarnings   | 字段自身警告消息             | [FieldMessage](#fieldmessage)[]                    | 否       | `[]`         |
 | selfSuccesses  | 字段自身成功消息             | [FieldMessage](#fieldmessage)[]                    | 否       | `[]`         |

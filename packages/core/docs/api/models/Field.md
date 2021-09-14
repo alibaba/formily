@@ -50,6 +50,7 @@ All model attributes are listed below. If the attribute is writable, then we can
 | editable       | Field is editable                            | Boolean                                            | No               | `true`        |
 | validateStatus | Field validation status                      | [FieldValidateStatus](#fieldvalidatestatus)        | yes              | `null`        |
 | content        | Field content, usually as a child node       | any                                                | No               | `null`        |
+| data           | Field extends properties                     | Object                                             | No               | `null`        |
 | selfErrors     | Field own error message                      | [FieldMessage](#fieldmessage)[]                    | No               | `[]`          |
 | selfWarnings   | Field own warning message                    | [FieldMessage](#fieldmessage)[]                    | No               | `[]`          |
 | selfSuccesses  | Success message of the field itself          | [FieldMessage](#fieldmessage)[]                    | No               | `[]`          |
