@@ -2,7 +2,7 @@ import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
 import { defineComponent, PropType } from '@vue/composition-api'
 import {
   composeExport,
-  getComponentByTag,
+  transformComponent,
   resolveComponent,
   SlotTypes,
 } from '../__builtins__/shared'
@@ -31,7 +31,7 @@ export type RadioGroupProps = ElRadioGroupProps & {
 
 export type RadioProps = ElRadioProps
 
-const TransformElRadioGroup = getComponentByTag(ElRadioGroup, {
+const TransformElRadioGroup = transformComponent(ElRadioGroup, {
   change: 'input',
 })
 

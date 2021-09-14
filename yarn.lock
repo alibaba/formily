@@ -19619,6 +19619,11 @@ vue-frag@^1.1.4:
   resolved "https://registry.yarnpkg.com/vue-frag/-/vue-frag-1.1.5.tgz#1158f92361dff2c312e00b8ca85334c329e566e7"
   integrity sha512-g+PP9pjW1gnrmPjy2Sa5jK/bfxYHK8Hgt1sVs/Y/7KT+srGJUwtGNwXNTUvWv/zJ2yGcvJVEH98eIrICyZX9Ng==
 
+vue-hoc@^0.4.7:
+  version "0.4.7"
+  resolved "https://registry.nlark.com/vue-hoc/download/vue-hoc-0.4.7.tgz#4d3322ba89b8b0e42b19045ef536c21d948a4fac"
+  integrity sha1-TTMiuom4sOQrGQRe9TbCHZSKT6w=
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
