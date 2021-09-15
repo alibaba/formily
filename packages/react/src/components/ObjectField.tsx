@@ -14,7 +14,6 @@ export const ObjectField = <D extends JSXComponent, C extends JSXComponent>(
   const field = useAttach(
     form.createObjectField({ basePath: parent?.address, ...props })
   )
-
   return (
     <FieldContext.Provider value={field}>
       <ReactiveField field={field}>{props.children}</ReactiveField>

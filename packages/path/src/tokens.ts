@@ -51,7 +51,18 @@ export const starTok = TokenType('*', {
   expectNext(next) {
     return (
       next === dotTok ||
-      next === starTok ||
+      next === parenLTok ||
+      next === bracketLTok ||
+      next === eofTok ||
+      next === commaTok ||
+      next === parenRTok
+    )
+  },
+})
+export const dbStarTok = TokenType('**', {
+  expectNext(next) {
+    return (
+      next === dotTok ||
       next === parenLTok ||
       next === bracketLTok ||
       next === eofTok ||
@@ -67,6 +78,7 @@ export const dotTok = TokenType('.', {
       next === nameTok ||
       next === bracketDLTok ||
       next === starTok ||
+      next === dbStarTok ||
       next === bracketLTok ||
       next === braceLTok ||
       next === eofTok
@@ -107,7 +119,7 @@ export const braceLTok = TokenType('{', {
     if (this.includesContext(destructorContext)) {
       return prev === colonTok || prev === commaTok || prev === bracketLTok
     }
-    return prev === dotTok || prev === colonTok
+    return prev === dotTok || prev === colonTok || prev === parenLTok
   },
   updateContext() {
     this.state.context.push(braceContext)
@@ -124,7 +136,7 @@ export const braceRTok = TokenType('}', {
         next === bracketRTok
       )
     }
-    return next === dotTok || next === eofTok
+    return next === dotTok || next === eofTok || next === commaTok
   },
   expectPrev(prev) {
     return prev === nameTok || prev === braceRTok || prev === bracketRTok
@@ -214,6 +226,7 @@ export const parenLTok = TokenType('(', {
     return (
       next === nameTok ||
       next === bracketDLTok ||
+      next === braceLTok ||
       next === bangTok ||
       next === bracketLTok
     )

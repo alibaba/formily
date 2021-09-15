@@ -32,9 +32,9 @@ const useEditable = (): [boolean, (payload: boolean) => void] => {
   }, [pattern])
   return [
     field.pattern === 'editable',
-    (pyaload: boolean) => {
+    (payload: boolean) => {
       if (pattern !== 'editable') return
-      field.setPattern(pyaload ? 'editable' : 'readPretty')
+      field.setPattern(payload ? 'editable' : 'readPretty')
     },
   ]
 }
@@ -44,9 +44,9 @@ const useFormItemProps = (): IFormItemProps => {
   if (isVoidField(field)) return {}
   if (!field) return {}
   const takeMessage = () => {
-    if (field.errors.length) return field.errors
-    if (field.warnings.length) return field.warnings
-    if (field.successes.length) return field.successes
+    if (field.selfErrors.length) return field.selfErrors
+    if (field.selfWarnings.length) return field.selfWarnings
+    if (field.selfSuccesses.length) return field.selfSuccesses
   }
 
   return {

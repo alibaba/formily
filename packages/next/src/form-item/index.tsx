@@ -272,6 +272,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   return (
     <div
       {...pickDataProps(props)}
+      data-span={gridSpan || 1}
       style={{
         ...style,
         ...gridStyles,
@@ -387,9 +388,9 @@ export const FormItem: ComposeFormItem = connect(
         }
         if (field.validating) return
         if (props.feedbackText) return props.feedbackText
-        if (field.errors.length) return split(field.errors)
-        if (field.warnings.length) return split(field.warnings)
-        if (field.successes.length) return split(field.successes)
+        if (field.selfErrors.length) return split(field.selfErrors)
+        if (field.selfWarnings.length) return split(field.selfWarnings)
+        if (field.selfSuccesses.length) return split(field.selfSuccesses)
       }
 
       return {

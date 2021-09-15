@@ -1,13 +1,26 @@
-import { isArr, isFn, isPlainObj, isStr, reduce } from '@formily/shared'
-import { isObservable } from '@formily/reactive'
-import { Schema } from './schema'
+import {
+  isArr,
+  isFn,
+  isPlainObj,
+  isStr,
+  reduce,
+  FormPath,
+} from '@formily/shared'
+import { IGeneralFieldState } from '@formily/core'
+import { untracked, hasCollected } from '@formily/reactive'
+import {
+  isNoNeedCompileObject,
+  hasOwnProperty,
+  patchStateFormSchema,
+} from './shared'
+import { traverse, traverseSchema } from './traverse'
+import { ISchema } from './types'
 
 const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/
-const actionsSymbol = Symbol.for('__REVA_ACTIONS')
-const ENVS = {
+const Registry = {
   silent: false,
   compile(expression: string, scope = {}) {
-    if (ENVS.silent) {
+    if (Registry.silent) {
       try {
         return new Function('$root', `with($root) { return (${expression}); }`)(
           scope
@@ -22,14 +35,14 @@ const ENVS = {
 }
 
 export const silent = (value = true) => {
-  ENVS.silent = !!value
+  Registry.silent = !!value
 }
 
 export const registerCompiler = (
   compiler: (expression: string, scope: any) => any
 ) => {
   if (isFn(compiler)) {
-    ENVS.compile = compiler
+    Registry.compile = compiler
   }
 }
 
@@ -40,9 +53,7 @@ export const shallowCompile = <Source = any, Scope = any>(
   if (isStr(source)) {
     const matched = source.match(ExpRE)
     if (!matched) return source
-    return ENVS.compile(matched[1], scope)
-  } else if (isArr(source)) {
-    return source.map((item) => shallowCompile(item, scope))
+    return Registry.compile(matched[1], scope)
   }
   return source
 }
@@ -51,38 +62,18 @@ export const compile = <Source = any, Scope = any>(
   source: Source,
   scope?: Scope
 ): any => {
-  const seenObjects = new WeakMap()
+  const seenObjects = new WeakSet()
   const compile = (source: any) => {
     if (isStr(source)) {
       return shallowCompile(source, scope)
     } else if (isArr(source)) {
       return source.map((value: any) => compile(value))
     } else if (isPlainObj(source)) {
-      if ('$$typeof' in source && '_owner' in source) {
+      if (isNoNeedCompileObject(source)) return source
+      if (seenObjects.has(source)) {
         return source
       }
-      if (source[actionsSymbol]) {
-        return source
-      }
-      if (source['_isAMomentObject']) {
-        return source
-      }
-      if (Schema.isSchemaInstance(source)) {
-        return source.compile(scope)
-      }
-      if (isFn(source['toJS'])) {
-        return source
-      }
-      if (isFn(source['toJSON'])) {
-        return source
-      }
-      if (isObservable(source)) {
-        return source
-      }
-      if (seenObjects.get(source)) {
-        return source
-      }
-      seenObjects.set(source, true)
+      seenObjects.add(source)
       const results = reduce(
         source,
         (buf, value, key) => {
@@ -91,10 +82,48 @@ export const compile = <Source = any, Scope = any>(
         },
         {}
       )
-      seenObjects.set(source, false)
+      seenObjects.delete(source)
       return results
     }
     return source
   }
   return compile(source)
+}
+
+export const patchCompile = (
+  targetState: IGeneralFieldState,
+  sourceState: any,
+  scope: any
+) => {
+  traverse(sourceState, (value, pattern) => {
+    const path = FormPath.parse(pattern)
+    const compiled = compile(value, scope)
+    const key = path.segments[0]
+    if (compiled === undefined) return
+    if (hasOwnProperty.call(targetState, key)) {
+      untracked(() => FormPath.setIn(targetState, path, compiled))
+    }
+  })
+}
+
+export const patchSchemaCompile = (
+  targetState: IGeneralFieldState,
+  sourceSchema: ISchema,
+  scope: any,
+  demand = false
+) => {
+  traverseSchema(sourceSchema, (value, path) => {
+    let compiled = value
+    let collected = hasCollected(() => {
+      compiled = compile(value, scope)
+    })
+    if (compiled === undefined) return
+    if (demand) {
+      if (collected || !targetState.initialized) {
+        patchStateFormSchema(targetState, path, compiled)
+      }
+    } else {
+      patchStateFormSchema(targetState, path, compiled)
+    }
+  })
 }

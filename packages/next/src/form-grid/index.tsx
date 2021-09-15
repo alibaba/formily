@@ -37,6 +37,9 @@ interface ILayoutProps {
 }
 
 export interface IFormGridProps {
+  prefix?: string
+  style?: React.CSSProperties
+  className?: string
   minWidth?: number | number[]
   maxWidth?: number | number[]
   minColumns?: number | number[]
@@ -66,6 +69,8 @@ interface IStyleProps extends IFormGridProps {
 
 export interface IGridColumnProps {
   gridSpan?: number
+  style?: React.CSSProperties
+  className?: string
 }
 
 type ComposedFormGrid = React.FC<IFormGridProps> & {
@@ -119,7 +124,7 @@ const normalizeProps = (props: IFormGridProps): ILayoutProps => {
 const useGridLayout = (outerProps: IFormGridProps): ILayout => {
   const ref = useRef<HTMLDivElement>(null)
   const props = useRef<ILayoutProps>()
-  const formGridPrefixCls = usePrefixCls('formily-grid')
+  const formGridPrefixCls = usePrefixCls('formily-grid', outerProps)
   const [layoutParams, setLayout] = useState({})
   const [styles, setStyles] = useState({})
   const normalizedProps = normalizeProps(outerProps)
@@ -232,6 +237,7 @@ const useGridLayout = (outerProps: IFormGridProps): ILayout => {
         childList: true,
       })
     }
+    updateUI()
     return () => {
       resizeObserver.unobserve(ref.current)
       mutationObserver.disconnect()
@@ -345,8 +351,8 @@ export const FormGrid: ComposedFormGrid = (props) => {
       value={{ columnGap: props.columnGap, ...layoutParams }}
     >
       <div
-        className={cls(`${formGridPrefixCls}-layout`)}
-        style={styles}
+        className={cls(`${formGridPrefixCls}-layout`, props.className)}
+        style={{ ...props.style, ...styles }}
         ref={ref}
       >
         {props.children}
@@ -358,10 +364,15 @@ export const FormGrid: ComposedFormGrid = (props) => {
 export const GridColumn: React.FC<IGridColumnProps> = ({
   gridSpan,
   children,
+  ...props
 }) => {
   const span = FormGrid.useGridSpan(gridSpan)
   return (
-    <div style={{ gridColumnStart: `span ${span}` }} data-span={span || 1}>
+    <div
+      {...props}
+      style={{ ...props.style, gridColumnStart: `span ${span}` }}
+      data-span={span || 1}
+    >
       {children}
     </div>
   )

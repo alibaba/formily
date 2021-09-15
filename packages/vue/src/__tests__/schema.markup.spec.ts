@@ -644,7 +644,8 @@ describe('recursion field', () => {
       </FormProvider>`,
     } as any
     const wrapper = mount(TestComponent, {
-      attachTo: div,
+      // attachTo: div,
+      attachToDocument: true,
       localVue,
     })
     expect(wrapper.find('.bbb').exists()).toBeFalsy()

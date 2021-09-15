@@ -144,6 +144,10 @@ export default {
             path: '/api/untracked',
           },
           {
+            title: 'hasCollected',
+            path: '/api/has-collected',
+          },
+          {
             title: 'Tracker',
             path: '/api/tracker',
           },
@@ -239,6 +243,10 @@ export default {
           {
             title: 'untracked',
             path: '/zh-CN/api/untracked',
+          },
+          {
+            title: 'hasCollected',
+            path: '/zh-CN/api/has-collected',
           },
           {
             title: 'Tracker',

@@ -422,13 +422,17 @@ test('onFieldValidate', async () => {
       required: true,
     })
   )
-  await field.validate()
+  try {
+    await field.validate()
+  } catch {}
   expect(validateStart).toBeCalled()
   expect(validateFailed).toBeCalled()
   expect(validateSuccess).not.toBeCalled()
   expect(validateEnd).toBeCalled()
   field.setValue('123')
-  await field.validate()
+  try {
+    await field.validate()
+  } catch {}
   expect(validateStart).toBeCalledTimes(2)
   expect(validateFailed).toBeCalledTimes(1)
   expect(validateSuccess).toBeCalledTimes(1)

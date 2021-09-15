@@ -18,23 +18,28 @@ export default {
     zip: 'The field value is not a zip format',
     len: 'The length or number of entries must be {{len}}',
     min: 'The length or number of entries must be at least {{min}}',
+    minLength: 'The length or number of entries must be at least {{minLength}}',
+    minItems: 'The length or number of entries must be at least {{minItems}}',
     maximum: 'The field value cannot be greater than {{maximum}}',
     exclusiveMaximum: 'The field value must be less than {{exclusiveMaximum}}',
     minimum: 'The field value cannot be less than {{minimum}}',
     exclusiveMinimum:
       'The field value must be greater than {{exclusiveMinimum}}',
     max: 'The field length or number of entries must be at most {{max}}',
+    maxLength:
+      'The field length or number of entries must be at most {{maxLength}}',
+    maxItems:
+      'The field length or number of entries must be at most {{maxItems}}',
     whitespace: 'This field value cannot be blank string.',
     enum: 'The field value must be one of {{enum}}',
-    schema: {
-      const: 'The field value must be equal to {{const}}',
-      multipleOf: 'The field value must be divisible by {{multipleOf}}',
-      maxProperties:
-        'The number of field properties cannot be greater than {{maxProperties}}',
-      minProperties:
-        'The number of field properties cannot be less than {{maxProperties}}',
-      uniqueItems: 'Array elements are not unique',
-    },
+
+    const: 'The field value must be equal to {{const}}',
+    multipleOf: 'The field value must be divisible by {{multipleOf}}',
+    maxProperties:
+      'The number of field properties cannot be greater than {{maxProperties}}',
+    minProperties:
+      'The number of field properties cannot be less than {{maxProperties}}',
+    uniqueItems: 'Array elements are not unique',
   },
   zh: {
     pattern: '该字段不是一个合法的字段',
@@ -55,20 +60,22 @@ export default {
     zip: '该字段不是合法的邮编格式',
     len: '长度或条目数必须为{{len}}',
     min: '长度或条目数不能小于{{min}}',
+    minLength: '长度或条目数不能小于{{minLength}}',
+    minItems: '长度或条目数不能小于{{minItems}}',
     max: '长度或条目数不能大于{{max}}',
+    maxLength: '长度或条目数不能大于{{maxLength}}',
+    maxItems: '长度或条目数不能大于{{maxItems}}',
     maximum: '数值不能大于{{maximum}}',
     exclusiveMaximum: '数值必须小于{{exclusiveMaximum}}',
     minimum: '数值不能小于{{minimum}}',
     exclusiveMinimum: '数值必须大于{{exclusiveMinimum}}',
     whitespace: '不能为纯空白字符串',
     enum: '字段值必须为{{enum}}其中一个',
-    schema: {
-      const: '字段值必须等于{{const}}',
-      multipleOf: '字段值不能被{{multipleOf}}整除',
-      maxProperties: '字段属性数量不能大于{{maxProperties}}',
-      minProperties: '字段属性数量不能小于{{minProperties}}',
-      uniqueItems: '数组元素不唯一',
-    },
+    const: '字段值必须等于{{const}}',
+    multipleOf: '字段值不能被{{multipleOf}}整除',
+    maxProperties: '字段属性数量不能大于{{maxProperties}}',
+    minProperties: '字段属性数量不能小于{{minProperties}}',
+    uniqueItems: '数组元素不唯一',
   },
   'en-US': {
     pattern: 'This field is invalid',
@@ -89,23 +96,27 @@ export default {
     zip: 'The field value is not a zip format',
     len: 'The length or number of entries must be {{len}}',
     min: 'The length or number of entries must be at least {{min}}',
+    minLength: 'The length or number of entries must be at least {{minLength}}',
+    minItems: 'The length or number of entries must be at least {{minItems}}',
     maximum: 'The field value cannot be greater than {{maximum}}',
     exclusiveMaximum: 'The field value must be less than {{exclusiveMaximum}}',
     minimum: 'The field value cannot be less than {{minimum}}',
     exclusiveMinimum:
       'The field value must be greater than {{exclusiveMinimum}}',
     max: 'The field length or number of entries must be at most {{max}}',
+    maxLength:
+      'The field length or number of entries must be at most {{maxLength}}',
+    maxItems:
+      'The field length or number of entries must be at most {{maxItems}}',
     whitespace: 'This field value cannot be blank string.',
     enum: 'The field value must be one of {{enum}}',
-    schema: {
-      const: 'The field value must be equal to {{const}}',
-      multipleOf: 'The field value must be divisible by {{multipleOf}}',
-      maxProperties:
-        'The number of field properties cannot be greater than {{maxProperties}}',
-      minProperties:
-        'The number of field properties cannot be less than {{maxProperties}}',
-      uniqueItems: 'Array elements are not unique',
-    },
+    const: 'The field value must be equal to {{const}}',
+    multipleOf: 'The field value must be divisible by {{multipleOf}}',
+    maxProperties:
+      'The number of field properties cannot be greater than {{maxProperties}}',
+    minProperties:
+      'The number of field properties cannot be less than {{maxProperties}}',
+    uniqueItems: 'Array elements are not unique',
   },
   'zh-CN': {
     pattern: '该字段不是一个合法的字段',
@@ -126,6 +137,10 @@ export default {
     zip: '该字段不是合法的邮编格式',
     len: '长度或条目数必须为{{len}}',
     min: '长度或条目数不能小于{{min}}',
+    minLength: '长度或条目数不能小于{{minLength}}',
+    minItems: '长度或条目数不能小于{{minItems}}',
+    maxLength: '长度或条目数不能大于{{maxLength}}',
+    maxItems: '长度或条目数不能大于{{maxItems}}',
     max: '长度或条目数不能大于{{max}}',
     maximum: '数值不能大于{{maximum}}',
     exclusiveMaximum: '数值必须小于{{exclusiveMaximum}}',
@@ -133,13 +148,11 @@ export default {
     exclusiveMinimum: '数值必须大于{{exclusiveMinimum}}',
     whitespace: '不能为纯空白字符串',
     enum: '字段值必须为{{enum}}其中一个',
-    schema: {
-      const: '字段值必须等于{{const}}',
-      multipleOf: '字段值不能被{{multipleOf}}整除',
-      maxProperties: '字段属性数量不能大于{{maxProperties}}',
-      minProperties: '字段属性数量不能小于{{minProperties}}',
-      uniqueItems: '数组元素不唯一',
-    },
+    const: '字段值必须等于{{const}}',
+    multipleOf: '字段值不能被{{multipleOf}}整除',
+    maxProperties: '字段属性数量不能大于{{maxProperties}}',
+    minProperties: '字段属性数量不能小于{{minProperties}}',
+    uniqueItems: '数组元素不唯一',
   },
   'zh-TW': {
     pattern: '該字段不是一個合法的字段',
@@ -160,20 +173,22 @@ export default {
     zip: '該字段不是合法的郵編格式',
     len: '長度或條目數必須為{{len}}',
     min: '長度或條目數不能小於{{min}}',
+    minItems: '長度或條目數不能小於{{minItems}}',
+    minLength: '長度或條目數不能小於{{minLength}}',
     max: '長度或條目數不能大於{{max}}',
+    maxItems: '長度或條目數不能大於{{maxItems}}',
+    maxLength: '長度或條目數不能大於{{maxLength}}',
     maximum: '數值不能大於{{maximum}}',
     exclusiveMaximum: '數值必須小於{{exclusiveMaximum}}',
     minimum: '數值不能小於{{minimum}}',
     exclusiveMinimum: '數值必須大於{{exclusiveMinimum}}',
     whitespace: '不能為純空白字符串',
     enum: '字段值必須為{{enum}}其中一個',
-    schema: {
-      const: '字段值必須等於{{const}}',
-      multipleOf: '字段值不能被{{multipleOf}}整除',
-      maxProperties: '字段屬性數量不能大於{{maxProperties}}',
-      minProperties: '字段屬性數量不能小於{{minProperties}}',
-      uniqueItems: '數組元素不唯一',
-    },
+    const: '字段值必須等於{{const}}',
+    multipleOf: '字段值不能被{{multipleOf}}整除',
+    maxProperties: '字段屬性數量不能大於{{maxProperties}}',
+    minProperties: '字段屬性數量不能小於{{minProperties}}',
+    uniqueItems: '數組元素不唯一',
   },
   ja: {
     url: 'このフィールドは無効なURLです',
@@ -190,8 +205,14 @@ export default {
     ipv6: 'このフィールドはIPv6形式ではありません',
     len: 'エントリの長さまたは数は{{len}}でなければなりません',
     max: 'エントリの長さまたは数は最大{{max}}でなければなりません',
+    maxItems: 'エントリの長さまたは数は最大{{maxItems}}でなければなりません',
+    maxLength: 'エントリの長さまたは数は最大{{maxLength}}でなければなりません',
     maximum: '値は{{最大}}を超えることはできません',
     min: 'エントリの長さまたは数は、少なくとも{{min}}である必要があります',
+    minItems:
+      'エントリの長さまたは数は、少なくとも{{minItems}}である必要があります',
+    minLength:
+      'エントリの長さまたは数は、少なくとも{{minLength}}である必要があります',
     minimum: '値は{{minimum}}以上にする必要があります',
     money: 'このフィールドは通貨形式ではありません',
     number: 'このフィールドは数値ではありません',
@@ -201,14 +222,12 @@ export default {
     qq: 'このフィールドはqq数値形式ではありません',
     required: 'この項目は必須です',
     enum: 'フィールド値は{{enum}}のいずれかである必要があります',
-    schema: {
-      cons: 'フィールド値は{{const}}と等しくなければなりません',
-      multipleOf: 'フィールド値を{{multipleOf}}で割り切れない',
-      maxProperties:
-        'フィールドプロパティの数は{{maxProperties}}を超えることはできません',
-      minProperties:
-        'フィールドプロパティの数は{{minProperties}}未満にすることはできません',
-      uniqueItems: '配列要素は一意ではありません',
-    },
+    cons: 'フィールド値は{{const}}と等しくなければなりません',
+    multipleOf: 'フィールド値を{{multipleOf}}で割り切れない',
+    maxProperties:
+      'フィールドプロパティの数は{{maxProperties}}を超えることはできません',
+    minProperties:
+      'フィールドプロパティの数は{{minProperties}}未満にすることはできません',
+    uniqueItems: '配列要素は一意ではありません',
   },
 }

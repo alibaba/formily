@@ -1,5 +1,87 @@
 # Changelog
 
+## v2.0.0-rc.6(2021-09-14)
+
+### :beetle: Bug Fixes
+
+1. [fix(react): fix x-component-props is not reactive](https://github.com/alibaba/formily/commit/d91ebfff) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+## v2.0.0-rc.5(2021-09-14)
+
+### :tada: Enhancements
+
+1. [feat(element): add FormCollapse component (#2119)](https://github.com/alibaba/formily/commit/48ed7b08) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [feat(element): radio/checkbox add optionType prop (#2114)](https://github.com/alibaba/formily/commit/54072a67) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [feat(next/antd): add tooltipIcon props to FormLayout & FormItem (#2085)](https://github.com/alibaba/formily/commit/1a817918) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+### :beetle: Bug Fixes
+
+1. [fix(antd/next): fix props.prefix is not work for FormGrid/FormLayout (#2151)](https://github.com/alibaba/formily/commit/bcdac582) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): fix array unshift with incomplete elements (#2150)](https://github.com/alibaba/formily/commit/64633714) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(path): fix path match destructor (#2148)](https://github.com/alibaba/formily/commit/f621d989) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(next/antd/vue): fix Switch type & add classname to ArrayItems.Index (#2093)](https://github.com/alibaba/formily/commit/9f875692) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+1. [fix(designable): fix Uncaught SyntaxError (#1997) (#2089)](https://github.com/alibaba/formily/commit/b56b5b28) :point_right: ( [youshao](https://github.com/youshao) )
+
+1. [fix(reactive-react): fix observer 2nd generic type (#2071)](https://github.com/alibaba/formily/commit/4b18a6ba) :point_right: ( [Yanlin Jiang](https://github.com/Yanlin Jiang) )
+
+1. [fix(core): unmounted field skip validation (#2066)](https://github.com/alibaba/formily/commit/5739fdad) :point_right: ( [null](https://github.com/null) )
+
+### :memo: Documents Changes
+
+1. [docs(core): add data docs](https://github.com/alibaba/formily/commit/e684bb71) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs: add notice for onFormValuesChange (#2146)](https://github.com/alibaba/formily/commit/c8176e53) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+1. [docs(site): update Pack on Demand doc (#2086)](https://github.com/alibaba/formily/commit/c0c50ace) :point_right: ( [vimvinter](https://github.com/vimvinter) )
+
+### :rose: Improve code quality
+
+1. [refactor(project): support more features for page description (#2099)](https://github.com/alibaba/formily/commit/6162ad5d) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore(project): improve code](https://github.com/alibaba/formily/commit/bc4945e6) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable): remove designable workspace](https://github.com/alibaba/formily/commit/0da67a3e) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+## v2.0.0-rc.4(2021-08-26)
+
+### :tada: Enhancements
+
+1. [feat(designable): add icons for drag source](https://github.com/alibaba/formily/commit/8c14fa6e) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [feat(designable): support componentsIcon/componentsSourceIcon](https://github.com/alibaba/formily/commit/5255e0da) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix add effects memo leak in form umount (#2050)](https://github.com/alibaba/formily/commit/f753ba12) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(element): remove Formily namepsace usecase](https://github.com/alibaba/formily/commit/0cc90672) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(vue): fix 'x-content' render named slot not work (#2046)](https://github.com/alibaba/formily/commit/71fb9814) :point_right: ( [jiezi19971225](https://github.com/jiezi19971225) )
+
+1. [fix(designable-antd): fix locales](https://github.com/alibaba/formily/commit/27be2651) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(designable): fix can not drag object to array cards in initialization](https://github.com/alibaba/formily/commit/99b46a3e) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(next): fix usePrefixCls tag undefined (#2042)](https://github.com/alibaba/formily/commit/9af2dda7) :point_right: ( [hellohy](https://github.com/hellohy) )
+
+1. [fix(next): fix formitem inset boder (#2039)](https://github.com/alibaba/formily/commit/19176530) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+### :blush: Other Changes
+
+1. [chore(designable): update dn deps](https://github.com/alibaba/formily/commit/3b92370a) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(react): compat ReactNative with SchemaField only json-schema mode](https://github.com/alibaba/formily/commit/77dd47e4) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(designable): improve DesignableText experience](https://github.com/alibaba/formily/commit/0f0285da) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-rc.3(2021-08-20)
 
 ### :blush: Other Changes
@@ -793,33 +875,3 @@
 1. [chore(workflow): add issue helper action](https://github.com/alibaba/formily/commit/e2d7c0ad) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(workflow): rename main.yml ==>commitlint.yml](https://github.com/alibaba/formily/commit/45734661) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v2.0.0-beta.56(2021-05-21)
-
-### :blush: Other Changes
-
-1. [chore(actions): update commit checker action](https://github.com/alibaba/formily/commit/573b60fe) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [chore(pkg): add preversion/version lerna scripts hook](https://github.com/alibaba/formily/commit/d933f1fe) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.55(2021-05-21)
-
-### :blush: Other Changes
-
-1. [chore(pkg): change the execution timing of the changelog generator](https://github.com/alibaba/formily/commit/0ff511f6) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.54(2021-05-21)
-
-### :beetle: Bug Fixes
-
-1. [fix(json-schema): remove array patch state logic](https://github.com/alibaba/formily/commit/73bd9a47) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :memo: Documents Changes
-
-1. [docs(readme): add v2 site link](https://github.com/alibaba/formily/commit/30df44b7) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :blush: Other Changes
-
-1. [chore(scripts): slice changelog counts](https://github.com/alibaba/formily/commit/fead7843) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [chore(project): add automatic changelog generator](https://github.com/alibaba/formily/commit/b9bef50a) :point_right: ( [janrywang](https://github.com/janrywang) )

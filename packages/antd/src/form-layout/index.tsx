@@ -46,7 +46,7 @@ export const FormLayout: React.FC<IFormLayoutProps> & {
   useFormShallowLayout: () => IFormLayoutProps
 } = ({ shallow, children, prefixCls, className, style, ...props }) => {
   const deepLayout = useFormDeepLayout()
-  const formPrefixCls = usePrefixCls('form')
+  const formPrefixCls = usePrefixCls('form', { prefixCls })
   const layoutPrefixCls = usePrefixCls('formily-layout', { prefixCls })
   const layoutClassName = cls(
     layoutPrefixCls,

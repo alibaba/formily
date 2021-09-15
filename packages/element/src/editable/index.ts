@@ -24,9 +24,9 @@ const getFormItemProps = (fieldRef): FormItemProps => {
   if (isVoidField(field)) return {}
   if (!field) return {}
   const takeMessage = () => {
-    if (field.errors.length) return field.errors[0]
-    if (field.warnings.length) return field.warnings[0]
-    if (field.successes.length) return field.successes[0]
+    if (field.selfErrors.length) return field.selfErrors[0]
+    if (field.selfWarnings.length) return field.selfWarnings[0]
+    if (field.selfSuccesses.length) return field.selfSuccesses[0]
   }
 
   return {

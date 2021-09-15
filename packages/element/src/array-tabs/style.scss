@@ -11,5 +11,6 @@ $array-table-prefix-cls: '#{$formily-prefix}-array-tabs';
 
   .#{$array-table-prefix-cls}-errors-badge {
     line-height: 1;
+    vertical-align: initial;
   }
 }

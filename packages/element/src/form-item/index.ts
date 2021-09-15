@@ -5,10 +5,11 @@ import {
   Ref,
   onBeforeUnmount,
   watch,
+  provide,
 } from '@vue/composition-api'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps, h } from '@formily/vue'
-import { useFormLayout } from '../form-layout'
+import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
 import { composeExport, resolveComponent } from '../__builtins__/shared'
 import { stylePrefix } from '../__builtins__/configs'
 import { Component } from 'vue'
@@ -107,17 +108,17 @@ export const FormBaseItem = defineComponent<FormItemProps>({
     className: {},
     required: {},
     label: {},
-    colon: { default: true },
+    colon: {},
     layout: {},
     tooltip: {},
     labelStyle: {},
     labelAlign: {},
-    labelWrap: { default: false },
+    labelWrap: {},
     labelWidth: {},
     wrapperWidth: {},
     labelCol: {},
     wrapperCol: {},
-    wrapperAlign: { default: 'left' },
+    wrapperAlign: {},
     wrapperWrap: {},
     wrapperStyle: {},
     fullness: {},
@@ -137,7 +138,7 @@ export const FormBaseItem = defineComponent<FormItemProps>({
   },
   setup(props, { slots, attrs, refs }) {
     const active = ref(false)
-    const deepLayout = useFormLayout()
+    const deepLayoutRef = useFormLayout()
 
     const prefixCls = `${stylePrefix}-form-item`
 
@@ -148,19 +149,22 @@ export const FormBaseItem = defineComponent<FormItemProps>({
       containerRef.value = refs.labelContainer
     })
 
+    provide(FormLayoutShallowContext, ref(null))
+
     return () => {
+      const deepLayout = deepLayoutRef.value
       const {
         label,
-        colon,
+        colon = deepLayout.colon ?? true,
         layout = deepLayout.layout ?? 'horizontal',
         tooltip,
         labelStyle = {},
-        labelWrap = deepLayout.labelWrap,
+        labelWrap = deepLayout.labelWrap ?? false,
         labelWidth = deepLayout.labelWidth,
         wrapperWidth = deepLayout.wrapperWidth,
         labelCol = deepLayout.labelCol,
         wrapperCol = deepLayout.wrapperCol,
-        wrapperAlign = deepLayout.wrapperAlign,
+        wrapperAlign = deepLayout.wrapperAlign ?? 'left',
         wrapperWrap = deepLayout.wrapperWrap,
         wrapperStyle = {},
         fullness = deepLayout.fullness,
@@ -507,9 +511,9 @@ const Item = connect(
         }
         if (field.validating) return
         if (props.feedbackText) return props.feedbackText
-        if (field.errors.length) return split(field.errors)
-        if (field.warnings.length) return split(field.warnings)
-        if (field.successes.length) return split(field.successes)
+        if (field.selfErrors.length) return split(field.selfErrors)
+        if (field.selfWarnings.length) return split(field.selfWarnings)
+        if (field.selfSuccesses.length) return split(field.selfSuccesses)
       }
       const errorMessages = takeMessage()
       return {

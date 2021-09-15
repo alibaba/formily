@@ -38,6 +38,9 @@ export default {
           ],
           'x-decorator': 'FormItem',
           'x-component': 'Radio.Group',
+          'x-component-props': {
+            optionType: 'button',
+          },
         },
       },
     }

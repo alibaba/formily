@@ -64,6 +64,10 @@ export const onFormValidateFailed = createFormEffect(
 export const onFormValidateEnd = createFormEffect(
   LifeCycleTypes.ON_FORM_VALIDATE_END
 )
+export const onFormGraphChange = createFormEffect(
+  LifeCycleTypes.ON_FORM_GRAPH_CHANGE
+)
+export const onFormLoading = createFormEffect(LifeCycleTypes.ON_FORM_LOADING)
 export function onFormReact(callback?: (form: Form) => void) {
   let dispose = null
   onFormInit((form) => {

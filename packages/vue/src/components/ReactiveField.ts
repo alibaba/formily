@@ -1,9 +1,9 @@
-import { defineComponent } from 'vue-demi'
+import { defineComponent, inject, ref } from 'vue-demi'
 import { isVoidField } from '@formily/core'
-import { clone } from '@formily/shared'
+import { FormPath } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
 import { toJS } from '@formily/reactive'
-
+import { SchemaOptionsSymbol } from '../shared'
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
 
@@ -11,14 +11,69 @@ import type {
   IReactiveFieldProps,
   VueComponent,
   DefineComponent,
+  VueComponentProps,
 } from '../types'
+
+function isVueOptions(options: any) {
+  if (!options) {
+    return false
+  }
+  return (
+    typeof options.template === 'string' ||
+    typeof options.render === 'function' ||
+    typeof options.setup === 'function'
+  )
+}
 
 export default observer(
   defineComponent<IReactiveFieldProps>({
     name: 'ReactiveField',
     props: ['field'],
     setup(props: IReactiveFieldProps, { slots }) {
+      const optionsRef = inject(SchemaOptionsSymbol, ref(null))
       const key = Math.floor(Date.now() * Math.random()).toString(16)
+      const mergeChildren = (slots: Record<string, any>, content: any) => {
+        if (!Object.keys(slots).length && !content) return {}
+
+        const defaultSlot = slots?.default
+          ? slots?.default(props.field, props.field.form)
+          : []
+        if (typeof content === 'string') {
+          slots['default'] = () => [...defaultSlot, content]
+        } else if (isVueOptions(content) || typeof content === 'function') {
+          // scoped slot for class component
+          if (isVueOptions(content) && content?.render?.length > 1) {
+            slots['default'] = (scopedProps: VueComponentProps<any>) => [
+              ...defaultSlot,
+              h(content, { props: scopedProps }, {}),
+            ]
+          } else {
+            slots['default'] = () => [...defaultSlot, h(content, {}, {})]
+          }
+        } else if (content && typeof content === 'object') {
+          // for named slots
+          Object.keys(content).forEach((key) => {
+            const child = content[key]
+            const slot = slots?.[key] ? slots?.[key]() : []
+            if (typeof child === 'string') {
+              slots[key] = () => [...slot, child]
+            } else if (isVueOptions(child) || typeof child === 'function') {
+              // scoped slot for class component
+              if (isVueOptions(child) && child?.render?.length > 1) {
+                slots[key] = (scopedProps: VueComponentProps<any>) => [
+                  ...slot,
+                  h(child, { props: scopedProps }, {}),
+                ]
+              } else {
+                slots[key] = () => [...slot, h(child, {}, {})]
+              }
+            }
+          })
+        }
+
+        return slots
+      }
+
       return () => {
         const field = props.field
         let children = {}
@@ -36,8 +91,11 @@ export default observer(
                 default: () => childNodes,
               }
             } else {
-              const decorator = field.decorator[0] as VueComponent
-              const decoratorData = clone(field.decorator[1]) || {}
+              const decorator = (FormPath.getIn(
+                optionsRef.value?.components,
+                field.decorator[0]
+              ) ?? field.decorator[0]) as VueComponent
+              const decoratorData = toJS(field.decorator[1]) || {}
               const style = decoratorData?.style
               delete decoratorData.style
               return {
@@ -71,8 +129,11 @@ export default observer(
               )
             }
 
-            const component = field.component[0] as VueComponent
-            const originData = clone(field.component[1]) || {}
+            const component = (FormPath.getIn(
+              optionsRef.value?.components,
+              field.component[0]
+            ) ?? field.component[0]) as VueComponent
+            const originData = toJS(field.component[1]) || {}
             const events = {} as Record<string, any>
             const originChange = originData['@change'] || originData['onChange']
             const originFocus = originData['@focus'] || originData['onFocus']
@@ -126,16 +187,13 @@ export default observer(
               style,
               on: events,
             }
-            const componentChildren = {
-              ...slots,
-            }
-            if (slots.default) {
-              componentChildren.default = () =>
-                slots.default({
-                  field: props.field,
-                  form: props.field.form,
-                })
-            }
+
+            const componentChildren = mergeChildren(
+              {
+                ...slots,
+              },
+              field.content
+            )
 
             return h(component, componentData, componentChildren)
           }

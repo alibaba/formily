@@ -29,3 +29,9 @@ sidebar: auto
 :::
 
 <dumi-previewer demoPath="questions/named-slot" />
+
+## 如何使用作用域插槽？
+
+`x-content` 使用函数式组件时, 渲染函数增加第二个参数，通过其 `props` 成员访问作用域插槽传入属性。
+
+<dumi-previewer demoPath="questions/scoped-slot" />

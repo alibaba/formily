@@ -245,6 +245,10 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
   )
 }
 
+const RowComp = (props: any) => {
+  return <SortableRow index={props['data-row-key'] || 0} {...props} />
+}
+
 export const ArrayTable: ComposedArrayTable = observer(
   (props: TableProps<any>) => {
     const ref = useRef<HTMLDivElement>()
@@ -305,14 +309,7 @@ export const ArrayTable: ComposedArrayTable = observer(
                         {...props}
                       />
                     ),
-                    row: (props: any) => {
-                      return (
-                        <SortableRow
-                          index={props['data-row-key'] || 0}
-                          {...props}
-                        />
-                      )
-                    },
+                    row: RowComp,
                   },
                 }}
               />

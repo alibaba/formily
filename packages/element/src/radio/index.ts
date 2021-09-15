@@ -1,19 +1,32 @@
 import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
-import { defineComponent } from '@vue/composition-api'
-import { composeExport, getComponentByTag } from '../__builtins__/shared'
+import { defineComponent, PropType } from '@vue/composition-api'
+import {
+  composeExport,
+  getComponentByTag,
+  resolveComponent,
+  SlotTypes,
+} from '../__builtins__/shared'
 import { PreviewText } from '../preview-text'
 import type {
   Radio as ElRadioProps,
   RadioGroup as ElRadioGroupProps,
 } from 'element-ui'
-import { Radio as ElRadio, RadioGroup as ElRadioGroup } from 'element-ui'
+import {
+  Radio as ElRadio,
+  RadioGroup as ElRadioGroup,
+  RadioButton,
+} from 'element-ui'
 
 export type RadioGroupProps = ElRadioGroupProps & {
   value: any
-  options?: (Omit<ElRadioProps, 'value'> & {
-    value: ElRadioProps['label']
-    label: string
-  })[]
+  options?: (
+    | (Omit<ElRadioProps, 'value'> & {
+        value: ElRadioProps['label']
+        label: SlotTypes
+      })
+    | string
+  )[]
+  optionType: 'defalt' | 'button'
 }
 
 export type RadioProps = ElRadioProps
@@ -26,13 +39,19 @@ const RadioGroupOption = defineComponent<RadioGroupProps>({
   name: 'FRadioGroup',
   props: {
     options: {
-      type: Array,
+      type: Array as PropType<RadioGroupProps['options']>,
       default: () => [],
+    },
+    optionType: {
+      type: String as PropType<RadioGroupProps['optionType']>,
+      default: 'default',
     },
   },
   setup(customProps, { attrs, slots, listeners }) {
     return () => {
       const options = customProps.options || []
+      const OptionType =
+        customProps.optionType === 'button' ? RadioButton : ElRadio
       const children =
         options.length !== 0
           ? {
@@ -40,13 +59,17 @@ const RadioGroupOption = defineComponent<RadioGroupProps>({
                 options.map((option) => {
                   if (typeof option === 'string') {
                     return h(
-                      ElRadio,
+                      OptionType,
                       { props: { label: option } },
-                      { default: () => [option] }
+                      {
+                        default: () => [
+                          resolveComponent(slots?.option ?? option, { option }),
+                        ],
+                      }
                     )
                   } else {
                     return h(
-                      ElRadio,
+                      OptionType,
                       {
                         props: {
                           ...option,
@@ -54,7 +77,13 @@ const RadioGroupOption = defineComponent<RadioGroupProps>({
                           label: option.value,
                         },
                       },
-                      { default: () => [option.label] }
+                      {
+                        default: () => [
+                          resolveComponent(slots?.option ?? option.label, {
+                            option,
+                          }),
+                        ],
+                      }
                     )
                   }
                 }),

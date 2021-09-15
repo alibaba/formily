@@ -61,7 +61,7 @@ Create a Schema Tree based on a piece of json schema data to ensure that each sc
 | x-component          | Field UI component                                                              | `String \| React.FC`                                                               | `component`                                                              |
 | x-component-props    | Field UI component properties                                                   | Any                                                                                | `component`                                                              |
 | x-reactions          | Field linkage agreement                                                         | [SchemaReactions](#schemareactions)                                                | `reactions`                                                              |
-| x-content            | Field content, used to pass in the child nodes of a component                   | React.ReactNode                                                                    | ReactChildren                                                            |
+| x-content            | Field content, used to pass in the child nodes of a component                   | React.ReactNode                                                                    | `content`                                                                |
 | x-visible            | Field display hidden                                                            | Boolean                                                                            | `visible`                                                                |
 | x-hidden             | Field UI hidden (data retention)                                                | Boolean                                                                            | `hidden`                                                                 |
 | x-disabled           | Field disabled                                                                  | Boolean                                                                            | `disabled`                                                               |
@@ -70,6 +70,7 @@ Create a Schema Tree based on a piece of json schema data to ensure that each sc
 | x-read-pretty        | Field Reading State                                                             | Boolean                                                                            | `readPretty`                                                             |
 | definitions          | Schema predefined                                                               | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
 | $ref                 | Read the Schema from the Schema predefined and merge it into the current Schema | String                                                                             | -                                                                        |
+| x-data               | Extends Data                                                                    | Object                                                                             | `data`                                                                   |
 
 #### Detailed description
 
@@ -947,7 +948,15 @@ Built-in expression scope is mainly used to realize various linkage relationship
 
 ### $self
 
-Can only be consumed by expressions in x-reactions, representing the current field instance
+Represents the current field instance, can be used in ordinary attribute expressions, and can also be used in x-reactions
+
+### $values
+
+Represents the top-level form data, which can be used in ordinary attribute expressions, and can also be used in x-reactions
+
+### $form
+
+Represents the current Form instance, which can be used in ordinary attribute expressions, and can also be used in x-reactions
 
 ### $dependencies
 
@@ -956,10 +965,6 @@ It can only be consumed by expressions in x-reactions, corresponding to the depe
 ### $deps
 
 It can only be consumed by expressions in x-reactions, corresponding to the dependencies defined by x-reactions, and the sequence of the array is the same
-
-### $form
-
-Can only be consumed by expressions in x-reactions, representing the current Form instance
 
 ### $target
 

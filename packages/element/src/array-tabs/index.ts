@@ -66,7 +66,7 @@ export const ArrayTabs = observer(
           const path = field.address.concat(index)
           const errors = field.form.queryFeedbacks({
             type: 'error',
-            address: `*(${path},${path}.*)`,
+            address: `${path}.**`,
           })
           if (errors.length) {
             return h(

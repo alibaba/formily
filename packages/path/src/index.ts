@@ -50,7 +50,7 @@ const setIn = (segments: Segments, source: any, value: any) => {
         return
       }
       if (!isValid(source[index])) {
-        if (!isValid(value)) {
+        if (value === undefined) {
           return
         }
         if (i < segments.length - 1) {

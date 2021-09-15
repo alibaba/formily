@@ -16,8 +16,8 @@ import {
   ReactionsSetter,
   ValidatorSetter,
 } from '@formily/designable-setters'
-import { FormTab } from '@formily/next'
-import { clone } from '@formily/shared'
+import { FormTab, FormItem } from '@formily/antd'
+import { isArr, isStr, each, reduce } from '@formily/shared'
 import { FormItemSwitcher } from '../FormItemSwitcher'
 import { DesignableObject } from '../DesignableObject'
 import { createOptions } from './options'
@@ -26,6 +26,113 @@ import { includesComponent } from '../../shared'
 import * as defaultSchemas from '../../schemas'
 
 Schema.silent()
+
+const SchemaStateMap = {
+  title: 'title',
+  description: 'description',
+  default: 'value',
+  enum: 'dataSource',
+  readOnly: 'readOnly',
+  writeOnly: 'editable',
+  required: 'required',
+  'x-content': 'content',
+  'x-value': 'value',
+  'x-editable': 'editable',
+  'x-disabled': 'disabled',
+  'x-read-pretty': 'readPretty',
+  'x-read-only': 'readOnly',
+  'x-visible': 'visible',
+  'x-hidden': 'hidden',
+  'x-display': 'display',
+  'x-pattern': 'pattern',
+}
+
+const NeedShownExpression = {
+  title: true,
+  description: true,
+  default: true,
+  'x-content': true,
+  'x-value': true,
+}
+
+const isExpression = (val: any) => isStr(val) && /^\{\{.*\}\}$/.test(val)
+
+const filterExpression = (val: any) => {
+  if (typeof val === 'object') {
+    const isArray = isArr(val)
+    const results = reduce(
+      val,
+      (buf: any, value, key) => {
+        if (isExpression(value)) {
+          return buf
+        } else {
+          const results = filterExpression(value)
+          if (results === undefined || results === null) return buf
+          if (isArray) {
+            return buf.concat([results])
+          }
+          buf[key] = results
+          return buf
+        }
+      },
+      isArray ? [] : {}
+    )
+    return results
+  }
+  if (isExpression(val)) {
+    return
+  }
+  return val
+}
+
+const toDesignableFieldProps = (
+  schema: ISchema,
+  components: any,
+  nodeIdAttrName: string,
+  id: string
+) => {
+  const results: any = {}
+  each(SchemaStateMap, (fieldKey, schemaKey) => {
+    const value = schema[schemaKey]
+    if (isExpression(value)) {
+      if (!NeedShownExpression[schemaKey]) return
+      if (value) {
+        results[fieldKey] = value
+        return
+      }
+    } else if (value) {
+      results[fieldKey] = filterExpression(value)
+    }
+  })
+  if (!components['FormItem']) {
+    components['FormItem'] = FormItem
+  }
+  const decorator =
+    schema['x-decorator'] && FormPath.getIn(components, schema['x-decorator'])
+  const component =
+    schema['x-component'] && FormPath.getIn(components, schema['x-component'])
+  const decoratorProps = schema['x-decorator-props'] || {}
+  const componentProps = schema['x-component-props'] || {}
+
+  if (decorator) {
+    results.decorator = [decorator, { ...decoratorProps }]
+  }
+  if (component) {
+    results.component = [component, { ...componentProps }]
+  }
+  if (decorator) {
+    FormPath.setIn(results['decorator'][1], nodeIdAttrName, id)
+  } else if (component) {
+    FormPath.setIn(results['component'][1], nodeIdAttrName, id)
+  }
+  results.title = results.title && (
+    <span data-content-editable="title">{results.title}</span>
+  )
+  results.description = results.description && (
+    <span data-content-editable="description">{results.description}</span>
+  )
+  return results
+}
 
 export const createDesignableField = (
   options: IDesignableFieldFactoryProps
@@ -300,31 +407,12 @@ export const createDesignableField = (
     const node = useTreeNode()
     if (!node) return null
 
-    const getFieldProps = () => {
-      const base = new Schema(clone(props)).compile()
-      const fieldProps = base.toFieldProps({
-        components: realOptions.components,
-      })
-      if (fieldProps.decorator?.[0]) {
-        fieldProps.decorator[1] = fieldProps.decorator[1] || {}
-        FormPath.setIn(
-          fieldProps.decorator[1],
-          designer.props.nodeIdAttrName,
-          node.id
-        )
-      } else if (fieldProps.component?.[0]) {
-        fieldProps.component[1] = fieldProps.component[1] || {}
-        FormPath.setIn(
-          fieldProps.component[1],
-          designer.props.nodeIdAttrName,
-          node.id
-        )
-      }
-      fieldProps.value = fieldProps.initialValue
-      return fieldProps as any
-    }
-
-    const fieldProps = getFieldProps()
+    const fieldProps = toDesignableFieldProps(
+      props,
+      realOptions.components,
+      designer.props.nodeIdAttrName,
+      node.id
+    )
     if (props.type === 'object') {
       return (
         <DesignableObject>

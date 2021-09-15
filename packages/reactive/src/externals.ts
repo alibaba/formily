@@ -8,7 +8,11 @@ import {
   isPlainObj,
   isArr,
 } from './checkers'
-import { ProxyRaw, MakeObservableSymbol } from './environment'
+import {
+  ProxyRaw,
+  MakeObservableSymbol,
+  DependencyCollected,
+} from './environment'
 import { Annotation } from './types'
 
 const RAW_TYPE = Symbol('RAW_TYPE')
@@ -79,53 +83,41 @@ export const raw = <T>(target: T): T => ProxyRaw.get(target as any)
 
 export const toJS = <T>(values: T): T => {
   const visited = new WeakSet<any>()
-  const tojs: typeof toJS = (values: any) => {
+  const _toJS: typeof toJS = (values: any) => {
+    if (visited.has(values)) {
+      return values
+    }
     if (isArr(values)) {
-      if (visited.has(values)) {
-        return values
+      if (isObservable(values)) {
+        visited.add(values)
+        const res: any = []
+        values.forEach((item: any) => {
+          res.push(_toJS(item))
+        })
+        visited.delete(values)
+        return res
       }
-      const originValues = values
-      if (ProxyRaw.has(values as any)) {
-        values = ProxyRaw.get(values as any)
-      }
-      visited.add(originValues)
-      const res: any = []
-      values.forEach((item: any) => {
-        res.push(tojs(item))
-      })
-      return res
     } else if (isPlainObj(values)) {
-      if (visited.has(values)) {
-        return values
-      }
-      const originValues = values
-      if (ProxyRaw.has(values as any)) {
-        values = ProxyRaw.get(values as any)
-      }
-      if ('$$typeof' in values && '_owner' in values) {
-        return values
-      } else if (values['_isAMomentObject']) {
-        return values
-      } else if (values['_isJSONSchemaObject']) {
-        return values
-      } else if (isFn(values['toJS'])) {
-        return values['toJS']()
-      } else if (isFn(values['toJSON'])) {
-        return values['toJSON']()
-      } else {
-        visited.add(originValues)
+      if (isObservable(values)) {
+        visited.add(values)
         const res: any = {}
         for (const key in values) {
           if (hasOwnProperty.call(values, key)) {
-            res[key] = tojs(values[key])
+            res[key] = _toJS(values[key])
           }
         }
+        visited.delete(values)
         return res
       }
-    } else {
-      return values
     }
+    return values
   }
 
-  return tojs(values)
+  return _toJS(values)
+}
+
+export const hasCollected = (callback?: () => void) => {
+  DependencyCollected.value = false
+  callback?.()
+  return DependencyCollected.value
 }
