@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.0-rc.6(2021-09-14)
+
+### :beetle: Bug Fixes
+
+1. [fix(react): fix x-component-props is not reactive](https://github.com/alibaba/formily/commit/d91ebfff) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-rc.5(2021-09-14)
 
 ### :tada: Enhancements
@@ -869,11 +875,3 @@
 1. [chore(workflow): add issue helper action](https://github.com/alibaba/formily/commit/e2d7c0ad) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(workflow): rename main.yml ==>commitlint.yml](https://github.com/alibaba/formily/commit/45734661) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v2.0.0-beta.56(2021-05-21)
-
-### :blush: Other Changes
-
-1. [chore(actions): update commit checker action](https://github.com/alibaba/formily/commit/573b60fe) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [chore(pkg): add preversion/version lerna scripts hook](https://github.com/alibaba/formily/commit/d933f1fe) :point_right: ( [janrywang](https://github.com/janrywang) )
