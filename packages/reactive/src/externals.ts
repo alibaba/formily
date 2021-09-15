@@ -94,6 +94,7 @@ export const toJS = <T>(values: T): T => {
         values.forEach((item: any) => {
           res.push(_toJS(item))
         })
+        visited.delete(values)
         return res
       }
     } else if (isPlainObj(values)) {
@@ -105,6 +106,7 @@ export const toJS = <T>(values: T): T => {
             res[key] = _toJS(values[key])
           }
         }
+        visited.delete(values)
         return res
       }
     }

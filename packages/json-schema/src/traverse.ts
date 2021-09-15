@@ -24,6 +24,7 @@ export const traverse = (
       each(target, (value, key) => {
         traverse(value, path.concat(key), address + '.' + key)
       })
+      seenObjects.set(target, false)
     } else {
       visitor(target, path, address)
     }
