@@ -7,16 +7,16 @@ export const traverse = (
   visitor: (value: any, path: Array<string | number>, address: string) => void,
   filter?: (value: any, path: Array<string | number>) => boolean
 ) => {
-  const seenObjects = new WeakMap()
+  const seenObjects = new WeakSet()
   const root = target
   const traverse = (target: any, path = [], address = '') => {
     if (filter?.(target, path) === false) return
 
     if (isPlainObj(target)) {
-      if (seenObjects.get(target)) {
+      if (seenObjects.has(target)) {
         return
       }
-      seenObjects.set(target, true)
+      seenObjects.add(target)
       if (isNoNeedCompileObject(target) && root !== target) {
         visitor(target, path, address)
         return
@@ -24,7 +24,7 @@ export const traverse = (
       each(target, (value, key) => {
         traverse(value, path.concat(key), address + '.' + key)
       })
-      seenObjects.set(target, false)
+      seenObjects.delete(target)
     } else {
       visitor(target, path, address)
     }

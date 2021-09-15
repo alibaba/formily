@@ -62,7 +62,7 @@ export const compile = <Source = any, Scope = any>(
   source: Source,
   scope?: Scope
 ): any => {
-  const seenObjects = new WeakMap()
+  const seenObjects = new WeakSet()
   const compile = (source: any) => {
     if (isStr(source)) {
       return shallowCompile(source, scope)
@@ -70,10 +70,10 @@ export const compile = <Source = any, Scope = any>(
       return source.map((value: any) => compile(value))
     } else if (isPlainObj(source)) {
       if (isNoNeedCompileObject(source)) return source
-      if (seenObjects.get(source)) {
+      if (seenObjects.has(source)) {
         return source
       }
-      seenObjects.set(source, true)
+      seenObjects.add(source)
       const results = reduce(
         source,
         (buf, value, key) => {
@@ -82,7 +82,7 @@ export const compile = <Source = any, Scope = any>(
         },
         {}
       )
-      seenObjects.set(source, false)
+      seenObjects.delete(source)
       return results
     }
     return source
