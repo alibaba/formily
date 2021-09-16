@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from 'react'
 import { Collapse, Badge } from 'antd'
-import { model } from '@formily/reactive'
+import { model, markRaw } from '@formily/reactive'
 import { CollapseProps, CollapsePanelProps } from 'antd/lib/collapse'
 import {
   useField,
@@ -92,7 +92,7 @@ const createFormCollapse = (defaultActiveKeys?: ActiveKeys) => {
       }
     },
   })
-  return formCollapse
+  return markRaw(formCollapse)
 }
 
 export const FormCollapse: ComposedFormCollapse = observer(

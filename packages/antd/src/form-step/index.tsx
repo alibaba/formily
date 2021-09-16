@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { action, model } from '@formily/reactive'
+import { action, markRaw, model } from '@formily/reactive'
 import { Steps } from 'antd'
 import cls from 'classnames'
 import { StepsProps, StepProps } from 'antd/lib/steps'
@@ -123,7 +123,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
       return env.form?.submit?.(onSubmit)
     },
   })
-  return formStep
+  return markRaw(formStep)
 }
 
 export const FormStep: ComposedFormTab = connect(

@@ -87,6 +87,7 @@ export const toJS = <T>(values: T): T => {
     if (visited.has(values)) {
       return values
     }
+    if (values && values[RAW_TYPE]) return values
     if (isArr(values)) {
       if (isObservable(values)) {
         visited.add(values)

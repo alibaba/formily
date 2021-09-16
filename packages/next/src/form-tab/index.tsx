@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from 'react'
 import { Tab as Tabs, Badge } from '@alifd/next'
-import { model } from '@formily/reactive'
+import { model, markRaw } from '@formily/reactive'
 import { isValid } from '@formily/shared'
 import {
   ItemProps as TabPaneProps,
@@ -61,7 +61,7 @@ const createFormTab = (defaultActiveKey?: string) => {
       formTab.activeKey = key
     },
   })
-  return formTab
+  return markRaw(formTab)
 }
 
 export const FormTab: ComposedFormTab = observer(({ formTab, ...props }) => {
