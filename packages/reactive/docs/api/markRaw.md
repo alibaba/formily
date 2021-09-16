@@ -4,6 +4,8 @@
 
 Mark any object or class prototype as never being hijacked by observable, priority is higher than markObservable
 
+Note: If you mark an object that is already observable with markRaw, then toJS will not convert it into a normal object
+
 ## Signature
 
 ```ts
