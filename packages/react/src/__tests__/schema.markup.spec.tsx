@@ -176,6 +176,49 @@ describe('markup schema field', () => {
       </FormProvider>
     )
   })
+  test('props children', () => {
+    const form = createForm()
+    const Text: React.FC = (props) => {
+      return <div data-testid="children-test">{props.children}</div>
+    }
+    const SchemaField = createSchemaField({
+      components: {
+        Text,
+      },
+    })
+    const { queryByTestId } = render(
+      <FormProvider form={form}>
+        <SchemaField>
+          <SchemaField.Void
+            x-component="Text"
+            x-component-props={{ children: 'props' }}
+          />
+        </SchemaField>
+      </FormProvider>
+    )
+    expect(queryByTestId('children-test')).toBeVisible()
+    expect(queryByTestId('children-test').innerHTML).toEqual('props')
+  })
+  test('x-content', () => {
+    const form = createForm()
+    const Text: React.FC = (props) => {
+      return <div data-testid="content-test">{props.children}</div>
+    }
+    const SchemaField = createSchemaField({
+      components: {
+        Text,
+      },
+    })
+    const { queryByTestId } = render(
+      <FormProvider form={form}>
+        <SchemaField>
+          <SchemaField.Void x-component="Text" x-content="content" />
+        </SchemaField>
+      </FormProvider>
+    )
+    expect(queryByTestId('content-test')).toBeVisible()
+    expect(queryByTestId('content-test').innerHTML).toEqual('content')
+  })
 })
 
 describe('recursion field', () => {
