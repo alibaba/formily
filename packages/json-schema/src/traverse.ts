@@ -7,16 +7,18 @@ export const traverse = (
   visitor: (value: any, path: Array<string | number>, address: string) => void,
   filter?: (value: any, path: Array<string | number>) => boolean
 ) => {
-  const seenObjects = new WeakSet()
+  const seenObjects = []
   const root = target
   const traverse = (target: any, path = [], address = '') => {
     if (filter?.(target, path) === false) return
 
     if (isPlainObj(target)) {
-      if (seenObjects.has(target)) {
+      const seenIndex = seenObjects.indexOf(target)
+      if (seenIndex > -1) {
         return
       }
-      seenObjects.add(target)
+      const addIndex = seenObjects.length
+      seenObjects.push(target)
       if (isNoNeedCompileObject(target) && root !== target) {
         visitor(target, path, address)
         return
@@ -24,7 +26,7 @@ export const traverse = (
       each(target, (value, key) => {
         traverse(value, path.concat(key), address + '.' + key)
       })
-      seenObjects.delete(target)
+      seenObjects.splice(addIndex, 1)
     } else {
       visitor(target, path, address)
     }

@@ -221,14 +221,14 @@ export const baseHandlers: ProxyHandler<any> = {
     return true
   },
   deleteProperty(target, key) {
-    const res = Reflect.deleteProperty(target, key)
     const oldValue = target[key]
+    delete target[key]
     runReactionsFromTargetKey({
       target,
       key,
       oldValue,
       type: 'delete',
     })
-    return res
+    return true
   },
 }

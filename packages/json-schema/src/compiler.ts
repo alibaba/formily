@@ -62,7 +62,7 @@ export const compile = <Source = any, Scope = any>(
   source: Source,
   scope?: Scope
 ): any => {
-  const seenObjects = new WeakSet()
+  const seenObjects = []
   const compile = (source: any) => {
     if (isStr(source)) {
       return shallowCompile(source, scope)
@@ -70,10 +70,12 @@ export const compile = <Source = any, Scope = any>(
       return source.map((value: any) => compile(value))
     } else if (isPlainObj(source)) {
       if (isNoNeedCompileObject(source)) return source
-      if (seenObjects.has(source)) {
+      const seenIndex = seenObjects.indexOf(source)
+      if (seenIndex > -1) {
         return source
       }
-      seenObjects.add(source)
+      const addIndex = seenObjects.length
+      seenObjects.push(source)
       const results = reduce(
         source,
         (buf, value, key) => {
@@ -82,7 +84,7 @@ export const compile = <Source = any, Scope = any>(
         },
         {}
       )
-      seenObjects.delete(source)
+      seenObjects.splice(addIndex, 1)
       return results
     }
     return source
