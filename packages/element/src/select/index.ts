@@ -7,9 +7,14 @@ import type {
   Option as ElOptionProps,
 } from 'element-ui'
 import { Select as ElSelect, Option as ElOption } from 'element-ui'
+import { resolveComponent, SlotTypes } from '../__builtins__'
 
 export type SelectProps = ElSelectProps & {
-  options?: Array<ElOptionProps | string>
+  options?: Array<
+    Omit<ElOptionProps, 'label'> & {
+      label: SlotTypes
+    }
+  >
 }
 
 const SelectOption = defineComponent<SelectProps>({
@@ -26,11 +31,30 @@ const SelectOption = defineComponent<SelectProps>({
                   if (typeof option === 'string') {
                     return h(
                       ElOption,
-                      { props: { label: option, value: option } },
-                      {}
+                      { props: { value: option } },
+                      {
+                        default: () => [
+                          resolveComponent(slots?.option ?? option, { option }),
+                        ],
+                      }
                     )
                   } else {
-                    return h(ElOption, { props: option }, {})
+                    return h(
+                      ElOption,
+                      {
+                        props: {
+                          ...option,
+                          label: '',
+                        },
+                      },
+                      {
+                        default: () => [
+                          resolveComponent(slots?.option ?? option.label, {
+                            option,
+                          }),
+                        ],
+                      }
+                    )
                   }
                 }),
             }

@@ -1,4 +1,4 @@
-import { getComponentByTag } from '../__builtins__/shared'
+import { transformComponent } from '../__builtins__/shared'
 import { connect, mapProps, mapReadPretty } from '@formily/vue'
 
 import type { DatePicker as ElDatePickerProps } from 'element-ui'
@@ -7,9 +7,12 @@ import { PreviewText } from '../preview-text'
 
 export type DatePickerProps = ElDatePickerProps
 
-const TransformElDatePicker = getComponentByTag<DatePickerProps>(ElDatePicker, {
-  change: 'input',
-})
+const TransformElDatePicker = transformComponent<DatePickerProps>(
+  ElDatePicker,
+  {
+    change: 'input',
+  }
+)
 
 const getDefaultFormat = (props, formatType = 'format') => {
   const type = props.type
