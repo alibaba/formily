@@ -32,7 +32,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   const field = props.field
   const content = mergeChildren(
     renderChildren(props.children, field, field.form),
-    field.content
+    field.content ?? field.component[1].children
   )
   if (field.display !== 'visible') return null
 
