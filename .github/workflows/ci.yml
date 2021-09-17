@@ -1,6 +1,9 @@
 name: Node CI
 
 on:
+  push:
+    branches:
+      - formily_next
   pull_request:
     branches:
       - formily_next
@@ -8,6 +11,7 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    if: !contains(github.event.head_commit.message, 'chore(versions)')
     strategy:
       matrix:
         node_version: [10.x, 11.x]

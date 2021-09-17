@@ -4,6 +4,8 @@
 
 Deep recursion converts observable objects into ordinary JS objects
 
+Note: If you mark an object that is already observable with markRaw, then toJS will not convert it into a normal object
+
 ## Signature
 
 ```ts

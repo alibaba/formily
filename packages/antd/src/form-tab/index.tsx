@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from 'react'
 import { Tabs, Badge } from 'antd'
-import { model } from '@formily/reactive'
+import { model, markRaw } from '@formily/reactive'
 import { TabPaneProps, TabsProps } from 'antd/lib/tabs'
 import {
   useField,
@@ -57,7 +57,7 @@ const createFormTab = (defaultActiveKey?: string) => {
       formTab.activeKey = key
     },
   })
-  return formTab
+  return markRaw(formTab)
 }
 
 export const FormTab: ComposedFormTab = observer(({ formTab, ...props }) => {
