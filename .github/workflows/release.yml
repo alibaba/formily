@@ -18,7 +18,21 @@ jobs:
           yarn -v
           yarn --ignore-engines
           yarn build
+          yarn test:prod
           yarn run release:force
+        env:
+          CI: true
+          HEADLESS: false
+          PROGRESS: none
+          NODE_ENV: test
+          NODE_OPTIONS: --max_old_space_size=4096
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
         env:
           HEADLESS: false
           PROGRESS: none
