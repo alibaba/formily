@@ -1,5 +1,25 @@
 # Changelog
 
+## v2.0.0-rc.8(2021-09-17)
+
+### :tada: Enhancements
+
+1. [feat(react): fix schema x-component-props children invalid (#2160)](https://github.com/alibaba/formily/commit/7dc9d9ff) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+### :memo: Documents Changes
+
+1. [docs(reactive): update toJS/markRaw docs](https://github.com/alibaba/formily/commit/77cb7b7b) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rocket: Improve Performance
+
+1. [perf(schema): improve performance](https://github.com/alibaba/formily/commit/184884ca) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(workflow): fix actions](https://github.com/alibaba/formily/commit/12dacdcc) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [chore(designable): lock version](https://github.com/alibaba/formily/commit/b61ad907) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-rc.7(2021-09-15)
 
 ### :beetle: Bug Fixes
@@ -781,25 +801,3 @@
 ### :blush: Other Changes
 
 1. [chore(readme): update readme](https://github.com/alibaba/formily/commit/96140630) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.58(2021-05-27)
-
-### :tada: Enhancements
-
-1. [feat(next): add ArrayCollapse (#1513)](https://github.com/alibaba/formily/commit/ebddc015) :point_right: ( [Lind](https://github.com/Lind) )
-
-### :beetle: Bug Fixes
-
-1. [fix(vue): remove empty default slots of fields (#1517)](https://github.com/alibaba/formily/commit/00a80b4b) :point_right: ( [月落音阑](https://github.com/月落音阑) )
-
-### :memo: Documents Changes
-
-1. [docs(json-schema): add definitions and doc](https://github.com/alibaba/formily/commit/e729e007) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [docs(core): fix typo (#1512)](https://github.com/alibaba/formily/commit/c568de99) :point_right: ( [后浪](https://github.com/后浪) )
-
-### :blush: Other Changes
-
-1. [chore(workflow): update ci action](https://github.com/alibaba/formily/commit/d3dd91ca) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [chore(github): update pr template](https://github.com/alibaba/formily/commit/b3149307) :point_right: ( [janrywang](https://github.com/janrywang) )
