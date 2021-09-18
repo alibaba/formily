@@ -20,7 +20,6 @@ export const ReservedProperties = new Set([
 export const RESPONSE_REQUEST_DURATION = 100
 
 export const GlobalState = {
-  initializing: false,
   lifecycles: [],
   context: [],
   effectStart: false,

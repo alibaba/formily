@@ -315,7 +315,7 @@ test('query', () => {
   expect(form.query('object.void').get('initialValue')).toBeUndefined()
   expect(form.query('object.void').get('inputValue')).toBeUndefined()
   expect(form.query('array').get('value')).toEqual([])
-  expect(form.query('array').get('initialValue')).toBeUndefined()
+  expect(form.query('array').get('initialValue')).toEqual([])
   expect(form.query('array').get('inputValue')).toBeNull()
   form.setFieldState('array', (state) => {
     state.value = [111]
@@ -975,7 +975,6 @@ test('initialValues merge values before create field', () => {
       name: 'array',
     })
   )
-
   form.values.array = [{ aa: '321' }]
   const arr_0_aa = attach(
     form.createField({
@@ -1062,8 +1061,8 @@ test('empty array initialValues', () => {
   expect(form.values.aa).toEqual([0])
   expect(form.values.bb).toEqual([''])
   expect(form.values.cc).toEqual([])
-  expect(form.values.dd).toEqual([])
-  expect(form.values.ee).toEqual([])
+  expect(form.values.dd).toEqual([null])
+  expect(form.values.ee).toEqual([undefined])
 })
 
 test('form lifecycle can be triggered after call form.setXXX', () => {

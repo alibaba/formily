@@ -191,8 +191,9 @@ export const baseHandlers: ProxyHandler<any> = {
     return result
   },
   ownKeys(target) {
+    const keys = Reflect.ownKeys(target)
     bindTargetKeyWithCurrentReaction({ target, type: 'iterate' })
-    return Reflect.ownKeys(target)
+    return keys
   },
   set(target, key, value, receiver) {
     const hadKey = hasOwnProperty.call(target, key)

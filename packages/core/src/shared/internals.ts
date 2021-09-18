@@ -8,18 +8,15 @@ import {
   isEmpty,
   isArr,
   isPlainObj,
-  toArr,
   isNumberLike,
-  shallowClone,
   clone,
-  isEqual,
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
   validate,
   parseValidatorDescriptions,
 } from '@formily/validator'
-import { batch, toJS, DataChange } from '@formily/reactive'
+import { batch, toJS, isObservable, DataChange } from '@formily/reactive'
 import { Field, ArrayField, Form, ObjectField } from '../models'
 import {
   ISpliceArrayStateProps,
@@ -44,7 +41,6 @@ import {
 import {
   RESPONSE_REQUEST_DURATION,
   ReservedProperties,
-  GlobalState,
   NumberIndexReg,
 } from './constants'
 
@@ -158,6 +154,7 @@ export const matchFeedback = (
 
 export const queryFeedbacks = (field: Field, search?: ISearchFeedback) => {
   return field.feedbacks.filter((feedback) => {
+    if (!feedback.messages?.length) return false
     return matchFeedback(search, {
       ...feedback,
       address: field.address?.toString(),
@@ -189,9 +186,8 @@ export const updateFeedback = (field: Field, feedback?: IFieldFeedback) => {
       if (searched.length) {
         field.feedbacks = field.feedbacks.reduce((buf, item) => {
           if (searched.includes(item)) {
-            const messages = toArr(feedback.messages)
-            if (messages?.length) {
-              item.messages = messages
+            if (feedback.messages?.length) {
+              item.messages = feedback.messages
               return buf.concat(item)
             } else {
               return buf
@@ -201,8 +197,9 @@ export const updateFeedback = (field: Field, feedback?: IFieldFeedback) => {
           }
         }, [])
         return
+      } else if (feedback.messages?.length) {
+        field.feedbacks = field.feedbacks.concat(feedback)
       }
-      field.feedbacks = field.feedbacks.concat(feedback)
     }
   })
 }
@@ -487,64 +484,7 @@ export const cleanupObjectChildren = (field: ObjectField, keys: string[]) => {
   })
 }
 
-export const initFieldValue = (field: Field, designable: boolean) => {
-  GlobalState.initializing = true
-  if (designable) {
-    if (isValid(field.props.initialValue)) {
-      field.initialValue = shallowClone(field.props.initialValue)
-    }
-    if (isValid(field.props.value)) {
-      field.value = field.props.value
-    }
-  } else {
-    const fromValue = (value: any) => [
-      isValid(value),
-      isEmpty(value, true),
-      value,
-    ]
-    const [, isEmptySelfValue, selfValue] = fromValue(field.value)
-    const [, isEmptySelfInitialValue, selfInitialValue] = fromValue(
-      field.initialValue
-    )
-    const [isValidPropsValue, isEmptyPropsValue, propsValue] = fromValue(
-      field.props.value
-    )
-    const [
-      isValidPropsInitialValue,
-      isEmptyPropsInitialValue,
-      propsInitialValue,
-    ] = fromValue(field.props.initialValue)
-    if (isEmptySelfInitialValue) {
-      if (isEmptyPropsInitialValue) {
-        if (!isEqual(selfInitialValue, propsInitialValue)) {
-          field.initialValue = shallowClone(propsInitialValue)
-        }
-      } else if (isValidPropsInitialValue) {
-        field.initialValue = shallowClone(propsInitialValue)
-      }
-    }
-    if (isEmptySelfValue) {
-      if (!isEmptyPropsValue) {
-        field.value = shallowClone(propsValue)
-      } else {
-        if (!isEmptyPropsInitialValue) {
-          field.value = shallowClone(propsInitialValue)
-        } else if (isValidPropsValue) {
-          if (!isEqual(selfValue, propsValue)) {
-            field.value = shallowClone(propsValue)
-          }
-        } else if (isValidPropsInitialValue) {
-          if (!isEqual(selfValue, propsInitialValue)) {
-            field.value = shallowClone(propsInitialValue)
-          }
-        }
-      }
-    }
-  }
-  GlobalState.initializing = false
-}
-
-export const initFieldUpdate = (field: GeneralField) => {
+export const initFieldUpdate = batch.scope.bound((field: GeneralField) => {
   const form = field.form
   const updates = FormPath.ensureIn(form, 'requests.updates', [])
   const indexes = FormPath.ensureIn(form, 'requests.updateIndexes', {})
@@ -566,7 +506,7 @@ export const initFieldUpdate = (field: GeneralField) => {
       delete indexes[pattern.toString()]
     }
   }
-}
+})
 
 export const subscribeUpdate = (
   form: Form,
@@ -723,22 +663,20 @@ export const applyValuesPatch = (
   const patch = (source: any, path: Array<string | number> = []) => {
     const targetValue = form.getValuesIn(path)
     const targetField = form.query(path).take()
-    if (isEmpty(targetValue)) {
-      if (isEmpty(source)) return
+    if (allowAssignDefaultValue(targetValue, source)) {
       update(path, source)
     } else {
-      const arrA = isArr(targetValue)
-      const arrB = isArr(source)
-      const objA = isPlainObj(targetValue)
-      const objB = isPlainObj(source)
-      if ((arrA && arrA === arrB) || (objA && objA === objB)) {
+      if (isPlainObj(targetValue) && isPlainObj(source)) {
         each(source, (value, key) => {
-          if (isEmpty(value)) return
           patch(value, path.concat(key))
         })
       } else {
         if (targetField) {
-          if (!isVoidField(targetField) && !targetField.modified) {
+          if (
+            !isVoidField(targetField) &&
+            targetField.initialized &&
+            !targetField.modified
+          ) {
             update(path, source)
           }
         } else {
@@ -747,7 +685,6 @@ export const applyValuesPatch = (
       }
     }
   }
-  if (GlobalState.initializing) return
   patch(source, path)
 }
 
@@ -761,23 +698,18 @@ export const triggerFormInitialValuesChange = (
     if (change.type === 'add' || change.type === 'set') {
       applyValuesPatch(form, path.slice(1), change.value)
     }
-    form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+    if (form.initialized) {
+      form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+    }
   }
 }
 
 export const triggerFormValuesChange = (form: Form, change: DataChange) => {
   const path = change.path
   if (path[path.length - 1] === 'length') return
-  if (path[0] === 'values') {
+  if (path[0] === 'values' && form.initialized) {
     form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
   }
-}
-
-const getValues = (target: Form | Field) => {
-  if (isForm(target)) {
-    return toJS(target.values)
-  }
-  return toJS(target.value)
 }
 
 const notify = (
@@ -874,6 +806,12 @@ export const batchSubmit = async <T>(
   target: Form | Field,
   onSubmit?: (values: any) => Promise<T> | void
 ): Promise<T> => {
+  const getValues = (target: Form | Field) => {
+    if (isForm(target)) {
+      return toJS(target.values)
+    }
+    return toJS(target.value)
+  }
   target.setSubmitting(true)
   try {
     notify(
@@ -1039,3 +977,35 @@ export const selfReset = batch.bound(
     }
   }
 )
+
+export const getValidFormValues = (values: any) => {
+  if (isObservable(values)) return values
+  return clone(values || {})
+}
+
+export const getValidFieldDefaultValue = (value: any, initialValue: any) => {
+  if (allowAssignDefaultValue(value, initialValue)) return initialValue
+  return value
+}
+
+export const allowAssignDefaultValue = (target: any, source: any) => {
+  const isEmptyTarget = isEmpty(target)
+  const isEmptySource = isEmpty(source)
+  const isValidTarget = isValid(target)
+  const isValidSource = isValid(source)
+  if (!isValidTarget) {
+    if (isValidSource) {
+      return true
+    }
+    return false
+  }
+
+  if (isEmptyTarget) {
+    if (isEmptySource) {
+      return false
+    } else {
+      return true
+    }
+  }
+  return false
+}

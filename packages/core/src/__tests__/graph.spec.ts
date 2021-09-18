@@ -26,7 +26,7 @@ test('getGraph/setGraph', () => {
   )
   form.query('normal').take((field) => {
     if (isVoidField(field)) return
-    field.errors = ['error']
+    field.selfErrors = ['error']
   })
   const graph = form.getFormGraph()
   form.clearFormGraph()

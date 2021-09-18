@@ -49,6 +49,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   componentType: Component
   componentProps: Record<string, any>
 
+  designable: boolean
   address: FormPath
   path: FormPath
   form: Form
@@ -62,30 +63,29 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     form: Form,
     designable: boolean
   ) {
-    this.initialize(props, form)
+    this.form = form
+    this.props = props
+    this.designable = designable
     this.makeIndexes(address)
-    this.makeObservable(designable)
-    this.makeReactive(designable)
+    this.initialize()
+    this.makeObservable()
+    this.makeReactive()
     this.onInit()
   }
 
   protected makeIndexes(address: FormPathPattern) {
+    this.form.fields[address.toString()] = this
     buildNodeIndexes(this, address)
   }
 
-  protected initialize(
-    props: IVoidFieldProps<Decorator, Component>,
-    form: Form
-  ) {
-    this.form = form
-    this.props = props
+  protected initialize() {
     this.mounted = false
     this.unmounted = false
     this.initialized = false
-    this.title = props.title
-    this.description = props.description
+    this.title = this.props.title
+    this.description = this.props.description
     this.pattern = this.props.pattern
-    this.display = props.display
+    this.display = this.props.display
     this.hidden = this.props.hidden
     this.editable = this.props.editable
     this.disabled = this.props.disabled
@@ -98,8 +98,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     this.component = toArr(this.props.component)
   }
 
-  protected makeObservable(designable: boolean) {
-    if (designable) return
+  protected makeObservable() {
+    if (this.designable) return
     define(this, {
       title: observable.ref,
       description: observable.ref,
@@ -138,8 +138,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     })
   }
 
-  protected makeReactive(designable: boolean) {
-    if (designable) return
+  protected makeReactive() {
+    if (this.designable) return
     this.form.addEffects(this, () => {
       toArr(this.props.reactions).forEach((reaction) => {
         if (isFn(reaction)) {
@@ -349,9 +349,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
 
   onInit = () => {
     this.initialized = true
-    batch.scope(() => {
-      initFieldUpdate(this)
-    })
+    initFieldUpdate(this)
     this.notify(LifeCycleTypes.ON_FIELD_INIT)
   }
 

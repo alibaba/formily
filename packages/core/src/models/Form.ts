@@ -1,11 +1,4 @@
-import {
-  define,
-  observable,
-  batch,
-  action,
-  isObservable,
-  observe,
-} from '@formily/reactive'
+import { define, observable, batch, action, observe } from '@formily/reactive'
 import {
   FormPath,
   FormPathPattern,
@@ -13,7 +6,6 @@ import {
   uid,
   globalThisPolyfill,
   merge,
-  clone,
   isPlainObj,
   isArr,
   isObj,
@@ -47,7 +39,6 @@ import {
   modelStateSetter,
   createFieldStateSetter,
   createFieldStateGetter,
-  applyValuesPatch,
   triggerFormInitialValuesChange,
   triggerFormValuesChange,
   batchValidate,
@@ -56,6 +47,7 @@ import {
   setValidating,
   setSubmitting,
   setLoading,
+  getValidFormValues,
 } from '../shared/internals'
 import { isVoidField } from '../shared/checkers'
 import { runEffects } from '../shared/effectbox'
@@ -91,9 +83,9 @@ export class Form<ValueType extends object = any> {
 
   constructor(props: IFormProps<ValueType>) {
     this.initialize(props)
-    this.makeInitialValues()
     this.makeObservable()
     this.makeReactive()
+    this.makeValues()
     this.onInit()
   }
 
@@ -122,14 +114,9 @@ export class Form<ValueType extends object = any> {
     })
   }
 
-  protected makeInitialValues() {
-    this.values = isObservable(this.props.values)
-      ? this.props.values
-      : clone(this.props.values) || ({} as any)
-    this.initialValues = isObservable(this.props.initialValues)
-      ? this.props.initialValues
-      : clone(this.props.initialValues) || ({} as any)
-    applyValuesPatch(this, [], this.initialValues)
+  protected makeValues() {
+    this.values = getValidFormValues(this.props.values)
+    this.initialValues = getValidFormValues(this.props.initialValues)
   }
 
   protected makeObservable() {
@@ -180,7 +167,6 @@ export class Form<ValueType extends object = any> {
   }
 
   protected makeReactive() {
-    if (this.props.designable) return
     this.disposers.push(
       observe(
         this,
@@ -314,12 +300,7 @@ export class Form<ValueType extends object = any> {
     if (!identifier) return
     if (!this.fields[identifier] || this.props.designable) {
       batch(() => {
-        this.fields[identifier] = new Field(
-          address,
-          props,
-          this,
-          this.props.designable
-        )
+        new Field(address, props, this, this.props.designable)
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
     }
@@ -337,11 +318,12 @@ export class Form<ValueType extends object = any> {
     if (!identifier) return
     if (!this.fields[identifier] || this.props.designable) {
       batch(() => {
-        this.fields[identifier] = new ArrayField(
+        new ArrayField(
           address,
           {
             ...props,
             value: isArr(props.value) ? props.value : [],
+            initialValue: isObj(props.initialValue) ? props.initialValue : [],
           },
           this,
           this.props.designable
@@ -363,11 +345,12 @@ export class Form<ValueType extends object = any> {
     if (!identifier) return
     if (!this.fields[identifier] || this.props.designable) {
       batch(() => {
-        this.fields[identifier] = new ObjectField(
+        new ObjectField(
           address,
           {
             ...props,
             value: isObj(props.value) ? props.value : {},
+            initialValue: isObj(props.initialValue) ? props.initialValue : {},
           },
           this,
           this.props.designable
@@ -389,12 +372,7 @@ export class Form<ValueType extends object = any> {
     if (!identifier) return
     if (!this.fields[identifier] || this.props.designable) {
       batch(() => {
-        this.fields[identifier] = new VoidField(
-          address,
-          props,
-          this,
-          this.props.designable
-        )
+        new VoidField(address, props, this, this.props.designable)
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
     }

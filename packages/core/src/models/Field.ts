@@ -45,12 +45,12 @@ import {
   initFieldUpdate,
   updateFeedback,
   queryFeedbacks,
+  allowAssignDefaultValue,
   queryFeedbackMessages,
   getValuesFromEvent,
   modelStateSetter,
   modelStateGetter,
   isHTMLInputEvent,
-  initFieldValue,
   setValidatorRule,
   batchValidate,
   batchSubmit,
@@ -59,6 +59,7 @@ import {
   setSubmitting,
   setLoading,
   selfValidate,
+  getValidFieldDefaultValue,
 } from '../shared/internals'
 import { Query } from './Query'
 export class Field<
@@ -96,6 +97,7 @@ export class Field<
   path: FormPath
 
   form: Form
+  designable: boolean
   props: IFieldProps<Decorator, Component, TextType, ValueType>
 
   caches: IFieldCaches = {}
@@ -108,23 +110,22 @@ export class Field<
     form: Form,
     designable: boolean
   ) {
-    this.initialize(props, form)
+    this.form = form
+    this.props = props
+    this.designable = designable
     this.makeIndexes(address)
-    this.makeObservable(designable)
-    this.makeReactive(designable)
-    this.onInit(designable)
+    this.initialize()
+    this.makeObservable()
+    this.makeReactive()
+    this.onInit()
   }
 
   protected makeIndexes(address: FormPathPattern) {
+    this.form.fields[address.toString()] = this
     buildNodeIndexes(this, address)
   }
 
-  protected initialize(
-    props: IFieldProps<Decorator, Component, TextType, ValueType>,
-    form: Form
-  ) {
-    this.form = form
-    this.props = props
+  protected initialize() {
     this.initialized = false
     this.loading = false
     this.validating = false
@@ -137,8 +138,8 @@ export class Field<
     this.inputValues = []
     this.inputValue = null
     this.feedbacks = []
-    this.title = props.title
-    this.description = props.description
+    this.title = this.props.title
+    this.description = this.props.description
     this.display = this.props.display
     this.pattern = this.props.pattern
     this.editable = this.props.editable
@@ -151,13 +152,18 @@ export class Field<
     this.validator = this.props.validator
     this.required = this.props.required
     this.content = this.props.content
+    this.value = getValidFieldDefaultValue(
+      this.props.value,
+      this.props.initialValue
+    )
+    this.initialValue = this.props.initialValue
     this.data = this.props.data
     this.decorator = toArr(this.props.decorator)
     this.component = toArr(this.props.component)
   }
 
-  protected makeObservable(designable: boolean) {
-    if (designable) return
+  protected makeObservable() {
+    if (this.designable) return
     define(this, {
       title: observable.ref,
       description: observable.ref,
@@ -237,8 +243,8 @@ export class Field<
     })
   }
 
-  protected makeReactive(designable: boolean) {
-    if (designable) return
+  protected makeReactive() {
+    if (this.designable) return
     this.disposers.push(
       reaction(
         () => this.value,
@@ -516,10 +522,27 @@ export class Field<
   }
 
   set value(value: ValueType) {
+    if (!this.initialized) {
+      if (this.display === 'none') {
+        this.caches.value = value
+        return
+      }
+      if (!allowAssignDefaultValue(this.value, value) && !this.designable) {
+        return
+      }
+    }
     this.form.setValuesIn(this.path, value)
   }
 
   set initialValue(initialValue: ValueType) {
+    if (!this.initialized) {
+      if (
+        !allowAssignDefaultValue(this.initialValue, initialValue) &&
+        !this.designable
+      ) {
+        return
+      }
+    }
     this.form.setInitialValuesIn(this.path, initialValue)
   }
 
@@ -663,14 +686,9 @@ export class Field<
 
   getState: IModelGetter<IFieldState> = modelStateGetter(this)
 
-  onInit = (designable: boolean) => {
+  onInit = () => {
     this.initialized = true
-    batch.scope(() => {
-      initFieldValue(this, designable)
-    })
-    batch.scope(() => {
-      initFieldUpdate(this)
-    })
+    initFieldUpdate(this)
     this.notify(LifeCycleTypes.ON_FIELD_INIT)
   }
 
