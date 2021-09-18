@@ -1,4 +1,4 @@
-import { getComponentByTag } from '../__builtins__/shared'
+import { transformComponent } from '../__builtins__/shared'
 import { connect, mapProps, mapReadPretty } from '@formily/vue'
 
 import type { InputNumber as _ElInputNumberProps } from 'element-ui'
@@ -7,7 +7,7 @@ import { PreviewText } from '../preview-text'
 
 export type InputNumberProps = _ElInputNumberProps
 
-const TransformElInputNumber = getComponentByTag<InputNumberProps>(
+const TransformElInputNumber = transformComponent<InputNumberProps>(
   ElInputNumber,
   {
     change: 'input',
