@@ -1,9 +1,10 @@
 import { Vue2Component } from '../types/vue2'
-import { isVue2, markRaw, defineComponent } from 'vue-demi'
+import { isVue2, markRaw, defineComponent, ref } from 'vue-demi'
 import { isFn, isStr, FormPath, each } from '@formily/shared'
 import { isVoidField, GeneralField } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 
+import { FieldSymbol } from '../shared/context'
 import { useField } from '../hooks/useField'
 import h from './h'
 
@@ -19,52 +20,69 @@ export function mapProps<T extends VueComponent = VueComponent>(
   ...args: IStateMapper<VueComponentProps<T>>[]
 ) {
   return (target: T) => {
-    return observer(
-      defineComponent<VueComponentProps<T>>({
-        // listeners is needed for vue2
-        setup(props, { attrs, slots, listeners }: Record<string, any>) {
-          const fieldRef = useField()
+    const getNewAttrs = (field, attrs) =>
+      field
+        ? transform({ ...attrs } as VueComponentProps<T>, field)
+        : { ...attrs }
 
-          const transform = (
-            input: VueComponentProps<T>,
-            field: GeneralField
-          ) =>
-            args.reduce((props, mapper) => {
-              if (isFn(mapper)) {
-                props = Object.assign(props, mapper(props, field))
-              } else {
-                each(mapper, (to, extract) => {
-                  const extractValue = FormPath.getIn(field, extract)
-                  const targetValue = isStr(to) ? to : extract
-                  if (extract === 'value') {
-                    if (to !== extract) {
-                      delete props['value']
-                    }
-                  }
-                  FormPath.setIn(props, targetValue, extractValue)
-                })
+    const transform = (input: VueComponentProps<T>, field: GeneralField) =>
+      args.reduce((props, mapper) => {
+        if (isFn(mapper)) {
+          props = Object.assign(props, mapper(props, field))
+        } else {
+          each(mapper, (to, extract) => {
+            const extractValue = FormPath.getIn(field, extract)
+            const targetValue = isStr(to) ? to : extract
+            if (extract === 'value') {
+              if (to !== extract) {
+                delete props['value']
               }
-              return props
-            }, input)
+            }
+            FormPath.setIn(props, targetValue, extractValue)
+          })
+        }
+        return props
+      }, input)
 
-          return () => {
-            const newAttrs = fieldRef.value
-              ? transform({ ...attrs } as VueComponentProps<T>, fieldRef.value)
-              : { ...attrs }
+    const beObserveredComponent = isVue2
+      ? {
+          inject: {
+            fieldRef: {
+              from: FieldSymbol,
+              default: ref(),
+            },
+          },
+          render(h) {
             return h(
               target,
               {
                 attrs: {
-                  ...newAttrs,
+                  ...getNewAttrs(this.fieldRef.value, { ...this.$attrs }),
                 },
-                on: listeners,
+                on: this.$listeners,
+                scopedSlots: this.$scopedSlots,
               },
-              slots
+              this.$slots.default
             )
-          }
-        },
-      }) as unknown as DefineComponent<VueComponentProps<T>>
-    )
+          },
+        }
+      : (defineComponent<VueComponentProps<T>>({
+          setup(props, { attrs, slots, listeners }: Record<string, any>) {
+            const fieldRef = useField()
+            return () =>
+              h(
+                target,
+                {
+                  attrs: {
+                    ...getNewAttrs(fieldRef.value, { ...attrs }),
+                  },
+                  on: listeners,
+                },
+                slots
+              )
+          },
+        }) as unknown as DefineComponent<VueComponentProps<T>>)
+    return observer(beObserveredComponent)
   }
 }
 
@@ -73,29 +91,54 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
   readPrettyProps?: Record<string, any>
 ) {
   return (target: T) => {
-    return observer(
-      defineComponent({
-        setup(props, { attrs, slots, listeners }: Record<string, any>) {
-          const fieldRef = useField()
-          return () => {
-            const field = fieldRef.value
+    const getComponent = (field, component, target) => {
+      const isReadPretty =
+        field && !isVoidField(field) && field.pattern === 'readPretty'
+      return isReadPretty ? component : target
+    }
+
+    const beObserveredComponent = isVue2
+      ? {
+          inject: {
+            fieldRef: {
+              from: FieldSymbol,
+              default: ref(),
+            },
+          },
+          render(h) {
             return h(
-              field && !isVoidField(field) && field.pattern === 'readPretty'
-                ? component
-                : target,
+              getComponent(this.fieldRef.value, component, target),
               {
                 attrs: {
                   ...readPrettyProps,
-                  ...attrs,
+                  ...this.$attrs,
                 },
-                on: listeners,
+                on: this.$listeners,
+                scopedSlots: this.$scopedSlots,
               },
-              slots
+              this.$slots.default
             )
-          }
-        },
-      }) as unknown as DefineComponent<VueComponentProps<T>>
-    )
+          },
+        }
+      : (defineComponent({
+          setup(props, { attrs, slots, listeners }: Record<string, any>) {
+            const fieldRef = useField()
+            return () =>
+              h(
+                getComponent(fieldRef.value, component, target),
+                {
+                  attrs: {
+                    ...readPrettyProps,
+                    ...attrs,
+                  },
+                  on: listeners,
+                },
+                slots
+              )
+          },
+        }) as unknown as DefineComponent<VueComponentProps<T>>)
+
+    return observer(beObserveredComponent)
   }
 }
 
