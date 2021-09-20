@@ -8,10 +8,9 @@ import {
   existInByDestructor,
 } from './destructor'
 import { Segments, Node, Pattern } from './types'
-import { LRUMap } from './lru'
 import { Matcher } from './matcher'
 
-const pathCache = new LRUMap(10000)
+const pathCache = new Map()
 
 const isMatcher = Symbol('PATH_MATCHER')
 
@@ -248,8 +247,8 @@ export class Path {
     this.isRegExp = isRegExp
     this.haveExcludePattern = haveExcludePattern
     this.tree = tree as Node
-    this.matchCache = new LRUMap(200)
-    this.includesCache = new LRUMap(200)
+    this.matchCache = new Map()
+    this.includesCache = new Map()
   }
 
   toString() {

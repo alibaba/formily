@@ -9,21 +9,32 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.head_commit.message, 'chore(versions)')
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
         with:
-          node-version: 11
+          node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: |
           yarn -v
           yarn --ignore-engines
           yarn build
+          yarn test:prod
           yarn run release:force
         env:
+          CI: true
           HEADLESS: false
           PROGRESS: none
+          NODE_ENV: test
+          NODE_OPTIONS: --max_old_space_size=4096
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
           ACCESS_KEY_SECRET: ${{ secrets.ACCESS_KEY_SECRET }}
           REGISTRY: https://registry.npmjs.org
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
