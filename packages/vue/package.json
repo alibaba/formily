@@ -30,6 +30,7 @@
     "@vuepress/plugin-back-to-top": "^1.8.2",
     "@vuepress/plugin-medium-zoom": "^1.8.2",
     "ant-design-vue": "^1.7.3",
+    "codesandbox": "^2.2.3",
     "core-js": "^2.4.0",
     "vue": "^2.6.12",
     "vuepress": "^1.8.2",
