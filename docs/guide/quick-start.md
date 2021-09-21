@@ -28,7 +28,7 @@ $ npm install --save @formily/vue
 
 ### Install component library
 
-To quickly implement beautiful forms, we usually need to use industry-leading component libraries, such as A[nt Design](https://ant.design) and [Alibaba Fusion](https://fusion.design). However, these excellent component libraries are not fully covered in some scenes of the form. For example, the detailed preview state is not supported by Ant Design, and some scene-based components are not supported, so Formily is in On top of this, @formily/antd and @formily/next are encapsulated to ensure that users can use it out of the box.
+To quickly implement beautiful forms, we usually need to use industry-leading component libraries, such as [Ant Design](https://ant.design) and [Alibaba Fusion](https://fusion.design). However, these excellent component libraries are not fully covered in some scenes of the form. For example, the detailed preview state is not supported by Ant Design, and some scene-based components are not supported, so Formily is in On top of this, @formily/antd and @formily/next are encapsulated to ensure that users can use it out of the box.
 
 **Ant Design users**
 
