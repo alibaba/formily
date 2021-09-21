@@ -43,7 +43,8 @@
     "ttypescript": "^1.5.12",
     "vue": "^2.6.0",
     "vuepress": "^1.8.2",
-    "vuepress-plugin-typescript": "^0.3.1"
+    "vuepress-plugin-typescript": "^0.3.1",
+    "codesandbox": "^2.2.3"
   },
   "dependencies": {
     "@formily/core": "2.0.0-rc.9",
