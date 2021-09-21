@@ -29,9 +29,9 @@ npm install --save @designable/formily-next
 [Example Source Code](https://github.com/alibaba/designable/tree/main/formily/antd/playground)
 
 ```tsx pure
-import'antd/dist/antd.less'
-import React, {useMemo} from'react'
-import ReactDOM from'react-dom'
+import 'antd/dist/antd.less'
+import React, { useMemo } from 'react'
+import ReactDOM from 'react-dom'
 import {
   Designer, //Designer root component, mainly used to deliver context
   DesignerToolsWidget, //Drawing board tool pendant
@@ -48,22 +48,22 @@ import {
   ViewPanel, //View layout panel
   SettingsPanel, //Configure the form layout panel on the right
   ComponentTreeWidget, //Component tree renderer
-} from'@designable/react'
-import {SettingsForm} from'@designable/react-settings-form'
+} from '@designable/react'
+import { SettingsForm } from '@designable/react-settings-form'
 import {
   createDesigner,
   GlobalRegistry,
   Shortcut,
   KeyCode,
-} from'@designable/core'
+} from '@designable/core'
 import {
   LogoWidget,
   ActionsWidget,
   PreviewWidget,
   SchemaEditorWidget,
   MarkupSchemaWidget,
-} from'./widgets'
-import {saveSchema} from'./service'
+} from './widgets'
+import { saveSchema } from './service'
 import {
   Form,
   Field,
@@ -92,23 +92,23 @@ import {
   FormCollapse,
   FormLayout,
   FormGrid,
-} from'../src'
+} from '../src'
 
 GlobalRegistry.registerDesignerLocales({
   'zh-CN': {
     sources: {
-      Inputs:'Input controls',
-      Layouts:'Layout components',
-      Arrays:'Self-incrementing components',
-      Displays:'Display components',
+      Inputs: 'Input controls',
+      Layouts: 'Layout components',
+      Arrays: 'Self-incrementing components',
+      Displays: 'Display components',
     },
   },
   'en-US': {
     sources: {
-      Inputs:'Inputs',
-      Layouts:'Layouts',
-      Arrays:'Arrays',
-      Displays:'Displays',
+      Inputs: 'Inputs',
+      Layouts: 'Layouts',
+      Arrays: 'Arrays',
+      Displays: 'Displays',
     },
   },
 })
@@ -128,7 +128,7 @@ const App = () => {
             },
           }),
         ],
-        rootComponentName:'Form',
+        rootComponentName: 'Form',
       }),
     []
   )
@@ -187,12 +187,12 @@ const App = () => {
             <ToolbarPanel>
               <DesignerToolsWidget />
               <ViewToolsWidget
-                use={['DESIGNABLE','JSONTREE','MARKUP','PREVIEW']}
+                use={['DESIGNABLE', 'JSONTREE', 'MARKUP', 'PREVIEW']}
               />
             </ToolbarPanel>
             <ViewportPanel>
               <ViewPanel type="DESIGNABLE">
-                (() => (
+                {() => (
                   <ComponentTreeWidget
                     components={{
                       Form,

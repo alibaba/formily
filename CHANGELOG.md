@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.0.0-rc.9(2021-09-18)
+
+### :tada: Enhancements
+
+1. [feat(element): support element-ui slot (#2162)](https://github.com/alibaba/formily/commit/205e164c) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix assign initialValue will overwrite value](https://github.com/alibaba/formily/commit/3fbb8697) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-rc.8(2021-09-17)
 
 ### :tada: Enhancements
@@ -781,23 +791,3 @@
 ### :blush: Other Changes
 
 1. [chore(pkg): add workspaces](https://github.com/alibaba/formily/commit/d8af530e) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.59(2021-06-01)
-
-### :beetle: Bug Fixes
-
-1. [fix(react): fix useFormEffects not support StrictMode #1491](https://github.com/alibaba/formily/commit/0198b0c4) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(core): fix field value restored incorrectly when hidden toggled (#1529)](https://github.com/alibaba/formily/commit/047c98af) :point_right: ( [JustDs](https://github.com/JustDs) )
-
-1. [fix(core): fix array field path calculation](https://github.com/alibaba/formily/commit/cdae914c) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :rose: Improve code quality
-
-1. [refactor(designable): update directory structure](https://github.com/alibaba/formily/commit/bb300a00) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [refactor(reactive-react): refactor observer function (#1523)](https://github.com/alibaba/formily/commit/55b93420) :point_right: ( [liuwei](https://github.com/liuwei) )
-
-### :blush: Other Changes
-
-1. [chore(readme): update readme](https://github.com/alibaba/formily/commit/96140630) :point_right: ( [janrywang](https://github.com/janrywang) )
