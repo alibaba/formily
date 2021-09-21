@@ -670,7 +670,7 @@ export const applyValuesPatch = (
         each(source, (value, key) => {
           patch(value, path.concat(key))
         })
-      } else {
+      } else if (!isEmpty(source)) {
         if (targetField) {
           if (
             !isVoidField(targetField) &&
@@ -960,9 +960,9 @@ export const selfReset = batch.bound(
     target.inputValues = []
     if (options?.forceClear) {
       if (isArrayField(target)) {
-        target.value = [] as any
+        target.value = []
       } else if (isObjectField(target)) {
-        target.value = {} as any
+        target.value = {}
       } else {
         target.value = undefined
       }

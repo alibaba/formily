@@ -323,7 +323,6 @@ export class Form<ValueType extends object = any> {
           {
             ...props,
             value: isArr(props.value) ? props.value : [],
-            initialValue: isObj(props.initialValue) ? props.initialValue : [],
           },
           this,
           this.props.designable
@@ -350,7 +349,6 @@ export class Form<ValueType extends object = any> {
           {
             ...props,
             value: isObj(props.value) ? props.value : {},
-            initialValue: isObj(props.initialValue) ? props.initialValue : {},
           },
           this,
           this.props.designable
