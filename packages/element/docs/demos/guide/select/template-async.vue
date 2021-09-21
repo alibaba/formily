@@ -12,13 +12,13 @@
           },
         },
       ]"
-      :enum="[
+      :dataSource="[
         { label: '发请求1', value: 1 },
         { label: '发请求2', value: 2 },
       ]"
     />
     <Field
-      name="[Select]"
+      name="select"
       title="异步选择框"
       :decorator="[FormItem]"
       :component="[
@@ -57,6 +57,7 @@ const form = createForm({
     useAsyncDataSource('select', async (field) => {
       const linkage = field.query('linkage').get('value')
       if (!linkage) return []
+
       return new Promise((resolve) => {
         setTimeout(() => {
           if (linkage === 1) {
