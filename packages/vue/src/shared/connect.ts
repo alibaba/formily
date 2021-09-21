@@ -91,28 +91,29 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
   readPrettyProps?: Record<string, any>
 ) {
   return (target: T) => {
-    const beObserveredComponent = defineComponent({
-      setup(props, { attrs, slots, listeners }: Record<string, any>) {
-        const fieldRef = useField()
-        const field = fieldRef.value
-        return () =>
-          h(
-            field && !isVoidField(field) && field.pattern === 'readPretty'
-              ? component
-              : target,
-            {
-              attrs: {
-                ...readPrettyProps,
-                ...attrs,
+    return observer(
+      defineComponent({
+        setup(props, { attrs, slots, listeners }: Record<string, any>) {
+          const fieldRef = useField()
+          return () => {
+            const field = fieldRef.value
+            return h(
+              field && !isVoidField(field) && field.pattern === 'readPretty'
+                ? component
+                : target,
+              {
+                attrs: {
+                  ...readPrettyProps,
+                  ...attrs,
+                },
+                on: listeners,
               },
-              on: listeners,
-            },
-            slots
-          )
-      },
-    }) as unknown as DefineComponent<VueComponentProps<T>>
-
-    return observer(beObserveredComponent)
+              slots
+            )
+          }
+        },
+      }) as unknown as DefineComponent<VueComponentProps<T>>
+    )
   }
 }
 
