@@ -91,52 +91,26 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
   readPrettyProps?: Record<string, any>
 ) {
   return (target: T) => {
-    const getComponent = (field, component, target) => {
-      const isReadPretty =
-        field && !isVoidField(field) && field.pattern === 'readPretty'
-      return isReadPretty ? component : target
-    }
-
-    const beObserveredComponent = isVue2
-      ? {
-          inject: {
-            fieldRef: {
-              from: FieldSymbol,
-              default: ref(),
-            },
-          },
-          render(h) {
-            return h(
-              getComponent(this.fieldRef.value, component, target),
-              {
-                attrs: {
-                  ...readPrettyProps,
-                  ...this.$attrs,
-                },
-                on: this.$listeners,
-                scopedSlots: this.$scopedSlots,
+    const beObserveredComponent = defineComponent({
+      setup(props, { attrs, slots, listeners }: Record<string, any>) {
+        const fieldRef = useField()
+        const field = fieldRef.value
+        return () =>
+          h(
+            field && !isVoidField(field) && field.pattern === 'readPretty'
+              ? component
+              : target,
+            {
+              attrs: {
+                ...readPrettyProps,
+                ...attrs,
               },
-              this.$slots.default
-            )
-          },
-        }
-      : (defineComponent({
-          setup(props, { attrs, slots, listeners }: Record<string, any>) {
-            const fieldRef = useField()
-            return () =>
-              h(
-                getComponent(fieldRef.value, component, target),
-                {
-                  attrs: {
-                    ...readPrettyProps,
-                    ...attrs,
-                  },
-                  on: listeners,
-                },
-                slots
-              )
-          },
-        }) as unknown as DefineComponent<VueComponentProps<T>>)
+              on: listeners,
+            },
+            slots
+          )
+      },
+    }) as unknown as DefineComponent<VueComponentProps<T>>
 
     return observer(beObserveredComponent)
   }
