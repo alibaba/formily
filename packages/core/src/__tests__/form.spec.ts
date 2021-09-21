@@ -315,7 +315,7 @@ test('query', () => {
   expect(form.query('object.void').get('initialValue')).toBeUndefined()
   expect(form.query('object.void').get('inputValue')).toBeUndefined()
   expect(form.query('array').get('value')).toEqual([])
-  expect(form.query('array').get('initialValue')).toEqual([])
+  expect(form.query('array').get('initialValue')).toBeUndefined()
   expect(form.query('array').get('inputValue')).toBeNull()
   form.setFieldState('array', (state) => {
     state.value = [111]
@@ -985,6 +985,25 @@ test('initialValues merge values before create field', () => {
   )
   expect(array.value).toEqual([{ aa: '321' }])
   expect(arr_0_aa.value).toEqual('321')
+})
+
+test('no patch with empty initialValues', () => {
+  const form = attach(
+    createForm({
+      values: {
+        array: [1, 2, 3],
+      },
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'array.0.1',
+    })
+  )
+
+  expect(form.values).toEqual({
+    array: [1, 2, 3],
+  })
 })
 
 test('initialValues merge values after create field', () => {
