@@ -1,9 +1,10 @@
 import { Vue2Component } from '../types/vue2'
-import { isVue2, markRaw, defineComponent } from 'vue-demi'
+import { isVue2, markRaw, defineComponent, ref } from 'vue-demi'
 import { isFn, isStr, FormPath, each } from '@formily/shared'
 import { isVoidField, GeneralField } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 
+import { FieldSymbol } from '../shared/context'
 import { useField } from '../hooks/useField'
 import h from './h'
 
@@ -19,52 +20,73 @@ export function mapProps<T extends VueComponent = VueComponent>(
   ...args: IStateMapper<VueComponentProps<T>>[]
 ) {
   return (target: T) => {
-    return observer(
-      defineComponent<VueComponentProps<T>>({
-        // listeners is needed for vue2
+    const getNewAttrs = (field, attrs) =>
+      field
+        ? transform({ ...attrs } as VueComponentProps<T>, field)
+        : { ...attrs }
+
+    const transform = (input: VueComponentProps<T>, field: GeneralField) =>
+      args.reduce((props, mapper) => {
+        if (isFn(mapper)) {
+          props = Object.assign(props, mapper(props, field))
+        } else {
+          each(mapper, (to, extract) => {
+            const extractValue = FormPath.getIn(field, extract)
+            const targetValue = isStr(to) ? to : extract
+            if (extract === 'value') {
+              if (to !== extract) {
+                delete props['value']
+              }
+            }
+            FormPath.setIn(props, targetValue, extractValue)
+          })
+        }
+        return props
+      }, input)
+
+    let beObserveredComponent: VueComponent
+    /* istanbul ignore next */
+    if (isVue2) {
+      beObserveredComponent = {
+        inject: {
+          fieldRef: {
+            from: FieldSymbol,
+            default: ref(),
+          },
+        },
+        render(h) {
+          return h(
+            target,
+            {
+              attrs: {
+                ...getNewAttrs(this.fieldRef.value, { ...this.$attrs }),
+              },
+              on: this.$listeners,
+              scopedSlots: this.$scopedSlots,
+            },
+            this.$slots.default
+          )
+        },
+      } as unknown as Vue2Component
+    } else {
+      beObserveredComponent = defineComponent({
         setup(props, { attrs, slots, listeners }: Record<string, any>) {
           const fieldRef = useField()
-
-          const transform = (
-            input: VueComponentProps<T>,
-            field: GeneralField
-          ) =>
-            args.reduce((props, mapper) => {
-              if (isFn(mapper)) {
-                props = Object.assign(props, mapper(props, field))
-              } else {
-                each(mapper, (to, extract) => {
-                  const extractValue = FormPath.getIn(field, extract)
-                  const targetValue = isStr(to) ? to : extract
-                  if (extract === 'value') {
-                    if (to !== extract) {
-                      delete props['value']
-                    }
-                  }
-                  FormPath.setIn(props, targetValue, extractValue)
-                })
-              }
-              return props
-            }, input)
-
-          return () => {
-            const newAttrs = fieldRef.value
-              ? transform({ ...attrs } as VueComponentProps<T>, fieldRef.value)
-              : { ...attrs }
-            return h(
+          return () =>
+            h(
               target,
               {
                 attrs: {
-                  ...newAttrs,
+                  ...getNewAttrs(fieldRef.value, { ...attrs }),
                 },
                 on: listeners,
               },
               slots
             )
-          }
         },
       }) as unknown as DefineComponent<VueComponentProps<T>>
-    )
+    }
+    return observer(beObserveredComponent)
   }
 }
 
@@ -73,16 +95,43 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
   readPrettyProps?: Record<string, any>
 ) {
   return (target: T) => {
-    return observer(
-      defineComponent({
+    const getComponent = (field, component, target) =>
+      field && !isVoidField(field) && field.pattern === 'readPretty'
+        ? component
+        : target
+
+    let beObserveredComponent: VueComponent
+    /* istanbul ignore else */
+    if (isVue2) {
+      beObserveredComponent = {
+        inject: {
+          fieldRef: {
+            from: FieldSymbol,
+            default: ref(),
+          },
+        },
+        render(h) {
+          return h(
+            getComponent(this.fieldRef.value, component, target),
+            {
+              attrs: {
+                ...readPrettyProps,
+                ...this.$attrs,
+              },
+              on: this.$listeners,
+              scopedSlots: this.$scopedSlots,
+            },
+            this.$slots.default
+          )
+        },
+      } as unknown as Vue2Component
+    } else {
+      beObserveredComponent = defineComponent({
         setup(props, { attrs, slots, listeners }: Record<string, any>) {
           const fieldRef = useField()
-          return () => {
-            const field = fieldRef.value
-            return h(
-              field && !isVoidField(field) && field.pattern === 'readPretty'
-                ? component
-                : target,
+          return () =>
+            h(
+              getComponent(fieldRef.value, component, target),
               {
                 attrs: {
                   ...readPrettyProps,
@@ -92,10 +141,11 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
               },
               slots
             )
-          }
         },
       }) as unknown as DefineComponent<VueComponentProps<T>>
-    )
+    }
+
+    return observer(beObserveredComponent)
   }
 }
 
