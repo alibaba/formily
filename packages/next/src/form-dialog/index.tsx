@@ -52,8 +52,8 @@ export interface IDialogProps extends DialogProps {
 
 export interface IFormDialog {
   forOpen(middleware: IMiddleware<IFormProps>): IFormDialog
-  forConfirm(middleware: IMiddleware<IFormProps>): IFormDialog
-  forCancel(middleware: IMiddleware<IFormProps>): IFormDialog
+  forConfirm(middleware: IMiddleware<Form>): IFormDialog
+  forCancel(middleware: IMiddleware<Form>): IFormDialog
   open(props?: IFormProps): Promise<any>
   close(): void
 }
