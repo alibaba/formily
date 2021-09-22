@@ -44,44 +44,48 @@ export function mapProps<T extends VueComponent = VueComponent>(
         return props
       }, input)
 
-    const beObserveredComponent = isVue2
-      ? {
-          inject: {
-            fieldRef: {
-              from: FieldSymbol,
-              default: ref(),
-            },
+    let beObserveredComponent: VueComponent
+    /* istanbul ignore next */
+    if (isVue2) {
+      beObserveredComponent = {
+        inject: {
+          fieldRef: {
+            from: FieldSymbol,
+            default: ref(),
           },
-          render(h) {
-            return h(
+        },
+        render(h) {
+          return h(
+            target,
+            {
+              attrs: {
+                ...getNewAttrs(this.fieldRef.value, { ...this.$attrs }),
+              },
+              on: this.$listeners,
+              scopedSlots: this.$scopedSlots,
+            },
+            this.$slots.default
+          )
+        },
+      } as unknown as Vue2Component
+    } else {
+      beObserveredComponent = defineComponent({
+        setup(props, { attrs, slots, listeners }: Record<string, any>) {
+          const fieldRef = useField()
+          return () =>
+            h(
               target,
               {
                 attrs: {
-                  ...getNewAttrs(this.fieldRef.value, { ...this.$attrs }),
+                  ...getNewAttrs(fieldRef.value, { ...attrs }),
                 },
-                on: this.$listeners,
-                scopedSlots: this.$scopedSlots,
+                on: listeners,
               },
-              this.$slots.default
+              slots
             )
-          },
-        }
-      : (defineComponent<VueComponentProps<T>>({
-          setup(props, { attrs, slots, listeners }: Record<string, any>) {
-            const fieldRef = useField()
-            return () =>
-              h(
-                target,
-                {
-                  attrs: {
-                    ...getNewAttrs(fieldRef.value, { ...attrs }),
-                  },
-                  on: listeners,
-                },
-                slots
-              )
-          },
-        }) as unknown as DefineComponent<VueComponentProps<T>>)
+        },
+      }) as unknown as DefineComponent<VueComponentProps<T>>
+    }
     return observer(beObserveredComponent)
   }
 }
@@ -91,16 +95,43 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
   readPrettyProps?: Record<string, any>
 ) {
   return (target: T) => {
-    return observer(
-      defineComponent({
+    const getComponent = (field, component, target) =>
+      field && !isVoidField(field) && field.pattern === 'readPretty'
+        ? component
+        : target
+
+    let beObserveredComponent: VueComponent
+    /* istanbul ignore else */
+    if (isVue2) {
+      beObserveredComponent = {
+        inject: {
+          fieldRef: {
+            from: FieldSymbol,
+            default: ref(),
+          },
+        },
+        render(h) {
+          return h(
+            getComponent(this.fieldRef.value, component, target),
+            {
+              attrs: {
+                ...readPrettyProps,
+                ...this.$attrs,
+              },
+              on: this.$listeners,
+              scopedSlots: this.$scopedSlots,
+            },
+            this.$slots.default
+          )
+        },
+      } as unknown as Vue2Component
+    } else {
+      beObserveredComponent = defineComponent({
         setup(props, { attrs, slots, listeners }: Record<string, any>) {
           const fieldRef = useField()
-          return () => {
-            const field = fieldRef.value
-            return h(
-              field && !isVoidField(field) && field.pattern === 'readPretty'
-                ? component
-                : target,
+          return () =>
+            h(
+              getComponent(fieldRef.value, component, target),
               {
                 attrs: {
                   ...readPrettyProps,
@@ -110,10 +141,11 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
               },
               slots
             )
-          }
         },
       }) as unknown as DefineComponent<VueComponentProps<T>>
-    )
+    }
+
+    return observer(beObserveredComponent)
   }
 }
 
