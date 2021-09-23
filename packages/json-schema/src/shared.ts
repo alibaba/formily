@@ -63,7 +63,7 @@ export const SchemaValidatorMap = {
 
 export const SchemaNormalKeys = Object.keys(SchemaStateMap)
 
-export const SchemaValidatorKeys = Object.keys(SchemaStateMap)
+export const SchemaValidatorKeys = Object.keys(SchemaValidatorMap)
 
 export const hasOwnProperty = Object.prototype.hasOwnProperty
 
