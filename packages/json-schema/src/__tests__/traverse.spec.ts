@@ -1,4 +1,4 @@
-import { traverse } from '../traverse'
+import { traverse } from '../shared'
 import { FormPath } from '@formily/shared'
 
 test('traverse circular reference', () => {

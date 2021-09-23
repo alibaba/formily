@@ -1955,7 +1955,7 @@ export default () => (
         title="AA"
         required
         x-reactions={(field) => {
-          field.errors =
+          field.selfErrors =
             field.query('bb').value() >= field.value ? 'AA必须大于BB' : ''
         }}
         x-component="NumberPicker"
@@ -1966,7 +1966,7 @@ export default () => (
         title="BB"
         required
         x-reactions={(field) => {
-          field.errors =
+          field.selfErrors =
             field.query('aa').value() <= field.value ? 'AA必须大于BB' : ''
         }}
         x-component="NumberPicker"
@@ -2001,7 +2001,7 @@ const schema = {
       title: 'AA',
       required: true,
       'x-reactions': `{{(field) => {
-          field.errors =
+          field.selfErrors =
             field.query('bb').value() >= field.value ? 'AA必须大于BB' : ''
       }}}`,
       'x-component': 'NumberPicker',
@@ -2014,7 +2014,7 @@ const schema = {
         dependencies: ['aa'],
         fulfill: {
           state: {
-            errors: "{{$deps[0] <= $self.value ? 'AA必须大于BB' : ''}}",
+            selfErrors: "{{$deps[0] <= $self.value ? 'AA必须大于BB' : ''}}",
           },
         },
       },
@@ -2048,7 +2048,7 @@ export default () => (
       title="AA"
       required
       reactions={(field) => {
-        field.errors =
+        field.selfErrors =
           field.query('bb').value() >= field.value ? 'AA必须大于BB' : ''
       }}
       component={[NumberPicker]}
@@ -2059,7 +2059,7 @@ export default () => (
       title="BB"
       required
       reactions={(field) => {
-        field.errors =
+        field.selfErrors =
           field.query('aa').value() <= field.value ? 'AA必须大于BB' : ''
       }}
       component={[NumberPicker]}

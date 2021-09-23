@@ -35,10 +35,10 @@ import {
   IFormMergeStrategy,
 } from '../types'
 import {
-  modelStateGetter,
-  modelStateSetter,
-  createFieldStateSetter,
-  createFieldStateGetter,
+  createStateGetter,
+  createStateSetter,
+  createBatchStateSetter,
+  createBatchStateGetter,
   triggerFormInitialValuesChange,
   triggerFormValuesChange,
   batchValidate,
@@ -573,17 +573,17 @@ export class Form<ValueType extends object = any> {
     }
   }
 
-  setState: IModelSetter<IFormState<ValueType>> = modelStateSetter(this)
+  setState: IModelSetter<IFormState<ValueType>> = createStateSetter(this)
 
-  getState: IModelGetter<IFormState<ValueType>> = modelStateGetter(this)
+  getState: IModelGetter<IFormState<ValueType>> = createStateGetter(this)
 
-  setFormState: IModelSetter<IFormState<ValueType>> = modelStateSetter(this)
+  setFormState: IModelSetter<IFormState<ValueType>> = createStateSetter(this)
 
-  getFormState: IModelGetter<IFormState<ValueType>> = modelStateGetter(this)
+  getFormState: IModelGetter<IFormState<ValueType>> = createStateGetter(this)
 
-  setFieldState: IFieldStateSetter = createFieldStateSetter(this)
+  setFieldState: IFieldStateSetter = createBatchStateSetter(this)
 
-  getFieldState: IFieldStateGetter = createFieldStateGetter(this)
+  getFieldState: IFieldStateGetter = createBatchStateGetter(this)
 
   getFormGraph = () => {
     return this.graph.getGraph()

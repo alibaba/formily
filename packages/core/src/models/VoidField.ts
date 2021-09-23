@@ -1,11 +1,5 @@
-import {
-  FormPath,
-  FormPathPattern,
-  isFn,
-  isValid,
-  toArr,
-} from '@formily/shared'
-import { define, observable, autorun, batch, action } from '@formily/reactive'
+import { FormPath, FormPathPattern, isValid, toArr } from '@formily/shared'
+import { define, observable, batch, action } from '@formily/reactive'
 import {
   JSXComponent,
   LifeCycleTypes,
@@ -21,8 +15,9 @@ import {
 } from '../types'
 import {
   buildNodeIndexes,
-  modelStateGetter,
-  modelStateSetter,
+  createReactions,
+  createStateGetter,
+  createStateSetter,
   initFieldUpdate,
 } from '../shared/internals'
 import { Form } from './Form'
@@ -140,13 +135,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
 
   protected makeReactive() {
     if (this.designable) return
-    this.form.addEffects(this, () => {
-      toArr(this.props.reactions).forEach((reaction) => {
-        if (isFn(reaction)) {
-          this.disposers.push(autorun(() => reaction(this)))
-        }
-      })
-    })
+    createReactions(this)
   }
 
   get parent() {
@@ -343,9 +332,9 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     }
   }
 
-  setState: IModelSetter<IVoidFieldState> = modelStateSetter(this)
+  setState: IModelSetter<IVoidFieldState> = createStateSetter(this)
 
-  getState: IModelGetter<IVoidFieldState> = modelStateGetter(this)
+  getState: IModelGetter<IVoidFieldState> = createStateGetter(this)
 
   onInit = () => {
     this.initialized = true

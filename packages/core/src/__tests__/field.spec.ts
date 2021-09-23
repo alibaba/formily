@@ -1554,3 +1554,52 @@ test('initial display with value', () => {
   expect(cc.value).toEqual(123)
   expect(cc.hidden).toBeTruthy()
 })
+
+test('state depend field visible value', async () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      reactions(field) {
+        field.visible = aa.value === '123'
+      },
+    })
+  )
+  const cc = attach(
+    form.createField({
+      name: 'cc',
+      reactions(field) {
+        field.visible = aa.value === '123'
+        field.disabled = !bb.value
+      },
+    })
+  )
+  expect(bb.visible).toBeFalsy()
+  expect(cc.visible).toBeFalsy()
+  expect(cc.disabled).toBeTruthy()
+  aa.value = '123'
+  await sleep(10)
+  expect(bb.visible).toBeTruthy()
+  expect(cc.visible).toBeTruthy()
+  expect(cc.disabled).toBeTruthy()
+  bb.value = '321'
+  await sleep(10)
+  expect(bb.visible).toBeTruthy()
+  expect(cc.visible).toBeTruthy()
+  expect(cc.disabled).toBeFalsy()
+  aa.value = ''
+  await sleep(10)
+  expect(bb.visible).toBeFalsy()
+  expect(cc.visible).toBeFalsy()
+  expect(cc.disabled).toBeTruthy()
+  aa.value = '123'
+  await sleep(10)
+  expect(bb.visible).toBeTruthy()
+  expect(cc.visible).toBeTruthy()
+  expect(cc.disabled).toBeFalsy()
+})

@@ -9,11 +9,12 @@ import {
 import { IGeneralFieldState } from '@formily/core'
 import { untracked, hasCollected } from '@formily/reactive'
 import {
+  traverse,
+  traverseSchema,
   isNoNeedCompileObject,
   hasOwnProperty,
   patchStateFormSchema,
 } from './shared'
-import { traverse, traverseSchema } from './traverse'
 import { ISchema } from './types'
 
 const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/

@@ -10,13 +10,20 @@ import {
   isPlainObj,
   isNumberLike,
   clone,
+  toArr,
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
   validate,
   parseValidatorDescriptions,
 } from '@formily/validator'
-import { batch, toJS, isObservable, DataChange } from '@formily/reactive'
+import {
+  autorun,
+  batch,
+  toJS,
+  isObservable,
+  DataChange,
+} from '@formily/reactive'
 import { Field, ArrayField, Form, ObjectField } from '../models'
 import {
   ISpliceArrayStateProps,
@@ -114,7 +121,7 @@ export const buildNodeIndexes = (
   return field
 }
 
-export const applyFieldPatches = (
+export const patchFieldStates = (
   target: Record<string, GeneralField>,
   patches: INodePatch<GeneralField>[]
 ) => {
@@ -132,6 +139,47 @@ export const applyFieldPatches = (
       }
     }
   })
+}
+
+export const patchFormValues = (
+  form: Form,
+  path: Array<string | number>,
+  source: any
+) => {
+  const update = (path: Array<string | number>, source: any) => {
+    if (path.length) {
+      form.setValuesIn(path, clone(source))
+    } else {
+      Object.assign(form.values, clone(source))
+    }
+  }
+
+  const patch = (source: any, path: Array<string | number> = []) => {
+    const targetValue = form.getValuesIn(path)
+    const targetField = form.query(path).take()
+    if (allowAssignDefaultValue(targetValue, source)) {
+      update(path, source)
+    } else {
+      if (isPlainObj(targetValue) && isPlainObj(source)) {
+        each(source, (value, key) => {
+          patch(value, path.concat(key))
+        })
+      } else if (!isEmpty(source)) {
+        if (targetField) {
+          if (
+            !isVoidField(targetField) &&
+            targetField.initialized &&
+            !targetField.modified
+          ) {
+            update(path, source)
+          }
+        } else {
+          update(path, source)
+        }
+      }
+    }
+  }
+  patch(source, path)
 }
 
 export const matchFeedback = (
@@ -360,7 +408,7 @@ export const spliceArrayState = (
         }
       }
     })
-    applyFieldPatches(fields, fieldPatches)
+    patchFieldStates(fields, fieldPatches)
   })
   field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
 }
@@ -425,7 +473,7 @@ export const exchangeArrayState = (
         }
       }
     })
-    applyFieldPatches(fields, fieldPatches)
+    patchFieldStates(fields, fieldPatches)
   })
   field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
 }
@@ -543,12 +591,8 @@ export const setModelState = (model: any, setter: any) => {
     if (key === 'componentType' || key === 'componentProps') return true
     if (key === 'decoratorType' || key === 'decoratorProps') return true
     if (key === 'validateStatus') return true
-    if (key === 'errors' || key === 'warnings' || key === 'successes') {
-      if (model.displayName === 'Form') return true
-      if (setter.feedbacks?.length) {
-        return true
-      }
-    }
+    if (key === 'errors' || key === 'warnings' || key === 'successes')
+      return true
     if (
       (key === 'display' || key === 'visible' || key === 'hidden') &&
       'selfDisplay' in setter &&
@@ -603,15 +647,15 @@ export const getModelState = (model: any, getter?: any) => {
   }
 }
 
-export const modelStateSetter = (model: any) => {
+export const createStateSetter = (model: any) => {
   return batch.bound((state?: any) => setModelState(model, state))
 }
 
-export const modelStateGetter = (model: any) => {
+export const createStateGetter = (model: any) => {
   return (getter?: any) => getModelState(model, getter)
 }
 
-export const createFieldStateSetter = (form: Form) => {
+export const createBatchStateSetter = (form: Form) => {
   return batch.bound((pattern: FieldMatchPattern, payload?: any) => {
     if (isQuery(pattern)) {
       pattern.forEach((field) => {
@@ -633,7 +677,7 @@ export const createFieldStateSetter = (form: Form) => {
     }
   })
 }
-export const createFieldStateGetter = (form: Form) => {
+export const createBatchStateGetter = (form: Form) => {
   return (pattern: FieldMatchPattern, payload?: any) => {
     if (isQuery(pattern)) {
       return pattern.take(payload)
@@ -647,47 +691,6 @@ export const createFieldStateGetter = (form: Form) => {
   }
 }
 
-export const applyValuesPatch = (
-  form: Form,
-  path: Array<string | number>,
-  source: any
-) => {
-  const update = (path: Array<string | number>, source: any) => {
-    if (path.length) {
-      form.setValuesIn(path, clone(source))
-    } else {
-      Object.assign(form.values, clone(source))
-    }
-  }
-
-  const patch = (source: any, path: Array<string | number> = []) => {
-    const targetValue = form.getValuesIn(path)
-    const targetField = form.query(path).take()
-    if (allowAssignDefaultValue(targetValue, source)) {
-      update(path, source)
-    } else {
-      if (isPlainObj(targetValue) && isPlainObj(source)) {
-        each(source, (value, key) => {
-          patch(value, path.concat(key))
-        })
-      } else if (!isEmpty(source)) {
-        if (targetField) {
-          if (
-            !isVoidField(targetField) &&
-            targetField.initialized &&
-            !targetField.modified
-          ) {
-            update(path, source)
-          }
-        } else {
-          update(path, source)
-        }
-      }
-    }
-  }
-  patch(source, path)
-}
-
 export const triggerFormInitialValuesChange = (
   form: Form,
   change: DataChange
@@ -696,7 +699,7 @@ export const triggerFormInitialValuesChange = (
   if (path[path.length - 1] === 'length') return
   if (path[0] === 'initialValues') {
     if (change.type === 'add' || change.type === 'set') {
-      applyValuesPatch(form, path.slice(1), change.value)
+      patchFormValues(form, path.slice(1), change.value)
     }
     if (form.initialized) {
       form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
@@ -880,7 +883,7 @@ export const batchValidate = async (
   const tasks = []
   target.query(pattern).forEach((field) => {
     if (!isVoidField(field)) {
-      tasks.push(selfValidate(field, triggerType, field === target))
+      tasks.push(validateSelf(field, triggerType, field === target))
     }
   })
   await Promise.all(tasks)
@@ -908,14 +911,14 @@ export const batchReset = async (
   const tasks = []
   target.query(pattern).forEach((field) => {
     if (!isVoidField(field)) {
-      tasks.push(selfReset(field, options, target === field))
+      tasks.push(resetSelf(field, options, target === field))
     }
   })
   notify(target, LifeCycleTypes.ON_FORM_RESET, LifeCycleTypes.ON_FIELD_RESET)
   await Promise.all(tasks)
 }
 
-export const selfValidate = batch.bound(
+export const validateSelf = batch.bound(
   async (target: Field, triggerType?: ValidatorTriggerType, noEmit = false) => {
     const start = () => {
       setValidating(target, true)
@@ -951,7 +954,7 @@ export const selfValidate = batch.bound(
   }
 )
 
-export const selfReset = batch.bound(
+export const resetSelf = batch.bound(
   async (target: Field, options?: IFieldResetOptions, noEmit = false) => {
     target.modified = false
     target.visited = false
@@ -973,7 +976,7 @@ export const selfReset = batch.bound(
       target.notify(LifeCycleTypes.ON_FIELD_RESET)
     }
     if (options?.validate) {
-      return await selfValidate(target)
+      return await validateSelf(target)
     }
   }
 )
@@ -1008,4 +1011,15 @@ export const allowAssignDefaultValue = (target: any, source: any) => {
     }
   }
   return false
+}
+
+export const createReactions = (field: GeneralField) => {
+  const reactions = toArr(field.props.reactions)
+  field.form.addEffects(field, () => {
+    reactions.forEach((reaction) => {
+      if (isFn(reaction)) {
+        field.disposers.push(autorun(batch.scope.bound(() => reaction(field))))
+      }
+    })
+  })
 }
