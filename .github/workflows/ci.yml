@@ -4,7 +4,7 @@ on:
  push:
     branches:
       - formily_next
-  pull_request:
+ pull_request:
     branches:
       - formily_next
 
