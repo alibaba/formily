@@ -4,6 +4,8 @@ import { render, waitFor } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import Vue, { FunctionalComponentOptions } from 'vue'
 import { FormProvider, createSchemaField } from '../vue2-components'
+import { connect, mapProps, mapReadPretty } from '../'
+import { defineComponent } from 'vue-demi'
 
 Vue.component('FormProvider', FormProvider)
 
@@ -81,7 +83,7 @@ const Previewer3: FunctionalComponentOptions = {
       },
       [
         context.scopedSlots.default({
-          scopedProp: '123',
+          slotProp: '123',
         }),
       ]
     )
@@ -100,7 +102,7 @@ const Previewer4: FunctionalComponentOptions = {
       },
       [
         context.scopedSlots.content({
-          scopedProp: '123',
+          slotProp: '123',
         }),
       ]
     )
@@ -444,7 +446,7 @@ describe('x-content', () => {
     const Content = {
       functional: true,
       render(h, context) {
-        return h('span', context.props.scopedProp)
+        return h('span', context.props.slotProp)
       },
     }
 
@@ -481,7 +483,7 @@ describe('x-content', () => {
     const Content = {
       functional: true,
       render(h, context) {
-        return h('span', context.props.scopedProp)
+        return h('span', context.props.slotProp)
       },
     }
     const { SchemaField } = createSchemaField({
@@ -520,7 +522,7 @@ describe('x-content', () => {
     const Content = {
       functional: true,
       render(h, context) {
-        return h('span', context.props.scopedProp)
+        return h('span', context.props.slotProp)
       },
     }
     const { SchemaField } = createSchemaField({
@@ -558,7 +560,7 @@ describe('x-content', () => {
     const Content = {
       functional: true,
       render(h, context) {
-        return h('span', context.props.scopedProp)
+        return h('span', context.props.slotProp)
       },
     }
     const { SchemaField } = createSchemaField({
@@ -589,6 +591,142 @@ describe('x-content', () => {
     })
     expect(queryByTestId('previewer4')).toBeVisible()
     expect(queryByTestId('previewer4').textContent).toEqual('123')
+  })
+
+  test('scoped slot with connect', () => {
+    const form = createForm()
+    const ConnectedComponent = connect(
+      defineComponent({
+        render(h) {
+          return h(
+            'div',
+            {
+              attrs: {
+                'data-testid': 'ConnectedComponent',
+              },
+            },
+            [
+              this.$scopedSlots.default({
+                slotProp: '123',
+              }),
+            ]
+          )
+        },
+      }),
+      mapProps((props, field) => {
+        return {
+          ...props,
+        }
+      })
+    )
+
+    const scopeSlotComponent = {
+      functional: true,
+      render(h, context) {
+        return h('span', context.props.slotProp)
+      },
+    }
+    const { SchemaField } = createSchemaField({
+      components: {
+        ConnectedComponent,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'string',
+            name: 'ConnectedComponent',
+            'x-component': 'ConnectedComponent',
+            'x-content': {
+              default: scopeSlotComponent,
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('ConnectedComponent')).toBeVisible()
+    expect(queryByTestId('ConnectedComponent').textContent).toEqual('123')
+  })
+
+  test('scoped slot with connect and readPretty', () => {
+    const form = createForm()
+
+    const ConnectedWithMapReadPretty = connect(
+      defineComponent({
+        render(h) {
+          return h(
+            'div',
+            {
+              attrs: {
+                'data-testid': 'ConnectedWithMapReadPretty',
+              },
+            },
+            [
+              this.$scopedSlots.withMapReadPretty({
+                slotProp: '123',
+              }),
+            ]
+          )
+        },
+      }),
+      mapProps((props, field) => {
+        return {
+          ...props,
+        }
+      }),
+      mapReadPretty({
+        render(h) {
+          return h('div', 'read pretty')
+        },
+      })
+    )
+
+    const scopeSlotComponent = {
+      functional: true,
+      render(h, context) {
+        return h('span', context.props.slotProp)
+      },
+    }
+    const { SchemaField } = createSchemaField({
+      components: {
+        ConnectedWithMapReadPretty,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'string',
+            name: 'ConnectedWithMapReadPretty',
+            'x-component': 'ConnectedWithMapReadPretty',
+            'x-content': {
+              withMapReadPretty: scopeSlotComponent,
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('ConnectedWithMapReadPretty')).toBeVisible()
+    expect(queryByTestId('ConnectedWithMapReadPretty').textContent).toEqual(
+      '123'
+    )
   })
 
   test('slot compitible', () => {
