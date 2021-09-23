@@ -16,7 +16,7 @@ const TextPreviewer = {
   render(h, context) {
     return h('div', {}, [
       context.scopedSlots.default({
-        scopedProp: 'default 作用域插槽',
+        slotProp: '有 default 作用域插槽组件的插槽属性值',
         onScopedFunc: ($event) => {
           alert($event)
         },
@@ -53,7 +53,7 @@ const ScopedSlotComponent = {
           },
         },
       },
-      [props.scopedProp]
+      [props.slotProp]
     )
   },
 }
