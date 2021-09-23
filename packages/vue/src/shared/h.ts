@@ -44,7 +44,7 @@ const compatibleCreateElement = (
           children.push(
             key === 'default'
               ? child
-              : hInVue2(FragmentComponent, { slot: key }, child)
+              : hInVue2(FragmentComponent, { slot: key }, [child])
           )
         } catch (error) {}
       }

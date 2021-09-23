@@ -220,11 +220,11 @@ const EditablePopover = observer(
             },
           },
           {
-            default: () => [
-              slots.default(),
+            default: () => [slots.default()],
+            reference: () =>
               h(
                 FormBaseItem,
-                { slot: 'reference', class: [`${prefixCls}-trigger`] },
+                { class: [`${prefixCls}-trigger`] },
                 {
                   default: () =>
                     h(
@@ -260,7 +260,6 @@ const EditablePopover = observer(
                     ),
                 }
               ),
-            ],
           }
         )
       }

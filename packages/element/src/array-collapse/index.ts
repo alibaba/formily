@@ -243,6 +243,8 @@ export const ArrayCollapseInner = observer(
                       default: () => [content],
                     }
                   ),
+                ],
+                title: () =>
                   h(
                     Row,
                     {
@@ -251,7 +253,6 @@ export const ArrayCollapseInner = observer(
                         type: 'flex',
                         justify: 'space-between',
                       },
-                      slot: 'title',
                     },
                     {
                       default: () => [
@@ -260,7 +261,6 @@ export const ArrayCollapseInner = observer(
                       ],
                     }
                   ),
-                ],
               }
             )
           })
