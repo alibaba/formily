@@ -22,8 +22,10 @@ if (isVue2) {
               name: 'frag',
             },
           ],
+          attrs: vm.$attrs,
+          scopedSlots: vm.$scopedSlots,
         },
-        vm?.$slots?.default
+        vm?.$scopedSlots?.default?.(vm.$attrs)
       )
     },
   }
