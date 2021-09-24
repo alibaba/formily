@@ -1,4 +1,5 @@
 import { ObservableListener, Reaction, ReactionsMap } from './types'
+import { ArraySet } from './array'
 import { DataNode } from './datatree'
 
 export const ProxyRaw = new WeakMap()
@@ -12,7 +13,7 @@ export const BatchCount = { value: 0 }
 export const UntrackCount = { value: 0 }
 export const BatchScope = { value: false }
 export const DependencyCollected = { value: false }
-export const PendingReactions = new Set<Reaction>()
-export const PendingScopeReactions = new Set<Reaction>()
+export const PendingReactions = new ArraySet<Reaction>()
+export const PendingScopeReactions = new ArraySet<Reaction>()
 export const MakeObservableSymbol = Symbol('MakeObservableSymbol')
-export const ObserverListeners = new Set<ObservableListener>()
+export const ObserverListeners = new ArraySet<ObservableListener>()
