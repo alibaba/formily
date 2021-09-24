@@ -103,21 +103,14 @@ export const traverseSchema = (
   schema: ISchema,
   visitor: (value: any, path: any[]) => void
 ) => {
-  each(SchemaNormalKeys, (schemaKey) => {
-    const property = schema[schemaKey]
-    if (property !== undefined) {
-      traverse(property, (value, path: string[]) => {
-        visitor(value, [schemaKey].concat(path))
-      })
-    }
-  })
-  each(SchemaValidatorKeys, (schemaKey) => {
-    const property = schema[schemaKey]
-    if (property !== undefined) {
-      traverse(property, (value, path: string[]) => {
-        visitor(value, [schemaKey].concat(path))
-      })
-    }
+  if (schema['x-validator'] !== undefined) {
+    visitor(schema['x-validator'], ['x-validator'])
+  }
+  traverse(schema, visitor, (value, path) => {
+    if (path[0] === 'x-validator') return false
+    if (String(path[0]).indexOf('x-') == -1 && isFn(value)) return false
+    if (SchemaNestedMap[path[0]]) return false
+    return true
   })
 }
 
