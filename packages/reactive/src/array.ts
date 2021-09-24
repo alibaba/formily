@@ -29,7 +29,9 @@ export class ArraySet<T> {
     }
   }
 
-  forEach(callback?: (value: T) => void) {
-    this.value.forEach(callback)
+  forEach(callback: (value: T) => void) {
+    for (let index = 0; index < this.value.length; index++) {
+      callback(this.value[index])
+    }
   }
 }
