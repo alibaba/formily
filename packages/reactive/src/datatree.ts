@@ -1,6 +1,5 @@
 import { ProxyRaw, RawNode } from './environment'
 import { ObservablePath, PropertyKey, IOperation } from './types'
-import { concat } from './array'
 
 export class DataChange {
   path: ObservablePath
@@ -13,7 +12,7 @@ export class DataChange {
     this.type = operation.type
     this.value = operation.value
     this.oldValue = operation.oldValue
-    this.path = concat(node.path, operation.key)
+    this.path = node.path.concat(operation.key)
   }
 }
 export class DataNode {
@@ -31,7 +30,7 @@ export class DataNode {
 
   get path() {
     if (!this.parent) return this.key ? [this.key] : []
-    return concat(this.parent.path, this.key)
+    return this.parent.path.concat(this.key)
   }
 
   get targetRaw() {

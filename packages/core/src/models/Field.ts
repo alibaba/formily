@@ -2,7 +2,6 @@ import {
   FormPath,
   isValid,
   FormPathPattern,
-  isFn,
   isEmpty,
   toArr,
 } from '@formily/shared'
@@ -16,7 +15,6 @@ import {
   reaction,
   batch,
   toJS,
-  autorun,
   action,
 } from '@formily/reactive'
 import { Form } from './Form'
@@ -48,8 +46,9 @@ import {
   allowAssignDefaultValue,
   queryFeedbackMessages,
   getValuesFromEvent,
-  modelStateSetter,
-  modelStateGetter,
+  createReactions,
+  createStateSetter,
+  createStateGetter,
   isHTMLInputEvent,
   setValidatorRule,
   batchValidate,
@@ -58,7 +57,7 @@ import {
   setValidating,
   setSubmitting,
   setLoading,
-  selfValidate,
+  validateSelf,
   getValidFieldDefaultValue,
 } from '../shared/internals'
 import { Query } from './Query'
@@ -251,7 +250,7 @@ export class Field<
         (value) => {
           this.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
           if (isValid(value) && this.modified && !this.caches.inputting) {
-            selfValidate(this)
+            validateSelf(this)
           }
         }
       ),
@@ -295,14 +294,7 @@ export class Field<
         }
       )
     )
-    const reactions = toArr(this.props.reactions)
-    this.form.addEffects(this, () => {
-      reactions.forEach((reaction) => {
-        if (isFn(reaction)) {
-          this.disposers.push(autorun(() => reaction(this)))
-        }
-      })
-    })
+    createReactions(this)
   }
 
   get parent() {
@@ -682,9 +674,9 @@ export class Field<
     }
   }
 
-  setState: IModelSetter<IFieldState> = modelStateSetter(this)
+  setState: IModelSetter<IFieldState> = createStateSetter(this)
 
-  getState: IModelGetter<IFieldState> = modelStateGetter(this)
+  getState: IModelGetter<IFieldState> = createStateGetter(this)
 
   onInit = () => {
     this.initialized = true
@@ -718,7 +710,7 @@ export class Field<
     this.form.modified = true
     this.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE)
     this.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
-    await selfValidate(this, 'onInput')
+    await validateSelf(this, 'onInput')
     this.caches.inputting = false
   }
 
@@ -728,7 +720,7 @@ export class Field<
     }
     this.active = true
     this.visited = true
-    await selfValidate(this, 'onFocus')
+    await validateSelf(this, 'onFocus')
   }
 
   onBlur = async (...args: any[]) => {
@@ -736,7 +728,7 @@ export class Field<
       if (!isHTMLInputEvent(args[0], false)) return
     }
     this.active = false
-    await selfValidate(this, 'onBlur')
+    await validateSelf(this, 'onBlur')
   }
 
   validate = (triggerType?: ValidatorTriggerType) => {

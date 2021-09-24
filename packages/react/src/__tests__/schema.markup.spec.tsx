@@ -769,3 +769,36 @@ test('nested update component props with x-reactions', async () => {
     expect(queryByText('10')).not.toBeNull()
   })
 })
+
+test('schema x-validator/required', async () => {
+  const form = createForm({
+    values: {
+      aaa: 'xxx',
+    },
+  })
+  const SchemaField = createSchemaField({
+    components: {
+      Input: () => <div></div>,
+    },
+  })
+
+  render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.String
+          name="input"
+          required
+          x-validator="email"
+          x-component="Input"
+        />
+      </SchemaField>
+    </FormProvider>
+  )
+  await waitFor(() => {
+    expect(form.query('input').get('required')).toBeTruthy()
+    expect(form.query('input').get('validator')).toEqual([
+      { required: true },
+      'email',
+    ])
+  })
+})

@@ -1,7 +1,7 @@
 import {
   getValuesFromEvent,
   matchFeedback,
-  applyFieldPatches,
+  patchFieldStates,
   setModelState,
   isHTMLInputEvent,
 } from '../shared/internals'
@@ -19,10 +19,10 @@ test('empty', () => {
   expect(matchFeedback()).toBeFalsy()
 })
 
-test('applyFieldPatches', () => {
+test('patchFieldStates', () => {
   const fields = {}
-  applyFieldPatches(fields, [{ type: 'update', address: 'aaa', payload: null }])
-  applyFieldPatches(fields, [
+  patchFieldStates(fields, [{ type: 'update', address: 'aaa', payload: null }])
+  patchFieldStates(fields, [
     { type: 'update3' as any, address: 'aaa', payload: null },
   ])
   expect(fields).toEqual({})

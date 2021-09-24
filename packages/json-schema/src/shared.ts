@@ -1,12 +1,11 @@
-import { isFn, isArr, toArr, FormPath } from '@formily/shared'
+import { isFn, each, isPlainObj, isArr, toArr, FormPath } from '@formily/shared'
 import { isObservable, untracked } from '@formily/reactive'
 import { Schema } from './schema'
+import { ISchema } from './types'
 
 const REVA_ACTIONS_KEY = Symbol.for('__REVA_ACTIONS')
 
-export const hasOwnProperty = Object.prototype.hasOwnProperty
-
-export const SchemaNestedKeys = {
+export const SchemaNestedMap = {
   parent: true,
   root: true,
   properties: true,
@@ -43,7 +42,7 @@ export const SchemaStateMap = {
   'x-component-props': 'componentProps',
 }
 
-export const SchemaValidatorKeys = {
+export const SchemaValidatorMap = {
   required: true,
   format: true,
   maxItems: true,
@@ -60,6 +59,59 @@ export const SchemaValidatorKeys = {
   maxProperties: true,
   minProperties: true,
   uniqueItems: true,
+}
+
+export const SchemaNormalKeys = Object.keys(SchemaStateMap)
+
+export const SchemaValidatorKeys = Object.keys(SchemaValidatorMap)
+
+export const hasOwnProperty = Object.prototype.hasOwnProperty
+
+export const traverse = (
+  target: any,
+  visitor: (value: any, path: Array<string | number>) => void,
+  filter?: (value: any, path: Array<string | number>) => boolean
+) => {
+  const seenObjects = []
+  const root = target
+  const traverse = (target: any, path = []) => {
+    if (filter?.(target, path) === false) return
+
+    if (isPlainObj(target)) {
+      const seenIndex = seenObjects.indexOf(target)
+      if (seenIndex > -1) {
+        return
+      }
+      const addIndex = seenObjects.length
+      seenObjects.push(target)
+      if (isNoNeedCompileObject(target) && root !== target) {
+        visitor(target, path)
+        return
+      }
+      each(target, (value, key) => {
+        traverse(value, path.concat(key))
+      })
+      seenObjects.splice(addIndex, 1)
+    } else {
+      visitor(target, path)
+    }
+  }
+  traverse(target)
+}
+
+export const traverseSchema = (
+  schema: ISchema,
+  visitor: (value: any, path: any[]) => void
+) => {
+  if (schema['x-validator'] !== undefined) {
+    visitor(schema['x-validator'], ['x-validator'])
+  }
+  traverse(schema, visitor, (value, path) => {
+    if (path[0] === 'x-validator') return false
+    if (String(path[0]).indexOf('x-') == -1 && isFn(value)) return false
+    if (SchemaNestedMap[path[0]]) return false
+    return true
+  })
 }
 
 export const isNoNeedCompileObject = (source: any) => {
@@ -118,7 +170,7 @@ export const patchStateFormSchema = (
         isEnum ? createDataSource(compiled) : compiled
       )
     } else {
-      const isValidatorKey = SchemaValidatorKeys[key]
+      const isValidatorKey = SchemaValidatorMap[key]
       if (isValidatorKey) {
         targetState['setValidatorRule'](key, compiled)
       }
