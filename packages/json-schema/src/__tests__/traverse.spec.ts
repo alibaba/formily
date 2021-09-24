@@ -1,5 +1,20 @@
-import { traverse } from '../shared'
+import { traverse, traverseSchema } from '../shared'
 import { FormPath } from '@formily/shared'
+
+test('traverseSchema', () => {
+  const visited = []
+  traverseSchema(
+    {
+      type: 'string',
+      required: true,
+      'x-validator': 'phone',
+    },
+    (value, path) => {
+      visited.push(path)
+    }
+  )
+  expect(visited).toEqual([['x-validator'], ['type'], ['required']])
+})
 
 test('traverse circular reference', () => {
   // eslint-disable-next-line
@@ -11,6 +26,9 @@ test('traverse circular reference', () => {
       cc: {
         dd: 123,
       },
+    },
+    kk: {
+      toJS() {},
     },
   }
   a.dd.mm = a
