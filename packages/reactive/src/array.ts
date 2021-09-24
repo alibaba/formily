@@ -34,4 +34,17 @@ export class ArraySet<T> {
       callback(this.value[index])
     }
   }
+
+  forEachDelete(callback: (value: T) => void) {
+    for (let index = 0; index < this.value.length; index++) {
+      const item = this.value[index]
+      this.value.splice(index, 1)
+      callback(item)
+      index--
+    }
+  }
+
+  clear() {
+    this.value.length = 0
+  }
 }

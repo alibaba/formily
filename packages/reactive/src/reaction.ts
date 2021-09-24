@@ -1,4 +1,5 @@
 import { isFn } from './checkers'
+import { ArraySet } from './array'
 import { IOperation, ReactionsMap, Reaction, PropertyKey } from './types'
 import {
   ReactionStack,
@@ -25,11 +26,13 @@ const addRawReactionsMap = (
     if (reactions) {
       reactions.add(reaction)
     } else {
-      reactionsMap.set(key, new Set([reaction]))
+      reactionsMap.set(key, new ArraySet([reaction]))
     }
     return reactionsMap
   } else {
-    const reactionsMap: ReactionsMap = new Map([[key, new Set([reaction])]])
+    const reactionsMap: ReactionsMap = new Map([
+      [key, new ArraySet([reaction])],
+    ])
     RawReactionsMap.set(target, reactionsMap)
     return reactionsMap
   }
@@ -43,7 +46,7 @@ const addReactionsMapToReaction = (
   if (bindSet) {
     bindSet.add(reactionsMap)
   } else {
-    reaction._reactionsSet = new Set([reactionsMap])
+    reaction._reactionsSet = new ArraySet([reactionsMap])
   }
   return bindSet
 }
@@ -113,7 +116,7 @@ export const bindComputedReactions = (reaction: Reaction) => {
       if (computes) {
         computes.add(reaction)
       } else {
-        current._computesSet = new Set([reaction])
+        current._computesSet = new ArraySet([reaction])
       }
     }
   }
@@ -191,8 +194,7 @@ export const batchScopeEnd = () => {
   const prevUntrackCount = UntrackCount.value
   BatchScope.value = false
   UntrackCount.value = 0
-  PendingScopeReactions.forEach((reaction) => {
-    PendingScopeReactions.delete(reaction)
+  PendingScopeReactions.forEachDelete((reaction) => {
     if (isFn(reaction._scheduler)) {
       reaction._scheduler(reaction)
     } else {
@@ -217,8 +219,7 @@ export const isScopeBatching = () => BatchScope.value
 export const isUntracking = () => UntrackCount.value > 0
 
 export const executePendingReactions = () => {
-  PendingReactions.forEach((reaction) => {
-    PendingReactions.delete(reaction)
+  PendingReactions.forEachDelete((reaction) => {
     if (isFn(reaction._scheduler)) {
       reaction._scheduler(reaction)
     } else {
