@@ -11,7 +11,7 @@ import {
   IVirtualFieldState,
   IVirtualField
 } from '@formily/core'
-import { Observable } from 'rxjs/internal/Observable'
+import { Observable } from 'rxjs'
 export * from '@formily/core'
 
 type ILayoutLabelAlign = 'top' | 'left' | 'right'
