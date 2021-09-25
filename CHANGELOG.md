@@ -1,5 +1,29 @@
 # Changelog
 
+## v2.0.0-rc.10(2021-09-21)
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix initialValues patch values with wrong type (#2214)](https://github.com/alibaba/formily/commit/334ff1bc) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(element): fix select label error (#2202)](https://github.com/alibaba/formily/commit/c8b513e0) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :memo: Documents Changes
+
+1. [docs(vue/element): add codesandbox support (#2206)](https://github.com/alibaba/formily/commit/07739bb9) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :rocket: Improve Performance
+
+1. [perf(path): use Map replace LRUMap](https://github.com/alibaba/formily/commit/1141e580) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(workflow): update ci actions](https://github.com/alibaba/formily/commit/aba1e3f0) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(deps-dev): bump semver-regex from 2.0.0 to 3.1.3 (#2209)](https://github.com/alibaba/formily/commit/94a6ffcc) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
+
+1. [chore(desingbale): move designable-antd/next to designable repo](https://github.com/alibaba/formily/commit/84327d2d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-rc.9(2021-09-18)
 
 ### :tada: Enhancements
@@ -769,25 +793,3 @@
 ### :rose: Improve code quality
 
 1. [refactor(core): controlled ==> designable](https://github.com/alibaba/formily/commit/ac79c196) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.60(2021-06-02)
-
-### :tada: Enhancements
-
-1. [feat(json-schema): add silent static method](https://github.com/alibaba/formily/commit/f1277ba2) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [feat(antd/next): support data props to FormItem](https://github.com/alibaba/formily/commit/a3750ec5) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [feat(designable): add SchemaRenderWidget](https://github.com/alibaba/formily/commit/ef49b45f) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :beetle: Bug Fixes
-
-1. [fix(react): fix ci](https://github.com/alibaba/formily/commit/f7fdbcd3) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(antd): fix typings](https://github.com/alibaba/formily/commit/6d8b1f22) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(core): fix array path calculation #1533](https://github.com/alibaba/formily/commit/29249000) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :blush: Other Changes
-
-1. [chore(pkg): add workspaces](https://github.com/alibaba/formily/commit/d8af530e) :point_right: ( [janrywang](https://github.com/janrywang) )
