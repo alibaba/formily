@@ -295,14 +295,9 @@ export function FormDrawer(
                           },
                         }
                       ),
-                      h(
-                        'div',
-                        {
-                          slot: 'title',
-                        },
-                        { default: () => resolveComponent(title) }
-                      ),
                     ],
+                    title: () =>
+                      h('div', {}, { default: () => resolveComponent(title) }),
                   }
                 ),
             }
@@ -408,9 +403,7 @@ const FormDrawerFooter = defineComponent({
             to: PORTAL_TARGET_NAME,
           },
         },
-        {
-          default: () => h(Fragment, {}, slots),
-        }
+        slots
       )
     }
   },

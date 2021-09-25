@@ -271,13 +271,11 @@ export const FormBaseItem = defineComponent<FormItemProps>({
               },
             },
             {
-              default: () => [
-                labelChildren,
+              default: () => [labelChildren],
+              content: () =>
                 h(
                   'div',
-                  {
-                    slot: 'content',
-                  },
+                  {},
                   {
                     default: () => [
                       overflow.value && resolveComponent(label),
@@ -285,7 +283,6 @@ export const FormBaseItem = defineComponent<FormItemProps>({
                     ],
                   }
                 ),
-              ],
             }
           )
         } else {
@@ -309,19 +306,17 @@ export const FormBaseItem = defineComponent<FormItemProps>({
                     },
                   },
                   {
-                    default: () => [
-                      h('i', { class: 'el-icon-info' }, {}),
+                    default: () => [h('i', { class: 'el-icon-info' }, {})],
+                    content: () =>
                       h(
                         'div',
                         {
                           class: `${prefixCls}-label-tooltip-content`,
-                          slot: 'content',
                         },
                         {
                           default: () => [resolveComponent(tooltip)],
                         }
                       ),
-                    ],
                   }
                 ),
               ],

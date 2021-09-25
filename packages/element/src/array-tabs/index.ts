@@ -42,25 +42,6 @@ export const ArrayTabs = observer(
           }
         }
 
-        const addButton = h(
-          Button,
-          {
-            class: [`${prefixCls}-addition`],
-            attrs: {
-              size: 'large',
-              icon: 'el-icon-plus',
-            },
-            on: {
-              click: (e: MouseEvent) => {
-                e.stopPropagation()
-                e.preventDefault()
-                onEdit(null, 'add')
-              },
-            },
-          },
-          {}
-        )
-
         const badgedTab = (index: number) => {
           const tab = `${field.title || 'Untitled'} ${index + 1}`
           const path = field.address.concat(index)
@@ -71,7 +52,7 @@ export const ArrayTabs = observer(
           if (errors.length) {
             return h(
               'span',
-              { slot: 'label' },
+              {},
               {
                 default: () => [
                   h(
@@ -86,19 +67,15 @@ export const ArrayTabs = observer(
                       default: () => [tab],
                     }
                   ),
-                  index === dataSource.length - 1 ? addButton : null,
                 ],
               }
             )
           }
           return h(
             'span',
-            { slot: 'label' },
+            {},
             {
-              default: () => [
-                tab,
-                index === dataSource.length - 1 ? addButton : null,
-              ],
+              default: () => [tab],
             }
           )
         }
@@ -120,7 +97,7 @@ export const ArrayTabs = observer(
                 },
               },
               {
-                default: () => [
+                default: () =>
                   h(
                     RecursionField,
                     {
@@ -131,8 +108,8 @@ export const ArrayTabs = observer(
                     },
                     {}
                   ),
-                  badgedTab(index),
-                ],
+
+                label: () => [badgedTab(index)],
               }
             )
           })
@@ -151,6 +128,7 @@ export const ArrayTabs = observer(
                 activeKey.value = key
               },
               'tab-remove': (target) => onEdit(target, 'remove'),
+              'tab-add': () => onEdit(null, 'add'),
             },
           },
           {
