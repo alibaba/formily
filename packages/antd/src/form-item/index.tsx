@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import cls from 'classnames'
 import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
@@ -91,7 +91,7 @@ function useOverflow<
   const containerRef = useRef<Container>()
   const contentRef = useRef<Content>()
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (containerRef.current && contentRef.current) {
       const contentWidth = contentRef.current.getBoundingClientRect().width
       const containerWidth = containerRef.current.getBoundingClientRect().width
@@ -116,10 +116,9 @@ const ICON_MAP = {
   warning: <ExclamationCircleOutlined />,
 }
 
-export const BaseItem: React.FC<IFormItemProps> = (props) => {
-  const { children, ...others } = props
-  const [active, setActice] = useState(false)
-  const formLayout = useFormItemLayout(others)
+export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
+  const [active, setActive] = useState(false)
+  const formLayout = useFormItemLayout(props)
   const gridSpan = useGridSpan(props.gridSpan)
   const { containerRef, contentRef, overflow } = useOverflow<
     HTMLDivElement,
@@ -219,10 +218,8 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
 
   const renderLabelText = () => {
     const labelChildren = (
-      <div className={cls(`${prefixCls}-label-content`)} ref={containerRef}>
-        {asterisk && (
-          <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>
-        )}
+      <div className={`${prefixCls}-label-content`} ref={containerRef}>
+        {asterisk && <span className={`${prefixCls}-asterisk`}>{'*'}</span>}
         <label ref={contentRef}>{label}</label>
       </div>
     )
@@ -244,7 +241,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const renderTooltipIcon = () => {
     if (tooltip && tooltipLayout === 'icon' && !overflow) {
       return (
-        <span className={cls(`${prefixCls}-label-tooltip-icon`)}>
+        <span className={`${prefixCls}-label-tooltip-icon`}>
           <Tooltip placement="top" align={{ offset: [0, 2] }} title={tooltip}>
             {tooltipIcon}
           </Tooltip>
@@ -268,7 +265,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         {renderLabelText()}
         {renderTooltipIcon()}
         {label !== ' ' && (
-          <span className={cls(`${prefixCls}-colon`)}>{colon ? ':' : ''}</span>
+          <span className={`${prefixCls}-colon`}>{colon ? ':' : ''}</span>
         )}
       </div>
     )
@@ -303,12 +300,12 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       })}
       onFocus={() => {
         if (feedbackIcon || inset) {
-          setActice(true)
+          setActive(true)
         }
       }}
       onBlur={() => {
         if (feedbackIcon || inset) {
-          setActice(false)
+          setActive(false)
         }
       }}
     >
