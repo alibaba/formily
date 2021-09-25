@@ -33,7 +33,7 @@
     "test:next": "jest packages/next",
     "test:watch": "jest --watch",
     "test:prod": "jest --coverage --silent",
-    "preversion": "npm run build && npm run lint && npm run test",
+    "preversion": "yarn install --ignore-engines && npm run build && npm run lint && npm run test",
     "version": "ts-node scripts/release changelog && git add -A",
     "publish:note": "ts-node scripts/release release",
     "version:alpha": "lerna version prerelease --preid alpha && npm run publish:note",
