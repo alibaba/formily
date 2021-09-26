@@ -36,7 +36,7 @@ const FormItem = observer(({ children }) => {
   return (
     <Form.Item
       label={field.title}
-      help={field.errors?.length ? field.errors : undefined}
+      help={field.selfErrors?.length ? field.selfErrors : undefined}
       extra={field.description}
       validateStatus={field.validateStatus}
     >

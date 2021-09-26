@@ -51,7 +51,7 @@ const FormItem = observer(
             props: {
               label: field.title,
               required: field.required,
-              help: field.errors?.length ? field.errors : undefined,
+              help: field.selfErrors?.length ? field.selfErrors : undefined,
               extra: field.description,
               validateStatus: field.validateStatus,
             },
