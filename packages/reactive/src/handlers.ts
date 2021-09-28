@@ -191,8 +191,9 @@ export const baseHandlers: ProxyHandler<any> = {
     return result
   },
   ownKeys(target) {
+    const keys = Reflect.ownKeys(target)
     bindTargetKeyWithCurrentReaction({ target, type: 'iterate' })
-    return Reflect.ownKeys(target)
+    return keys
   },
   set(target, key, value, receiver) {
     const hadKey = hasOwnProperty.call(target, key)
@@ -221,14 +222,14 @@ export const baseHandlers: ProxyHandler<any> = {
     return true
   },
   deleteProperty(target, key) {
-    const res = Reflect.deleteProperty(target, key)
     const oldValue = target[key]
+    delete target[key]
     runReactionsFromTargetKey({
       target,
       key,
       oldValue,
       type: 'delete',
     })
-    return res
+    return true
   },
 }

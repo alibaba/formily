@@ -562,7 +562,7 @@ export default () => {
                   dependencies: ['.confirm_password'],
                   fulfill: {
                     state: {
-                      errors:
+                      selfErrors:
                         '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
                     },
                   },
@@ -583,7 +583,7 @@ export default () => {
                   dependencies: ['.password'],
                   fulfill: {
                     state: {
-                      errors:
+                      selfErrors:
                         '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
                     },
                   },
@@ -882,7 +882,7 @@ const schema = {
           dependencies: ['.confirm_password'],
           fulfill: {
             state: {
-              errors:
+              selfErrors:
                 '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
             },
           },
@@ -903,7 +903,7 @@ const schema = {
           dependencies: ['.password'],
           fulfill: {
             state: {
-              errors:
+              selfErrors:
                 '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
             },
           },
@@ -1188,7 +1188,7 @@ export default () => {
             ]}
             reactions={(field) => {
               const confirm = field.query('.confirm_password')
-              field.errors =
+              field.selfErrors =
                 confirm.get('value') &&
                 field.value &&
                 field.value !== confirm.get('value')
@@ -1209,7 +1209,7 @@ export default () => {
             ]}
             reactions={(field) => {
               const password = field.query('.password')
-              field.errors =
+              field.selfErrors =
                 password.get('value') &&
                 field.value &&
                 field.value !== password.get('value')
@@ -1431,7 +1431,7 @@ export default () => {
                   dependencies: ['.confirm_password'],
                   fulfill: {
                     state: {
-                      errors:
+                      selfErrors:
                         '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
                     },
                   },
@@ -1452,7 +1452,7 @@ export default () => {
                   dependencies: ['.password'],
                   fulfill: {
                     state: {
-                      errors:
+                      selfErrors:
                         '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
                     },
                   },
@@ -1539,7 +1539,7 @@ const schema = {
           dependencies: ['.confirm_password'],
           fulfill: {
             state: {
-              errors:
+              selfErrors:
                 '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
             },
           },
@@ -1560,7 +1560,7 @@ const schema = {
           dependencies: ['.password'],
           fulfill: {
             state: {
-              errors:
+              selfErrors:
                 '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
             },
           },
@@ -1672,7 +1672,7 @@ export default () => {
             ]}
             reactions={(field) => {
               const confirm = field.query('.confirm_password')
-              field.errors =
+              field.selfErrors =
                 confirm.get('value') &&
                 field.value &&
                 field.value !== confirm.get('value')
@@ -1693,7 +1693,7 @@ export default () => {
             ]}
             reactions={(field) => {
               const confirm = field.query('.password')
-              field.errors =
+              field.selfErrors =
                 confirm.get('value') &&
                 field.value &&
                 field.value !== confirm.get('value')

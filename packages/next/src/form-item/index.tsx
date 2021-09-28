@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import cls from 'classnames'
 import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
@@ -91,7 +91,7 @@ function useOverflow<
   const containerRef = useRef<Container>()
   const contentRef = useRef<Content>()
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (containerRef.current && contentRef.current) {
       const contentWidth = contentRef.current.getBoundingClientRect().width
       const containerWidth = containerRef.current.getBoundingClientRect().width

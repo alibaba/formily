@@ -1,0 +1,6 @@
+@import '../__builtins__/styles/common.scss';
+
+.#{$formily-prefix}-form-inline {
+  display: flex;
+  flex-wrap: wrap;
+}

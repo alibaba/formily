@@ -23,7 +23,7 @@ if (isVue2) {
             },
           ],
         },
-        vm?.$slots?.default
+        vm?.$scopedSlots?.default?.(vm.$attrs)
       )
     },
   }

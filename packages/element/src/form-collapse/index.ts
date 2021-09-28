@@ -174,12 +174,13 @@ const FormCollapse = observer(
                   {
                     default: () => [
                       h(RecursionField, { props: { schema, name } }, {}),
+                    ],
+                    title: () =>
                       h(
                         'span',
-                        { slot: 'title' },
+                        {},
                         { default: () => badgedHeader(name, props) }
                       ),
-                    ],
                   }
                 )
               })

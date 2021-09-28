@@ -8,40 +8,39 @@ Formily Form Designer is an extension package based on [designable](https://gith
 
 ## Core Concept
 
-The core concept of Designable is to turn the designer into a modular combination, everything can be replaced. Designable itself provides a series of out-of-the-box components for users to use, but if users are not satisfied with the components, they can directly replace the components. To achieve maximum flexible customization, that is, Designable itself does not provide any plug-in related APIs
+The core concept of Designable is to turn the designer into a modular combination, everything can be replaced, Designable itself provides a series of out-of-the-box components for users to use, but if users are not satisfied with the components, they can directly replace the components. To achieve maximum flexible customization, that is, Designable itself does not provide any plug-in related APIs
 
 ## Install
 
 Ant Design users
 
 ```bash
-npm install --save @formily/designable-antd
+npm install --save @designable/formily-antd
 ```
 
 Alibaba Fusion users
 
 ```bash
-npm install --save @formily/designable-next
+npm install --save @designable/formily-next
 ```
 
 ## Get started quickly
 
-[Source Code](https://github.com/alibaba/formily/tree/formily_next/designable/antd/playground/widgets)
-
-In the following example, we will help you understand the usage of each component line by line through code comments.
+[Example Source Code](https://github.com/alibaba/designable/tree/main/formily/antd/playground)
 
 ```tsx pure
+import 'antd/dist/antd.less'
 import React, { useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import {
-  Designer, //Designer root component, used to deliver context
-  IconWidget, //Icon widget, used to obtain various system built-in icons
+  Designer, //Designer root component, mainly used to deliver context
   DesignerToolsWidget, //Drawing board tool pendant
   ViewToolsWidget, //View switching tool pendant
   Workspace, //Workspace components, core components, used to manage drag and drop behavior in the workspace, tree node data, etc...
   OutlineTreeWidget, //Outline tree component, it will automatically identify the current workspace and display the tree nodes in the workspace
-  DragSourceWidget, //Drag and drop the source component
-  MainPanel, //Main layout panel
+  ResourceWidget, //Drag and drop the source widget
+  HistoryWidget, //History widget
+  StudioPanel, //Main layout panel
   CompositePanel, //Left combined layout panel
   WorkspacePanel, //Workspace layout panel
   ToolbarPanel, //Toolbar layout panel
@@ -51,23 +50,49 @@ import {
   ComponentTreeWidget, //Component tree renderer
 } from '@designable/react'
 import { SettingsForm } from '@designable/react-settings-form'
-import { createDesigner, GlobalRegistry } from '@designable/core'
 import {
-  createDesignableField,
-  createDesignableForm,
-} from '@formily/designable-antd'
+  createDesigner,
+  GlobalRegistry,
+  Shortcut,
+  KeyCode,
+} from '@designable/core'
 import {
-  transformToSchema, //Convert the component tree structure into Formily JSON Schema
-  transformToTreeNode, //Convert Formily JSON Schema into a component tree
-} from '@designable/formily'
-import {
-  LogoWidget, //Business custom Logo rendering component
-  PreviewWidget, //Business custom preview component
-  SchemaEditorWidget, //Business custom Schema editor
-  MarkupSchemaWidget, //Business custom source code previewer
+  LogoWidget,
+  ActionsWidget,
+  PreviewWidget,
+  SchemaEditorWidget,
+  MarkupSchemaWidget,
 } from './widgets'
-import { Button } from 'antd'
-import 'antd/dist/antd.less'
+import { saveSchema } from './service'
+import {
+  Form,
+  Field,
+  Input,
+  Select,
+  TreeSelect,
+  Cascader,
+  Radio,
+  Checkbox,
+  Slider,
+  Rate,
+  NumberPicker,
+  Transfer,
+  Password,
+  DatePicker,
+  TimePicker,
+  Upload,
+  Switch,
+  Text,
+  Card,
+  ArrayCards,
+  ObjectContainer,
+  ArrayTable,
+  Space,
+  FormTab,
+  FormCollapse,
+  FormLayout,
+  FormGrid,
+} from '../src'
 
 GlobalRegistry.registerDesignerLocales({
   'zh-CN': {
@@ -75,6 +100,7 @@ GlobalRegistry.registerDesignerLocales({
       Inputs: 'Input controls',
       Layouts: 'Layout components',
       Arrays: 'Self-incrementing components',
+      Displays: 'Display components',
     },
   },
   'en-US': {
@@ -82,66 +108,78 @@ GlobalRegistry.registerDesignerLocales({
       Inputs: 'Inputs',
       Layouts: 'Layouts',
       Arrays: 'Arrays',
+      Displays: 'Displays',
     },
   },
 })
 
-const Root = createDesignableForm({
-  registryName: 'Root',
-})
-
-const DesignableField = createDesignableField({
-  registryName: 'DesignableField',
-})
-
 const App = () => {
-  const engine = useMemo(() => createDesigner(), [])
-
-  useEffect(() => {
-    //The business layer gets the schema to echo the data
-    fetchSchema().then((schema) => {
-      engine.setCurrentTree(
-        transformToTreeNode(schema, {
-          designableFieldName: 'DesignableField',
-          designableFormName: 'Root',
-        })
-      )
-    })
-  }, [])
-
+  const engine = useMemo(
+    () =>
+      createDesigner({
+        shortcuts: [
+          new Shortcut({
+            codes: [
+              [KeyCode.Meta, KeyCode.S],
+              [KeyCode.Control, KeyCode.S],
+            ],
+            handler(ctx) {
+              saveSchema(ctx.engine)
+            },
+          }),
+        ],
+        rootComponentName: 'Form',
+      }),
+    []
+  )
   return (
-    <Designer engine={engine} theme="dark">
-      <MainPanel
-        logo={<LogoWidget />}
-        actions={
-          <Button
-            onClick={() => {
-              submitSchema({
-                schema: transformToSchema(engine.getCurrentTree(), {
-                  designableFieldName: 'DesignableField',
-                  designableFormName: 'Root',
-                }),
-              })
-            }}
-          >
-            Save
-          </Button>
-        }
-      >
+    <Designer engine={engine}>
+      <StudioPanel logo={<LogoWidget />} actions={<ActionsWidget />}>
         <CompositePanel>
-          <CompositePanel.Item
-            title="panels.Component"
-            icon={<IconWidget infer="Component" />}
-          >
-            <DragSourceWidget title="sources.Inputs" name="inputs" />
-            <DragSourceWidget title="sources.Layouts" name="layouts" />
-            <DragSourceWidget title="sources.Arrays" name="arrays" />
+          <CompositePanel.Item title="panels.Component" icon="Component">
+            <ResourceWidget
+              title="sources.Inputs"
+              sources={[
+                Input,
+                Password,
+                NumberPicker,
+                Rate,
+                Slider,
+                Select,
+                TreeSelect,
+                Cascader,
+                Transfer,
+                Checkbox,
+                Radio,
+                DatePicker,
+                TimePicker,
+                Upload,
+                Switch,
+                ObjectContainer,
+              ]}
+            />
+            <ResourceWidget
+              title="sources.Layouts"
+              sources={[
+                Card,
+                FormGrid,
+                FormTab,
+                FormLayout,
+                FormCollapse,
+                Space,
+              ]}
+            />
+            <ResourceWidget
+              title="sources.Arrays"
+              sources={[ArrayCards, ArrayTable]}
+            />
+            <ResourceWidget title="sources.Displays" sources={[Text]} />
           </CompositePanel.Item>
-          <CompositePanel.Item
-            title="panels.OutlinedTree"
-            icon={<IconWidget infer="Outline" />}
-          >
+          <CompositePanel.Item title="panels.OutlinedTree" icon="Outline">
             <OutlineTreeWidget />
+          </CompositePanel.Item>
+          <CompositePanel.Item title="panels.History" icon="History">
+            <HistoryWidget />
           </CompositePanel.Item>
         </CompositePanel>
         <Workspace id="form">
@@ -157,8 +195,33 @@ const App = () => {
                 {() => (
                   <ComponentTreeWidget
                     components={{
-                      Root,
-                      DesignableField,
+                      Form,
+                      Field,
+                      Input,
+                      Select,
+                      TreeSelect,
+                      Cascader,
+                      Radio,
+                      Checkbox,
+                      Slider,
+                      Rate,
+                      NumberPicker,
+                      Transfer,
+                      Password,
+                      DatePicker,
+                      TimePicker,
+                      Upload,
+                      Switch,
+                      Text,
+                      Card,
+                      ArrayCards,
+                      ArrayTable,
+                      Space,
+                      FormTab,
+                      FormCollapse,
+                      FormGrid,
+                      FormLayout,
+                      ObjectContainer,
                     }}
                   />
                 )}
@@ -180,66 +243,10 @@ const App = () => {
         <SettingsPanel title="panels.PropertySettings">
           <SettingsForm uploadAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" />
         </SettingsPanel>
-      </MainPanel>
+      </StudioPanel>
     </Designer>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-## API
-
-> The Designable API document is currently unavailable, Yes, stay tuned~
-
-### createDesignableField
-
-#### Description
-
-Create DesignableField and consume it for ComponentTreeWidget to build
-
-#### Signature
-
-```ts
-interface IDesignableFieldFactoryProps {
-  registryName: string //Required, registered name, componentName that identifies DesignableField in the component tree
-  components?: Record<string, React.JSXElementConstructor<unknown>> //Custom canvas components, used to pass in x-component/x-decorator
-  componentsPropsSchema?: Record<string, ISchema> //Custom canvas component property schema configuration
-  componentsIcon?: Record<string, React.ReactNode> //Custom canvas component's icon
-  componentsSourceIcon?: Record<string, React.ReactNode> //Custom canvas component's drag source icon
-  dropFormItemComponents?: ComponentNameMatcher[] //Identify which components do not need to support FormItem
-  dropReactionComponents?: ComponentNameMatcher[] //Identify which components do not need to support responder configuration
-  selfRenderChildrenComponents?: ComponentNameMatcher[] //Identify which canvas components are rendered by the component itself, and currently internal components such as ArrayTable/FormTab are identified by default
-  inlineChildrenLayoutComponents?: ComponentNameMatcher[] //Identify which canvas component's child component layout mode is inline mode
-  inlineLayoutComponents?: ComponentNameMatcher[] //Identify which canvas components are in inline mode
-  restrictChildrenComponents?: Record<string, ComponentNameMatcher[]> //Node constraints, identify the upper and lower constraints between canvas components, for example, the child nodes of A component can only be B/C components
-  restrictSiblingComponents?: Record<string, ComponentNameMatcher[]> //Node constraint, identifies the adjacent constraint relationship of canvas components, for example, adjacent nodes of component A can only be B/C components
-}
-
-interface createDesignableField {
-  (props: IDesignableFieldFactoryProps): React.FC
-}
-```
-
-### createDesignableForm
-
-#### Description
-
-Create DesignableForm and consume it for ComponentTreeWidget
-
-It should be noted here that if it is a pure form designer, we need to specify the registryName as Root, so that the Form component cannot be dragged. If it is specified as DesignableForm or other names, it can be dragged. This scenario is suitable for Page-level construction, you can embed the entire form into other modules
-
-#### Signature
-
-```ts
-import { IDesignerProps } from '@designable/core'
-
-interface IDesignableFormFactoryProps extends IDesignerProps {
-  registryName: string //Required, registered name, componentName that identifies DesignableForm in the component tree
-  component?: React.JSXElementConstructor<unknown> //The canvas component of the Form, no need to specify by default
-}
-
-interface createDesignableForm {
-  (props: IDesignableFormFactoryProps): React.FC
-}
 ```

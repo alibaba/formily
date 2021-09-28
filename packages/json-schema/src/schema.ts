@@ -21,7 +21,7 @@ import {
   registerVoidComponents,
   registerTypeDefaultComponents,
 } from './polyfills'
-import { SchemaNestedKeys } from './shared'
+import { SchemaNestedMap } from './shared'
 
 export class Schema<
   Decorator = any,
@@ -467,7 +467,7 @@ export class Schema<
     each(this, (value, key) => {
       if (isFn(value) && !key.includes('x-')) return
       if (key === 'parent' || key === 'root') return
-      if (!SchemaNestedKeys[key]) {
+      if (!SchemaNestedMap[key]) {
         schema[key] = value ? compile(value, scope) : value
       } else {
         schema[key] = value ? shallowCompile(value, scope) : value

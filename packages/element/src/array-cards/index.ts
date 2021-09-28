@@ -143,8 +143,8 @@ const ArrayCardsInner = observer(
                       },
                     },
                     {
-                      default: () => [
-                        content,
+                      default: () => [content],
+                      header: () =>
                         h(
                           Row,
                           {
@@ -152,13 +152,11 @@ const ArrayCardsInner = observer(
                               type: 'flex',
                               justify: 'space-between',
                             },
-                            slot: 'header',
                           },
                           {
                             default: () => [title, extra],
                           }
                         ),
-                      ],
                     }
                   ),
               }

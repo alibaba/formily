@@ -1,8 +1,11 @@
 export const pickDataProps = (props: any = {}) => {
-  return Object.keys(props).reduce((buf, key) => {
-    if (key.includes('data-')) {
-      buf[key] = props[key]
+  const results = {}
+
+  for (let key in props) {
+    if (key.indexOf('data-') > -1) {
+      results[key] = props[key]
     }
-    return buf
-  }, {})
+  }
+
+  return results
 }

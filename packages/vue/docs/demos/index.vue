@@ -54,8 +54,8 @@ const FormItem = connect(
     (props, field) => {
       return {
         help: !isVoidField(field)
-          ? field.errors.length
-            ? field.errors
+          ? field.selfErrors.length
+            ? field.selfErrors
             : undefined
           : undefined,
         extra: field.description,
@@ -78,9 +78,9 @@ export default {
         field.value &&
         form.values[equalName] !== field.value
       ) {
-        field.errors = ['Password does not match Confirm Password.']
+        field.selfErrors = ['Password does not match Confirm Password.']
       } else {
-        field.errors = []
+        field.selfErrors = []
       }
     }
     return {

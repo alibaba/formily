@@ -49,7 +49,7 @@ const FormItem = connect(
     (props, field) => {
       return {
         ...props,
-        help: field.errors?.length ? field.errors : undefined,
+        help: field.selfErrors?.length ? field.selfErrors : undefined,
       }
     }
   )

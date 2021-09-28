@@ -975,7 +975,6 @@ test('initialValues merge values before create field', () => {
       name: 'array',
     })
   )
-
   form.values.array = [{ aa: '321' }]
   const arr_0_aa = attach(
     form.createField({
@@ -986,6 +985,25 @@ test('initialValues merge values before create field', () => {
   )
   expect(array.value).toEqual([{ aa: '321' }])
   expect(arr_0_aa.value).toEqual('321')
+})
+
+test('no patch with empty initialValues', () => {
+  const form = attach(
+    createForm({
+      values: {
+        array: [1, 2, 3],
+      },
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'array.0.1',
+    })
+  )
+
+  expect(form.values).toEqual({
+    array: [1, 2, 3],
+  })
 })
 
 test('initialValues merge values after create field', () => {
@@ -1062,8 +1080,8 @@ test('empty array initialValues', () => {
   expect(form.values.aa).toEqual([0])
   expect(form.values.bb).toEqual([''])
   expect(form.values.cc).toEqual([])
-  expect(form.values.dd).toEqual([])
-  expect(form.values.ee).toEqual([])
+  expect(form.values.dd).toEqual([null])
+  expect(form.values.ee).toEqual([undefined])
 })
 
 test('form lifecycle can be triggered after call form.setXXX', () => {

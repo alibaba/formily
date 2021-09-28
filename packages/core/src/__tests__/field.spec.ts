@@ -330,6 +330,35 @@ test('setDecorator/setDecoratorProps', () => {
   expect(field.decorator[1]).toEqual({ props: 123, hello: 'world' })
 })
 
+test('reaction initialValue', () => {
+  const form = attach(
+    createForm({
+      values: {
+        aa: 123,
+      },
+    })
+  )
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      reactions(field) {
+        field.initialValue = 321
+      },
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      value: 123,
+      reactions(field) {
+        field.initialValue = 321
+      },
+    })
+  )
+  expect(aa.value).toEqual(123)
+  expect(bb.value).toEqual(123)
+})
+
 test('selfValidate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedbacks', async () => {
   const form = attach(createForm())
   const field = attach(
@@ -425,20 +454,20 @@ test('selfValidate/errors/warnings/successes/valid/invalid/validateStatus/queryF
   expect(field.selfErrors).toEqual(['error'])
   await field.onBlur()
   expect(field.selfErrors).toEqual([
-    'The field value is a invalid url',
     'error',
+    'The field value is a invalid url',
   ])
   await field.onFocus()
   expect(field.selfErrors).toEqual([
+    'error',
     'The field value is a invalid url',
     'The field value is not a valid date format',
-    'error',
   ])
   field.setFeedback()
   expect(field.selfErrors).toEqual([
+    'error',
     'The field value is a invalid url',
     'The field value is not a valid date format',
-    'error',
   ])
   expect(field3.feedbacks).toEqual([])
   field3.setFeedback()
@@ -1493,4 +1522,84 @@ test('field submit', async () => {
     expect(e).not.toBeUndefined()
   }
   expect(onSubmit).toBeCalledTimes(0)
+})
+
+test('initial display with value', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      value: 123,
+      visible: false,
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      value: 123,
+      visible: true,
+    })
+  )
+  const cc = attach(
+    form.createField({
+      name: 'cc',
+      value: 123,
+      hidden: true,
+    })
+  )
+  expect(aa.value).toBeUndefined()
+  expect(aa.visible).toBeFalsy()
+  expect(bb.value).toEqual(123)
+  expect(bb.visible).toBeTruthy()
+  expect(cc.value).toEqual(123)
+  expect(cc.hidden).toBeTruthy()
+})
+
+test('state depend field visible value', async () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      reactions(field) {
+        field.visible = aa.value === '123'
+      },
+    })
+  )
+  const cc = attach(
+    form.createField({
+      name: 'cc',
+      reactions(field) {
+        field.visible = aa.value === '123'
+        field.disabled = !bb.value
+      },
+    })
+  )
+  expect(bb.visible).toBeFalsy()
+  expect(cc.visible).toBeFalsy()
+  expect(cc.disabled).toBeTruthy()
+  aa.value = '123'
+  await sleep(10)
+  expect(bb.visible).toBeTruthy()
+  expect(cc.visible).toBeTruthy()
+  expect(cc.disabled).toBeTruthy()
+  bb.value = '321'
+  await sleep(10)
+  expect(bb.visible).toBeTruthy()
+  expect(cc.visible).toBeTruthy()
+  expect(cc.disabled).toBeFalsy()
+  aa.value = ''
+  await sleep(10)
+  expect(bb.visible).toBeFalsy()
+  expect(cc.visible).toBeFalsy()
+  expect(cc.disabled).toBeTruthy()
+  aa.value = '123'
+  await sleep(10)
+  expect(bb.visible).toBeTruthy()
+  expect(cc.visible).toBeTruthy()
+  expect(cc.disabled).toBeFalsy()
 })

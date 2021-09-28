@@ -2,7 +2,7 @@ import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
 import { defineComponent, PropType } from '@vue/composition-api'
 import {
   composeExport,
-  getComponentByTag,
+  transformComponent,
   resolveComponent,
   SlotTypes,
 } from '../__builtins__/shared'
@@ -83,7 +83,7 @@ export type CheckboxGroupProps = ElCheckboxGroupProps & {
   optionType: 'default' | 'button'
 }
 
-const TransformElCheckboxGroup = getComponentByTag(ElCheckboxGroup, {
+const TransformElCheckboxGroup = transformComponent(ElCheckboxGroup, {
   change: 'input',
 })
 

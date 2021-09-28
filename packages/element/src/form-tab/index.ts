@@ -114,11 +114,9 @@ const FormTabInner = observer(
                     },
                     {}
                   ),
-                  h(
-                    'div',
-                    { slot: 'label' },
-                    { default: badgedTab(name, props) }
-                  ),
+                ],
+                label: () => [
+                  h('div', {}, { default: badgedTab(name, props) }),
                 ],
               }
             )
