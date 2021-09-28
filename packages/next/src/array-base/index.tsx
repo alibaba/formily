@@ -131,10 +131,15 @@ ArrayBase.Addition = (props) => {
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
   if (!array) return null
-  if (array.field?.pattern !== 'editable') return null
+  if (
+    array.field?.pattern !== 'editable' &&
+    array.field?.pattern !== 'disabled'
+  )
+    return null
   return (
     <Button
       {...props}
+      disabled={array.field?.disabled}
       className={cls(`${prefixCls}-addition`, props.className)}
       style={{ display: 'block', width: '100%', ...props.style }}
       onClick={(e) => {
