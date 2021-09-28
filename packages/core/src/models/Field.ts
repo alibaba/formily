@@ -59,6 +59,8 @@ import {
   setLoading,
   validateSelf,
   getValidFieldDefaultValue,
+  initializeStart,
+  initializeEnd,
 } from '../shared/internals'
 import { Query } from './Query'
 export class Field<
@@ -112,11 +114,13 @@ export class Field<
     this.form = form
     this.props = props
     this.designable = designable
+    initializeStart()
     this.makeIndexes(address)
     this.initialize()
     this.makeObservable()
     this.makeReactive()
     this.onInit()
+    initializeEnd()
   }
 
   protected makeIndexes(address: FormPathPattern) {

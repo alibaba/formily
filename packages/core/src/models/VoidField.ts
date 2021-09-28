@@ -19,6 +19,8 @@ import {
   createStateGetter,
   createStateSetter,
   initFieldUpdate,
+  initializeStart,
+  initializeEnd,
 } from '../shared/internals'
 import { Form } from './Form'
 import { Query } from './Query'
@@ -61,11 +63,13 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     this.form = form
     this.props = props
     this.designable = designable
+    initializeStart()
     this.makeIndexes(address)
     this.initialize()
     this.makeObservable()
     this.makeReactive()
     this.onInit()
+    initializeEnd()
   }
 
   protected makeIndexes(address: FormPathPattern) {

@@ -132,7 +132,10 @@ const setSchemaFieldState = (
   }
 }
 
-const getBaseScope = (field: Field, options: ISchemaTransformerOptions) => {
+const getBaseScope = (
+  field: Field,
+  options: ISchemaTransformerOptions = {}
+) => {
   const $observable = (target: any, deps?: any[]) =>
     autorun.memo(() => observable(target), deps)
   const $props = (props: any) => field.setComponentProps(props)
