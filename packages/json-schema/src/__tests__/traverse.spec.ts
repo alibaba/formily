@@ -8,12 +8,20 @@ test('traverseSchema', () => {
       type: 'string',
       required: true,
       'x-validator': 'phone',
+      default: {
+        input: 123,
+      },
     },
     (value, path) => {
       visited.push(path)
     }
   )
-  expect(visited).toEqual([['x-validator'], ['type'], ['required']])
+  expect(visited).toEqual([
+    ['x-validator'],
+    ['type'],
+    ['required'],
+    ['default'],
+  ])
 })
 
 test('traverse circular reference', () => {
@@ -33,6 +41,7 @@ test('traverse circular reference', () => {
   }
   a.dd.mm = a
   traverse(a, () => {})
+  traverseSchema(a as any, () => {})
 })
 
 test('traverse none circular reference', () => {
@@ -50,6 +59,7 @@ test('traverse none circular reference', () => {
   traverse(a, (value, path) => {
     paths.push(path)
   })
+  traverseSchema(a, () => {})
   expect(
     paths.some((path) => FormPath.parse(path).includes('dd.mm'))
   ).toBeTruthy()

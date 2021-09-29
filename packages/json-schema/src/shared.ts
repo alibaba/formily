@@ -69,14 +69,11 @@ export const hasOwnProperty = Object.prototype.hasOwnProperty
 
 export const traverse = (
   target: any,
-  visitor: (value: any, path: Array<string | number>) => void,
-  filter?: (value: any, path: Array<string | number>) => boolean
+  visitor: (value: any, path: Array<string | number>) => void
 ) => {
   const seenObjects = []
   const root = target
   const traverse = (target: any, path = []) => {
-    if (filter?.(target, path) === false) return
-
     if (isPlainObj(target)) {
       const seenIndex = seenObjects.indexOf(target)
       if (seenIndex > -1) {
