@@ -1028,5 +1028,7 @@ export const initializeStart = () => {
 }
 
 export const initializeEnd = () => {
-  GlobalState.initializing = false
+  batch.endpoint(() => {
+    GlobalState.initializing = false
+  })
 }

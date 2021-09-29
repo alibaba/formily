@@ -11,6 +11,7 @@ interface batch {
   <T>(callback?: () => T): T //原地batch
   scope<T>(callback?: () => T): T //原地局部batch
   bound<T extends (...args: any[]) => any>(callback: T, context?: any): T //高阶绑定
+  endpoint(callback?: () => void): void //注册批量执行结束回调
 }
 ```
 
