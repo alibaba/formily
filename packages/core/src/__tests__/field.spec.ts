@@ -1603,3 +1603,33 @@ test('state depend field visible value', async () => {
   expect(cc.visible).toBeTruthy()
   expect(cc.disabled).toBeFalsy()
 })
+
+test('reactions initialValue and value', () => {
+  const form = attach(
+    createForm({
+      values: {
+        aa: {
+          input: '111',
+        },
+      },
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'aa',
+      reactions: [
+        (field) => {
+          field.initialValue = {}
+          field.initialValue.input = 123
+        },
+      ],
+    })
+  )
+  attach(
+    form.createField({
+      name: 'input',
+      basePath: 'aa',
+    })
+  )
+  expect(form.values.aa.input).toEqual('111')
+})

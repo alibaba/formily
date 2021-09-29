@@ -463,3 +463,43 @@ describe('annotation batch', () => {
     expect(obs.cc).toEqual(41)
   })
 })
+
+describe('batch endpoint', () => {
+  test('normal endpoint', () => {
+    const tokens = []
+    const inner = batch.bound(() => {
+      batch.endpoint(() => {
+        tokens.push('endpoint')
+      })
+      tokens.push('inner')
+    })
+    const wrapper = batch.bound(() => {
+      inner()
+      tokens.push('wrapper')
+    })
+    wrapper()
+    expect(tokens).toEqual(['inner', 'wrapper', 'endpoint'])
+  })
+
+  test('unexpect endpoint', () => {
+    const tokens = []
+    const inner = batch.bound(() => {
+      batch.endpoint()
+      tokens.push('inner')
+    })
+    const wrapper = batch.bound(() => {
+      inner()
+      tokens.push('wrapper')
+    })
+    wrapper()
+    expect(tokens).toEqual(['inner', 'wrapper'])
+  })
+
+  test('no wrapper endpoint', () => {
+    const tokens = []
+    batch.endpoint(() => {
+      tokens.push('endpoint')
+    })
+    expect(tokens).toEqual(['endpoint'])
+  })
+})

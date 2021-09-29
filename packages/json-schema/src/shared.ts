@@ -69,14 +69,11 @@ export const hasOwnProperty = Object.prototype.hasOwnProperty
 
 export const traverse = (
   target: any,
-  visitor: (value: any, path: Array<string | number>) => void,
-  filter?: (value: any, path: Array<string | number>) => boolean
+  visitor: (value: any, path: Array<string | number>) => void
 ) => {
   const seenObjects = []
   const root = target
   const traverse = (target: any, path = []) => {
-    if (filter?.(target, path) === false) return
-
     if (isPlainObj(target)) {
       const seenIndex = seenObjects.indexOf(target)
       if (seenIndex > -1) {
@@ -106,12 +103,41 @@ export const traverseSchema = (
   if (schema['x-validator'] !== undefined) {
     visitor(schema['x-validator'], ['x-validator'])
   }
-  traverse(schema, visitor, (value, path) => {
-    if (path[0] === 'x-validator') return false
-    if (String(path[0]).indexOf('x-') == -1 && isFn(value)) return false
-    if (SchemaNestedMap[path[0]]) return false
-    return true
-  })
+  const seenObjects = []
+  const root = schema
+  const traverse = (target: any, path = []) => {
+    if (
+      path[0] === 'x-validator' ||
+      path[0] === 'version' ||
+      path[0] === '_isJSONSchemaObject'
+    )
+      return
+    if (String(path[0]).indexOf('x-') == -1 && isFn(target)) return
+    if (SchemaNestedMap[path[0]]) return
+    if (isPlainObj(target)) {
+      if (path[0] === 'default' || path[0] === 'x-value') {
+        visitor(target, path)
+        return
+      }
+      const seenIndex = seenObjects.indexOf(target)
+      if (seenIndex > -1) {
+        return
+      }
+      const addIndex = seenObjects.length
+      seenObjects.push(target)
+      if (isNoNeedCompileObject(target) && root !== target) {
+        visitor(target, path)
+        return
+      }
+      each(target, (value, key) => {
+        traverse(value, path.concat(key))
+      })
+      seenObjects.splice(addIndex, 1)
+    } else {
+      visitor(target, path)
+    }
+  }
+  traverse(schema)
 }
 
 export const isNoNeedCompileObject = (source: any) => {

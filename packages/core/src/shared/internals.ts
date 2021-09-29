@@ -49,6 +49,7 @@ import {
   RESPONSE_REQUEST_DURATION,
   ReservedProperties,
   NumberIndexReg,
+  GlobalState,
 } from './constants'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
@@ -160,17 +161,15 @@ export const patchFormValues = (
     if (allowAssignDefaultValue(targetValue, source)) {
       update(path, source)
     } else {
+      if (isEmpty(source)) return
+      if (GlobalState.initializing) return
       if (isPlainObj(targetValue) && isPlainObj(source)) {
         each(source, (value, key) => {
           patch(value, path.concat(key))
         })
-      } else if (!isEmpty(source)) {
+      } else {
         if (targetField) {
-          if (
-            !isVoidField(targetField) &&
-            targetField.initialized &&
-            !targetField.modified
-          ) {
+          if (!isVoidField(targetField) && !targetField.modified) {
             update(path, source)
           }
         } else {
@@ -619,7 +618,7 @@ export const setModelState = (model: any, setter: any) => {
     Object.keys(setter || {}).forEach((key: string) => {
       const value = setter[key]
       if (isFn(value)) return
-      if (ReservedProperties.has(key)) return
+      if (ReservedProperties[key]) return
       if (isSkipProperty(key)) return
       model[key] = value
     })
@@ -636,7 +635,7 @@ export const getModelState = (model: any, getter?: any) => {
       if (isFn(value)) {
         return buf
       }
-      if (ReservedProperties.has(key)) return buf
+      if (ReservedProperties[key]) return buf
       if (key === 'address' || key === 'path') {
         buf[key] = value.toString()
         return buf
@@ -1021,5 +1020,15 @@ export const createReactions = (field: GeneralField) => {
         field.disposers.push(autorun(batch.scope.bound(() => reaction(field))))
       }
     })
+  })
+}
+
+export const initializeStart = () => {
+  GlobalState.initializing = true
+}
+
+export const initializeEnd = () => {
+  batch.endpoint(() => {
+    GlobalState.initializing = false
   })
 }
