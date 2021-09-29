@@ -32,7 +32,7 @@
         :required="true"
       />
     </SchemaField>
-    <FormButtonGroup>
+    <FormButtonGroup alignFormItem>
       <Submit>提交</Submit>
     </FormButtonGroup>
   </Form>

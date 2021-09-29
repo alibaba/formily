@@ -50,7 +50,9 @@ export const Form = defineComponent<FormProps>({
                   h(
                     FormLayout,
                     {
-                      attrs,
+                      attrs: {
+                        ...attrs,
+                      },
                     },
                     {
                       default: () => [
