@@ -12,6 +12,7 @@ interface batch {
   scope<T>(callback?: () => T): T //In-situ local batch
   bound<T extends (...args: any[]) => any>(callback: T, context?: any): T //High-level binding
   endpoint(callback?: () => void): void //Register batch endpoint callback
+}
 ```
 
 ## Example
