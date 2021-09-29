@@ -1,5 +1,4 @@
 import { createForm } from '../'
-import { GlobalState } from '../shared/constants'
 import { attach, sleep } from './shared'
 
 test('create field', () => {
