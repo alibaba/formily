@@ -1,5 +1,37 @@
 # Changelog
 
+## v2.0.0-rc.11(2021-09-25)
+
+### :beetle: Bug Fixes
+
+1. [fix(core/json-schema): fix props unexpect patch and field reactions unexpect react (#2232)](https://github.com/alibaba/formily/commit/62fbe265) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(antd/next): remove duplicated exports (#2231)](https://github.com/alibaba/formily/commit/2c8cedb1) :point_right: ( [Robin Wong](https://github.com/Robin Wong) )
+
+1. [fix(vue): fix vue2 scopedSlot and slot pass problem (#2221)](https://github.com/alibaba/formily/commit/2489182c) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [fix(antd/next): fix FormDialog typings](https://github.com/alibaba/formily/commit/4b170ca7) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :memo: Documents Changes
+
+1. [docs(vue): add more scopedSlot content tests and readme (#2226)](https://github.com/alibaba/formily/commit/ff7e790f) :point_right: ( [lirui](https://github.com/lirui) )
+
+1. [docs(project): update login-register.md](https://github.com/alibaba/formily/commit/79f948b3) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [doc: fix typo for Ant Design in docs/guide/quick-start.md (#2201)](https://github.com/alibaba/formily/commit/151f6845) :point_right: ( [vagusX](https://github.com/vagusX) )
+
+### :rose: Improve code quality
+
+1. [refactor(element): refactor element slot pass way (#2236)](https://github.com/alibaba/formily/commit/da28fe7e) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :rocket: Improve Performance
+
+1. [perf(antd/next): improve FormItem render performance (#2237)](https://github.com/alibaba/formily/commit/64445d09) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore: update ci.yml](https://github.com/alibaba/formily/commit/4845ddfe) :point_right: ( [Janry](https://github.com/Janry) )
+
 ## v2.0.0-rc.10(2021-09-21)
 
 ### :beetle: Bug Fixes
@@ -787,9 +819,3 @@
 ## v2.0.0-beta.62(2021-06-02)
 
 ### No Change Log
-
-## v2.0.0-beta.61(2021-06-02)
-
-### :rose: Improve code quality
-
-1. [refactor(core): controlled ==> designable](https://github.com/alibaba/formily/commit/ac79c196) :point_right: ( [janrywang](https://github.com/janrywang) )
