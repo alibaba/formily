@@ -43,7 +43,7 @@ export class VoidField<
     initializeEnd()
   }
 
-  initialize() {
+  protected initialize() {
     this.mounted = false
     this.unmounted = false
     this.initialized = false
@@ -63,7 +63,7 @@ export class VoidField<
     this.component = toArr(this.props.component)
   }
 
-  makeObservable() {
+  protected makeObservable() {
     if (this.designable) return
     define(this, {
       title: observable.ref,
@@ -103,7 +103,7 @@ export class VoidField<
     })
   }
 
-  makeReactive() {
+  protected makeReactive() {
     if (this.designable) return
     createReactions(this)
   }

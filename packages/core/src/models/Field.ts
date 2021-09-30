@@ -94,7 +94,7 @@ export class Field<
     initializeEnd()
   }
 
-  initialize() {
+  protected initialize() {
     this.initialized = false
     this.loading = false
     this.validating = false
@@ -131,7 +131,7 @@ export class Field<
     this.component = toArr(this.props.component)
   }
 
-  makeObservable() {
+  protected makeObservable() {
     if (this.designable) return
     define(this, {
       title: observable.ref,
@@ -212,7 +212,7 @@ export class Field<
     })
   }
 
-  makeReactive() {
+  protected makeReactive() {
     if (this.designable) return
     this.disposers.push(
       reaction(
