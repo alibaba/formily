@@ -35,6 +35,7 @@ const Input = defineComponent({
     return () => {
       const field = fieldRef.value
       return h('input', {
+        class: 'test-input',
         attrs: {
           ...attrs,
           value: props.value,
@@ -145,6 +146,54 @@ test('render field', async () => {
   expect(form.query('aa').get('value')).toEqual('123')
   expect(form.query('kk').get('value')).toEqual('123')
   expect(getByTestId('mm-children')).not.toBeUndefined()
+})
+
+test('render field with html attrs', async () => {
+  const form = createForm()
+
+  const { getByTestId, container } = render(
+    defineComponent({
+      name: 'TestComponent',
+      setup() {
+        return {
+          form,
+          Input,
+          Decorator,
+        }
+      },
+      template: `<FormProvider :form="form">
+      <Field
+        name="aa"
+        :decorator="[Decorator, {
+          'data-testid': 'decorator',
+          class: {
+            'test-class': true
+          },
+          style: {
+            marginRight: '10px'
+          }
+        }]"
+        :component="[Input, {
+          class: {
+            'test-class': true
+          },
+          style: {
+            marginLeft: '10px'
+          }
+        }]"
+      />
+    </FormProvider>`,
+    })
+  )
+  expect(form.mounted).toBeTruthy()
+  expect(form.query('aa').take().mounted).toBeTruthy()
+  expect(getByTestId('aa').className.indexOf('test-input') !== -1).toBeTruthy()
+  expect(getByTestId('aa').className.indexOf('test-class') !== -1).toBeTruthy()
+  expect(getByTestId('aa').style.marginLeft).toEqual('10px')
+  expect(
+    getByTestId('decorator').className.indexOf('test-class') !== -1
+  ).toBeTruthy()
+  expect(getByTestId('decorator').style.marginRight).toEqual('10px')
 })
 
 test('ReactiveField', () => {
