@@ -97,13 +97,16 @@ export default observer(
               ) ?? field.decorator[0]) as VueComponent
               const decoratorData = toJS(field.decorator[1]) || {}
               const style = decoratorData?.style
+              const classes = decoratorData?.class
               delete decoratorData.style
+              delete decoratorData.class
               return {
                 default: () =>
                   h(
                     decorator,
                     {
                       style,
+                      class: classes,
                       attrs: decoratorData,
                     },
                     {
@@ -170,7 +173,9 @@ export default observer(
             }
 
             const style = originData?.style
-            delete originData?.style
+            const classes = originData?.class
+            delete originData.style
+            delete originData.class
             const attrs = {
               disabled: !isVoidField(field)
                 ? field.pattern === 'disabled' || field.pattern === 'readPretty'
@@ -185,6 +190,7 @@ export default observer(
             const componentData = {
               attrs,
               style,
+              class: classes,
               on: events,
             }
 
