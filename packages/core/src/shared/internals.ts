@@ -255,17 +255,18 @@ export const validateToFeedbacks = async (
   field: Field,
   triggerType?: ValidatorTriggerType
 ) => {
+  if (
+    field.pattern !== 'editable' ||
+    field.display !== 'visible' ||
+    field.unmounted
+  )
+    return {}
+
   const results = await validate(field.value, field.validator, {
     triggerType,
     validateFirst: field.props.validateFirst || field.form.props.validateFirst,
     context: field,
   })
-  const takeSkipCondition = () => {
-    if (field.display !== 'visible') return true
-    if (field.pattern !== 'editable') return true
-    if (field.unmounted) return true
-    return false
-  }
 
   batch(() => {
     each(results, (messages, type) => {
@@ -273,7 +274,7 @@ export const validateToFeedbacks = async (
         triggerType,
         type,
         code: pascalCase(`validate-${type}`),
-        messages: takeSkipCondition() ? [] : messages,
+        messages: messages,
       } as any)
     })
   })
