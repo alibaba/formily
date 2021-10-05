@@ -207,13 +207,15 @@ const getUserReactions =
         reaction.effects = effects?.length ? effects : DefaultFieldEffects
       }
       if (reaction.effects) {
-        untracked(() => {
-          each(reaction.effects, (type) => {
-            if (FieldEffects[type]) {
-              FieldEffects[type](field.address, run)
-            }
+        autorun.memo(() => {
+          untracked(() => {
+            each(reaction.effects, (type) => {
+              if (FieldEffects[type]) {
+                FieldEffects[type](field.address, run)
+              }
+            })
           })
-        })
+        }, [])
       } else {
         run()
       }

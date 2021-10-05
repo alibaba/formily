@@ -78,9 +78,7 @@ export function createSchemaField<Components extends SchemaReactComponents>(
   function MarkupField<
     Decorator extends ReactComponentPath<Components>,
     Component extends ReactComponentPath<Components>
-  >(
-    props: ISchemaMarkupFieldProps<Components, Component, Decorator>
-  ): React.ReactElement {
+  >(props: ISchemaMarkupFieldProps<Components, Component, Decorator>) {
     const parent = useContext(SchemaMarkupContext)
     if (!parent) return <Fragment />
     const renderChildren = () => {
