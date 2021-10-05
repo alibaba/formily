@@ -204,6 +204,18 @@ describe('normal batch', () => {
     expect(handler).toBeCalledTimes(2)
     expect(obs.cc).toEqual(41)
   })
+
+  test('batch error', () => {
+    let error = null
+    try {
+      batch(() => {
+        throw '123'
+      })
+    } catch (e) {
+      error = e
+    }
+    expect(error).toEqual('123')
+  })
 })
 
 describe('annotation batch', () => {
