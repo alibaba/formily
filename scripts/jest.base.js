@@ -12,8 +12,8 @@ module.exports = {
   // moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
   globals: {
     'ts-jest': {
-      babelConfig: true,
-      tsconfig: 'tsconfig.jest.json',
+      babelConfig: false,
+      tsconfig: path.resolve(__dirname, '../tsconfig.jest.json'),
       diagnostics: false,
     },
   },
