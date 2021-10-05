@@ -1,5 +1,27 @@
 # Changelog
 
+## v2.0.0-rc.12(2021-09-29)
+
+### :tada: Enhancements
+
+1. [feat(next/antd): change ArrayBase.Addition disabled UI (#2251)](https://github.com/alibaba/formily/commit/bfd832af) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix reactions initial value will overwrite value (#2252)](https://github.com/alibaba/formily/commit/c4ca495d) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(element): fix form props pass bug (#2253)](https://github.com/alibaba/formily/commit/71859771) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :memo: Documents Changes
+
+1. [docs(reactive): update reactive docs](https://github.com/alibaba/formily/commit/db4c35ff) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs: update errors to use selfErrors](https://github.com/alibaba/formily/commit/731ddc02) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore: update build scripts](https://github.com/alibaba/formily/commit/563c9fe8) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-rc.11(2021-09-25)
 
 ### :beetle: Bug Fixes
@@ -815,7 +837,3 @@
 ### :blush: Other Changes
 
 1. [chore(designable): formily designable progress 50%](https://github.com/alibaba/formily/commit/00603f53) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.62(2021-06-02)
-
-### No Change Log
