@@ -69,12 +69,15 @@ export const setValidateLanguage = (lang: string) => {
 
 export const getValidateLanguage = () => registry.locales.language
 
+export const getLocaleByPath = (path: string, lang: string = registry.locales.language) => getIn(
+  registry.locales.messages,
+  `${getISOCode(lang)}.${path}`
+)
+
+
 export const getValidateLocale = (path: string) => {
-  const message = getIn(
-    registry.locales.messages,
-    `${getISOCode(registry.locales.language)}.${path}`
-  )
-  return message || getValidateLocale('pattern')
+  const message = getLocaleByPath(path);
+  return message || getLocaleByPath('pattern') || getLocaleByPath('pattern', defaultLanguage)
 }
 
 export const getValidateMessageTemplateEngine = () => registry.template
