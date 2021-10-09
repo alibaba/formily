@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useRef } from 'react'
+import React, { Fragment, useContext, useRef, useMemo } from 'react'
 import { isFn, isValid } from '@formily/shared'
 import { GeneralField } from '@formily/core'
 import { Schema } from '@formily/json-schema'
@@ -40,7 +40,7 @@ const useBasePath = (props: IRecursionFieldProps) => {
 
 export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const basePath = useBasePath(props)
-  const fieldSchema = new Schema(props.schema)
+  const fieldSchema = useMemo(() => new Schema(props.schema), [props.schema])
   const fieldProps = useFieldProps(fieldSchema)
   const renderProperties = (field?: GeneralField) => {
     if (props.onlyRenderSelf) return

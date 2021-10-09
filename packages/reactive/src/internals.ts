@@ -95,15 +95,15 @@ export const createBoundaryFunction = (
 ) => {
   function boundary<F extends (...args: any) => any>(fn?: F): ReturnType<F> {
     let results: ReturnType<F>
-    start()
     try {
+      start()
       if (isFn(fn)) {
         results = fn()
       }
     } finally {
       end()
-      return results
     }
+    return results
   }
 
   boundary.bound = createBindFunction(boundary)

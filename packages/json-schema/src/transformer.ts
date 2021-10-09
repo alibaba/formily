@@ -132,7 +132,10 @@ const setSchemaFieldState = (
   }
 }
 
-const getBaseScope = (field: Field, options: ISchemaTransformerOptions) => {
+const getBaseScope = (
+  field: Field,
+  options: ISchemaTransformerOptions = {}
+) => {
   const $observable = (target: any, deps?: any[]) =>
     autorun.memo(() => observable(target), deps)
   const $props = (props: any) => field.setComponentProps(props)
@@ -204,13 +207,15 @@ const getUserReactions =
         reaction.effects = effects?.length ? effects : DefaultFieldEffects
       }
       if (reaction.effects) {
-        untracked(() => {
-          each(reaction.effects, (type) => {
-            if (FieldEffects[type]) {
-              FieldEffects[type](field.address, run)
-            }
+        autorun.memo(() => {
+          untracked(() => {
+            each(reaction.effects, (type) => {
+              if (FieldEffects[type]) {
+                FieldEffects[type](field.address, run)
+              }
+            })
           })
-        })
+        }, [])
       } else {
         run()
       }

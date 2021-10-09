@@ -4,6 +4,7 @@ import { IOperation, ReactionsMap, Reaction, PropertyKey } from './types'
 import {
   ReactionStack,
   PendingScopeReactions,
+  BatchEndpoints,
   DependencyCollected,
   RawReactionsMap,
   PendingReactions,
@@ -182,6 +183,7 @@ export const batchEnd = () => {
     const prevUntrackCount = UntrackCount.value
     UntrackCount.value = 0
     executePendingReactions()
+    executeBatchEndpoints()
     UntrackCount.value = prevUntrackCount
   }
 }
@@ -225,6 +227,12 @@ export const executePendingReactions = () => {
     } else {
       reaction()
     }
+  })
+}
+
+export const executeBatchEndpoints = () => {
+  BatchEndpoints.forEachDelete((callback) => {
+    callback()
   })
 }
 

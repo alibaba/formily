@@ -127,7 +127,6 @@ const ArrayItemsInner = observer(
                 'div',
                 {
                   class: [prefixCls],
-                  attrs,
                   on: {
                     change: () => {},
                   },
@@ -154,7 +153,9 @@ const ArrayItemsItem = defineComponent<IArrayItemsItemProps>({
         'div',
         {
           class: [`${prefixCls}-${props.type || 'card'}`],
-          attrs,
+          attrs: {
+            ...attrs,
+          },
           on: {
             change: () => {},
           },

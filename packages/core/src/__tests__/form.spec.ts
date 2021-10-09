@@ -1244,3 +1244,216 @@ test('designable form', () => {
   expect(form.values.aa).toEqual(321)
   expect(form.initialValues.bb).toEqual(321)
 })
+
+test('validate will skip display none', async () => {
+  const form = attach(createForm())
+  const validator = jest.fn()
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      validator() {
+        validator()
+        return 'error'
+      },
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      validator() {
+        validator()
+        return 'error'
+      },
+    })
+  )
+  try {
+    await form.validate()
+  } catch (e) {
+    expect(e).toEqual([
+      {
+        triggerType: 'onInput',
+        type: 'error',
+        code: 'ValidateError',
+        messages: ['error'],
+        address: 'aa',
+        path: 'aa',
+      },
+      {
+        triggerType: 'onInput',
+        type: 'error',
+        code: 'ValidateError',
+        messages: ['error'],
+        address: 'bb',
+        path: 'bb',
+      },
+    ])
+  }
+  expect(aa.invalid).toBeTruthy()
+  expect(bb.invalid).toBeTruthy()
+  expect(validator).toBeCalledTimes(2)
+  aa.display = 'none'
+  try {
+    await form.validate()
+  } catch (e) {
+    expect(e).toEqual([
+      {
+        triggerType: 'onInput',
+        type: 'error',
+        code: 'ValidateError',
+        messages: ['error'],
+        address: 'bb',
+        path: 'bb',
+      },
+    ])
+  }
+  expect(aa.invalid).toBeFalsy()
+  expect(bb.invalid).toBeTruthy()
+  expect(validator).toBeCalledTimes(3)
+  bb.display = 'none'
+  await form.validate()
+  expect(aa.invalid).toBeFalsy()
+  expect(bb.invalid).toBeFalsy()
+  expect(validator).toBeCalledTimes(3)
+})
+
+test('validate will skip unmounted', async () => {
+  const form = attach(createForm())
+  const validator = jest.fn()
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      validator() {
+        validator()
+        return 'error'
+      },
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      validator() {
+        validator()
+        return 'error'
+      },
+    })
+  )
+  try {
+    await form.validate()
+  } catch (e) {
+    expect(e).toEqual([
+      {
+        triggerType: 'onInput',
+        type: 'error',
+        code: 'ValidateError',
+        messages: ['error'],
+        address: 'aa',
+        path: 'aa',
+      },
+      {
+        triggerType: 'onInput',
+        type: 'error',
+        code: 'ValidateError',
+        messages: ['error'],
+        address: 'bb',
+        path: 'bb',
+      },
+    ])
+  }
+  expect(aa.invalid).toBeTruthy()
+  expect(bb.invalid).toBeTruthy()
+  expect(validator).toBeCalledTimes(2)
+  aa.onUnmount()
+  try {
+    await form.validate()
+  } catch (e) {
+    expect(e).toEqual([
+      {
+        triggerType: 'onInput',
+        type: 'error',
+        code: 'ValidateError',
+        messages: ['error'],
+        address: 'bb',
+        path: 'bb',
+      },
+    ])
+  }
+  expect(aa.invalid).toBeFalsy()
+  expect(bb.invalid).toBeTruthy()
+  expect(validator).toBeCalledTimes(3)
+  bb.onUnmount()
+  await form.validate()
+  expect(aa.invalid).toBeFalsy()
+  expect(bb.invalid).toBeFalsy()
+  expect(validator).toBeCalledTimes(3)
+})
+
+test('validate will skip uneditable', async () => {
+  const form = attach(createForm())
+  const validator = jest.fn()
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      validator() {
+        validator()
+        return 'error'
+      },
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      validator() {
+        validator()
+        return 'error'
+      },
+    })
+  )
+  try {
+    await form.validate()
+  } catch (e) {
+    expect(e).toEqual([
+      {
+        triggerType: 'onInput',
+        type: 'error',
+        code: 'ValidateError',
+        messages: ['error'],
+        address: 'aa',
+        path: 'aa',
+      },
+      {
+        triggerType: 'onInput',
+        type: 'error',
+        code: 'ValidateError',
+        messages: ['error'],
+        address: 'bb',
+        path: 'bb',
+      },
+    ])
+  }
+  expect(aa.invalid).toBeTruthy()
+  expect(bb.invalid).toBeTruthy()
+  expect(validator).toBeCalledTimes(2)
+  aa.editable = false
+  try {
+    await form.validate()
+  } catch (e) {
+    expect(e).toEqual([
+      {
+        triggerType: 'onInput',
+        type: 'error',
+        code: 'ValidateError',
+        messages: ['error'],
+        address: 'bb',
+        path: 'bb',
+      },
+    ])
+  }
+  expect(aa.invalid).toBeFalsy()
+  expect(bb.invalid).toBeTruthy()
+  expect(validator).toBeCalledTimes(3)
+  bb.editable = false
+  await form.validate()
+  expect(aa.invalid).toBeFalsy()
+  expect(bb.invalid).toBeFalsy()
+  expect(validator).toBeCalledTimes(3)
+})

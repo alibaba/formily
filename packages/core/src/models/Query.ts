@@ -49,17 +49,19 @@ export class Query {
 
   map(): GeneralField[]
   map<Result>(
-    mapper?: (field: GeneralField, address: FormPath) => Result
+    iterator?: (field: GeneralField, address: FormPath) => Result
   ): Result[]
-  map(mapper?: any): any {
+  map(iterator?: any): any {
     return this.addresses.map((address) =>
-      output(this.form.fields[address], mapper)
+      output(this.form.fields[address], iterator)
     )
   }
 
-  forEach<Result>(eacher: (field: GeneralField, address: FormPath) => Result) {
+  forEach<Result>(
+    iterator: (field: GeneralField, address: FormPath) => Result
+  ) {
     return this.addresses.forEach((address) =>
-      output(this.form.fields[address], eacher)
+      output(this.form.fields[address], iterator)
     )
   }
 

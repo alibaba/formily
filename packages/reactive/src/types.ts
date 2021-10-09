@@ -105,3 +105,7 @@ export interface IAction extends IBoundable {
   <T>(callback?: () => T): T //原地action
   scope?: (<T>(callback?: () => T) => T) & IBoundable //原地局部action
 }
+
+export interface IBatch extends IAction {
+  endpoint?: (callback?: () => void) => void
+}
