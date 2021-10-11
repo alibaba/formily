@@ -27,6 +27,9 @@
     "build:umd": "rollup --config",
     "build:global": "ts-node ../../scripts/build-global"
   },
+  "peerDependencies": {
+    "typescript": "^4.4.0"
+  },
   "dependencies": {
     "@formily/core": "2.0.0-rc.14",
     "@formily/reactive": "2.0.0-rc.14",
