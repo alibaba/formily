@@ -730,6 +730,6 @@ Note: The title attribute can receive the title mapping in the Field model, that
 
 No attributes
 
-### ArrayItems.useIndex
+### ArrayTable.useIndex
 
 > Read the React Hook of the current rendering row index
