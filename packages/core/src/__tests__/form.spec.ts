@@ -1,5 +1,6 @@
 import { createForm } from '../'
 import {
+  onFieldValidateStart,
   onFieldValueChange,
   onFormInitialValuesChange,
   onFormValuesChange,
@@ -1246,7 +1247,16 @@ test('designable form', () => {
 })
 
 test('validate will skip display none', async () => {
-  const form = attach(createForm())
+  const validateA = jest.fn()
+  const validateB = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFieldValidateStart('aa', validateA)
+        onFieldValidateStart('bb', validateB)
+      },
+    })
+  )
   const validator = jest.fn()
   const aa = attach(
     form.createField({
@@ -1288,6 +1298,8 @@ test('validate will skip display none', async () => {
       },
     ])
   }
+  expect(validateA).toBeCalledTimes(1)
+  expect(validateB).toBeCalledTimes(1)
   expect(aa.invalid).toBeTruthy()
   expect(bb.invalid).toBeTruthy()
   expect(validator).toBeCalledTimes(2)
@@ -1306,18 +1318,31 @@ test('validate will skip display none', async () => {
       },
     ])
   }
+  expect(validateA).toBeCalledTimes(1)
+  expect(validateB).toBeCalledTimes(2)
   expect(aa.invalid).toBeFalsy()
   expect(bb.invalid).toBeTruthy()
   expect(validator).toBeCalledTimes(3)
   bb.display = 'none'
   await form.validate()
+  expect(validateA).toBeCalledTimes(1)
+  expect(validateB).toBeCalledTimes(2)
   expect(aa.invalid).toBeFalsy()
   expect(bb.invalid).toBeFalsy()
   expect(validator).toBeCalledTimes(3)
 })
 
 test('validate will skip unmounted', async () => {
-  const form = attach(createForm())
+  const validateA = jest.fn()
+  const validateB = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFieldValidateStart('aa', validateA)
+        onFieldValidateStart('bb', validateB)
+      },
+    })
+  )
   const validator = jest.fn()
   const aa = attach(
     form.createField({
@@ -1359,6 +1384,8 @@ test('validate will skip unmounted', async () => {
       },
     ])
   }
+  expect(validateA).toBeCalledTimes(1)
+  expect(validateB).toBeCalledTimes(1)
   expect(aa.invalid).toBeTruthy()
   expect(bb.invalid).toBeTruthy()
   expect(validator).toBeCalledTimes(2)
@@ -1377,18 +1404,31 @@ test('validate will skip unmounted', async () => {
       },
     ])
   }
+  expect(validateA).toBeCalledTimes(1)
+  expect(validateB).toBeCalledTimes(2)
   expect(aa.invalid).toBeFalsy()
   expect(bb.invalid).toBeTruthy()
   expect(validator).toBeCalledTimes(3)
   bb.onUnmount()
   await form.validate()
+  expect(validateA).toBeCalledTimes(1)
+  expect(validateB).toBeCalledTimes(2)
   expect(aa.invalid).toBeFalsy()
   expect(bb.invalid).toBeFalsy()
   expect(validator).toBeCalledTimes(3)
 })
 
 test('validate will skip uneditable', async () => {
-  const form = attach(createForm())
+  const validateA = jest.fn()
+  const validateB = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFieldValidateStart('aa', validateA)
+        onFieldValidateStart('bb', validateB)
+      },
+    })
+  )
   const validator = jest.fn()
   const aa = attach(
     form.createField({
@@ -1430,6 +1470,8 @@ test('validate will skip uneditable', async () => {
       },
     ])
   }
+  expect(validateA).toBeCalledTimes(1)
+  expect(validateB).toBeCalledTimes(1)
   expect(aa.invalid).toBeTruthy()
   expect(bb.invalid).toBeTruthy()
   expect(validator).toBeCalledTimes(2)
@@ -1448,11 +1490,15 @@ test('validate will skip uneditable', async () => {
       },
     ])
   }
+  expect(validateA).toBeCalledTimes(1)
+  expect(validateB).toBeCalledTimes(2)
   expect(aa.invalid).toBeFalsy()
   expect(bb.invalid).toBeTruthy()
   expect(validator).toBeCalledTimes(3)
   bb.editable = false
   await form.validate()
+  expect(validateA).toBeCalledTimes(1)
+  expect(validateB).toBeCalledTimes(2)
   expect(aa.invalid).toBeFalsy()
   expect(bb.invalid).toBeFalsy()
   expect(validator).toBeCalledTimes(3)
