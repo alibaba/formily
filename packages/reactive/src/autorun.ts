@@ -1,8 +1,6 @@
 import {
   batchEnd,
   batchStart,
-  untrackEnd,
-  untrackStart,
   disposeBindingReactions,
   releaseBindingReactions,
   disposeEffects,
@@ -16,14 +14,6 @@ import { toArray } from './array'
 interface IValue {
   currentValue?: any
   oldValue?: any
-}
-
-interface IInitialized {
-  current?: boolean
-}
-
-interface IDirty {
-  current?: boolean
 }
 
 export const autorun = (tracker: Reaction, name = 'AutoRun') => {
@@ -119,47 +109,43 @@ export const reaction = <T>(
     ...options,
   }
   const value: IValue = {}
-  const initialized: IInitialized = {}
-  const dirty: IDirty = {}
   const dirtyCheck = () => {
     if (isFn(realOptions.equals))
       return !realOptions.equals(value.oldValue, value.currentValue)
     return value.oldValue !== value.currentValue
   }
 
-  const reaction = () => {
+  const fireAction = () => {
+    try {
+      batchStart()
+      if (isFn(subscriber)) subscriber(value.currentValue, value.oldValue)
+    } finally {
+      batchEnd()
+    }
+  }
+
+  const reaction: Reaction = () => {
     if (ReactionStack.indexOf(reaction) === -1) {
       releaseBindingReactions(reaction)
       try {
         ReactionStack.push(reaction)
         value.currentValue = tracker()
-        dirty.current = dirtyCheck()
       } finally {
         ReactionStack.pop()
       }
     }
-
-    if (
-      (dirty.current && initialized.current) ||
-      (!initialized.current && realOptions.fireImmediately)
-    ) {
-      try {
-        batchStart()
-        untrackStart()
-        if (isFn(subscriber)) subscriber(value.currentValue, value.oldValue)
-      } finally {
-        untrackEnd()
-        batchEnd()
-      }
-    }
-
-    value.oldValue = value.currentValue
-    initialized.current = true
   }
-
+  reaction._scheduler = (looping) => {
+    looping()
+    if (dirtyCheck()) fireAction()
+    value.oldValue = value.currentValue
+  }
   reaction._name = realOptions.name
   reaction()
-
+  value.oldValue = value.currentValue
+  if (realOptions.fireImmediately) {
+    fireAction()
+  }
   return () => {
     disposeBindingReactions(reaction)
   }
