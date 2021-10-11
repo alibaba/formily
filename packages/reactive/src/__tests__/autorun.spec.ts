@@ -68,6 +68,28 @@ test('reaction fireImmediately', () => {
   expect(handler).toBeCalledTimes(2)
 })
 
+test('reaction untrack handler', () => {
+  const obs = observable({
+    aa: {
+      bb: 123,
+      cc: 123,
+    },
+  })
+  const handler = jest.fn()
+  const dispose = reaction(
+    () => {
+      return obs.aa.bb
+    },
+    () => {
+      handler(obs.aa.cc)
+    }
+  )
+  obs.aa.bb = 222
+  obs.aa.cc = 222
+  expect(handler).toBeCalledTimes(1)
+  dispose()
+})
+
 test('reaction dirty check', () => {
   const obs: any = {
     aa: 123,

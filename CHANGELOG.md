@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.0.0-rc.13(2021-10-05)
+
+### :beetle: Bug Fixes
+
+1. [fix(reactive): fix batch api can not throw error (#2268)](https://github.com/alibaba/formily/commit/07227ad2) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): fix validate skip (#2265)](https://github.com/alibaba/formily/commit/4c1cfeda) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(vue): fix the problem that the component class name will be overwritten rather than merged (#2260)](https://github.com/alibaba/formily/commit/73053737) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+### :rose: Improve code quality
+
+1. [refactor(core): reduce core package size (#2261)](https://github.com/alibaba/formily/commit/84f3fc1b) :point_right: ( [Janry](https://github.com/Janry) )
+
 ## v2.0.0-rc.12(2021-09-29)
 
 ### :tada: Enhancements
@@ -815,25 +829,3 @@
 ### :blush: Other Changes
 
 1. [chore(readme): update readme](https://github.com/alibaba/formily/commit/692512da) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.63(2021-06-10)
-
-### :tada: Enhancements
-
-1. [feat(antd/next): add tree-shaking support for antd/next (#1544)](https://github.com/alibaba/formily/commit/6835f6d2) :point_right: ( [liuwei](https://github.com/liuwei) )
-
-### :beetle: Bug Fixes
-
-1. [fix(antd/next): fix dumi lost style due to treeshaking (#1549)](https://github.com/alibaba/formily/commit/20d6b4f2) :point_right: ( [liuwei](https://github.com/liuwei) )
-
-1. [fix: add defaultLanguage & doc: update setValidateLanguage (#1548)](https://github.com/alibaba/formily/commit/b2777527) :point_right: ( [zkylearner](https://github.com/zkylearner) )
-
-1. [fix(react): fix SchemaField missing props scope (#1543)](https://github.com/alibaba/formily/commit/2293d4b7) :point_right: ( [liuwei](https://github.com/liuwei) )
-
-### :memo: Documents Changes
-
-1. [docs(project): add designable links](https://github.com/alibaba/formily/commit/4e6d14ef) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :blush: Other Changes
-
-1. [chore(designable): formily designable progress 50%](https://github.com/alibaba/formily/commit/00603f53) :point_right: ( [janrywang](https://github.com/janrywang) )

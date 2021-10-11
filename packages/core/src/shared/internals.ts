@@ -255,13 +255,6 @@ export const validateToFeedbacks = async (
   field: Field,
   triggerType?: ValidatorTriggerType
 ) => {
-  if (
-    field.pattern !== 'editable' ||
-    field.display !== 'visible' ||
-    field.unmounted
-  )
-    return {}
-
   const results = await validate(field.value, field.validator, {
     triggerType,
     validateFirst: field.props.validateFirst || field.form.props.validateFirst,
@@ -880,6 +873,14 @@ export const batchValidate = async (
   triggerType?: ValidatorTriggerType
 ) => {
   if (isForm(target)) target.setValidating(true)
+  else {
+    if (
+      target.pattern !== 'editable' ||
+      target.display !== 'visible' ||
+      target.unmounted
+    )
+      return
+  }
   const tasks = []
   target.query(pattern).forEach((field) => {
     if (!isVoidField(field)) {
@@ -932,6 +933,13 @@ export const validateSelf = batch.bound(
         target.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED)
       }
     }
+
+    if (
+      target.pattern !== 'editable' ||
+      target.display !== 'visible' ||
+      target.unmounted
+    )
+      return {}
     start()
     if (!triggerType) {
       const allTriggerTypes = parseValidatorDescriptions(target.validator).map(
