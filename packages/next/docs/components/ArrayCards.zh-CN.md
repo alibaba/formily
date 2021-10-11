@@ -498,6 +498,6 @@ export default () => {
 
 无属性
 
-### ArrayItems.useIndex
+### ArrayCards.useIndex
 
 > 读取当前渲染行索引的 React Hook
