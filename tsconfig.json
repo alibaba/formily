@@ -9,6 +9,7 @@
     "noUnusedLocals": false,
     "preserveConstEnums": true,
     "sourceMap": true,
+    "skipLibCheck": true,
     "declaration": true,
     "experimentalDecorators": true,
     "downlevelIteration": true,
