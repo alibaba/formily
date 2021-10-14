@@ -189,7 +189,7 @@ const schema = {
       maxItems: 3,
       'x-decorator': 'FormItem',
       items: {
-        type: 'object',
+        type: 'void',
         'x-component': 'ArrayCollapse.CollapsePanel',
         'x-component-props': {
           header: 'String array',
