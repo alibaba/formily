@@ -62,6 +62,7 @@ module.exports = {
             '/api/hooks/use-field-schema',
             '/api/hooks/use-form',
             '/api/hooks/use-form-effects',
+            '/api/hooks/use-parent-form',
           ],
         },
         {

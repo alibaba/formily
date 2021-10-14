@@ -1,4 +1,4 @@
-import { h, useForm } from '@formily/vue'
+import { h, useParentForm } from '@formily/vue'
 import { IFormFeedback } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 import { defineComponent } from '@vue/composition-api'
@@ -18,7 +18,7 @@ export const Submit = observer(
     name: 'FSubmit',
     props: ['onClick', 'onSubmit', 'onSubmitSuccess', 'onSubmitFailed'],
     setup(props, { attrs, slots, listeners }) {
-      const formRef = useForm()
+      const formRef = useParentForm()
 
       return () => {
         const {

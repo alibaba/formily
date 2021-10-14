@@ -33,7 +33,7 @@ export const Form: React.FC<FormProps> = ({
     setValidateLanguage(validateLanguage)
   }, [lang])
 
-  const content = (
+  const renderContent = (form: FormType) => (
     <PreviewText.Placeholder value={previewTextPlaceholder}>
       <FormLayout {...props}>
         {React.createElement(
@@ -51,11 +51,11 @@ export const Form: React.FC<FormProps> = ({
     </PreviewText.Placeholder>
   )
 
-  if (top) return content
+  if (top) return renderContent(top)
 
   if (!form) throw new Error('must pass form instance by createForm')
 
-  return <FormProvider form={form}>{content}</FormProvider>
+  return <FormProvider form={form}>{renderContent(form)}</FormProvider>
 }
 
 Form.defaultProps = {
