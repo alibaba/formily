@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '@alifd/next'
 import { ButtonProps } from '@alifd/next/lib/button'
 import { IFormFeedback } from '@formily/core'
-import { useForm, observer } from '@formily/react'
+import { useParentForm, observer } from '@formily/react'
 
 interface ISubmitProps extends ButtonProps {
   onClick?: (e: React.MouseEvent<Element, MouseEvent>) => any
@@ -13,7 +13,7 @@ interface ISubmitProps extends ButtonProps {
 
 export const Submit: React.FC<ISubmitProps> = observer(
   ({ onSubmit, onSubmitFailed, onSubmitSuccess, ...props }: ISubmitProps) => {
-    const form = useForm()
+    const form = useParentForm()
     return (
       <Button
         htmlType={onSubmit ? 'button' : 'submit'}

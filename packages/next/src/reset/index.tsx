@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '@alifd/next'
 import { ButtonProps } from '@alifd/next/lib/button'
 import { IFormFeedback, IFieldResetOptions } from '@formily/core'
-import { useForm } from '@formily/react'
+import { useParentForm } from '@formily/react'
 
 export interface IResetProps extends IFieldResetOptions, ButtonProps {
   onClick?: (e: React.MouseEvent<Element, MouseEvent>) => any
@@ -17,7 +17,7 @@ export const Reset: React.FC<IResetProps> = ({
   onResetValidateSuccess,
   ...props
 }: IResetProps) => {
-  const form = useForm()
+  const form = useParentForm()
   return (
     <Button
       {...props}
