@@ -501,3 +501,7 @@ No attributes
 ### ArrayCards.useIndex
 
 > Read the React Hook of the current rendering row index
+
+### ArrayCards.useRecord
+
+> Read the React Hook of the current rendering row

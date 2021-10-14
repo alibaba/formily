@@ -748,3 +748,7 @@ No attributes
 ### ArrayTable.useIndex
 
 > Read the React Hook of the current rendering row index
+
+### ArrayTable.useRecord
+
+> Read the React Hook of the current rendering row

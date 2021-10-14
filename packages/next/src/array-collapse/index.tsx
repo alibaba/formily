@@ -132,7 +132,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
                 address: `${path}.**`,
               })
               return (
-                <ArrayBase.Item index={index}>
+                <ArrayBase.Item index={index} record={item}>
                   <div
                     className={cls(`${prefixCls}-item-title`, props.className)}
                   >
@@ -188,7 +188,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
                 key={index}
                 title={title()}
               >
-                <ArrayBase.Item index={index} key={index}>
+                <ArrayBase.Item index={index} key={index} record={item}>
                   {content}
                 </ArrayBase.Item>
               </Collapse.Panel>

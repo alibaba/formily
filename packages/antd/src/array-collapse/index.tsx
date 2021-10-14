@@ -138,7 +138,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
                 address: `${path}.**`,
               })
               return (
-                <ArrayBase.Item index={index}>
+                <ArrayBase.Item index={index} record={item}>
                   <RecursionField
                     schema={items}
                     name={index}
@@ -164,7 +164,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
             }
 
             const extra = (
-              <ArrayBase.Item index={index}>
+              <ArrayBase.Item index={index} record={item}>
                 <RecursionField
                   schema={items}
                   name={index}
@@ -198,7 +198,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
                 header={header()}
                 extra={extra}
               >
-                <ArrayBase.Item index={index} key={index}>
+                <ArrayBase.Item index={index} key={index} record={item}>
                   {content}
                 </ArrayBase.Item>
               </Collapse.Panel>

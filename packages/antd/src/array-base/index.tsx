@@ -30,6 +30,7 @@ export interface IArrayBaseContext {
 
 export interface IArrayBaseItemProps {
   index: number
+  record: any
 }
 
 export type ArrayBaseMixins = {
@@ -41,6 +42,7 @@ export type ArrayBaseMixins = {
   Index?: React.FC
   useArray?: () => IArrayBaseContext
   useIndex?: () => number
+  useRecord?: () => any
 }
 
 export interface IArrayBaseProps {
@@ -68,6 +70,11 @@ const useArray = () => {
 const useIndex = (index?: number) => {
   const ctx = useContext(ItemContext)
   return ctx ? ctx.index : index
+}
+
+const useRecord = (record?: number) => {
+  const ctx = useContext(ItemContext)
+  return ctx ? ctx.record : record
 }
 
 const getDefaultValue = (defaultValue: any, schema: Schema) => {
@@ -238,6 +245,7 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
 
 ArrayBase.useArray = useArray
 ArrayBase.useIndex = useIndex
+ArrayBase.useRecord = useRecord
 ArrayBase.mixin = (target: any) => {
   target.Index = ArrayBase.Index
   target.SortHandle = ArrayBase.SortHandle
@@ -247,6 +255,7 @@ ArrayBase.mixin = (target: any) => {
   target.MoveUp = ArrayBase.MoveUp
   target.useArray = ArrayBase.useArray
   target.useIndex = ArrayBase.useIndex
+  target.useRecord = ArrayBase.useRecord
   return target
 }
 
