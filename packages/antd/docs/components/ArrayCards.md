@@ -498,6 +498,10 @@ Note: The title attribute can receive the title mapping in the Field model, that
 
 No attributes
 
-### ArrayItems.useIndex
+### ArrayCards.useIndex
 
 > Read the React Hook of the current rendering row index
+
+### ArrayCards.useRecord
+
+> Read the React Hook of the current rendering row

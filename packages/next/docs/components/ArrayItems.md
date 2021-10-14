@@ -779,3 +779,7 @@ No attributes
 ### ArrayItems.useIndex
 
 > Read the React Hook of the current rendering row index
+
+### ArrayItems.useRecord
+
+> Read the React Hook of the current rendering row

@@ -631,3 +631,7 @@ No attributes
 ### ArrayCollapse.useIndex
 
 > Read the React Hook of the current rendering row index
+
+### ArrayCollapse.useRecord
+
+> Read the React Hook of the current rendering row
