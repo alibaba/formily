@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.0.0-rc.14(2021-10-11)
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix validate lifecycle wrong trigger in skip digest (#2279)](https://github.com/alibaba/formily/commit/1ac87fb4) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(reactive): fix reaction force untrack will effect to setState (#2278)](https://github.com/alibaba/formily/commit/17b9315e) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(validator): getValidatorLocale Maximum call stack size exceeded (#2273)](https://github.com/alibaba/formily/commit/200253e0) :point_right: ( [Suel](https://github.com/Suel) )
+
 ## v2.0.0-rc.13(2021-10-05)
 
 ### :beetle: Bug Fixes
@@ -809,23 +819,3 @@
 ### :blush: Other Changes
 
 1. [chore(designable-antd): upgrade designable](https://github.com/alibaba/formily/commit/ffce36c7) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.64(2021-06-11)
-
-### :tada: Enhancements
-
-1. [feat(designable-antd): improve designable schema descriptions](https://github.com/alibaba/formily/commit/ee8cb02d) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :beetle: Bug Fixes
-
-1. [fix(antd/next): fix FormItem styles](https://github.com/alibaba/formily/commit/4ca5fa4f) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(next): fix style missing due to wrong sideEffects (#1564)](https://github.com/alibaba/formily/commit/9fb8b93e) :point_right: ( [liuwei](https://github.com/liuwei) )
-
-### :rose: Improve code quality
-
-1. [refactor(antd/next): improve docs and support x-component/x-decorator ReactComponent style](https://github.com/alibaba/formily/commit/65bfef1e) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :blush: Other Changes
-
-1. [chore(readme): update readme](https://github.com/alibaba/formily/commit/692512da) :point_right: ( [janrywang](https://github.com/janrywang) )
