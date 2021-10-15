@@ -112,6 +112,47 @@ export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
   ) => {
     const ctx = getContext()
     const prefix = modal.prefix || ctx.prefix || 'next'
+    const okProps = {
+      children: ctx?.locale?.Dialog?.ok || '确定',
+      ...(ctx?.defaultPropsConfig?.Dialog?.okProps || {}),
+      ...(modal.okProps || {}),
+    }
+    const cancelProps = {
+      children: ctx?.locale?.Dialog?.cancel || '取消',
+      ...(ctx?.defaultPropsConfig?.Dialog?.cancelProps || {}),
+      ...(modal.cancelProps || {}),
+    }
+    const buttonMap = {
+      ok: (
+        <Button
+          key="ok"
+          type="primary"
+          className={prefix + '-dialog-btn'}
+          loading={env.form.submitting}
+          onClick={(e) => {
+            if (modal?.onOk?.(e) !== false) {
+              resolve()
+            }
+          }}
+          {...okProps}
+        />
+      ),
+      cancel: (
+        <Button
+          key="cancel"
+          className={prefix + '-dialog-btn'}
+          onClick={(e) => {
+            if (modal?.onCancel?.(e) !== false) {
+              reject()
+            }
+          }}
+          {...cancelProps}
+        />
+      ),
+    }
+    const footerActions = ctx?.defaultPropsConfig?.Dialog?.footerActions ||
+      modal.footerActions || ['cancel', 'ok']
+
     return (
       <ConfigProvider {...ctx}>
         <Observer>
@@ -121,30 +162,7 @@ export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
               visible={visible}
               footer={
                 <Fragment>
-                  <Button
-                    type="primary"
-                    className={prefix + '-dialog-btn'}
-                    loading={env.form.submitting}
-                    onClick={(e) => {
-                      if (modal?.onOk?.(e) !== false) {
-                        resolve()
-                      }
-                    }}
-                  >
-                    {modal?.locale?.ok || ctx?.locale?.Dialog?.ok || '确定'}
-                  </Button>
-                  <Button
-                    className={prefix + '-dialog-btn'}
-                    onClick={(e) => {
-                      if (modal?.onCancel?.(e) !== false) {
-                        reject()
-                      }
-                    }}
-                  >
-                    {modal?.locale?.cancel ||
-                      ctx?.locale?.Dialog?.cancel ||
-                      '取消'}
-                  </Button>
+                  {footerActions.map((item) => buttonMap[item])}
                 </Fragment>
               }
               onClose={(trigger, e) => {
