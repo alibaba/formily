@@ -102,3 +102,7 @@
 ### ArrayTable.useIndex
 
 > 读取当前渲染行索引的 Hook
+
+### ArrayTable.useRecord
+
+> 读取当前渲染记录的 Hook

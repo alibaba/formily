@@ -129,6 +129,7 @@ const ArrayCardsInner = observer(
                 key: getKey(item, index),
                 props: {
                   index,
+                  record: item,
                 },
               },
               {
@@ -241,6 +242,7 @@ export const ArrayCards = composeExport(ArrayCardsInner, {
   MoveUp: ArrayBase.MoveUp,
   useArray: ArrayBase.useArray,
   useIndex: ArrayBase.useIndex,
+  useRecord: ArrayBase.useRecord,
 })
 
 export default ArrayCards

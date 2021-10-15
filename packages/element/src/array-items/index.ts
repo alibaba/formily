@@ -43,6 +43,7 @@ const ArrayItemsInner = observer(
                 key,
                 props: {
                   index,
+                  record: item,
                 },
               },
               {
@@ -175,6 +176,7 @@ export const ArrayItems = composeExport(ArrayItemsInner, {
   MoveUp: ArrayBase.MoveUp,
   useArray: ArrayBase.useArray,
   useIndex: ArrayBase.useIndex,
+  useRecord: ArrayBase.useRecord,
 })
 
 export default ArrayItems
