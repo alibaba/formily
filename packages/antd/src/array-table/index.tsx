@@ -90,6 +90,7 @@ const useArrayTableSources = () => {
   }
 
   const parseArrayItems = (schema: Schema['items']) => {
+    if (!schema) return []
     const sources: ObservableColumnSource[] = []
     const items = isArr(schema) ? schema : [schema]
     return items.reduce((columns, schema) => {
@@ -120,7 +121,7 @@ const useArrayTableColumns = (
       render: (value: any, record: any) => {
         const index = dataSource.indexOf(record)
         const children = (
-          <ArrayBase.Item index={index}>
+          <ArrayBase.Item index={index} record={record}>
             <RecursionField schema={schema} name={index} onlyRenderProperties />
           </ArrayBase.Item>
         )

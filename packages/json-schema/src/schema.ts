@@ -176,7 +176,9 @@ export class Schema<
 
   ['x-read-only']?: boolean;
 
-  ['x-read-pretty']?: boolean
+  ['x-read-pretty']?: boolean;
+
+  [key: `x-${string | number}` | symbol]: any
 
   _isJSONSchemaObject = true
 

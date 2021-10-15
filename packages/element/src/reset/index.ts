@@ -1,5 +1,5 @@
 import { IFieldResetOptions } from '@formily/core'
-import { h, useForm } from '@formily/vue'
+import { h, useParentForm } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
 import { defineComponent } from '@vue/composition-api'
 
@@ -22,7 +22,7 @@ export const Reset = observer(
       },
     },
     setup(props, context) {
-      const formRef = useForm()
+      const formRef = useParentForm()
       const { listeners, slots } = context
       return () => {
         const form = formRef?.value

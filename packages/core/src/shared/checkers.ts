@@ -1,4 +1,5 @@
 import { isFn } from '@formily/shared'
+import { DataField } from '..'
 import {
   Form,
   Field,
@@ -59,7 +60,7 @@ export const isArrayFieldState = (state: any): state is IFieldState => {
   return state?.displayName === 'ArrayField'
 }
 
-export const isDataField = (node: any) => {
+export const isDataField = (node: any): node is DataField => {
   return isField(node) || isArrayField(node) || isObjectField(node)
 }
 

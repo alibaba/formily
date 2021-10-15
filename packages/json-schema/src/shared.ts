@@ -198,7 +198,7 @@ export const patchStateFormSchema = (
     } else {
       const isValidatorKey = SchemaValidatorMap[key]
       if (isValidatorKey) {
-        targetState['setValidatorRule'](key, compiled)
+        targetState['setValidatorRule']?.(key, compiled)
       }
     }
   })

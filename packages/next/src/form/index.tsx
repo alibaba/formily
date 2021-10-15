@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { FormProvider, IProviderProps, JSXComponent } from '@formily/react'
+import { FormProvider, JSXComponent, useForm } from '@formily/react'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
 import { ConfigProvider } from '@alifd/next'
 import {
@@ -9,8 +9,8 @@ import {
   IFormFeedback,
 } from '@formily/core'
 import { PreviewText } from '../preview-text'
-export interface FormProps extends IProviderProps, IFormLayoutProps {
-  form: FormType
+export interface FormProps extends IFormLayoutProps {
+  form?: FormType
   component?: JSXComponent
   onAutoSubmit?: (values: any) => any
   onAutoSubmitFailed?: (feedbacks: IFormFeedback[]) => void
@@ -25,6 +25,7 @@ export const Form: React.FC<FormProps> = ({
   previewTextPlaceholder,
   ...props
 }) => {
+  const top = useForm()
   const lang =
     (ConfigProvider as any).getContext()?.locale?.momentLocale ?? 'zh-CN'
   useMemo(() => {
@@ -32,25 +33,29 @@ export const Form: React.FC<FormProps> = ({
     setValidateLanguage(validateLanguage)
   }, [lang])
 
-  return (
-    <FormProvider form={form}>
-      <PreviewText.Placeholder value={previewTextPlaceholder}>
-        <FormLayout {...props}>
-          {React.createElement(
-            component,
-            {
-              onSubmit(e: React.FormEvent) {
-                e?.stopPropagation?.()
-                e?.preventDefault?.()
-                form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
-              },
+  const renderContent = (form: FormType) => (
+    <PreviewText.Placeholder value={previewTextPlaceholder}>
+      <FormLayout {...props}>
+        {React.createElement(
+          component,
+          {
+            onSubmit(e: React.FormEvent) {
+              e?.stopPropagation?.()
+              e?.preventDefault?.()
+              form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
             },
-            props.children
-          )}
-        </FormLayout>
-      </PreviewText.Placeholder>
-    </FormProvider>
+          },
+          props.children
+        )}
+      </FormLayout>
+    </PreviewText.Placeholder>
   )
+
+  if (top) return renderContent(top)
+
+  if (!form) throw new Error('must pass form instance by createForm')
+
+  return <FormProvider form={form}>{renderContent(form)}</FormProvider>
 }
 
 Form.defaultProps = {

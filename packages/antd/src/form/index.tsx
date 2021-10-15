@@ -1,10 +1,10 @@
 import React from 'react'
 import { Form as FormType, IFormFeedback } from '@formily/core'
-import { FormProvider, IProviderProps, JSXComponent } from '@formily/react'
+import { useForm, FormProvider, JSXComponent } from '@formily/react'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
 import { PreviewText } from '../preview-text'
-export interface FormProps extends IProviderProps, IFormLayoutProps {
-  form: FormType
+export interface FormProps extends IFormLayoutProps {
+  form?: FormType
   component?: JSXComponent
   onAutoSubmit?: (values: any) => any
   onAutoSubmitFailed?: (feedbacks: IFormFeedback[]) => void
@@ -19,25 +19,27 @@ export const Form: React.FC<FormProps> = ({
   previewTextPlaceholder,
   ...props
 }) => {
-  return (
-    <FormProvider form={form}>
-      <PreviewText.Placeholder value={previewTextPlaceholder}>
-        <FormLayout {...props}>
-          {React.createElement(
-            component,
-            {
-              onSubmit(e: React.FormEvent) {
-                e?.stopPropagation?.()
-                e?.preventDefault?.()
-                form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
-              },
+  const top = useForm()
+  const renderContent = (form: FormType) => (
+    <PreviewText.Placeholder value={previewTextPlaceholder}>
+      <FormLayout {...props}>
+        {React.createElement(
+          component,
+          {
+            onSubmit(e: React.FormEvent) {
+              e?.stopPropagation?.()
+              e?.preventDefault?.()
+              form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
             },
-            props.children
-          )}
-        </FormLayout>
-      </PreviewText.Placeholder>
-    </FormProvider>
+          },
+          props.children
+        )}
+      </FormLayout>
+    </PreviewText.Placeholder>
   )
+  if (top) return renderContent(top)
+  if (!form) throw new Error('must pass form instance by createForm')
+  return <FormProvider form={form}>{renderContent(form)}</FormProvider>
 }
 
 Form.defaultProps = {
