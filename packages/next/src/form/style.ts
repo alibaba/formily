@@ -1,1 +1,1 @@
-import './main.scss'
+// @ts-ignore
