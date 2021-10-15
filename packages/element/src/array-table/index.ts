@@ -129,6 +129,7 @@ const getArrayTableSources = (
   }
 
   const parseArrayTable = (schema: Schema['items']) => {
+    if (!schema) return []
     const sources: ObservableColumnSource[] = []
     const items = isArr(schema) ? schema : ([schema] as Schema[])
     return items.reduce((columns, schema) => {
@@ -172,7 +173,7 @@ const getArrayTableColumns = (
 
               const children = h(
                 ArrayBase.Item,
-                { props: { index }, key: `${key}${index}` },
+                { props: { index, record: props.row }, key: `${key}${index}` },
                 {
                   default: () =>
                     h(
@@ -561,6 +562,7 @@ export const ArrayTable = composeExport(ArrayTableInner, {
   MoveUp: ArrayBase.MoveUp,
   useArray: ArrayBase.useArray,
   useIndex: ArrayBase.useIndex,
+  useRecord: ArrayBase.useRecord,
 })
 
 export default ArrayTable

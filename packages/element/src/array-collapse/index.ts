@@ -143,6 +143,7 @@ export const ArrayCollapseInner = observer(
               {
                 props: {
                   index,
+                  record: item,
                 },
               },
               {
@@ -182,6 +183,7 @@ export const ArrayCollapseInner = observer(
               {
                 props: {
                   index,
+                  record: item,
                 },
               },
               {
@@ -237,6 +239,7 @@ export const ArrayCollapseInner = observer(
                     {
                       props: {
                         index,
+                        record: item,
                       },
                     },
                     {
@@ -379,6 +382,7 @@ export const ArrayCollapse = composeExport(ArrayCollapseInner, {
   MoveUp: ArrayBase.MoveUp,
   useArray: ArrayBase.useArray,
   useIndex: ArrayBase.useIndex,
+  useRecord: ArrayBase.useRecord,
 })
 
 export default ArrayCollapse
