@@ -25,6 +25,9 @@ export interface IFormLayoutProps {
   tooltipIcon?: React.ReactNode
   feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none'
   bordered?: boolean
+  gridColumnGap?: number
+  gridRowGap?: number
+  spaceGap?: number
 }
 
 export const FormLayoutDeepContext = createContext<IFormLayoutProps>(null)

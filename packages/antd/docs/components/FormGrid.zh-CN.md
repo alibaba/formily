@@ -192,7 +192,7 @@ export default () => {
   return (
     <React.Fragment>
       <p>maxColumns 3 + minColumns 2</p>
-      <FormGrid maxColumns={3} minColumns={2}>
+      <FormGrid maxColumns={3} minColumns={2} columnGap={4}>
         <GridColumn gridSpan={4}>
           <Cell>1</Cell>
         </GridColumn>
@@ -213,7 +213,7 @@ export default () => {
         </GridColumn>
       </FormGrid>
       <p>maxColumns 3</p>
-      <FormGrid maxColumns={3}>
+      <FormGrid maxColumns={3} columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
         </GridColumn>
@@ -234,7 +234,7 @@ export default () => {
         </GridColumn>
       </FormGrid>
       <p>minColumns 2</p>
-      <FormGrid minColumns={2}>
+      <FormGrid minColumns={2} columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
         </GridColumn>
@@ -255,7 +255,7 @@ export default () => {
         </GridColumn>
       </FormGrid>
       <p>Null</p>
-      <FormGrid>
+      <FormGrid columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
         </GridColumn>
@@ -276,7 +276,7 @@ export default () => {
         </GridColumn>
       </FormGrid>
       <p>minWidth 150 +maxColumns 3</p>
-      <FormGrid minWidth={150} maxColumns={3}>
+      <FormGrid minWidth={150} maxColumns={3} columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
         </GridColumn>
@@ -297,7 +297,7 @@ export default () => {
         </GridColumn>
       </FormGrid>
       <p>maxWidth 120+minColumns 2</p>
-      <FormGrid maxWidth={120} minColumns={2}>
+      <FormGrid maxWidth={120} minColumns={2} columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
         </GridColumn>
@@ -317,6 +317,18 @@ export default () => {
           <Cell>6</Cell>
         </GridColumn>
       </FormGrid>
+      <p>maxWidth 120</p>
+      <FormGrid maxWidth={120} columnGap={4}>
+        <GridColumn gridSpan={2}>
+          <Cell>1</Cell>
+        </GridColumn>
+        <GridColumn>
+          <Cell>2</Cell>
+        </GridColumn>
+        <GridColumn style={{ gridColumnEnd: '-1' }}>
+          <Cell>3</Cell>
+        </GridColumn>
+      </FormGrid>
     </React.Fragment>
   )
 }
@@ -333,8 +345,8 @@ export default () => {
 | minColumns  | `number \| number[]` | 最小列数     | 0                 |
 | maxColumns  | `number \| number[]` | 最大列数     | -                 |
 | breakpoints | number[]             | 容器尺寸断点 | `[720,1280,1920]` |
-| columnGap   | number               | 列间距       | 10                |
-| rowGap      | number               | 行间距       | 5                 |
+| columnGap   | number               | 列间距       | 8                 |
+| rowGap      | number               | 行间距       | 4                 |
 | colWrap     | boolean              | 自动换行     | true              |
 
 注意：

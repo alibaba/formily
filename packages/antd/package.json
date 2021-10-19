@@ -55,6 +55,7 @@
     "@formily/core": "2.0.0-rc.15",
     "@formily/json-schema": "2.0.0-rc.15",
     "@formily/react": "2.0.0-rc.15",
+    "@formily/grid": "2.0.0-rc.15",
     "@formily/reactive": "2.0.0-rc.15",
     "@formily/reactive-react": "2.0.0-rc.15",
     "@formily/shared": "2.0.0-rc.15",
