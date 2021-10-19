@@ -92,6 +92,7 @@ export class Grid<Container extends HTMLElement> {
       height: observable.ref,
       childCount: observable.ref,
       childSpans: observable.ref,
+      columns: observable.computed,
       templateColumns: observable.computed,
       gap: observable.computed,
     })
@@ -178,6 +179,7 @@ export class Grid<Container extends HTMLElement> {
   }
 
   get templateColumns() {
+    if (!this.width) return ''
     if (this.maxWidth === Infinity) {
       return `repeat(${this.columns},1fr)`
     }
