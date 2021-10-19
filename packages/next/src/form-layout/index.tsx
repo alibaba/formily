@@ -4,7 +4,6 @@ import React, {
   useRef,
   useState,
   useEffect,
-  useLayoutEffect,
 } from 'react'
 import { isValid, isNum, isStr, isArr } from '@formily/shared'
 import { usePrefixCls } from '../__builtins__'
@@ -40,7 +39,7 @@ export interface IFormLayoutProps {
   breakpoints?: number[]
 }
 
-interface IUseFormLayoutReactive {
+interface IUseResponsiveFormLayout {
   (props: IFormLayoutProps): {
     ref: React.MutableRefObject<HTMLDivElement>
     props: IFormLayoutProps
@@ -104,7 +103,7 @@ const normalizeProps = (
   }
 }
 
-const useFormLayoutReactive: IUseFormLayoutReactive = (props) => {
+const useResponsiveFormLayout: IUseResponsiveFormLayout = (props) => {
   const ref = useRef<HTMLDivElement>(null)
   const { breakpoints } = props
   if (!isArr(breakpoints)) {
@@ -147,10 +146,6 @@ const useFormLayoutReactive: IUseFormLayoutReactive = (props) => {
   }
 
   useEffect(() => {
-    updateUI()
-  }, [])
-
-  useLayoutEffect(() => {
     const observer = () => {
       updateUI()
     }
@@ -175,7 +170,7 @@ export const FormLayout: React.FC<IFormLayoutProps> & {
   useFormDeepLayout: () => IFormLayoutProps
   useFormShallowLayout: () => IFormLayoutProps
 } = ({ shallow, children, prefix, className, style, ...otherProps }) => {
-  const { ref, props } = useFormLayoutReactive(otherProps)
+  const { ref, props } = useResponsiveFormLayout(otherProps)
   const deepLayout = useFormDeepLayout()
   const formPrefixCls = usePrefixCls('form', { prefix })
   const layoutPrefixCls = usePrefixCls('formily-layout', { prefix })
