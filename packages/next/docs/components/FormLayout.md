@@ -181,3 +181,6 @@ export default () => (
 | tooltipLayout  | `"icon" \| "text"`                       | Ask the prompt layout                 | `"icon"`      |
 | tooltipIcon    | ReactNode                                | Ask the prompt icon                   | -             |
 | bordered       | boolean                                  | Is there a border                     | true          |
+| gridColumnGap  | number                                   | Grid Column Gap                       | 8             |
+| gridRowGap     | number                                   | Grid Row Gap                          | 4             |
+| spaceGap       | number                                   | Space Gap                             | 8             |
