@@ -317,7 +317,7 @@ export default () => {
           <Cell>6</Cell>
         </GridColumn>
       </FormGrid>
-      <p>maxWidth 120</p>
+      <p>maxWidth 120 + gridSpan -1</p>
       <FormGrid maxWidth={120} columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
@@ -325,7 +325,7 @@ export default () => {
         <GridColumn>
           <Cell>2</Cell>
         </GridColumn>
-        <GridColumn style={{ gridColumnEnd: '-1' }}>
+        <GridColumn gridSpan={-1}>
           <Cell>3</Cell>
         </GridColumn>
       </FormGrid>
@@ -357,9 +357,9 @@ note:
 
 ### FormGrid.GridColumn
 
-| Property name | Type   | Description                              | Default value |
-| ------------- | ------ | ---------------------------------------- | ------------- |
-| gridSpan      | number | Number of columns spanned by the element | 1             |
+| Property name | Type   | Description                                                                                                              | Default value |
+| ------------- | ------ | ------------------------------------------------------------------------------------------------------------------------ | ------------- |
+| gridSpan      | number | The number of columns spanned by the element, if it is -1, it will automatically fill the cell across columns in reverse | 1             |
 
 ### FormGrid.useGridSpan
 

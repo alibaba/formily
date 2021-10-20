@@ -41,6 +41,18 @@ const calcChildSpans = (nodes: HTMLElement[]) =>
     return buf + parseSpan(style.gridColumnStart)
   }, 0)
 
+const calcChildOriginSpans = (nodes: HTMLElement[]) =>
+  nodes.reduce((buf, node) => {
+    const style = getComputedStyle(node)
+    const origin = node.getAttribute('data-origin-span')
+    const current = parseSpan(style.gridColumnStart)
+    const span = Number(node.getAttribute('data-origin-span') ?? current)
+    if (!origin) {
+      node.setAttribute('data-origin-span', current as any)
+    }
+    return buf + span
+  }, 0)
+
 const calcSatisfyColumns = (
   width: number,
   maxColumns: number,
@@ -78,6 +90,7 @@ export class Grid<Container extends HTMLElement> {
   container: Container
   childCount = 0
   childSpans = 0
+  childOriginSpans = 0
   ready = false
   constructor(options?: IGridOptions) {
     this.options = {
@@ -135,7 +148,7 @@ export class Grid<Container extends HTMLElement> {
   get columns() {
     if (!this.ready) return 0
 
-    const spanColumns = this.childSpans
+    const spanColumns = this.childOriginSpans
 
     if (this.colWrap === false) {
       return spanColumns
@@ -209,12 +222,16 @@ export class Grid<Container extends HTMLElement> {
       const digestChild = batch.bound(() => {
         const children = Array.from(this.container.childNodes) as HTMLElement[]
         const childCount = children.length
+        const childOriginSpans = calcChildOriginSpans(children)
         const childSpans = calcChildSpans(children)
         if (this.childCount !== childCount) {
           this.childCount = childCount
         }
         if (this.childSpans !== childSpans) {
           this.childSpans = childSpans
+        }
+        if (this.childOriginSpans !== childOriginSpans) {
+          this.childOriginSpans = childOriginSpans
         }
       })
       const digestSize = batch.bound(() => {
@@ -226,14 +243,23 @@ export class Grid<Container extends HTMLElement> {
           this.height = rect.height
         }
       })
+      const mutationObserver = new MutationObserver(() => {
+        requestAnimationFrame(digestChild)
+      })
       const resizeObserver = new ResizeObserver(() => {
         requestAnimationFrame(digestSize)
       })
       resizeObserver.observe(this.container)
+      mutationObserver.observe(this.container, {
+        attributeFilter: ['style'],
+        attributes: true,
+        childList: true,
+      })
       initialize()
       return () => {
         resizeObserver.unobserve(this.container)
         resizeObserver.disconnect()
+        mutationObserver.disconnect()
       }
     }
 
@@ -243,6 +269,15 @@ export class Grid<Container extends HTMLElement> {
   calcGridSpan = (span: number) => {
     if (!this.ready) {
       return span
+    }
+    if (span === -1) {
+      const prevOriginSpans = this.childOriginSpans - 1
+      const prevSpans = this.childSpans - 1
+      const remainSpans = this.columns - prevOriginSpans
+      const remainOriginSpans = this.columns - prevSpans
+      const minRemainSpans = Math.max(remainSpans, remainOriginSpans)
+      if (minRemainSpans < 0) return 1
+      return minRemainSpans > 0 ? minRemainSpans : this.columns
     }
     return this.columns < span ? this.columns : span
   }

@@ -317,7 +317,7 @@ export default () => {
           <Cell>6</Cell>
         </GridColumn>
       </FormGrid>
-      <p>maxWidth 120</p>
+      <p>maxWidth 120 + gridSpan -1</p>
       <FormGrid maxWidth={120} columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
@@ -325,7 +325,7 @@ export default () => {
         <GridColumn>
           <Cell>2</Cell>
         </GridColumn>
-        <GridColumn style={{ gridColumnEnd: '-1' }}>
+        <GridColumn gridSpan={-1}>
           <Cell>3</Cell>
         </GridColumn>
       </FormGrid>
@@ -357,9 +357,9 @@ export default () => {
 
 ### FormGrid.GridColumn
 
-| 属性名   | 类型   | 描述         | 默认值 |
-| -------- | ------ | ------------ | ------ |
-| gridSpan | number | 元素所跨列数 | 1      |
+| 属性名   | 类型   | 描述                                                  | 默认值 |
+| -------- | ------ | ----------------------------------------------------- | ------ |
+| gridSpan | number | 元素所跨列数 ，如果为-1，那么会自动反向跨列填补单元格 | 1      |
 
 ### FormGrid.useGridSpan
 

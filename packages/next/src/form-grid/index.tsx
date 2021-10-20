@@ -22,6 +22,7 @@ export interface IGridColumnProps {
 type ComposedFormGrid = React.FC<IFormGridProps> & {
   GridColumn: React.FC<IGridColumnProps>
   useGridSpan: (gridSpan: number) => number
+  useGridColumn: (gridSpan: number) => string
 }
 
 const useFormGrid = (props: IFormGridProps) => {
@@ -37,6 +38,11 @@ const useFormGrid = (props: IFormGridProps) => {
 export const useGridSpan = (gridSpan = 1) => {
   const grid = useContext(FormGridContext)
   return grid?.calcGridSpan(gridSpan) ?? gridSpan
+}
+
+export const useGridColumn = (gridSpan = 1) => {
+  const span = useGridSpan(gridSpan)
+  return gridSpan === -1 ? `span ${span} / -1` : `span ${span} / auto`
 }
 
 export const FormGrid: ComposedFormGrid = observer(
@@ -77,11 +83,13 @@ export const FormGrid: ComposedFormGrid = observer(
 
 export const GridColumn: React.FC<IGridColumnProps> = observer(
   ({ gridSpan, children, ...props }) => {
-    const span = FormGrid.useGridSpan(gridSpan)
     return (
       <div
         {...props}
-        style={{ ...props.style, gridColumnStart: `span ${span}` }}
+        style={{
+          gridColumn: useGridColumn(gridSpan),
+          ...props.style,
+        }}
       >
         {children}
       </div>
