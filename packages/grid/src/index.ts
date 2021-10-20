@@ -78,6 +78,7 @@ export class Grid<Container extends HTMLElement> {
   container: Container
   childCount = 0
   childSpans = 0
+  ready = false
   constructor(options?: IGridOptions) {
     this.options = {
       breakpoints: [720, 1280, 1920],
@@ -90,6 +91,7 @@ export class Grid<Container extends HTMLElement> {
     define(this, {
       width: observable.ref,
       height: observable.ref,
+      ready: observable.ref,
       childCount: observable.ref,
       childSpans: observable.ref,
       columns: observable.computed,
@@ -131,6 +133,8 @@ export class Grid<Container extends HTMLElement> {
   }
 
   get columns() {
+    if (!this.ready) return 0
+
     const spanColumns = this.childSpans
 
     if (this.colWrap === false) {
@@ -197,10 +201,14 @@ export class Grid<Container extends HTMLElement> {
   connect = (container: Container) => {
     if (container) {
       this.container = container
-      const digest = batch.bound(() => {
+      const initialize = batch.bound(() => {
+        digestChild()
+        digestSize()
+        this.ready = true
+      })
+      const digestChild = batch.bound(() => {
         const children = Array.from(this.container.childNodes) as HTMLElement[]
         const childCount = children.length
-        const rect = this.container.getBoundingClientRect()
         const childSpans = calcChildSpans(children)
         if (this.childCount !== childCount) {
           this.childCount = childCount
@@ -208,6 +216,9 @@ export class Grid<Container extends HTMLElement> {
         if (this.childSpans !== childSpans) {
           this.childSpans = childSpans
         }
+      })
+      const digestSize = batch.bound(() => {
+        const rect = this.container.getBoundingClientRect()
         if (this.width !== rect.width) {
           this.width = rect.width
         }
@@ -215,18 +226,14 @@ export class Grid<Container extends HTMLElement> {
           this.height = rect.height
         }
       })
-      const mutationObserver = new MutationObserver(digest)
-      const resizeObserver = new ResizeObserver(digest)
-      resizeObserver.observe(this.container)
-      mutationObserver.observe(this.container, {
-        childList: true,
-        attributes: false,
+      const resizeObserver = new ResizeObserver(() => {
+        requestAnimationFrame(digestSize)
       })
-      digest()
+      resizeObserver.observe(this.container)
+      initialize()
       return () => {
         resizeObserver.unobserve(this.container)
         resizeObserver.disconnect()
-        mutationObserver.disconnect()
       }
     }
 
@@ -234,6 +241,9 @@ export class Grid<Container extends HTMLElement> {
   }
 
   calcGridSpan = (span: number) => {
+    if (!this.ready) {
+      return span
+    }
     return this.columns < span ? this.columns : span
   }
 
