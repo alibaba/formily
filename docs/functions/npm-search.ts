@@ -14,7 +14,7 @@ export const handler: Handler = async (event) => {
   }
   const params = qs.parse(event.rawQuery)
   const results = await axios.get(
-    `https://www.npmjs.com/suggestions/search?q=${params.q}&size=100`
+    `https://www.npmjs.com/search/suggestions?q=${params.q}&size=100`
   )
   return {
     statusCode: 200,
