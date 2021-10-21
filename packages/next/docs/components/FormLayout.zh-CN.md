@@ -188,3 +188,6 @@ export default () => (
 | tooltipIcon    | ReactNode                                                                             | 问号提示图标            | -          |
 | bordered       | boolean                                                                               | 是否有边框              | true       |
 | breakpoints    | number[]                                                                              | 容器尺寸断点            | -          |
+| gridColumnGap  | number                                                                                | 网格布局列间距          | 8          |
+| gridRowGap     | number                                                                                | 网格布局行间距          | 4          |
+| spaceGap       | number                                                                                | 弹性间距                | 8          |

@@ -192,7 +192,7 @@ export default () => {
   return (
     <React.Fragment>
       <p>maxColumns 3 + minColumns 2</p>
-      <FormGrid maxColumns={3} minColumns={2}>
+      <FormGrid maxColumns={3} minColumns={2} columnGap={4}>
         <GridColumn gridSpan={4}>
           <Cell>1</Cell>
         </GridColumn>
@@ -213,7 +213,7 @@ export default () => {
         </GridColumn>
       </FormGrid>
       <p>maxColumns 3</p>
-      <FormGrid maxColumns={3}>
+      <FormGrid maxColumns={3} columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
         </GridColumn>
@@ -234,7 +234,7 @@ export default () => {
         </GridColumn>
       </FormGrid>
       <p>minColumns 2</p>
-      <FormGrid minColumns={2}>
+      <FormGrid minColumns={2} columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
         </GridColumn>
@@ -255,7 +255,7 @@ export default () => {
         </GridColumn>
       </FormGrid>
       <p>Null</p>
-      <FormGrid>
+      <FormGrid columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
         </GridColumn>
@@ -276,7 +276,7 @@ export default () => {
         </GridColumn>
       </FormGrid>
       <p>minWidth 150 +maxColumns 3</p>
-      <FormGrid minWidth={150} maxColumns={3}>
+      <FormGrid minWidth={150} maxColumns={3} columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
         </GridColumn>
@@ -297,7 +297,7 @@ export default () => {
         </GridColumn>
       </FormGrid>
       <p>maxWidth 120+minColumns 2</p>
-      <FormGrid maxWidth={120} minColumns={2}>
+      <FormGrid maxWidth={120} minColumns={2} columnGap={4}>
         <GridColumn gridSpan={2}>
           <Cell>1</Cell>
         </GridColumn>
@@ -315,6 +315,18 @@ export default () => {
         </GridColumn>
         <GridColumn>
           <Cell>6</Cell>
+        </GridColumn>
+      </FormGrid>
+      <p>maxWidth 120 + gridSpan -1</p>
+      <FormGrid maxWidth={120} columnGap={4}>
+        <GridColumn gridSpan={2}>
+          <Cell>1</Cell>
+        </GridColumn>
+        <GridColumn>
+          <Cell>2</Cell>
+        </GridColumn>
+        <GridColumn gridSpan={-1}>
+          <Cell>3</Cell>
         </GridColumn>
       </FormGrid>
     </React.Fragment>
@@ -345,9 +357,9 @@ export default () => {
 
 ### FormGrid.GridColumn
 
-| 属性名   | 类型   | 描述         | 默认值 |
-| -------- | ------ | ------------ | ------ |
-| gridSpan | number | 元素所跨列数 | 1      |
+| 属性名   | 类型   | 描述                                                  | 默认值 |
+| -------- | ------ | ----------------------------------------------------- | ------ |
+| gridSpan | number | 元素所跨列数 ，如果为-1，那么会自动反向跨列填补单元格 | 1      |
 
 ### FormGrid.useGridSpan
 

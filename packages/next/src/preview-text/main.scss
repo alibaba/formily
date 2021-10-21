@@ -9,4 +9,8 @@ $form-text-prefix-cls: '#{$css-prefix}form-text';
   .#{$css-prefix}tag {
     margin-right: 4px;
   }
+
+  .#{$css-prefix}tag:last-child {
+    margin-right: 0;
+  }
 }

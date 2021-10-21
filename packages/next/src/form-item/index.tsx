@@ -4,7 +4,7 @@ import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
-import { useGridSpan } from '../form-grid'
+import { useGridColumn } from '../form-grid'
 import { Balloon } from '@alifd/next'
 import {
   QuestionCircleOutlined,
@@ -118,8 +118,8 @@ const ICON_MAP = {
 
 export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const { children, ...others } = props
-  const [active, setActice] = useState(false)
-  const gridSpan = useGridSpan(props.gridSpan)
+  const [active, setActive] = useState(false)
+  const gridColumn = useGridColumn(props.gridSpan)
   const formLayout = useFormItemLayout(others)
   const { containerRef, contentRef, overflow } = useOverflow<
     HTMLDivElement,
@@ -200,8 +200,8 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
 
   const gridStyles: React.CSSProperties = {}
 
-  if (gridSpan) {
-    gridStyles.gridColumnStart = `span ${gridSpan}`
+  if (gridColumn) {
+    gridStyles.gridColumn = gridColumn
   }
 
   const getOverflowTooltip = () => {
@@ -272,7 +272,6 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   return (
     <div
       {...pickDataProps(props)}
-      data-span={gridSpan || 1}
       style={{
         ...style,
         ...gridStyles,
@@ -299,12 +298,12 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       })}
       onFocus={() => {
         if (feedbackIcon || inset) {
-          setActice(true)
+          setActive(true)
         }
       }}
       onBlur={() => {
         if (feedbackIcon || inset) {
-          setActice(false)
+          setActive(false)
         }
       }}
     >

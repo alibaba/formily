@@ -182,3 +182,6 @@ export default () => (
 | tooltipIcon    | ReactNode                                                                              | Ask the prompt icon                   | -             |
 | bordered       | boolean                                                                                | Is there a border                     | true          |
 | breakpoints    | number[]                                                                               | Container size breakpoints            | -             |
+| gridColumnGap  | number                                                                                 | Grid Column Gap                       | 8             |
+| gridRowGap     | number                                                                                 | Grid Row Gap                          | 4             |
+| spaceGap       | number                                                                                 | Space Gap                             | 8             |

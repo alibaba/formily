@@ -65,24 +65,27 @@ const Select: React.FC<SelectProps> = observer((props) => {
     }
   }
 
+  const getLabel = (target: any) => {
+    return (
+      dataSource?.find((item) => item.value == target?.value)?.label ||
+      target.label ||
+      placeholder
+    )
+  }
+
   const getLabels = () => {
     const selected = getSelected()
-    if (!selected.length)
-      return (
-        <Tag type="primary" size="small">
-          {placeholder}
-        </Tag>
-      )
-    return selected.map(({ value, label }, key) => {
-      const text =
-        dataSource?.find((item) => item.value == value)?.label || label
+    if (!selected.length) return placeholder
+    if (selected.length === 1) return getLabel(selected[0])
+    return selected.map((item, key) => {
       return (
         <Tag type="primary" size="small" key={key}>
-          {text || placeholder}
+          {getLabel(item)}
         </Tag>
       )
     })
   }
+
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 })
 

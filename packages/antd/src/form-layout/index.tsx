@@ -30,6 +30,9 @@ export interface IFormLayoutProps {
   feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none'
   bordered?: boolean
   breakpoints?: number[]
+  spaceGap?: number
+  gridColumnGap?: number
+  gridRowGap?: number
 }
 
 export const FormLayoutDeepContext = createContext<IFormLayoutProps>(null)

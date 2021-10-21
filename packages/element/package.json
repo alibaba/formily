@@ -35,7 +35,6 @@
     "@vuepress-dumi/vuepress-theme-dumi": "0.3.3",
     "@vuepress/plugin-back-to-top": "^1.8.2",
     "@vuepress/plugin-medium-zoom": "^1.8.2",
-    "axios": "^0.21.1",
     "codesandbox": "^2.2.3",
     "core-js": "^2.4.0",
     "element-ui": "latest",
