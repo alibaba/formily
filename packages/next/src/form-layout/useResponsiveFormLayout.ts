@@ -73,7 +73,7 @@ const calculateProps: ICalculateProps = (target, props) => {
   }
 }
 
-const useResponsiveFormLayout: IUseResponsiveFormLayout = (props) => {
+export const useResponsiveFormLayout: IUseResponsiveFormLayout = (props) => {
   const ref = useRef<HTMLDivElement>(null)
   const { breakpoints } = props
   if (!isArr(breakpoints)) {
@@ -104,5 +104,3 @@ const useResponsiveFormLayout: IUseResponsiveFormLayout = (props) => {
     props: layoutProps,
   }
 }
-
-export default useResponsiveFormLayout

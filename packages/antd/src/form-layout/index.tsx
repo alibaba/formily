@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import useResponsiveFormLayout from './useResponsiveFormLayout'
+import { useResponsiveFormLayout } from './useResponsiveFormLayout'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 
