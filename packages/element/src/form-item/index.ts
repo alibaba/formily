@@ -15,6 +15,7 @@ import { stylePrefix } from '../__builtins__/configs'
 import { Component } from 'vue'
 import { Tooltip } from 'element-ui'
 import ResizeObserver from 'resize-observer-polyfill'
+import { useGridColumn } from '../form-grid'
 
 export type FormItemProps = {
   className?: string
@@ -152,6 +153,12 @@ export const FormBaseItem = defineComponent<FormItemProps>({
     provide(FormLayoutShallowContext, ref(null))
 
     return () => {
+      const gridColumn = useGridColumn(props.gridSpan)
+      const gridStyles: Record<string, any> = {}
+
+      if (gridColumn) {
+        gridStyles.gridColumn = gridColumn
+      }
       const deepLayout = deepLayoutRef.value
       const {
         label,
@@ -446,7 +453,9 @@ export const FormBaseItem = defineComponent<FormItemProps>({
       return h(
         'div',
         {
-          style: attrs.style as string | undefined,
+          style: {
+            ...gridStyles,
+          },
           class: {
             [`${prefixCls}`]: true,
             [`${prefixCls}-layout-${layout}`]: true,

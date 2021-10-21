@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>maxColumns 3 + minColumns 2</p>
-    <FormGrid :maxColumns="3" :minColumns="2">
+    <FormGrid :maxColumns="3" :minColumns="2" :columnGap="4">
       <FormGridColumn :gridSpan="4">
         <Cell>1</Cell>
       </FormGridColumn>
@@ -22,7 +22,7 @@
       </FormGridColumn>
     </FormGrid>
     <p>maxColumns 3</p>
-    <FormGrid :maxColumns="3">
+    <FormGrid :maxColumns="3" :columnGap="4">
       <FormGridColumn :gridSpan="2">
         <Cell>1</Cell>
       </FormGridColumn>
@@ -43,7 +43,7 @@
       </FormGridColumn>
     </FormGrid>
     <p>minColumns 2</p>
-    <FormGrid :minColumns="2">
+    <FormGrid :minColumns="2" :columnGap="4">
       <FormGridColumn :gridSpan="2">
         <Cell>1</Cell>
       </FormGridColumn>
@@ -64,7 +64,7 @@
       </FormGridColumn>
     </FormGrid>
     <p>Null</p>
-    <FormGrid>
+    <FormGrid :columnGap="4">
       <FormGridColumn :gridSpan="2">
         <Cell>1</Cell>
       </FormGridColumn>
@@ -85,7 +85,7 @@
       </FormGridColumn>
     </FormGrid>
     <p>minWidth 150 +maxColumns 3</p>
-    <FormGrid :minWidth="150" :maxColumns="3">
+    <FormGrid :minWidth="150" :maxColumns="3" :columnGap="4">
       <FormGridColumn :gridSpan="2">
         <Cell>1</Cell>
       </FormGridColumn>
@@ -106,7 +106,7 @@
       </FormGridColumn>
     </FormGrid>
     <p>maxWidth 120+minColumns 2</p>
-    <FormGrid :maxWidth="120" :minColumns="2">
+    <FormGrid :maxWidth="120" :minColumns="2" :columnGap="4">
       <FormGridColumn :gridSpan="2">
         <Cell>1</Cell>
       </FormGridColumn>
@@ -126,6 +126,18 @@
         <Cell>6</Cell>
       </FormGridColumn>
     </FormGrid>
+    <p>maxWidth 120 + gridSpan -1</p>
+    <FormGrid :maxWidth="120" :columnGap="4">
+      <FormGridColumn :gridSpan="2">
+        <Cell>1</Cell>
+      </FormGridColumn>
+      <FormGridColumn>
+        <Cell>2</Cell>
+      </FormGridColumn>
+      <FormGridColumn :gridSpan="-1">
+        <Cell>3</Cell>
+      </FormGridColumn>
+    </FormGrid>
   </div>
 </template>
 
@@ -141,7 +153,7 @@ const Cell = {
         style: {
           backgroundColor: '#AAA',
           color: '#FFF',
-          height: 30,
+          height: '30px',
           display: 'flex',
           alignItems: 'center',
           padding: '0 10px',

@@ -5,6 +5,7 @@ import { h } from '@formily/vue'
 import { stylePrefix } from '../__builtins__/configs'
 
 import type { VNode } from 'vue'
+import { useFormLayout } from '../form-layout'
 
 export type SpaceProps = {
   size: 'small' | 'middle' | 'large' | number
@@ -22,8 +23,14 @@ export const Space = defineComponent<SpaceProps>({
   name: 'FSpace',
   props: ['size', 'direction', 'align'],
   setup(props, { slots }) {
+    const layout = useFormLayout()
+
     return () => {
-      const { align, size = 'small', direction = 'horizontal' } = props
+      const {
+        align,
+        size = layout.value?.spaceGap ?? 'small',
+        direction = 'horizontal',
+      } = props
 
       const prefixCls = `${stylePrefix}-space`
       const children = slots.default?.()

@@ -31,6 +31,9 @@ export type FormLayoutProps = {
   tooltipLayout?: 'icon' | 'text'
   bordered?: boolean
   inset?: boolean
+  spaceGap?: number
+  gridColumnGap?: number
+  gridRowGap?: number
 }
 
 export const FormLayoutDeepContext: InjectionKey<Ref<FormLayoutProps>> = Symbol(
@@ -40,12 +43,13 @@ export const FormLayoutDeepContext: InjectionKey<Ref<FormLayoutProps>> = Symbol(
 export const FormLayoutShallowContext: InjectionKey<Ref<FormLayoutProps>> =
   Symbol('FormLayoutShallowContext')
 
-export const useFormDeepLayout = () => inject(FormLayoutDeepContext, ref(null))
+export const useFormDeepLayout = (): Ref<FormLayoutProps> =>
+  inject(FormLayoutDeepContext, ref(null))
 
-export const useFormShallowLayout = () =>
+export const useFormShallowLayout = (): Ref<FormLayoutProps> =>
   inject(FormLayoutShallowContext, ref(null))
 
-export const useFormLayout = () => {
+export const useFormLayout = (): Ref<FormLayoutProps> => {
   return ref({
     ...useFormDeepLayout().value,
     ...useFormShallowLayout().value,
@@ -74,6 +78,9 @@ export const FormLayout = defineComponent<FormLayoutProps>({
     tooltipLayout: {},
     bordered: { default: true },
     inset: { default: false },
+    spaceGap: {},
+    gridColumnGap: {},
+    gridRowGap: {},
   },
   setup(props, { slots }) {
     const deepLayout = useFormDeepLayout()
