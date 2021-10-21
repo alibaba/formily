@@ -125,7 +125,7 @@ export default () => {
               x-component-props={{
                 mode: 'multiple',
               }}
-              default={['123', '222']}
+              default={['123']}
               enum={[
                 { label: 'A111', value: '123' },
                 { label: 'A222', value: '222' },
