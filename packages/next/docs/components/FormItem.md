@@ -228,7 +228,7 @@ export default () => {
           }}
         />
         <SchemaField.String
-          title="fixed content width (wraperWidth)"
+          title="fixed content width (wrapperWidth)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{

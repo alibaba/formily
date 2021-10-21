@@ -1,4 +1,5 @@
 import React, { createContext, useContext } from 'react'
+import useResponsiveFormLayout from './useResponsiveFormLayout'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 
@@ -7,17 +8,21 @@ export interface IFormLayoutProps {
   className?: string
   style?: React.CSSProperties
   colon?: boolean
-  labelAlign?: 'right' | 'left'
-  wrapperAlign?: 'right' | 'left'
+  labelAlign?: 'right' | 'left' | ('right' | 'left')[]
+  wrapperAlign?: 'right' | 'left' | ('right' | 'left')[]
   labelWrap?: boolean
   labelWidth?: number
   wrapperWidth?: number
   wrapperWrap?: boolean
-  labelCol?: number
-  wrapperCol?: number
+  labelCol?: number | number[]
+  wrapperCol?: number | number[]
   fullness?: boolean
   size?: 'small' | 'default' | 'large'
-  layout?: 'vertical' | 'horizontal' | 'inline'
+  layout?:
+    | 'vertical'
+    | 'horizontal'
+    | 'inline'
+    | ('vertical' | 'horizontal' | 'inline')[]
   direction?: 'rtl' | 'ltr'
   inset?: boolean
   shallow?: boolean
@@ -25,6 +30,7 @@ export interface IFormLayoutProps {
   tooltipIcon?: React.ReactNode
   feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none'
   bordered?: boolean
+  breakpoints?: number[]
   gridColumnGap?: number
   gridRowGap?: number
   spaceGap?: number
@@ -47,7 +53,8 @@ export const FormLayout: React.FC<IFormLayoutProps> & {
   useFormLayout: () => IFormLayoutProps
   useFormDeepLayout: () => IFormLayoutProps
   useFormShallowLayout: () => IFormLayoutProps
-} = ({ shallow, children, prefix, className, style, ...props }) => {
+} = ({ shallow, children, prefix, className, style, ...otherProps }) => {
+  const { ref, props } = useResponsiveFormLayout(otherProps)
   const deepLayout = useFormDeepLayout()
   const formPrefixCls = usePrefixCls('form', { prefix })
   const layoutPrefixCls = usePrefixCls('formily-layout', { prefix })
@@ -83,7 +90,7 @@ export const FormLayout: React.FC<IFormLayoutProps> & {
     )
   }
   return (
-    <div className={layoutClassName} style={style}>
+    <div ref={ref} className={layoutClassName} style={style}>
       {renderChildren()}
     </div>
   )
