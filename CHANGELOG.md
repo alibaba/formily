@@ -1,5 +1,29 @@
 # Changelog
 
+## v2.0.0-rc.15(2021-10-16)
+
+### :tada: Enhancements
+
+1. [feat(element): support useRecord for ArrayBase (#2313)](https://github.com/alibaba/formily/commit/74594663) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [feat(next): fix FormDialog footerActions/okProps/cancelProps (#2312)](https://github.com/alibaba/formily/commit/e2fe6734) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+1. [feat(vue): support useParentForm hook (#2306)](https://github.com/alibaba/formily/commit/13008d1f) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [feat(json-schema): support extend schema property (#2284)](https://github.com/alibaba/formily/commit/67ca5e58) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [feat(next/antd): fix ArrayCards/ArrayTable/ArrayCollapse demo bug (#2283)](https://github.com/alibaba/formily/commit/85ab1078) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+### :beetle: Bug Fixes
+
+1. [fix(antd/next): fix style compiler error (#2310)](https://github.com/alibaba/formily/commit/44adf04b) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(schema): fix setValidateRule will throw error when use void field (#2281)](https://github.com/alibaba/formily/commit/d752b221) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :rose: Improve code quality
+
+1. [refactor(react): silent useForm for child form sence (#2302)](https://github.com/alibaba/formily/commit/c2c2e305) :point_right: ( [Janry](https://github.com/Janry) )
+
 ## v2.0.0-rc.14(2021-10-11)
 
 ### :beetle: Bug Fixes
@@ -797,25 +821,3 @@
 1. [chore(designable-antd): improve ui](https://github.com/alibaba/formily/commit/b994bccc) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore: replace 'disgusting' with 'sophisticated' (#1574)](https://github.com/alibaba/formily/commit/d14c042e) :point_right: ( [Riting LIU](https://github.com/Riting LIU) )
-
-## v2.0.0-beta.65(2021-06-14)
-
-### :tada: Enhancements
-
-1. [feat(antd/next): support disabled to ArrayBase](https://github.com/alibaba/formily/commit/cb342e70) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :beetle: Bug Fixes
-
-1. [fix(core): fix createForm memory leak](https://github.com/alibaba/formily/commit/5f11459b) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(project): fix ci](https://github.com/alibaba/formily/commit/61627825) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(antd/next): fix FormGrid can't support controlled mode](https://github.com/alibaba/formily/commit/88f379c3) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :rose: Improve code quality
-
-1. [refactor(desingbale-antd): improve dir name](https://github.com/alibaba/formily/commit/ceb8a8d5) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :blush: Other Changes
-
-1. [chore(designable-antd): upgrade designable](https://github.com/alibaba/formily/commit/ffce36c7) :point_right: ( [janrywang](https://github.com/janrywang) )
