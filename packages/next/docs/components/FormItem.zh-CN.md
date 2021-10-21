@@ -228,7 +228,7 @@ export default () => {
           }}
         />
         <SchemaField.String
-          title="固定内容宽度(wraperWidth)"
+          title="固定内容宽度(wrapperWidth)"
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
