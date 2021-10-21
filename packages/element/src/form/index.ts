@@ -78,19 +78,19 @@ export const Form = defineComponent<FormProps>({
         )
       }
 
-      if (top.value) {
-        return renderContent(top.value)
+      if (form) {
+        return h(
+          FormProvider,
+          { props: { form } },
+          {
+            default: () => renderContent(form),
+          }
+        )
       }
 
-      if (!form) throw new Error('must pass form instance by createForm')
+      if (!top.value) throw new Error('must pass form instance by createForm')
 
-      return h(
-        FormProvider,
-        { props: { form } },
-        {
-          default: () => renderContent(form),
-        }
-      )
+      return renderContent(top.value)
     }
   },
 })

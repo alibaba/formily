@@ -51,11 +51,10 @@ export const Form: React.FC<FormProps> = ({
     </PreviewText.Placeholder>
   )
 
-  if (top) return renderContent(top)
-
-  if (!form) throw new Error('must pass form instance by createForm')
-
-  return <FormProvider form={form}>{renderContent(form)}</FormProvider>
+  if (form)
+    return <FormProvider form={form}>{renderContent(form)}</FormProvider>
+  if (!top) throw new Error('must pass form instance by createForm')
+  return renderContent(top)
 }
 
 Form.defaultProps = {
