@@ -13,7 +13,9 @@ export const handler: Handler = async (event) => {
     return { statusCode: 405, body: 'Method Not Allowed' }
   }
   const params = qs.parse(event.rawQuery)
-  const results = await axios.get(`https://www.npmjs.com/search?q=${params.q}`)
+  const results = await axios.get(
+    `https://www.npmjs.com/suggestions/search?q=${params.q}&size=100`
+  )
   return {
     statusCode: 200,
     headers,

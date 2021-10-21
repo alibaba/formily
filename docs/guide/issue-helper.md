@@ -78,18 +78,14 @@ const form = createForm({
     })
     onFieldMount('package', async (field) => {
       const packages = await fetch(
-        'https://api.npms.io/v2/search/suggestions?q=@formily'
+        'https://v2.formilyjs.org/.netlify/functions/npm-search?q=@formily'
       ).then((res) => res.json())
-      field.dataSource = packages
-        .filter(({ package: { name } }) => {
-          return name.indexOf('@formily/') > -1
-        })
-        .map(({ package: { name } }) => {
-          return {
-            label: name,
-            value: name,
-          }
-        })
+      field.dataSource = packages.map(({ name }) => {
+        return {
+          label: name,
+          value: name,
+        }
+      })
     })
     onFieldReact('bug-desc', (field) => {
       field.visible = field.query('type').value() === 'Bug Report'
