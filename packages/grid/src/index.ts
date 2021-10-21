@@ -243,12 +243,8 @@ export class Grid<Container extends HTMLElement> {
           this.height = rect.height
         }
       })
-      const mutationObserver = new MutationObserver(() => {
-        requestAnimationFrame(digestChild)
-      })
-      const resizeObserver = new ResizeObserver(() => {
-        requestAnimationFrame(digestSize)
-      })
+      const mutationObserver = new MutationObserver(digestChild)
+      const resizeObserver = new ResizeObserver(digestSize)
       resizeObserver.observe(this.container)
       mutationObserver.observe(this.container, {
         attributeFilter: ['style'],
