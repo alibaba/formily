@@ -68,9 +68,9 @@ const calcSatisfyColumns = (
     if (columnWidth >= minWidth && columnWidth <= maxWidth) {
       results.push(columns)
     } else if (columnWidth < minWidth) {
-      results.push(Math.floor(innerWidth / minWidth))
+      results.push(Math.min(Math.floor(innerWidth / minWidth), maxColumns))
     } else if (columnWidth > maxWidth) {
-      results.push(Math.floor(innerWidth / maxWidth))
+      results.push(Math.min(Math.floor(innerWidth / maxWidth), maxColumns))
     }
   }
   return Math.max(...results)
