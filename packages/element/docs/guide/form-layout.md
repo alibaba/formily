@@ -33,6 +33,11 @@
 | size           | `'small'             | 'default'               | 'large'`       | 组件尺寸 | default    |
 | layout         | `'vertical'          | 'horizontal'            | 'inline'`      | 布局模式 | horizontal |
 | direction      | `'rtl'               | 'ltr'`                  | 方向(暂不支持) | ltr      |
+| inset          | boolean              | 内联布局                | false          |
 | shallow        | boolean              | 上下文浅层传递          | true           |
 | feedbackLayout | `'loose'             | 'terse'                 | 'popover'      | 'none'`  | 反馈布局   | true |
 | tooltipLayout  | `'icon'` \| `'text'` | 问提示布局              | `"icon"`       |
+| bordered       | boolean              | 是否有边框              | true           |
+| gridColumnGap  | number               | 网格布局列间距          | 8              |
+| gridRowGap     | number               | 网格布局行间距          | 4              |
+| spaceGap       | number               | 弹性间距                | 8              |

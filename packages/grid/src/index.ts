@@ -37,16 +37,14 @@ const calcFactor = <T>(value: T | T[], breakpointIndex: number): T => {
   }
 }
 
-const calcChildSpans = (nodes: Node[]) =>
+const calcChildSpans = (nodes: HTMLElement[]) =>
   nodes.reduce((buf, node) => {
-    if (!isHTMLElement(node)) return buf
     const style = getComputedStyle(node)
     return buf + parseSpan(style.gridColumnStart)
   }, 0)
 
-const calcChildOriginSpans = (nodes: Node[]) =>
+const calcChildOriginSpans = (nodes: HTMLElement[]) =>
   nodes.reduce((buf, node) => {
-    if (!isHTMLElement(node)) return buf
     const style = getComputedStyle(node)
     const origin = node.getAttribute('data-origin-span')
     const current = parseSpan(style.gridColumnStart)
@@ -224,7 +222,7 @@ export class Grid<Container extends HTMLElement> {
         this.ready = true
       })
       const digestChild = batch.bound(() => {
-        const children = Array.from(this.container.childNodes)
+        const children = Array.from(this.container.children) as HTMLElement[]
         const childCount = children.length
         const childOriginSpans = calcChildOriginSpans(children)
         const childSpans = calcChildSpans(children)
