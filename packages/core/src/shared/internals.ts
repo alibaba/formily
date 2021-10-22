@@ -172,7 +172,7 @@ export const patchFormValues = (
           if (!isVoidField(targetField) && !targetField.modified) {
             update(path, source)
           }
-        } else {
+        } else if (form.initialized) {
           update(path, source)
         }
       }
