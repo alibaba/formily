@@ -144,6 +144,25 @@ test('setValues/setInitialValues', () => {
   })
 })
 
+test('no field initialValues merge', () => {
+  const form = attach(
+    createForm<any>({
+      values: {
+        aa: '123',
+      },
+      initialValues: {
+        aa: '333',
+        bb: '321',
+      },
+    })
+  )
+
+  expect(form.values).toEqual({
+    aa: '123',
+    bb: '321',
+  })
+})
+
 test('setLoading', async () => {
   const form = attach(createForm())
   expect(form.loading).toBeFalsy()
