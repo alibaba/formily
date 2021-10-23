@@ -6,30 +6,35 @@ import {
   Ref,
   ref,
   watch,
-  computed,
 } from '@vue/composition-api'
 import { h } from '@formily/vue'
 import { stylePrefix } from '../__builtins__/configs'
+import { useResponsiveFormLayout } from './useResponsiveFormLayout'
 
 export type FormLayoutProps = {
   className?: string
   colon?: boolean
-  labelAlign?: 'right' | 'left'
-  wrapperAlign?: 'right' | 'left'
+  labelAlign?: 'right' | 'left' | ('right' | 'left')[]
+  wrapperAlign?: 'right' | 'left' | ('right' | 'left')[]
   labelWrap?: boolean
   labelWidth?: number
   wrapperWidth?: number
   wrapperWrap?: boolean
-  labelCol?: number
-  wrapperCol?: number
+  labelCol?: number | number[]
+  wrapperCol?: number | number[]
   fullness?: boolean
   size?: 'small' | 'default' | 'large'
-  layout?: 'vertical' | 'horizontal' | 'inline'
+  layout?:
+    | 'vertical'
+    | 'horizontal'
+    | 'inline'
+    | ('vertical' | 'horizontal' | 'inline')[]
   direction?: 'rtl' | 'ltr'
   shallow?: boolean
   feedbackLayout?: 'loose' | 'terse' | 'popover'
   tooltipLayout?: 'icon' | 'text'
   bordered?: boolean
+  breakpoints?: number[]
   inset?: boolean
   spaceGap?: number
   gridColumnGap?: number
@@ -50,10 +55,23 @@ export const useFormShallowLayout = (): Ref<FormLayoutProps> =>
   inject(FormLayoutShallowContext, ref(null))
 
 export const useFormLayout = (): Ref<FormLayoutProps> => {
-  return ref({
-    ...useFormDeepLayout().value,
-    ...useFormShallowLayout().value,
-  })
+  const shallowLayout = useFormShallowLayout()
+  const deepLayout = useFormDeepLayout()
+  const formLayout = ref({})
+
+  watch(
+    [shallowLayout],
+    () => {
+      formLayout.value = {
+        ...deepLayout.value,
+        ...shallowLayout.value,
+      }
+    },
+    {
+      immediate: true,
+    }
+  )
+  return formLayout
 }
 
 export const FormLayout = defineComponent<FormLayoutProps>({
@@ -78,28 +96,32 @@ export const FormLayout = defineComponent<FormLayoutProps>({
     tooltipLayout: {},
     bordered: { default: true },
     inset: { default: false },
+    breakpoints: {},
     spaceGap: {},
     gridColumnGap: {},
     gridRowGap: {},
   },
-  setup(props, { slots }) {
+  setup(customProps, { slots, refs }) {
+    const { props } = useResponsiveFormLayout(customProps, refs)
+
     const deepLayout = useFormDeepLayout()
     const newDeepLayout = ref({
       ...deepLayout,
     })
-    const shallowProps = computed(() => (props.shallow ? props : undefined))
+    const shallowProps = ref({})
 
     watch(
       [props, deepLayout],
       () => {
-        if (!props.shallow) {
+        shallowProps.value = props.value.shallow ? props.value : undefined
+        if (!props.value.shallow) {
           Object.assign(newDeepLayout.value, props)
         } else {
-          if (props.size) {
-            newDeepLayout.value.size = props.size
+          if (props.value.size) {
+            newDeepLayout.value.size = props.value.size
           }
-          if (props.colon) {
-            newDeepLayout.value.colon = props.colon
+          if (props.value.colon) {
+            newDeepLayout.value.colon = props.value.colon
           }
         }
       },
@@ -112,14 +134,16 @@ export const FormLayout = defineComponent<FormLayoutProps>({
     const formPrefixCls = `${stylePrefix}-form`
     return () => {
       const classNames = {
-        [`${formPrefixCls}-${props.layout}`]: true,
-        [`${formPrefixCls}-rtl`]: props.direction === 'rtl',
-        [`${formPrefixCls}-${props.size}`]: props.size !== undefined,
-        [`${props.className}`]: props.className !== undefined,
+        [`${formPrefixCls}-${props.value.layout}`]: true,
+        [`${formPrefixCls}-rtl`]: props.value.direction === 'rtl',
+        [`${formPrefixCls}-${props.value.size}`]:
+          props.value.size !== undefined,
+        [`${props.value.className}`]: props.value.className !== undefined,
       }
       return h(
         'div',
         {
+          ref: 'root',
           class: classNames,
         },
         slots

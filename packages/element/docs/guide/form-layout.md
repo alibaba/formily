@@ -16,28 +16,29 @@
 
 ## API
 
-| 属性名         | 类型                 | 描述                    | 默认值         |
-| -------------- | -------------------- | ----------------------- | -------------- | -------- | ---------- | ---- |
-| style          | CSSProperties        | 样式                    | -              |
-| className      | string               | 类名                    | -              |
-| colon          | boolean              | 是否有冒号              | true           |
-| labelAlign     | `right` \| `left`    | 标签内容对齐            | -              |
-| wrapperAlign   | `right` \| `left`    | 组件容器内容对齐        | -              |
-| labelWrap      | boolean              | 标签内容换行            | false          |
-| labelWidth     | number               | 标签宽度(px)            | -              |
-| wrapperWidth   | number               | 组件容器宽度(px)        | -              |
-| wrapperWrap    | boolean              | 组件容器换行            | false          |
-| labelCol       | number               | 标签宽度(24 column)     | -              |
-| wrapperCol     | number               | 组件容器宽度(24 column) | -              |
-| fullness       | boolean              | 组件容器宽度 100%       | false          |
-| size           | `'small'             | 'default'               | 'large'`       | 组件尺寸 | default    |
-| layout         | `'vertical'          | 'horizontal'            | 'inline'`      | 布局模式 | horizontal |
-| direction      | `'rtl'               | 'ltr'`                  | 方向(暂不支持) | ltr      |
-| inset          | boolean              | 内联布局                | false          |
-| shallow        | boolean              | 上下文浅层传递          | true           |
-| feedbackLayout | `'loose'             | 'terse'                 | 'popover'      | 'none'`  | 反馈布局   | true |
-| tooltipLayout  | `'icon'` \| `'text'` | 问提示布局              | `"icon"`       |
-| bordered       | boolean              | 是否有边框              | true           |
-| gridColumnGap  | number               | 网格布局列间距          | 8              |
-| gridRowGap     | number               | 网格布局行间距          | 4              |
-| spaceGap       | number               | 弹性间距                | 8              |
+| 属性名         | 类型          | 描述              | 默认值                  |
+| -------------- | ------------- | ----------------- | ----------------------- | ----------- | ---------------- | ------------ | -------- | ---------- |
+| style          | CSSProperties | 样式              | -                       |
+| className      | string        | 类名              | -                       |
+| colon          | boolean       | 是否有冒号        | true                    |
+| labelAlign     | `'right'      | 'left'            | ('right'                | 'left')[]`  | 标签内容对齐     | -            |
+| wrapperAlign   | `'right'      | 'left'            | ('right'                | 'left')[]`  | 组件容器内容对齐 | -            |
+| labelWrap      | boolean       | 标签内容换行      | false                   |
+| labelWidth     | number        | 标签宽度(px)      | -                       |
+| wrapperWidth   | number        | 组件容器宽度(px)  | -                       |
+| wrapperWrap    | boolean       | 组件容器换行      | false                   |
+| labelCol       | `number       | number[]`         | 标签宽度(24 column)     | -           |
+| wrapperCol     | `number       | number[]`         | 组件容器宽度(24 column) | -           |
+| fullness       | boolean       | 组件容器宽度 100% | false                   |
+| size           | `'small'      | 'default'         | 'large'`                | 组件尺寸    | default          |
+| layout         | `'vertical'   | 'horizontal'      | 'inline'                | ('vertical' | 'horizontal'     | 'inline')[]` | 布局模式 | horizontal |
+| direction      | `'rtl'        | 'ltr'`            | 方向(暂不支持)          | ltr         |
+| inset          | boolean       | 内联布局          | false                   |
+| shallow        | boolean       | 上下文浅层传递    | true                    |
+| feedbackLayout | `'loose'      | 'terse'           | 'popover'               | 'none'`     | 反馈布局         | true         |
+| tooltipLayout  | `'icon'`      | `'text'`          | 问提示布局              | `"icon"`    |
+| bordered       | boolean       | 是否有边框        | true                    |
+| breakpoints    | number[]      | 容器尺寸断点      | -                       |
+| gridColumnGap  | number        | 网格布局列间距    | 8                       |
+| gridRowGap     | number        | 网格布局行间距    | 4                       |
+| spaceGap       | number        | 弹性间距          | 8                       |

@@ -1,6 +1,12 @@
 <template>
   <FormProvider :form="form">
-    <FormLayout :labelCol="6" :wrapperCol="10">
+    <FormLayout
+      :breakpoints="[680]"
+      :layout="['vertical', 'horizontal']"
+      :labelAlign="['left', 'right']"
+      :labelCol="[24, 6]"
+      :wrapperCol="[24, 10]"
+    >
       <Field
         name="input"
         title="输入框"
