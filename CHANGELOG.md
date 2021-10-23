@@ -1,5 +1,37 @@
 # Changelog
 
+## v2.0.0-rc.16(2021-10-21)
+
+### :tada: Enhancements
+
+1. [feat(next/antd): support breakpoints for FormLayout (#2336)](https://github.com/alibaba/formily/commit/c894adc8) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+1. [feat(grid): support smart gridSpan -1](https://github.com/alibaba/formily/commit/01ee70d8) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :beetle: Bug Fixes
+
+1. [fix(grid): fix calcSatisfyColumns](https://github.com/alibaba/formily/commit/04dead36) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :memo: Documents Changes
+
+1. [docs: update issue-helper api](https://github.com/alibaba/formily/commit/22877f1c) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rose: Improve code quality
+
+1. [refactor(element): redesign form-grid and improve form-layout (#2337)](https://github.com/alibaba/formily/commit/9e468fae) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [refactor(antd/next/element): adjust the read priority of Form context](https://github.com/alibaba/formily/commit/f0c29bbc) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rocket: Improve Performance
+
+1. [perf(grid): improve grid performance](https://github.com/alibaba/formily/commit/7c60bc1e) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(antd/next): improve code](https://github.com/alibaba/formily/commit/506eb129) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(grid): update readme](https://github.com/alibaba/formily/commit/9738292c) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-rc.15(2021-10-16)
 
 ### :tada: Enhancements
@@ -803,21 +835,3 @@
 ### :rose: Improve code quality
 
 1. [refactor(reactive): fix #1598 and support #1586 and super performance optimization](https://github.com/alibaba/formily/commit/a1e72006) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.66(2021-06-17)
-
-### :tada: Enhancements
-
-1. [feat(designable-antd): add DesignableArrayCards](https://github.com/alibaba/formily/commit/8a7a788d) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :beetle: Bug Fixes
-
-1. [fix(core): fix array initialValue empty side case](https://github.com/alibaba/formily/commit/0a7b32a4) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(vue): add deep copy to decorator props (#1587)](https://github.com/alibaba/formily/commit/710f5e1b) :point_right: ( [Muyao](https://github.com/Muyao) )
-
-### :blush: Other Changes
-
-1. [chore(designable-antd): improve ui](https://github.com/alibaba/formily/commit/b994bccc) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [chore: replace 'disgusting' with 'sophisticated' (#1574)](https://github.com/alibaba/formily/commit/d14c042e) :point_right: ( [Riting LIU](https://github.com/Riting LIU) )
