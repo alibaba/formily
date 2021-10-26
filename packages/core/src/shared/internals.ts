@@ -422,13 +422,25 @@ export const exchangeArrayState = (
   const isArrayChildren = (identifier: string) => {
     return identifier.indexOf(address) === 0 && identifier.length > addrLength
   }
+  
+  const isDown = fromIndex < toIndex;
 
-  const isFromOrToNode = (identifier: string) => {
+  const isMoveNode = (identifier: string) => {
+    const afterStr = identifier.slice(address.length);
+    const number = afterStr.match(NumberIndexReg)?.[1];
+    if (number === undefined) return false;
+    const index = Number(number);
+    return isDown
+      ? index > fromIndex && index <= toIndex
+      : index < fromIndex && index >= toIndex;
+  };
+
+  const isFromNode = (identifier: string) => {
     const afterStr = identifier.substring(addrLength)
     const number = afterStr.match(NumberIndexReg)?.[1]
     if (number === undefined) return false
     const index = Number(number)
-    return index === toIndex || index === fromIndex
+    return index === fromIndex
   }
 
   const moveIndex = (identifier: string) => {
@@ -440,7 +452,7 @@ export const exchangeArrayState = (
     if (index === fromIndex) {
       index = toIndex
     } else {
-      index = fromIndex
+      index += isDown ? -1 : 1;
     }
 
     return `${preStr}${afterStr.replace(/^\.\d+/, `.${index}`)}`
@@ -449,7 +461,7 @@ export const exchangeArrayState = (
   batch(() => {
     each(fields, (field, identifier) => {
       if (isArrayChildren(identifier)) {
-        if (isFromOrToNode(identifier)) {
+        if (isMoveNode(identifier) || isFromNode(identifier)) {
           const newIdentifier = moveIndex(identifier)
           fieldPatches.push({
             type: 'update',
