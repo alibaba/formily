@@ -411,8 +411,9 @@ test('array field move api with children', async () => {
     })
   )
   await array.move(0, 2)
-  expect(form.fields['array.0.name']).not.toBeUndefined()
+  expect(form.fields['array.0.name']).toBeUndefined()
   expect(form.fields['array.2.name']).toBeUndefined()
+  expect(form.fields['array.1.name']).not.toBeUndefined()
 })
 
 test('array field remove memo leak', async () => {
