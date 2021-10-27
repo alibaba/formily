@@ -140,6 +140,61 @@ test('array field children state exchanges', () => {
   expect(form.query('array.2.value').get('value')).toEqual(55)
 })
 
+test('array field move up/down then fields move', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'value',
+      basePath: 'array.0',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'value',
+      basePath: 'array.1',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'value',
+      basePath: 'array.2',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'value',
+      basePath: 'array.3',
+    })
+  )
+  const line0 = form.fields['array.0.value']
+  const line1 = form.fields['array.1.value']
+  const line2 = form.fields['array.2.value']
+  const line3 = form.fields['array.3.value']
+
+  array.push({ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' })
+
+  array.move(0, 3)
+
+  // 1,2,3,0
+  expect(form.fields['array.0.value']).toBe(line1)
+  expect(form.fields['array.1.value']).toBe(line2)
+  expect(form.fields['array.2.value']).toBe(line3)
+  expect(form.fields['array.3.value']).toBe(line0)
+
+  array.move(3, 1)
+
+  // 1,0,2,3
+  expect(form.fields['array.0.value']).toBe(line1)
+  expect(form.fields['array.1.value']).toBe(line0)
+  expect(form.fields['array.2.value']).toBe(line2)
+  expect(form.fields['array.3.value']).toBe(line3)
+})
+
 test('void children', () => {
   const form = attach(createForm())
   const array = attach(
@@ -356,8 +411,9 @@ test('array field move api with children', async () => {
     })
   )
   await array.move(0, 2)
-  expect(form.fields['array.0.name']).not.toBeUndefined()
+  expect(form.fields['array.0.name']).toBeUndefined()
   expect(form.fields['array.2.name']).toBeUndefined()
+  expect(form.fields['array.1.name']).not.toBeUndefined()
 })
 
 test('array field remove memo leak', async () => {
