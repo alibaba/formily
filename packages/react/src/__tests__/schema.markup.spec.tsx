@@ -802,3 +802,47 @@ test('schema x-validator/required', async () => {
     ])
   })
 })
+
+test('schema x-reactions when undefined', async () => {
+  const form = createForm({
+    values: {
+      aaa: 'xxx',
+    },
+  })
+  const SchemaField = createSchemaField({
+    components: {
+      Input: () => <div data-testid="input"></div>,
+      Select: () => <div data-testid="select"></div>,
+    },
+  })
+
+  const { queryByTestId } = render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.String name="input" required x-component="Input" />
+        <SchemaField.String
+          name="select"
+          required
+          x-component="Select"
+          x-reactions={{
+            when: '{{$values.input}}',
+            fulfill: {
+              state: {
+                visible: true,
+              },
+            },
+            otherwise: {
+              state: {
+                visible: false,
+              },
+            },
+          }}
+        />
+      </SchemaField>
+    </FormProvider>
+  )
+  await waitFor(() => {
+    expect(queryByTestId('input')).not.toBeNull()
+    expect(queryByTestId('select')).toBeNull()
+  })
+})

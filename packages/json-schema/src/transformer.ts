@@ -3,7 +3,6 @@ import { untracked, autorun, observable } from '@formily/reactive'
 import {
   isArr,
   isStr,
-  isValid,
   toArr,
   each,
   isFn,
@@ -189,7 +188,7 @@ const getUserReactions =
           $dependencies,
         }
         const compiledWhen = shallowCompile(when, scope)
-        const condition = isValid(compiledWhen) ? compiledWhen : true
+        const condition = when ? compiledWhen : true
         const request = condition ? fulfill : otherwise
         const runner = condition ? fulfill?.run : otherwise?.run
         setSchemaFieldState({
