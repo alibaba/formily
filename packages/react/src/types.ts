@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   Form,
   Field as FieldType,
@@ -171,4 +172,4 @@ export type ISchemaTypeFieldProps<
   Components extends SchemaReactComponents,
   Decorator extends ReactComponentPath<Components>,
   Component extends ReactComponentPath<Components>
-> = Omit<ISchemaMarkupFieldProps<Components, Decorator, Component>, 'type'>
+> = ISchemaMarkupFieldProps<Components, Decorator, Component>

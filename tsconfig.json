@@ -8,18 +8,14 @@
     "allowJs": false,
     "noUnusedLocals": false,
     "preserveConstEnums": true,
-    "sourceMap": true,
     "skipLibCheck": true,
+    "sourceMap": true,
     "declaration": true,
     "experimentalDecorators": true,
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
-      "@formily/*": [
-        "./packages/*/src",
-        "./designable/*/src",
-        "./devtools/*/src"
-      ]
+      "@formily/*": ["packages/*/src", "devtools/*/src"]
     }
   }
 }

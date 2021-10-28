@@ -8,11 +8,7 @@
     "module": "commonjs",
     "target": "es5",
     "paths": {
-      "@formily/*": [
-        "./packages/*/src",
-        "./designable/*/src",
-        "./devtools/*/src"
-      ]
+      "@formily/*": ["./packages/*/src"]
     }
   },
   "exclude": ["./packages/*/esm", "./packages/*/lib"]

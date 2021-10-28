@@ -28,7 +28,7 @@
     "build:global": "ts-node ../../scripts/build-global"
   },
   "peerDependencies": {
-    "typescript": "^4.4.0"
+    "typescript": "^4.1.0"
   },
   "dependencies": {
     "@formily/reactive": "2.0.0-rc.17"
