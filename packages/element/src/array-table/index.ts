@@ -410,7 +410,7 @@ const ArrayTableInner = observer(
   defineComponent<IArrayTableProps>({
     name: 'FArrayTable',
     inheritAttrs: false,
-    setup(props, { attrs }) {
+    setup(props, { attrs, listeners, slots }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
       const prefixCls = `${stylePrefix}-array-table`
@@ -512,8 +512,10 @@ const ArrayTableInner = observer(
                             ...attrs,
                             data: dataSource,
                           },
+                          on: listeners,
                         },
                         {
+                          ...slots,
                           default: renderColumns,
                         }
                       ),

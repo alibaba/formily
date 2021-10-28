@@ -11,7 +11,7 @@ export const ArrayTabs = observer(
   defineComponent<TabsProps>({
     name: 'ArrayTabs',
     props: [],
-    setup(props, { attrs }) {
+    setup(props, { attrs, listeners }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
 
@@ -124,11 +124,18 @@ export const ArrayTabs = observer(
               addable: true,
             },
             on: {
+              ...listeners,
               input: (key) => {
                 activeKey.value = key
               },
-              'tab-remove': (target) => onEdit(target, 'remove'),
-              'tab-add': () => onEdit(null, 'add'),
+              'tab-remove': (target) => {
+                onEdit(target, 'remove')
+                listeners?.['tab-remove']?.(target)
+              },
+              'tab-add': () => {
+                onEdit(null, 'add')
+                listeners?.['tab-add']?.()
+              },
             },
           },
           {
