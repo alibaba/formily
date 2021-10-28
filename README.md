@@ -10,7 +10,7 @@ English | [简体中文](./README.zh-cn.md)
 </a>
 <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"/>
 <a href="https://github.com/actions-cool/issues-helper">
-  <img src="https://img.shields.io/badge/using-issues--helper-blueviolet" />
+  <img src="https://img.shields.io/badge/using-issues--helper-blueviolet"/>
 </a>
 <a href="https://app.netlify.com/sites/formily/deploys"><img src="https://api.netlify.com/api/v1/badges/7145918b-9cb5-47f8-8a42-111969e232ef/deploy-status"/></a>
 </p>
