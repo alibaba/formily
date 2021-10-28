@@ -75,6 +75,7 @@ export function createSchemaField<Components extends SchemaReactComponents>(
   }
 
   SchemaField.displayName = 'SchemaField'
+
   function MarkupField<
     Decorator extends ReactComponentPath<Components>,
     Component extends ReactComponentPath<Components>
@@ -195,5 +196,6 @@ export function createSchemaField<Components extends SchemaReactComponents>(
   SchemaField.DateTime = DateTimeField
   SchemaField.Void = VoidField
   SchemaField.Number = NumberField
+
   return SchemaField
 }
