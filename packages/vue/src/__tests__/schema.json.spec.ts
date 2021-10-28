@@ -966,3 +966,64 @@ describe('expression', () => {
     wrapper.destroy()
   })
 })
+
+describe('schema controlled', () => {
+  test('view updated with schema', async () => {
+    const form = createForm({})
+    const { SchemaField } = createSchemaField({
+      components: {
+        Input,
+        Input2,
+      },
+    })
+    const component = defineComponent({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: {
+            type: 'object',
+            properties: {
+              input: {
+                type: 'string',
+                'x-component': 'Input',
+              },
+              input2: {
+                type: 'string',
+                'x-component': 'Input2',
+              },
+            },
+          },
+        }
+      },
+      methods: {
+        changeSchema() {
+          this.form = createForm()
+          this.schema = {
+            type: 'object',
+            properties: {
+              input2: {
+                type: 'string',
+                'x-component': 'Input2',
+              },
+            },
+          }
+        },
+      },
+      template: `<FormProvider :form="form">
+          <SchemaField
+            :schema="schema"
+          />
+          <button @click="changeSchema()">changeSchema</button>
+        </FormProvider>`,
+    })
+    const wrapper = mount(component, { attachToDocument: true })
+
+    expect(wrapper.contains('.input')).toBe(true)
+    expect(wrapper.contains('.input2')).toBe(true)
+    await wrapper.find('button').trigger('click')
+    expect(wrapper.contains('.input2')).toBe(true)
+    expect(wrapper.contains('.input')).toBe(false)
+    wrapper.destroy()
+  })
+})
