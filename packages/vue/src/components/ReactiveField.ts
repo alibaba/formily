@@ -107,7 +107,9 @@ export default observer(
                     {
                       style,
                       class: classes,
-                      attrs: decoratorData,
+                      attrs: {
+                        ...decoratorData,
+                      },
                     },
                     {
                       default: () => childNodes,

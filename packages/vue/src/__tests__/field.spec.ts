@@ -21,12 +21,18 @@ Vue.component('VoidField', VoidField)
 Vue.component('Field', Field)
 Vue.component('ReactiveField', ReactiveField as unknown as Vue)
 
-const Decorator: FunctionalComponentOptions = {
-  functional: true,
-  render(h, context) {
-    return h('div', context.data, context.children)
+const Decorator = defineComponent({
+  props: ['label'],
+  render(h) {
+    return h(
+      'div',
+      {
+        attrs: this.$attrs,
+      },
+      [this.label, this.$slots.default]
+    )
   },
-}
+})
 
 const Input = defineComponent({
   props: ['value'],
@@ -64,7 +70,7 @@ test('render field', async () => {
   const atBlur = jest.fn()
   const atFocus = jest.fn()
 
-  const { getByTestId, queryByTestId } = render(
+  const { getByTestId, queryByTestId, queryByText } = render(
     defineComponent({
       name: 'TestComponent',
       setup() {
@@ -82,7 +88,7 @@ test('render field', async () => {
       template: `<FormProvider :form="form">
       <Field
         name="aa"
-        :decorator="[Decorator]"
+        :decorator="[Decorator, {label: 'aa-decorator'}]"
         :component="[Input, { onChange }]"
       />
       <ArrayField name="bb" :decorator="[Decorator]">
@@ -146,6 +152,7 @@ test('render field', async () => {
   expect(form.query('aa').get('value')).toEqual('123')
   expect(form.query('kk').get('value')).toEqual('123')
   expect(getByTestId('mm-children')).not.toBeUndefined()
+  expect(queryByText('aa-decorator')).not.toBeNull()
 })
 
 test('render field with html attrs', async () => {
