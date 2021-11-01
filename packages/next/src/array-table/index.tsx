@@ -159,8 +159,8 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(
     const options = props.dataSource?.map(({ label, value }) => {
       const hasError = errors.some(({ address }) => {
         const currentIndex = parseIndex(address)
-        const startIndex = (value - 1) * props.pageSize
-        const endIndex = value * props.pageSize
+        const startIndex = (value - 1) * pageSize
+        const endIndex = value * pageSize
         return currentIndex >= startIndex && currentIndex <= endIndex
       })
       return {
