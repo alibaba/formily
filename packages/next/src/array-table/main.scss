@@ -53,7 +53,8 @@ $array-table-prefix-cls: '#{$css-prefix}formily-array-table';
           color: #fff;
           padding: 6px 8px;
           margin-top: 6px;
-
+          transform: translateY(0);
+          opacity: 1;
           &:after {
             content: ' ';
             background: $form-error-color;

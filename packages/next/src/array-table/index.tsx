@@ -12,7 +12,7 @@ import {
   useFieldSchema,
   RecursionField,
 } from '@formily/react'
-import { FormPath, isArr, isBool } from '@formily/shared'
+import { isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
 import { ArrayBase, ArrayBaseMixins } from '../array-base'
@@ -149,15 +149,19 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(
       type: 'error',
       address: `${field.address}.*`,
     })
-    const createIndexPattern = (page: number) => {
-      const pattern = `${field.address}.*[${(page - 1) * pageSize}:${
-        page * pageSize
-      }].*`
-      return FormPath.parse(pattern)
+    const parseIndex = (address: string) => {
+      return Number(
+        address
+          .slice(address.indexOf(field.address.toString()) + 1)
+          .match(/(\d+)/)?.[1]
+      )
     }
     const options = props.dataSource?.map(({ label, value }) => {
       const hasError = errors.some(({ address }) => {
-        return createIndexPattern(value).match(address)
+        const currentIndex = parseIndex(address)
+        const startIndex = (value - 1) * pageSize
+        const endIndex = value * pageSize
+        return currentIndex >= startIndex && currentIndex <= endIndex
       })
       return {
         label: hasError ? <Badge dot>{label}</Badge> : label,
