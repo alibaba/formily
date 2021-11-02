@@ -253,9 +253,9 @@ export class Field<
         }
       ),
       reaction(
-        () => [this.pattern, this.unmounted],
-        ([pattern, unmounted]) => {
-          if (pattern !== 'editable' || unmounted) {
+        () => this.pattern,
+        (pattern) => {
+          if (pattern !== 'editable') {
             this.setFeedback({
               type: 'error',
               messages: [],
