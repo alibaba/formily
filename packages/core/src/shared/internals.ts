@@ -886,12 +886,7 @@ export const batchValidate = async (
 ) => {
   if (isForm(target)) target.setValidating(true)
   else {
-    if (
-      target.pattern !== 'editable' ||
-      target.display !== 'visible' ||
-      target.unmounted
-    )
-      return
+    if (target.pattern !== 'editable' || target.display !== 'visible') return
   }
   const tasks = []
   target.query(pattern).forEach((field) => {
@@ -946,12 +941,7 @@ export const validateSelf = batch.bound(
       }
     }
 
-    if (
-      target.pattern !== 'editable' ||
-      target.display !== 'visible' ||
-      target.unmounted
-    )
-      return {}
+    if (target.pattern !== 'editable' || target.display !== 'visible') return {}
     start()
     if (!triggerType) {
       const allTriggerTypes = parseValidatorDescriptions(target.validator).map(

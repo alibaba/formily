@@ -1418,23 +1418,31 @@ test('validate will skip unmounted', async () => {
         type: 'error',
         code: 'ValidateError',
         messages: ['error'],
+        address: 'aa',
+        path: 'aa',
+      },
+      {
+        triggerType: 'onInput',
+        type: 'error',
+        code: 'ValidateError',
+        messages: ['error'],
         address: 'bb',
         path: 'bb',
       },
     ])
   }
-  expect(validateA).toBeCalledTimes(1)
+  expect(validateA).toBeCalledTimes(2)
   expect(validateB).toBeCalledTimes(2)
-  expect(aa.invalid).toBeFalsy()
+  expect(aa.invalid).toBeTruthy()
   expect(bb.invalid).toBeTruthy()
-  expect(validator).toBeCalledTimes(3)
-  bb.onUnmount()
+  expect(validator).toBeCalledTimes(4)
+  form.clearFormGraph('*(aa,bb)')
   await form.validate()
-  expect(validateA).toBeCalledTimes(1)
+  expect(validateA).toBeCalledTimes(2)
   expect(validateB).toBeCalledTimes(2)
   expect(aa.invalid).toBeFalsy()
   expect(bb.invalid).toBeFalsy()
-  expect(validator).toBeCalledTimes(3)
+  expect(validator).toBeCalledTimes(4)
 })
 
 test('validate will skip uneditable', async () => {

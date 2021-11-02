@@ -1301,6 +1301,11 @@ test('fields unmount and selfValidate', async () => {
   } catch {}
   expect(form.invalid).toBeTruthy()
   field.onUnmount()
+  try {
+    await form.validate()
+  } catch {}
+  expect(form.invalid).toBeTruthy()
+  form.clearFormGraph('parent')
   await form.validate()
   expect(form.invalid).toBeFalsy()
 })
