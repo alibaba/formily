@@ -78,7 +78,7 @@ export class Form<ValueType extends object = any> {
   graph: Graph
   fields: IFormFields = {}
   requests: IFormRequests = {}
-  indexes: Map<string, string> = new Map()
+  indexes: Record<string, string> = {}
   disposers: (() => void)[] = []
 
   constructor(props: IFormProps<ValueType>) {
@@ -566,7 +566,7 @@ export class Form<ValueType extends object = any> {
     this.query('*').forEach((field) => field.destroy())
     this.disposers.forEach((dispose) => dispose())
     this.unmounted = true
-    this.indexes.clear()
+    this.indexes = {}
     this.heart.clear()
     if (globalThisPolyfill[DEV_TOOLS_HOOK] && !this.props.designable) {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)

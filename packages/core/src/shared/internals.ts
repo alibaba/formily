@@ -55,6 +55,20 @@ import {
   ReadOnlyProperties,
 } from './constants'
 
+const hasOwnProperty = Object.prototype.hasOwnProperty
+
+const notify = (
+  target: Form | Field,
+  formType: LifeCycleTypes,
+  fieldType: LifeCycleTypes
+) => {
+  if (isForm(target)) {
+    target.notify(formType)
+  } else {
+    target.notify(fieldType)
+  }
+}
+
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
     if (isValid(event.target.value) || isValid(event.target.checked))
@@ -86,23 +100,25 @@ export const getValuesFromEvent = (args: any[]) => {
 
 export const buildFieldPath = (field: GeneralField) => {
   let prevArray = false
-  return field.address.reduce((path: FormPath, key: string, index: number) => {
-    const currentPath = path.concat([key])
-    const currentAddress = field.address.slice(0, index + 1)
-    const current = field.form.fields[currentAddress.toString()]
+  const fields = field.form.fields
+  const segments = field.address.segments
+  const path = segments.reduce((path: string[], key: string, index: number) => {
+    const currentPath = path.concat(key)
+    const currentAddress = segments.slice(0, index + 1)
+    const current = fields[currentAddress.join('.')]
     if (prevArray) {
       prevArray = false
       return path
     }
-    if (index >= field.address.length - 1) {
+    if (index >= segments.length - 1) {
       if (isVoidField(field)) {
         return currentPath
       }
       return currentPath
     }
     if (isVoidField(current)) {
-      const parentAddress = field.address.slice(0, index)
-      const parent = field.form.fields[parentAddress.toString()]
+      const parentAddress = segments.slice(0, index)
+      const parent = fields[parentAddress.join('.')]
       if (isArrayField(parent) && isNumberLike(key)) {
         prevArray = true
         return currentPath
@@ -112,7 +128,8 @@ export const buildFieldPath = (field: GeneralField) => {
       prevArray = false
     }
     return currentPath
-  }, new FormPath(''))
+  }, [])
+  return new FormPath(path)
 }
 
 export const buildNodeIndexes = (
@@ -121,7 +138,7 @@ export const buildNodeIndexes = (
 ) => {
   field.address = FormPath.parse(address)
   field.path = buildFieldPath(field)
-  field.form.indexes.set(field.path.toString(), field.address.toString())
+  field.form.indexes[field.path.toString()] = field.address.toString()
   return field
 }
 
@@ -276,8 +293,6 @@ export const validateToFeedbacks = async (
   })
   return results
 }
-
-const hasOwnProperty = Object.prototype.hasOwnProperty
 
 export const setValidatorRule = (field: Field, name: string, value: any) => {
   if (!isValid(value)) return
@@ -666,6 +681,7 @@ export const createBatchStateSetter = (form: Form) => {
     }
   })
 }
+
 export const createBatchStateGetter = (form: Form) => {
   return (pattern: FieldMatchPattern, payload?: any) => {
     if (isQuery(pattern)) {
@@ -707,18 +723,6 @@ export const triggerFormValuesChange = (form: Form, change: DataChange) => {
     form.initialized
   ) {
     form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
-  }
-}
-
-const notify = (
-  target: Form | Field,
-  formType: LifeCycleTypes,
-  fieldType: LifeCycleTypes
-) => {
-  if (isForm(target)) {
-    target.notify(formType)
-  } else {
-    target.notify(fieldType)
   }
 }
 

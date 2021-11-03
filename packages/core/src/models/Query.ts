@@ -22,13 +22,13 @@ export class Query {
     this.form = props.form
     if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
-      const index = this.form.indexes.get(identifier)
+      const indexIdentifier = this.form.indexes[identifier]
       const absoluteField = this.form.fields[identifier]
-      const indexField = this.form.fields[index]
+      const indexField = this.form.fields[indexIdentifier]
       if (absoluteField) {
         this.addresses = [identifier]
       } else if (indexField) {
-        this.addresses = [index]
+        this.addresses = [indexIdentifier]
       }
     } else {
       each(this.form.fields, (field, address) => {
