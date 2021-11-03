@@ -542,3 +542,24 @@ test('autorun dispose in batch', () => {
   })
   expect(handler).toBeCalledTimes(1)
 })
+
+test('atom mutate value by computed depend', () => {
+  const obs = observable<any>({})
+  const comp1 = observable.computed(() => {
+    return obs.aa?.bb
+  })
+  const comp2 = observable.computed(() => {
+    return obs.aa?.cc
+  })
+  const handler = jest.fn()
+  autorun(() => {
+    handler(comp1.value, comp2.value)
+  })
+  obs.aa = {
+    bb: 123,
+    cc: 321,
+  }
+  expect(handler).toBeCalledTimes(2)
+  expect(handler).toBeCalledWith(undefined, undefined)
+  expect(handler).toBeCalledWith(123, 321)
+})
