@@ -1,6 +1,6 @@
 import { ProxyRaw, RawProxy, ReactionStack } from '../environment'
 import { createAnnotation } from '../internals'
-import { buildDataTree } from '../datatree'
+import { buildDataTree } from '../tree'
 import {
   bindTargetKeyWithCurrentReaction,
   runReactionsFromTargetKey,

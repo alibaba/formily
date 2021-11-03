@@ -20,6 +20,7 @@ import {
 import {
   autorun,
   batch,
+  contains,
   toJS,
   isObservable,
   DataChange,
@@ -48,8 +49,10 @@ import {
 import {
   RESPONSE_REQUEST_DURATION,
   ReservedProperties,
+  MutuallyExclusiveProperties,
   NumberIndexReg,
   GlobalState,
+  ReadOnlyProperties,
 } from './constants'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
@@ -274,6 +277,8 @@ export const validateToFeedbacks = async (
   return results
 }
 
+const hasOwnProperty = Object.prototype.hasOwnProperty
+
 export const setValidatorRule = (field: Field, name: string, value: any) => {
   if (!isValid(value)) return
   const hasRule = parseValidatorDescriptions(field.validator).some(
@@ -285,7 +290,7 @@ export const setValidatorRule = (field: Field, name: string, value: any) => {
   if (hasRule) {
     if (isArr(field.validator)) {
       field.validator = field.validator.map((desc: any) => {
-        if (Object.prototype.hasOwnProperty.call(desc, name)) {
+        if (hasOwnProperty.call(desc, name)) {
           desc[name] = value
           return desc
         }
@@ -588,76 +593,52 @@ export const subscribeUpdate = (
   }
 }
 
-export const setModelState = (model: any, setter: any) => {
+export const serialize = (model: any, setter: any) => {
   if (!model) return
-  const isSkipProperty = (key: string) => {
-    if (key === 'address' || key === 'path') return true
-    if (key === 'valid' || key === 'invalid') return true
-    if (key === 'componentType' || key === 'componentProps') return true
-    if (key === 'decoratorType' || key === 'decoratorProps') return true
-    if (key === 'validateStatus') return true
-    if (key === 'errors' || key === 'warnings' || key === 'successes')
-      return true
-    if (
-      (key === 'display' || key === 'visible' || key === 'hidden') &&
-      'selfDisplay' in setter &&
-      !isValid(setter.selfDisplay)
-    ) {
-      return true
-    }
-    if (
-      (key === 'pattern' ||
-        key === 'editable' ||
-        key === 'disabled' ||
-        key === 'readOnly' ||
-        key === 'readPretty') &&
-      'selfPattern' in setter &&
-      !isValid(setter.selfPattern)
-    ) {
-      return true
-    }
-    return false
-  }
   if (isFn(setter)) {
     setter(model)
+    return model
   } else {
-    Object.keys(setter || {}).forEach((key: string) => {
-      const value = setter[key]
+    each(setter, (value, key) => {
       if (isFn(value)) return
-      if (ReservedProperties[key]) return
-      if (isSkipProperty(key)) return
+      if (ReadOnlyProperties[key] || ReservedProperties[key]) return
+      const MutuallyExclusiveKey = MutuallyExclusiveProperties[key]
+      if (
+        MutuallyExclusiveKey &&
+        hasOwnProperty.call(setter, MutuallyExclusiveKey) &&
+        !isValid(setter[MutuallyExclusiveKey])
+      )
+        return
       model[key] = value
     })
   }
   return model
 }
 
-export const getModelState = (model: any, getter?: any) => {
+export const deserialize = (model: any, getter?: any) => {
   if (isFn(getter)) {
     return getter(model)
   } else {
-    return Object.keys(model || {}).reduce((buf, key: string) => {
-      const value = model[key]
-      if (isFn(value)) {
-        return buf
-      }
-      if (ReservedProperties[key]) return buf
+    const results = {}
+    each(model, (value, key) => {
+      if (isFn(value)) return
+      if (ReservedProperties[key]) return
       if (key === 'address' || key === 'path') {
-        buf[key] = value.toString()
-        return buf
+        results[key] = value.toString()
+        return
       }
-      buf[key] = toJS(value)
-      return buf
-    }, {})
+      results[key] = toJS(value)
+    })
+    return results
   }
 }
 
 export const createStateSetter = (model: any) => {
-  return batch.bound((state?: any) => setModelState(model, state))
+  return batch.bound((setter?: any) => serialize(model, setter))
 }
 
 export const createStateGetter = (model: any) => {
-  return (getter?: any) => getModelState(model, getter)
+  return (getter?: any) => deserialize(model, getter)
 }
 
 export const createBatchStateSetter = (form: Form) => {
@@ -701,8 +682,11 @@ export const triggerFormInitialValuesChange = (
   change: DataChange
 ) => {
   const path = change.path
-  if (path[path.length - 1] === 'length') return
-  if (path[0] === 'initialValues') {
+  if (Array.isArray(change.object) && change.key === 'length') return
+  if (
+    contains(form.initialValues, change.object) ||
+    contains(form.initialValues, change.value)
+  ) {
     if (change.type === 'add' || change.type === 'set') {
       patchFormValues(form, path.slice(1), change.value)
     }
@@ -713,9 +697,12 @@ export const triggerFormInitialValuesChange = (
 }
 
 export const triggerFormValuesChange = (form: Form, change: DataChange) => {
-  const path = change.path
-  if (path[path.length - 1] === 'length') return
-  if (path[0] === 'values' && form.initialized) {
+  if (Array.isArray(change.object) && change.key === 'length') return
+  if (
+    (contains(form.values, change.object) ||
+      contains(form.values, change.value)) &&
+    form.initialized
+  ) {
     form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
   }
 }
@@ -997,7 +984,7 @@ export const getValidFormValues = (values: any) => {
 }
 
 export const getValidFieldDefaultValue = (value: any, initialValue: any) => {
-  if (allowAssignDefaultValue(value, initialValue)) return initialValue
+  if (allowAssignDefaultValue(value, initialValue)) return clone(initialValue)
   return value
 }
 

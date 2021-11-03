@@ -12,6 +12,7 @@ import {
   ProxyRaw,
   MakeObservableSymbol,
   DependencyCollected,
+  RawNode,
 } from './environment'
 import { Annotation } from './types'
 
@@ -115,6 +116,17 @@ export const toJS = <T>(values: T): T => {
   }
 
   return _toJS(values)
+}
+
+export const contains = (target: any, property: any) => {
+  const targetRaw = ProxyRaw.get(target) || target
+  const propertyRaw = ProxyRaw.get(property) || property
+  if (targetRaw === propertyRaw) return true
+  const targetNode = RawNode.get(targetRaw)
+  const propertyNode = RawNode.get(propertyRaw)
+  if (!targetNode) return false
+  if (!propertyNode) return false
+  return targetNode.contains(propertyNode)
 }
 
 export const hasCollected = (callback?: () => void) => {

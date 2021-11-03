@@ -1,7 +1,7 @@
 import { autorun, batch } from '@formily/reactive'
 import { Form } from '../models'
 import { LifeCycleTypes } from '../types'
-import { createEffectHook } from '../shared/effectbox'
+import { createEffectHook } from '../shared/effective'
 
 function createFormEffect(type: LifeCycleTypes) {
   return createEffectHook(

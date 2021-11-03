@@ -1638,3 +1638,25 @@ test('reactions initialValue and value', () => {
   )
   expect(form.values.aa.input).toEqual('111')
 })
+
+test('field name is length in initialize', () => {
+  const form = attach(createForm())
+  const field = attach(
+    form.createField({
+      name: 'length',
+      initialValue: 123,
+    })
+  )
+  expect(field.value).toEqual(123)
+})
+
+test('field name is length in dynamic assign', () => {
+  const form = attach(createForm())
+  const field = attach(
+    form.createField({
+      name: 'length',
+    })
+  )
+  field.initialValue = 123
+  expect(field.value).toEqual(123)
+})

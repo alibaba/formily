@@ -7,7 +7,7 @@ import {
   RawNode,
 } from './environment'
 import { baseHandlers, collectionHandlers } from './handlers'
-import { buildDataTree } from './datatree'
+import { buildDataTree } from './tree'
 import { isSupportObservable } from './externals'
 import { PropertyKey, IVisitor, BoundaryFunction } from './types'
 

@@ -1,5 +1,5 @@
 import { isFn } from './checkers'
-import { buildDataTree } from './datatree'
+import { buildDataTree } from './tree'
 import { observable } from './observable'
 import { getObservableMaker } from './internals'
 import { isObservable, isAnnotation, isSupportObservable } from './externals'
