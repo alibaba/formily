@@ -36,7 +36,7 @@ import {
   onFormValuesChange,
   isVoidField,
 } from '../'
-import { runEffects } from '../shared/effectbox'
+import { runEffects } from '../shared/effective'
 import { attach, sleep } from './shared'
 
 test('onFormInit/onFormMount/onFormUnmount', () => {

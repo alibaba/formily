@@ -13,7 +13,7 @@ import {
   createEffectHook,
   createEffectContext,
   useEffectForm,
-} from './effectbox'
+} from './effective'
 import {
   isArrayField,
   isArrayFieldState,

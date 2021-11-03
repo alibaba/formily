@@ -27,6 +27,7 @@ type OperationType =
 interface IChange {
   key?: PropertyKey
   path?: ObservablePath
+  object?: object
   value?: any
   oldValue?: any
   type?: OperationType

@@ -1,6 +1,6 @@
 import { ArraySet } from './array'
 
-export * from './datatree'
+export * from './tree'
 
 export type PropertyKey = string | number | symbol
 

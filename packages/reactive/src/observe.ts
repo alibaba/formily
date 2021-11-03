@@ -1,7 +1,7 @@
 import { IOperation } from './types'
 import { RawNode, ProxyRaw, ObserverListeners } from './environment'
 import { isFn } from './checkers'
-import { DataChange } from './datatree'
+import { DataChange } from './tree'
 
 export const observe = (
   target: object,

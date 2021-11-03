@@ -2,7 +2,7 @@ import {
   getValuesFromEvent,
   matchFeedback,
   patchFieldStates,
-  setModelState,
+  serialize,
   isHTMLInputEvent,
 } from '../shared/internals'
 
@@ -28,10 +28,10 @@ test('patchFieldStates', () => {
   expect(fields).toEqual({})
 })
 
-test('setModelState', () => {
-  expect(setModelState(null, null)).toBeUndefined()
+test('serialize', () => {
+  expect(serialize(null, null)).toBeUndefined()
   expect(
-    setModelState(
+    serialize(
       {},
       {
         parent: null,

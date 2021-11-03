@@ -4,12 +4,14 @@ import { ObservablePath, PropertyKey, IOperation } from './types'
 export class DataChange {
   path: ObservablePath
   key: PropertyKey
+  object: object
   type: string
   value: any
   oldValue: any
   constructor(operation: IOperation, node: DataNode) {
     this.key = operation.key
     this.type = operation.type
+    this.object = operation.target
     this.value = operation.value
     this.oldValue = operation.oldValue
     this.path = node.path.concat(operation.key)

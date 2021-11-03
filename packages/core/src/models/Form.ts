@@ -50,7 +50,7 @@ import {
   getValidFormValues,
 } from '../shared/internals'
 import { isVoidField } from '../shared/checkers'
-import { runEffects } from '../shared/effectbox'
+import { runEffects } from '../shared/effective'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
 import { VoidField } from './VoidField'

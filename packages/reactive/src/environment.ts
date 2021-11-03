@@ -1,6 +1,6 @@
 import { ObservableListener, Reaction, ReactionsMap } from './types'
 import { ArraySet } from './array'
-import { DataNode } from './datatree'
+import { DataNode } from './tree'
 
 export const ProxyRaw = new WeakMap()
 export const RawProxy = new WeakMap()
