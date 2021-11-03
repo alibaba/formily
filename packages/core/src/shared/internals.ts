@@ -593,52 +593,55 @@ export const subscribeUpdate = (
   }
 }
 
-export const serialize = (model: any, setter: any) => {
+export const deserialize = (model: any, setter: any) => {
   if (!model) return
   if (isFn(setter)) {
     setter(model)
-    return model
   } else {
-    each(setter, (value, key) => {
-      if (isFn(value)) return
-      if (ReadOnlyProperties[key] || ReservedProperties[key]) return
+    for (let key in setter) {
+      if (!hasOwnProperty.call(setter, key)) continue
+      if (ReadOnlyProperties[key] || ReservedProperties[key]) continue
       const MutuallyExclusiveKey = MutuallyExclusiveProperties[key]
       if (
         MutuallyExclusiveKey &&
         hasOwnProperty.call(setter, MutuallyExclusiveKey) &&
         !isValid(setter[MutuallyExclusiveKey])
       )
-        return
+        continue
+      const value = setter[key]
+      if (isFn(value)) continue
       model[key] = value
-    })
+    }
   }
   return model
 }
 
-export const deserialize = (model: any, getter?: any) => {
+export const serialize = (model: any, getter?: any) => {
   if (isFn(getter)) {
     return getter(model)
   } else {
     const results = {}
-    each(model, (value, key) => {
-      if (isFn(value)) return
-      if (ReservedProperties[key]) return
+    for (let key in model) {
+      if (!hasOwnProperty.call(model, key)) continue
+      if (ReservedProperties[key]) continue
       if (key === 'address' || key === 'path') {
-        results[key] = value.toString()
-        return
+        results[key] = model[key].toString()
+        continue
       }
+      const value = model[key]
+      if (isFn(value)) continue
       results[key] = toJS(value)
-    })
+    }
     return results
   }
 }
 
 export const createStateSetter = (model: any) => {
-  return batch.bound((setter?: any) => serialize(model, setter))
+  return batch.bound((setter?: any) => deserialize(model, setter))
 }
 
 export const createStateGetter = (model: any) => {
-  return (getter?: any) => deserialize(model, getter)
+  return (getter?: any) => serialize(model, getter)
 }
 
 export const createBatchStateSetter = (form: Form) => {
