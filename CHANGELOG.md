@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.0.0-rc.17(2021-10-23)
+
+### :tada: Enhancements
+
+1. [feat(element): support breakpoints for FormLayout (#2340)](https://github.com/alibaba/formily/commit/345d5f18) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :beetle: Bug Fixes
+
+1. [fix(core): fix initialValues merge with no fields (#2339)](https://github.com/alibaba/formily/commit/9c2ebc36) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore(grid): improve grid responsive effects](https://github.com/alibaba/formily/commit/bbb1a5a8) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-rc.16(2021-10-21)
 
 ### :tada: Enhancements
@@ -817,21 +831,3 @@
 ### :beetle: Bug Fixes
 
 1. [fix(types): fix global.d.ts](https://github.com/alibaba/formily/commit/df8561d6) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.67(2021-06-18)
-
-### :tada: Enhancements
-
-1. [feat(antd/next): add Form and Submit components submitFailed callback events (#1597)](https://github.com/alibaba/formily/commit/2517f807) :point_right: ( [后浪](https://github.com/后浪) )
-
-### :beetle: Bug Fixes
-
-1. [fix(project): fix typings](https://github.com/alibaba/formily/commit/c8aff09b) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :memo: Documents Changes
-
-1. [docs(core): add Type number and integer for ValidatorFormats (#1599)](https://github.com/alibaba/formily/commit/03591144) :point_right: ( [codetyphon](https://github.com/codetyphon) )
-
-### :rose: Improve code quality
-
-1. [refactor(reactive): fix #1598 and support #1586 and super performance optimization](https://github.com/alibaba/formily/commit/a1e72006) :point_right: ( [janrywang](https://github.com/janrywang) )
