@@ -563,3 +563,60 @@ test('atom mutate value by computed depend', () => {
   expect(handler).toBeCalledWith(undefined, undefined)
   expect(handler).toBeCalledWith(123, 321)
 })
+
+test('autorun recollect dependencies', () => {
+  const obs = observable<any>({
+    aa: 'aaa',
+    bb: 'bbb',
+    cc: 'ccc',
+  })
+  const fn = jest.fn()
+  autorun(() => {
+    fn()
+    if (obs.aa === 'aaa') {
+      return obs.bb
+    }
+    return obs.cc
+  })
+  obs.aa = '111'
+  obs.bb = '222'
+  expect(fn).toBeCalledTimes(2)
+})
+
+test('reaction recollect dependencies', () => {
+  const obs = observable<any>({
+    aa: 'aaa',
+    bb: 'bbb',
+    cc: 'ccc',
+  })
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+  const trigger1 = jest.fn()
+  const trigger2 = jest.fn()
+  reaction(() => {
+    fn1()
+    if (obs.aa === 'aaa') {
+      return obs.bb
+    }
+    return obs.cc
+  }, trigger1)
+  reaction(
+    () => {
+      fn2()
+      if (obs.aa === 'aaa') {
+        return obs.bb
+      }
+      return obs.cc
+    },
+    trigger2,
+    {
+      fireImmediately: true,
+    }
+  )
+  obs.aa = '111'
+  obs.bb = '222'
+  expect(fn1).toBeCalledTimes(2)
+  expect(trigger1).toBeCalledTimes(1)
+  expect(fn2).toBeCalledTimes(2)
+  expect(trigger2).toBeCalledTimes(2)
+})

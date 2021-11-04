@@ -37,3 +37,29 @@ test('nested tracker', () => {
   expect(fn).toBeCalledTimes(2)
   tracker.dispose()
 })
+
+test('tracker recollect dependencies', () => {
+  const obs = observable<any>({
+    aa: 'aaa',
+    bb: 'bbb',
+    cc: 'ccc',
+  })
+  const fn = jest.fn()
+  const view = () => {
+    fn()
+    if (obs.aa === 'aaa') {
+      return obs.bb
+    }
+    return obs.cc
+  }
+  const handler = () => {
+    tracker.track(view)
+  }
+  const tracker = new Tracker(handler)
+
+  tracker.track(view)
+  obs.aa = '111'
+  obs.bb = '222'
+  expect(fn).toBeCalledTimes(2)
+  tracker.dispose()
+})
