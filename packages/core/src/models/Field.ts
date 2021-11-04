@@ -478,6 +478,7 @@ export class Field<
     }
     this.active = true
     this.visited = true
+    this.notify(LifeCycleTypes.ON_FIELD_FOCUS)
     await validateSelf(this, 'onFocus')
   }
 
@@ -486,6 +487,7 @@ export class Field<
       if (!isHTMLInputEvent(args[0], false)) return
     }
     this.active = false
+    this.notify(LifeCycleTypes.ON_FIELD_BLUR)
     await validateSelf(this, 'onBlur')
   }
 

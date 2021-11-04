@@ -436,6 +436,104 @@ export default () => {
 }
 ```
 
+## onFieldBlur
+
+#### 描述
+
+用于监听某个字段 onBlur 触发的副作用钩子
+
+#### 签名
+
+```ts
+interface onFieldBlur {
+  (pattern: FormPathPattern, callback: (field: Field, form: Form) => void)
+}
+```
+
+#### 用例
+
+```tsx
+import React, { useMemo, useState } from 'react'
+import { createForm, onFieldBlur } from '@formily/core'
+import { ActionResponse } from './ActionResponse'
+
+export default () => {
+  const [response, setResponse] = useState('')
+  const form = useMemo(
+    () =>
+      createForm({
+        effects() {
+          onFieldBlur('target', () => {
+            setResponse('target blur')
+          })
+        },
+      }),
+    []
+  )
+  return (
+    <ActionResponse response={response}>
+      <button
+        onClick={() => {
+          const field = form.createField({ name: 'target' })
+          field.onBlur()
+        }}
+      >
+        Call Blur
+      </button>
+    </ActionResponse>
+  )
+}
+```
+
+## onFieldFocus
+
+#### 描述
+
+用于监听某个字段 onBlur 触发的副作用钩子
+
+#### 签名
+
+```ts
+interface onFieldFocus {
+  (pattern: FormPathPattern, callback: (field: Field, form: Form) => void)
+}
+```
+
+#### 用例
+
+```tsx
+import React, { useMemo, useState } from 'react'
+import { createForm, onFieldFocus } from '@formily/core'
+import { ActionResponse } from './ActionResponse'
+
+export default () => {
+  const [response, setResponse] = useState('')
+  const form = useMemo(
+    () =>
+      createForm({
+        effects() {
+          onFieldFocus('target', () => {
+            setResponse('target focus')
+          })
+        },
+      }),
+    []
+  )
+  return (
+    <ActionResponse response={response}>
+      <button
+        onClick={() => {
+          const field = form.createField({ name: 'target' })
+          field.onFocus()
+        }}
+      >
+        Call Focus
+      </button>
+    </ActionResponse>
+  )
+}
+```
+
 ## onFieldValidateStart
 
 #### 描述

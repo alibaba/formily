@@ -436,6 +436,104 @@ export default () => {
 }
 ```
 
+## onFieldBlur
+
+#### Description
+
+Used to monitor the side effect hook triggered by a field onBlur
+
+#### Signature
+
+```ts
+interface onFieldBlur {
+  (pattern: FormPathPattern, callback: (field: Field, form: Form) => void)
+}
+```
+
+#### Example
+
+```tsx
+import React, { useMemo, useState } from 'react'
+import { createForm, onFieldBlur } from '@formily/core'
+import { ActionResponse } from './ActionResponse'
+
+export default () => {
+  const [response, setResponse] = useState('')
+  const form = useMemo(
+    () =>
+      createForm({
+        effects() {
+          onFieldBlur('target', () => {
+            setResponse('target blur')
+          })
+        },
+      }),
+    []
+  )
+  return (
+    <ActionResponse response={response}>
+      <button
+        onClick={() => {
+          const field = form.createField({ name: 'target' })
+          field.onBlur()
+        }}
+      >
+        Call Blur
+      </button>
+    </ActionResponse>
+  )
+}
+```
+
+## onFieldFocus
+
+#### Description
+
+Used to monitor the side effect hook triggered by a field onFocus
+
+#### Signature
+
+```ts
+interface onFieldFocus {
+  (pattern: FormPathPattern, callback: (field: Field, form: Form) => void)
+}
+```
+
+#### Example
+
+```tsx
+import React, { useMemo, useState } from 'react'
+import { createForm, onFieldFocus } from '@formily/core'
+import { ActionResponse } from './ActionResponse'
+
+export default () => {
+  const [response, setResponse] = useState('')
+  const form = useMemo(
+    () =>
+      createForm({
+        effects() {
+          onFieldFocus('target', (field) => {
+            setResponse('target focus' + field.displayName)
+          })
+        },
+      }),
+    []
+  )
+  return (
+    <ActionResponse response={response}>
+      <button
+        onClick={() => {
+          const field = form.createField({ name: 'target' })
+          field.onFocus()
+        }}
+      >
+        Call Focus
+      </button>
+    </ActionResponse>
+  )
+}
+```
+
 ## onFieldValidateStart
 
 #### Description

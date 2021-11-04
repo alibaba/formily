@@ -43,6 +43,12 @@ export const onFieldInitialValueChange = createFieldEffect<DataField>(
 export const onFieldInputValueChange = createFieldEffect<DataField>(
   LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE
 )
+export const onFieldBlur = createFieldEffect<DataField>(
+  LifeCycleTypes.ON_FIELD_BLUR
+)
+export const onFieldFocus = createFieldEffect<DataField>(
+  LifeCycleTypes.ON_FIELD_FOCUS
+)
 export const onFieldValidateStart = createFieldEffect<DataField>(
   LifeCycleTypes.ON_FIELD_VALIDATE_START
 )
