@@ -961,6 +961,7 @@ export const resetSelf = batch.bound(
     target.feedbacks = []
     target.inputValue = undefined
     target.inputValues = []
+    target.caches = {}
     if (options?.forceClear) {
       if (isArrayField(target)) {
         target.value = []
