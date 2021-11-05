@@ -248,3 +248,26 @@ test('computed with computed array length', () => {
   obs.arr = []
   expect(handler).toBeCalledWith(false)
 })
+
+test('computed recollect dependencies', () => {
+  const computed = jest.fn()
+  const obs = model({
+    aa: 'aaa',
+    bb: 'bbb',
+    cc: 'ccc',
+    get compute() {
+      computed()
+      if (this.aa === 'aaa') {
+        return this.bb
+      }
+      return this.cc
+    },
+  })
+  const handler = jest.fn()
+  autorun(() => {
+    handler(obs.compute)
+  })
+  obs.aa = '111'
+  obs.bb = '222'
+  expect(computed).toBeCalledTimes(2)
+})

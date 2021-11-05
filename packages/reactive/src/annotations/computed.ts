@@ -9,6 +9,7 @@ import {
   isUntracking,
   batchStart,
   batchEnd,
+  releaseBindingReactions,
 } from '../reaction'
 
 interface IValue<T = any> {
@@ -55,6 +56,7 @@ export const computed: IComputed = createAnnotation(
     }
     function reaction() {
       if (ReactionStack.indexOf(reaction) === -1) {
+        releaseBindingReactions(reaction)
         try {
           ReactionStack.push(reaction)
           compute()
