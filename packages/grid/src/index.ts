@@ -236,6 +236,7 @@ export class Grid<Container extends HTMLElement> {
       })
       const digestSize = batch.bound(() => {
         const rect = this.container.getBoundingClientRect()
+        if (!rect.width || !rect.height) return
         if (this.width !== rect.width) {
           this.width = rect.width
         }
