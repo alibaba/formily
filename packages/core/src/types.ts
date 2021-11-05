@@ -281,7 +281,6 @@ export interface IFieldRequests {
 export interface IFieldCaches {
   value?: any
   initialValue?: any
-  feedbacks?: IFieldFeedback[]
   inputting?: boolean
 }
 
