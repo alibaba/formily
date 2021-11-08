@@ -9,6 +9,7 @@ export interface IGridOptions {
   columnGap?: number
   rowGap?: number
   colWrap?: boolean
+  strictAutoFit?: boolean
 }
 
 const SpanRegExp = /span\s*(\d+)/
@@ -200,10 +201,13 @@ export class Grid<Container extends HTMLElement> {
     if (this.maxWidth === Infinity) {
       return `repeat(${this.columns},1fr)`
     }
-    const columnWidth =
-      (this.width - (this.columns - 1) * this.columnGap) / this.columns
-    if (columnWidth < this.minWidth || columnWidth > this.maxWidth)
-      return `repeat(${this.columns},1fr)`
+    if (this.options.strictAutoFit !== false) {
+      const columnWidth =
+        (this.width - (this.columns - 1) * this.columnGap) / this.columns
+      if (columnWidth < this.minWidth || columnWidth > this.maxWidth) {
+        return `repeat(${this.columns},1fr)`
+      }
+    }
     return `repeat(${this.columns},minmax(${this.minWidth}px,${this.maxWidth}px))`
   }
 
