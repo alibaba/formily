@@ -100,6 +100,7 @@ export class Grid<Container extends HTMLElement> {
       rowGap: 4,
       minWidth: 100,
       colWrap: true,
+      strictAutoFit: false,
       ...options,
     }
     define(this, {
@@ -201,7 +202,7 @@ export class Grid<Container extends HTMLElement> {
     if (this.maxWidth === Infinity) {
       return `repeat(${this.columns},1fr)`
     }
-    if (this.options.strictAutoFit !== false) {
+    if (this.options.strictAutoFit) {
       const columnWidth =
         (this.width - (this.columns - 1) * this.columnGap) / this.columns
       if (columnWidth < this.minWidth || columnWidth > this.maxWidth) {
