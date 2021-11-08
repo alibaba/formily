@@ -338,16 +338,17 @@ export default () => {
 
 ### FormGrid
 
-| Property name | Type                 | Description                | Default value     |
-| ------------- | -------------------- | -------------------------- | ----------------- |
-| minWidth      | `number \| number[]` | Minimum element width      | 100               |
-| maxWidth      | `number \| number[]` | Maximum element width      | -                 |
-| minColumns    | `number \| number[]` | Minimum number of columns  | 0                 |
-| maxColumns    | `number \| number[]` | Maximum number of columns  | -                 |
-| breakpoints   | number[]             | Container size breakpoints | `[720,1280,1920]` |
-| columnGap     | number               | Column spacing             | 8                 |
-| rowGap        | number               | Row spacing                | 4                 |
-| colWrap       | boolean              | Wrap                       | true              |
+| Property name | Type                 | Description                           | Default value     |
+| ------------- | -------------------- | ------------------------------------- | ----------------- |
+| minWidth      | `number \| number[]` | Minimum element width                 | 100               |
+| maxWidth      | `number \| number[]` | Maximum element width                 | -                 |
+| minColumns    | `number \| number[]` | Minimum number of columns             | 0                 |
+| maxColumns    | `number \| number[]` | Maximum number of columns             | -                 |
+| breakpoints   | number[]             | Container size breakpoints            | `[720,1280,1920]` |
+| columnGap     | number               | Column spacing                        | 8                 |
+| rowGap        | number               | Row spacing                           | 4                 |
+| colWrap       | boolean              | Wrap                                  | true              |
+| strictAutoFit | boolean              | Is width strictly limited by maxWidth | false             |
 
 note:
 

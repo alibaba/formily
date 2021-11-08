@@ -18,16 +18,17 @@
 
 ### FormGrid
 
-| 属性名      | 类型                | 描述         | 默认值            |
-| ----------- | ------------------- | ------------ | ----------------- |
-| minWidth    | `number / number[]` | 元素最小宽度 | 100               |
-| maxWidth    | `number / number[]` | 元素最大宽度 | -                 |
-| minColumns  | `number / number[]` | 最小列数     | 0                 |
-| maxColumns  | `number / number[]` | 最大列数     | -                 |
-| breakpoints | number[]            | 容器尺寸断点 | `[720,1280,1920]` |
-| columnGap   | number              | 列间距       | 8                 |
-| rowGap      | number              | 行间距       | 4                 |
-| colWrap     | boolean             | 自动换行     | true              |
+| 属性名        | 类型                | 描述                                                           | 默认值            |
+| ------------- | ------------------- | -------------------------------------------------------------- | ----------------- |
+| minWidth      | `number / number[]` | 元素最小宽度                                                   | 100               |
+| maxWidth      | `number / number[]` | 元素最大宽度                                                   | -                 |
+| minColumns    | `number / number[]` | 最小列数                                                       | 0                 |
+| maxColumns    | `number / number[]` | 最大列数                                                       | -                 |
+| breakpoints   | number[]            | 容器尺寸断点                                                   | `[720,1280,1920]` |
+| columnGap     | number              | 列间距                                                         | 8                 |
+| rowGap        | number              | 行间距                                                         | 4                 |
+| colWrap       | boolean             | 自动换行                                                       | true              |
+| strictAutoFit | boolean             | GridItem 宽度是否严格受限于 maxWidth，不受限的话会自动占满容器 | false             |
 
 注意：
 
