@@ -202,7 +202,7 @@ export class Grid<Container extends HTMLElement> {
     if (this.maxWidth === Infinity) {
       return `repeat(${this.columns},1fr)`
     }
-    if (this.options.strictAutoFit) {
+    if (this.options.strictAutoFit !== true) {
       const columnWidth =
         (this.width - (this.columns - 1) * this.columnGap) / this.columns
       if (columnWidth < this.minWidth || columnWidth > this.maxWidth) {
