@@ -48,6 +48,7 @@ import {
   getValidFieldDefaultValue,
   initializeStart,
   initializeEnd,
+  createChildrenFeedbackFilter,
 } from '../shared/internals'
 import { Form } from './Form'
 import { BaseField } from './BaseField'
@@ -275,10 +276,7 @@ export class Field<
   }
 
   get errors() {
-    return this.form.queryFeedbacks({
-      address: `${this.address}.**`,
-      type: 'error',
-    })
+    return this.form.errors.filter(createChildrenFeedbackFilter(this))
   }
 
   get selfWarnings() {
@@ -288,10 +286,7 @@ export class Field<
   }
 
   get warnings() {
-    return this.form.queryFeedbacks({
-      address: `${this.address}.**`,
-      type: 'warning',
-    })
+    return this.form.warnings.filter(createChildrenFeedbackFilter(this))
   }
 
   get selfSuccesses() {
@@ -301,10 +296,7 @@ export class Field<
   }
 
   get successes() {
-    return this.form.queryFeedbacks({
-      address: `${this.address}.**`,
-      type: 'success',
-    })
+    return this.form.successes.filter(createChildrenFeedbackFilter(this))
   }
 
   get selfValid() {

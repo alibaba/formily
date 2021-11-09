@@ -651,6 +651,13 @@ export const serialize = (model: any, getter?: any) => {
   }
 }
 
+export const createChildrenFeedbackFilter = (field: Field) => {
+  const identifier = field.address?.toString()
+  return ({ address }: IFormFeedback) => {
+    return address.indexOf(identifier) === 0
+  }
+}
+
 export const createStateSetter = (model: any) => {
   return batch.bound((setter?: any) => deserialize(model, setter))
 }
