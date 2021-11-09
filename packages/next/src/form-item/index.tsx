@@ -4,7 +4,6 @@ import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
-import { useGridColumn } from '../form-grid'
 import { Balloon } from '@alifd/next'
 import {
   QuestionCircleOutlined,
@@ -119,7 +118,6 @@ const ICON_MAP = {
 export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const { children, ...others } = props
   const [active, setActive] = useState(false)
-  const gridColumn = useGridColumn(props.gridSpan)
   const formLayout = useFormItemLayout(others)
   const { containerRef, contentRef, overflow } = useOverflow<
     HTMLDivElement,
@@ -200,10 +198,6 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
 
   const gridStyles: React.CSSProperties = {}
 
-  if (gridColumn) {
-    gridStyles.gridColumn = gridColumn
-  }
-
   const getOverflowTooltip = () => {
     if (overflow) {
       return (
@@ -276,6 +270,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         ...style,
         ...gridStyles,
       }}
+      data-grid-span={props.gridSpan}
       className={cls({
         [`${prefixCls}`]: true,
         [`${prefixCls}-layout-${layout}`]: true,

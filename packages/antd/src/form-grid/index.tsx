@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useContext, useMemo } from 'react'
+import React, { useLayoutEffect, useRef, useMemo } from 'react'
 import { observer } from '@formily/react'
 import { Grid, IGridOptions } from '@formily/grid'
 import { usePrefixCls, pickDataProps } from '../__builtins__'
@@ -21,7 +21,13 @@ export interface IGridColumnProps {
 
 type ComposedFormGrid = React.FC<IFormGridProps> & {
   GridColumn: React.FC<IGridColumnProps>
+  /**
+   * @deprecated
+   */
   useGridSpan: (gridSpan: number) => number
+  /**
+   * @deprecated
+   */
   useGridColumn: (gridSpan: number) => string
 }
 
@@ -35,14 +41,18 @@ const useFormGrid = (props: IFormGridProps) => {
   return useMemo(() => new Grid(options), [Grid.id(options)])
 }
 
+/**
+ * @deprecated
+ */
 export const useGridSpan = (gridSpan = 1) => {
-  const grid = useContext(FormGridContext)
-  return grid?.calcGridSpan(gridSpan) ?? gridSpan
+  return gridSpan
 }
 
+/**
+ * @deprecated
+ */
 export const useGridColumn = (gridSpan = 1) => {
-  const span = useGridSpan(gridSpan)
-  return gridSpan === -1 ? `span ${span} / -1` : `span ${span} / auto`
+  return gridSpan
 }
 
 export const FormGrid: ComposedFormGrid = observer(
@@ -84,13 +94,7 @@ export const FormGrid: ComposedFormGrid = observer(
 export const GridColumn: React.FC<IGridColumnProps> = observer(
   ({ gridSpan, children, ...props }) => {
     return (
-      <div
-        {...props}
-        style={{
-          gridColumn: useGridColumn(gridSpan),
-          ...props.style,
-        }}
-      >
+      <div {...props} style={props.style} data-grid-span={gridSpan}>
         {children}
       </div>
     )

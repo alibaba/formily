@@ -5,15 +5,12 @@ import {
   onMounted,
   InjectionKey,
   Ref,
-  inject,
   computed,
   watchEffect,
 } from '@vue/composition-api'
-import { isValid, isNum, isBool, isEqual } from '@formily/shared'
 import { h } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
 import { Grid, IGridOptions } from '@formily/grid'
-import ResizeObserver from 'resize-observer-polyfill'
 import { stylePrefix } from '../__builtins__/configs'
 import { composeExport } from '../__builtins__/shared'
 import { useFormLayout } from '../form-layout'
@@ -54,15 +51,18 @@ const useFormGrid = (props: IFormGridProps) => {
   })
 }
 
+/**
+ * @deprecated
+ */
 const useGridSpan = (gridSpan: number) => {
-  const grid = inject(FormGridSymbol, ref(null))
-
-  return grid.value?.calcGridSpan(gridSpan) ?? gridSpan
+  return gridSpan
 }
 
+/**
+ * @deprecated
+ */
 export const useGridColumn = (gridSpan = 1) => {
-  const span = useGridSpan(gridSpan)
-  return gridSpan === -1 ? `span ${span} / -1` : `span ${span} / auto`
+  return gridSpan
 }
 
 const FormGridInner = observer(
@@ -153,7 +153,9 @@ const FormGridColumn = observer(
         return h(
           'div',
           {
-            style: { gridColumn: useGridColumn(props.gridSpan) },
+            attrs: {
+              'data-grid-span': props.gridSpan,
+            },
           },
           slots
         )

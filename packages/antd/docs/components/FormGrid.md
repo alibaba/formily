@@ -361,17 +361,3 @@ note:
 | Property name | Type   | Description                                                                                                              | Default value |
 | ------------- | ------ | ------------------------------------------------------------------------------------------------------------------------ | ------------- |
 | gridSpan      | number | The number of columns spanned by the element, if it is -1, it will automatically fill the cell across columns in reverse | 1             |
-
-### FormGrid.useGridSpan
-
-#### Description
-
-Calculate the correct span based on the width of the container to prevent element overflow
-
-#### Signature
-
-```ts
-interface uesGridSpan {
-  (gridSpan: number): number
-}
-```

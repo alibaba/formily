@@ -38,32 +38,37 @@ const calcFactor = <T>(value: T | T[], breakpointIndex: number): T => {
 }
 
 const parseGridNode = (elements: HTMLCollection): GridNode[] => {
-  let index = 0
-  return Array.from(elements).map((element) => {
+  return Array.from(elements).reduce((buf, element) => {
     const style = getComputedStyle(element)
-    const origin = element.getAttribute('data-origin-span')
+    const visible = !(style.display === 'none')
+    const origin = element.getAttribute('data-grid-span')
     const span = parseSpan(style.gridColumnStart) ?? 1
     const originSpan = Number(origin ?? span)
     if (!origin) {
-      element.setAttribute('data-origin-span', String(span))
+      element.setAttribute('data-grid-span', String(span))
     }
-    const start = index
-    const end = (index += span) - 1
-    return {
-      start,
-      end,
+    return buf.concat({
       span,
+      visible,
       originSpan,
       element,
-    }
-  })
+    })
+  }, [])
 }
 
 const calcChildTotalColumns = (nodes: GridNode[]) =>
-  nodes.reduce((buf, node) => buf + node.span, 0)
+  nodes.reduce((buf, node) => {
+    if (!node.visible) return buf
+    if (node.originSpan === -1) return buf + 1
+    return buf + node.span
+  }, 0)
 
 const calcChildOriginTotalColumns = (nodes: GridNode[]) =>
-  nodes.reduce((buf, node) => buf + node.originSpan, 0)
+  nodes.reduce((buf, node) => {
+    if (!node.visible) return buf
+    if (node.originSpan === -1) return buf + 1
+    return buf + node.originSpan
+  }, 0)
 
 const calcSatisfyColumns = (
   width: number,
@@ -95,12 +100,39 @@ const parseSpan = (gridColumnStart: string) => {
 const factor = <T>(value: T | T[], grid: Grid<HTMLElement>): T =>
   isValid(value) ? calcFactor(value as any, grid.breakpoint) : value
 
+const resolveChildren = (grid: Grid<HTMLElement>) => {
+  let walked = 0,
+    rowIndex = 0
+  if (!grid.ready) return
+  grid.children = grid.children.map((node) => {
+    if (!node.visible) return node
+    const columnIndex = walked % grid.columns
+    const remainColumns = grid.columns - columnIndex
+    const originSpan = node.originSpan
+    const targetSpan = originSpan > grid.columns ? grid.columns : originSpan
+    const span = targetSpan > remainColumns ? remainColumns : targetSpan
+    const gridColumn =
+      originSpan === -1 ? `span ${remainColumns} / -1` : `span ${span} / auto`
+    if (node.element.style.gridColumn !== gridColumn) {
+      node.element.style.gridColumn = gridColumn
+    }
+    walked += span
+    if (columnIndex === 0) {
+      rowIndex++
+    }
+    node.row = rowIndex
+    node.column = columnIndex + 1
+    return node
+  })
+}
+
 export type GridNode = {
-  start?: number
-  end?: number
+  visible?: boolean
+  column?: number
+  row?: number
   span?: number
   originSpan?: number
-  element?: Element
+  element?: HTMLElement
 }
 export class Grid<Container extends HTMLElement> {
   options: IGridOptions
@@ -258,15 +290,19 @@ export class Grid<Container extends HTMLElement> {
           this.width = rect.width
           this.height = rect.height
         }
-        this.options?.onDigest?.(this)
+        resolveChildren(this)
+        if (this.ready) {
+          this.options?.onDigest?.(this)
+        }
       })
       const mutationObserver = new MutationObserver(digest)
       const resizeObserver = new ResizeObserver(digest)
       resizeObserver.observe(this.container)
       mutationObserver.observe(this.container, {
-        attributeFilter: ['style'],
+        attributeFilter: ['style', 'class'],
         attributes: true,
         childList: true,
+        subtree: true,
       })
       initialize()
       return () => {
@@ -280,23 +316,11 @@ export class Grid<Container extends HTMLElement> {
     return () => {}
   }
 
+  /**
+   * @deprecated
+   */
   calcGridSpan = (span: number) => {
-    if (!this.ready) {
-      return span
-    }
-    if (span === -1) {
-      const prevOriginTotalColumns = this.childOriginTotalColumns - 1
-      const prevTotalColumns = this.childTotalColumns - 1
-      const remainTotalColumns = this.columns - prevOriginTotalColumns
-      const remainOriginTotalColumns = this.columns - prevTotalColumns
-      const minRemainTotalColumns = Math.max(
-        remainTotalColumns,
-        remainOriginTotalColumns
-      )
-      if (minRemainTotalColumns < 0) return 1
-      return minRemainTotalColumns > 0 ? minRemainTotalColumns : this.columns
-    }
-    return this.columns < span ? this.columns : span
+    return span
   }
 
   static id = (options: IGridOptions = {}) =>

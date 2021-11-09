@@ -361,17 +361,3 @@ export default () => {
 | 属性名   | 类型   | 描述                                                  | 默认值 |
 | -------- | ------ | ----------------------------------------------------- | ------ |
 | gridSpan | number | 元素所跨列数 ，如果为-1，那么会自动反向跨列填补单元格 | 1      |
-
-### FormGrid.useGridSpan
-
-#### 描述
-
-根据容器宽度计算出正确的 span，防止元素溢出
-
-#### 签名
-
-```ts
-interface uesGridSpan {
-  (gridSpan: number): number
-}
-```
