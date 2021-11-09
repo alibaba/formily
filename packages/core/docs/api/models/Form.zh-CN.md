@@ -4,7 +4,7 @@ order: 0
 
 # Form
 
-调用[createForm](/api/entry/create-form)所返回的核心[表单模型](/guide/form) API，以下会列出所有模型属性，如果该属性是可写的，那么我们可以直接引用是修改该属性，@formily/reactive 便会响应从而触发 UI 更新。
+调用[createForm](/zh-CN/api/entry/create-form)所返回的核心[表单模型](/zh-CN/guide/form) API，以下会列出所有模型属性，如果该属性是可写的，那么我们可以直接引用是修改该属性，@formily/reactive 便会响应从而触发 UI 更新。
 
 ## 属性
 
@@ -142,7 +142,7 @@ interface setValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### setInitialValuesIn
 
@@ -158,7 +158,7 @@ interface setInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### existValuesIn
 
@@ -174,7 +174,7 @@ interface existValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### existInitialValuesIn
 
@@ -190,7 +190,7 @@ interface existInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### getValuesIn
 
@@ -206,7 +206,7 @@ interface getValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### getInitialValuesIn
 
@@ -222,7 +222,7 @@ interface getInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### deleteValuesIn
 
@@ -238,7 +238,7 @@ interface deleteValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### deleteInitialValuesIn
 
@@ -254,7 +254,7 @@ interface deleteInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### setSubmitting
 
@@ -372,7 +372,7 @@ interface clearErrors {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### clearWarnings
 
@@ -388,7 +388,7 @@ interface clearWarnings {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### clearSuccesses
 
@@ -404,7 +404,7 @@ interface clearSuccesses {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
 ### query
 
@@ -420,9 +420,9 @@ interface query {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
-Query 对象 API 参考 [Query](/api/models/query)
+Query 对象 API 参考 [Query](/zh-CN/api/models/query)
 
 ### queryFeedbacks
 
@@ -438,7 +438,7 @@ interface queryFeedbacks {
 }
 ```
 
-ISearchFeedback 参考 [ISearchFeedback](/api/models/field#isearchfeedback)
+ISearchFeedback 参考 [ISearchFeedback](/zh-CN/api/models/field#isearchfeedback)
 
 IFormFeedback 参考[IFormFeedback](#iformfeedback)
 
@@ -583,9 +583,9 @@ interface setFieldState {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
-IGeneralFieldState 参考 [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
+IGeneralFieldState 参考 [IGeneralFieldState](/zh-CN/api/models/field/#igeneralfieldstate)
 
 ### getFieldState
 
@@ -602,9 +602,9 @@ interface getFieldState<T> {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
-IGeneralFieldState 参考 [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
+IGeneralFieldState 参考 [IGeneralFieldState](/zh-CN/api/models/field/#igeneralfieldstate)
 
 ### getFormGraph
 
@@ -693,9 +693,9 @@ interface reset {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
-IFieldResetOptions 参考 [IFieldResetOptions](/api/models/field/#ifieldresetoptions)
+IFieldResetOptions 参考 [IFieldResetOptions](/zh-CN/api/models/field/#ifieldresetoptions)
 
 ## 类型
 
@@ -796,11 +796,11 @@ interface IFieldFactoryProps {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
-FieldValidator 参考 [FieldValidator](/api/models/field#fieldvalidator)
+FieldValidator 参考 [FieldValidator](/zh-CN/api/models/field#fieldvalidator)
 
-FieldReaction 参考 [FieldReaction](/api/models/field#fieldreaction)
+FieldReaction 参考 [FieldReaction](/zh-CN/api/models/field#fieldreaction)
 
 ### IVoidFieldFactoryProps
 
@@ -825,9 +825,9 @@ interface IFieldFactoryProps {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+FormPathPattern API 参考 [FormPath](/zh-CN/api/entry/form-path#formpathpattern)
 
-FieldReaction 参考 [FieldReaction](/api/models/field#fieldreaction)
+FieldReaction 参考 [FieldReaction](/zh-CN/api/models/field#fieldreaction)
 
 > Formily Typescript 类型约定
 >
