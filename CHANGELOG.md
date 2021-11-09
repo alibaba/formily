@@ -1,5 +1,43 @@
 # Changelog
 
+## v2.0.0-rc.18(2021-11-03)
+
+### :tada: Enhancements
+
+1. [feat(element): add ArrayTable/ArrayCollapse/ArrayTabs event (#2365)](https://github.com/alibaba/formily/commit/d54cdb8b) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :beetle: Bug Fixes
+
+1. [fix(reactive): fix computed value can not get real value (#2389)](https://github.com/alibaba/formily/commit/eb34b2de) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): fix default is not work when name is length (#2387)](https://github.com/alibaba/formily/commit/0adf07ab) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix: fix decorator attrs is not passed down correctly (#2369)](https://github.com/alibaba/formily/commit/fee4af03) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [fix(vue): view should updated when schema changed (#2354)](https://github.com/alibaba/formily/commit/4b3d092d) :point_right: ( [Amorites](https://github.com/Amorites) )
+
+1. [fix(json-schema): fix typings and x-reactions.when (#2360)](https://github.com/alibaba/formily/commit/19e8a4b2) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): make exchangeArrayState be right when move (#2357)](https://github.com/alibaba/formily/commit/a2189465) :point_right: ( [折木](https://github.com/折木) )
+
+1. [fix(react): fix incorrect dts in useFieldSchema (#2350)](https://github.com/alibaba/formily/commit/e8781032) :point_right: ( [Jingkun Hua](https://github.com/Jingkun Hua) )
+
+1. [fix(element): fix style path error (#2348)](https://github.com/alibaba/formily/commit/fada2357) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :memo: Documents Changes
+
+1. [docs: fix scenes url (#2384)](https://github.com/alibaba/formily/commit/3538b171) :point_right: ( [PlutoCA](https://github.com/PlutoCA) )
+
+1. [docs: add issues-helper badge (#2359)](https://github.com/alibaba/formily/commit/a99feb43) :point_right: ( [xrkffgg](https://github.com/xrkffgg) )
+
+### :rose: Improve code quality
+
+1. [refactor(core): revert field unmount to skip validate (#2379)](https://github.com/alibaba/formily/commit/8a016794) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore(antd/next): improve array table ui (#2373)](https://github.com/alibaba/formily/commit/831ba8b8) :point_right: ( [Janry](https://github.com/Janry) )
+
 ## v2.0.0-rc.17(2021-10-23)
 
 ### :tada: Enhancements
@@ -825,9 +863,3 @@
 1. [chore(path): add benchmark case](https://github.com/alibaba/formily/commit/9533e049) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(designable-antd): upgrade designable](https://github.com/alibaba/formily/commit/31803367) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.68(2021-06-18)
-
-### :beetle: Bug Fixes
-
-1. [fix(types): fix global.d.ts](https://github.com/alibaba/formily/commit/df8561d6) :point_right: ( [janrywang](https://github.com/janrywang) )
