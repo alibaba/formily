@@ -50,9 +50,9 @@ export const parseIValidatorRules = (
   )
   const getContext = (context: any, value: any) => {
     return {
-      value,
       ...rules,
-      ...context,
+      value,
+      context,
     }
   }
   const createValidate =
@@ -70,7 +70,7 @@ export const parseIValidatorRules = (
                 type: 'error',
                 message,
               },
-              { ...context_, ...scope }
+              { ...scope, ...context_ }
             )?.message
           }
         )
