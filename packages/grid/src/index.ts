@@ -1,4 +1,5 @@
 import { define, observable, batch } from '@formily/reactive'
+import { ChildListMutationObserver } from './observer'
 
 export interface IGridOptions {
   maxColumns?: number | number[]
@@ -295,14 +296,12 @@ export class Grid<Container extends HTMLElement> {
           this.options?.onDigest?.(this)
         }
       })
-      const mutationObserver = new MutationObserver(digest)
+      const mutationObserver = new ChildListMutationObserver(digest)
       const resizeObserver = new ResizeObserver(digest)
       resizeObserver.observe(this.container)
       mutationObserver.observe(this.container, {
-        attributeFilter: ['style', 'class'],
+        attributeFilter: ['style', 'class', 'data-grid-span'],
         attributes: true,
-        childList: true,
-        subtree: true,
       })
       initialize()
       return () => {
