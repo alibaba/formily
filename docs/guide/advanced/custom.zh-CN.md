@@ -1,6 +1,6 @@
 # 实现自定义组件
 
-实现业务自定义组件主要是使用[@formily/react](https://react.formilyjs.org) 或[@formily/vue](https://vue.formilyjs.org)中的 Hooks API 与 observer API
+实现业务自定义组件主要是使用[@formily/react](https://react.formilyjs.org/zh-CN) 或[@formily/vue](https://vue.formilyjs.org)中的 Hooks API 与 observer API
 
 接入现成组件库的话，我们主要使用 connect/mapProps/mapReadPretty API
 
