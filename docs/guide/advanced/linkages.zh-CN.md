@@ -6,11 +6,11 @@ Formily1.x 中实现联动逻辑只有一种模式，也就是主动模式，必
 
 主动联动核心是基于
 
-- [FormEffectHooks](https://core.formilyjs.org/api/entry/form-effect-hooks)
-- [FieldEffectHooks](https://core.formilyjs.org/api/entry/field-effect-hooks)
-- [setFormState](https://core.formilyjs.org/api/models/form#setformstate)
-- [setFieldState](https://core.formilyjs.org/api/models/form#setfieldstate)
-- [SchemaReactions](https://react.formilyjs.org/api/shared/schema#schemareactions)
+- [FormEffectHooks](https://core.formilyjs.org/zh-CN/api/entry/form-effect-hooks)
+- [FieldEffectHooks](https://core.formilyjs.org/zh-CN/api/entry/field-effect-hooks)
+- [setFormState](https://core.formilyjs.org/zh-CN/api/models/form#setformstate)
+- [setFieldState](https://core.formilyjs.org/zh-CN/api/models/form#setfieldstate)
+- [SchemaReactions](https://react.formilyjs.org/zh-CN/api/shared/schema#schemareactions)
 
 实现主动联动，优点是实现一对多联动时非常方便
 
@@ -989,9 +989,9 @@ export default () => (
 
 被动模式的核心是基于
 
-- [onFieldReact](https://core.formilyjs.org/api/entry/field-effect-hooks#onfieldreact)实现全局响应式逻辑
-- [FieldReaction](https://core.formilyjs.org/api/models/field#fieldreaction)实现局部响应式逻辑
-- [SchemaReactions](https://react.formilyjs.org/api/shared/schema#schemareactions)实现 Schema 协议中的结构化逻辑描述(内部是基于 FieldReaction 来实现的)
+- [onFieldReact](https://core.formilyjs.org/zh-CN/api/entry/field-effect-hooks#onfieldreact)实现全局响应式逻辑
+- [FieldReaction](https://core.formilyjs.org/zh-CN/api/models/field#fieldreaction)实现局部响应式逻辑
+- [SchemaReactions](https://react.formilyjs.org/zh-CN/api/shared/schema#schemareactions)实现 Schema 协议中的结构化逻辑描述(内部是基于 FieldReaction 来实现的)
 
 ### 一对一联动
 
