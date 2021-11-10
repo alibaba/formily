@@ -70,7 +70,7 @@
 **VirtualField**
 
 - V1: 代表虚拟字段
-- V2: 改名，统一使用[VoidField](https://core.formilyjs.org/api/models/void-field)
+- V2: 改名，统一使用[VoidField](https://core.formilyjs.org/zh-CN/api/models/void-field)
 
 **unmount 行为**
 
@@ -84,17 +84,17 @@
 **createFormActions/createAsyncFormActions**
 
 - V1 创建一个 Form 操作器，可以调用 setFieldState/setFormState 方法
-- V2 移除，统一使用@formily/core 中的[createForm](https://core.formilyjs.org/api/entry/create-form)创建出来的 Form 实例操作状态
+- V2 移除，统一使用@formily/core 中的[createForm](https://core.formilyjs.org/zh-CN/api/entry/create-form)创建出来的 Form 实例操作状态
 
 **Form**
 
 - V1 内部会创建 Form 实例，可以受控传递 values/initialValues 属性等
-- V2 移除，统一使用[FormProvider](https://react.formilyjs.org/api/components/form-provider)
+- V2 移除，统一使用[FormProvider](https://react.formilyjs.org/zh-CN/api/components/form-provider)
 
 **SchemaForm**
 
 - V1 内部会解析 json-schema 协议，同时会创建 Form 实例，支持受控模式，并渲染
-- V2 移除，统一使用[createSchemaField](https://react.formilyjs.org/api/components/schema-field)创建出来的 SchemaField 组件，且不支持受控模式
+- V2 移除，统一使用[createSchemaField](https://react.formilyjs.org/zh-CN/api/components/schema-field)创建出来的 SchemaField 组件，且不支持受控模式
 
 **Field**
 
@@ -104,22 +104,22 @@
 **VirtualField**
 
 - V1 支持受控模式，需要使用 render props 进行组件状态映射
-- V2 不支持受控模式，改名[VoidField](https://react.formilyjs.org/api/components/void-field)，传入 decorator/component 属性即可快速实现状态映射
+- V2 不支持受控模式，改名[VoidField](https://react.formilyjs.org/zh-CN/api/components/void-field)，传入 decorator/component 属性即可快速实现状态映射
 
 **FieldList**
 
 - V1 代表自增字段控制组件
-- V2 改名为[ArrayField](https://react.formilyjs.org/api/components/array-field)
+- V2 改名为[ArrayField](https://react.formilyjs.org/zh-CN/api/components/array-field)
 
 **FormSpy**
 
 - V1 监听所有生命周期触发，并重新渲染
-- V2 移除，统一使用[FormConsumer](https://react.formilyjs.org/api/components/form-consumer)
+- V2 移除，统一使用[FormConsumer](https://react.formilyjs.org/zh-CN/api/components/form-consumer)
 
 **SchemaMarkupField**
 
 - V1 代表 Schema 描述标签组件
-- V2 移除，统一使用[createSchemaField](https://react.formilyjs.org/api/components/schema-field)工厂函数创建出来的描述标签组件
+- V2 移除，统一使用[createSchemaField](https://react.formilyjs.org/zh-CN/api/components/schema-field)工厂函数创建出来的描述标签组件
 
 **useFormQuery**
 
@@ -129,27 +129,27 @@
 **useForm**
 
 - V1 代表创建 Form 实例
-- V2 代表消费上下文中的 Form 实例，如果要创建，请使用[createForm](https://react.formilyjs.org/api/entry/create-form)
+- V2 代表消费上下文中的 Form 实例，如果要创建，请使用[createForm](https://core.formilyjs.org/zh-CN/api/entry/create-form)
 
 **useField**
 
 - V1 代表创建 Field 实例
-- V2 代表消费上下文中的 Field 实例，如果要创建，请调用[form.createField](https://core.formilyjs.org/api/models/form#createfield)
+- V2 代表消费上下文中的 Field 实例，如果要创建，请调用[form.createField](https://core.formilyjs.org/zh-CN/api/models/form#createfield)
 
 **useVirtualField**
 
 - V1 代表创建 VirtualField 实例
-- V2 移除，如果要创建，请调用[form.createVoidField](https://core.formilyjs.org/api/models/form#createvoidfield)
+- V2 移除，如果要创建，请调用[form.createVoidField](https://core.formilyjs.org/zh-CN/api/models/form#createvoidfield)
 
 **useFormState**
 
 - V1 消费上下文中的 Form 状态
-- V2 移除，统一使用[useForm](https://react.formilyjs.org/api/hooks/use-form)
+- V2 移除，统一使用[useForm](https://react.formilyjs.org/zh-CN/api/hooks/use-form)
 
 **useFieldState**
 
 - V1 消费上下文中的 Field 状态
-- V2 移除，统一使用[useField](https://react.formilyjs.org/api/hooks/use-field)
+- V2 移除，统一使用[useField](https://react.formilyjs.org/zh-CN/api/hooks/use-field)
 
 **useFormSpy**
 
@@ -159,12 +159,12 @@
 **useSchemaProps**
 
 - V1 消费上下文中的 SchemaField 的 Props
-- V2 移除，统一使用[useFieldSchema](https://react.formilyjs.org/api/hooks/use-field-schema)
+- V2 移除，统一使用[useFieldSchema](https://react.formilyjs.org/zh-CN/api/hooks/use-field-schema)
 
 **connect**
 
 - V1 标准 HOC
-- V2 高阶函数改为 1 阶，属性有巨大变化，具体看[connect 文档](https://react.formilyjs.org/api/shared/connect)
+- V2 高阶函数改为 1 阶，属性有巨大变化，具体看[connect 文档](https://react.formilyjs.org/zh-CN/api/shared/connect)
 
 **registerFormField/registerVirtaulBox/registerFormComponent/registerFormItemComponent**
 
