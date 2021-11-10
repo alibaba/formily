@@ -4,7 +4,7 @@ Formily2.x 已经放弃了给表单组件和字段组件支持受控模式，因
 
 所以 Formily 就不再支持受控模式了，但是如果我们硬要实现普通 React 受控，还是可以支持的，只不过只能实现值受控，不能实现字段级受控，也就是我们使用的 Field 组件，属性只会在初次渲染时生效，未来属性发生任何变化都不会自动更新，想要自动更新，除非重新创建 Form 实例(显然这样会丢失所有之前维护好的状态)。
 
-所以，我们更加推荐的是使用[@formily/reactive](https://reactive.formilyjs.org) 实现响应式受控，既能实现值受控，也能实现字段级受控
+所以，我们更加推荐的是使用[@formily/reactive](https://reactive.formilyjs.org/zh-CN) 实现响应式受控，既能实现值受控，也能实现字段级受控
 
 ## 值受控
 
@@ -85,7 +85,7 @@ export default () => {
 
 ## 响应式值受控
 
-响应式受控主要是使用[@formily/reactive](https://reactive.formilyjs.org)实现响应式更新，我们可以轻松实现双向绑定，同时性能完爆普通受控更新
+响应式受控主要是使用[@formily/reactive](https://reactive.formilyjs.org/zh-CN)实现响应式更新，我们可以轻松实现双向绑定，同时性能完爆普通受控更新
 
 ```tsx
 import React, { useMemo, useRef } from 'react'
@@ -465,7 +465,7 @@ export default observer(() => {
 
 ### 最佳实践
 
-推荐使用[@formily/reactive](https://reactive.formilyjs.org) 实现响应式受控
+推荐使用[@formily/reactive](https://reactive.formilyjs.org/zh-CN) 实现响应式受控
 
 ```tsx
 import React from 'react'
