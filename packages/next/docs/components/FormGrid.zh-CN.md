@@ -334,6 +334,167 @@ export default () => {
 }
 ```
 
+## 查询表单实现案例
+
+```tsx
+import React, { useMemo, useState, useEffect, Fragment } from 'react'
+import { createForm } from '@formily/core'
+import { createSchemaField, FormProvider } from '@formily/react'
+import {
+  Form,
+  Input,
+  Select,
+  DatePicker,
+  FormItem,
+  FormGrid,
+  Submit,
+  Reset,
+  FormButtonGroup,
+} from '@formily/next'
+
+const QueryForm: React.FC = (props) => {
+  const [expanded, setExpanded] = useState(false)
+  const [grid, setGrid] = useState()
+  const updateChildren = () => {
+    if (grid) {
+      grid.children.forEach((node, index) => {
+        if (index === grid.childSize - 1) return
+        node.element.style.display = !expanded && node.row > 1 ? 'none' : ''
+      })
+    }
+  }
+
+  const renderActions = () => {
+    return (
+      <Fragment>
+        <Submit onSubmit={console.log}>查询</Submit>
+        <Reset>重置</Reset>
+      </Fragment>
+    )
+  }
+
+  const renderButtonGroup = () => {
+    if (grid?.rows < 2) {
+      return (
+        <FormButtonGroup.FormItem>
+          <FormButtonGroup>{renderActions()}</FormButtonGroup>
+        </FormButtonGroup.FormItem>
+      )
+    }
+
+    return (
+      <Fragment>
+        {grid?.rows > 1 ? (
+          <FormButtonGroup>
+            <a
+              href=""
+              onClick={(e) => {
+                e.preventDefault()
+                setExpanded(!expanded)
+              }}
+            >
+              {expanded ? '收起' : '展开'}
+            </a>
+          </FormButtonGroup>
+        ) : null}
+        <FormButtonGroup align="right">{renderActions()}</FormButtonGroup>
+      </Fragment>
+    )
+  }
+  useEffect(() => {
+    updateChildren()
+  }, [expanded, grid])
+  return (
+    <Form {...props} layout="vertical" feedbackLayout="terse">
+      <FormGrid
+        maxColumns={4}
+        maxWidth={240}
+        onInitialized={(grid) => {
+          setGrid(grid)
+          updateChildren()
+        }}
+      >
+        {props.children}
+        <FormGrid.GridColumn
+          gridSpan={-1}
+          style={{ display: 'flex', justifyContent: 'space-between' }}
+        >
+          {renderButtonGroup()}
+        </FormGrid.GridColumn>
+      </FormGrid>
+    </Form>
+  )
+}
+
+const SchemaField = createSchemaField({
+  components: {
+    QueryForm,
+    Input,
+    Select,
+    DatePicker,
+    FormItem,
+  },
+})
+
+export default () => {
+  const form = useMemo(() => createForm(), [])
+  return (
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.Object x-component="QueryForm">
+          <SchemaField.String
+            name="input1"
+            title="Input 1"
+            x-component="Input"
+            x-decorator="FormItem"
+          />
+          <SchemaField.String
+            name="input2"
+            title="Input 2"
+            x-component="Input"
+            x-decorator="FormItem"
+          />
+
+          <SchemaField.String
+            name="select1"
+            title="Select 1"
+            x-component="Select"
+            x-decorator="FormItem"
+          />
+          <SchemaField.String
+            name="select2"
+            title="Select 2"
+            x-component="Select"
+            x-decorator="FormItem"
+          />
+          <SchemaField.String
+            name="date"
+            title="DatePicker"
+            x-component="DatePicker"
+            x-decorator="FormItem"
+          />
+          <SchemaField.String
+            name="dateRange"
+            title="DatePicker.RangePicker"
+            x-component="DatePicker.RangePicker"
+            x-decorator="FormItem"
+            x-decorator-props={{
+              gridSpan: 2,
+            }}
+          />
+          <SchemaField.String
+            name="select3"
+            title="Select 3"
+            x-component="Select"
+            x-decorator="FormItem"
+          />
+        </SchemaField.Object>
+      </SchemaField>
+    </FormProvider>
+  )
+}
+```
+
 ## API
 
 ### FormGrid

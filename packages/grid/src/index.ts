@@ -12,6 +12,7 @@ export interface IGridOptions {
   colWrap?: boolean
   strictAutoFit?: boolean
   onDigest?: (grid: Grid<HTMLElement>) => void
+  onInitialized?: (grid: Grid<HTMLElement>) => void
 }
 
 const SpanRegExp = /span\s*(\d+)/
@@ -126,6 +127,8 @@ const resolveChildren = (grid: Grid<HTMLElement>) => {
     return node
   })
 }
+
+const nextTick = (callback?: () => void) => Promise.resolve(0).then(callback)
 
 export type GridNode = {
   visible?: boolean
@@ -292,8 +295,13 @@ export class Grid<Container extends HTMLElement> {
           this.height = rect.height
         }
         resolveChildren(this)
-        if (this.ready) {
+        nextTick(() => {
           this.options?.onDigest?.(this)
+        })
+        if (!this.ready) {
+          nextTick(() => {
+            this.options?.onInitialized?.(this)
+          })
         }
       })
       const mutationObserver = new ChildListMutationObserver(digest)
