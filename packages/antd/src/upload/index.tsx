@@ -80,9 +80,11 @@ const getErrorMessage = (target: any) => {
     target?.errMsg ||
     target?.errorMsg ||
     target?.message ||
-    typeof target?.error === 'string'
-    ? target.error
-    : ''
+    (
+      typeof target?.error === 'string'
+      ? target.error
+      : ''
+    )
 }
 
 const getState = (target: any) => {
