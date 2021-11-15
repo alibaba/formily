@@ -84,13 +84,13 @@ const getSuccess = (target: any) => {
 }
 
 const getErrorMessage = (target: any) => {
-  return target?.errorMessage ||
+  return (
+    target?.errorMessage ||
     target?.errMsg ||
     target?.errorMsg ||
     target?.message ||
-    typeof target?.error === 'string'
-    ? target.error
-    : ''
+    (typeof target?.error === 'string' ? target.error : '')
+  )
 }
 
 const getState = (target: any) => {
