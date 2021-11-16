@@ -1,4 +1,8 @@
-import { Validator, ValidatorTriggerType } from '@formily/validator'
+import {
+  IValidatorRules,
+  Validator,
+  ValidatorTriggerType,
+} from '@formily/validator'
 import { FormPath } from '@formily/shared'
 import {
   Form,
@@ -293,7 +297,13 @@ export type FieldPatternTypes =
   | 'readPretty'
   | ({} & string)
 
-export type FieldValidator = Validator
+export type FieldValidatorContext = IValidatorRules & {
+  field?: Field
+  form?: Form
+  value?: any
+}
+
+export type FieldValidator = Validator<FieldValidatorContext>
 
 export type FieldDataSource = {
   label?: any

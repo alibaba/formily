@@ -278,7 +278,7 @@ export const validateToFeedbacks = async (
   const results = await validate(field.value, field.validator, {
     triggerType,
     validateFirst: field.props.validateFirst || field.form.props.validateFirst,
-    context: field,
+    context: { field, form: field.form },
   })
 
   batch(() => {
