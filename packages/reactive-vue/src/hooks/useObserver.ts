@@ -1,6 +1,7 @@
 import { autorun } from '@formily/reactive'
 import { getCurrentInstance, onBeforeUnmount, isVue3 } from 'vue-demi'
 
+/* istanbul ignore next */
 export const useObserver = () => {
   if (isVue3) {
     const vm = getCurrentInstance()
