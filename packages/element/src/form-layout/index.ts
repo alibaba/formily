@@ -49,18 +49,21 @@ export const FormLayoutShallowContext: InjectionKey<Ref<FormLayoutProps>> =
   Symbol('FormLayoutShallowContext')
 
 export const useFormDeepLayout = (): Ref<FormLayoutProps> =>
-  inject(FormLayoutDeepContext, ref(null))
+  inject(FormLayoutDeepContext, ref({}))
 
 export const useFormShallowLayout = (): Ref<FormLayoutProps> =>
-  inject(FormLayoutShallowContext, ref(null))
+  inject(FormLayoutShallowContext, ref({}))
 
 export const useFormLayout = (): Ref<FormLayoutProps> => {
   const shallowLayout = useFormShallowLayout()
   const deepLayout = useFormDeepLayout()
-  const formLayout = ref({})
+  const formLayout = ref({
+    ...deepLayout.value,
+    ...shallowLayout.value,
+  })
 
   watch(
-    [shallowLayout],
+    [shallowLayout, deepLayout],
     () => {
       formLayout.value = {
         ...deepLayout.value,
@@ -68,7 +71,7 @@ export const useFormLayout = (): Ref<FormLayoutProps> => {
       }
     },
     {
-      immediate: true,
+      deep: true,
     }
   )
   return formLayout
@@ -115,7 +118,7 @@ export const FormLayout = defineComponent<FormLayoutProps>({
       () => {
         shallowProps.value = props.value.shallow ? props.value : undefined
         if (!props.value.shallow) {
-          Object.assign(newDeepLayout.value, props)
+          Object.assign(newDeepLayout.value, props.value)
         } else {
           if (props.value.size) {
             newDeepLayout.value.size = props.value.size
