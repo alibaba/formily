@@ -4,11 +4,7 @@
     "outDir": "./lib",
     "skipLibCheck": true,
     "paths": {
-      "@formily/*": [
-        "../../packages/*",
-        "../../designable/*",
-        "../../devtools/*"
-      ]
+      "@formily/*": ["../../packages/*", "../../devtools/*"]
     },
     "plugins": [{ "transform": "./transformer.ts", "after": true }]
   },

@@ -7,7 +7,7 @@
     "version": {
       "forcePublish": true,
       "exact": true,
-      "message": "chore(versions): 😊 publish %s"
+      "message": "chore(release): 😊 publish %s"
     }
   }
 }
