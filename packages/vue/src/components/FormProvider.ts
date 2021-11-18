@@ -1,7 +1,15 @@
 import { provide, defineComponent, watch } from 'vue-demi'
-import { FormSymbol } from '../shared/context'
+import {
+  FormSymbol,
+  FieldSymbol,
+  SchemaMarkupSymbol,
+  SchemaSymbol,
+  SchemaExpressionScopeSymbol,
+  SchemaOptionsSymbol,
+} from '../shared/context'
 import { IProviderProps } from '../types'
 import { useAttach } from '../hooks/useAttach'
+import { useInjectionCleaner } from '../hooks/useInjectionCleaner'
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
 
@@ -25,6 +33,13 @@ export default defineComponent<IProviderProps>({
     )
 
     provide(FormSymbol, formRef)
+    useInjectionCleaner([
+      FieldSymbol,
+      SchemaMarkupSymbol,
+      SchemaSymbol,
+      SchemaExpressionScopeSymbol,
+      SchemaOptionsSymbol,
+    ])
 
     return () => h(Fragment, { attrs }, slots)
   },

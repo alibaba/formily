@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { render } from '@testing-library/vue'
+import { render, fireEvent } from '@testing-library/vue'
 import { createForm } from '@formily/core'
 import {
   FormProvider,
@@ -9,7 +9,7 @@ import {
   VoidField,
 } from '../vue2-components'
 import { defineComponent } from 'vue-demi'
-import { useParentForm } from '../hooks'
+import { useParentForm, useField } from '../hooks'
 import { h } from 'vue-demi'
 
 Vue.component('FormProvider', FormProvider)
@@ -17,6 +17,28 @@ Vue.component('FormConsumer', FormConsumer)
 Vue.component('ObjectField', ObjectField)
 Vue.component('VoidField', VoidField)
 Vue.component('Field', Field)
+
+const Input = defineComponent({
+  props: ['value'],
+  setup(props, { attrs, listeners }) {
+    const fieldRef = useField()
+    return () => {
+      const field = fieldRef.value
+      return h('input', {
+        class: 'test-input',
+        attrs: {
+          ...attrs,
+          value: props.value,
+          'data-testid': field.path.toString(),
+        },
+        on: {
+          ...listeners,
+          input: listeners.change,
+        },
+      })
+    }
+  },
+})
 
 test('render form', () => {
   const form = createForm()
@@ -71,4 +93,35 @@ test('useParentForm', () => {
   expect(queryByTestId('111').textContent).toBe('ObjectField')
   expect(queryByTestId('222').textContent).toBe('Form')
   expect(queryByTestId('333').textContent).toBe('Form')
+})
+
+test('useInjectionCleaner', async () => {
+  const form = createForm()
+
+  const { getByTestId } = render(
+    defineComponent({
+      name: 'TestComponent',
+      setup() {
+        return {
+          form,
+          Input,
+        }
+      },
+      template: `<FormProvider :form="form">
+        <Field name="parent">
+          <FormProvider :form="form">
+            <Field name="inner" :component="[Input]" />
+          </FormProvider>
+          <Field name="outer" :component="[Input]" />
+        </Field>
+      </FormProvider>`,
+    })
+  )
+  expect(form.mounted).toBeTruthy()
+  expect(form.query('inner').take().mounted).toBeTruthy()
+  expect(form.query('parent.outer').take().mounted).toBeTruthy()
+  await fireEvent.update(getByTestId('parent.outer'), '123')
+  expect(form.getValuesIn('parent.outer')).toBe('123')
+  await fireEvent.update(getByTestId('inner'), '123')
+  expect(form.getValuesIn('inner')).toBe('123')
 })
