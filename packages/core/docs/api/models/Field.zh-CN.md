@@ -21,7 +21,8 @@ order: 1
 | description    | 字段描述                     | [FieldMessage](#fieldmessage)                      | 否       | `""`         |
 | loading        | 字段加载状态                 | Boolean                                            | 否       | `false`      |
 | validating     | 字段是否正在校验             | Boolean                                            | 否       | `false`      |
-| modified       | 字段是否被手动修改过         | Boolean                                            | 否       | `false`      |
+| modified       | 字段子树是否被手动修改过     | Boolean                                            | 否       | `false`      |
+| selfModified   | 字段自身是否被手动修改过     | Boolean                                            | 否       | `false`      |
 | active         | 字段是否处于激活态           | Boolean                                            | 否       | `false`      |
 | visited        | 字段是否被浏览过             | Boolean                                            | 否       | `false`      |
 | inputValue     | 字段输入值                   | Any                                                | 否       | `null`       |
