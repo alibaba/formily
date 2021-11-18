@@ -45,6 +45,7 @@ import {
   setSubmitting,
   setLoading,
   validateSelf,
+  modifySelf,
   getValidFieldDefaultValue,
   initializeStart,
   initializeEnd,
@@ -65,9 +66,10 @@ export class Field<
   loading: boolean
   validating: boolean
   submitting: boolean
-  modified: boolean
   active: boolean
   visited: boolean
+  selfModified: boolean
+  modified: boolean
   inputValue: ValueType
   inputValues: any[]
   dataSource: FieldDataSource
@@ -100,7 +102,7 @@ export class Field<
     this.loading = false
     this.validating = false
     this.submitting = false
-    this.modified = false
+    this.selfModified = false
     this.active = false
     this.visited = false
     this.mounted = false
@@ -143,6 +145,7 @@ export class Field<
       loading: observable.ref,
       validating: observable.ref,
       submitting: observable.ref,
+      selfModified: observable.ref,
       modified: observable.ref,
       active: observable.ref,
       visited: observable.ref,
@@ -220,7 +223,7 @@ export class Field<
         () => this.value,
         (value) => {
           this.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
-          if (isValid(value) && this.modified && !this.caches.inputting) {
+          if (isValid(value) && this.selfModified && !this.caches.inputting) {
             validateSelf(this)
           }
         }
@@ -456,8 +459,7 @@ export class Field<
     this.inputValue = value
     this.inputValues = values
     this.value = value
-    this.modified = true
-    this.form.modified = true
+    this.modify()
     this.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE)
     this.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     await validateSelf(this, 'onInput')
@@ -496,4 +498,6 @@ export class Field<
   queryFeedbacks = (search?: ISearchFeedback): IFieldFeedback[] => {
     return queryFeedbacks(this, search)
   }
+
+  modify = () => modifySelf(this)
 }

@@ -1660,3 +1660,32 @@ test('field name is length in dynamic assign', () => {
   field.initialValue = 123
   expect(field.value).toEqual(123)
 })
+
+test('nested field modified', async () => {
+  const form = attach(createForm())
+  const obj = attach(
+    form.createObjectField({
+      name: 'object',
+    })
+  )
+  const child = attach(
+    form.createField({
+      name: 'child',
+      basePath: 'object',
+    })
+  )
+  await child.onInput()
+  expect(child.modified).toBeTruthy()
+  expect(child.selfModified).toBeTruthy()
+  expect(obj.modified).toBeTruthy()
+  expect(obj.selfModified).toBeFalsy()
+  expect(form.modified).toBeTruthy()
+  await obj.reset()
+  expect(child.modified).toBeFalsy()
+  expect(child.selfModified).toBeFalsy()
+  expect(obj.modified).toBeFalsy()
+  expect(obj.selfModified).toBeFalsy()
+  expect(form.modified).toBeTruthy()
+  await form.reset()
+  expect(form.modified).toBeFalsy()
+})

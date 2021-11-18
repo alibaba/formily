@@ -42,6 +42,7 @@ import {
   isArrayField,
   isObjectField,
   isGeneralField,
+  isDataField,
   isForm,
   isQuery,
   isVoidField,
@@ -189,7 +190,7 @@ export const patchFormValues = (
         })
       } else {
         if (targetField) {
-          if (!isVoidField(targetField) && !targetField.modified) {
+          if (!isVoidField(targetField) && !targetField.selfModified) {
             update(path, source)
           }
         } else if (form.initialized) {
@@ -923,6 +924,9 @@ export const batchReset = async (
       tasks.push(resetSelf(field, options, target === field))
     }
   })
+  if (isForm(target)) {
+    target.modified = false
+  }
   notify(target, LifeCycleTypes.ON_FORM_RESET, LifeCycleTypes.ON_FIELD_RESET)
   await Promise.all(tasks)
 }
@@ -968,6 +972,7 @@ export const validateSelf = batch.bound(
 export const resetSelf = batch.bound(
   async (target: Field, options?: IFieldResetOptions, noEmit = false) => {
     target.modified = false
+    target.selfModified = false
     target.visited = false
     target.feedbacks = []
     target.inputValue = undefined
@@ -992,6 +997,21 @@ export const resetSelf = batch.bound(
     }
   }
 )
+
+export const modifySelf = (target: Field) => {
+  if (target.selfModified) return
+  target.selfModified = true
+  target.modified = true
+  let parent = target.parent
+  while (parent) {
+    if (isDataField(parent)) {
+      if (parent.modified) return
+      parent.modified = true
+    }
+    parent = parent.parent
+  }
+  target.form.modified = true
+}
 
 export const getValidFormValues = (values: any) => {
   if (isObservable(values)) return values
