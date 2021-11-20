@@ -287,8 +287,10 @@ export class Grid<Container extends HTMLElement> {
       })
       const digest = batch.bound(() => {
         this.children = parseGridNode(this.container.children)
-        this.childTotalColumns = calcChildOriginTotalColumns(this.children)
-        this.childOriginTotalColumns = calcChildTotalColumns(this.children)
+        this.childTotalColumns = calcChildTotalColumns(this.children)
+        this.childOriginTotalColumns = calcChildOriginTotalColumns(
+          this.children
+        )
         const rect = this.container.getBoundingClientRect()
         if (rect.width && rect.height) {
           this.width = rect.width
