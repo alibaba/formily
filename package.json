@@ -40,8 +40,7 @@
     "version:preminor": "lerna version preminor --preid beta",
     "version:major": "lerna version major",
     "release:force": "lerna publish from-package --yes",
-    "lint": "eslint .",
-    "translate": "ts-node scripts/translate"
+    "lint": "eslint ."
   },
   "resolutions": {
     "@types/react": "^17.0.0",
@@ -153,8 +152,7 @@
     "vue-eslint-parser": "^7.1.1",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1",
-    "@google-cloud/translate": "^6.2.5"
+    "webpack-dev-server": "^3.10.1"
   },
   "repository": {
     "type": "git",
