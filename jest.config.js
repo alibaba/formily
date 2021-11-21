@@ -1,4 +1,3 @@
-const path = require('path')
 module.exports = {
   collectCoverage: true,
   verbose: true,
@@ -7,7 +6,7 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.spec.[jt]s?(x)'],
   setupFilesAfterEnv: [
     require.resolve('jest-dom/extend-expect'),
-    path.resolve(__dirname, './scripts/global.ts'),
+    './global.config.ts',
   ],
   // moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
   globals: {
