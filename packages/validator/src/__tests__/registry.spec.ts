@@ -13,6 +13,7 @@ test('getValidateLocaleIOSCode', () => {
   expect(getValidateLocaleIOSCode('cn')).toEqual('zh-CN')
   expect(getValidateLocaleIOSCode('en')).toEqual('en')
   expect(getValidateLocaleIOSCode('TW')).toEqual('zh-TW')
+  expect(getValidateLocaleIOSCode('nl')).toEqual('nl')
 })
 
 test('getLocaleByPath', () => {
