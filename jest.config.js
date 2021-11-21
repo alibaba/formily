@@ -1,9 +1,32 @@
-const baseConfig = require('./scripts/jest.base')
-// jest.config.js
-
-// Note: If you are using babel version 7 you have to install babel-jest with
-// yarn add --dev babel-jest 'babel-core@^7.0.0-bridge' @babel/core
-
+const path = require('path')
 module.exports = {
-  ...baseConfig,
+  collectCoverage: true,
+  verbose: true,
+  testEnvironment: 'jsdom',
+  preset: 'ts-jest',
+  testMatch: ['**/__tests__/**/*.spec.[jt]s?(x)'],
+  setupFilesAfterEnv: [
+    require.resolve('jest-dom/extend-expect'),
+    path.resolve(__dirname, './scripts/global.ts'),
+  ],
+  // moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
+  globals: {
+    'ts-jest': {
+      babelConfig: false,
+      tsconfig: './tsconfig.jest.json',
+      diagnostics: false,
+    },
+  },
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/__tests__/',
+    '/esm/',
+    '/lib/',
+    'package.json',
+    '/demo/',
+    '/packages/builder/src/__tests__/',
+    '/packages/builder/src/components/',
+    '/packages/builder/src/configs/',
+    'package-lock.json',
+  ],
 }
