@@ -38,20 +38,21 @@
 
 2.0
 
-https://v2.formilyjs.org
+https://formilyjs.org
 
 1.0
 
-https://formilyjs.org
+https://v1.formilyjs.org
 
-## 集团其他产品
+## 生态产品
 
+- [formilyjs](https://github.com/formilyjs)
 - [designable](https://github.com/alibaba/designable)
 - [icejs](https://github.com/alibaba/ice)
 
 ## 如何贡献
 
-- [贡献指南](https://v2.formilyjs.org/zh-CN/guide/contribution)
+- [贡献指南](https://formilyjs.org/zh-CN/guide/contribution)
 
 ## 贡献者
 

@@ -30,7 +30,7 @@ module.exports = {
       },
       {
         text: '主站',
-        link: 'https://v2.formilyjs.org',
+        link: 'https://formilyjs.org',
       },
       {
         text: 'GITHUB',

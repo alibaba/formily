@@ -6,7 +6,7 @@ hero:
   desc: Formily Component System Based on Ant Design Encapsulation
   actions:
     - text: Home Site
-      link: //v2.formilyjs.org
+      link: //formilyjs.org
     - text: Document
       link: /components
 features:

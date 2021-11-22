@@ -91,7 +91,7 @@ export default {
       },
       {
         title: 'Document@1.x',
-        path: 'https://formilyjs.org',
+        path: 'https://v1.formilyjs.org',
       },
       {
         title: 'GITHUB',

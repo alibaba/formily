@@ -78,7 +78,7 @@ const form = createForm({
     })
     onFieldMount('package', async (field) => {
       const packages = await fetch(
-        'https://v2.formilyjs.org/.netlify/functions/npm-search?q=@formily'
+        'https://formilyjs.org/.netlify/functions/npm-search?q=@formily'
       ).then((res) => res.json())
       field.dataSource = packages.map(({ name }) => {
         return {

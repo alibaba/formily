@@ -38,20 +38,21 @@ In React, the whole tree rendering performance problem of the form is very obvio
 
 2.0
 
-https://v2.formilyjs.org
+https://formilyjs.org
 
 1.0
 
-https://formilyjs.org
+https://v1.formilyjs.org
 
 ## Community
 
+- [formilyjs](https://github.com/formilyjs)
 - [designable](https://github.com/alibaba/designable)
 - [icejs](https://github.com/alibaba/ice)
 
 ## How to contribute?
 
-- [Contribute document](https://v2.formilyjs.org/zh-CN/guide/contribution)
+- [Contribute document](https://formilyjs.org/zh-CN/guide/contribution)
 
 ## Contributors
 

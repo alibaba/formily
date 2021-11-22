@@ -4,7 +4,7 @@ import './Contributors.less'
 export const Contributors: React.FC = () => {
   const [contributors, setContributors] = useState([])
   useEffect(() => {
-    fetch('//v2.formilyjs.org/.netlify/functions/contributors')
+    fetch('//formilyjs.org/.netlify/functions/contributors')
       .then((res) => res.json())
       .then(({ data }) => {
         setContributors(data)

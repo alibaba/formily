@@ -6,7 +6,7 @@ hero:
   desc: 面向DDD的响应式状态管理方案
   actions:
     - text: 主站文档
-      link: //v2.formilyjs.org
+      link: //formilyjs.org
     - text: 开发指南
       link: /zh-CN/guide
 features:

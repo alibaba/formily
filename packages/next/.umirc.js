@@ -15,7 +15,7 @@ export default {
       },
       {
         title: 'Home Site',
-        path: 'https://v2.formilyjs.org',
+        path: 'https://formilyjs.org',
       },
       {
         title: 'GITHUB',
@@ -29,7 +29,7 @@ export default {
       },
       {
         title: '主站',
-        path: 'https://v2.formilyjs.org',
+        path: 'https://formilyjs.org',
       },
       {
         title: 'GITHUB',
