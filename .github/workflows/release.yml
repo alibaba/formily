@@ -24,7 +24,7 @@ jobs:
         env:
           NODE_OPTIONS: --max_old_space_size=4096
           REGISTRY: https://registry.npmjs.org
-      - uses: janrywang/github-tag-release@master
+      - uses: janrywang/github-tag-release@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - run: yarn run release:force
