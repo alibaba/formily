@@ -236,7 +236,6 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
     }
   }
 
-
   setData = (data: any) => {
     this.data = data
   }
