@@ -422,6 +422,34 @@ interface getState<T> {
 
 IFieldState 参考 [IFieldState](#ifieldstate)
 
+### setData
+
+#### 描述
+
+设置 Data 值
+
+#### 签名
+
+```ts
+interface setData {
+  (data: any): void
+}
+```
+
+### setContent
+
+#### 描述
+
+设置 Content 值
+
+#### 签名
+
+```ts
+interface setContent {
+  (content: any): void
+}
+```
+
 ### onInit
 
 #### 描述

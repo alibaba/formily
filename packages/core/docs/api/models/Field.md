@@ -422,6 +422,34 @@ interface getState<T> {
 
 IFieldState Reference [IFieldState](#ifieldstate)
 
+### setData
+
+#### Description
+
+set field data
+
+#### Signature
+
+```ts
+interface setData {
+  (data: any): void
+}
+```
+
+### setContent
+
+#### Description
+
+set field content
+
+#### Signature
+
+```ts
+interface setContent {
+  (content: any): void
+}
+```
+
 ### onInit
 
 #### Description

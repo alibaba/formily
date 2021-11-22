@@ -97,6 +97,8 @@ export class VoidField<
       setComponentProps: action,
       setDecorator: action,
       setDecoratorProps: action,
+      setData: action,
+      setContent: action,
       onInit: batch,
       onMount: batch,
       onUnmount: batch,

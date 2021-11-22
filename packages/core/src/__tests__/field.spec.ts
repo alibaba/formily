@@ -895,6 +895,33 @@ test('required/setRequired', () => {
   expect(dd.required).toBeTruthy()
 })
 
+test('setData/setContent', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  aa.setData('This is data')
+  aa.setContent('This is Content')
+  expect(aa.data).toEqual('This is data')
+  expect(aa.content).toEqual('This is Content')
+})
+
+test('setData/setContent in void field', () => {
+  const form = attach(createForm())
+  const voidFeild = attach(
+    form.createVoidField({
+      name: 'voidFeild',
+    })
+  )
+  voidFeild.setData('This is data')
+  voidFeild.setContent('This is Content')
+  expect(voidFeild.data).toEqual('This is data')
+  expect(voidFeild.content).toEqual('This is Content')
+})
+
 test('setErrors/setWarnings/setSuccesses/setValidator', async () => {
   const form = attach(createForm())
   const aa = attach(
