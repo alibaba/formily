@@ -107,7 +107,6 @@ const resolveChildren = (grid: Grid<HTMLElement>) => {
     rowIndex = 0
   if (!grid.ready) return
   grid.children = grid.children.map((node) => {
-    if (!node.visible) return node
     const columnIndex = walked % grid.columns
     const remainColumns = grid.columns - columnIndex
     const originSpan = node.originSpan
