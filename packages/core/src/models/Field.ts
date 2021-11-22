@@ -205,6 +205,8 @@ export class Field<
       setComponentProps: action,
       setDecorator: action,
       setDecoratorProps: action,
+      setData: action,
+      setContent: action,
       validate: action,
       reset: action,
       onInit: batch,

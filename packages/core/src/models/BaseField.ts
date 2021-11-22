@@ -236,6 +236,15 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
     }
   }
 
+
+  setData = (data: any) => {
+    this.data = data
+  }
+
+  setContent = (content: any) => {
+    this.content = content
+  }
+
   onInit = () => {
     this.initialized = true
     initFieldUpdate(this as any)
