@@ -90,7 +90,7 @@ export const ArrayCollapseInner = observer(
         default: 5,
       },
     },
-    setup(props, { attrs, listeners }) {
+    setup(props, { attrs }) {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
 
@@ -279,7 +279,6 @@ export const ArrayCollapseInner = observer(
               on: {
                 change: (keys: number[] | number) => {
                   activeKeys.value = keys
-                  listeners?.change?.(keys)
                 },
               },
             },
