@@ -169,6 +169,7 @@
         height: 100%;
         padding-left: 2px;
       }
+
       .#{$css-prefix}transfer {
         display: flex;
         align-items: center;
@@ -354,7 +355,7 @@
   > .#{$form-item-cls}-control {
     > .#{$form-item-cls}-control-content {
       > .#{$form-item-cls}-control-content-component {
-        > *:first-child:not(.#{$css-prefix}switch, .#{$css-prefix}icon, .anticon) {
+        > *:first-child:not(.#{$css-prefix}switch, .#{$css-prefix}icon, .#{$css-prefix}formily-icon, .anticon) {
           width: 100%;
         }
       }

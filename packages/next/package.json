@@ -51,7 +51,6 @@
     "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.0.0",
     "@formily/core": "2.0.0",
     "@formily/grid": "2.0.0",
     "@formily/json-schema": "2.0.0",
