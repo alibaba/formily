@@ -45,6 +45,7 @@
   "resolutions": {
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@mapbox/hast-util-to-jsx": "~1.0.0",
     "yargs": "^16.x",
     "commander": "^6.x"
   },

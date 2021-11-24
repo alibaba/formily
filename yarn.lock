@@ -2365,13 +2365,13 @@
     npmlog "^4.1.2"
     write-file-atomic "^3.0.3"
 
-"@mapbox/hast-util-to-jsx@^1.0.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@mapbox/hast-util-to-jsx/-/hast-util-to-jsx-1.1.0.tgz#fdfef81069974b906dbc10d3307820ebda16e71a"
-  integrity sha512-VvtIstB/gOLwtHJL4VjS910YGwTS6bEQ5wRQfX0E/Eo1HV4lV5QvT9BDSxNh4RN3HEwWQNZIRuVlL1pFH9tmWA==
+"@mapbox/hast-util-to-jsx@^1.0.0", "@mapbox/hast-util-to-jsx@~1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@mapbox/hast-util-to-jsx/-/hast-util-to-jsx-1.0.0.tgz#90ce46b0d2dde42d5ea4d4a1e0b26b9ce2215013"
+  integrity sha512-HJRp3qkr0uGIBFASzA8rVATLo6y/UoOMoD8eXsG8HVofk5Dokc9PV+dh266zYLZniYgtpJbc2+AKf1fNpsVqAA==
   dependencies:
     kebab-case "^1.0.0"
-    postcss "^7.0.39"
+    postcss "^7.0.31"
     postcss-js "^2.0.3"
     property-information "^5.5.0"
     react-attr-converter "^0.3.1"
@@ -15487,7 +15487,7 @@ postcss@7.0.32:
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
-postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.17, postcss@^7.0.18, postcss@^7.0.2, postcss@^7.0.26, postcss@^7.0.27, postcss@^7.0.32, postcss@^7.0.36, postcss@^7.0.39, postcss@^7.0.5, postcss@^7.0.6:
+postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.17, postcss@^7.0.18, postcss@^7.0.2, postcss@^7.0.26, postcss@^7.0.27, postcss@^7.0.31, postcss@^7.0.32, postcss@^7.0.36, postcss@^7.0.5, postcss@^7.0.6:
   version "7.0.39"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.39.tgz#9624375d965630e2e1f2c02a935c82a59cb48309"
   integrity sha512-yioayjNbHn6z1/Bywyb2Y4s3yvDAeXGOyxqD+LnVOinq6Mdmd++SW2wUNVzavyyHxd6+DxzWGIuosg6P1Rj8uA==
