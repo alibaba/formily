@@ -106,14 +106,14 @@ const useKey = (schema: Schema) => {
         if (!keyMap.has(record)) {
           keyMap.set(record, uid())
         }
-        return keyMap.get(record)
+        return `${keyMap.get(record)}-${index}`
       }
 
       if (!keyMap[index]) {
         keyMap[index] = uid()
       }
 
-      return keyMap[index]
+      return `${keyMap[index]}-${index}`
     },
   }
 }
