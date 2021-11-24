@@ -1,7 +1,8 @@
-import { define, observable, batch } from '@formily/reactive'
+import { define, observable, batch, reaction } from '@formily/reactive'
 import { ChildListMutationObserver } from './observer'
 
 export interface IGridOptions {
+  maxRows?: number
   maxColumns?: number | number[]
   minColumns?: number | number[]
   maxWidth?: number | number[]
@@ -11,6 +12,7 @@ export interface IGridOptions {
   rowGap?: number
   colWrap?: boolean
   strictAutoFit?: boolean
+  shouldVisible?: (node: GridNode, grid: Grid<HTMLElement>) => boolean
   onDigest?: (grid: Grid<HTMLElement>) => void
   onInitialized?: (grid: Grid<HTMLElement>) => void
 }
@@ -40,35 +42,41 @@ const calcFactor = <T>(value: T | T[], breakpointIndex: number): T => {
 }
 
 const parseGridNode = (elements: HTMLCollection): GridNode[] => {
-  return Array.from(elements).reduce((buf, element) => {
+  return Array.from(elements).reduce((buf, element: HTMLElement, index) => {
     const style = getComputedStyle(element)
     const visible = !(style.display === 'none')
     const origin = element.getAttribute('data-grid-span')
     const span = parseSpan(style.gridColumnStart) ?? 1
     const originSpan = Number(origin ?? span)
-    if (!origin) {
-      element.setAttribute('data-grid-span', String(span))
-    }
-    return buf.concat({
+    const node: GridNode = {
+      index,
       span,
       visible,
       originSpan,
       element,
-    })
+    }
+    if (!origin) {
+      element.setAttribute('data-grid-span', String(span))
+    }
+    return buf.concat(node)
   }, [])
 }
 
-const calcChildTotalColumns = (nodes: GridNode[]) =>
+const calcChildTotalColumns = (nodes: GridNode[], shadow = false) =>
   nodes.reduce((buf, node) => {
-    if (!node.visible) return buf
-    if (node.originSpan === -1) return buf + 1
+    if (!shadow) {
+      if (!node.visible) return buf
+    }
+    if (node.originSpan === -1) return buf + (node.span ?? 1)
     return buf + node.span
   }, 0)
 
-const calcChildOriginTotalColumns = (nodes: GridNode[]) =>
+const calcChildOriginTotalColumns = (nodes: GridNode[], shadow = false) =>
   nodes.reduce((buf, node) => {
-    if (!node.visible) return buf
-    if (node.originSpan === -1) return buf + 1
+    if (!shadow) {
+      if (!node.visible) return buf
+    }
+    if (node.originSpan === -1) return buf + (node.span ?? 1)
     return buf + node.originSpan
   }, 0)
 
@@ -104,25 +112,55 @@ const factor = <T>(value: T | T[], grid: Grid<HTMLElement>): T =>
 
 const resolveChildren = (grid: Grid<HTMLElement>) => {
   let walked = 0,
-    rowIndex = 0
+    shadowWalked = 0,
+    rowIndex = 0,
+    shadowRowIndex = 0
   if (!grid.ready) return
   grid.children = grid.children.map((node) => {
     const columnIndex = walked % grid.columns
+    const shadowColumnIndex = shadowWalked % grid.columns
     const remainColumns = grid.columns - columnIndex
     const originSpan = node.originSpan
     const targetSpan = originSpan > grid.columns ? grid.columns : originSpan
-    const span = targetSpan > remainColumns ? remainColumns : targetSpan
+    const span = grid.options.strictAutoFit
+      ? targetSpan
+      : targetSpan > remainColumns
+      ? remainColumns
+      : targetSpan
     const gridColumn =
       originSpan === -1 ? `span ${remainColumns} / -1` : `span ${span} / auto`
     if (node.element.style.gridColumn !== gridColumn) {
       node.element.style.gridColumn = gridColumn
     }
-    walked += span
+    if (node.visible) {
+      walked += span
+    }
+    shadowWalked += span
     if (columnIndex === 0) {
       rowIndex++
     }
-    node.row = rowIndex
-    node.column = columnIndex + 1
+    if (shadowColumnIndex == 0) {
+      shadowRowIndex++
+    }
+    node.shadowRow = shadowRowIndex
+    node.shadowColumn = shadowColumnIndex + 1
+    if (node.visible) {
+      node.row = rowIndex
+      node.column = columnIndex + 1
+    }
+    if (grid.options?.shouldVisible) {
+      if (!grid.options.shouldVisible(node, grid)) {
+        if (node.visible) {
+          node.element.style.display = 'none'
+        }
+        node.visible = false
+      } else {
+        if (!node.visible) {
+          node.element.style.display = ''
+        }
+        node.visible = true
+      }
+    }
     return node
   })
 }
@@ -130,9 +168,12 @@ const resolveChildren = (grid: Grid<HTMLElement>) => {
 const nextTick = (callback?: () => void) => Promise.resolve(0).then(callback)
 
 export type GridNode = {
+  index?: number
   visible?: boolean
   column?: number
+  shadowColumn?: number
   row?: number
+  shadowRow?: number
   span?: number
   originSpan?: number
   element?: HTMLElement
@@ -144,7 +185,9 @@ export class Grid<Container extends HTMLElement> {
   container: Container
   children: GridNode[] = []
   childTotalColumns = 0
+  shadowChildTotalColumns = 0
   childOriginTotalColumns = 0
+  shadowChildOriginTotalColumns = 0
   ready = false
   constructor(options?: IGridOptions) {
     this.options = {
@@ -157,43 +200,100 @@ export class Grid<Container extends HTMLElement> {
       ...options,
     }
     define(this, {
+      options: observable.shallow,
       width: observable.ref,
       height: observable.ref,
       ready: observable.ref,
       children: observable.ref,
+      childOriginTotalColumns: observable.ref,
+      shadowChildOriginTotalColumns: observable.ref,
+      shadowChildTotalColumns: observable.ref,
       childTotalColumns: observable.ref,
       columns: observable.computed,
       templateColumns: observable.computed,
       gap: observable.computed,
+      maxColumns: observable.computed,
+      minColumns: observable.computed,
+      maxWidth: observable.computed,
+      minWidth: observable.computed,
+      breakpoints: observable.computed,
+      breakpoint: observable.computed,
+      rowGap: observable.computed,
+      columnGap: observable.computed,
+      colWrap: observable.computed,
     })
+  }
+
+  set breakpoints(breakpoints) {
+    this.options.breakpoints = breakpoints
+  }
+
+  get breakpoints() {
+    return this.options.breakpoints
   }
 
   get breakpoint() {
     return calcBreakpointIndex(this.options.breakpoints, this.width)
   }
 
+  set maxWidth(maxWidth) {
+    this.options.maxWidth = maxWidth
+  }
+
   get maxWidth() {
     return factor(this.options.maxWidth, this) ?? Infinity
+  }
+
+  set minWidth(minWidth) {
+    this.options.minWidth = minWidth
   }
 
   get minWidth() {
     return factor(this.options.minWidth, this) ?? 100
   }
 
+  set maxColumns(maxColumns) {
+    this.options.maxColumns = maxColumns
+  }
+
   get maxColumns() {
     return factor(this.options.maxColumns, this) ?? Infinity
+  }
+
+  set maxRows(maxRows) {
+    this.options.maxRows = maxRows
+  }
+
+  get maxRows() {
+    return this.options.maxRows ?? Infinity
+  }
+
+  set minColumns(minColumns) {
+    this.options.minColumns = minColumns
   }
 
   get minColumns() {
     return factor(this.options.minColumns, this) ?? 1
   }
 
+  set rowGap(rowGap) {
+    this.options.rowGap = rowGap
+  }
+
   get rowGap() {
     return factor(this.options.rowGap, this) ?? 5
   }
 
+  set columnGap(columnGap) {
+    this.options.columnGap = columnGap
+  }
+
   get columnGap() {
     return factor(this.options.columnGap, this) ?? 10
+  }
+
+  set colWrap(colWrap) {
+    this.options.colWrap = colWrap
   }
 
   get colWrap() {
@@ -254,6 +354,10 @@ export class Grid<Container extends HTMLElement> {
     return Math.ceil(this.childTotalColumns / this.columns)
   }
 
+  get shadowRows() {
+    return Math.ceil(this.shadowChildTotalColumns / this.columns)
+  }
+
   get templateColumns() {
     if (!this.width) return ''
     if (this.maxWidth === Infinity) {
@@ -277,6 +381,10 @@ export class Grid<Container extends HTMLElement> {
     return this.children.length
   }
 
+  get fullnessLastColumn() {
+    return this.columns === this.children[this.childSize - 1]?.span
+  }
+
   connect = (container: Container) => {
     if (container) {
       this.container = container
@@ -287,8 +395,16 @@ export class Grid<Container extends HTMLElement> {
       const digest = batch.bound(() => {
         this.children = parseGridNode(this.container.children)
         this.childTotalColumns = calcChildTotalColumns(this.children)
+        this.shadowChildTotalColumns = calcChildTotalColumns(
+          this.children,
+          true
+        )
         this.childOriginTotalColumns = calcChildOriginTotalColumns(
           this.children
+        )
+        this.shadowChildOriginTotalColumns = calcChildOriginTotalColumns(
+          this.children,
+          true
         )
         const rect = this.container.getBoundingClientRect()
         if (rect.width && rect.height) {
@@ -307,6 +423,7 @@ export class Grid<Container extends HTMLElement> {
       })
       const mutationObserver = new ChildListMutationObserver(digest)
       const resizeObserver = new ResizeObserver(digest)
+      const dispose = reaction(() => ({ ...this.options }), digest)
       resizeObserver.observe(this.container)
       mutationObserver.observe(this.container, {
         attributeFilter: ['style', 'class', 'data-grid-span'],
@@ -317,6 +434,7 @@ export class Grid<Container extends HTMLElement> {
         resizeObserver.unobserve(this.container)
         resizeObserver.disconnect()
         mutationObserver.disconnect()
+        dispose()
         this.children = []
       }
     }
@@ -324,17 +442,19 @@ export class Grid<Container extends HTMLElement> {
     return () => {}
   }
 
-  /**
-   * @deprecated
-   */
-  calcGridSpan = (span: number) => {
-    return span
-  }
-
   static id = (options: IGridOptions = {}) =>
     JSON.stringify(
-      Object.keys(options)
-        .sort()
-        .map((key) => options[key])
+      [
+        'maxRows',
+        'maxColumns',
+        'minColumns',
+        'maxWidth',
+        'minWidth',
+        'breakpoints',
+        'columnGap',
+        'rowGap',
+        'colWrap',
+        'strictAutoFit',
+      ].map((key) => options[key])
     )
 }
