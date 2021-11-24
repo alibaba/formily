@@ -4,7 +4,7 @@
 
 Formily 内核架构非常复杂，因为要解决一个领域级的问题，而不是单点具体的问题，先上架构图：
 
-![](https://img.alicdn.com/imgextra/i2/O1CN01VlHYkh1WQeur8bQMN_!!6000000002783-55-tps-2431-2037.svg)
+![](https://img.alicdn.com/imgextra/i4/O1CN01HlrsLS1hQAJnihhh1_!!6000000004271-55-tps-2431-2037.svg)
 
 ## 说明
 

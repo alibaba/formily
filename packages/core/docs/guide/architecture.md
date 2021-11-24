@@ -4,7 +4,7 @@
 
 Formily's kernel architecture is very complicated, because it is necessary to solve a domain-level problem, rather than a single point of specific problem, first go to the architecture diagram:
 
-![](https://img.alicdn.com/imgextra/i2/O1CN01VlHYkh1WQeur8bQMN_!!6000000002783-55-tps-2431-2037.svg)
+![](https://img.alicdn.com/imgextra/i4/O1CN01HlrsLS1hQAJnihhh1_!!6000000004271-55-tps-2431-2037.svg)
 
 ## Description
 

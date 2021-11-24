@@ -269,7 +269,7 @@ Therefore, our form can be described by protocol, and it can be configurable no 
 
 I talked about the solutions to various problems at the beginning, so how do we design now to make Formily more self-consistent and elegant?
 
-![](https://img.alicdn.com/imgextra/i3/O1CN0191vNVu1TYxFZA3KGN_!!6000000002395-55-tps-1939-1199.svg)
+![](https://img.alicdn.com/imgextra/i4/O1CN019qbf1b1ChnTfT9x3X_!!6000000000113-55-tps-1939-1199.svg)
 
 This picture mainly divides Formily into the kernel layer, UI bridge layer, extended component layer, and configuration application layer.
 

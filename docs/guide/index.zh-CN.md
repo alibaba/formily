@@ -267,7 +267,7 @@ interface Field {
 
 前面讲了对于一开始的各种问题的解法，那么现在我们如何设计才能让 Formily 更加自洽且优雅呢？
 
-![](https://img.alicdn.com/imgextra/i4/O1CN01XebYW51E96eP1AcwZ_!!6000000000308-55-tps-1939-1199.svg)
+![](https://img.alicdn.com/imgextra/i3/O1CN01iEwHrP1NUw84xTded_!!6000000001574-55-tps-1939-1199.svg)
 
 这张图主要将 Formily 分为了内核层，UI 桥接层，扩展组件层，和配置应用层。
 
