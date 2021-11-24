@@ -1,5 +1,6 @@
-@import '~antd/lib/style/themes/default.less';
-@import '~antd/lib/input/style/mixin.less';
+@root-entry-name: 'default';
+@import (reference) '~antd/es/style/themes/index.less';
+@import (reference) '~antd/lib/input/style/mixin.less';
 @import './grid.less';
 @import './animation.less';
 
@@ -369,6 +370,7 @@
 
   .@{ant-prefix}-input-number {
     font-size: @font-size-lg;
+
     input {
       height: @height-lg - 2;
     }

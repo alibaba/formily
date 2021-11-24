@@ -14,13 +14,13 @@ import { isArr, toArr } from '@formily/shared'
 import { UPLOAD_PLACEHOLDER } from './placeholder'
 import { usePrefixCls } from '../__builtins__'
 
-type UploadProps = Omit<AntdUploadProps, 'onChange'> & {
+export type UploadProps = Omit<AntdUploadProps, 'onChange'> & {
   textContent?: React.ReactNode
   onChange?: (fileList: UploadFile[]) => void
   serviceErrorMessage?: string
 }
 
-type DraggerProps = Omit<AntdDraggerProps, 'onChange'> & {
+export type DraggerProps = Omit<AntdDraggerProps, 'onChange'> & {
   textContent?: React.ReactNode
   onChange?: (fileList: UploadFile[]) => void
   serviceErrorMessage?: string
@@ -76,15 +76,13 @@ const getThumbURL = (target: any) => {
 }
 
 const getErrorMessage = (target: any) => {
-  return target?.errorMessage ||
+  return (
+    target?.errorMessage ||
     target?.errMsg ||
     target?.errorMsg ||
     target?.message ||
-    (
-      typeof target?.error === 'string'
-      ? target.error
-      : ''
-    )
+    (typeof target?.error === 'string' ? target.error : '')
+  )
 }
 
 const getState = (target: any) => {
