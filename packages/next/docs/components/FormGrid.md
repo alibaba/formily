@@ -337,9 +337,9 @@ export default () => {
 ## Query Form case
 
 ```tsx
-import React, { useMemo, useState, useEffect, Fragment } from 'react'
+import React, { useMemo, Fragment } from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, FormProvider } from '@formily/react'
+import { createSchemaField, FormProvider, observer } from '@formily/react'
 import {
   Form,
   Input,
@@ -352,17 +352,49 @@ import {
   FormButtonGroup,
 } from '@formily/next'
 
-const QueryForm: React.FC = (props) => {
-  const [expanded, setExpanded] = useState(false)
-  const [grid, setGrid] = useState()
-  const updateChildren = () => {
-    if (grid) {
-      grid.children.forEach((node, index) => {
-        if (index === grid.childSize - 1) return
-        node.element.style.display = !expanded && node.row > 1 ? 'none' : ''
-      })
+const useCollapseGrid = (maxRows: number) => {
+  const grid = useMemo(
+    () =>
+      FormGrid.createFormGrid({
+        maxColumns: 4,
+        maxWidth: 240,
+        maxRows: maxRows,
+        shouldVisible: (node, grid) => {
+          if (node.index === grid.childSize - 1) return true
+          if (grid.maxRows === Infinity) return true
+          return node.shadowRow < maxRows + 1
+        },
+      }),
+    []
+  )
+  const expanded = grid.maxRows === Infinity
+  const realRows = grid.shadowRows
+  const computeRows = grid.fullnessLastColumn
+    ? grid.shadowRows - 1
+    : grid.shadowRows
+
+  const toggle = () => {
+    if (grid.maxRows === Infinity) {
+      grid.maxRows = maxRows
+    } else {
+      grid.maxRows = Infinity
     }
   }
+  const takeType = () => {
+    if (realRows < maxRows + 1) return 'incomplete-wrap'
+    if (computeRows > maxRows) return 'collapsible'
+    return 'complete-wrap'
+  }
+  return {
+    grid,
+    expanded,
+    toggle,
+    type: takeType(),
+  }
+}
+
+const QueryForm: React.FC = observer((props) => {
+  const { grid, expanded, toggle, type } = useCollapseGrid(1)
 
   const renderActions = () => {
     return (
@@ -374,46 +406,41 @@ const QueryForm: React.FC = (props) => {
   }
 
   const renderButtonGroup = () => {
-    if (grid?.rows < 2) {
+    if (type === 'incomplete-wrap') {
       return (
         <FormButtonGroup.FormItem>
           <FormButtonGroup>{renderActions()}</FormButtonGroup>
         </FormButtonGroup.FormItem>
       )
     }
-
-    return (
-      <Fragment>
-        {grid?.rows > 1 ? (
+    if (type === 'collapsible') {
+      return (
+        <Fragment>
           <FormButtonGroup>
             <a
               href=""
               onClick={(e) => {
                 e.preventDefault()
-                setExpanded(!expanded)
+                toggle()
               }}
             >
               {expanded ? 'Fold' : 'UnFold'}
             </a>
           </FormButtonGroup>
-        ) : null}
-        <FormButtonGroup align="right">{renderActions()}</FormButtonGroup>
-      </Fragment>
+          <FormButtonGroup align="right">{renderActions()}</FormButtonGroup>
+        </Fragment>
+      )
+    }
+    return (
+      <FormButtonGroup align="right" style={{ display: 'flex', width: '100%' }}>
+        {renderActions()}
+      </FormButtonGroup>
     )
   }
-  useEffect(() => {
-    updateChildren()
-  }, [expanded, grid])
+
   return (
     <Form {...props} layout="vertical" feedbackLayout="terse">
-      <FormGrid
-        maxColumns={4}
-        maxWidth={240}
-        onInitialized={(grid) => {
-          setGrid(grid)
-          updateChildren()
-        }}
-      >
+      <FormGrid grid={grid}>
         {props.children}
         <FormGrid.GridColumn
           gridSpan={-1}
@@ -424,7 +451,7 @@ const QueryForm: React.FC = (props) => {
       </FormGrid>
     </Form>
   )
-}
+})
 
 const SchemaField = createSchemaField({
   components: {
@@ -499,17 +526,19 @@ export default () => {
 
 ### FormGrid
 
-| Property name | Type                 | Description                           | Default value     |
-| ------------- | -------------------- | ------------------------------------- | ----------------- |
-| minWidth      | `number \| number[]` | Minimum element width                 | 100               |
-| maxWidth      | `number \| number[]` | Maximum element width                 | -                 |
-| minColumns    | `number \| number[]` | Minimum number of columns             | 0                 |
-| maxColumns    | `number \| number[]` | Maximum number of columns             | -                 |
-| breakpoints   | number[]             | Container size breakpoints            | `[720,1280,1920]` |
-| columnGap     | number               | Column spacing                        | 10                |
-| rowGap        | number               | Row spacing                           | 5                 |
-| colWrap       | boolean              | Wrap                                  | true              |
-| strictAutoFit | boolean              | Is width strictly limited by maxWidth | false             |
+| Property name | Type                   | Description                                                                       | Default value     |
+| ------------- | ---------------------- | --------------------------------------------------------------------------------- | ----------------- |
+| minWidth      | `number \| number[]`   | Minimum element width                                                             | 100               |
+| maxWidth      | `number \| number[]`   | Maximum element width                                                             | -                 |
+| minColumns    | `number \| number[]`   | Minimum number of columns                                                         | 0                 |
+| maxColumns    | `number \| number[]`   | Maximum number of columns                                                         | -                 |
+| breakpoints   | number[]               | Container size breakpoints                                                        | `[720,1280,1920]` |
+| columnGap     | number                 | Column spacing                                                                    | 8                 |
+| rowGap        | number                 | Row spacing                                                                       | 4                 |
+| colWrap       | boolean                | Wrap                                                                              | true              |
+| strictAutoFit | boolean                | Is width strictly limited by maxWidth                                             | false             |
+| shouldVisible | `(node,grid)=>boolean` | Whether to show the current node                                                  | `()=>true`        |
+| grid          | `Grid`                 | Grid instance passed in from outside, used to implement more complex layout logic | -                 |
 
 note:
 
@@ -522,3 +551,28 @@ note:
 | Property name | Type   | Description                                                                                                              | Default value |
 | ------------- | ------ | ------------------------------------------------------------------------------------------------------------------------ | ------------- |
 | gridSpan      | number | The number of columns spanned by the element, if it is -1, it will automatically fill the cell across columns in reverse | 1             |
+
+### FormGrid.createFormGrid
+
+Read the Grid instance from the context
+
+```ts
+interface createFormGrid {
+  (props: IGridProps): Grid
+}
+```
+
+- IGridProps reference FormGrid properties
+- Grid instance attribute method reference https://github.com/alibaba/formily/tree/formily_next/packages/grid
+
+### FormGrid.useFormGrid
+
+Read the Grid instance from the context
+
+```ts
+interface useFormGrid {
+  (): Grid
+}
+```
+
+- Grid instance attribute method reference https://github.com/alibaba/formily/tree/formily_next/packages/grid

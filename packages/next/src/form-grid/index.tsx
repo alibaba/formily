@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useRef, useMemo } from 'react'
+import React, { useLayoutEffect, useRef, useMemo, useContext } from 'react'
+import { markRaw } from '@formily/reactive'
 import { observer } from '@formily/react'
 import { Grid, IGridOptions } from '@formily/grid'
 import { usePrefixCls, pickDataProps } from '../__builtins__'
@@ -8,6 +9,7 @@ import cls from 'classnames'
 const FormGridContext = React.createContext<Grid<HTMLElement>>(null)
 
 export interface IFormGridProps extends IGridOptions {
+  grid?: Grid<HTMLElement>
   prefix?: string
   className?: string
   style?: React.CSSProperties
@@ -21,6 +23,8 @@ export interface IGridColumnProps {
 
 type ComposedFormGrid = React.FC<IFormGridProps> & {
   GridColumn: React.FC<IGridColumnProps>
+  useFormGrid: () => Grid<HTMLElement>
+  createFormGrid: (props: IFormGridProps) => Grid<HTMLElement>
   /**
    * @deprecated
    */
@@ -28,18 +32,14 @@ type ComposedFormGrid = React.FC<IFormGridProps> & {
   /**
    * @deprecated
    */
-  useGridColumn: (gridSpan: number) => string
+  useGridColumn: (gridSpan: number) => number
 }
 
-const useFormGrid = (props: IFormGridProps) => {
-  const layout = useFormLayout()
-  const options = {
-    columnGap: layout?.gridColumnGap ?? 8,
-    rowGap: layout?.gridRowGap ?? 4,
-    ...props,
-  }
-  return useMemo(() => new Grid(options), [Grid.id(options)])
+export const createFormGrid = (props: IFormGridProps) => {
+  return markRaw(new Grid(props))
 }
+
+export const useFormGrid = () => useContext(FormGridContext)
 
 /**
  * @deprecated
@@ -61,7 +61,16 @@ export const FormGrid: ComposedFormGrid = observer(
     style,
     ...props
   }: React.PropsWithChildren<IFormGridProps>) => {
-    const grid = useFormGrid(props)
+    const layout = useFormLayout()
+    const options = {
+      columnGap: layout?.gridColumnGap ?? 8,
+      rowGap: layout?.gridRowGap ?? 4,
+      ...props,
+    }
+    const grid = useMemo(
+      () => markRaw(options?.grid ? options.grid : new Grid(options)),
+      [Grid.id(options)]
+    )
     const ref = useRef<HTMLDivElement>()
     const prefixCls = usePrefixCls('formily-grid', props)
     const dataProps = pickDataProps(props)
@@ -104,7 +113,10 @@ GridColumn.defaultProps = {
   gridSpan: 1,
 }
 
+FormGrid.createFormGrid = createFormGrid
+FormGrid.useFormGrid = useFormGrid
 FormGrid.useGridSpan = useGridSpan
+FormGrid.useGridColumn = useGridColumn
 FormGrid.GridColumn = GridColumn
 
 export default FormGrid
