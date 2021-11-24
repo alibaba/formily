@@ -949,12 +949,14 @@ export const validateSelf = batch.bound(
     if (target.pattern !== 'editable' || target.display !== 'visible') return {}
     start()
     if (!triggerType) {
-      const allTriggerTypes = Array.from(
-        new Set(
-          parseValidatorDescriptions(target.validator).map(
-            (desc) => desc.triggerType
-          )
-        )
+      const allTriggerTypes = parseValidatorDescriptions(
+        target.validator
+      ).reduce(
+        (types, desc) =>
+          types.indexOf(desc.triggerType) > -1
+            ? types
+            : types.concat(desc.triggerType),
+        []
       )
       const results = {}
       for (let i = 0; i < allTriggerTypes.length; i++) {
