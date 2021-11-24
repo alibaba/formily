@@ -1716,3 +1716,21 @@ test('nested field modified', async () => {
   await form.reset()
   expect(form.modified).toBeFalsy()
 })
+
+test('field setValidator repeat call', async () => {
+  const form = attach(createForm())
+  const field = attach(
+    form.createField({
+      name: 'normal',
+    })
+  )
+
+  const validator1 = jest.fn(() => '')
+  const validator2 = jest.fn(() => '')
+  const validator3 = jest.fn(() => '')
+
+  field.setValidator([validator1, validator2, validator3])
+
+  await form.validate()
+  expect(validator1).toBeCalledTimes(1)
+})
