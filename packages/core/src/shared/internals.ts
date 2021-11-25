@@ -306,7 +306,7 @@ export const setValidatorRule = (field: Field, name: string, value: any) => {
   if (hasRule) {
     if (isArr(field.validator)) {
       field.validator = field.validator.map((desc: any) => {
-        if (hasOwnProperty.call(desc, name)) {
+        if (isPlainObj(desc) && hasOwnProperty.call(desc, name)) {
           desc[name] = value
           return desc
         }
