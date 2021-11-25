@@ -1,6 +1,4 @@
 import {
-  batchEnd,
-  batchStart,
   bindTargetKeyWithCurrentReaction,
   runReactionsFromTargetKey,
 } from './reaction'
@@ -202,7 +200,6 @@ export const baseHandlers: ProxyHandler<any> = {
     const newValue = createObservable(target, key, value)
     const oldValue = target[key]
     target[key] = newValue // use Reflect.set is too slow
-    batchStart()
     if (!hadKey) {
       runReactionsFromTargetKey({
         target,
@@ -222,7 +219,6 @@ export const baseHandlers: ProxyHandler<any> = {
         type: 'set',
       })
     }
-    batchEnd()
     return true
   },
   deleteProperty(target, key) {

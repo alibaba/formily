@@ -125,6 +125,7 @@ export const bindComputedReactions = (reaction: Reaction) => {
 
 export const runReactionsFromTargetKey = (operation: IOperation) => {
   let { key, type, target, oldTarget } = operation
+  batchStart()
   notifyObservers(operation)
   if (type === 'clear') {
     oldTarget.forEach((_: any, key: PropertyKey) => {
@@ -137,6 +138,7 @@ export const runReactionsFromTargetKey = (operation: IOperation) => {
     const newKey = Array.isArray(target) ? 'length' : ITERATION_KEY
     runReactions(target, newKey)
   }
+  batchEnd()
 }
 
 export const hasRunningReaction = () => {
