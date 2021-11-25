@@ -519,12 +519,35 @@ test('setValidateRule', () => {
       validator: 'phone',
     })
   )
+  const field4 = attach(
+    form.createField({
+      name: 'dd',
+      validator: { format: 'phone' },
+    })
+  )
+  const field5 = attach(
+    form.createField({
+      name: 'ee',
+      validator: [{ format: 'phone' }],
+    })
+  )
+  const field6 = attach(
+    form.createField({
+      name: 'ff',
+    })
+  )
   field1.setValidatorRule('format', 'phone')
   field2.setValidatorRule('max', 3)
   field3.setValidatorRule('format', 'url')
+  field4.setValidatorRule('min', 3)
+  field5.setValidatorRule('min', 3)
+  field6.setValidatorRule('min', 3)
   expect(field1.validator).toEqual([{ required: true }, { format: 'phone' }])
-  expect(field3.validator).toEqual({ format: 'url' })
   expect(field2.validator).toEqual(['phone', { max: 3 }])
+  expect(field3.validator).toEqual({ format: 'url' })
+  expect(field4.validator).toEqual({ format: 'phone', min: 3 })
+  expect(field5.validator).toEqual([{ format: 'phone' }, { min: 3 }])
+  expect(field6.validator).toEqual({ min: 3 })
 })
 
 test('query', () => {
@@ -1528,6 +1551,40 @@ test('initial value with empty', () => {
 })
 
 test('field submit', async () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        aa: {
+          cc: 'cc',
+        },
+        bb: 'bb',
+      },
+    })
+  )
+  const childForm = attach(
+    form.createObjectField({
+      name: 'aa',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'cc',
+      basePath: 'aa',
+    })
+  )
+  const onSubmit = jest.fn()
+  await childForm.submit(onSubmit)
+  expect(onSubmit).toBeCalledWith({
+    cc: 'cc',
+  })
+})
+
+test('field submit with error', async () => {
   const form = attach(createForm())
   const childForm = attach(
     form.createObjectField({

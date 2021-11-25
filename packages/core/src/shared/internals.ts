@@ -334,7 +334,7 @@ export const setValidatorRule = (field: Field, name: string, value: any) => {
       } else if (field.validator) {
         field.validator = [field.validator, rule]
       } else {
-        field.validator = [rule]
+        field.validator = rule
       }
     }
   }
