@@ -6,7 +6,8 @@
     "paths": {
       "@formily/*": ["../../packages/*", "../../devtools/*"]
     },
-    "plugins": [{ "transform": "./transformer.ts", "after": true }]
+    "plugins": [{ "transform": "./transformer.ts", "after": true }],
+    "lib": ["ESNext", "DOM"]
   },
   "include": ["./src/**/*.ts", "./src/**/*.tsx"],
   "exclude": ["./esm/*", "./lib/*"]
