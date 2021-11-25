@@ -1530,3 +1530,34 @@ test('validate will skip uneditable', async () => {
   expect(bb.invalid).toBeFalsy()
   expect(validator).toBeCalledTimes(3)
 })
+
+test('validator order with format', async () => {
+  const form = attach(createForm())
+
+  attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+      validator: {
+        format: 'url',
+        message: 'custom',
+      },
+    })
+  )
+
+  attach(
+    form.createField({
+      name: 'bb',
+      required: true,
+      validator: (value) => {
+        if (!value) return ''
+        return value !== '111' ? 'custom' : ''
+      },
+    })
+  )
+  const results = await form.submit<any[]>(() => {}).catch((e) => e)
+  expect(results.map(({ messages }) => messages)).toEqual([
+    ['The field value is required'],
+    ['The field value is required'],
+  ])
+})

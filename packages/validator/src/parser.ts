@@ -42,12 +42,23 @@ export const parseValidatorDescriptions = <Context = any>(
   })
 }
 
-export const parseIValidatorRules = (
-  rules: IValidatorRules
+export const parseValidatorRules = (
+  rules: IValidatorRules = {}
 ): ValidatorParsedFunction[] => {
-  const rulesKeys = Object.keys(rules || {}).sort((key) =>
-    key === 'validator' ? 1 : -1
-  )
+  const getRulesKeys = (): string[] => {
+    const keys = []
+    if ('required' in rules) {
+      keys.push('required')
+    }
+    for (let key in rules) {
+      if (key === 'required' || key === 'validator') continue
+      keys.push(key)
+    }
+    if ('validator' in rules) {
+      keys.push('validator')
+    }
+    return keys
+  }
   const getContext = (context: any, value: any) => {
     return {
       ...rules,
@@ -112,11 +123,13 @@ export const parseIValidatorRules = (
         }
       }
     }
-  return rulesKeys.reduce((buf, key) => {
+  return getRulesKeys().reduce((buf, key) => {
     const callback = getValidateRules(key)
-    return callback
-      ? buf.concat(createValidate(callback, getRuleMessage(rules, key)))
-      : buf
+    if (callback) {
+      const validator = createValidate(callback, getRuleMessage(rules, key))
+      return buf.concat(validator)
+    }
+    return buf
   }, [])
 }
 
@@ -125,11 +138,13 @@ export const parseValidator = <Context = any>(
   options: IValidatorOptions = {}
 ) => {
   const array = isArr(validator) ? validator : [validator]
-  const results: ValidatorParsedFunction<Context>[] = []
-  return array.reduce((buf, description) => {
-    const rules = parseValidatorDescription(description)
-    if (options?.triggerType && options.triggerType !== rules.triggerType)
-      return buf
-    return rules ? buf.concat(parseIValidatorRules(rules)) : buf
-  }, results)
+  return array.reduce<ValidatorParsedFunction<Context>[]>(
+    (buf, description) => {
+      const rules = parseValidatorDescription(description)
+      if (options?.triggerType && options.triggerType !== rules.triggerType)
+        return buf
+      return rules ? buf.concat(parseValidatorRules(rules)) : buf
+    },
+    []
+  )
 }
