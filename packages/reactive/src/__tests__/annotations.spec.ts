@@ -126,47 +126,47 @@ test('computed annotation', () => {
     runner2()
   })
   expect(compu.value).toEqual(44)
-  expect(handler).toBeCalledTimes(2)
+  expect(handler).toBeCalledTimes(3) // 2 -> 3
   obs.bb = 33
   expect(runner1).toBeCalledTimes(2)
   expect(runner2).toBeCalledTimes(2)
-  expect(handler).toBeCalledTimes(3)
+  expect(handler).toBeCalledTimes(4) // 3 -> 4
   expect(compu.value).toEqual(55)
-  expect(handler).toBeCalledTimes(3)
+  expect(handler).toBeCalledTimes(4) // 3 -> 4
   obs.aa = 11
   expect(runner1).toBeCalledTimes(3)
   expect(runner2).toBeCalledTimes(3)
-  expect(handler).toBeCalledTimes(4)
+  expect(handler).toBeCalledTimes(5) // 4 -> 5
   expect(compu.value).toEqual(44)
-  expect(handler).toBeCalledTimes(4)
+  expect(handler).toBeCalledTimes(5) // 4 -> 5
   dispose()
   obs.aa = 22
   expect(runner1).toBeCalledTimes(3)
   expect(runner2).toBeCalledTimes(4)
-  expect(handler).toBeCalledTimes(5)
+  expect(handler).toBeCalledTimes(6) // 5 -> 6
   expect(compu.value).toEqual(55)
-  expect(handler).toBeCalledTimes(5)
+  expect(handler).toBeCalledTimes(6) // 5 -> 6
   dispose2()
   obs.aa = 33
   expect(runner1).toBeCalledTimes(3)
   expect(runner2).toBeCalledTimes(4)
-  expect(handler).toBeCalledTimes(5)
+  expect(handler).toBeCalledTimes(6) // 5 -> 6
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(6)
+  expect(handler).toBeCalledTimes(7) // 6 -> 7
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(6)
+  expect(handler).toBeCalledTimes(7) // 6 -> 7
   autorun(() => {
     compu.value
     runner3()
   })
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(6)
+  expect(handler).toBeCalledTimes(8) // 6 -> 8
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(6)
+  expect(handler).toBeCalledTimes(8) // 6 -> 8
   obs.aa = 11
-  expect(handler).toBeCalledTimes(7)
+  expect(handler).toBeCalledTimes(9) // 7 -> 9
   expect(compu.value).toEqual(44)
-  expect(handler).toBeCalledTimes(7)
+  expect(handler).toBeCalledTimes(9) // 7 -> 9
 })
 
 test('computed chain annotation', () => {
@@ -270,4 +270,133 @@ test('computed recollect dependencies', () => {
   obs.aa = '111'
   obs.bb = '222'
   expect(computed).toBeCalledTimes(2)
+})
+
+test('computed reject circular reaction', () => {
+  const computingFn = jest.fn()
+  const computedFn = jest.fn()
+  const obs = model({
+    a: 0,
+    b: 0,
+    get c() {
+      computingFn()
+      return this.a + this.b
+    },
+  })
+  expect(obs.c).toEqual(0)
+  expect(computingFn).toBeCalledTimes(1)
+  expect(computedFn).toBeCalledTimes(0)
+  autorun(() => {
+    computedFn()
+    if (obs.c % 2) obs.a++
+    else obs.b++
+  })
+  expect(obs.c).toEqual(1)
+  expect(computingFn).toBeCalledTimes(3) // 2 -> 3
+  expect(computedFn).toBeCalledTimes(1)
+  obs.a++
+  expect(obs.c).toEqual(3)
+  expect(computingFn).toBeCalledTimes(5) // 4 -> 5
+  expect(computedFn).toBeCalledTimes(2)
+  obs.b++
+  expect(obs.c).toEqual(5)
+  expect(computingFn).toBeCalledTimes(7) // 6 -> 7
+  expect(computedFn).toBeCalledTimes(3)
+  obs.a++
+  obs.b++
+  expect(obs.c).toEqual(9)
+  expect(computingFn).toBeCalledTimes(11) // 9 -> 11
+  expect(computedFn).toBeCalledTimes(5)
+})
+
+test('computed with cache', () => {
+  const computingFnB = jest.fn()
+  const computedFnB = jest.fn()
+  const computingFnC = jest.fn()
+  const computedFnC = jest.fn()
+  const obs = model({
+    a: 0,
+    get b() {
+      computingFnB()
+      return this.a
+    },
+    get c() {
+      computingFnC()
+      void this.a
+      return 0
+    },
+  })
+  expect(obs.b).toEqual(0)
+  expect(computingFnB).toBeCalledTimes(1)
+  expect(computedFnB).toBeCalledTimes(0)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(1)
+  expect(computedFnC).toBeCalledTimes(0)
+  obs.a++
+  expect(obs.b).toEqual(1)
+  expect(computingFnB).toBeCalledTimes(2)
+  expect(computedFnB).toBeCalledTimes(0)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(2)
+  expect(computedFnC).toBeCalledTimes(0)
+  obs.a++
+  obs.a++
+  expect(obs.b).toEqual(3)
+  expect(computingFnB).toBeCalledTimes(3)
+  expect(computedFnB).toBeCalledTimes(0)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(3)
+  expect(computedFnC).toBeCalledTimes(0)
+  const disposeB = autorun(() => {
+    computedFnB()
+    void obs.b
+  })
+  const disposeC = autorun(() => {
+    computedFnC()
+    void obs.c
+  })
+  expect(obs.b).toEqual(3)
+  expect(computingFnB).toBeCalledTimes(4)
+  expect(computedFnB).toBeCalledTimes(1)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(4)
+  expect(computedFnC).toBeCalledTimes(1)
+  obs.a++
+  expect(obs.b).toEqual(4)
+  expect(computingFnB).toBeCalledTimes(5)
+  expect(computedFnB).toBeCalledTimes(2)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(5)
+  expect(computedFnC).toBeCalledTimes(1)
+  obs.a++
+  obs.a++
+  expect(obs.b).toEqual(6)
+  expect(computingFnB).toBeCalledTimes(7)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(7)
+  expect(computedFnC).toBeCalledTimes(1)
+  disposeB()
+  disposeC()
+  expect(obs.b).toEqual(6)
+  expect(computingFnB).toBeCalledTimes(8)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(8)
+  expect(computedFnC).toBeCalledTimes(1)
+  obs.a++
+  expect(obs.b).toEqual(7)
+  expect(computingFnB).toBeCalledTimes(9)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(9)
+  expect(computedFnC).toBeCalledTimes(1)
+  obs.a++
+  obs.a++
+  expect(obs.b).toEqual(9)
+  expect(computingFnB).toBeCalledTimes(10)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(10)
+  expect(computedFnC).toBeCalledTimes(1)
 })

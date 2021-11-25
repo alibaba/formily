@@ -10,7 +10,9 @@ import {
   batchStart,
   batchEnd,
   releaseBindingReactions,
+  getReactionsFromTargetKey,
 } from '../reaction'
+import { ArraySet } from '../array'
 
 interface IValue<T = any> {
   value?: T
@@ -67,7 +69,18 @@ export const computed: IComputed = createAnnotation(
     }
     reaction._name = 'ComputedReaction'
     reaction._scheduler = () => {
-      reaction._dirty = true
+      const reactions = getReactionsFromTargetKey(context, property)
+      if (!reactions.length) {
+        reaction._dirty = true
+        return
+      }
+
+      const oldValue = store.value
+      reaction()
+      if (oldValue === store.value) return
+
+      // reaction._dirty = true
+
       batchStart()
       runReactionsFromTargetKey({
         target: context,
@@ -81,6 +94,7 @@ export const computed: IComputed = createAnnotation(
     reaction._dirty = true
     reaction._context = context
     reaction._property = property
+    reaction._dependedsSet = new ArraySet([])
 
     ProxyRaw.set(proxy, store)
     RawProxy.set(store, proxy)
@@ -92,6 +106,12 @@ export const computed: IComputed = createAnnotation(
         bindComputedReactions(reaction)
       }
       if (!isUntracking()) {
+        const current = ReactionStack[ReactionStack.length - 1]
+        if (current && !reaction._dependedsSet.has(current)) {
+          reaction._dependedsSet.add(current)
+          reaction._dirty = true
+        }
+
         //如果允许untracked过程中收集依赖，那么永远不会存在绑定，因为_dirty已经设置为false
         if (reaction._dirty) {
           reaction()

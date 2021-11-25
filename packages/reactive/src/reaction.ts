@@ -52,7 +52,7 @@ const addReactionsMapToReaction = (
   return bindSet
 }
 
-const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
+export const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
   const reactionsMap = RawReactionsMap.get(target)
   const reactions = []
   if (reactionsMap) {
