@@ -10,12 +10,16 @@ import {
 } from '@vue/composition-api'
 import { h } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
+import { markRaw } from '@formily/reactive'
 import { Grid, IGridOptions } from '@formily/grid'
 import { stylePrefix } from '../__builtins__/configs'
 import { composeExport } from '../__builtins__/shared'
 import { useFormLayout } from '../form-layout'
+import { inject } from '@vue/composition-api'
+import { PropType } from '@vue/composition-api'
 
 export interface IFormGridProps extends IGridOptions {
+  grid?: Grid<HTMLElement>
   prefixCls?: string
   className?: string
   style?: React.CSSProperties
@@ -24,32 +28,15 @@ export interface IFormGridProps extends IGridOptions {
 const FormGridSymbol: InjectionKey<Ref<Grid<HTMLElement>>> =
   Symbol('FormGridContext')
 
-interface Style {
-  [key: string]: string
-}
-
 interface GridColumnProps {
   gridSpan: number
 }
 
-const useFormGrid = (props: IFormGridProps) => {
-  const layout = useFormLayout()
-
-  return computed(() => {
-    const newProps = {}
-    Object.keys(props).forEach((key) => {
-      if (typeof props[key] !== 'undefined') {
-        newProps[key] = props[key]
-      }
-    })
-    const options = {
-      columnGap: layout.value?.gridColumnGap ?? 8,
-      rowGap: layout.value?.gridRowGap ?? 4,
-      ...newProps,
-    }
-    return new Grid(options)
-  })
+export const createFormGrid = (props: IFormGridProps): Grid<HTMLElement> => {
+  return markRaw(new Grid(props))
 }
+
+export const useFormGrid = (): Ref<Grid<HTMLElement>> => inject(FormGridSymbol)
 
 /**
  * @deprecated
@@ -94,17 +81,45 @@ const FormGridInner = observer(
         type: Boolean,
         default: true,
       },
+      strictAutoFit: {
+        type: Boolean,
+        default: false,
+      },
+      shouldVisible: {
+        type: Function as PropType<IGridOptions['shouldVisible']>,
+        default() {
+          return () => true
+        },
+      },
+      grid: {
+        type: Object as PropType<Grid<HTMLElement>>,
+      },
     },
     setup(props: IFormGridProps) {
-      const grid = useFormGrid(props)
+      const layout = useFormLayout()
+
+      const gridInstance = computed(() => {
+        const newProps: IFormGridProps = {}
+        Object.keys(props).forEach((key) => {
+          if (typeof props[key] !== 'undefined') {
+            newProps[key] = props[key]
+          }
+        })
+        const options = {
+          columnGap: layout.value?.gridColumnGap ?? 8,
+          rowGap: layout.value?.gridRowGap ?? 4,
+          ...newProps,
+        }
+        return markRaw(options?.grid ? options.grid : new Grid(options))
+      })
       const prefixCls = `${stylePrefix}-form-grid`
       const root = ref(null)
 
-      provide(FormGridSymbol, grid)
+      provide(FormGridSymbol, gridInstance)
 
       onMounted(() => {
         watchEffect((onInvalidate) => {
-          const dispose = grid.value.connect(root.value)
+          const dispose = gridInstance.value.connect(root.value)
           onInvalidate(() => {
             dispose()
           })
@@ -114,11 +129,11 @@ const FormGridInner = observer(
       return {
         prefixCls,
         root,
-        grid,
+        gridInstance,
       }
     },
     render() {
-      const { prefixCls, grid } = this
+      const { prefixCls, gridInstance } = this
       return h(
         'div',
         {
@@ -126,8 +141,8 @@ const FormGridInner = observer(
             class: `${prefixCls}`,
           },
           style: {
-            gridTemplateColumns: grid.templateColumns,
-            gap: grid.gap,
+            gridTemplateColumns: gridInstance.templateColumns,
+            gap: gridInstance.gap,
           },
           ref: 'root',
         },
@@ -167,6 +182,8 @@ const FormGridColumn = observer(
 export const FormGrid = composeExport(FormGridInner, {
   GridColumn: FormGridColumn,
   useGridSpan,
+  useFormGrid,
+  createFormGrid,
 })
 
 export default FormGrid
