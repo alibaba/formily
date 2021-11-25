@@ -543,7 +543,7 @@ test('autorun dispose in batch', () => {
   expect(handler).toBeCalledTimes(1)
 })
 
-test('atom mutate value by computed depend', () => {
+test('set value by computed depend', () => {
   const obs = observable<any>({})
   const comp1 = observable.computed(() => {
     return obs.aa?.bb
@@ -562,6 +562,109 @@ test('atom mutate value by computed depend', () => {
   expect(handler).toBeCalledTimes(2)
   expect(handler).toBeCalledWith(undefined, undefined)
   expect(handler).toBeCalledWith(123, 321)
+})
+
+test('delete value by computed depend', () => {
+  const handler = jest.fn()
+  const obs = observable({
+    a: {
+      b: 1,
+      c: 2,
+    },
+  })
+  const comp1 = observable.computed(() => {
+    return obs.a?.b
+  })
+  const comp2 = observable.computed(() => {
+    return obs.a?.c
+  })
+  autorun(() => {
+    handler(comp1.value, comp2.value)
+  })
+  delete obs.a
+  expect(handler).toBeCalledTimes(2)
+  expect(handler).toBeCalledWith(1, 2)
+  expect(handler).toBeCalledWith(undefined, undefined)
+})
+
+test('set Set value by computed depend', () => {
+  const handler = jest.fn()
+  const obs = observable({
+    set: new Set(),
+  })
+  const comp1 = observable.computed(() => {
+    return obs.set.has(1)
+  })
+  const comp2 = observable.computed(() => {
+    return obs.set.size
+  })
+  autorun(() => {
+    handler(comp1.value, comp2.value)
+  })
+  obs.set.add(1)
+  expect(handler).toBeCalledTimes(2)
+  expect(handler).toBeCalledWith(false, 0)
+  expect(handler).toBeCalledWith(true, 1)
+})
+
+test('delete Set by computed depend', () => {
+  const handler = jest.fn()
+  const obs = observable({
+    set: new Set([1]),
+  })
+  const comp1 = observable.computed(() => {
+    return obs.set.has(1)
+  })
+  const comp2 = observable.computed(() => {
+    return obs.set.size
+  })
+  autorun(() => {
+    handler(comp1.value, comp2.value)
+  })
+  obs.set.delete(1)
+  expect(handler).toBeCalledTimes(2)
+  expect(handler).toBeCalledWith(true, 1)
+  expect(handler).toBeCalledWith(false, 0)
+})
+
+test('set Map value by computed depend', () => {
+  const handler = jest.fn()
+  const obs = observable({
+    map: new Map(),
+  })
+  const comp1 = observable.computed(() => {
+    return obs.map.has(1)
+  })
+  const comp2 = observable.computed(() => {
+    return obs.map.size
+  })
+  autorun(() => {
+    handler(comp1.value, comp2.value)
+  })
+  obs.map.set(1, 1)
+  expect(handler).toBeCalledTimes(2)
+  expect(handler).toBeCalledWith(false, 0)
+  expect(handler).toBeCalledWith(true, 1)
+})
+
+test('delete Map by computed depend', () => {
+  const handler = jest.fn()
+  const obs = observable({
+    map: new Map([[1, 1]]),
+  })
+  const comp1 = observable.computed(() => {
+    return obs.map.has(1)
+  })
+  const comp2 = observable.computed(() => {
+    return obs.map.size
+  })
+  autorun(() => {
+    handler(comp1.value, comp2.value)
+  })
+  obs.map.delete(1)
+  expect(handler).toBeCalledTimes(2)
+  expect(handler).toBeCalledWith(true, 1)
+  expect(handler).toBeCalledWith(false, 0)
 })
 
 test('autorun recollect dependencies', () => {
