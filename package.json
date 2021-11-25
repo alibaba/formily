@@ -31,7 +31,7 @@
     "test:next": "jest packages/next",
     "test:watch": "jest --watch",
     "test:prod": "jest --coverage --silent",
-    "preversion": "yarn install --ignore-engines && npm run build && npm run lint && npm run test",
+    "preversion": "yarn install --ignore-engines && git add -A && npm run build && npm run lint && npm run test",
     "version:alpha": "lerna version prerelease --preid alpha",
     "version:beta": "lerna version prerelease --preid beta",
     "version:rc": "lerna version prerelease --preid rc",
