@@ -306,7 +306,7 @@ export const setValidatorRule = (field: Field, name: string, value: any) => {
   if (hasRule) {
     if (isArr(field.validator)) {
       field.validator = field.validator.map((desc: any) => {
-        if (hasOwnProperty.call(desc, name)) {
+        if (isPlainObj(desc) && hasOwnProperty.call(desc, name)) {
           desc[name] = value
           return desc
         }
@@ -326,26 +326,16 @@ export const setValidatorRule = (field: Field, name: string, value: any) => {
       } else {
         field.validator.push(rule)
       }
-    } else if (isPlainObj(field.validator)) {
-      field.validator[name] = value
-    } else if (field.validator) {
-      if (name === 'required') {
-        field.validator = [
-          {
-            [name]: value,
-          },
-          field.validator,
-        ]
-      } else {
-        field.validator = [
-          field.validator,
-          {
-            [name]: value,
-          },
-        ]
-      }
     } else {
-      field.validator = [rule]
+      if (name === 'required') {
+        field.validator = [rule, field.validator]
+      } else if (isPlainObj(field.validator)) {
+        field.validator[name] = value
+      } else if (field.validator) {
+        field.validator = [field.validator, rule]
+      } else {
+        field.validator = rule
+      }
     }
   }
 }

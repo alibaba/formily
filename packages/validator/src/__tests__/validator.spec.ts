@@ -454,3 +454,15 @@ test('validator template with format', async () => {
     '123=123&123'
   )
 })
+
+test('validator order with format', async () => {
+  hasError(
+    await validate('', [
+      { required: true },
+      {
+        format: 'url',
+      },
+    ]),
+    'The field value is required'
+  )
+})
