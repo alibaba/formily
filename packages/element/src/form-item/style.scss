@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import '../__builtins__/styles/common.scss';
 @import './var.scss';
 @import './grid.scss';
@@ -193,8 +194,8 @@
     &.is-controls-right {
       .#{$namespace}-input-number__increase,
       .#{$namespace}-input-number__decrease {
-        line-height: $--form-item-small-line-height / 2;
-        height: $--form-item-small-line-height / 2;
+        line-height: math.div($--form-item-small-line-height, 2);
+        height: math.div($--form-item-small-line-height, 2);
         font-size: $--font-size-extra-small;
         box-sizing: border-box;
       }
@@ -253,7 +254,7 @@
     &.is-controls-right {
       .#{$namespace}-input-number__increase,
       .#{$namespace}-input-number__decrease {
-        line-height: $--form-item-large-line-height / 2 - 1;
+        line-height: math.div($--form-item-large-line-height, 2) - 1;
         font-size: $--font-size-medium;
       }
     }

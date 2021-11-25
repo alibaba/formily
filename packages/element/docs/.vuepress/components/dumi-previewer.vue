@@ -121,7 +121,7 @@ export default {
 
   computed: {
     decodedCode() {
-      return decodeURIComponent(this.code || this.demoStr)
+      return this.code || this.demoStr
     },
 
     highlightCode() {

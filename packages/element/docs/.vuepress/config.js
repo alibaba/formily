@@ -69,4 +69,23 @@ module.exports = {
       },
     }
   },
+  chainWebpack: (config, isServer) => {
+    config.module
+      .rule('js') // Find the rule.
+      .use('babel-loader') // Find the loader
+      .tap((options) =>
+        Object.assign(options, {
+          // Modifying options
+          presets: [
+            [
+              '@vue/babel-preset-jsx',
+              {
+                vModel: false,
+                compositionAPI: true,
+              },
+            ],
+          ],
+        })
+      )
+  },
 }
