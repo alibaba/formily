@@ -1791,3 +1791,22 @@ test('field setValidator repeat call', async () => {
   await form.validate()
   expect(validator1).toBeCalledTimes(1)
 })
+
+test('custom validator to get ctx.field', async () => {
+  const form = attach(createForm())
+  let ctxField = null
+  let ctxForm = null
+  attach(
+    form.createField({
+      name: 'aaa',
+      validator(value, rule, ctx) {
+        ctxField = ctx.field
+        ctxForm = ctx.form
+        return ''
+      },
+    })
+  )
+  await form.submit()
+  expect(!!ctxField).toBeTruthy()
+  expect(!!ctxForm).toBeTruthy()
+})

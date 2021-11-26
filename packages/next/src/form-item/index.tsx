@@ -1,16 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react'
 import cls from 'classnames'
-import { usePrefixCls, pickDataProps } from '../__builtins__'
+import {
+  usePrefixCls,
+  pickDataProps,
+  QuestionCircleOutlinedIcon,
+  CloseCircleOutlinedIcon,
+  CheckCircleOutlinedIcon,
+  ExclamationCircleOutlinedIcon,
+} from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
 import { Balloon } from '@alifd/next'
-import {
-  QuestionCircleOutlined,
-  CloseCircleOutlined,
-  CheckCircleOutlined,
-  ExclamationCircleOutlined,
-} from '@ant-design/icons'
 
 export interface IFormItemProps {
   className?: string
@@ -77,7 +78,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
     feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
     tooltipLayout: props.tooltipLayout ?? layout.tooltipLayout ?? 'icon',
     tooltipIcon: props.tooltipIcon ?? layout.tooltipIcon ?? (
-      <QuestionCircleOutlined />
+      <QuestionCircleOutlinedIcon />
     ),
   }
 }
@@ -110,9 +111,9 @@ function useOverflow<
 }
 
 const ICON_MAP = {
-  error: <CloseCircleOutlined />,
-  success: <CheckCircleOutlined />,
-  warning: <ExclamationCircleOutlined />,
+  error: <CloseCircleOutlinedIcon />,
+  success: <CheckCircleOutlinedIcon />,
+  warning: <ExclamationCircleOutlinedIcon />,
 }
 
 export const BaseItem: React.FC<IFormItemProps> = (props) => {
