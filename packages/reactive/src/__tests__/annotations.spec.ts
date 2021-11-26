@@ -571,3 +571,56 @@ test('computed with chain dependency', () => {
     cb: [2, 1],
   })
 })
+
+test('computed switch autorun', () => {
+  const ing = jest.fn()
+
+  const obs = model({
+    a: 0,
+    get b() {
+      ing()
+      return this.a
+    },
+  })
+
+  expect(obs.b).toEqual(0)
+  expect(ing).toBeCalledTimes(1)
+  obs.a++
+  expect(obs.b).toEqual(1)
+  expect(ing).toBeCalledTimes(2)
+  obs.a++
+  obs.a++
+  obs.a++
+  expect(obs.b).toEqual(4)
+  expect(ing).toBeCalledTimes(3)
+
+  autorun(() => obs.b)()
+
+  expect(obs.b).toEqual(4)
+  expect(ing).toBeCalledTimes(4)
+  obs.a++
+  expect(obs.b).toEqual(5)
+  expect(ing).toBeCalledTimes(5)
+  obs.a++
+  obs.a++
+  obs.a++
+  expect(obs.b).toEqual(8)
+  expect(ing).toBeCalledTimes(6)
+  expect(obs.b).toEqual(8)
+  expect(obs.b).toEqual(8)
+  expect(obs.b).toEqual(8)
+  expect(ing).toBeCalledTimes(6)
+
+  autorun(() => obs.b)
+
+  expect(obs.b).toEqual(8)
+  expect(ing).toBeCalledTimes(6)
+  obs.a++
+  expect(obs.b).toEqual(9)
+  expect(ing).toBeCalledTimes(7)
+  obs.a++
+  obs.a++
+  obs.a++
+  expect(obs.b).toEqual(12)
+  expect(ing).toBeCalledTimes(10)
+})
