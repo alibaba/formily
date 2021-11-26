@@ -126,47 +126,47 @@ test('computed annotation', () => {
     runner2()
   })
   expect(compu.value).toEqual(44)
-  expect(handler).toBeCalledTimes(3) // 2 -> 3
+  expect(handler).toBeCalledTimes(2)
   obs.bb = 33
   expect(runner1).toBeCalledTimes(2)
   expect(runner2).toBeCalledTimes(2)
-  expect(handler).toBeCalledTimes(4) // 3 -> 4
+  expect(handler).toBeCalledTimes(3)
   expect(compu.value).toEqual(55)
-  expect(handler).toBeCalledTimes(4) // 3 -> 4
+  expect(handler).toBeCalledTimes(3)
   obs.aa = 11
   expect(runner1).toBeCalledTimes(3)
   expect(runner2).toBeCalledTimes(3)
-  expect(handler).toBeCalledTimes(5) // 4 -> 5
+  expect(handler).toBeCalledTimes(4)
   expect(compu.value).toEqual(44)
-  expect(handler).toBeCalledTimes(5) // 4 -> 5
+  expect(handler).toBeCalledTimes(4)
   dispose()
   obs.aa = 22
   expect(runner1).toBeCalledTimes(3)
   expect(runner2).toBeCalledTimes(4)
-  expect(handler).toBeCalledTimes(6) // 5 -> 6
+  expect(handler).toBeCalledTimes(5)
   expect(compu.value).toEqual(55)
-  expect(handler).toBeCalledTimes(6) // 5 -> 6
+  expect(handler).toBeCalledTimes(5)
   dispose2()
   obs.aa = 33
   expect(runner1).toBeCalledTimes(3)
   expect(runner2).toBeCalledTimes(4)
-  expect(handler).toBeCalledTimes(6) // 5 -> 6
+  expect(handler).toBeCalledTimes(5)
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(7) // 6 -> 7
+  expect(handler).toBeCalledTimes(6)
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(7) // 6 -> 7
+  expect(handler).toBeCalledTimes(6)
   autorun(() => {
     compu.value
     runner3()
   })
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(8) // 6 -> 8
+  expect(handler).toBeCalledTimes(6)
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(8) // 6 -> 8
+  expect(handler).toBeCalledTimes(6)
   obs.aa = 11
-  expect(handler).toBeCalledTimes(9) // 7 -> 9
+  expect(handler).toBeCalledTimes(7)
   expect(compu.value).toEqual(44)
-  expect(handler).toBeCalledTimes(9) // 7 -> 9
+  expect(handler).toBeCalledTimes(7)
 })
 
 test('computed chain annotation', () => {
@@ -292,20 +292,20 @@ test('computed reject circular reaction', () => {
     else obs.b++
   })
   expect(obs.c).toEqual(1)
-  expect(computingFn).toBeCalledTimes(3) // 2 -> 3
+  expect(computingFn).toBeCalledTimes(2)
   expect(computedFn).toBeCalledTimes(1)
   obs.a++
   expect(obs.c).toEqual(3)
-  expect(computingFn).toBeCalledTimes(5) // 4 -> 5
+  expect(computingFn).toBeCalledTimes(4)
   expect(computedFn).toBeCalledTimes(2)
   obs.b++
   expect(obs.c).toEqual(5)
-  expect(computingFn).toBeCalledTimes(7) // 6 -> 7
+  expect(computingFn).toBeCalledTimes(6)
   expect(computedFn).toBeCalledTimes(3)
   obs.a++
   obs.b++
   expect(obs.c).toEqual(9)
-  expect(computingFn).toBeCalledTimes(11) // 9 -> 11
+  expect(computingFn).toBeCalledTimes(10) // 9 -> 10
   expect(computedFn).toBeCalledTimes(5)
 })
 
@@ -356,47 +356,218 @@ test('computed with cache', () => {
     void obs.c
   })
   expect(obs.b).toEqual(3)
-  expect(computingFnB).toBeCalledTimes(4)
+  expect(computingFnB).toBeCalledTimes(3)
   expect(computedFnB).toBeCalledTimes(1)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(3)
+  expect(computedFnC).toBeCalledTimes(1)
+  obs.a++
+  expect(obs.b).toEqual(4)
+  expect(computingFnB).toBeCalledTimes(4)
+  expect(computedFnB).toBeCalledTimes(2)
   expect(obs.c).toEqual(0)
   expect(computingFnC).toBeCalledTimes(4)
   expect(computedFnC).toBeCalledTimes(1)
   obs.a++
-  expect(obs.b).toEqual(4)
-  expect(computingFnB).toBeCalledTimes(5)
-  expect(computedFnB).toBeCalledTimes(2)
-  expect(obs.c).toEqual(0)
-  expect(computingFnC).toBeCalledTimes(5)
+  obs.a++
+  expect(computingFnB).toBeCalledTimes(6)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(computingFnC).toBeCalledTimes(6)
   expect(computedFnC).toBeCalledTimes(1)
-  obs.a++
-  obs.a++
+  expect(obs.b).toEqual(6)
+  expect(computingFnB).toBeCalledTimes(6)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(6)
+  expect(computedFnC).toBeCalledTimes(1)
+  disposeB()
+  disposeC()
   expect(obs.b).toEqual(6)
   expect(computingFnB).toBeCalledTimes(7)
   expect(computedFnB).toBeCalledTimes(4)
   expect(obs.c).toEqual(0)
   expect(computingFnC).toBeCalledTimes(7)
   expect(computedFnC).toBeCalledTimes(1)
-  disposeB()
-  disposeC()
-  expect(obs.b).toEqual(6)
+  obs.a++
+  expect(obs.b).toEqual(7)
   expect(computingFnB).toBeCalledTimes(8)
   expect(computedFnB).toBeCalledTimes(4)
   expect(obs.c).toEqual(0)
   expect(computingFnC).toBeCalledTimes(8)
   expect(computedFnC).toBeCalledTimes(1)
   obs.a++
-  expect(obs.b).toEqual(7)
+  obs.a++
+  expect(computingFnB).toBeCalledTimes(8)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(computingFnC).toBeCalledTimes(8)
+  expect(computedFnC).toBeCalledTimes(1)
+  expect(obs.b).toEqual(9)
   expect(computingFnB).toBeCalledTimes(9)
   expect(computedFnB).toBeCalledTimes(4)
   expect(obs.c).toEqual(0)
   expect(computingFnC).toBeCalledTimes(9)
   expect(computedFnC).toBeCalledTimes(1)
+})
+
+test('computed with chain dependency', () => {
+  const b = { ing: jest.fn(), ed: jest.fn() }
+  const ba = { ing: jest.fn(), ed: jest.fn() }
+  const bb = { ing: jest.fn(), ed: jest.fn() }
+  const c = { ing: jest.fn(), ed: jest.fn() }
+  const ca = { ing: jest.fn(), ed: jest.fn() }
+  const cb = { ing: jest.fn(), ed: jest.fn() }
+
+  const obs = model({
+    a: 0,
+    get b() {
+      b.ing()
+      return this.a
+    },
+    get ba() {
+      ba.ing()
+      return this.b
+    },
+    get bb() {
+      bb.ing(this.b)
+      return 0
+    },
+    get c() {
+      c.ing(this.a)
+      return 0
+    },
+    get ca() {
+      ca.ing()
+      return this.c
+    },
+    get cb() {
+      cb.ing(this.c)
+      return 0
+    },
+  })
+
+  const expectValues = ({ b, ba, bb, c, ca, cb }) => {
+    expect(obs.b).toEqual(b)
+    expect(obs.ba).toEqual(ba)
+    expect(obs.bb).toEqual(bb)
+    expect(obs.c).toEqual(c)
+    expect(obs.ca).toEqual(ca)
+    expect(obs.cb).toEqual(cb)
+  }
+
+  const expectCalledTimes = ({
+    b: [bing, bed],
+    ba: [baing, baed],
+    bb: [bbing, bbed],
+    c: [cing, ced],
+    ca: [caing, caed],
+    cb: [cbing, cbed],
+  }) => {
+    expect(b.ing).toBeCalledTimes(bing)
+    expect(b.ed).toBeCalledTimes(bed)
+    expect(ba.ing).toBeCalledTimes(baing)
+    expect(ba.ed).toBeCalledTimes(baed)
+    expect(bb.ing).toBeCalledTimes(bbing)
+    expect(bb.ed).toBeCalledTimes(bbed)
+    expect(c.ing).toBeCalledTimes(cing)
+    expect(c.ed).toBeCalledTimes(ced)
+    expect(ca.ing).toBeCalledTimes(caing)
+    expect(ca.ed).toBeCalledTimes(caed)
+    expect(cb.ing).toBeCalledTimes(cbing)
+    expect(cb.ed).toBeCalledTimes(cbed)
+  }
+
+  expectCalledTimes({
+    b: [0, 0],
+    ba: [0, 0],
+    bb: [0, 0],
+    c: [0, 0],
+    ca: [0, 0],
+    cb: [0, 0],
+  })
+
+  const disposers = [
+    autorun(() => b.ed(obs.b)),
+    autorun(() => ba.ed(obs.ba)),
+    autorun(() => bb.ed(obs.bb)),
+    autorun(() => c.ed(obs.c)),
+    autorun(() => ca.ed(obs.ca)),
+    autorun(() => cb.ed(obs.cb)),
+  ]
+
+  expectCalledTimes({
+    b: [1, 1],
+    ba: [1, 1],
+    bb: [1, 1],
+    c: [1, 1],
+    ca: [1, 1],
+    cb: [1, 1],
+  })
+
+  obs.a++
+
+  expectCalledTimes({
+    b: [2, 2],
+    ba: [2, 2],
+    bb: [2, 1],
+    c: [2, 1],
+    ca: [1, 1],
+    cb: [1, 1],
+  })
+
+  expectValues({ b: 1, ba: 1, bb: 0, c: 0, ca: 0, cb: 0 })
+
+  expectCalledTimes({
+    b: [2, 2],
+    ba: [2, 2],
+    bb: [2, 1],
+    c: [2, 1],
+    ca: [1, 1],
+    cb: [1, 1],
+  })
+
   obs.a++
   obs.a++
-  expect(obs.b).toEqual(9)
-  expect(computingFnB).toBeCalledTimes(10)
-  expect(computedFnB).toBeCalledTimes(4)
-  expect(obs.c).toEqual(0)
-  expect(computingFnC).toBeCalledTimes(10)
-  expect(computedFnC).toBeCalledTimes(1)
+  obs.a++
+
+  expectCalledTimes({
+    b: [5, 5],
+    ba: [5, 5],
+    bb: [5, 1],
+    c: [5, 1],
+    ca: [1, 1],
+    cb: [1, 1],
+  })
+
+  expectValues({ b: 4, ba: 4, bb: 0, c: 0, ca: 0, cb: 0 })
+
+  expectCalledTimes({
+    b: [5, 5],
+    ba: [5, 5],
+    bb: [5, 1],
+    c: [5, 1],
+    ca: [1, 1],
+    cb: [1, 1],
+  })
+
+  disposers.forEach((disposer) => disposer())
+
+  expectCalledTimes({
+    b: [5, 5],
+    ba: [5, 5],
+    bb: [5, 1],
+    c: [5, 1],
+    ca: [1, 1],
+    cb: [1, 1],
+  })
+
+  expectValues({ b: 4, ba: 4, bb: 0, c: 0, ca: 0, cb: 0 })
+
+  expectCalledTimes({
+    b: [6, 5],
+    ba: [6, 5],
+    bb: [6, 1],
+    c: [6, 1],
+    ca: [2, 1],
+    cb: [2, 1],
+  })
 })

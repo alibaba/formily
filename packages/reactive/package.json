@@ -31,11 +31,11 @@
     "benchmark:prevself": "ts-node ./benchmark/vs-prevself"
   },
   "devDependencies": {
-    "@formily/reactive": "2.0.0",
-    "@vue/reactivity": "^3.0.11",
-    "benny": "^3.6.15",
+    "@formily/reactive": "2.0.1",
+    "@vue/reactivity": "^3.2.22",
+    "benny": "^3.7.1",
     "dumi": "^1.1.0-rc.8",
-    "mobx": "^6.3.0"
+    "mobx": "^6.3.7"
   },
   "publishConfig": {
     "access": "public"

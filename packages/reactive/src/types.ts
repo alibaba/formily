@@ -69,7 +69,6 @@ export type Reaction = ((...args: any[]) => any) & {
   _disposed?: boolean
   _property?: PropertyKey
   _computesSet?: ArraySet<Reaction>
-  _dependedsSet?: ArraySet<Reaction>
   _reactionsSet?: ArraySet<ReactionsMap>
   _scheduler?: (reaction: Reaction) => void
   _memos?: {
