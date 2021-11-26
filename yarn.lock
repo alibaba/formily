@@ -19032,12 +19032,10 @@ ts-import-plugin@1.6.1:
     opencollective-postinstall "^2.0.2"
     tslib "^1.10.0"
 
-ts-import-plugin@^1.6.7:
-  version "1.6.7"
-  resolved "https://registry.yarnpkg.com/ts-import-plugin/-/ts-import-plugin-1.6.7.tgz#219cabef4a8b50d8321ac750758837378492914c"
-  integrity sha512-6qbRME6Cj9RzhlqXGc1275lAK3IEJjmwYPmX0/jVPBwtdoDqHVbdRURYcvR195uFi8ZpBqT2WjL4E56buPQ4sg==
-  dependencies:
-    tslib "^2.0.3"
+ts-import-plugin@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ts-import-plugin/-/ts-import-plugin-2.0.0.tgz#7366beb7c6deab59165363134e8953ac07b8af49"
+  integrity sha512-pjWVq8uCjExk1XarLAUCWssEnCtHHlcQavLdhpsxIguTgKyz7sx2GqR8a0irnrHZR/+bu1SPT5L77LCuu6y5BA==
 
 ts-jest@^26.0.0:
   version "26.5.6"
