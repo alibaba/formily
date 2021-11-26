@@ -64,7 +64,7 @@ const useOverflow = (containerRef: Ref<HTMLElement>) => {
     const container = containerRef.value
     const content = container.querySelector('label')
     const containerWidth = container.getBoundingClientRect().width
-    const contentWidth = content.getBoundingClientRect().width
+    const contentWidth = content?.getBoundingClientRect().width
 
     if (containerWidth !== 0) {
       if (contentWidth > containerWidth) {
