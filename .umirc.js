@@ -178,7 +178,7 @@ export default {
       },
       {
         title: '1.x文档',
-        path: 'https://formilyjs.org',
+        path: 'https://v1.formilyjs.org',
       },
       {
         title: 'GITHUB',
