@@ -17,6 +17,7 @@
     "baseUrl": ".",
     "paths": {
       "@formily/*": ["packages/*/src", "devtools/*/src"]
-    }
+    },
+    "lib": ["ESNext"]
   }
 }

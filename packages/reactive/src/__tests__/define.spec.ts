@@ -21,7 +21,10 @@ describe('makeObservable', () => {
     observe(target.aa, handler2)
     target.aa.bb = { cc: { dd: { ee: 123 } } }
     target.aa = { hh: 123 }
-    expect(handler).toBeCalledWith({ dd: { ee: 123 } })
+    expect(handler).toBeCalledTimes(3)
+    expect(handler).nthCalledWith(1, undefined)
+    expect(handler).nthCalledWith(2, { dd: { ee: 123 } })
+    expect(handler).nthCalledWith(3, undefined)
     expect(handler1).toBeCalledTimes(2)
     expect(handler2).toBeCalledTimes(2)
   })
@@ -43,8 +46,10 @@ describe('makeObservable', () => {
     target.aa.bb = { cc: { dd: { ee: 123 } } }
     target.aa.bb.cc.kk = 333
     target.aa = { hh: 123 }
-    expect(handler).toBeCalledWith({ dd: { ee: 123 }, kk: 333 })
     expect(handler).toBeCalledTimes(3)
+    expect(handler).nthCalledWith(1, undefined)
+    expect(handler).nthCalledWith(2, { dd: { ee: 123 }, kk: 333 })
+    expect(handler).nthCalledWith(3, undefined)
     expect(handler1).toBeCalledTimes(2)
     expect(handler2).toBeCalledTimes(2)
   })
@@ -61,8 +66,11 @@ describe('makeObservable', () => {
     })
     observe(target, handler1)
     observe(target.aa, handler2)
+
+    expect(handler).lastCalledWith(undefined)
     target.aa.set(123)
-    expect(handler).toBeCalledWith(123)
+    expect(handler).toBeCalledTimes(2)
+    expect(handler).lastCalledWith(123)
     expect(handler1).toBeCalledTimes(1)
     expect(handler2).toBeCalledTimes(1)
   })
@@ -77,8 +85,10 @@ describe('makeObservable', () => {
       handler(target.aa)
     })
     observe(target, handler1)
+    expect(handler).lastCalledWith(undefined)
     target.aa = 123
-    expect(handler).toBeCalledWith(123)
+    expect(handler).toBeCalledTimes(2)
+    expect(handler).lastCalledWith(123)
     expect(handler1).toBeCalledTimes(1)
   })
   test('action annotation', () => {
@@ -100,6 +110,7 @@ describe('makeObservable', () => {
     autorun(() => {
       handler([target.aa.bb, target.aa.cc])
     })
+    expect(handler).toBeCalledTimes(1)
     target.setData()
     expect(handler).toBeCalledTimes(2)
   })
@@ -123,13 +134,9 @@ describe('makeObservable', () => {
     })
     expect(handler).toBeCalledTimes(1)
     expect(target.cc).toEqual(33)
-    expect(handler).toBeCalledTimes(1)
-    expect(target.cc).toEqual(33)
-    expect(handler).toBeCalledTimes(1)
     target.aa = 22
     expect(handler).toBeCalledTimes(2)
     expect(target.cc).toEqual(44)
-    expect(handler).toBeCalledTimes(2)
   })
 })
 

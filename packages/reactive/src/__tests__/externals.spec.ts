@@ -9,43 +9,46 @@ import {
 
 test('is support observable', () => {
   const obs = observable<any>({ aa: 111 })
-  expect(isSupportObservable(obs)).toBeTruthy()
-  expect(isSupportObservable(null)).toBeFalsy()
-  expect(isSupportObservable([])).toBeTruthy()
-  expect(isSupportObservable({})).toBeTruthy()
-  expect(isSupportObservable({ $$typeof: {}, _owner: {} })).toBeFalsy()
-  expect(isSupportObservable({ _isAMomentObject: {} })).toBeFalsy()
-  expect(isSupportObservable({ _isJSONSchemaObject: {} })).toBeFalsy()
-  expect(isSupportObservable({ toJS: () => {} })).toBeFalsy()
-  expect(isSupportObservable({ toJSON: () => {} })).toBeFalsy()
-  expect(isSupportObservable(new Map())).toBeTruthy()
-  expect(isSupportObservable(new WeakMap())).toBeTruthy()
-  expect(isSupportObservable(new Set())).toBeTruthy()
-  expect(isSupportObservable(new WeakSet())).toBeTruthy()
+  class Class {}
+
+  expect(isSupportObservable(obs)).toBe(true)
+  expect(isSupportObservable(new Class())).toBe(true)
+  expect(isSupportObservable(null)).toBe(false)
+  expect(isSupportObservable([])).toBe(true)
+  expect(isSupportObservable({})).toBe(true)
+  expect(isSupportObservable({ $$typeof: {}, _owner: {} })).toBe(false)
+  expect(isSupportObservable({ _isAMomentObject: {} })).toBe(false)
+  expect(isSupportObservable({ _isJSONSchemaObject: {} })).toBe(false)
+  expect(isSupportObservable({ toJS: () => {} })).toBe(false)
+  expect(isSupportObservable({ toJSON: () => {} })).toBe(false)
+  expect(isSupportObservable(new Map())).toBe(true)
+  expect(isSupportObservable(new WeakMap())).toBe(true)
+  expect(isSupportObservable(new Set())).toBe(true)
+  expect(isSupportObservable(new WeakSet())).toBe(true)
 })
 
 describe('mark operation', () => {
   test('plain object should be observable', () => {
     const obs = observable<any>({ aa: 111 })
-    expect(isObservable(obs)).toBeTruthy()
+    expect(isObservable(obs)).toBe(true)
   })
 
   test('class instance should be observable', () => {
     class Class {}
     const obs = observable<any>(new Class())
     const obs2 = observable<any>(new Class())
-    expect(isObservable(obs)).toBeTruthy()
-    expect(isObservable(obs2)).toBeTruthy()
+    expect(isObservable(obs)).toBe(true)
+    expect(isObservable(obs2)).toBe(true)
   })
 
   test('object with toJS function should NOT be observable', () => {
     const obs = observable<any>({ aa: 111, toJS: () => {} })
-    expect(isObservable(obs)).toBeFalsy()
+    expect(isObservable(obs)).toBe(false)
   })
 
   test('plain object marked as raw should NOT be observable', () => {
     const obs = observable<any>(markRaw({ aa: 111 }))
-    expect(isObservable(obs)).toBeFalsy()
+    expect(isObservable(obs)).toBe(false)
   })
 
   test('class marked as raw instance should NOT be observable', () => {
@@ -53,23 +56,23 @@ describe('mark operation', () => {
     markRaw(Class)
     const obs = observable<any>(new Class())
     const obs2 = observable<any>(new Class())
-    expect(isObservable(obs)).toBeFalsy()
-    expect(isObservable(obs2)).toBeFalsy()
+    expect(isObservable(obs)).toBe(false)
+    expect(isObservable(obs2)).toBe(false)
   })
 
   test('object with toJS function marked as observable should be observable', () => {
     const obs = observable<any>(markObservable({ aa: 111, toJS: () => {} }))
-    expect(isObservable(obs)).toBeTruthy()
+    expect(isObservable(obs)).toBe(true)
   })
 
   test('plain object marked as raw and observable should NOT be observable', () => {
     const obs = observable<any>(markRaw(markObservable({ aa: 111 })))
-    expect(isObservable(obs)).toBeFalsy()
+    expect(isObservable(obs)).toBe(false)
   })
 
   test('plain object marked as observable and raw should NOT be observable', () => {
     const obs = observable<any>(markObservable(markRaw({ aa: 111 })))
-    expect(isObservable(obs)).toBeFalsy()
+    expect(isObservable(obs)).toBe(false)
   })
 })
 

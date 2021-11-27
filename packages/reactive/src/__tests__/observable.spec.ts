@@ -8,14 +8,27 @@ test('array mutation', () => {
 })
 
 test('observable contains', () => {
-  const element = { aa: 123 }
-  const other = { bb: 321 }
+  const subElement = { cc: 333 }
+  const element = { aa: subElement }
   const arr = observable<any[]>([element, 2, 3, 4])
+  expect(contains(arr, arr[0])).toBe(true)
+  expect(contains(arr, arr[0].aa)).toBe(true)
+  expect(contains(arr, element)).toBe(true)
+  expect(contains(arr, subElement)).toBe(true)
+  expect(contains(element, subElement)).toBe(true)
+  expect(contains(element, arr[0].aa)).toBe(true)
+  expect(contains(arr[0], subElement)).toBe(true)
+
   const obj = observable<any>({})
-  expect(contains(arr, arr[0])).toBeTruthy()
-  expect(contains(obj, obj.other)).toBeFalsy()
+  const other = { bb: 321 }
+  expect(contains(obj, obj.other)).toBe(false)
   obj.other = other
   obj.arr = arr
-  expect(contains(obj, obj.other)).toBeTruthy()
-  expect(contains(obj, obj.arr)).toBeFalsy()
+
+  expect(contains(obj, obj.other)).toBe(true)
+  expect(contains(obj, other)).toBe(true)
+
+  // Are these expected behaviors?
+  expect(contains(obj, obj.arr)).toBe(false)
+  expect(contains(obj, arr)).toBe(false)
 })

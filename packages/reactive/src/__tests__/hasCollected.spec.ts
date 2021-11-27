@@ -7,8 +7,8 @@ test('hasCollected', () => {
       hasCollected(() => {
         obs.value
       })
-    ).toBeTruthy()
-    expect(hasCollected(() => {})).toBeFalsy()
-    expect(hasCollected()).toBeFalsy()
+    ).toBe(true)
+    expect(hasCollected(() => {})).toBe(false)
+    expect(hasCollected()).toBe(false)
   })
 })
