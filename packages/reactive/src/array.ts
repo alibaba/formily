@@ -8,6 +8,7 @@ export const toArray = (value: any) => {
 
 export class ArraySet<T> {
   value: T[]
+  batchDeleting = false
   constructor(value: T[] = []) {
     this.value = value
   }
@@ -23,6 +24,7 @@ export class ArraySet<T> {
   }
 
   delete(item: T) {
+    if (this.batchDeleting) return //批量删除时禁止单独删除，会影响计数执行器
     const index = this.value.indexOf(item)
     if (index > -1) {
       this.value.splice(index, 1)
@@ -38,12 +40,14 @@ export class ArraySet<T> {
 
   forEachDelete(callback: (value: T) => void) {
     if (this.value.length === 0) return
+    this.batchDeleting = true
     for (let index = 0; index < this.value.length; index++) {
       const item = this.value[index]
       this.value.splice(index, 1)
       callback(item)
       index--
     }
+    this.batchDeleting = false
   }
 
   clear() {

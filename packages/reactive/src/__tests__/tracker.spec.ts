@@ -64,3 +64,30 @@ test('tracker recollect dependencies', () => {
   expect(fn).toBeCalledTimes(2)
   tracker.dispose()
 })
+
+test('shared scheduler with multi tracker(mock react strict mode)', () => {
+  const obs = observable<any>({})
+
+  const component = () => obs.value
+
+  const render = () => {
+    tracker1.track(component)
+    tracker2.track(component)
+  }
+
+  const scheduler1 = jest.fn(() => {
+    tracker2.track(component)
+  })
+  const scheduler2 = jest.fn(() => {
+    tracker1.track(component)
+  })
+  const tracker1 = new Tracker(scheduler1, 'tracker1')
+  const tracker2 = new Tracker(scheduler2, 'tracker2')
+
+  render()
+
+  obs.value = 123
+
+  expect(scheduler1).toBeCalledTimes(1)
+  expect(scheduler2).toBeCalledTimes(1)
+})
