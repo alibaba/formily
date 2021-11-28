@@ -15,9 +15,7 @@ export class Tracker {
     name = 'TrackerReaction'
   ) {
     this.track._scheduler = (callback) => {
-      if (this.track._boundary === 0) {
-        this.dispose()
-      }
+      if (this.track._boundary === 0) this.dispose()
       if (isFn(callback)) scheduler(callback)
     }
     this.track._name = name
