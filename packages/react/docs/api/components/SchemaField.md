@@ -38,7 +38,7 @@ interface ISchemaFieldProps extends IFieldFactoryProps {
   schema?: ISchema //Field schema
   scope?: any //Protocol expression scope
   name?: string //Field name
-  component?: {
+  components?: {
     [key: string]: React.FC //Partial component list, note: the components passed here cannot enjoy smart prompts
   }
 }

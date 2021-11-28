@@ -38,7 +38,7 @@ interface ISchemaFieldProps extends IFieldFactoryProps {
   schema?: ISchema //字段schema
   scope?: any //协议表达式作用域
   name?: string //字段名称
-  component?: {
+  components?: {
     [key: string]: React.FC //局部组件列表，注意：这里传的组件是享受不到智能提示的
   }
 }
