@@ -33,21 +33,21 @@ export const computed: IComputed = createAnnotation(
 
     function getGetter(target: any) {
       if (!target) {
-        if (value?.get) return value?.get
+        if (value && value.get) return value.get
         return value
       }
       const descriptor = Object.getOwnPropertyDescriptor(target, property)
-      if (descriptor?.get) return descriptor.get
+      if (descriptor && descriptor.get) return descriptor.get
       return getGetter(Object.getPrototypeOf(target))
     }
 
     function getSetter(target: any) {
       if (!target) {
-        if (value?.set) return value?.set
+        if (value && value.set) return value.set
         return
       }
       const descriptor = Object.getOwnPropertyDescriptor(target, property)
-      if (descriptor?.set) return descriptor.set
+      if (descriptor && descriptor.set) return descriptor.set
       return getSetter(Object.getPrototypeOf(target))
     }
 
