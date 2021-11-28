@@ -45,16 +45,17 @@ export const Space: React.FC<ISpaceProps> = ({
     }
   }
   const _size = size ?? layout?.spaceGap ?? 8
+  const _align = getAlign()
   return (
     <Box
       {...props}
       spacing={isNumberLike(_size) ? _size : spaceSize[_size] || 8}
       style={{
-        alignItems: 'center',
+        alignItems: _align,
         display: 'inline-flex',
         ...props.style,
       }}
-      align={getAlign()}
+      align={_align}
       direction={getDirection()}
     >
       {toArray(props.children, { keepEmpty: true }).map((child, index) => (
