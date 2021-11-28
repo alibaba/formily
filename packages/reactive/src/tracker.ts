@@ -15,7 +15,11 @@ export class Tracker {
     name = 'TrackerReaction'
   ) {
     this.track._scheduler = (callback) => {
-      if (this.track._boundary === 0) this.dispose()
+      if (this.track._boundary === 0) {
+        this.dispose()
+      } else if (ReactionStack.indexOf(this.track) !== -1) {
+        releaseBindingReactions(this.track)
+      }
       if (isFn(callback)) scheduler(callback)
     }
     this.track._name = name
@@ -26,7 +30,6 @@ export class Tracker {
     if (!isFn(tracker)) return this.results
     if (this.track._boundary > 0) return
     if (ReactionStack.indexOf(this.track) === -1) {
-      releaseBindingReactions(this.track)
       try {
         batchStart()
         ReactionStack.push(this.track)
