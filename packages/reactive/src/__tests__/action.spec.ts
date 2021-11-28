@@ -487,8 +487,8 @@ test('nested action to reaction', () => {
       obs.aa = 4
     })
   })
-  expect(handler).toBeCalledWith(2)
-  expect(handler).toBeCalledWith(4)
+  expect(handler).nthCalledWith(1, 2)
+  expect(handler).nthCalledWith(2, 4)
   expect(handler).toBeCalledTimes(2)
 })
 
@@ -525,7 +525,7 @@ test('nested action/batch to reaction', () => {
       obs.aa = 4
     })
   })
-  expect(handler).toBeCalledWith(2)
-  expect(handler).toBeCalledWith(4)
+  expect(handler).nthCalledWith(1, 2)
+  expect(handler).nthCalledWith(2, 4)
   expect(handler).toBeCalledTimes(2)
 })

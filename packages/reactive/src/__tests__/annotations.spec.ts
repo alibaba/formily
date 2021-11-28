@@ -30,9 +30,9 @@ test('shallow annotation', () => {
     handler(obs.aa)
   })
   obs.aa = { bb: { cc: 123 } }
-  expect(isObservable(obs)).toBeTruthy()
-  expect(isObservable(obs.aa)).toBeFalsy()
-  expect(isObservable(obs.aa.bb)).toBeFalsy()
+  expect(isObservable(obs)).toBe(true)
+  expect(isObservable(obs.aa)).toBe(false)
+  expect(isObservable(obs.aa.bb)).toBe(false)
   obs.aa.bb = 333
   obs.cc = 444
   expect(handler).toBeCalledTimes(2)
@@ -67,8 +67,8 @@ test('ref annotation', () => {
     handler(obs.value)
   })
   obs.value = 333
-  expect(handler).toBeCalledWith(123)
-  expect(handler).toBeCalledWith(123)
+  expect(handler).nthCalledWith(1, 123)
+  expect(handler).nthCalledWith(2, 333)
   expect(handler1).toBeCalledTimes(1)
 })
 
@@ -99,8 +99,8 @@ test('no action annotation', () => {
   }, handler)
   setData()
   expect(handler).toBeCalledTimes(2)
-  expect(handler).toBeCalledWith([123, undefined], [undefined, undefined])
-  expect(handler).toBeCalledWith([123, 321], [123, undefined])
+  expect(handler).nthCalledWith(1, [123, undefined], [undefined, undefined])
+  expect(handler).nthCalledWith(2, [123, 321], [123, undefined])
 })
 
 test('computed annotation', () => {
@@ -241,12 +241,16 @@ test('computed with computed array length', () => {
     handler(obs.isNotEmpty)
     handler2(obs.arr2)
   })
-  expect(handler).toBeCalledWith(false)
   expect(handler).toBeCalledTimes(1)
+  expect(handler).lastCalledWith(false)
+  expect(handler2).toBeCalledTimes(1)
+  expect(handler2.mock.calls[0][0]).toEqual([])
   obs.arr.push(1)
-  expect(handler).toBeCalledWith(true)
+  expect(handler).lastCalledWith(true)
+  expect(handler2.mock.calls[1][0]).toEqual([2])
   obs.arr = []
-  expect(handler).toBeCalledWith(false)
+  expect(handler).lastCalledWith(false)
+  expect(handler2.mock.calls[2][0]).toEqual([])
 })
 
 test('computed recollect dependencies', () => {

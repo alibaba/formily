@@ -6,15 +6,15 @@ test('base tracker', () => {
   const view = () => {
     fn(obs.value)
   }
-  const handler = () => {
+  const scheduler = () => {
     tracker.track(view)
   }
-  const tracker = new Tracker(handler)
+  const tracker = new Tracker(scheduler)
 
   tracker.track(view)
   obs.value = 123
-  expect(fn).toBeCalledWith(undefined)
-  expect(fn).toBeCalledWith(123)
+  expect(fn).nthCalledWith(1, undefined)
+  expect(fn).nthCalledWith(2, 123)
   tracker.dispose()
 })
 
@@ -25,16 +25,17 @@ test('nested tracker', () => {
     obs.value = obs.value || 321
     fn(obs.value)
   }
-  const handler = () => {
+  const scheduler = () => {
     tracker.track(view)
   }
-  const tracker = new Tracker(handler)
+  const tracker = new Tracker(scheduler)
 
   tracker.track(view)
+  expect(fn).toBeCalledTimes(1)
+  expect(fn).nthCalledWith(1, 321)
   obs.value = 123
-  expect(fn).toBeCalledWith(321)
-  expect(fn).toBeCalledWith(123)
   expect(fn).toBeCalledTimes(2)
+  expect(fn).nthCalledWith(2, 123)
   tracker.dispose()
 })
 
@@ -52,10 +53,10 @@ test('tracker recollect dependencies', () => {
     }
     return obs.cc
   }
-  const handler = () => {
+  const scheduler = () => {
     tracker.track(view)
   }
-  const tracker = new Tracker(handler)
+  const tracker = new Tracker(scheduler)
 
   tracker.track(view)
   obs.aa = '111'
