@@ -79,6 +79,7 @@ export type Reaction = ((...args: any[]) => any) & {
     queue: IEffectQueueItem[]
     cursor: number
   }
+  _pmeta?: any
 }
 
 export type ReactionsMap = Map<PropertyKey, ArraySet<Reaction>>

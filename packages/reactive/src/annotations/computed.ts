@@ -53,7 +53,7 @@ export const computed: IComputed = createAnnotation(
     }
 
     function compute() {
-      store.value = getter?.call?.(context)
+      return (store.value = getter?.call?.(context))
     }
     function reaction() {
       if (ReactionStack.indexOf(reaction) === -1) {
@@ -68,25 +68,21 @@ export const computed: IComputed = createAnnotation(
     }
     reaction._name = 'ComputedReaction'
     reaction._scheduler = () => {
-      const reactions = getReactionsFromTargetKey(context, property)
-      if (reactions.length === 0) {
-        reaction._dirty = true
-        return
-      }
-
-      const oldValue = store.value
-      reaction()
-      if (oldValue === store.value) return
-
-      // reaction._dirty = true
-
+      reaction._dirty = true
       batchStart()
+      context._meta = {
+        value: store.value,
+        setDirtyTrue: () => (reaction._dirty = true),
+        setDirtyFalse: () => (reaction._dirty = false),
+        compute,
+      }
       runReactionsFromTargetKey({
         target: context,
         key: property,
         value: store.value,
         type: 'set',
       })
+      context._meta = undefined
       batchEnd()
     }
     reaction._isComputed = true
