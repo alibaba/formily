@@ -68,14 +68,12 @@ export const computed: IComputed = createAnnotation(
     reaction._name = 'ComputedReaction'
     reaction._scheduler = () => {
       reaction._dirty = true
-      batchStart()
       runReactionsFromTargetKey({
         target: context,
         key: property,
         value: store.value,
         type: 'set',
       })
-      batchEnd()
     }
     reaction._isComputed = true
     reaction._dirty = true
