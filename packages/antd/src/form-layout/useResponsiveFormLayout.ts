@@ -79,7 +79,7 @@ export const useResponsiveFormLayout: IUseResponsiveFormLayout = (props) => {
   if (!isArr(breakpoints)) {
     return { ref, props }
   }
-  const [layoutProps, setLayout] = useState<IProps>({})
+  const [layoutProps, setLayout] = useState<IProps>(props)
 
   const updateUI = () => {
     setLayout(calculateProps(ref.current, props))
