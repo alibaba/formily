@@ -1,17 +1,20 @@
 import b from 'benny'
-import _ from 'lodash'
 import * as mobx from 'mobx'
 import * as vueReactivity from '@vue/reactivity'
-import * as formilyReactive from './src'
+import * as formilyReactive from '../src'
 
-function func(obs, times) {
+function times(times: number, fn: (t: number) => void) {
+  ~[...Array(times).keys()].forEach(fn)
+}
+
+const benchmark1 = (obs: any) => {
   obs.arr = []
   obs.obj = {}
-  _.times(times, (v) => {
+  times(1e2, (v) => {
     obs.num = v
-    obs.str = `${v}`
+    obs.str = String(v)
     obs.arr.push(v)
-    obs.obj[`${v}`] = v
+    obs.obj[String(v)] = v
   })
 }
 
@@ -20,17 +23,17 @@ b.suite(
 
   b.add('Case MobX', () => {
     const obs = mobx.observable({})
-    func(obs, 1e3)
+    benchmark1(obs)
   }),
 
   b.add('Case @vue/reactivity', () => {
     const obs = vueReactivity.reactive({})
-    func(obs, 1e3)
+    benchmark1(obs)
   }),
 
   b.add('Case @formily/reactive', () => {
     const obs = formilyReactive.observable({})
-    func(obs, 1e3)
+    benchmark1(obs)
   }),
 
   b.cycle(),
