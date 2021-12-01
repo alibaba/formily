@@ -79,7 +79,7 @@ const runReactions = (target: any, key: PropertyKey) => {
     } else if (isScopeBatching()) {
       PendingScopeReactions.add(reaction)
     } else if (isBatching()) {
-      reaction._pmeta = target._meta
+      reaction._computesCtx = target._computesCtx
       PendingReactions.add(reaction)
     } else {
       if (isFn(reaction._scheduler)) {
@@ -226,14 +226,9 @@ export const isUntracking = () => UntrackCount.value > 0
 export const executePendingReactions = () => {
   PendingReactions.forEachDelete((reaction) => {
     try {
-      if (reaction._pmeta) {
-        const { value, compute, setDirtyTrue, setDirtyFalse } = reaction._pmeta
-        if (compute() === value) {
-          setDirtyFalse()
-          return
-        } else {
-          setDirtyTrue()
-        }
+      if (reaction._computesCtx) {
+        const { oldValue, compute, setUndirty } = reaction._computesCtx
+        if (oldValue === compute()) return setUndirty()
       }
 
       if (isFn(reaction._scheduler)) {
@@ -242,7 +237,7 @@ export const executePendingReactions = () => {
         reaction()
       }
     } finally {
-      reaction._pmeta = undefined
+      delete reaction._computesCtx
     }
   })
 }
