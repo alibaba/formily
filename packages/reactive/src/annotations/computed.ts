@@ -10,7 +10,6 @@ import {
   batchStart,
   batchEnd,
   releaseBindingReactions,
-  getReactionsFromTargetKey,
 } from '../reaction'
 
 interface IValue<T = any> {
@@ -68,11 +67,20 @@ export const computed: IComputed = createAnnotation(
     }
     reaction._name = 'ComputedReaction'
     reaction._scheduler = () => {
-      context._computesCtx = {
-        compute,
-        oldValue: store.value,
-        setUndirty: () => (reaction._dirty = false),
-        isDirty: () => reaction._dirty,
+      const oldValue = store.value
+      context._computesPrune = {
+        AutoRun: (): boolean => {
+          if (reaction._dirty) {
+            reaction._dirty = false
+            return oldValue === compute()
+          } else return false
+        },
+        Reaction: (): boolean => {
+          if (oldValue === compute()) {
+            reaction._dirty = false
+            return true
+          } else return false
+        },
       }
 
       reaction._dirty = true
@@ -85,7 +93,7 @@ export const computed: IComputed = createAnnotation(
       })
       batchEnd()
 
-      delete context._computesCtx
+      delete context._computesPrune
     }
     reaction._isComputed = true
     reaction._dirty = true

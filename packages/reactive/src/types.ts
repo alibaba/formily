@@ -68,6 +68,7 @@ export type Reaction = ((...args: any[]) => any) & {
   _context?: any
   _disposed?: boolean
   _property?: PropertyKey
+  _computesPrune?: () => boolean
   _computesSet?: ArraySet<Reaction>
   _reactionsSet?: ArraySet<ReactionsMap>
   _scheduler?: (reaction: Reaction) => void
@@ -78,12 +79,6 @@ export type Reaction = ((...args: any[]) => any) & {
   _effects?: {
     queue: IEffectQueueItem[]
     cursor: number
-  }
-  _computesCtx?: {
-    oldValue: any
-    compute: () => any
-    setUndirty: () => void
-    isDirty: () => boolean
   }
 }
 

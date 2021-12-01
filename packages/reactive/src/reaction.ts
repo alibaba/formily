@@ -52,7 +52,7 @@ const addReactionsMapToReaction = (
   return bindSet
 }
 
-export const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
+const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
   const reactionsMap = RawReactionsMap.get(target)
   const reactions = []
   if (reactionsMap) {
@@ -79,7 +79,7 @@ const runReactions = (target: any, key: PropertyKey) => {
     } else if (isScopeBatching()) {
       PendingScopeReactions.add(reaction)
     } else if (isBatching()) {
-      reaction._computesCtx = target._computesCtx
+      reaction._computesPrune = target._computesPrune?.[reaction._name]
       PendingReactions.add(reaction)
     } else {
       if (isFn(reaction._scheduler)) {
@@ -226,20 +226,7 @@ export const isUntracking = () => UntrackCount.value > 0
 export const executePendingReactions = () => {
   PendingReactions.forEachDelete((reaction) => {
     try {
-      if (reaction._computesCtx) {
-        const { oldValue, compute, setUndirty, isDirty } = reaction._computesCtx
-        if (reaction._name === 'AutoRun') {
-          if (isDirty()) {
-            setUndirty()
-            if (oldValue === compute()) return
-          }
-        } else if (reaction._name === 'Reaction') {
-          if (oldValue === compute()) {
-            setUndirty()
-            return
-          }
-        }
-      }
+      if (reaction._computesPrune?.()) return
 
       if (isFn(reaction._scheduler)) {
         reaction._scheduler(reaction)
@@ -247,7 +234,7 @@ export const executePendingReactions = () => {
         reaction()
       }
     } finally {
-      delete reaction._computesCtx
+      delete reaction._computesPrune
     }
   })
 }
