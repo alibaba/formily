@@ -83,6 +83,7 @@ export type Reaction = ((...args: any[]) => any) & {
     oldValue: any
     compute: () => any
     setUndirty: () => void
+    isDirty: () => boolean
   }
 }
 

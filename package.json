@@ -13,7 +13,6 @@
     "build:docs": "dumi build",
     "start": "dumi dev",
     "test": "jest --coverage",
-    "test:fix-computed": "jest packages/reactive/src/__tests__/_fix-computed.spec.ts",
     "test:reactive": "jest packages/reactive",
     "test:validator": "jest packages/validator",
     "test:core": "jest packages/core",

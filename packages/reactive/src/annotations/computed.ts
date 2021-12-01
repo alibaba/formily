@@ -72,6 +72,7 @@ export const computed: IComputed = createAnnotation(
         compute,
         oldValue: store.value,
         setUndirty: () => (reaction._dirty = false),
+        isDirty: () => reaction._dirty,
       }
 
       reaction._dirty = true

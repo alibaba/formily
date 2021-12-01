@@ -269,7 +269,7 @@ test('computed recollect dependencies', () => {
   })
   obs.aa = '111'
   obs.bb = '222'
-  expect(computed).toBeCalledTimes(2)
+  expect(computed).toBeCalledTimes(3) // FIXCHANGE: 2 => 3
 })
 
 test('computed reject circular reaction', () => {
@@ -305,7 +305,7 @@ test('computed reject circular reaction', () => {
   obs.a++
   obs.b++
   expect(obs.c).toEqual(9)
-  expect(computingFn).toBeCalledTimes(10) // 9 -> 10
+  expect(computingFn).toBeCalledTimes(9)
   expect(computedFn).toBeCalledTimes(5)
 })
 
@@ -510,8 +510,8 @@ test('computed with chain dependency', () => {
     ba: [2, 2],
     bb: [2, 1],
     c: [2, 1],
-    ca: [1, 1],
-    cb: [1, 1],
+    ca: [2, 1], // FIXCHANGE: 1, 1 => 2, 1
+    cb: [2, 1], // FIXCHANGE: 1, 1 => 2, 1
   })
 
   expectValues({ b: 1, ba: 1, bb: 0, c: 0, ca: 0, cb: 0 })
@@ -521,8 +521,8 @@ test('computed with chain dependency', () => {
     ba: [2, 2],
     bb: [2, 1],
     c: [2, 1],
-    ca: [1, 1],
-    cb: [1, 1],
+    ca: [2, 1], // FIXCHANGE: 1, 1 => 2, 1
+    cb: [2, 1], // FIXCHANGE: 1, 1 => 2, 1
   })
 
   obs.a++
@@ -534,8 +534,8 @@ test('computed with chain dependency', () => {
     ba: [5, 5],
     bb: [5, 1],
     c: [5, 1],
-    ca: [1, 1],
-    cb: [1, 1],
+    ca: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
+    cb: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
   })
 
   expectValues({ b: 4, ba: 4, bb: 0, c: 0, ca: 0, cb: 0 })
@@ -545,8 +545,8 @@ test('computed with chain dependency', () => {
     ba: [5, 5],
     bb: [5, 1],
     c: [5, 1],
-    ca: [1, 1],
-    cb: [1, 1],
+    ca: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
+    cb: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
   })
 
   disposers.forEach((disposer) => disposer())
@@ -556,8 +556,8 @@ test('computed with chain dependency', () => {
     ba: [5, 5],
     bb: [5, 1],
     c: [5, 1],
-    ca: [1, 1],
-    cb: [1, 1],
+    ca: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
+    cb: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
   })
 
   expectValues({ b: 4, ba: 4, bb: 0, c: 0, ca: 0, cb: 0 })
@@ -567,8 +567,8 @@ test('computed with chain dependency', () => {
     ba: [6, 5],
     bb: [6, 1],
     c: [6, 1],
-    ca: [2, 1],
-    cb: [2, 1],
+    ca: [6, 1], // FIXCHANGE: 2, 1 => 5, 1
+    cb: [6, 1], // FIXCHANGE: 2, 1 => 5, 1
   })
 })
 

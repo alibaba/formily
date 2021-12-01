@@ -227,8 +227,18 @@ export const executePendingReactions = () => {
   PendingReactions.forEachDelete((reaction) => {
     try {
       if (reaction._computesCtx) {
-        const { oldValue, compute, setUndirty } = reaction._computesCtx
-        if (oldValue === compute()) return setUndirty()
+        const { oldValue, compute, setUndirty, isDirty } = reaction._computesCtx
+        if (reaction._name === 'AutoRun') {
+          if (isDirty()) {
+            setUndirty()
+            if (oldValue === compute()) return
+          }
+        } else if (reaction._name === 'Reaction') {
+          if (oldValue === compute()) {
+            setUndirty()
+            return
+          }
+        }
       }
 
       if (isFn(reaction._scheduler)) {
