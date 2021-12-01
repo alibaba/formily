@@ -44,9 +44,11 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const fieldProps = useFieldProps(fieldSchema)
   const renderProperties = (field?: GeneralField) => {
     if (props.onlyRenderSelf) return
+    const properties = Schema.getOrderProperties(fieldSchema)
+    if (!properties.length) return
     return (
       <Fragment>
-        {fieldSchema.mapProperties((item, name, index) => {
+        {properties.map(({ schema: item, key: name }, index) => {
           const base = field?.address || basePath
           let schema: Schema = item
           if (isFn(props.mapProperties)) {
