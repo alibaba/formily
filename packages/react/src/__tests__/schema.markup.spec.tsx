@@ -846,3 +846,25 @@ test('schema x-reactions when undefined', async () => {
     expect(queryByTestId('select')).toBeNull()
   })
 })
+
+test('void field children', async () => {
+  const form = createForm()
+  const SchemaField = createSchemaField({
+    components: {
+      Button: (props) => (
+        <div data-testid="btn">{props.children || 'placeholder'}</div>
+      ),
+    },
+  })
+
+  const { queryByTestId } = render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.Void x-component="Button" />
+      </SchemaField>
+    </FormProvider>
+  )
+  await waitFor(() => {
+    expect(queryByTestId('btn').textContent).toBe('placeholder')
+  })
+})
