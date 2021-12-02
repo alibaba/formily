@@ -2,20 +2,12 @@ module.exports = {
   collectCoverage: true,
   verbose: true,
   testEnvironment: 'jsdom',
-  preset: 'ts-jest',
   testMatch: ['**/__tests__/**/*.spec.[jt]s?(x)'],
   setupFilesAfterEnv: [
     require.resolve('jest-dom/extend-expect'),
     './global.config.ts',
   ],
   // moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
-  globals: {
-    'ts-jest': {
-      babelConfig: false,
-      tsconfig: './tsconfig.jest.json',
-      diagnostics: false,
-    },
-  },
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/__tests__/',
@@ -28,4 +20,7 @@ module.exports = {
     '/packages/builder/src/configs/',
     'package-lock.json',
   ],
+  transform: {
+    '^.+\\.(t|j)sx?$': ['@swc/jest'],
+  },
 }
