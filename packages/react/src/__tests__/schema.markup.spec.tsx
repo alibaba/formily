@@ -868,3 +868,51 @@ test('void field children', async () => {
     expect(queryByTestId('btn').textContent).toBe('placeholder')
   })
 })
+
+test('x-reactions runner for target', async () => {
+  const form = createForm()
+  const getTarget = jest.fn()
+  const SchemaField = createSchemaField({
+    components: {
+      Input: () => <div></div>,
+      Button: (props) => (
+        <button
+          data-testid="btn"
+          onClick={(e) => {
+            e.preventDefault()
+            props.onChange('123')
+          }}
+        >
+          Click {props.value}
+        </button>
+      ),
+    },
+    scope: {
+      getTarget,
+    },
+  })
+
+  const { getByTestId } = render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.String name="target" default="333" x-component="Input" />
+        <SchemaField.String
+          x-component="Button"
+          x-reactions={{
+            target: 'target',
+            effects: ['onFieldInputValueChange'],
+            fulfill: {
+              run: 'getTarget($target.value)',
+            },
+          }}
+        />
+      </SchemaField>
+    </FormProvider>
+  )
+  fireEvent.click(getByTestId('btn'))
+  await waitFor(() => {
+    expect(getByTestId('btn').textContent).toBe('Click 123')
+    expect(getTarget).toBeCalledWith('333')
+    expect(getTarget).toBeCalledTimes(1)
+  })
+})

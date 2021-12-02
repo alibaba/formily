@@ -130,6 +130,7 @@ export interface IFieldStateSetterOptions {
   field: GeneralField
   target?: FormPathPattern
   request: ISchemaFieldUpdateRequest
+  runner?: string
   scope?: any
 }
 
