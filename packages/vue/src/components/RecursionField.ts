@@ -82,35 +82,35 @@ const RecursionField = observer(
 
         const renderProperties = (field?: GeneralField) => {
           if (props.onlyRenderSelf) return
-          const children = fieldSchemaRef.value.mapProperties(
-            (item, name, index) => {
-              const base = field?.address || basePath
-              let schema: Schema = item
-              if (isFn(props.mapProperties)) {
-                const mapped = props.mapProperties(item, name)
-                if (mapped) {
-                  schema = mapped
-                }
+          const properties = Schema.getOrderProperties(fieldSchemaRef.value)
+          if (!properties.length) return
+          const children = properties.map(({ schema: item, key: name }) => {
+            const base = field?.address || basePath
+            let schema: Schema = item
+            if (isFn(props.mapProperties)) {
+              const mapped = props.mapProperties(item, name)
+              if (mapped) {
+                schema = mapped
               }
-              if (isFn(props.filterProperties)) {
-                if (props.filterProperties(schema, name) === false) {
-                  return null
-                }
-              }
-              return h(
-                RecursionField,
-                {
-                  key: name,
-                  attrs: {
-                    schema,
-                    name,
-                    basePath: base,
-                  },
-                },
-                {}
-              )
             }
-          )
+            if (isFn(props.filterProperties)) {
+              if (props.filterProperties(schema, name) === false) {
+                return null
+              }
+            }
+            return h(
+              RecursionField,
+              {
+                key: name,
+                attrs: {
+                  schema,
+                  name,
+                  basePath: base,
+                },
+              },
+              {}
+            )
+          })
 
           const slots: Record<string, () => any> = {}
           if (children.length > 0) {
