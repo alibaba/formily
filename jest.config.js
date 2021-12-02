@@ -21,6 +21,6 @@ module.exports = {
     'package-lock.json',
   ],
   transform: {
-    '^.+\\.(t|j)sx?$': ['@swc/jest'],
+    '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: true }],
   },
 }
