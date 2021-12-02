@@ -95,7 +95,7 @@ const setSchemaFieldState = (
   options: IFieldStateSetterOptions,
   demand = false
 ) => {
-  const { request, target, field, scope } = options || {}
+  const { request, target, runner, field, scope } = options || {}
   if (!request) return
   if (target) {
     if (request.state) {
@@ -119,6 +119,14 @@ const setSchemaFieldState = (
         )
       )
     }
+    if (isStr(runner) && runner) {
+      field.form.setFieldState(target, (state) => {
+        shallowCompile(`{{function(){${runner}}}}`, {
+          ...scope,
+          $target: state,
+        })()
+      })
+    }
   } else {
     if (request.state) {
       field.setState((state) => patchCompile(state, request.state, scope))
@@ -127,6 +135,9 @@ const setSchemaFieldState = (
       field.setState((state) =>
         patchSchemaCompile(state, request.schema, scope, demand)
       )
+    }
+    if (isStr(runner) && runner) {
+      shallowCompile(`{{function(){${runner}}}}`, scope)()
     }
   }
 }
@@ -195,11 +206,9 @@ const getUserReactions =
           field,
           target,
           request,
+          runner,
           scope,
         })
-        if (isStr(runner)) {
-          shallowCompile(`{{function(){${runner}}}}`, scope)()
-        }
       }
 
       if (target) {
