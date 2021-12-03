@@ -11,6 +11,7 @@ import {
   batchEnd,
   releaseBindingReactions,
 } from '../reaction'
+import { Reaction } from '../types'
 
 interface IValue<T = any> {
   value?: T
@@ -68,19 +69,16 @@ export const computed: IComputed = createAnnotation(
     reaction._name = 'ComputedReaction'
     reaction._scheduler = () => {
       const oldValue = store.value
-      context._computesPrune = {
-        AutoRun: (): boolean => {
-          if (reaction._dirty) {
-            reaction._dirty = false
-            return oldValue === compute()
-          } else return false
-        },
-        Reaction: (): boolean => {
-          if (reaction._dirty && oldValue === compute()) {
+      context._computesPrune = (pruneReaction: Reaction): boolean => {
+        if (reaction._dirty) {
+          if (oldValue === compute()) {
             reaction._dirty = false
             return true
-          } else return false
-        },
+          } else if (pruneReaction._boundary !== undefined) {
+            reaction._dirty = false
+            return false
+          }
+        } else return false
       }
 
       reaction._dirty = true

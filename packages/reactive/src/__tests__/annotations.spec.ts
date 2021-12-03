@@ -1,4 +1,4 @@
-import { observable, action, model } from '../'
+import { observable, action, model, batch } from '../'
 import { autorun, reaction } from '../autorun'
 import { observe } from '../observe'
 import { isObservable } from '../externals'
@@ -704,4 +704,44 @@ test('computed with untracked', () => {
     expect(obs.b).toEqual(0)
     expect(computing).toBeCalledTimes(3)
   })
+})
+
+test('computed with side effects', () => {
+  const obs = model({
+    a: 0,
+    b: 0,
+    get c() {
+      return this.a++ + this.b++
+    },
+    get d() {
+      void (this.c + this.a++ + this.b++ + this.c)
+      return 0
+    },
+  })
+
+  obs.a++
+  obs.b++
+
+  expect(obs.a).toEqual(1)
+  expect(obs.b).toEqual(1)
+  expect(obs.c).toEqual(2)
+  expect(obs.d).toEqual(0)
+
+  obs.a++
+  obs.b++
+
+  expect(obs.a).toEqual(5)
+  expect(obs.b).toEqual(5)
+  expect(obs.c).toEqual(10)
+  expect(obs.d).toEqual(0)
+
+  batch(() => {
+    obs.a++
+    obs.b++
+  })
+
+  expect(obs.a).toEqual(9)
+  expect(obs.b).toEqual(9)
+  expect(obs.c).toEqual(18)
+  expect(obs.d).toEqual(0)
 })
