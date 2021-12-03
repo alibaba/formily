@@ -28,6 +28,7 @@ jobs:
       - uses: janrywang/github-tag-release@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          dingtalk_tokens: ${{secrets.DING_TALK_TOKENS}}
       - run: yarn run release:force
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}

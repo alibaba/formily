@@ -1,4 +1,5 @@
 import { createForm } from '../'
+import { DataField } from '../types'
 import { attach, sleep } from './shared'
 
 test('create field', () => {
@@ -1809,4 +1810,27 @@ test('custom validator to get ctx.field', async () => {
   await form.submit()
   expect(!!ctxField).toBeTruthy()
   expect(!!ctxForm).toBeTruthy()
+})
+
+test('single direction linkage effect', async () => {
+  const form = attach(createForm())
+
+  const input1 = form.createField({
+    name: 'input1',
+    reactions: (field: DataField) => {
+      if (!field.selfModified) {
+        return
+      }
+      input2.value = field.value
+    },
+  })
+
+  const input2 = form.createField({
+    name: 'input2',
+  })
+
+  await input1.onInput('123')
+  expect(input2.value).toBe('123')
+  await input2.onInput('321')
+  expect(input2.value).toBe('321')
 })

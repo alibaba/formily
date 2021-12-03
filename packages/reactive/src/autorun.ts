@@ -5,6 +5,8 @@ import {
   releaseBindingReactions,
   disposeEffects,
   hasDepsChange,
+  untrackStart,
+  untrackEnd,
 } from './reaction'
 import { isFn } from './checkers'
 import { ReactionStack } from './environment'
@@ -117,10 +119,12 @@ export const reaction = <T>(
 
   const fireAction = () => {
     try {
+      untrackStart()
       batchStart()
       if (isFn(subscriber)) subscriber(value.currentValue, value.oldValue)
     } finally {
       batchEnd()
+      untrackEnd()
     }
   }
 

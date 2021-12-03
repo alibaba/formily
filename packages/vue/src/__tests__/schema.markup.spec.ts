@@ -660,4 +660,36 @@ describe('recursion field', () => {
     expect(wrapper.find('.ccc').exists()).toBeTruthy()
     wrapper.destroy()
   })
+
+  test('void field children', () => {
+    const form = createForm()
+    const VoidComponent = {
+      render(h: CreateElement) {
+        return h(
+          'div',
+          { attrs: { 'data-testid': 'void-component' } },
+          this.$slots.default || 'placeholder'
+        )
+      },
+    }
+    const { SchemaField, SchemaVoidField } = createSchemaField({
+      components: {
+        VoidComponent,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField, SchemaVoidField },
+      data() {
+        return {
+          form,
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField>
+          <SchemaVoidField x-component="VoidComponent" />
+        </SchemaField>
+      </FormProvider>`,
+    })
+    expect(queryByTestId('void-component').textContent).toBe('placeholder')
+  })
 })
