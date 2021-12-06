@@ -76,7 +76,7 @@ export const computed: IComputed = createAnnotation(
           } else return false
         },
         Reaction: (): boolean => {
-          if (oldValue === compute()) {
+          if (reaction._dirty && oldValue === compute()) {
             reaction._dirty = false
             return true
           } else return false
