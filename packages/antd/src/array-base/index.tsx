@@ -6,6 +6,7 @@ import {
   UpOutlined,
   PlusOutlined,
   MenuOutlined,
+  CopyOutlined,
 } from '@ant-design/icons'
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from 'antd/lib/button'
@@ -36,6 +37,7 @@ export interface IArrayBaseItemProps {
 export type ArrayBaseMixins = {
   Addition?: React.FC<IArrayBaseAdditionProps>
   Remove?: React.FC<AntdIconProps & { index?: number }>
+  Copy?: React.FC<AntdIconProps & { index?: number }>
   MoveUp?: React.FC<AntdIconProps & { index?: number }>
   MoveDown?: React.FC<AntdIconProps & { index?: number }>
   SortHandle?: React.FC<AntdIconProps & { index?: number }>
@@ -49,6 +51,7 @@ export interface IArrayBaseProps {
   disabled?: boolean
   onAdd?: (index: number) => void
   onRemove?: (index: number) => void
+  onCopy?: (index: number) => void
   onMoveDown?: (index: number) => void
   onMoveUp?: (index: number) => void
 }
@@ -195,6 +198,30 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
   )
 })
 
+ArrayBase.Copy = React.forwardRef((props, ref) => {
+  const index = useIndex(props.index)
+  const array = useArray()
+  const prefixCls = usePrefixCls('formily-array-base')
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
+  return (
+    <CopyOutlined
+      {...props}
+      className={cls(`${prefixCls}-copy`, props.className)}
+      ref={ref}
+      onClick={(e) => {
+        if (array.props?.disabled) return
+        e.stopPropagation()
+        array.field?.copy?.(index)
+        array.props?.onCopy?.(index)
+        if (props.onClick) {
+          props.onClick(e)
+        }
+      }}
+    />
+  )
+})
+
 ArrayBase.MoveDown = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
   const array = useArray()
@@ -251,6 +278,7 @@ ArrayBase.mixin = (target: any) => {
   target.SortHandle = ArrayBase.SortHandle
   target.Addition = ArrayBase.Addition
   target.Remove = ArrayBase.Remove
+  target.Copy = ArrayBase.Copy
   target.MoveDown = ArrayBase.MoveDown
   target.MoveUp = ArrayBase.MoveUp
   target.useArray = ArrayBase.useArray

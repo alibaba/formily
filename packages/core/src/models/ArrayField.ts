@@ -1,4 +1,4 @@
-import { isArr } from '@formily/shared'
+import { isArr, clone } from '@formily/shared'
 import { action, reaction } from '@formily/reactive'
 import {
   spliceArrayState,
@@ -85,6 +85,15 @@ export class ArrayField<
         deleteCount: 1,
       })
       this.value.splice(index, 1)
+      return this.onInput(this.value)
+    })
+  }
+
+  copy = (index: number) => {
+    if (!isArr(this.value)) return
+    return action(() => {
+      const fromItem = this.value[index]
+      this.value.splice(index, 0, clone(fromItem))
       return this.onInput(this.value)
     })
   }
