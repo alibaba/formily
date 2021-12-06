@@ -79,7 +79,7 @@ const runReactions = (target: any, key: PropertyKey) => {
     } else if (isScopeBatching()) {
       PendingScopeReactions.add(reaction)
     } else if (isBatching()) {
-      reaction._computesPrune = target._computesPrune?.[reaction._name]
+      reaction._computesPrune = target._computesPrune
       PendingReactions.add(reaction)
     } else {
       if (isFn(reaction._scheduler)) {
@@ -226,7 +226,7 @@ export const isUntracking = () => UntrackCount.value > 0
 export const executePendingReactions = () => {
   PendingReactions.forEachDelete((reaction) => {
     try {
-      if (reaction._computesPrune?.()) return
+      if (reaction._computesPrune?.(reaction)) return
 
       if (isFn(reaction._scheduler)) {
         reaction._scheduler(reaction)
