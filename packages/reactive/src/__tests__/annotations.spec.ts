@@ -2,6 +2,7 @@ import { observable, action, model } from '../'
 import { autorun, reaction } from '../autorun'
 import { observe } from '../observe'
 import { isObservable } from '../externals'
+import { untracked } from '../untracked'
 
 test('observable annotation', () => {
   const obs = observable<any>({
@@ -273,5 +274,434 @@ test('computed recollect dependencies', () => {
   })
   obs.aa = '111'
   obs.bb = '222'
-  expect(computed).toBeCalledTimes(2)
+  expect(computed).toBeCalledTimes(3) // FIXCHANGE: 2 => 3
+})
+
+test('computed reject circular reaction', () => {
+  const computingFn = jest.fn()
+  const computedFn = jest.fn()
+  const obs = model({
+    a: 0,
+    b: 0,
+    get c() {
+      computingFn()
+      return this.a + this.b
+    },
+  })
+  expect(obs.c).toEqual(0)
+  expect(computingFn).toBeCalledTimes(1)
+  expect(computedFn).toBeCalledTimes(0)
+  autorun(() => {
+    computedFn()
+    if (obs.c % 2) obs.a++
+    else obs.b++
+  })
+  expect(obs.c).toEqual(1)
+  expect(computingFn).toBeCalledTimes(2)
+  expect(computedFn).toBeCalledTimes(1)
+  obs.a++
+  expect(obs.c).toEqual(3)
+  expect(computingFn).toBeCalledTimes(4)
+  expect(computedFn).toBeCalledTimes(2)
+  obs.b++
+  expect(obs.c).toEqual(5)
+  expect(computingFn).toBeCalledTimes(6)
+  expect(computedFn).toBeCalledTimes(3)
+  obs.a++
+  obs.b++
+  expect(obs.c).toEqual(9)
+  expect(computingFn).toBeCalledTimes(9)
+  expect(computedFn).toBeCalledTimes(5)
+})
+
+test('computed with cache', () => {
+  const computingFnB = jest.fn()
+  const computedFnB = jest.fn()
+  const computingFnC = jest.fn()
+  const computedFnC = jest.fn()
+  const obs = model({
+    a: 0,
+    get b() {
+      computingFnB()
+      return this.a
+    },
+    get c() {
+      computingFnC()
+      void this.a
+      return 0
+    },
+  })
+  expect(obs.b).toEqual(0)
+  expect(computingFnB).toBeCalledTimes(1)
+  expect(computedFnB).toBeCalledTimes(0)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(1)
+  expect(computedFnC).toBeCalledTimes(0)
+  obs.a++
+  expect(obs.b).toEqual(1)
+  expect(computingFnB).toBeCalledTimes(2)
+  expect(computedFnB).toBeCalledTimes(0)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(2)
+  expect(computedFnC).toBeCalledTimes(0)
+  obs.a++
+  obs.a++
+  expect(obs.b).toEqual(3)
+  expect(computingFnB).toBeCalledTimes(3)
+  expect(computedFnB).toBeCalledTimes(0)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(3)
+  expect(computedFnC).toBeCalledTimes(0)
+  const disposeB = autorun(() => {
+    computedFnB()
+    void obs.b
+  })
+  const disposeC = autorun(() => {
+    computedFnC()
+    void obs.c
+  })
+  expect(obs.b).toEqual(3)
+  expect(computingFnB).toBeCalledTimes(3)
+  expect(computedFnB).toBeCalledTimes(1)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(3)
+  expect(computedFnC).toBeCalledTimes(1)
+  obs.a++
+  expect(obs.b).toEqual(4)
+  expect(computingFnB).toBeCalledTimes(4)
+  expect(computedFnB).toBeCalledTimes(2)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(4)
+  expect(computedFnC).toBeCalledTimes(1)
+  obs.a++
+  obs.a++
+  expect(computingFnB).toBeCalledTimes(6)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(computingFnC).toBeCalledTimes(6)
+  expect(computedFnC).toBeCalledTimes(1)
+  expect(obs.b).toEqual(6)
+  expect(computingFnB).toBeCalledTimes(6)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(6)
+  expect(computedFnC).toBeCalledTimes(1)
+  disposeB()
+  disposeC()
+  expect(obs.b).toEqual(6)
+  expect(computingFnB).toBeCalledTimes(7)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(7)
+  expect(computedFnC).toBeCalledTimes(1)
+  obs.a++
+  expect(obs.b).toEqual(7)
+  expect(computingFnB).toBeCalledTimes(8)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(8)
+  expect(computedFnC).toBeCalledTimes(1)
+  obs.a++
+  obs.a++
+  expect(computingFnB).toBeCalledTimes(8)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(computingFnC).toBeCalledTimes(8)
+  expect(computedFnC).toBeCalledTimes(1)
+  expect(obs.b).toEqual(9)
+  expect(computingFnB).toBeCalledTimes(9)
+  expect(computedFnB).toBeCalledTimes(4)
+  expect(obs.c).toEqual(0)
+  expect(computingFnC).toBeCalledTimes(9)
+  expect(computedFnC).toBeCalledTimes(1)
+})
+
+test('computed with chain dependency', () => {
+  const b = { ing: jest.fn(), ed: jest.fn() }
+  const ba = { ing: jest.fn(), ed: jest.fn() }
+  const bb = { ing: jest.fn(), ed: jest.fn() }
+  const c = { ing: jest.fn(), ed: jest.fn() }
+  const ca = { ing: jest.fn(), ed: jest.fn() }
+  const cb = { ing: jest.fn(), ed: jest.fn() }
+
+  const obs = model({
+    a: 0,
+    get b() {
+      b.ing()
+      return this.a
+    },
+    get ba() {
+      ba.ing()
+      return this.b
+    },
+    get bb() {
+      bb.ing(this.b)
+      return 0
+    },
+    get c() {
+      c.ing(this.a)
+      return 0
+    },
+    get ca() {
+      ca.ing()
+      return this.c
+    },
+    get cb() {
+      cb.ing(this.c)
+      return 0
+    },
+  })
+
+  const expectValues = ({ b, ba, bb, c, ca, cb }) => {
+    expect(obs.b).toEqual(b)
+    expect(obs.ba).toEqual(ba)
+    expect(obs.bb).toEqual(bb)
+    expect(obs.c).toEqual(c)
+    expect(obs.ca).toEqual(ca)
+    expect(obs.cb).toEqual(cb)
+  }
+
+  const expectCalledTimes = ({
+    b: [bing, bed],
+    ba: [baing, baed],
+    bb: [bbing, bbed],
+    c: [cing, ced],
+    ca: [caing, caed],
+    cb: [cbing, cbed],
+  }) => {
+    expect(b.ing).toBeCalledTimes(bing)
+    expect(b.ed).toBeCalledTimes(bed)
+    expect(ba.ing).toBeCalledTimes(baing)
+    expect(ba.ed).toBeCalledTimes(baed)
+    expect(bb.ing).toBeCalledTimes(bbing)
+    expect(bb.ed).toBeCalledTimes(bbed)
+    expect(c.ing).toBeCalledTimes(cing)
+    expect(c.ed).toBeCalledTimes(ced)
+    expect(ca.ing).toBeCalledTimes(caing)
+    expect(ca.ed).toBeCalledTimes(caed)
+    expect(cb.ing).toBeCalledTimes(cbing)
+    expect(cb.ed).toBeCalledTimes(cbed)
+  }
+
+  expectCalledTimes({
+    b: [0, 0],
+    ba: [0, 0],
+    bb: [0, 0],
+    c: [0, 0],
+    ca: [0, 0],
+    cb: [0, 0],
+  })
+
+  const disposers = [
+    autorun(() => b.ed(obs.b)),
+    autorun(() => ba.ed(obs.ba)),
+    autorun(() => bb.ed(obs.bb)),
+    autorun(() => c.ed(obs.c)),
+    autorun(() => ca.ed(obs.ca)),
+    autorun(() => cb.ed(obs.cb)),
+  ]
+
+  expectCalledTimes({
+    b: [1, 1],
+    ba: [1, 1],
+    bb: [1, 1],
+    c: [1, 1],
+    ca: [1, 1],
+    cb: [1, 1],
+  })
+
+  obs.a++
+
+  expectCalledTimes({
+    b: [2, 2],
+    ba: [2, 2],
+    bb: [2, 1],
+    c: [2, 1],
+    ca: [2, 1], // FIXCHANGE: 1, 1 => 2, 1
+    cb: [2, 1], // FIXCHANGE: 1, 1 => 2, 1
+  })
+
+  expectValues({ b: 1, ba: 1, bb: 0, c: 0, ca: 0, cb: 0 })
+
+  expectCalledTimes({
+    b: [2, 2],
+    ba: [2, 2],
+    bb: [2, 1],
+    c: [2, 1],
+    ca: [2, 1], // FIXCHANGE: 1, 1 => 2, 1
+    cb: [2, 1], // FIXCHANGE: 1, 1 => 2, 1
+  })
+
+  obs.a++
+  obs.a++
+  obs.a++
+
+  expectCalledTimes({
+    b: [5, 5],
+    ba: [5, 5],
+    bb: [5, 1],
+    c: [5, 1],
+    ca: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
+    cb: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
+  })
+
+  expectValues({ b: 4, ba: 4, bb: 0, c: 0, ca: 0, cb: 0 })
+
+  expectCalledTimes({
+    b: [5, 5],
+    ba: [5, 5],
+    bb: [5, 1],
+    c: [5, 1],
+    ca: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
+    cb: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
+  })
+
+  disposers.forEach((disposer) => disposer())
+
+  expectCalledTimes({
+    b: [5, 5],
+    ba: [5, 5],
+    bb: [5, 1],
+    c: [5, 1],
+    ca: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
+    cb: [5, 1], // FIXCHANGE: 1, 1 => 5, 1
+  })
+
+  expectValues({ b: 4, ba: 4, bb: 0, c: 0, ca: 0, cb: 0 })
+
+  expectCalledTimes({
+    b: [6, 5],
+    ba: [6, 5],
+    bb: [6, 1],
+    c: [6, 1],
+    ca: [6, 1], // FIXCHANGE: 2, 1 => 5, 1
+    cb: [6, 1], // FIXCHANGE: 2, 1 => 5, 1
+  })
+})
+
+test('computed switch autorun', () => {
+  const ing = jest.fn()
+
+  const obs = model({
+    a: 0,
+    get b() {
+      ing()
+      return this.a
+    },
+  })
+
+  expect(obs.b).toEqual(0)
+  expect(ing).toBeCalledTimes(1)
+  obs.a++
+  expect(obs.b).toEqual(1)
+  expect(ing).toBeCalledTimes(2)
+  obs.a++
+  obs.a++
+  obs.a++
+  expect(obs.b).toEqual(4)
+  expect(ing).toBeCalledTimes(3)
+
+  autorun(() => obs.b)()
+
+  expect(obs.b).toEqual(4)
+  expect(ing).toBeCalledTimes(4)
+  obs.a++
+  expect(obs.b).toEqual(5)
+  expect(ing).toBeCalledTimes(5)
+  obs.a++
+  obs.a++
+  obs.a++
+  expect(obs.b).toEqual(8)
+  expect(ing).toBeCalledTimes(6)
+  expect(obs.b).toEqual(8)
+  expect(obs.b).toEqual(8)
+  expect(obs.b).toEqual(8)
+  expect(ing).toBeCalledTimes(6)
+
+  autorun(() => obs.b)
+
+  expect(obs.b).toEqual(8)
+  expect(ing).toBeCalledTimes(6)
+  obs.a++
+  expect(obs.b).toEqual(9)
+  expect(ing).toBeCalledTimes(7)
+  obs.a++
+  obs.a++
+  obs.a++
+  expect(obs.b).toEqual(12)
+  expect(ing).toBeCalledTimes(10)
+})
+
+test('computed with reaction', () => {
+  const bComputing = jest.fn()
+  const bReactioning = jest.fn()
+  const bReactioned = jest.fn()
+  const cComputing = jest.fn()
+  const cReactioning = jest.fn()
+  const cReactioned = jest.fn()
+
+  const obs = model({
+    a: 0,
+    get b() {
+      bComputing()
+      return this.a
+    },
+    get c() {
+      cComputing()
+      void this.a
+      return 0
+    },
+  })
+  reaction(
+    () => {
+      bReactioning()
+      return obs.b
+    },
+    () => {
+      bReactioned()
+    }
+  )
+  reaction(
+    () => {
+      cReactioning()
+      return obs.c
+    },
+    () => {
+      cReactioned()
+    }
+  )
+
+  obs.a++
+
+  expect(bComputing).toBeCalledTimes(3)
+  expect(bReactioning).toBeCalledTimes(2)
+  expect(bReactioned).toBeCalledTimes(1)
+  expect(cComputing).toBeCalledTimes(2)
+  expect(cReactioning).toBeCalledTimes(1)
+  expect(cReactioned).toBeCalledTimes(0)
+})
+
+test('computed with untracked', () => {
+  const computing = jest.fn()
+
+  const obs = model({
+    a: 0,
+    get b() {
+      computing()
+      return this.a
+    },
+  })
+
+  expect(obs.b).toEqual(0)
+  expect(computing).toBeCalledTimes(1)
+  expect(obs.b).toEqual(0)
+  expect(computing).toBeCalledTimes(1)
+  expect(obs.b).toEqual(0)
+  expect(computing).toBeCalledTimes(1)
+
+  untracked(() => {
+    expect(computing).toBeCalledTimes(1)
+    expect(obs.b).toEqual(0)
+    expect(computing).toBeCalledTimes(2)
+    expect(obs.b).toEqual(0)
+    expect(computing).toBeCalledTimes(3)
+  })
 })
