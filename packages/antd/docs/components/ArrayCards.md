@@ -51,6 +51,7 @@ export default () => {
               x-component="Input"
             />
             <SchemaField.Void x-component="ArrayCards.Remove" />
+            <SchemaField.Void x-component="ArrayCards.Copy" />
             <SchemaField.Void x-component="ArrayCards.MoveUp" />
             <SchemaField.Void x-component="ArrayCards.MoveDown" />
           </SchemaField.Void>
@@ -78,6 +79,7 @@ export default () => {
               x-component="Input"
             />
             <SchemaField.Void x-component="ArrayCards.Remove" />
+            <SchemaField.Void x-component="ArrayCards.Copy" />
             <SchemaField.Void x-component="ArrayCards.MoveUp" />
             <SchemaField.Void x-component="ArrayCards.MoveDown" />
           </SchemaField.Object>
@@ -148,6 +150,10 @@ const schema = {
             type: 'void',
             'x-component': 'ArrayCards.Remove',
           },
+          copy: {
+            type: 'void',
+            'x-component': 'ArrayCards.Copy',
+          },
           moveUp: {
             type: 'void',
             'x-component': 'ArrayCards.MoveUp',
@@ -191,6 +197,10 @@ const schema = {
           remove: {
             type: 'void',
             'x-component': 'ArrayCards.Remove',
+          },
+          copy: {
+            type: 'void',
+            'x-component': 'ArrayCards.Copy',
           },
           moveUp: {
             type: 'void',
@@ -308,6 +318,7 @@ export default () => {
               x-component="Input"
             />
             <SchemaField.Void x-component="ArrayCards.Remove" />
+            <SchemaField.Void x-component="ArrayCards.Copy" />
             <SchemaField.Void x-component="ArrayCards.MoveUp" />
             <SchemaField.Void x-component="ArrayCards.MoveDown" />
           </SchemaField.Object>
@@ -401,6 +412,10 @@ const schema = {
             type: 'void',
             'x-component': 'ArrayCards.Remove',
           },
+          copy: {
+            type: 'void',
+            'x-component': 'ArrayCards.Copy',
+          },
           moveUp: {
             type: 'void',
             'x-component': 'ArrayCards.MoveUp',
@@ -459,6 +474,18 @@ Note: The title attribute can receive the title mapping in the Field model, that
 ### ArrayCards.Remove
 
 > Delete button
+
+| Property name | Type      | Description | Default value |
+| ------------- | --------- | ----------- | ------------- |
+| title         | ReactText | Copywriting |               |
+
+Other references https://ant.design/components/icon-cn/
+
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
+
+### ArrayCards.Copy
+
+> Copy button
 
 | Property name | Type      | Description | Default value |
 | ------------- | --------- | ----------- | ------------- |
