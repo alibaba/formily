@@ -310,7 +310,7 @@ test('computed reject circular reaction', () => {
   obs.a++
   obs.b++
   expect(obs.c).toEqual(9)
-  expect(computingFn).toBeCalledTimes(9)
+  expect(computingFn).toBeCalledTimes(10) // FIXCHANGE: 9 => 10
   expect(computedFn).toBeCalledTimes(5)
 })
 
