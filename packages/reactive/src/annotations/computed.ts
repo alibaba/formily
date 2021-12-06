@@ -11,6 +11,7 @@ import {
   batchEnd,
   releaseBindingReactions,
 } from '../reaction'
+import { Reaction } from '../types'
 
 interface IValue<T = any> {
   value?: T
@@ -52,7 +53,7 @@ export const computed: IComputed = createAnnotation(
     }
 
     function compute() {
-      store.value = getter?.call?.(context)
+      return (store.value = getter?.call?.(context))
     }
     function reaction() {
       if (ReactionStack.indexOf(reaction) === -1) {
@@ -67,6 +68,19 @@ export const computed: IComputed = createAnnotation(
     }
     reaction._name = 'ComputedReaction'
     reaction._scheduler = () => {
+      const oldValue = store.value
+      context._computesPrune = (pruneReaction: Reaction): boolean => {
+        if (reaction._dirty) {
+          if (oldValue === compute()) {
+            reaction._dirty = false
+            return true
+          } else if (pruneReaction._boundary !== undefined) {
+            reaction._dirty = false
+            return false
+          }
+        } else return false
+      }
+
       reaction._dirty = true
       runReactionsFromTargetKey({
         target: context,
@@ -74,6 +88,8 @@ export const computed: IComputed = createAnnotation(
         value: store.value,
         type: 'set',
       })
+
+      delete context._computesPrune
     }
     reaction._isComputed = true
     reaction._dirty = true
