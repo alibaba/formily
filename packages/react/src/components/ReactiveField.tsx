@@ -32,17 +32,17 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   const field = props.field
   const content = mergeChildren(
     renderChildren(props.children, field, field.form),
-    field.content ?? field.component[1].children
+    field.content ?? field.componentProps.children
   )
   if (field.display !== 'visible') return null
 
   const renderDecorator = (children: React.ReactNode) => {
-    if (!field.decorator[0]) {
+    if (!field.decoratorType) {
       return <Fragment>{children}</Fragment>
     }
     const finalComponent =
-      FormPath.getIn(options?.components, field.decorator[0]) ??
-      field.decorator[0]
+      FormPath.getIn(options?.components, field.decoratorType) ??
+      field.decoratorType
 
     return React.createElement(
       finalComponent,
@@ -52,26 +52,26 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   }
 
   const renderComponent = () => {
-    if (!field.component[0]) return content
+    if (!field.componentType) return content
     const value = !isVoidField(field) ? field.value : undefined
     const onChange = !isVoidField(field)
       ? (...args: any[]) => {
           field.onInput(...args)
-          field.component[1]?.onChange?.(...args)
+          field.componentProps?.onChange?.(...args)
         }
-      : field.component[1]?.onChange
+      : field.componentProps?.onChange
     const onFocus = !isVoidField(field)
       ? (...args: any[]) => {
           field.onFocus(...args)
-          field.component[1]?.onFocus?.(...args)
+          field.componentProps?.onFocus?.(...args)
         }
-      : field.component[1]?.onFocus
+      : field.componentProps?.onFocus
     const onBlur = !isVoidField(field)
       ? (...args: any[]) => {
           field.onBlur(...args)
-          field.component[1]?.onBlur?.(...args)
+          field.componentProps?.onBlur?.(...args)
         }
-      : field.component[1]?.onBlur
+      : field.componentProps?.onBlur
     const disabled = !isVoidField(field)
       ? field.pattern === 'disabled' || field.pattern === 'readPretty'
       : undefined
@@ -79,8 +79,8 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
       ? field.pattern === 'readOnly'
       : undefined
     const finalComponent =
-      FormPath.getIn(options?.components, field.component[0]) ??
-      field.component[0]
+      FormPath.getIn(options?.components, field.componentType) ??
+      field.componentType
     return React.createElement(
       finalComponent,
       {
