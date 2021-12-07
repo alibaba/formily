@@ -106,7 +106,7 @@ I talked about model binding, and protocol binding is the process of converting 
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01jLCRxH1aa3V0x6nw4_!!6000000003345-55-tps-2200-1147.svg)
 
-To sum up, in @formily/react, there are mainly two layers of binding relationships, Schema binding model, model binding component, the glue layer that realizes the binding is @formily/react, it should be noted that Schema binds the field model After that, the Schema is not perceptible in the field model. For example, if you want to modify the `enum`, you need to modify the `dataSource` attribute in the field model. In short, if you want to update the field model, refer to [Field](//core.formilyjs. org/models/field), you can refer to [Schema](/api/shared/schema) document if you want to understand the mapping relationship between Schema and field model
+To sum up, in @formily/react, there are mainly two layers of binding relationships, Schema binding model, model binding component, the glue layer that realizes the binding is @formily/react, it should be noted that Schema binds the field model After that, the Schema is not perceptible in the field model. For example, if you want to modify the `enum`, you need to modify the `dataSource` attribute in the field model. In short, if you want to update the field model, refer to [Field](//core.formilyjs. org/api/models/field), you can refer to [Schema](/api/shared/schema) document if you want to understand the mapping relationship between Schema and field model
 
 ## Three development models
 
