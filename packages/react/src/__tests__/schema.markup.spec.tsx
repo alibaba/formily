@@ -798,7 +798,7 @@ test('schema x-validator/required', async () => {
     expect(form.query('input').get('required')).toBeTruthy()
     expect(form.query('input').get('validator')).toEqual([
       { required: true },
-      'email',
+      { format: 'email' },
     ])
   })
 })

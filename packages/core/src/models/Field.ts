@@ -1,4 +1,10 @@
-import { isValid, isEmpty, toArr, FormPathPattern } from '@formily/shared'
+import {
+  isValid,
+  isEmpty,
+  toArr,
+  FormPathPattern,
+  isArr,
+} from '@formily/shared'
 import {
   ValidatorTriggerType,
   parseValidatorDescriptions,
@@ -329,9 +335,10 @@ export class Field<
   }
 
   get required() {
-    return parseValidatorDescriptions(this.validator).some(
-      (desc) => desc.required
-    )
+    const validators = isArr(this.validator)
+      ? this.validator
+      : parseValidatorDescriptions(this.validator)
+    return validators.some((desc) => !!desc?.['required'])
   }
 
   get validateStatus() {

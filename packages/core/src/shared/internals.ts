@@ -6,7 +6,6 @@ import {
   isFn,
   isValid,
   isEmpty,
-  isArr,
   isPlainObj,
   isNumberLike,
   clone,
@@ -274,7 +273,7 @@ export const updateFeedback = (field: Field, feedback?: IFieldFeedback) => {
 
 export const validateToFeedbacks = async (
   field: Field,
-  triggerType?: ValidatorTriggerType
+  triggerType: ValidatorTriggerType = 'onInput'
 ) => {
   const results = await validate(field.value, field.validator, {
     triggerType,
@@ -297,45 +296,24 @@ export const validateToFeedbacks = async (
 
 export const setValidatorRule = (field: Field, name: string, value: any) => {
   if (!isValid(value)) return
-  const hasRule = parseValidatorDescriptions(field.validator).some(
-    (desc) => name in desc
-  )
+  const validators = parseValidatorDescriptions(field.validator)
+  const hasRule = validators.some((desc) => name in desc)
   const rule = {
     [name]: value,
   }
   if (hasRule) {
-    if (isArr(field.validator)) {
-      field.validator = field.validator.map((desc: any) => {
-        if (isPlainObj(desc) && hasOwnProperty.call(desc, name)) {
-          desc[name] = value
-          return desc
-        }
+    field.validator = validators.map((desc: any) => {
+      if (isPlainObj(desc) && hasOwnProperty.call(desc, name)) {
+        desc[name] = value
         return desc
-      })
-    } else if (isPlainObj(field.validator)) {
-      field.validator[name] = value
-    } else {
-      field.validator = {
-        [name]: value,
       }
-    }
+      return desc
+    })
   } else {
-    if (isArr(field.validator)) {
-      if (name === 'required') {
-        field.validator.unshift(rule)
-      } else {
-        field.validator.push(rule)
-      }
+    if (name === 'required') {
+      field.validator = [rule].concat(validators)
     } else {
-      if (name === 'required') {
-        field.validator = [rule, field.validator]
-      } else if (isPlainObj(field.validator)) {
-        field.validator[name] = value
-      } else if (field.validator) {
-        field.validator = [field.validator, rule]
-      } else {
-        field.validator = rule
-      }
+      field.validator = validators.concat(rule)
     }
   }
 }

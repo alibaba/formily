@@ -80,9 +80,6 @@ export const computed: IComputed = createAnnotation(
     reaction._context = context
     reaction._property = property
 
-    ProxyRaw.set(proxy, store)
-    RawProxy.set(store, proxy)
-
     buildDataTree(target, key, store)
 
     function get() {
@@ -127,6 +124,8 @@ export const computed: IComputed = createAnnotation(
         set,
         get,
       })
+      ProxyRaw.set(proxy, store)
+      RawProxy.set(store, proxy)
     }
     return proxy
   }

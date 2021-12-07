@@ -26,7 +26,7 @@ interface ICalculateProps {
 interface IUseResponsiveFormLayout {
   (props: IProps): {
     ref: React.MutableRefObject<HTMLDivElement>
-    props: IProps
+    props: any
   }
 }
 
@@ -79,7 +79,7 @@ export const useResponsiveFormLayout: IUseResponsiveFormLayout = (props) => {
   if (!isArr(breakpoints)) {
     return { ref, props }
   }
-  const [layoutProps, setLayout] = useState<IProps>(props)
+  const [layoutProps, setLayout] = useState<any>(props)
 
   const updateUI = () => {
     setLayout(calculateProps(ref.current, props))

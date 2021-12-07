@@ -22,9 +22,6 @@ export const ref: IRef = createAnnotation(({ target, key, value }) => {
 
   buildDataTree(target, key, store)
 
-  ProxyRaw.set(proxy, store)
-  RawProxy.set(store, proxy)
-
   function get() {
     bindTargetKeyWithCurrentReaction({
       target: context,
@@ -60,6 +57,8 @@ export const ref: IRef = createAnnotation(({ target, key, value }) => {
       set,
       get,
     })
+    ProxyRaw.set(proxy, store)
+    RawProxy.set(store, proxy)
   }
   return proxy
 })
