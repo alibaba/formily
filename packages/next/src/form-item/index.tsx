@@ -371,7 +371,6 @@ export const FormItem: ComposeFormItem = connect(
       }
     if (!field) return props
     const takeFeedbackStatus = () => {
-      if (!field.selfModified) return
       if (field.validating) return 'pending'
       return field.decoratorProps.feedbackStatus || field.validateStatus
     }
@@ -384,7 +383,7 @@ export const FormItem: ComposeFormItem = connect(
             : buf.concat([text])
         }, [])
       }
-      if (field.validating || !field.selfModified) return
+      if (field.validating) return
       if (props.feedbackText) return props.feedbackText
       if (field.selfErrors.length) return split(field.selfErrors)
       if (field.selfWarnings.length) return split(field.selfWarnings)

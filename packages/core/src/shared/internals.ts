@@ -234,6 +234,7 @@ export const queryFeedbackMessages = (
   field: Field,
   search: ISearchFeedback
 ) => {
+  if (!field.feedbacks.length) return []
   return queryFeedbacks(field, search).reduce(
     (buf, info) => (isEmpty(info.messages) ? buf : buf.concat(info.messages)),
     []
