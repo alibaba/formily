@@ -1,6 +1,7 @@
 import { ProxyRaw, RawProxy, ReactionStack } from '../environment'
 import { createAnnotation } from '../internals'
 import { buildDataTree } from '../tree'
+import { isFn } from '../checkers'
 import {
   bindTargetKeyWithCurrentReaction,
   runReactionsFromTargetKey,
@@ -20,24 +21,24 @@ export interface IComputed {
   <T>(compute: { get?: () => T; set?: (value: T) => void }): IValue<T>
 }
 
-function getGetter(target: any, key: PropertyKey, value: any) {
-  if (!target) {
-    if (value && value.get) return value.get
-    return value
-  }
-  const descriptor = Object.getOwnPropertyDescriptor(target, key)
-  if (descriptor && descriptor.get) return descriptor.get
-  return getGetter(Object.getPrototypeOf(target), key, value)
-}
+const getDescriptor = Object.getOwnPropertyDescriptor
 
-function getSetter(target: any, key: PropertyKey, value: any) {
+const getProto = Object.getPrototypeOf
+
+function getGetterAndSetter(target: any, key: PropertyKey, value: any) {
   if (!target) {
-    if (value && value.set) return value.set
-    return
+    if (value) {
+      if (isFn(value)) {
+        return [value]
+      } else {
+        return [value.get, value.set]
+      }
+    }
+    return []
   }
-  const descriptor = Object.getOwnPropertyDescriptor(target, key)
-  if (descriptor && descriptor.set) return descriptor.set
-  return getSetter(Object.getPrototypeOf(target), key, value)
+  const descriptor = getDescriptor(target, key)
+  if (descriptor) return [descriptor.get, descriptor.set]
+  return getGetterAndSetter(getProto(target), key, value)
 }
 
 export const computed: IComputed = createAnnotation(
@@ -48,11 +49,10 @@ export const computed: IComputed = createAnnotation(
 
     const context = target ? target : store
     const property = target ? key : 'value'
-    const getter = getGetter(context, property, value)
-    const setter = getSetter(context, property, value)
+    const [getter, setter] = getGetterAndSetter(context, property, value)
 
     function compute() {
-      store.value = getter?.call?.(context)
+      store.value = getter?.call(context)
     }
     function reaction() {
       if (ReactionStack.indexOf(reaction) === -1) {
@@ -80,8 +80,6 @@ export const computed: IComputed = createAnnotation(
     reaction._context = context
     reaction._property = property
 
-    buildDataTree(target, key, store)
-
     function get() {
       if (hasRunningReaction()) {
         bindComputedReactions(reaction)
@@ -106,7 +104,7 @@ export const computed: IComputed = createAnnotation(
     function set(value: any) {
       try {
         batchStart()
-        setter?.call?.(context, value)
+        setter?.call(context, value)
       } finally {
         batchEnd()
       }
@@ -116,7 +114,6 @@ export const computed: IComputed = createAnnotation(
         get,
         set,
         enumerable: true,
-        configurable: false,
       })
       return target
     } else {
@@ -124,6 +121,7 @@ export const computed: IComputed = createAnnotation(
         set,
         get,
       })
+      buildDataTree(target, key, store)
       ProxyRaw.set(proxy, store)
       RawProxy.set(store, proxy)
     }

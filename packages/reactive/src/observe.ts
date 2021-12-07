@@ -1,7 +1,7 @@
 import { IOperation } from './types'
-import { RawNode, ProxyRaw, ObserverListeners } from './environment'
+import { ProxyRaw, ObserverListeners } from './environment'
 import { isFn } from './checkers'
-import { DataChange } from './tree'
+import { DataChange, getDataNode } from './tree'
 
 export const observe = (
   target: object,
@@ -10,11 +10,11 @@ export const observe = (
 ) => {
   const addListener = (target: any) => {
     const raw = ProxyRaw.get(target) || target
-    const node = RawNode.get(raw)
+    const node = getDataNode(raw)
 
     const listener = (operation: IOperation) => {
       const targetRaw = ProxyRaw.get(operation.target) || operation.target
-      const targetNode = RawNode.get(targetRaw)
+      const targetNode = getDataNode(targetRaw)
       if (deep) {
         if (node.contains(targetNode)) {
           observer(new DataChange(operation, targetNode))

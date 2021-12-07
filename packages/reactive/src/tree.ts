@@ -1,6 +1,5 @@
-import { ProxyRaw, RawNode } from './environment'
+import { RawNode, ProxyRaw } from './environment'
 import { ObservablePath, PropertyKey, IOperation } from './types'
-
 export class DataChange {
   path: ObservablePath
   key: PropertyKey
@@ -41,7 +40,7 @@ export class DataNode {
 
   get parent() {
     if (!this.target) return
-    return RawNode.get(this.targetRaw)
+    return getDataNode(this.targetRaw)
   }
 
   isEqual(node: DataNode) {
@@ -62,8 +61,17 @@ export class DataNode {
   }
 }
 
+export const getDataNode = (raw: any) => {
+  return RawNode.get(raw)
+}
+
+export const setDataNode = (raw: any, node: DataNode) => {
+  RawNode.set(raw, node)
+}
+
 export const buildDataTree = (target: any, key: PropertyKey, value: any) => {
-  const currentNode = RawNode.get(ProxyRaw.get(value) || value)
+  const raw = ProxyRaw.get(value) || value
+  const currentNode = getDataNode(raw)
   if (currentNode) return currentNode
-  RawNode.set(value, new DataNode(target, key, value))
+  setDataNode(raw, new DataNode(target, key, value))
 }

@@ -4,10 +4,9 @@ import {
   ProxyRaw,
   MakeObservableSymbol,
   RawShallowProxy,
-  RawNode,
 } from './environment'
 import { baseHandlers, collectionHandlers } from './handlers'
-import { buildDataTree } from './tree'
+import { buildDataTree, getDataNode } from './tree'
 import { isSupportObservable } from './externals'
 import { PropertyKey, IVisitor, BoundaryFunction } from './types'
 
@@ -48,7 +47,7 @@ export const createObservable = (
   if (typeof value !== 'object') return value
   const raw = ProxyRaw.get(value)
   if (!!raw) {
-    const node = RawNode.get(raw)
+    const node = getDataNode(raw)
     node.key = key
     return value
   }

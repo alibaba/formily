@@ -1,5 +1,4 @@
 import { observable, observe } from '../'
-//import { ProxyRaw, RawNode } from '../environment'
 
 test('deep observe', () => {
   const obs = observable<any>({

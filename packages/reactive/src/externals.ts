@@ -12,8 +12,8 @@ import {
   ProxyRaw,
   MakeObservableSymbol,
   DependencyCollected,
-  RawNode,
 } from './environment'
+import { getDataNode } from './tree'
 import { Annotation } from './types'
 
 const RAW_TYPE = Symbol('RAW_TYPE')
@@ -122,8 +122,8 @@ export const contains = (target: any, property: any) => {
   const targetRaw = ProxyRaw.get(target) || target
   const propertyRaw = ProxyRaw.get(property) || property
   if (targetRaw === propertyRaw) return true
-  const targetNode = RawNode.get(targetRaw)
-  const propertyNode = RawNode.get(propertyRaw)
+  const targetNode = getDataNode(targetRaw)
+  const propertyNode = getDataNode(propertyRaw)
   if (!targetNode) return false
   if (!propertyNode) return false
   return targetNode.contains(propertyNode)

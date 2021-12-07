@@ -46,7 +46,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
 
     return React.createElement(
       finalComponent,
-      toJS(field.decorator[1]),
+      toJS(field.decoratorProps),
       children
     )
   }
@@ -86,7 +86,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
       {
         disabled,
         readOnly,
-        ...toJS(field.component[1]),
+        ...toJS(field.componentProps),
         value,
         onChange,
         onFocus,
