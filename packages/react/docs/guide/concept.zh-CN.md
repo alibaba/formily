@@ -106,7 +106,7 @@ formily 的协议驱动主要是基于标准 JSON Schema 来进行驱动渲染�
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01jLCRxH1aa3V0x6nw4_!!6000000003345-55-tps-2200-1147.svg)
 
-总结下来，在@formily/react 中，主要有 2 层绑定关系，Schema 绑定模型，模型绑定组件，实现绑定的胶水层就是@formily/react，需要注意的是，Schema 绑定字段模型之后，字段模型中是感知不到 Schema 的，比如要修改`enum`，就是修改字段模型中的`dataSource`属性了，总之，想要更新字段模型，参考[Field](/api/models/field)，想要理解 Schema 与字段模型的映射关系可以参考[Schema](/api/shared/schema)文档
+总结下来，在@formily/react 中，主要有 2 层绑定关系，Schema 绑定模型，模型绑定组件，实现绑定的胶水层就是@formily/react，需要注意的是，Schema 绑定字段模型之后，字段模型中是感知不到 Schema 的，比如要修改`enum`，就是修改字段模型中的`dataSource`属性了，总之，想要更新字段模型，参考[Field](//core.formilyjs.org/zh-CN/api/models/field)，想要理解 Schema 与字段模型的映射关系可以参考[Schema](/api/shared/schema)文档
 
 ## 三种开发模式
 
