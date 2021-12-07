@@ -20,6 +20,26 @@ export interface IComputed {
   <T>(compute: { get?: () => T; set?: (value: T) => void }): IValue<T>
 }
 
+function getGetter(target: any, key: PropertyKey, value: any) {
+  if (!target) {
+    if (value && value.get) return value.get
+    return value
+  }
+  const descriptor = Object.getOwnPropertyDescriptor(target, key)
+  if (descriptor && descriptor.get) return descriptor.get
+  return getGetter(Object.getPrototypeOf(target), key, value)
+}
+
+function getSetter(target: any, key: PropertyKey, value: any) {
+  if (!target) {
+    if (value && value.set) return value.set
+    return
+  }
+  const descriptor = Object.getOwnPropertyDescriptor(target, key)
+  if (descriptor && descriptor.set) return descriptor.set
+  return getSetter(Object.getPrototypeOf(target), key, value)
+}
+
 export const computed: IComputed = createAnnotation(
   ({ target, key, value }) => {
     const store: IValue = {}
@@ -28,28 +48,8 @@ export const computed: IComputed = createAnnotation(
 
     const context = target ? target : store
     const property = target ? key : 'value'
-    const getter = getGetter(context)
-    const setter = getSetter(context)
-
-    function getGetter(target: any) {
-      if (!target) {
-        if (value && value.get) return value.get
-        return value
-      }
-      const descriptor = Object.getOwnPropertyDescriptor(target, property)
-      if (descriptor && descriptor.get) return descriptor.get
-      return getGetter(Object.getPrototypeOf(target))
-    }
-
-    function getSetter(target: any) {
-      if (!target) {
-        if (value && value.set) return value.set
-        return
-      }
-      const descriptor = Object.getOwnPropertyDescriptor(target, property)
-      if (descriptor && descriptor.set) return descriptor.set
-      return getSetter(Object.getPrototypeOf(target))
-    }
+    const getter = getGetter(context, property, value)
+    const setter = getSetter(context, property, value)
 
     function compute() {
       store.value = getter?.call?.(context)
