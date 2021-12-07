@@ -21,6 +21,7 @@ const getRuleMessage = (rule: IValidatorRules, type: string) => {
 export const parseValidatorDescription = (
   description: ValidatorDescription
 ): IValidatorRules => {
+  if (!description) return {}
   let rules: IValidatorRules = {}
   if (isStr(description)) {
     rules.format = description
@@ -29,13 +30,13 @@ export const parseValidatorDescription = (
   } else {
     rules = Object.assign(rules, description)
   }
-  rules.triggerType = rules.triggerType || 'onInput'
   return rules
 }
 
 export const parseValidatorDescriptions = <Context = any>(
   validator: Validator<Context>
 ): IValidatorRules[] => {
+  if (!validator) return []
   const array = isArr(validator) ? validator : [validator]
   return array.map((description) => {
     return parseValidatorDescription(description)
@@ -137,11 +138,13 @@ export const parseValidator = <Context = any>(
   validator: Validator<Context>,
   options: IValidatorOptions = {}
 ) => {
+  if (!validator) return []
   const array = isArr(validator) ? validator : [validator]
   return array.reduce<ValidatorParsedFunction<Context>[]>(
     (buf, description) => {
       const rules = parseValidatorDescription(description)
-      if (options?.triggerType && options.triggerType !== rules.triggerType)
+      const triggerType = rules.triggerType ?? 'onInput'
+      if (options?.triggerType && options.triggerType !== triggerType)
         return buf
       return rules ? buf.concat(parseValidatorRules(rules)) : buf
     },

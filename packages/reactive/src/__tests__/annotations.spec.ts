@@ -2,6 +2,7 @@ import { observable, action, model } from '../'
 import { autorun, reaction } from '../autorun'
 import { observe } from '../observe'
 import { isObservable } from '../externals'
+import { untracked } from '../untracked'
 
 test('observable annotation', () => {
   const obs = observable<any>({
@@ -274,4 +275,20 @@ test('computed recollect dependencies', () => {
   obs.aa = '111'
   obs.bb = '222'
   expect(computed).toBeCalledTimes(2)
+})
+
+test('computed no params', () => {
+  observable.computed(null)
+})
+
+test('computed object params', () => {
+  observable.computed({ get: () => {} })
+})
+
+test('computed no track get', () => {
+  const obs = observable({ aa: 123 })
+  const compu = observable.computed({ get: () => obs.aa })
+  untracked(() => {
+    expect(compu.value).toBe(123)
+  })
 })

@@ -544,11 +544,11 @@ test('setValidateRule', () => {
   field5.setValidatorRule('min', 3)
   field6.setValidatorRule('min', 3)
   expect(field1.validator).toEqual([{ required: true }, { format: 'phone' }])
-  expect(field2.validator).toEqual(['phone', { max: 3 }])
-  expect(field3.validator).toEqual({ format: 'url' })
-  expect(field4.validator).toEqual({ format: 'phone', min: 3 })
+  expect(field2.validator).toEqual([{ format: 'phone' }, { max: 3 }])
+  expect(field3.validator).toEqual([{ format: 'url' }])
+  expect(field4.validator).toEqual([{ format: 'phone' }, { min: 3 }])
   expect(field5.validator).toEqual([{ format: 'phone' }, { min: 3 }])
-  expect(field6.validator).toEqual({ min: 3 })
+  expect(field6.validator).toEqual([{ min: 3 }])
 })
 
 test('query', () => {

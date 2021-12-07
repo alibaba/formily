@@ -26,7 +26,7 @@ interface ICalculateProps {
 interface IUseResponsiveFormLayout {
   (props: IProps): {
     ref: React.MutableRefObject<HTMLDivElement>
-    props: IProps
+    props: any
   }
 }
 
