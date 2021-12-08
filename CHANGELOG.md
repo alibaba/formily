@@ -1,5 +1,37 @@
 # Changelog
 
+## v2.0.4(2021-12-08)
+
+### :bug: Bug Fixes
+
+1. [fix(json-schema): fix reactions isolate effect (#2590)](https://github.com/alibaba/formily/commit/f04deb13) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(antd/next): fix FormItem mapProps](https://github.com/alibaba/formily/commit/ccf1bc8f) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(react): fix doc link (#2584)](https://github.com/alibaba/formily/commit/4faa406d) :point_right: ( [燃冰](https://github.com/燃冰) )
+
+1. [fix(next): fix missing ExclamationCircleOutlined Icon (#2564)](https://github.com/alibaba/formily/commit/33d8d278) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+1. [fix(reactive): fix unexpect effect in reactions (#2563)](https://github.com/alibaba/formily/commit/8f8db67a) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :memo: Documents Changes
+
+1. [docs(core): fix typo (#2582)](https://github.com/alibaba/formily/commit/5befbadc) :point_right: ( [翁立鑫](https://github.com/翁立鑫) )
+
+1. [docs(react): update field document urls (#2585)](https://github.com/alibaba/formily/commit/98628470) :point_right: ( [燃冰](https://github.com/燃冰) )
+
+1. [docs: improve site show brandName (#2574)](https://github.com/alibaba/formily/commit/483f79f1) :point_right: ( [Dark](https://github.com/Dark) )
+
+### :rocket: Improve Performance
+
+1. [perf: improve total performance 20% (#2589)](https://github.com/alibaba/formily/commit/2d981385) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore: improve code style (#2579)](https://github.com/alibaba/formily/commit/4a083bad) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [chore: add dingtalk notification for release](https://github.com/alibaba/formily/commit/35a18c48) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.3(2021-12-02)
 
 ### :bug: Bug Fixes
@@ -880,12 +912,6 @@
 
 ## v2.0.0-beta.76(2021-07-05)
 
-### :bug: Bug Fixes
-
-1. [fix(reactive): fix Tracker memo leak in StrictMode (#1715)](https://github.com/alibaba/formily/commit/e9f23c39) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v2.0.0-beta.75(2021-07-03)
-
 ### :tada: Enhancements
 
 1. [feat(core): skip validate when parent.visible is equal hidden/none (#1712)](https://github.com/alibaba/formily/commit/0076ef7d) :point_right: ( [Janry](https://github.com/Janry) )
@@ -1146,7 +1172,7 @@
 
 ### :bug: Bug Fixes
 
-1. [fix(reactive): fix tracker recursive react (#1709)](https://github.com/alibaba/formily/commit/3de82d58) :point_right: ( [Janry](https://github.com/Janry) )
+1. [fix(reactive): fix Tracker memo leak in StrictMode (#1715)](https://github.com/alibaba/formily/commit/e9f23c39) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(json-schema): fix typo about transformer](https://github.com/alibaba/formily/commit/498d3119) :point_right: ( [janrywang](https://github.com/janrywang) )
 
@@ -1251,6 +1277,8 @@
 1. [fix(core): fix reset logic for ArrayField/ObjectField](https://github.com/alibaba/formily/commit/909c5907) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(vue): fix typings and some exceptions (#1261)](https://github.com/alibaba/formily/commit/c73a3183) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+1. [fix(reactive): fix tojs recursive dependence stack overflow (#1245)](https://github.com/alibaba/formily/commit/675df0ce) :point_right: ( [gwsbhqt](https://github.com/gwsbhqt) )
 
 1. [fix(antd/next): fix editable closing being blocked by other controller](https://github.com/alibaba/formily/commit/edd7a675) :point_right: ( [janrywang](https://github.com/janrywang) )
 
