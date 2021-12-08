@@ -186,7 +186,7 @@ export default () => {
   const form = useMemo(
     () =>
       createForm({
-        effects() {
+        effects(form) {
           onFieldReact('target', () => {
             setResponse(
               'target ' + (form.values.other === 123 ? '显示' : '隐藏')
@@ -262,7 +262,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldChange('target', () => {
+          onFieldChange('target', (field) => {
             setResponse('target值变化：' + field.value)
           })
           onFieldChange('target', ['component'], () => {
@@ -320,7 +320,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValueChange('target', () => {
+          onFieldValueChange('target', (field) => {
             setResponse('target值变化：' + field.value)
           })
         },
@@ -367,7 +367,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldInitialValueChange('target', () => {
+          onFieldInitialValueChange('target', (field) => {
             setResponse('target默认值变化：' + field.value)
           })
         },
@@ -414,7 +414,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldInputValueChange('target', () => {
+          onFieldInputValueChange('target', (field) => {
             setResponse('target 值变化：' + field.value)
           })
         },

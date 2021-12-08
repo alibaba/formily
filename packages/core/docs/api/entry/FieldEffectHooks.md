@@ -186,7 +186,7 @@ export default () => {
   const form = useMemo(
     () =>
       createForm({
-        effects() {
+        effects(form) {
           onFieldReact('target', () => {
             setResponse(
               'target ' + (form.values.other === 123 ? 'display' : 'hide')
@@ -262,7 +262,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldChange('target', () => {
+          onFieldChange('target', (field) => {
             setResponse('target value change:' + field.value)
           })
           onFieldChange('target', ['component'], () => {
@@ -320,7 +320,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldValueChange('target', () => {
+          onFieldValueChange('target', (field) => {
             setResponse('target value change:' + field.value)
           })
         },
@@ -367,7 +367,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldInitialValueChange('target', () => {
+          onFieldInitialValueChange('target', (field) => {
             setResponse('target default value change:' + field.value)
           })
         },
@@ -414,7 +414,7 @@ export default () => {
     () =>
       createForm({
         effects() {
-          onFieldInputValueChange('target', () => {
+          onFieldInputValueChange('target', (field) => {
             setResponse('target value change:' + field.value)
           })
         },
