@@ -82,15 +82,17 @@ const compatibleCreateElement = (
     ) => VNode
     const newData = {}
     Object.keys(data).forEach((key) => {
-      if (key === 'on') {
+      if (['on', 'nativeOn'].includes(key)) {
         if (data[key]) {
           const events = Object.keys(data[key])
           events.forEach((event) => {
-            const eventName = `on${event[0].toUpperCase()}${event.slice(1)}`
+            const eventName = `on${
+              key === 'on' ? event[0].toUpperCase() : event[0]
+            }${event.slice(1)}`
             newData[eventName] = data[key][event]
           })
         }
-      } else if (typeof data[key] === 'object' && data[key] !== null) {
+      } else if (['attrs', 'props', 'domProps'].includes(key)) {
         Object.assign(newData, data[key])
       } else {
         newData[key] = data[key]
