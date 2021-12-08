@@ -178,11 +178,14 @@ const getBaseReactions =
     )
   }
 
-const getUserReactions =
-  (schema: ISchema, options: ISchemaTransformerOptions) => (field: Field) => {
-    const reactions: SchemaReaction[] = toArr(schema['x-reactions'])
-    const baseScope = getBaseScope(field, options)
-    reactions.forEach((unCompiled) => {
+const getUserReactions = (
+  schema: ISchema,
+  options: ISchemaTransformerOptions
+) => {
+  const reactions: SchemaReaction[] = toArr(schema['x-reactions'])
+  return reactions.map((unCompiled) => {
+    return (field: Field) => {
+      const baseScope = getBaseScope(field, options)
       const reaction = shallowCompile(unCompiled, baseScope)
       if (!reaction) return
       if (isFn(reaction)) {
@@ -227,8 +230,9 @@ const getUserReactions =
       } else {
         run()
       }
-    })
-  }
+    }
+  })
+}
 
 export const transformFieldProps = (
   schema: Schema,
@@ -236,9 +240,8 @@ export const transformFieldProps = (
 ): IFieldFactoryProps<any, any> => {
   return {
     name: schema.name,
-    reactions: [
-      getBaseReactions(schema, options),
-      getUserReactions(schema, options),
-    ],
+    reactions: [getBaseReactions(schema, options)].concat(
+      getUserReactions(schema, options)
+    ),
   }
 }
