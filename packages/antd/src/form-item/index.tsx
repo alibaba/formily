@@ -364,6 +364,8 @@ export const FormItem: ComposeFormItem = connect(
   mapProps((props, field) => {
     if (isVoidField(field))
       return {
+        label: field.title || props.label,
+        asterisk: props.asterisk,
         extra: props.extra || field.description,
       }
     if (!field) return props
@@ -396,7 +398,7 @@ export const FormItem: ComposeFormItem = connect(
       return false
     }
     return {
-      label: field.title,
+      label: field.title || props.label,
       feedbackStatus: takeFeedbackStatus(),
       feedbackText: takeMessage(),
       asterisk: takeAsterisk(),
