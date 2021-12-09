@@ -1,5 +1,6 @@
 import { h, isVue2 } from 'vue-demi'
 import { Fragment, FragmentComponent } from './fragment'
+import { formatVue3VNodeData } from '../utils/formatVNodeData'
 
 type RenderChildren = {
   [key in string]?: (...args: any[]) => (VNode | string)[]
@@ -80,25 +81,7 @@ const compatibleCreateElement = (
       data?: VNodeData,
       components?: RenderChildren
     ) => VNode
-    const newData = {}
-    Object.keys(data).forEach((key) => {
-      if (['on', 'nativeOn'].includes(key)) {
-        if (data[key]) {
-          const events = Object.keys(data[key])
-          events.forEach((event) => {
-            const eventName = `on${
-              key === 'on' ? event[0].toUpperCase() : event[0]
-            }${event.slice(1)}`
-            newData[eventName] = data[key][event]
-          })
-        }
-      } else if (['attrs', 'props', 'domProps'].includes(key)) {
-        Object.assign(newData, data[key])
-      } else {
-        newData[key] = data[key]
-      }
-    })
-    return hInVue3(tag, newData, components)
+    return hInVue3(tag, formatVue3VNodeData(data), components)
   }
 }
 
