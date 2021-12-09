@@ -81,7 +81,15 @@ export function createCodeSandBox(codeStr) {
             'sass-loader': '^8.0.2',
           },
           babel: {
-            presets: ['@vue/cli-plugin-babel/preset'],
+            presets: [
+              [
+                '@vue/babel-preset-jsx',
+                {
+                  vModel: false,
+                  compositionAPI: true,
+                },
+              ],
+            ],
           },
           vue: {
             devServer: {
