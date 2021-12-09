@@ -475,12 +475,12 @@ export const FormBaseItem = defineComponent<FormItemProps>({
             [`${props.className}`]: !!props.className,
           },
           on: {
-            '!focus': () => {
+            focus: () => {
               if (feedbackIcon || inset) {
                 active.value = true
               }
             },
-            '!blur': () => {
+            blur: () => {
               if (feedbackIcon || inset) {
                 active.value = false
               }
