@@ -1,3 +1,4 @@
+import { autorun, batch } from '@formily/reactive'
 import { createForm } from '../'
 import { DataField } from '../types'
 import { attach, sleep } from './shared'
@@ -1833,4 +1834,23 @@ test('single direction linkage effect', async () => {
   expect(input2.value).toBe('123')
   await input2.onInput('321')
   expect(input2.value).toBe('321')
+})
+
+test('path change will update computed value', () => {
+  const form = attach(createForm())
+
+  const input = form.createField({
+    name: 'input',
+  })
+
+  const value = jest.fn()
+
+  autorun(() => {
+    value(input.value)
+  })
+  batch(() => {
+    input.makeIndexes('select')
+    input.value = '123'
+  })
+  expect(value).nthCalledWith(2, '123')
 })

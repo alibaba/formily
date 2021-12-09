@@ -64,6 +64,7 @@ export default () => {
           </SchemaField.Void>
           <SchemaField.Void
             x-component="ArrayItems.Addition"
+            x-component-props={{ method: 'unshift' }}
             title="添加条目"
           />
         </SchemaField.Array>
