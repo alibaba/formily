@@ -143,6 +143,7 @@ export class Field<
   protected makeObservable() {
     if (this.designable) return
     define(this, {
+      path: observable.ref,
       title: observable.ref,
       description: observable.ref,
       dataSource: observable.ref,
