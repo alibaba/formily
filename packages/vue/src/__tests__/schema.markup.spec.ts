@@ -665,11 +665,7 @@ describe('recursion field', () => {
     const form = createForm()
     const VoidComponent = {
       render(h: CreateElement) {
-        return h(
-          'div',
-          { attrs: { 'data-testid': 'void-component' } },
-          this.$slots.default || 'placeholder'
-        )
+        return h('div', this.$slots.default || 'placeholder')
       },
     }
     const { SchemaField, SchemaVoidField } = createSchemaField({
@@ -686,10 +682,12 @@ describe('recursion field', () => {
       },
       template: `<FormProvider :form="form">
         <SchemaField>
-          <SchemaVoidField x-component="VoidComponent" />
+          <SchemaVoidField x-component="VoidComponent" :x-component-props="{ 'data-testid': 'void-component-1' }" />
+          <SchemaVoidField x-component="VoidComponent" :x-component-props="{ 'data-testid': 'void-component-2' }" x-content="content" />
         </SchemaField>
       </FormProvider>`,
     })
-    expect(queryByTestId('void-component').textContent).toBe('placeholder')
+    expect(queryByTestId('void-component-1').textContent).toBe('placeholder')
+    expect(queryByTestId('void-component-2').textContent).toBe('content')
   })
 })
