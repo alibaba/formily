@@ -110,6 +110,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       return (
         <Collapse
           {...props}
+          onChange={() => {}}
           expandedKeys={expandKeys.map(String)}
           onExpand={(keys: string[]) => setExpandKeys(toArr(keys).map(Number))}
           className={cls(`${prefixCls}-item`, props.className)}
@@ -185,6 +186,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
               <Collapse.Panel
                 {...props}
                 {...panelProps}
+                onChange={() => {}}
                 key={index}
                 title={title()}
               >

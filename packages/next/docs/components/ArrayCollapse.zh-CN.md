@@ -13,6 +13,7 @@ import {
   Input,
   ArrayCollapse,
   FormButtonGroup,
+  Radio,
   Submit,
 } from '@formily/next'
 import { createForm } from '@formily/core'
@@ -21,6 +22,7 @@ import { Button } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
+    Radio,
     FormItem,
     Input,
     ArrayCollapse,
@@ -85,6 +87,14 @@ export default () => {
               title="Input"
               required
               x-component="Input"
+            />
+            <SchemaField.String
+              name="radio"
+              x-decorator="FormItem"
+              title="Radio"
+              enum={[1, 2]}
+              required
+              x-component="Radio.Group"
             />
             <SchemaField.Void x-component="ArrayCollapse.Remove" />
             <SchemaField.Void x-component="ArrayCollapse.MoveUp" />
