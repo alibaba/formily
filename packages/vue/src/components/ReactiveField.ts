@@ -36,7 +36,7 @@ export default observer(
         if (!Object.keys(slots).length && !content) return {}
 
         const defaultSlot = slots?.default
-          ? slots?.default(props.field, props.field.form)
+          ? slots?.default(props.field, props.field.form) ?? []
           : []
         if (typeof content === 'string') {
           slots['default'] = () => [...defaultSlot, content]
