@@ -26,7 +26,7 @@ Append an element to the end of the array and trigger onInput
 
 ```ts
 interface push {
-  (...items: any[]): Prommise<void>
+  (...items: any[]): Promise<void>
 }
 ```
 

@@ -26,7 +26,7 @@ order: 2
 
 ```ts
 interface push {
-  (...items: any[]): Prommise<void>
+  (...items: any[]): Promise<void>
 }
 ```
 
