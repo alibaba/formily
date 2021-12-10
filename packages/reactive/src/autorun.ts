@@ -5,8 +5,6 @@ import {
   releaseBindingReactions,
   disposeEffects,
   hasDepsChange,
-  untrackStart,
-  untrackEnd,
 } from './reaction'
 import { isFn } from './checkers'
 import { ReactionStack } from './environment'
@@ -119,12 +117,11 @@ export const reaction = <T>(
 
   const fireAction = () => {
     try {
-      untrackStart()
+      //如果untrack的话，会导致用户如果在scheduler里同步调用setState影响下次React渲染的依赖收集
       batchStart()
       if (isFn(subscriber)) subscriber(value.currentValue, value.oldValue)
     } finally {
       batchEnd()
-      untrackEnd()
     }
   }
 

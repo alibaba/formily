@@ -9,14 +9,7 @@ import {
   ValidatorTriggerType,
   parseValidatorDescriptions,
 } from '@formily/validator'
-import {
-  define,
-  observable,
-  reaction,
-  batch,
-  toJS,
-  action,
-} from '@formily/reactive'
+import { define, observable, batch, toJS, action } from '@formily/reactive'
 import {
   JSXComponent,
   LifeCycleTypes,
@@ -56,6 +49,7 @@ import {
   initializeStart,
   initializeEnd,
   createChildrenFeedbackFilter,
+  createReaction,
 } from '../shared/internals'
 import { Form } from './Form'
 import { BaseField } from './BaseField'
@@ -228,7 +222,7 @@ export class Field<
   protected makeReactive() {
     if (this.designable) return
     this.disposers.push(
-      reaction(
+      createReaction(
         () => this.value,
         (value) => {
           this.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
@@ -237,13 +231,13 @@ export class Field<
           }
         }
       ),
-      reaction(
+      createReaction(
         () => this.initialValue,
         () => {
           this.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE)
         }
       ),
-      reaction(
+      createReaction(
         () => this.display,
         (display) => {
           const value = this.value
@@ -266,7 +260,7 @@ export class Field<
           }
         }
       ),
-      reaction(
+      createReaction(
         () => this.pattern,
         (pattern) => {
           if (pattern !== 'editable') {

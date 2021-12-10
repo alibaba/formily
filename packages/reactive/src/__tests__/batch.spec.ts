@@ -1,4 +1,4 @@
-import { observable, batch, autorun } from '..'
+import { observable, batch, autorun, reaction } from '..'
 import { define } from '../model'
 
 describe('normal batch', () => {
@@ -538,4 +538,55 @@ describe('batch endpoint', () => {
     })
     expect(tokens).toEqual(['endpoint'])
   })
+})
+
+test('reaction collect in batch valid', () => {
+  const obs = observable({
+    aa: 11,
+    bb: 22,
+    cc: 33,
+  })
+  reaction(
+    () => obs.aa,
+    () => {
+      void obs.cc
+    }
+  )
+  const fn = jest.fn()
+
+  autorun(() => {
+    batch.scope(() => {
+      obs.aa = obs.bb
+    })
+    fn()
+  })
+
+  obs.bb = 44
+  expect(fn).toBeCalledTimes(2)
+})
+
+test('reaction collect in batch invalid', () => {
+  const obs = observable({
+    aa: 11,
+    bb: 22,
+    cc: 33,
+  })
+  reaction(
+    () => obs.aa,
+    () => {
+      void obs.cc
+    }
+  )
+  const fn = jest.fn()
+
+  autorun(() => {
+    batch.scope(() => {
+      obs.aa = obs.bb
+    })
+    fn()
+  })
+
+  obs.bb = 44
+  obs.cc = 55
+  expect(fn).toBeCalledTimes(3)
 })
