@@ -42,6 +42,7 @@ export interface IFormItemProps {
   feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none' | (string & {})
   feedbackStatus?: 'error' | 'warning' | 'success' | 'pending' | (string & {})
   feedbackIcon?: React.ReactNode
+  getPopupContainer?: (node: HTMLElement) => HTMLElement
   asterisk?: boolean
   gridSpan?: number
   bordered?: boolean
@@ -150,6 +151,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
     tooltipLayout,
     tooltip,
     tooltipIcon,
+    getPopupContainer,
   } = formLayout
   const labelStyle = { ...formLayout.labelStyle }
   const wrapperStyle = { ...formLayout.wrapperStyle }
@@ -173,6 +175,9 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
   }
 
   const prefixCls = usePrefixCls('formily-item', props)
+
+  const extraPopupProps = getPopupContainer ? { getPopupContainer } : {}
+
   const formatChildren =
     feedbackLayout === 'popover' ? (
       <Popover
@@ -189,6 +194,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
           </div>
         }
         visible={!!feedbackText}
+        {...extraPopupProps}
       >
         {children}
       </Popover>
