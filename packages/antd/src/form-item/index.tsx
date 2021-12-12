@@ -191,9 +191,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
           </div>
         }
         visible={!!feedbackText}
-        getPopupContainer={
-          getPopupContainer ? getPopupContainer : () => document.body
-        }
+        getPopupContainer={getPopupContainer}
       >
         {children}
       </Popover>
