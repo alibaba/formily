@@ -42,6 +42,7 @@ export interface IFormItemProps {
   feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none' | (string & {})
   feedbackStatus?: 'error' | 'warning' | 'success' | 'pending' | (string & {})
   feedbackIcon?: React.ReactNode
+  getPopupContainer?: (node: HTMLElement) => HTMLElement
   asterisk?: boolean
   gridSpan?: number
   bordered?: boolean
@@ -136,6 +137,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
     fullness,
     feedbackLayout,
     feedbackIcon,
+    getPopupContainer,
     inset,
     bordered = true,
     labelWidth,
@@ -189,6 +191,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
           </div>
         }
         visible={!!feedbackText}
+        getPopupContainer={getPopupContainer}
       >
         {children}
       </Popover>
@@ -207,7 +210,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
         </div>
       )
     }
-    return tooltip
+    return tooltip 
   }
 
   const renderLabelText = () => {
