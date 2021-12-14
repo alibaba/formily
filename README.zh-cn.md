@@ -38,7 +38,7 @@
 
 2.0
 
-https://formilyjs.org
+https://v2.formilyjs.org/
 
 1.0
 
