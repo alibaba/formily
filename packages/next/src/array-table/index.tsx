@@ -37,7 +37,7 @@ interface IStatusSelectProps extends SelectProps {
   pageSize?: number
 }
 
-interface ExtendTableProps extends TableProps {
+export interface ExtendTableProps extends TableProps {
   pagination?: PaginationProps
 }
 
