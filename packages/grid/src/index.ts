@@ -1,6 +1,6 @@
 import { define, observable, batch, reaction } from '@formily/reactive'
 import { ChildListMutationObserver } from './observer'
-
+import { ResizeObserver } from '@juggle/resize-observer'
 export interface IGridOptions {
   maxRows?: number
   maxColumns?: number | number[]

@@ -58,7 +58,6 @@
     "@formily/reactive": "2.0.5",
     "@formily/reactive-react": "2.0.5",
     "@formily/shared": "2.0.5",
-    "@juggle/resize-observer": "^3.3.1",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3"
