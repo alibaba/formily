@@ -311,24 +311,42 @@ export class Grid<Container extends HTMLElement> {
 
     const baseColumns = this.childSize
 
-    const maxWidthColumns = Math.min(
-      originTotalColumns,
-      Math.round(this.width / (this.maxWidth + this.columnGap))
+    const strictMaxWidthColumns = Math.round(
+      this.width / (this.maxWidth + this.columnGap)
     )
 
-    const minWidthColumns = Math.min(
+    const looseMaxWidthColumns = Math.min(
       originTotalColumns,
-      Math.round(this.width / (this.minWidth + this.columnGap))
+      strictMaxWidthColumns
     )
+
+    const maxWidthColumns = this.options.strictAutoFit
+      ? strictMaxWidthColumns
+      : looseMaxWidthColumns
+
+    const strictMinWidthColumns = Math.round(
+      this.width / (this.minWidth + this.columnGap)
+    )
+
+    const looseMinWidthColumns = Math.min(
+      originTotalColumns,
+      strictMinWidthColumns
+    )
+
+    const minWidthColumns = this.options.strictAutoFit
+      ? strictMinWidthColumns
+      : looseMinWidthColumns
 
     const minCalculatedColumns = Math.min(
       baseColumns,
+      originTotalColumns,
       maxWidthColumns,
       minWidthColumns
     )
 
     const maxCalculatedColumns = Math.max(
       baseColumns,
+      originTotalColumns,
       maxWidthColumns,
       minWidthColumns
     )
