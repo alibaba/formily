@@ -7,7 +7,7 @@ import {
   FieldDecorator,
   FieldComponent,
 } from '../types'
-import { buildNodeIndexes, initFieldUpdate } from '../shared/internals'
+import { buildNodeIndexes, destroy, initFieldUpdate } from '../shared/internals'
 import { Form } from './Form'
 import { Query } from './Query'
 
@@ -282,8 +282,7 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
   }
 
   destroy = () => {
-    this.dispose()
-    delete this.form.fields[this.address.toString()]
+    destroy(this.form.fields, this.address.toString())
   }
 
   match = (pattern: FormPathPattern) => {

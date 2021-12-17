@@ -150,8 +150,7 @@ export const patchFieldStates = (
 ) => {
   patches.forEach(({ type, address, oldAddress, payload }) => {
     if (type === 'remove') {
-      target[address]?.dispose()
-      delete target[address]
+      destroy(target, address)
     } else if (type === 'update') {
       if (payload) {
         target[address] = payload
@@ -162,6 +161,14 @@ export const patchFieldStates = (
       }
     }
   })
+}
+
+export const destroy = (
+  target: Record<string, GeneralField>,
+  address: string
+) => {
+  target[address]?.dispose()
+  delete target[address]
 }
 
 export const patchFormValues = (
@@ -333,7 +340,8 @@ export const spliceArrayState = (
   }
   const address = field.address.toString()
   const addrLength = address.length
-  const fields = field.form.fields
+  const form = field.form
+  const fields = form.fields
   const fieldPatches: INodePatch<GeneralField>[] = []
   const offset = insertCount - deleteCount
   const isArrayChildren = (identifier: string) => {
@@ -389,6 +397,9 @@ export const spliceArrayState = (
           })
         }
         if (isInsertNode(identifier) || isDeleteNode(identifier)) {
+          if (isDataField(field)) {
+            form.deleteInitialValuesIn(field.path)
+          }
           fieldPatches.push({ type: 'remove', address: identifier })
         }
       }
