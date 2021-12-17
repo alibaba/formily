@@ -522,6 +522,7 @@ test('nest array remove', async () => {
   expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
   await metrics.remove(1)
   expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
+  expect(form.initialValues.metrics?.[1]?.content?.[0]?.attr).toBeUndefined()
 })
 
 test('incomplete insertion of array elements', async () => {
