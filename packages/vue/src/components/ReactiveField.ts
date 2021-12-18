@@ -10,8 +10,8 @@ import { Fragment } from '../shared/fragment'
 import type {
   IReactiveFieldProps,
   VueComponent,
-  DefineComponent,
   VueComponentProps,
+  DefineComponent,
 } from '../types'
 
 function isVueOptions(options: any) {
@@ -26,7 +26,7 @@ function isVueOptions(options: any) {
 }
 
 export default observer(
-  defineComponent<IReactiveFieldProps>({
+  defineComponent({
     name: 'ReactiveField',
     props: ['field'],
     setup(props: IReactiveFieldProps, { slots }) {
@@ -212,5 +212,5 @@ export default observer(
         return h(Fragment, { key }, children)
       }
     },
-  }) as unknown as DefineComponent<IReactiveFieldProps>
+  }) as DefineComponent<IReactiveFieldProps>
 )

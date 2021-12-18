@@ -8,55 +8,33 @@ import { getRawComponent } from '../utils/getRawComponent'
 
 import type { IFieldProps, DefineComponent } from '../types'
 
-export default defineComponent<IFieldProps>({
+export default defineComponent({
   name: 'Field',
-  props: {
-    name: {},
-    title: {},
-    description: {},
-    value: {},
-    initialValue: {},
-    basePath: {},
-    decorator: Array,
-    component: Array,
-    display: String,
-    pattern: String,
-    required: {
-      type: Boolean,
-      default: undefined,
-    },
-    validateFirst: {
-      type: Boolean,
-      default: undefined,
-    },
-    hidden: {
-      type: Boolean,
-      default: undefined,
-    },
-    visible: {
-      type: Boolean,
-      default: undefined,
-    },
-    editable: {
-      type: Boolean,
-      default: undefined,
-    },
-    disabled: {
-      type: Boolean,
-      default: undefined,
-    },
-    readOnly: {
-      type: Boolean,
-      default: undefined,
-    },
-    readPretty: {
-      type: Boolean,
-      default: undefined,
-    },
-    dataSource: {},
-    validator: {},
-    reactions: [Array, Function],
-  },
+  props: [
+    'name',
+    'basePath',
+    'title',
+    'description',
+    'value',
+    'initialValue',
+    'required',
+    'display',
+    'pattern',
+    'hidden',
+    'visible',
+    'editable',
+    'disabled',
+    'readOnly',
+    'readPretty',
+    'dataSource',
+    'validateFirst',
+    'validator',
+    'decorator',
+    'component',
+    'reactions',
+    'content',
+    'data',
+  ],
   setup(props: IFieldProps, { slots }) {
     const formRef = useForm()
     const parentRef = useField()
@@ -100,4 +78,4 @@ export default defineComponent<IFieldProps>({
       return h(ReactiveField, componentData, children)
     }
   },
-}) as unknown as DefineComponent<IFieldProps>
+}) as DefineComponent<IFieldProps>

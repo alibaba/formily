@@ -8,43 +8,27 @@ import { getRawComponent } from '../utils/getRawComponent'
 
 import type { IVoidFieldProps, DefineComponent } from '../types'
 
-export default defineComponent<IVoidFieldProps>({
+export default defineComponent({
   name: 'VoidField',
-  props: {
-    name: {},
-    title: {},
-    description: {},
-    basePath: {},
-    decorator: Array,
-    component: Array,
-    display: String,
-    pattern: String,
-    hidden: {
-      type: Boolean,
-      default: undefined,
-    },
-    visible: {
-      type: Boolean,
-      default: undefined,
-    },
-    editable: {
-      type: Boolean,
-      default: undefined,
-    },
-    disabled: {
-      type: Boolean,
-      default: undefined,
-    },
-    readOnly: {
-      type: Boolean,
-      default: undefined,
-    },
-    readPretty: {
-      type: Boolean,
-      default: undefined,
-    },
-    reactions: [Array, Function],
-  },
+  props: [
+    'name',
+    'basePath',
+    'title',
+    'description',
+    'display',
+    'pattern',
+    'hidden',
+    'visible',
+    'editable',
+    'disabled',
+    'readOnly',
+    'readPretty',
+    'decorator',
+    'component',
+    'reactions',
+    'content',
+    'data',
+  ],
   setup(props: IVoidFieldProps, { slots }) {
     const formRef = useForm()
     const parentRef = useField()
@@ -88,4 +72,4 @@ export default defineComponent<IVoidFieldProps>({
       return h(ReactiveField, componentData, children)
     }
   },
-}) as unknown as DefineComponent<IVoidFieldProps>
+}) as DefineComponent<IVoidFieldProps>
