@@ -1,10 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib",
+    "outDir": "./type-artefacts",
     "paths": {
       "@formily/*": ["packages/*", "devtools/*"]
     },
-    "declaration": false
+    "declaration": true,
+    "sourceMap": false,
+    "inlineSources": false
   }
 }

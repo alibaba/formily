@@ -7,23 +7,16 @@ import {
   SchemaExpressionScopeSymbol,
   SchemaOptionsSymbol,
 } from '../shared/context'
-import { IProviderProps } from '../types'
+import { IProviderProps, DefineComponent } from '../types'
 import { useAttach } from '../hooks/useAttach'
 import { useInjectionCleaner } from '../hooks/useInjectionCleaner'
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
 
-import type { DefineComponent } from '../types'
-
-export default defineComponent<IProviderProps>({
+export default defineComponent({
   name: 'FormProvider',
   inheritAttrs: false,
-  props: {
-    form: {
-      type: Object,
-      required: true,
-    },
-  },
+  props: ['form'],
   setup(props: IProviderProps, { attrs, slots }) {
     const getForm = () => props.form
     const [formRef, checker] = useAttach(getForm())
@@ -43,4 +36,4 @@ export default defineComponent<IProviderProps>({
 
     return () => h(Fragment, { attrs }, slots)
   },
-}) as unknown as DefineComponent<IProviderProps>
+}) as DefineComponent<IProviderProps>

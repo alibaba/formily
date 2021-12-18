@@ -10,6 +10,7 @@ lib/
 esm/
 temp_esm/
 dist/
+type-artefacts/
 build/
 coverage/
 node_modules/

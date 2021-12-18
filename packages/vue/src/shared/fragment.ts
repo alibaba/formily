@@ -1,16 +1,16 @@
 import frag from 'vue-frag'
-import { VueComponent } from '../types'
+import { DefineComponent } from '../types'
 import { isVue2, defineComponent } from 'vue-demi'
 
 export const Fragment = '#fragment'
 
-let FragmentComponent: VueComponent
+let FragmentComponent: DefineComponent<{}>
 
 if (isVue2) {
-  FragmentComponent = {
+  FragmentComponent = defineComponent({
     name: 'Fragment',
     directives: {
-      frag,
+      frag: frag as any,
     },
     render(h) {
       const vm = this as any
@@ -26,7 +26,7 @@ if (isVue2) {
         vm?.$scopedSlots?.default?.(vm.$attrs)
       )
     },
-  }
+  })
 } else {
   /* istanbul ignore next */
   FragmentComponent = defineComponent({
