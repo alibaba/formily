@@ -7,3 +7,5 @@ global['sleep'] = time => {
 }
 
 global['requestAnimationFrame'] = fn => setTimeout(fn)
+
+global.document.documentElement.style['grid-column-gap'] = true

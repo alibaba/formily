@@ -173,9 +173,12 @@ class FormValidator {
     let errors = []
     let warnings = []
     try {
+      const nodeKey = pattern.toString()
+      const node = this.nodes[nodeKey]
+      const matchNodes = node ? { [nodeKey]: node } : this.nodes
       await Promise.all(
         reduce<ValidateNodeMap, ValidateNode>(
-          this.nodes,
+          matchNodes,
           (buf, validator, path) => {
             if (
               isFn(this.matchStrategy)

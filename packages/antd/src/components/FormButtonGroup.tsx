@@ -56,7 +56,7 @@ const isElementInViewport = (
   )
 }
 
-export const FormButtonGroup = styled(
+export const FormButtonGroup: React.FC<IFormButtonGroupProps> = styled(
   (props: React.PropsWithChildren<IFormButtonGroupProps>) => {
     const {
       span,

@@ -1,6 +1,7 @@
 import { ButtonProps } from '@alifd/next/types/button'
 import { FormProps, ItemProps } from '@alifd/next/types/form'
 import { StepProps, ItemProps as StepItemProps } from '@alifd/next/types/step'
+import { TabProps } from '@alifd/next/types/tab'
 import { ColumnProps } from '@alifd/next/types/table'
 import {
   ISchemaFormProps,
@@ -99,6 +100,10 @@ export interface IFormTextBox extends IItemProps {
 
 export interface IFormStep extends StepProps {
   dataSource: Array<StepItemProps & { name: FormPathPattern }>
+}
+
+export interface IFormTab extends TabProps {
+  hiddenKeys?: string[]
 }
 
 export type IDragHandlerCellProps = React.PropsWithChildren<{}>

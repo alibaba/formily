@@ -58,7 +58,7 @@ const isElementInViewport = (
   )
 }
 
-export const FormButtonGroup = styled(
+export const FormButtonGroup: React.FC<IFormButtonGroupProps> = styled(
   (props: React.PropsWithChildren<IFormButtonGroupProps>) => {
     const {
       span,
@@ -133,7 +133,7 @@ export const FormButtonGroup = styled(
 
     return content
   }
-)<IFormButtonGroupProps>`
+)`
   ${(props: IFormButtonGroupProps) =>
     props.align ? `display:flex;justify-content: ${getAlign(props.align)}` : ''}
   &.is-inline {
@@ -159,5 +159,5 @@ export const FormButtonGroup = styled(
 
 createVirtualBox<React.PropsWithChildren<IFormButtonGroupProps>>(
   'button-group',
-  FormButtonGroup,
+  FormButtonGroup
 )

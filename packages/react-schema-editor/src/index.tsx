@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Radio, Tabs } from 'antd'
-import * as fp from 'lodash/fp'
 import _ from 'lodash'
 import { SchemaTree } from './components/SchemaTree'
 import FieldEditor from './components/FieldEditor'
@@ -18,9 +17,9 @@ import './index.css'
 export const SchemaEditor: React.FC<{
   className?: string
   schema: any
-  showAntdComponents: boolean
-  showFusionComponents: boolean
-  customComponents: []
+  showAntdComponents?: boolean
+  showFusionComponents?: boolean
+  customComponents?: []
   onChange: (schema: any) => void
 }> = ({
   className,
@@ -51,14 +50,14 @@ export const SchemaEditor: React.FC<{
     try {
       onChange(JSON.parse(schema))
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
   }
 
   const isRoot = selectedPath === 'root'
 
   const selectedSchema =
-    selectedPath && (isRoot ? schema : fp.get(selectedPath, schema))
+    selectedPath && (isRoot ? schema : _.get(selectedPath, schema))
 
   return (
     <div className={`schema-editor ${className}`}>

@@ -1,4 +1,5 @@
 import { BigData } from './big-data'
+import { isValid } from './isEmpty'
 
 function defaultIsMergeableObject(value: any) {
   return isNonNullObject(value) && !isSpecial(value)
@@ -64,6 +65,7 @@ function getEnumerableOwnPropertySymbols(target: any): any {
 }
 
 function getKeys(target: any) {
+  if (!isValid(target)) return []
   return Object.keys(target).concat(getEnumerableOwnPropertySymbols(target))
 }
 
@@ -87,9 +89,9 @@ function propertyIsUnsafe(target, key) {
 }
 
 function mergeObject(target: any, source: any, options: Options) {
-  const destination = options.assign ? target : {}
-
-  if (!options.assign && options.isMergeableObject(target)) {
+  const destination = options.assign ? target || {} : {}
+  if (!options.isMergeableObject(target)) return target
+  if (!options.assign) {
     getKeys(target).forEach(function(key) {
       destination[key] = cloneUnlessOtherwiseSpecified(target[key], options)
     })
@@ -97,6 +99,9 @@ function mergeObject(target: any, source: any, options: Options) {
   getKeys(source).forEach(function(key) {
     if (propertyIsUnsafe(target, key)) {
       return
+    }
+    if (!target[key]) {
+      destination[key] = source[key]
     }
     if (
       propertyIsOnObject(target, key) &&

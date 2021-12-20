@@ -1,0 +1,1204 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default style default style 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.c0 > .next-form-item-label {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+}
+
+.c0 > .next-form-item-control {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inline style gutter item 1`] = `
+.c0 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-label {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-control {
+  display: inline-block;
+}
+
+.c0:not(:last-child) {
+  margin-right: 20px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inline style item 1`] = `
+.c0 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-label {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-control {
+  display: inline-block;
+}
+
+.c0:not(:last-child) {
+  margin-right: undefinedpx;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inline style labelAlign:top item 1`] = `
+.c0 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-label {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-control {
+  display: block;
+}
+
+.c0:not(:last-child) {
+  margin-right: undefinedpx;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inline style labelAlign:top layout 1`] = `
+.c0 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-label {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-control {
+  display: block;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inline style layout 1`] = `
+.c0 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-label {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-control {
+  display: inline-block;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inset mode inset style 1`] = `
+.c0 .mega-layout-item-inset {
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c0 .mega-layout-item-inset-has-error .mega-layout-item-inset-help {
+  color: red;
+}
+
+.c0 .mega-layout-item-inset-has-error .next-form-item {
+  border-color: red;
+}
+
+.c0 .mega-layout-item-inset-has-warning .mega-layout-item-inset-help {
+  color: #FF6A00;
+}
+
+.c0 .mega-layout-item-inset-has-warning .next-form-item {
+  border-color: #FF6A00;
+}
+
+.c0 .next-form-item-help {
+  display: none;
+}
+
+.c0 .next-range-picker-trigger,
+.c0 .next-input {
+  border: none;
+}
+
+.c0 .next-form-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0.mega-layout-item .next-form-item {
+  padding-left: 0;
+  border: none;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inset mode inset style of component 1`] = `
+.c0 .mega-layout-item-inset {
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c0 .mega-layout-item-inset-has-error .mega-layout-item-inset-help {
+  color: red;
+}
+
+.c0 .mega-layout-item-inset-has-error .next-form-item {
+  border-color: red;
+}
+
+.c0 .mega-layout-item-inset-has-warning .mega-layout-item-inset-help {
+  color: #FF6A00;
+}
+
+.c0 .mega-layout-item-inset-has-warning .next-form-item {
+  border-color: #FF6A00;
+}
+
+.c0 .next-form-item-help {
+  display: none;
+}
+
+.c0 .next-range-picker-trigger,
+.c0 .next-input {
+  border: none;
+}
+
+.c0 .next-form-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 .next-form-item {
+  padding-left: 12px;
+  border: 1px solid #D8D8D8;
+  border-radius: 4px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inset mode inset style(hasBorder) 1`] = `
+.c0 .mega-layout-item-inset {
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c0 .mega-layout-item-inset-has-error .mega-layout-item-inset-help {
+  color: red;
+}
+
+.c0 .mega-layout-item-inset-has-error .next-form-item {
+  border-color: red;
+}
+
+.c0 .mega-layout-item-inset-has-warning .mega-layout-item-inset-help {
+  color: #FF6A00;
+}
+
+.c0 .mega-layout-item-inset-has-warning .next-form-item {
+  border-color: #FF6A00;
+}
+
+.c0 .next-form-item-help {
+  display: none;
+}
+
+.c0 .next-range-picker-trigger,
+.c0 .next-input {
+  border: none;
+}
+
+.c0 .next-form-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 .next-form-item {
+  padding-left: 12px;
+  border: 1px solid #D8D8D8;
+  border-radius: 4px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inset mode item inset style(hasBorder) 1`] = `
+.c0 .next-form-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0.mega-layout-item .next-form-item {
+  padding-left: 0;
+  border: none;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle default layout 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
+  margin-bottom: 0;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child {
+  margin-bottom: 0;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle grid layout 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .next-form-item,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
+  margin-bottom: 0;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child {
+  margin-bottom: 0;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle inline layout 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .next-form-item,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
+  margin-bottom: 0;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child {
+  margin-bottom: 0;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle large size 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: NaNpx;
+  line-height: 40px;
+  font-size: 16px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: NaNpx;
+  line-height: 40px;
+  font-size: 16px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle medium size 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle middle size 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle small size 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: NaNpx;
+  line-height: 20px;
+  font-size: 12px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: NaNpx;
+  line-height: 20px;
+  font-size: 12px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`nest grid layout container nest columns 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: NaNpx;
+  grid-row-gap: NaNpx;
+  grid-template-columns: repeat(3,1fr);
+}
+
+.c0.mega-layout-nest-container {
+  grid-column-start: span 2;
+}
+
+.c0.mega-layout-nest-container > .mega-layout-container {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+<div
+  className="c0 mega-layout-nest-container"
+/>
+`;
+
+exports[`nest grid layout container nest mega layout container 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+
+@media (max-width:720px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,1fr);
+  }
+}
+
+@media (min-width:720px) and (max-width:1200px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,1fr);
+  }
+}
+
+@media (min-width:1200px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,1fr);
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`nest layout item style grid item style in large span 1`] = `
+@media (max-width:720px) {
+  .c0.mega-layout-item-col {
+    grid-column-start: span 1;
+  }
+}
+
+@media (min-width:720px) and (max-width:1200px) {
+  .c0.mega-layout-item-col {
+    grid-column-start: span 2;
+  }
+}
+
+@media (min-width:1200px) {
+  .c0.mega-layout-item-col {
+    grid-column-start: span 3;
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`nest layout item style grid item style in small span 1`] = `
+@media (max-width:720px) {
+  .c0.mega-layout-item-col {
+    grid-column-start: span 1;
+  }
+}
+
+@media (min-width:720px) and (max-width:1200px) {
+  .c0.mega-layout-item-col {
+    grid-column-start: span 2;
+  }
+}
+
+@media (min-width:1200px) {
+  .c0.mega-layout-item-col {
+    grid-column-start: span 2;
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`nest layout item style span style span 1 1`] = `
+.c0.mega-layout-nest-container > .mega-layout-container {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+@media (max-width:720px) {
+  .c0.mega-layout-nest-container {
+    grid-column-start: span 1;
+  }
+}
+
+@media (min-width:720px) and (max-width:1200px) {
+  .c0.mega-layout-nest-container {
+    grid-column-start: span 1;
+  }
+}
+
+@media (min-width:1200px) {
+  .c0.mega-layout-nest-container {
+    grid-column-start: span 1;
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`nest layout item style span style span 2 1`] = `
+.c0.mega-layout-nest-container > .mega-layout-container {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+@media (max-width:720px) {
+  .c0.mega-layout-nest-container {
+    grid-column-start: span 1;
+  }
+}
+
+@media (min-width:720px) and (max-width:1200px) {
+  .c0.mega-layout-nest-container {
+    grid-column-start: span 2;
+  }
+}
+
+@media (min-width:1200px) {
+  .c0.mega-layout-nest-container {
+    grid-column-start: span 2;
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`nest layout item style span style span 3 1`] = `
+.c0.mega-layout-nest-container > .mega-layout-container {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+@media (max-width:720px) {
+  .c0.mega-layout-nest-container {
+    grid-column-start: span 1;
+  }
+}
+
+@media (min-width:720px) and (max-width:1200px) {
+  .c0.mega-layout-nest-container {
+    grid-column-start: span 2;
+  }
+}
+
+@media (min-width:1200px) {
+  .c0.mega-layout-nest-container {
+    grid-column-start: span 3;
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test addon style gutter 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: 10px;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: 10px;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test addon style normal 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test grid layout style gridStyle autoRow false 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+
+@media (max-width:720px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  }
+}
+
+@media (min-width:720px) and (max-width:1200px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  }
+}
+
+@media (min-width:1200px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test grid layout style gridStyle autoRow false(enableSafeWidth=false) 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+
+@media (max-width:720px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(1,1fr);
+  }
+}
+
+@media (min-width:720px) and (max-width:1200px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (min-width:1200px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(3,1fr);
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test grid layout style gridStyle autoRow true 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  grid-template-columns: repeat(3,minmax(100px,1fr));
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test grid layout style gridStyle autoRow true(responsive) 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+
+@media (max-width:720px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(1,minmax(100px,1fr));
+  }
+}
+
+@media (min-width:720px) and (max-width:1200px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(2,minmax(100px,1fr));
+  }
+}
+
+@media (min-width:1200px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(3,minmax(100px,1fr));
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test grid layout style normal 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test label-align style left 1`] = `
+.c0 > .next-form-item-label {
+  text-align: left;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test label-align style right 1`] = `
+.c0 > .next-form-item-label {
+  text-align: right;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test label-align style top 1`] = `
+.c0 > .next-form-item-label {
+  text-align: left;
+}
+
+.c0.mega-layout-item {
+  display: block;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test label-align style top and inline 1`] = `
+.c0 > .next-form-item-label {
+  text-align: left;
+}
+
+.c0.mega-layout-item {
+  display: inline-block;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`width style labelAlign:top labelWidth and wrapperWidth 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c0 > .next-form-item-label {
+  width: 100px;
+  max-width: 100px;
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+}
+
+.c0 > .next-form-item-control {
+  width: 200px;
+  max-width: 200px;
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`width style labelWidth and wrapperWidth 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.c0 > .next-form-item-label {
+  width: 100px;
+  max-width: 100px;
+  -webkit-flex: 0 0 100px;
+  -ms-flex: 0 0 100px;
+  flex: 0 0 100px;
+}
+
+.c0 > .next-form-item-control {
+  width: 200px;
+  max-width: 200px;
+  -webkit-flex: 0 0 200px;
+  -ms-flex: 0 0 200px;
+  flex: 0 0 200px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`width style only labelWidth 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.c0 > .next-form-item-label {
+  width: 200px;
+  max-width: 200px;
+  -webkit-flex: 0 0 200px;
+  -ms-flex: 0 0 200px;
+  flex: 0 0 200px;
+}
+
+.c0 > .next-form-item-control {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`width style only wrapperWidth 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.c0 > .next-form-item-control {
+  width: 200px;
+  max-width: 200px;
+  -webkit-flex: 0 0 200px;
+  -ms-flex: 0 0 200px;
+  flex: 0 0 200px;
+}
+
+<div
+  className="c0"
+/>
+`;

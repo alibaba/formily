@@ -436,7 +436,7 @@ enum LifeCycleTypes { // Form pre-initialization trigger
   ON_FORM_SUBMIT_VALIDATE_START = 'onFormSubmitValidateStart',
 
   // Triggered when the form submission ends due to validate successs
-  ON_FORM_SUBMIT_VALIDATE_SUCCESS= 'onFormSubmitValidateSuccess',
+  ON_FORM_SUBMIT_VALIDATE_SUCCESS = 'onFormSubmitValidateSuccess',
 
   // Triggered when the form submission ends due to validate failed
   ON_FORM_SUBMIT_VALIDATE_FAILED = 'onFormSubmitValidateFailed',
@@ -487,7 +487,7 @@ enum LifeCycleTypes { // Form pre-initialization trigger
   ON_FIELD_MOUNT = 'onFieldMount',
 
   // Trigger when the field is unloaded
-  ON_FIELD_UNMOUNT = 'onFieldUnmount',
+  ON_FIELD_UNMOUNT = 'onFieldUnmount'
 }
 ```
 
@@ -773,7 +773,7 @@ interface ValidateDescription {
   // Customize with regularity
   pattern?: RegExp | string
   // Maximum length rule
-  max?: number;
+  max?: number
   // Maximum numerical rule
   maximum?: number
   // Exclusive maximum numerical rule

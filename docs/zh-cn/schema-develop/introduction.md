@@ -9,7 +9,7 @@
 - 纯 JSX(源码) 开发表单
   - 该方案主要用于纯前端开发方式，或者在前两个方案的自定义组件内部的开发以复合形态来开发。
 
-下面我们以具体例子来详细介绍不同开发模式的差异，案例右下角可以查看源码也可以跳转至 codesandbox 中试玩该例子。
+下面我们以具体例子来详细介绍不同开发模式的差异，案例右下角可以查看源码也可以跳转至 CodeSandbox 中试玩该例子。
 我们在看例子的过程中不需要详细理解具体 API，只需要了解个大概即可。
 
 ## JSON Schema 开发表单
@@ -32,9 +32,9 @@ const App = () => {
       onSubmit={console.log}
       schema={{
         type: 'object',
-        "x-component-props":{
-          labelCol:7,
-          wrapperCol:12
+        'x-component-props': {
+          labelCol: 7,
+          wrapperCol: 12
         },
         properties: {
           string: {

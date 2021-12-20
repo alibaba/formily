@@ -17,7 +17,9 @@ const createPanel = () => {
         'Formily',
         'img/logo/scalable.png',
         './devpanel.html',
-        function() {}
+        function(panel) {
+         
+        }
       )
     }
   )

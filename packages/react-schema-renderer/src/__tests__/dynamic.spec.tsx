@@ -327,7 +327,14 @@ test('dynaimc add field with initialValue in virtualbox', async () => {
   fireEvent.click(queryByText('Submit'))
   await wait()
   expect(submitHandler).toHaveBeenCalledWith({
-    container: [{ aa: '321' }, undefined]
+    container: [
+      {
+        aa: '321',
+        bb: undefined,
+        [Symbol.for('@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@')]: 'container.0'
+      },
+      undefined
+    ]
   })
 })
 
@@ -589,9 +596,9 @@ test('dynamic remove field and relationship needs to be retained', async () => {
   await wait()
   fireEvent.click(queryByText('Add Field'))
   await wait()
-  expect(queryAllByTestId('input').length).toBe(4)
-  expect(queryAllByTestId('input')[0].getAttribute('value')).toBe('')
-  expect(queryAllByTestId('input')[1].getAttribute('value')).toBe('')
+  expect(queryAllByTestId('input').length).toBe(2)
+  expect(queryAllByTestId('input')[0].getAttribute('value')).toBe('123')
+  expect(queryAllByTestId('input')[1].getAttribute('value')).toBe('123')
 })
 
 test('after deleting a component should not be sync an default value', async () => {

@@ -7,11 +7,13 @@ import {
 } from '../shared'
 
 export const Radio = connect<'Group'>({
-  getProps: mapStyledProps,
-  getComponent: mapTextComponent
+  valueName: 'checked',
+  getProps: mapStyledProps
 })(AntdRadio)
 
 Radio.Group = connect({
   getProps: mapStyledProps,
   getComponent: mapTextComponent
 })(transformDataSourceKey(AntdRadio.Group, 'options'))
+
+export default Radio

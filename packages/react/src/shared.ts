@@ -1,10 +1,12 @@
 import {
   isFn,
+  isStr,
   FormPath,
   Subscribable,
   isValid,
   toArr,
-  isEqual
+  isEqual,
+  each
 } from '@formily/shared'
 import {
   IFormEffect,
@@ -51,7 +53,11 @@ export const createFormActions = (): IFormActions => {
     'setFieldValue',
     'getFieldValue',
     'setFieldInitialValue',
-    'getFieldInitialValue'
+    'getFieldInitialValue',
+    'disableUnmountClearStates',
+    'enableUnmountClearStates',
+    'enableUnmountRemoveNode',
+    'disableUnmountRemoveNode'
   ) as IFormActions
 }
 
@@ -78,7 +84,11 @@ export const createAsyncFormActions = (): IFormAsyncActions =>
     'setFieldValue',
     'getFieldValue',
     'setFieldInitialValue',
-    'getFieldInitialValue'
+    'getFieldInitialValue',
+    'disableUnmountClearStates',
+    'enableUnmountClearStates',
+    'enableUnmountRemoveNode',
+    'disableUnmountRemoveNode'
   ) as IFormAsyncActions
 
 export interface IEventTargetOption {
@@ -148,7 +158,9 @@ export class Broadcast extends Subscribable {
   context: any
 
   setContext(context: any) {
-    this.context = context
+    if (!this.context) {
+      this.context = context
+    }
   }
   getContext() {
     return this.context
@@ -162,7 +174,10 @@ export const env = {
   currentActions: null
 }
 
-export const createFormEffects = <Payload = any, Actions = any>(
+export const createFormEffects = <
+  Payload = any,
+  Actions extends IFormActions = any
+>(
   effects: IFormEffect<Payload, Actions> | null,
   actions: Actions
 ) => {
@@ -302,7 +317,10 @@ export const FormEffectHooks = {
   )
 }
 
-export const createEffectsProvider = <TActions = any, TContext = any>(
+export const createEffectsProvider = <
+  TActions extends IFormActions = any,
+  TContext = any
+>(
   callback: IEffectProviderHandler<TActions, TContext>,
   middlewares?: IEffectMiddleware<TActions, TContext>[],
   context?: TContext
@@ -310,6 +328,10 @@ export const createEffectsProvider = <TActions = any, TContext = any>(
   const promises = {}
 
   const resolves = {}
+
+  const resolvePayload = (payload: any) => {
+    return isFn(payload.getState) ? payload?.getState() : payload
+  }
 
   const waitFor = async <TPayload = any>(
     type: string,
@@ -327,24 +349,16 @@ export const createEffectsProvider = <TActions = any, TContext = any>(
     })
   }
 
-  const triggerTo = async <TPayload = any>(
-    type: string,
-    payload: TPayload
-  ): Promise<TPayload> => {
+  const triggerTo = <TPayload = any>(type: string, payload: TPayload): void => {
     if (resolves[type]) {
+      payload = resolvePayload(payload)
       if (resolves[type].filter) {
         if (resolves[type].filter(payload)) {
-          return resolves[type].resolve(payload)
-        } else {
-          return
+          resolves[type].resolve(payload)
         }
+      } else {
+        resolves[type].resolve(payload)
       }
-      return resolves[type].resolve(payload)
-    } else {
-      promises[type] = new Promise(resolve => {
-        resolves[type] = { resolve }
-      })
-      return resolves[type].resolve(payload)
     }
   }
 
@@ -371,31 +385,29 @@ export const createEffectsProvider = <TActions = any, TContext = any>(
         let i = 0
         const next = (payload: TPayload) => {
           if (!queue[type][i]) return payload
-          return Promise.resolve(queue[type][i++](payload, next))
+          const response = queue[type][i++](payload, next)
+          if (response === undefined) {
+            return new Promise(() => {})
+          }
+          return Promise.resolve(response)
         }
-        return await next(payload)
+        return await next(resolvePayload(payload))
       }
       return payload
     }
 
-    const subscribe = (type: string) => {
-      $(type).subscribe(async (payload: any) => {
+    $('onFormInit').subscribe(() => {
+      actions.subscribe(async ({ type, payload }) => {
         await applyMiddlewares(type, payload)
-        await triggerTo(type, payload)
+        triggerTo(type, payload)
       })
-    }
-
-    subscribe('onFieldInit')
-    subscribe('onFieldChange')
-    subscribe('onFieldInputChange')
-    subscribe('onFormChange')
-    subscribe('onFormMount')
-    subscribe('onFormSubmit')
-    subscribe('onFormReset')
+    })
 
     callback({ ...runtime, applyMiddlewares, triggerTo, waitFor })($, actions)
   }
 }
+
+export const ON_FORM_QUERY = '@@__ON_FORM_QUERY__@@'
 
 export const createQueryEffects = <
   TQueryPayload = any,
@@ -403,52 +415,36 @@ export const createQueryEffects = <
   TActions extends IFormActions = any,
   TContext = any
 >(
-  query: (payload: TQueryPayload) => TQueryResult | Promise<TQueryResult>,
+  resource: (payload: TQueryPayload) => TQueryResult | Promise<TQueryResult>,
   middlewares?: IEffectMiddleware<TActions, TContext>[],
   context?: TContext
 ) => {
   return createEffectsProvider<TActions>(
     ({ applyMiddlewares, actions }) => $ => {
-      $('onFormMount').subscribe(async () => {
-        let values = await applyMiddlewares(
+      $(ON_FORM_QUERY).subscribe(async type => {
+        if (!isStr(type)) return
+        const preValues = await applyMiddlewares(
           'onFormWillQuery',
           actions.getFormState(state => state.values)
         )
-        values = await applyMiddlewares('onFormFirstQuery', values)
+        const values = await applyMiddlewares(type, preValues)
         try {
-          await applyMiddlewares('onFormDidQuery', await query(values))
+          await applyMiddlewares('onFormDidQuery', await resource(values))
         } catch (e) {
           await applyMiddlewares('onFormQueryFailed', e)
           throw e
         }
+      })
+      $('onFormMount').subscribe(async () => {
+        actions.dispatch(ON_FORM_QUERY, 'onFormFirstQuery')
       })
 
       $('onFormSubmit').subscribe(async () => {
-        let values = await applyMiddlewares(
-          'onFormWillQuery',
-          actions.getFormState(state => state.values)
-        )
-        values = await applyMiddlewares('onFormSubmitQuery', values)
-        try {
-          await applyMiddlewares('onFormDidQuery', await query(values))
-        } catch (e) {
-          await applyMiddlewares('onFormQueryFailed', e)
-          throw e
-        }
+        actions.dispatch(ON_FORM_QUERY, 'onFormSubmitQuery')
       })
 
       $('onFormReset').subscribe(async () => {
-        let values = await applyMiddlewares(
-          'onFormWillQuery',
-          actions.getFormState(state => state.values)
-        )
-        values = await applyMiddlewares('onFormResetQuery', values)
-        try {
-          await applyMiddlewares('onFormDidQuery', await query(values))
-        } catch (e) {
-          await applyMiddlewares('onFormQueryFailed', e)
-          throw e
-        }
+        actions.dispatch(ON_FORM_QUERY, 'onFormResetQuery')
       })
     },
     middlewares,
@@ -463,8 +459,8 @@ export const inspectChanged = (
 ): any => {
   let changeNum = 0
   const changedProps = {}
-  toArr(keys).forEach((key: string) => {
-    if (!isEqual(source[key], target[key])) {
+  each(keys, (key: string) => {
+    if (!isEqual(source[key], target[key], true)) {
       changeNum++
       changedProps[key] = target[key]
     }

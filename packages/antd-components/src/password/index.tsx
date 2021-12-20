@@ -41,7 +41,6 @@ export const Password = connect({
     </span>
   )
 })`
-  display: inline-block;
   .password-strength-wrapper {
     background: #e0e0e0;
     margin-bottom: 3px;

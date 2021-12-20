@@ -251,4 +251,4 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - useFormEffects 中写的联动，是具有全局效果的，所以，你完全可以在 A 组件内部隐式的控制 B、C、D...组件的联动，这样在一定程度上是可以提高开发效率，但是也容易埋坑，如果一个项目是多人协作，对方是完全不知道你的组件到底做了什么，所以，我们要尽可能的做到，在 useFormEffects 内写的联动逻辑，只是与组件内部字段相关的，同时要多关注，组件内部和外部是否存在联动冲突问题
 - FormItem 组件，name 属性必须传完整路径，因为 FormItem 组件与 SchemaForm 是共享上下文的，所以可以享受到 labelCol/wraperCol 的批量控制效果
-- 注意，用于递归渲染的SchemaField组件必须要传schema对象，否则会存在子字段读取schema失效的风险问题。
+- 注意，用于递归渲染的 SchemaField 组件必须要传 schema 对象，否则会存在子字段读取 schema 失效的风险问题。

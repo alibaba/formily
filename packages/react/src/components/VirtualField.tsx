@@ -1,10 +1,10 @@
 import React from 'react'
 import { useVirtualField } from '../hooks/useVirtualField'
 import { isFn } from '@formily/shared'
-import { IVirtualFieldProps } from '../types'
+import { IVirtualFieldStateUIProps } from '../types'
 import { FieldContext } from '../context'
 
-export const VirtualField: React.FunctionComponent<IVirtualFieldProps> = props => {
+export const VirtualField: React.FunctionComponent<IVirtualFieldStateUIProps> = props => {
   const { state, field, props: innerProps, form } = useVirtualField(props)
   if (!state.visible || !state.display) return <React.Fragment />
   if (isFn(props.children)) {

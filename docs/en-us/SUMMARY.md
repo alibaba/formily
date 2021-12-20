@@ -1,19 +1,19 @@
 - [首页](./README.md)
-- Schema开发指南
+- Schema 开发指南
   - 介绍
   - 快速开始
   - 概念/术语理解
     - 理解表单生命周期
-    - 理解actions/effects
+    - 理解 actions/effects
     - 理解表单路径系统
     - 理解传值属性
     - 理解表单节点树
     - 理解表单组件扩展机制
   - 实践教程
     - 使用布局组件
-    - 使用Effect Hooks
-    - 自定义Effect Hook
-    - 借助Rxjs实现联动逻辑
+    - 使用 Effect Hooks
+    - 自定义 Effect Hook
+    - 借助 Rxjs 实现联动逻辑
     - 实现超复杂联动逻辑
     - 实现联动校验
     - 跨组件操作表单
@@ -34,15 +34,15 @@
   - 快速开始
   - 概念/术语理解
     - 理解表单生命周期
-    - 理解actions/effects
+    - 理解 actions/effects
     - 理解表单路径系统
     - 理解传值属性
     - 理解表单节点树
   - 实践教程
     - 使用布局组件
-    - 使用Effect Hooks
-    - 自定义Effect Hook
-    - 借助Rxjs实现联动逻辑
+    - 使用 Effect Hooks
+    - 自定义 Effect Hook
+    - 借助 Rxjs 实现联动逻辑
     - 实现超复杂联动逻辑
     - 实现联动校验
     - 跨组件操作表单
@@ -56,17 +56,17 @@
 - 其他指南
   - 底层扩展开发
     - 介绍
-    - 理解核心API
-    - 理解Observable Graph
+    - 理解核心 API
+    - 理解 Observable Graph
     - 扩展实现@formily/vue
     - 扩展实现@formily/mini-app
     - FAQ
   - 升级迁移指南
-    - UForm迁移Formily
+    - UForm 迁移 Formily
   - 开发调试指南
     - devtools
   - 贡献指南
-- API手册
+- API 手册
   - Ant Design
     - antd
     - antd-components

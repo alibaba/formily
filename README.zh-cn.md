@@ -13,7 +13,7 @@
 
 ## 背景
 
-在React中，在受控模式下，表单的整树渲染问题非常明显。特别是对于数据联动的场景，很容易导致页面卡顿，为了解决这个问题，我们将每个表单字段的状态做了分布式管理，从而大大提升了表单操作性能。同时，我们深度整合了JSON Schema协议，可以帮助您快速解决后端驱动表单渲染的问题。
+在 React 中，在受控模式下，表单的整树渲染问题非常明显。特别是对于数据联动的场景，很容易导致页面卡顿，为了解决这个问题，我们将每个表单字段的状态做了分布式管理，从而大大提升了表单操作性能。同时，我们深度整合了 JSON Schema 协议，可以帮助您快速解决后端驱动表单渲染的问题。
 
 ## 特性
 
@@ -23,65 +23,24 @@
 - 🏅 副作用逻辑独立管理，涵盖各种复杂联动校验逻辑
 - 🌯 支持各种表单复杂布局方案
 
-## 安装
-
-使用 Ant Design：
-
-```bash
-npm install --save antd @formily/antd @formily/antd-components
-```
-
-使用 Fusion Design：
-
-```bash
-npm install --save @alifd/next @formily/next @formily/next-components
-```
-
-使用Formily React渲染引擎包:
-
-```bash
-npm install --save @formily/react-schema-renderer
-```
-
-使用 Formily React包:
-
-```bash
-npm install --save @formily/react
-```
-
-使用 Formily 核心包:
-
-```bash
-npm install --save @formily/core
-```
-
 ## 官网
+
+2.0
+
+https://v2.formilyjs.org
+
+1.0
 
 https://formilyjs.org
 
-## 架构
+## 集团其他产品
 
-![](https://img.alicdn.com/tfs/TB1BvlRu4D1gK0jSZFsXXbldVXa-1882-1144.png)
-
-## 文档
-
-- [@formily/antd](./packages/antd/README.zh-cn.md)
-- [@formily/next](./packages/next/README.zh-cn.md)
-- [@formily/react-schema-renderer](./packages/react-schema-renderer/README.zh-cn.md)
-- [@formily/react](./packages/react/README.zh-cn.md)
-- [@formily/core](./packages/core/README.zh-cn.md)
-
-
-## 入门案例
-
-[codesandbox](https://codesandbox.io/s/o5up7)
-
+- [icejs](https://github.com/alibaba/ice)
 
 ## 贡献者
 
-This project exists thanks to all the people who contribute. 
+This project exists thanks to all the people who contribute.
 <a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://opencollective.com/formily/contributors.svg?width=890" /></a>
-
 
 ## LICENSE
 

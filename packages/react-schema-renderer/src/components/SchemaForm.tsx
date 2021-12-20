@@ -3,7 +3,8 @@ import { ISchemaFormProps } from '../types'
 import { Form } from '@formily/react'
 import { SchemaField } from './SchemaField'
 import { useSchemaForm } from '../hooks/useSchemaForm'
-import SchemaContext, {
+import {
+  FormSchemaContext,
   FormComponentsContext,
   FormExpressionScopeContext
 } from '../shared/context'
@@ -14,6 +15,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
     fields,
     virtualFields,
     formComponent,
+    componentPropsInterceptor,
     formItemComponent,
     formComponentProps,
     schema,
@@ -22,10 +24,10 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
   } = useSchemaForm(props)
   return (
     <FormComponentsContext.Provider
-      value={{ fields, virtualFields, formComponent, formItemComponent }}
+      value={{ fields, virtualFields, formComponent, formItemComponent, componentPropsInterceptor }}
     >
       <FormExpressionScopeContext.Provider value={props.expressionScope}>
-        <SchemaContext.Provider value={schema}>
+        <FormSchemaContext.Provider value={schema}>
           <Form form={form}>
             {React.createElement(
               formComponent,
@@ -33,6 +35,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
                 ...formComponentProps,
                 onSubmit: (e: any) => {
                   if (e && e.preventDefault) e.preventDefault()
+                  if (e && e.stopPropagation) e.stopPropagation()
                   form.submit().catch(e => log.warn(e))
                 },
                 onReset: () => {
@@ -43,7 +46,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
               children
             )}
           </Form>
-        </SchemaContext.Provider>
+        </FormSchemaContext.Provider>
       </FormExpressionScopeContext.Provider>
     </FormComponentsContext.Provider>
   )

@@ -7,6 +7,7 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
   return (
     <FormSpy
       selector={[
+        LifeCycleTypes.ON_FORM_MOUNT,
         LifeCycleTypes.ON_FORM_SUBMIT_START,
         LifeCycleTypes.ON_FORM_SUBMIT_END
       ]}
@@ -31,15 +32,15 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
         return (
           <Button
             onClick={e => {
-              if (props.htmlType !== 'submit') {
+              if (onSubmit) {
                 form.submit(onSubmit)
               }
               if (props.onClick) {
                 props.onClick(e)
               }
             }}
-            disabled={showLoading ? state.submitting : undefined}
             {...props}
+            htmlType={onSubmit ? 'button' : 'submit'}
             loading={showLoading ? state.submitting : undefined}
           >
             {props.children || '提交'}
@@ -68,7 +69,16 @@ export const Reset: React.FC<IResetProps> = ({
         return (
           <Button
             {...props}
-            onClick={() => form.reset({ forceClear, validate })}
+            onClick={async (e) => {
+              try {
+                if (props.onClick) {
+                  props.onClick(e)
+                }
+                await form.reset({ forceClear, validate })
+              } catch (e) {
+                // do nothing...
+              }
+            }}
           >
             {children || '重置'}
           </Button>

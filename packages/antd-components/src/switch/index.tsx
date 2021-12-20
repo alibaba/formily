@@ -6,3 +6,5 @@ export const Switch = connect({
   valueName: 'checked',
   getProps: mapStyledProps
 })(acceptEnum(AntdSwitch))
+
+export default Switch;

@@ -15,6 +15,7 @@ import {
   UpOutlined
 } from '@ant-design/icons'
 import styled from 'styled-components'
+import cls from 'classnames'
 
 const ArrayComponents = {
   CircleButton,
@@ -43,7 +44,9 @@ export const ArrayCards: any = styled(
       : schema.items
 
     const onAdd = () => {
-      mutators.push(schemaItems.getEmptyValue())
+      if (schemaItems) {
+        mutators.push(schemaItems.getEmptyValue())
+      }
     }
     return (
       <div className={className}>
@@ -66,11 +69,12 @@ export const ArrayCards: any = styled(
               <Card
                 {...componentProps}
                 size="small"
-                className={`card-list-item`}
+                className={cls(`card-list-item`, componentProps.className)}
                 key={index}
                 title={
                   <span>
-                    {index + 1}. {componentProps.title || schema.title}
+                    {index + 1}
+                    <span>.</span> {componentProps.title || schema.title}
                   </span>
                 }
                 extra={
@@ -93,21 +97,25 @@ export const ArrayCards: any = styled(
                   </Fragment>
                 }
               >
-                <SchemaField
-                  path={FormPath.parse(path).concat(index)}
-                  schema={schemaItems}
-                />
+                {schemaItems && (
+                  <SchemaField
+                    path={FormPath.parse(path).concat(index)}
+                    schema={schemaItems}
+                  />
+                )}
               </Card>
             )
           })}
           <ArrayList.Empty>
-            {({ children }) => {
+            {({ children, allowAddition }) => {
               return (
                 <Card
                   {...componentProps}
                   size="small"
-                  className={`card-list-item card-list-empty`}
-                  onClick={onAdd}
+                  className={`card-list-item card-list-empty ${
+                    allowAddition ? 'add-pointer' : ''
+                  }`}
+                  onClick={allowAddition ? onAdd : undefined}
                 >
                   <div className="empty-wrapper">{children}</div>
                 </Card>
@@ -130,6 +138,7 @@ export const ArrayCards: any = styled(
     )
   }
 )<ISchemaFieldComponentProps>`
+  width: 100%;
   .ant-card {
     .ant-card {
       box-shadow: none;
@@ -158,7 +167,7 @@ export const ArrayCards: any = styled(
       }
     }
   }
-  .card-list-empty.card-list-item {
+  .card-list-empty.card-list-item.add-pointer {
     cursor: pointer;
   }
 

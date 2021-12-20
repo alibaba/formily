@@ -23,7 +23,7 @@
 > 如果你使用的是 Ant Design
 
 ```bash
-npm install --save antd @formily/antd @formily/antd-components
+npm install --save antd @formily/antd@1.x @formily/antd-components
 ```
 
 @formily/antd 主要是作为 Form 核心库，@formily/antd-components 主要作为 Form 的 antd 扩展组件库，我们可以不使用@formily/antd-components，它只是作为扩展包
@@ -31,7 +31,7 @@ npm install --save antd @formily/antd @formily/antd-components
 > 如果你使用的是 Fusion Next
 
 ```bash
-npm install --save next @formily/next @formily/next-components
+npm install --save next @formily/next@1.x @formily/next-components
 ```
 
 @formily/next 主要是作为 Form 核心库，@formily/next-components 主要作为 Form 的 fusion 扩展组件库，我们可以不使用@formily/next-components，它只是作为扩展包
@@ -156,7 +156,7 @@ const service = ({ values, pagination, sorter = {}, filters = {} }) => {
   return fetch({
     url: 'https://randomuser.me/api',
     data: {
-      results: 10,
+      results: pagination.pageSize,
       sortField: sorter.field,
       sortOrder: sorter.order,
       page: pagination.current,
@@ -274,6 +274,7 @@ const components = {
   MonthPicker: DatePicker.MonthPicker,
   WeekPicker: DatePicker.WeekPicker,
   TimePicker,
+  TimeRangePicker: TimePicker.RangePicker,
   Upload,
   Range,
   Rating,
@@ -344,6 +345,12 @@ const App = () => (
         x-component="MonthPicker"
       />
       <Field type="string" title="时间" name="time" x-component="TimePicker" />
+      <Field
+        type="string"
+        title="时间范围"
+        name="timerange"
+        x-component="TimeRangePicker"
+      />
       <Field type="string" title="周" name="week" x-component="WeekPicker" />
       <Field
         type="array"
@@ -451,6 +458,7 @@ const components = {
   MonthPicker: DatePicker.MonthPicker,
   WeekPicker: DatePicker.WeekPicker,
   TimePicker,
+  TimeRangePicker: TimePicker.RangePicker,
   Upload,
   Range,
   Rating,
@@ -473,6 +481,7 @@ const getInitialValues = () => {
         date: '2020-02-20',
         month: '2020-08',
         time: '22:29:53',
+        timerange: ['9:00:00', '18:00:00'],
         week: '2020-9th',
         number: 123,
         boolean: true,
@@ -567,6 +576,12 @@ const App = () => {
           title="时间"
           name="time"
           x-component="TimePicker"
+        />
+        <Field
+          type="string"
+          title="时间范围"
+          name="timerange"
+          x-component="TimeRangePicker"
         />
         <Field type="string" title="周" name="week" x-component="WeekPicker" />
         <Field
@@ -670,6 +685,7 @@ const components = {
   MonthPicker: DatePicker.MonthPicker,
   WeekPicker: DatePicker.WeekPicker,
   TimePicker,
+  TimeRangePicker: TimePicker.RangePicker,
   Upload,
   Range,
   Rating,
@@ -693,6 +709,7 @@ const getInitialValues = () => {
         month: '2020-08',
         year: '2023',
         time: '22:29:53',
+        timerange: ['9:00:00', '18:00:00'],
         week: '2020-9th',
         number: 123,
         boolean: true,
@@ -788,6 +805,12 @@ const App = () => {
           title="时间"
           name="time"
           x-component="TimePicker"
+        />
+        <Field
+          type="string"
+          title="时间范围"
+          name="timerange"
+          x-component="TimeRangePicker"
         />
         <Field type="string" title="周" name="week" x-component="WeekPicker" />
         <Field
@@ -1360,12 +1383,12 @@ const App = () => {
                 type: 'warning',
                 message: '第一阶梯'
               }
-            } else if ((value >= 100) & (value < 500)) {
+            } else if ((value >= 100) && (value < 500)) {
               return {
                 type: 'warning',
                 message: '第二阶梯'
               }
-            } else if ((value >= 500) & (value < 1000)) {
+            } else if ((value >= 500) && (value < 1000)) {
               return {
                 type: 'warning',
                 message: '第三阶梯'

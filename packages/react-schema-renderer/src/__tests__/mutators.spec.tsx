@@ -4,7 +4,7 @@ import {
   connect,
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '../index'
 import { render, fireEvent, wait } from '@testing-library/react'
 
@@ -14,8 +14,7 @@ registerFormField(
     <div>
       <button
         onClick={() => {
-          props.value[0].aaa = '321'
-          props.onChange(props.value)
+          props.onChange([{ aaa: '321' }, ...props.value])
         }}
       >
         Change Value

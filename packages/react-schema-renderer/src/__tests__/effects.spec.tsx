@@ -144,7 +144,7 @@ test('onFieldChange will trigger with initialValues', async () => {
   }
 
   render(<TestComponent />)
-  await wait()
+  await sleep(100)
   expect(callback).toHaveBeenCalledTimes(2)
   expect(callback.mock.calls[0][0].value).toBe(undefined)
   expect(callback.mock.calls[1][0].value).toBe(123)
