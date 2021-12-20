@@ -100,6 +100,11 @@ export const getValuesFromEvent = (args: any[]) => {
   })
 }
 
+export const getTypedDefaultValue = (field: Field) => {
+  if (isArrayField(field)) return []
+  if (isObjectField(field)) return {}
+}
+
 export const buildFieldPath = (field: GeneralField) => {
   let prevArray = false
   const fields = field.form.fields
@@ -959,23 +964,18 @@ export const validateSelf = batch.bound(
 
 export const resetSelf = batch.bound(
   async (target: Field, options?: IFieldResetOptions, noEmit = false) => {
+    const typedDefaultValue = getTypedDefaultValue(target)
     target.modified = false
     target.selfModified = false
     target.visited = false
     target.feedbacks = []
-    target.inputValue = undefined
+    target.inputValue = typedDefaultValue
     target.inputValues = []
     target.caches = {}
     if (options?.forceClear) {
-      if (isArrayField(target)) {
-        target.value = []
-      } else if (isObjectField(target)) {
-        target.value = {}
-      } else {
-        target.value = undefined
-      }
+      target.value = typedDefaultValue
     } else if (isValid(target.value)) {
-      target.value = toJS(target.initialValue)
+      target.value = toJS(target.initialValue ?? typedDefaultValue)
     }
     if (!noEmit) {
       target.notify(LifeCycleTypes.ON_FIELD_RESET)
