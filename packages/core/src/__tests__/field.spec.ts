@@ -1854,3 +1854,28 @@ test('path change will update computed value', () => {
   })
   expect(value).nthCalledWith(2, '123')
 })
+
+test('object field reset', async () => {
+  const form = attach(createForm())
+
+  attach(
+    form.createObjectField({
+      name: 'obj',
+    })
+  )
+
+  const input = attach(
+    form.createField({
+      name: 'input',
+      basePath: 'obj',
+    })
+  )
+
+  await form.reset()
+  form.setValues({
+    obj: {
+      input: '123',
+    },
+  })
+  expect(input.value).toBe('123')
+})
