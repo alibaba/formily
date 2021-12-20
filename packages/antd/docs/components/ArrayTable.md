@@ -64,7 +64,7 @@ export default () => {
               x-component="ArrayTable.Column"
               x-component-props={{ width: 80, title: 'Index', align: 'center' }}
             >
-              <SchemaField.String
+              <SchemaField.Void
                 x-decorator="FormItem"
                 required
                 x-component="ArrayTable.Index"

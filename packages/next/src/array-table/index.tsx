@@ -6,7 +6,6 @@ import { SelectProps } from '@alifd/next/lib/select'
 import cls from 'classnames'
 import { GeneralField, FieldDisplayTypes, ArrayField } from '@formily/core'
 import {
-  useForm,
   useField,
   observer,
   useFieldSchema,
@@ -140,15 +139,15 @@ const useAddition = () => {
   }, null)
 }
 
+const schedulerRequest = {
+  request: null,
+}
+
 const StatusSelect: React.FC<IStatusSelectProps> = observer(
   ({ pageSize, ...props }) => {
-    const form = useForm()
     const field = useField<ArrayField>()
     const prefixCls = usePrefixCls('formily-array-table')
-    const errors = form.queryFeedbacks({
-      type: 'error',
-      address: `${field.address}.*`,
-    })
+    const errors = field.errors
     const parseIndex = (address: string) => {
       return Number(
         address
@@ -181,6 +180,14 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(
         })}
       />
     )
+  },
+  {
+    scheduler: (update) => {
+      clearTimeout(schedulerRequest.request)
+      schedulerRequest.request = setTimeout(() => {
+        update()
+      }, 100)
+    },
   }
 )
 
