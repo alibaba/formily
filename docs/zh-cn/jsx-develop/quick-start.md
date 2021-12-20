@@ -23,7 +23,7 @@
 > 如果你使用的是 Ant Design
 
 ```bash
-npm install --save antd @formily/antd @formily/antd-components
+npm install --save antd @formily/antd@1.x @formily/antd-components
 ```
 
 @formily/antd 主要是作为 Form 核心库，@formily/antd-components 主要作为 Form 的 antd 扩展组件库
@@ -31,7 +31,7 @@ npm install --save antd @formily/antd @formily/antd-components
 > 如果你使用的是 Fusion Next
 
 ```bash
-npm install --save next @formily/next @formily/next-components
+npm install --save next @formily/next@1.x @formily/next-components
 ```
 
 @formily/next 主要是作为 Form 核心库，@formily/next-components 主要作为 Form 的 fusion 扩展组件库
@@ -67,7 +67,12 @@ const App = () => {
         console.log(values)
       }}
     >
-      <FormItem name="name" label="Name" placeholder="Input Name" component={Input} />
+      <FormItem
+        name="name"
+        label="Name"
+        placeholder="Input Name"
+        component={Input}
+      />
       <FormButtonGroup>
         <Submit>查询</Submit>
         <Reset>重置</Reset>
@@ -81,8 +86,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- FormItem组件需要传入name来标识当前字段的路径，同时可以传入与对应组件库FormItem组件一样的label属性
-- FormItem组件需要传入一个component属性来注册需要渲染的组件，该组件只需要满足value/onChange属性API即可立即使用
+- FormItem 组件需要传入 name 来标识当前字段的路径，同时可以传入与对应组件库 FormItem 组件一样的 label 属性
+- FormItem 组件需要传入一个 component 属性来注册需要渲染的组件，该组件只需要满足 value/onChange 属性 API 即可立即使用
 
 ## 开发查询列表页
 
@@ -234,6 +239,7 @@ const App = () => (
       <FormItem label="年份" name="year" component={DatePicker.YearPicker} />
       <FormItem label="月份" name="month" component={DatePicker.MonthPicker} />
       <FormItem label="时间" name="time" component={TimePicker} />
+      <FormItem label="时间范围" name="timerange" component={TimePicker.RangePicker} />
       <FormItem label="周" name="week" component={DatePicker.WeekPicker} />
       <FormItem
         label="卡片上传文件"
@@ -334,6 +340,7 @@ const getInitialValues = () => {
         date: '2020-02-20',
         month: '2020-08',
         time: '22:29:53',
+        timerange: ['9:00:00', '18:00:00'],
         week: '2020-9th',
         number: 123,
         boolean: true,
@@ -389,6 +396,7 @@ const App = () => {
           component={DatePicker.MonthPicker}
         />
         <FormItem label="时间" name="time" component={TimePicker} />
+        <FormItem label="时间范围" name="timerange" component={TimePicker.RangePicker} />
         <FormItem label="周" name="week" component={DatePicker.WeekPicker} />
         <FormItem
           label="卡片上传文件"
@@ -485,6 +493,7 @@ const getInitialValues = () => {
         month: '2020-08',
         year: '2023',
         time: '22:29:53',
+        timerange: ['9:00:00', '18:00:00'],
         week: '2020-9th',
         number: 123,
         boolean: true,
@@ -545,6 +554,7 @@ const App = () => {
           component={DatePicker.MonthPicker}
         />
         <FormItem label="时间" name="time" component={TimePicker} />
+        <FormItem label="时间范围" name="timerange" component={TimePicker.RangePicker} />
         <FormItem label="周" name="week" component={DatePicker.WeekPicker} />
         <FormItem
           label="卡片上传文件"
@@ -907,7 +917,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - FormItem 组件，如果不传 component，可以作为一个普通布局组件，同时它也支持 name 属性，可以在联动场景下，直接操作布局组件的显示隐藏
 - FormItem 组件，不管是否传 component 或者 label 属性，它都会自带 FormItem 样式，如果期望联动控制非 FormItem 样式的布局组件，可以使用 VirtualField 组件，它是一个无 UI 组件
 - FormItemDeepProvider 可以在局部区域控制 FormItem 的 labelCol/wrapperCol
-- 数据嵌套场景，每个FormItem的name要传完整路径，这个与Schema开发的SchemaMarkupField的name规则不一样
+- 数据嵌套场景，每个 FormItem 的 name 要传完整路径，这个与 Schema 开发的 SchemaMarkupField 的 name 规则不一样
 
 ## 实现一些校验规则
 

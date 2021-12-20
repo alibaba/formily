@@ -97,11 +97,11 @@ import {
   Reset
 } from '@formily/antd' // 或者 @formily/next
 import { ArrayTable, Input } from '@formily/antd-components'
-import {Button} from 'antd'
+import { Button } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
-const { onFieldValueChange$ } = FormEffectHooks
+const { onFieldChange$ } = FormEffectHooks
 
 const actions = createFormActions()
 
@@ -114,14 +114,21 @@ const App = () => {
         onSubmit={values => {
           console.log(values)
         }}
+        initialValues={{
+          array: [
+            { aa: true, bb: '123' },
+            { aa: false, bb: '321' }
+          ]
+        }}
         effects={({ setFieldState }) => {
-          onFieldValueChange$('array.*.aa').subscribe(({ name, value }) => {
+          onFieldChange$('array.*.aa').subscribe(({ name, value }) => {
             setFieldState(
               FormPath.transform(name, /\d/, $1 => {
                 return `array.${$1}.bb`
               }),
               state => {
-                state.visible = value
+                console.log(name, value, state.name)
+                state.visible = !!value
               }
             )
           })
@@ -137,17 +144,20 @@ const App = () => {
                 { label: '显示', value: true },
                 { label: '隐藏', value: false }
               ]}
-              default={true}
               x-component="Input"
             />
             <Field type="string" name="bb" title="BB" x-component="Input" />
           </Field>
         </Field>
         <FormButtonGroup>
-          <Button onClick={()=>{
-            const mutators = actions.createMutators('array')
-            mutators.push({})
-          }}>Add</Button>
+          <Button
+            onClick={() => {
+              const mutators = actions.createMutators('array')
+              mutators.push({})
+            }}
+          >
+            Add
+          </Button>
         </FormButtonGroup>
       </SchemaForm>
     </Printer>
@@ -159,7 +169,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 在 ` onFieldValueChange$ `入参中使用\*批量匹配数组第 n 项的 aa 字段
+- 在 `onFieldValueChange$`入参中使用\*批量匹配数组第 n 项的 aa 字段
 - 使用 FormPath.transform 将一个路径转换成另外一个路径，目前该例子主要用于转换成相邻路径
 
 ## 使用路径匹配能力批量操作字段状态

@@ -3,7 +3,7 @@ import { mapTextComponent, mapStyledProps, normalizeCol } from '@formily/antd'
 import { Select as AntSelect } from 'antd'
 import { SelectProps as AntSelectProps } from 'antd/lib/select'
 import styled from 'styled-components'
-import { isArr } from '@formily/shared'
+import { isArr, FormPath } from '@formily/shared'
 export * from '@formily/shared'
 
 export const compose = (...args: any[]) => {
@@ -100,6 +100,26 @@ export const transformDataSourceKey = (component, dataSourceKey) => {
       [dataSourceKey]: dataSource,
       ...others
     })
+  }
+}
+
+export const createMatchUpdate = (name: string, path: string) => (
+  targetName: string,
+  targetPath: string,
+  callback: () => void
+) => {
+  if (targetName || targetPath) {
+    if (targetName) {
+      if (FormPath.parse(targetName).matchAliasGroup(name, path)) {
+        callback()
+      }
+    } else if (targetPath) {
+      if (FormPath.parse(targetPath).matchAliasGroup(name, path)) {
+        callback()
+      }
+    }
+  } else {
+    callback()
   }
 }
 

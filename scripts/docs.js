@@ -5,21 +5,23 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 const HEAD_HTML = `
 <script>
 window.codeSandBoxDependencies = {
-  '@alifd/next': 'latest',
-  '@formily/next': 'latest',
-  '@formily/next-components': 'latest',
-  '@formily/antd': 'latest',
-  '@formily/antd-components': 'latest',
-  '@formily/shared': 'latest',
-  '@formily/react': 'latest',
-  '@formily/printer': 'latest',
+  '@alifd/next': '^1.x',
+  '@formily/next': '^1.x',
+  '@formily/next-components': '^1.x',
+  '@formily/antd': '^1.x',
+  '@formily/antd-components': '^1.x',
+  '@formily/shared': '^1.x',
+  '@formily/react': '^1.x',
+  '@formily/printer': '^1.x',
   '@babel/runtime':'latest',
+  'styled-components':'^4.x',
   'mfetch':'latest',
   antd: 'latest'
 }
 
 window.codeSandBoxPeerDependencies = {
-  moment: 'latest'
+  moment: 'latest',
+  'styled-components':'^4.x',
 }
 if (window.parent !== window) {
   try {
@@ -29,12 +31,6 @@ if (window.parent !== window) {
   }
 }
 </script>
-`
-
-const FOOTER_HTML = `
-<script src="//unpkg.com/moment/min/moment-with-locales.js"></script>
-<script src="//unpkg.com/antd@4.x/dist/antd.min.js"></script>
-<script src="//unpkg.com/@alifd/next/dist/next.min.js"></script>
 `
 
 const createDocs = async () => {
@@ -58,17 +54,9 @@ const createDocs = async () => {
       title: 'Formily',
       renderer: path.resolve(__dirname, './doc-renderer.js'),
       header: HEAD_HTML,
-      footer: FOOTER_HTML
     },
     (webpackConfig, env) => {
       webpackConfig.devtool = 'none'
-      webpackConfig.externals = {
-        ...webpackConfig.externals,
-        '@alifd/next': 'Next',
-        antd: 'antd',
-        moment: 'moment'
-      }
-
       webpackConfig.module.rules = webpackConfig.module.rules.map(rule => {
         if (rule.test.test('.tsx')) {
           return {
@@ -89,11 +77,11 @@ const createDocs = async () => {
 
       Object.assign(webpackConfig.resolve.alias, {
         ...alias,
-        '@alifd/next': path.resolve(
+        '@alifd/next$': path.resolve(
           __dirname,
-          '../packages/next/node_modules/@alifd/next'
+          '../node_modules/@alifd/next'
         ),
-        antd: path.resolve(__dirname, '../packages/antd/node_modules/antd')
+        'antd$': path.resolve(__dirname, '../node_modules/antd')
       })
       webpackConfig.resolve.plugins = [
         new TsconfigPathsPlugin({

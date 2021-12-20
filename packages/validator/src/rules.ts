@@ -64,7 +64,7 @@ export default {
     rule: ValidateDescription,
     rules: ValidateRulesMap
   ) {
-    return Number(value) >= Number(rule.maximum)
+    return Number(value) >= Number(rule.exclusiveMaximum)
       ? getRuleMessage(rule, 'exclusiveMaximum', rules)
       : ''
   },
@@ -78,7 +78,7 @@ export default {
     rule: ValidateDescription,
     rules: ValidateRulesMap
   ) {
-    return Number(value) <= Number(rule.minimum)
+    return Number(value) <= Number(rule.exclusiveMinimum)
       ? getRuleMessage(rule, 'exclusiveMinimum', rules)
       : ''
   },
@@ -108,7 +108,7 @@ export default {
       if (isBool(response)) {
         return response ? rule.message : ''
       } else {
-        return response
+        return response || ''
       }
     }
     throw new Error("The rule's validator property must be a function.")

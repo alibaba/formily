@@ -1,11 +1,10 @@
-import { FormState } from '../state/form'
+import { Form } from '../models/form'
 
 test('computeState', () => {
-  const state = new FormState({ useDirty: false })
+  const state = new Form()
   expect(state.getState()).toEqual({
     displayName: 'FormState',
-    editable: undefined,
-    pristine: true,
+    editable: true,
     valid: true,
     invalid: false,
     loading: false,
@@ -18,8 +17,7 @@ test('computeState', () => {
     values: {},
     initialValues: {},
     mounted: false,
-    unmounted: false,
-    props: {}
+    unmounted: false
   })
 
   // can not set invalid errors, warnings
@@ -48,27 +46,13 @@ test('computeState', () => {
   expect(state.getState().valid).toEqual(false)
 
   // pristine depends on whether values to be equal initialvalues
-  expect(state.getState().pristine).toEqual(true)
   state.setState(draft => {
     draft.pristine = false
   })
-  expect(state.getState().pristine).toEqual(true)
   state.setState(draft => {
     draft.values = { change: true }
   })
   expect(state.getState().values).toEqual({ change: true })
-  expect(state.getState().pristine).toEqual(false)
-
-  // cannot set invalid props
-  expect(state.getState().props).toEqual({})
-  state.setState(draft => {
-    draft.props = { hello: 'world' }
-  })
-  expect(state.getState().props).toEqual({ hello: 'world' })
-  state.setState(draft => {
-    draft.props = undefined
-  })
-  expect(state.getState().props).toEqual({ hello: 'world' })
 
   // loading depends on validating
   expect(state.getState().loading).toEqual(false)
@@ -93,7 +77,7 @@ test('computeState', () => {
   expect(state.getState().unmounted).toEqual(true)
 })
 test('subscribe/unsubscribe', () => {
-  const state = new FormState({ useDirty: false })
+  const state = new Form()
   const cb = jest.fn()
   const idx = state.subscribe(cb)
   const paylaod = state.getState()
@@ -105,24 +89,9 @@ test('subscribe/unsubscribe', () => {
   expect(cb).toBeCalledTimes(1)
   expect(cb).toBeCalledWith(paylaod)
 })
-test('batch', () => {
-  const state = new FormState({ useDirty: false })
-  const cb = jest.fn()
-  state.batch(cb)
-  expect(cb).toBeCalledTimes(1)
-  expect(cb).toBeCalledWith()
-  // force run getState
-  const susCb = jest.fn()
-  state.subscribe(susCb)
-  state.dirtyNum = 1
-  state.batch(cb)
-  expect(cb).toBeCalledTimes(2)
-  expect(cb).toBeCalledWith()
-  expect(susCb).toBeCalledTimes(1)
-  expect(susCb).toBeCalledWith(state.state)
-})
+
 test('getState', () => {
-  const state = new FormState({ useDirty: false })
+  const state = new Form()
   const cb = jest.fn()
   state.getState(cb)
   expect(cb).toBeCalledTimes(1)
@@ -130,13 +99,13 @@ test('getState', () => {
   const syncState = state.getState()
   expect(syncState).toEqual(state.state)
 
-  state.controller.publishState = () => null
+  state.factory.getState = () => null
   state.getState(cb)
   expect(cb).toBeCalledTimes(2)
   expect(cb).toBeCalledWith(null)
 })
 test('setState', () => {
-  const state = new FormState({ useDirty: false })
+  const state = new Form()
   const susCb = jest.fn()
   state.subscribe(susCb)
   const cb1 = draft => {
@@ -159,13 +128,11 @@ test('setState', () => {
   expect(state.getState().values.change).toEqual(true)
   expect(state.getState()).toEqual({
     ...prevState1,
-    pristine: false,
     values: { change: true }
   })
   expect(susCb).toBeCalledTimes(1)
   expect(susCb).toBeCalledWith({
     ...prevState1,
-    pristine: false,
     values: { change: true }
   })
 
@@ -203,7 +170,7 @@ test('setState', () => {
   })
 })
 test('getSourceState', () => {
-  const state = new FormState({ useDirty: false })
+  const state = new Form()
   const cb = jest.fn()
   state.getSourceState(cb)
   expect(cb).toBeCalledTimes(1)
@@ -211,13 +178,13 @@ test('getSourceState', () => {
   const syncState = state.getSourceState()
   expect(syncState).toEqual(state.state)
 
-  state.controller.publishState = () => null
+  state.factory.getState = () => null
   state.getSourceState(cb)
   expect(cb).toBeCalledTimes(2)
   expect(cb).toBeCalledWith(state.state)
 })
 test('setSourceState', () => {
-  const state = new FormState({ useDirty: false })
+  const state = new Form()
   const cb1 = draft => (draft.change = true)
   const prevState1 = state.getSourceState()
   expect(prevState1.change).toEqual(undefined)
@@ -226,14 +193,14 @@ test('setSourceState', () => {
   expect(state.getSourceState()).toEqual({ ...prevState1, change: true })
 })
 test('isDirty', () => {
-  const state = new FormState({ useDirty: true })
-  expect(state.dirtyNum).toEqual(0)
+  const state = new Form()
+  expect(state.dirtyCount).toEqual(0)
   expect(state.isDirty()).toEqual(false)
-  state.dirtyNum = 1
+  state.dirtyCount = 1
   expect(state.isDirty()).toEqual(true)
-  state.dirtyNum = 0
+  state.dirtyCount = 0
   expect(state.isDirty()).toEqual(false)
-  state.dirtys.validating = true
+  state.dirtys = { validating: true }
   expect(state.isDirty()).toEqual(false)
   expect(state.isDirty('validating')).toEqual(true)
 })

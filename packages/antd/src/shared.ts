@@ -2,19 +2,33 @@ import React from 'react'
 import { PreviewText } from '@formily/react-shared-components'
 import {
   IConnectProps,
-  MergedFieldComponentProps
+  MergedFieldComponentProps,
+  getRegistry
 } from '@formily/react-schema-renderer'
 import { version } from 'antd'
-import { each } from '@formily/shared'
+import { each, isArr } from '@formily/shared'
 export * from '@formily/shared'
 
 export const isAntdV4 = /^4\./.test(version)
+
+export const cloneChlildren = (children: any, props?: any) => {
+  return React.isValidElement(children)
+    ? React.cloneElement(children, {
+        ...props,
+        children: cloneChlildren(children.props['children'])
+      })
+    : isArr(children)
+    ? children.map((child, key) => cloneChlildren(child, { key }))
+    : children
+}
 
 export const autoScrollInValidateFailed = (formRef: any) => {
   if (formRef.current) {
     setTimeout(() => {
       const elements = formRef.current.querySelectorAll(
-        '.ant-form-item-control.has-error'
+        isAntdV4
+          ? '.ant-form-item-has-error'
+          : '.ant-form-item-control.has-error'
       )
       if (elements && elements.length) {
         if (!elements[0].scrollIntoView) return
@@ -36,7 +50,7 @@ export const mapTextComponent = (
   const { editable } = fieldProps
   if (editable !== undefined) {
     if (editable === false) {
-      return PreviewText
+      return getRegistry().previewText || PreviewText
     }
   }
   return Target
@@ -52,9 +66,9 @@ export const transformDataSourceKey = (component, dataSourceKey) => {
 }
 
 export const normalizeCol = (
-  col: { span: number; offset?: number } | number,
+  col?: { span: number; offset?: number } | number,
   defaultValue?: { span: number }
-): { span: number; offset?: number } => {
+): { span: number; offset?: number } | undefined => {
   if (!col) {
     return defaultValue
   } else {
@@ -93,7 +107,8 @@ const NextFormItemProps = [
   'extra',
   'itemStyle',
   'itemClassName',
-  'addonAfter'
+  'addonAfter',
+  'tooltip'
 ]
 
 export const pickFormItemProps = (props: any) => {

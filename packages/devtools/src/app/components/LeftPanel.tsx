@@ -33,4 +33,5 @@ export const LeftPanel = styled(({ className, dataSource, onSelect }) => {
   )
 })`
   width: 50%;
+  min-width: 50%;
 `

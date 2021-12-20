@@ -11,28 +11,21 @@ backgroundPageConnection.postMessage({
   tabId: chrome.devtools.inspectedWindow.tabId
 })
 
-const debounce = (fn: any, duration = 60) => {
-  let timer = null
-  return (...args: any[]) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      clearTimeout(timer)
-      fn(...args)
-    }, duration)
-  }
-}
+chrome.devtools.inspectedWindow.eval(
+  'window.__FORMILY_DEV_TOOLS_HOOK__.openDevtools()'
+)
 
 const Devtools = () => {
   const [state, setState] = useState([])
   useEffect(() => {
     let store = {}
-    const update = debounce(() => {
+    const update = () => {
       setState(
         Object.keys(store).map(key => {
           return store[key]
         })
       )
-    })
+    }
     chrome.devtools.inspectedWindow.eval(
       'window.__FORMILY_DEV_TOOLS_HOOK__.update()'
     )

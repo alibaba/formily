@@ -18,15 +18,15 @@ export class FormGraph<NodeType = any> extends Subscribable<{
   type: string
   payload: FormGraphNodeRef
 }> {
-  private refrences: {
-    [key in string]: FormGraphNodeRef
+  refrences: {
+    [key: string]: FormGraphNodeRef
   }
 
-  private nodes: {
-    [key in string]: NodeType
+  nodes: {
+    [key: string]: NodeType
   }
 
-  private buffer: {
+  buffer: {
     path: FormPath
     ref: FormGraphNodeRef
     latestParent?: {
@@ -35,9 +35,9 @@ export class FormGraph<NodeType = any> extends Subscribable<{
     }
   }[]
 
-  private matchStrategy: FormGraphProps['matchStrategy']
+  matchStrategy: FormGraphProps['matchStrategy']
 
-  public size: number
+  size: number
 
   constructor(props: FormGraphProps = {}) {
     super()
@@ -156,9 +156,9 @@ export class FormGraph<NodeType = any> extends Subscribable<{
               : FormPath.parse(selector).match(path))
           ) {
             eacher(node, path)
-            if (recursion) {
-              this.eachChildren(path, selector, eacher, recursion)
-            }
+          }
+          if (recursion) {
+            this.eachChildren(path, selector, eacher, recursion)
           }
         }
       })
@@ -220,23 +220,36 @@ export class FormGraph<NodeType = any> extends Subscribable<{
     return reduce(this.nodes, reducer, initial)
   }
 
-  appendNode(path: FormPathPattern, node: NodeType) {
+  appendNode(
+    node: NodeType,
+    path: FormPathPattern = '',
+    dataPath: FormPathPattern = ''
+  ) {
     const selfPath = FormPath.parse(path)
+    const selfDataPath = FormPath.parse(dataPath || path)
     const parentPath = selfPath.parent()
+    const dataParentPath = selfDataPath.parent()
     const parentRef = this.refrences[parentPath.toString()]
+    const dataParentRef = this.refrences[dataParentPath.toString()]
     const selfRef: FormGraphNodeRef = {
       path: selfPath,
+      dataPath: selfDataPath,
       children: []
     }
     if (this.get(selfPath)) return
     this.nodes[selfPath.toString()] = node
     this.refrences[selfPath.toString()] = selfRef
+    this.refrences[selfDataPath.toString()] = selfRef
     this.size++
     if (parentRef) {
       parentRef.children.push(selfPath)
       selfRef.parent = parentRef
+    } else if (dataParentRef) {
+      dataParentRef.children.push(selfDataPath)
+      selfRef.parent = dataParentRef
     } else {
       const latestParent = this.getLatestParent(selfPath)
+      const latestDataParent = this.getLatestParent(selfDataPath)
       if (latestParent) {
         latestParent.ref.children.push(selfPath)
         selfRef.parent = latestParent.ref
@@ -244,6 +257,14 @@ export class FormGraph<NodeType = any> extends Subscribable<{
           path: selfPath,
           ref: selfRef,
           latestParent: latestParent
+        })
+      } else if (latestDataParent) {
+        latestDataParent.ref.children.push(selfPath)
+        selfRef.parent = latestDataParent.ref
+        this.buffer.push({
+          path: selfPath,
+          ref: selfRef,
+          latestParent: latestDataParent
         })
       }
     }
@@ -287,6 +308,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
     })
     delete this.nodes[selfPath.toString()]
     delete this.refrences[selfPath.toString()]
+    delete this.refrences[selfRef.dataPath.toString()]
     this.size--
     if (selfRef.parent) {
       selfRef.parent.children.forEach((path, index) => {

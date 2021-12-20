@@ -4,9 +4,7 @@ import {
   IFormCreatorOptions,
   LifeCycleTypes,
   FormLifeCycle,
-  IForm,
-  IModel,
-  isStateModel
+  IForm
 } from '@formily/core'
 import { useDirty } from './useDirty'
 import { useEva } from 'react-eva'
@@ -102,7 +100,7 @@ export const useForm = <
   const lifecycles = [
     new FormLifeCycle(({ type, payload }) => {
       dispatch.lazy(type, () => {
-        return isStateModel(payload) ? payload.getState() : payload
+        return payload?.getState ? payload.getState?.() : payload
       })
       if (broadcast) {
         broadcast.notify({ type, payload })
@@ -110,10 +108,10 @@ export const useForm = <
     }),
     new FormLifeCycle(
       LifeCycleTypes.ON_FORM_WILL_INIT,
-      (payload: IModel, form: IForm) => {
+      (form: IForm, formApi) => {
         const actions = {
-          ...form,
-          dispatch: form.notify
+          ...formApi,
+          dispatch: formApi.notify
         }
         implementActions(actions)
         if (broadcast) {

@@ -383,3 +383,24 @@ test('remove initial value by onFieldChange', async () => {
 
   expect(queryAllByTestId('test-input')[0].getAttribute('value')).toEqual('')
 })
+
+test('default value support expression', async () => {
+  const TestComponent = () => {
+    const schema = {
+      'type': 'object',
+      'properties': {
+        'aa': {
+          'x-component': 'string',
+          'default':'{{123321}}',
+        },
+      }
+    }
+    return (
+      <SchemaForm schema={schema}/>
+    )
+  }
+  const { getByTestId } = render(<TestComponent />)
+  await wait()
+  expect(getByTestId('test-input').getAttribute('value')).toEqual('123321')
+})
+

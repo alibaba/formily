@@ -1,5 +1,7 @@
 import React from 'react'
 import { isArr, each, isFn, isValid, defaults } from '@formily/shared'
+import { useLayout } from '@formily/react'
+import hoistNonReactStatics from 'hoist-non-react-statics'
 import {
   ISchema,
   IConnectOptions,
@@ -90,11 +92,21 @@ export const connect = <ExtendsComponentKey extends string = ''>(
             ...args
           )
           if (isFn(schemaComponentProps[options.eventName])) {
-            schemaComponentProps[options.eventName](event, ...args)
+            return schemaComponentProps[options.eventName](event, ...args)
           }
         },
-        onBlur: () => mutators.blur(),
-        onFocus: () => mutators.focus()
+        onBlur: (...args: any) => {
+          mutators.blur()
+          if (isFn(schemaComponentProps['onBlur'])) {
+            return schemaComponentProps['onBlur'](...args)
+          }
+        },
+        onFocus: (...args: any) => {
+          mutators.focus()
+          if (isFn(schemaComponentProps['onFocus'])) {
+            return schemaComponentProps['onFocus'](...args)
+          }
+        }
       }
       if (isValid(editable)) {
         if (isFn(editable)) {
@@ -135,6 +147,20 @@ export const connect = <ExtendsComponentKey extends string = ''>(
         delete componentProps.editable
       }
 
+      const megaProps = schema.getMegaLayoutProps()
+      const { full, size } = useLayout(megaProps)
+      if (full) {
+        componentProps.style = {
+          ...(componentProps.style || {}),
+          width: '100%',
+          flex: '1 1 0%'
+        }
+      }
+
+      if (size) {
+        componentProps.size = size
+      }
+
       return React.createElement(
         isFn(options.getComponent)
           ? options.getComponent(Component, props, fieldProps)
@@ -146,6 +172,9 @@ export const connect = <ExtendsComponentKey extends string = ''>(
     Object.assign(ConnectedComponent, {
       __ALREADY_CONNECTED__: true
     })
+    if (Component) {
+      hoistNonReactStatics(ConnectedComponent, Component)
+    }
 
     return ConnectedComponent
   }

@@ -1,15 +1,17 @@
 import { useMemo, useState, useRef } from 'react'
-import { createQueryEffects } from '../shared'
+import { createQueryEffects, ON_FORM_QUERY } from '../shared'
 import { toArr } from '@formily/shared'
 import { IEffectMiddleware, IFormActions } from '../types'
 
 export const useFormQuery = <
   TQueryPayload = any,
   TQueryResult = any,
+  TContext = any,
   TActions extends IFormActions = any
 >(
   resource: (payload: TQueryPayload) => TQueryResult | Promise<TQueryResult>,
-  middlewares: IEffectMiddleware[]
+  middlewares: IEffectMiddleware[],
+  context?: TContext
 ) => {
   const ref = useRef<any>()
   const [state, setState] = useState({
@@ -23,13 +25,21 @@ export const useFormQuery = <
     response: ref.current.response,
     error: ref.current.error,
     ...useMemo(() => {
-      let dispatch: any
+      let trigger: any
+      let promise: Promise<any>
+      let resolve: () => void
+      const onSubmit = () => {
+        promise = new Promise(_resolve => {
+          resolve = _resolve
+        })
+        return promise
+      }
       const effects = createQueryEffects<TQueryPayload, TQueryResult, TActions>(
         resource,
         [
           ({ actions }) => {
-            dispatch = () => {
-              actions.dispatch('onFormSubmit', actions.getFormState())
+            trigger = (type: string = 'onFormSubmitQuery') => {
+              actions.dispatch(ON_FORM_QUERY, type)
             }
             return {
               async onFormWillQuery(payload, next) {
@@ -58,16 +68,21 @@ export const useFormQuery = <
                 loading: false,
                 response
               })
+              if (resolve) {
+                resolve()
+              }
               return response
             }
           })
-        ]
+        ],
+        context
       )
       return {
         effects,
-        trigger() {
-          if (dispatch) {
-            dispatch()
+        onSubmit,
+        trigger(type?: string) {
+          if (trigger) {
+            trigger(type)
           }
         }
       }

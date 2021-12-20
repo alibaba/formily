@@ -1,7 +1,7 @@
 import React from 'react'
 import {
-  IFieldStateProps,
-  IVirtualFieldStateProps,
+  IFieldRegistryProps,
+  IVirtualFieldRegistryProps,
   IForm,
   IMutators,
   IFieldState,
@@ -13,6 +13,53 @@ import {
 } from '@formily/core'
 import { Observable } from 'rxjs/internal/Observable'
 export * from '@formily/core'
+
+type ILayoutLabelAlign = 'top' | 'left' | 'right'
+export interface ILayoutProps {
+  hasBorder?: boolean
+  context?: any
+  isRoot?: boolean
+  isLayout?: boolean
+  defaultSettings?: any
+  children?: any
+  full?: boolean
+  layoutProps?: any
+  className?: string
+  label?: any
+  required?: boolean
+  labelAlign?: ILayoutLabelAlign
+  inline?: boolean
+  inset?: boolean
+  autoRow?: boolean
+  columns?: number
+  flex?: boolean
+  enableSafeWidth?: boolean
+  labelWidth?: number | string
+  wrapperWidth?: number | string
+  labelCol?: number
+  wrapperCol?: number
+  addonBefore?: any
+  addonAfter?: any
+  description?: any
+  gutter?: number | string
+  span?: number
+  grid?: boolean
+  contextColumns?: number
+  contextResponsive?: { lg?: number; m?: number; s?: number }
+  responsive?: { lg?: number; m?: number; s?: number }
+  size?: string
+}
+
+export type ILayoutItemProps = {
+  span?: number
+  full?: boolean
+  labelAlign?: ILayoutLabelAlign
+  inset?: boolean
+  labelWidth?: number
+  wrapperWidth?: number
+  labelCol?: number
+  wrapperCol?: number
+}
 
 export interface IFormEffect<Payload = any, Actions = any> {
   (
@@ -74,13 +121,13 @@ export interface IVirtualFieldAPI {
   props: {}
 }
 
-export interface IFieldStateUIProps extends IFieldStateProps {
+export interface IFieldStateUIProps extends IFieldRegistryProps {
   triggerType?: 'onChange' | 'onBlur' | 'none'
   getValueFromEvent?: (...args: any[]) => any
   children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)
 }
 
-export interface IVirtualFieldProps extends IVirtualFieldStateProps {
+export interface IVirtualFieldStateUIProps extends IVirtualFieldRegistryProps {
   children?:
     | React.ReactElement
     | ((api: IVirtualFieldAPI) => React.ReactElement)
@@ -144,7 +191,7 @@ type OMitActions =
   | 'unsafe_do_not_use_transform_data_path'
 
 export type IFormActions = Omit<IForm, OMitActions> & {
-  dispatch: (type: string, payload: any) => void
+  dispatch?: (type: string, payload: any) => void
 }
 
 type WrapPromise<
@@ -162,10 +209,7 @@ export interface IEffectProviderAPI<TActions = any, TContext = any> {
     type: string,
     filter: (payload: TPayload) => boolean
   ) => Promise<TPayload>
-  triggerTo: <TPayload = any>(
-    type: string,
-    payload: TPayload
-  ) => Promise<TPayload>
+  triggerTo: <TPayload = any>(type: string, payload: TPayload) => void
   applyMiddlewares: <TPayload = any>(
     type: string,
     payload: TPayload

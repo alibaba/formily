@@ -1,8 +1,10 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useContext } from 'react'
 import {
   ISchemaFieldComponentProps,
   SchemaField,
-  Schema
+  Schema,
+  FormExpressionScopeContext,
+  complieExpression
 } from '@formily/react-schema-renderer'
 import { toArr, isFn, isArr, FormPath } from '@formily/shared'
 import { ArrayList, DragListView } from '@formily/react-shared-components'
@@ -18,7 +20,6 @@ const SelectionRow = (Table as any).SelectionRow
 
 const ArrayComponents = {
   Wrapper: Table,
-  Item: Table.Column,
   CircleButton,
   TextButton,
   AdditionIcon: () => <Icon type="add" className="next-icon-first" />,
@@ -124,6 +125,7 @@ const DragableTable = styled(props => {
 
 export const ArrayTable = styled(
   (props: ISchemaFieldComponentProps & { className: string }) => {
+    const expressionScope = useContext(FormExpressionScopeContext)
     const { value, schema, className, editable, path, mutators } = props
     const {
       renderAddition,
@@ -134,14 +136,16 @@ export const ArrayTable = styled(
       renderExtraOperations,
       operationsWidth,
       operations,
-      dragable,
+      draggable,
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
+    const schemaItems = Array.isArray(schema.items)
+      ? schema.items[schema.items.length - 1]
+      : schema.items
     const onAdd = () => {
-      const items = Array.isArray(schema.items)
-        ? schema.items[schema.items.length - 1]
-        : schema.items
-      mutators.push(items.getEmptyValue())
+      if (schemaItems) {
+        mutators.push(schemaItems.getEmptyValue())
+      }
     }
     const onMove = (dragIndex, dropIndex) => {
       mutators.move(dragIndex, dropIndex)
@@ -153,10 +157,10 @@ export const ArrayTable = styled(
           ...props.getExtendsProps()
         }
         return (
-          <ArrayList.Item
+          <Table.Column
             width={200}
             {...itemProps}
-            title={props.title}
+            title={complieExpression(props.title, expressionScope)}
             key={key}
             dataIndex={key}
             cell={(value: any, index: number) => {
@@ -165,6 +169,8 @@ export const ArrayTable = styled(
                 <FormItemShallowProvider
                   key={newPath.toString()}
                   label={undefined}
+                  labelCol={undefined}
+                  wrapperCol={undefined}
                 >
                   <SchemaField path={newPath} schema={props} />
                 </FormItemShallowProvider>
@@ -174,6 +180,14 @@ export const ArrayTable = styled(
         )
       })
     }
+    let columns = []
+    if (schema.items) {
+      columns = isArr(schema.items)
+        ? schema.items.reduce((buf, items) => {
+            return buf.concat(renderColumns(items))
+          }, [])
+        : renderColumns(schema.items)
+    }
     const renderTable = () => {
       return (
         <ArrayList.Wrapper
@@ -181,41 +195,39 @@ export const ArrayTable = styled(
           {...componentProps}
           dataSource={toArr(value)}
         >
-          {isArr(schema.items)
-            ? schema.items.reduce((buf, items) => {
-                return buf.concat(renderColumns(items))
-              }, [])
-            : renderColumns(schema.items)}
-          <ArrayList.Item
-            width={operationsWidth || 200}
-            lock="right"
-            {...operations}
-            key="operations"
-            dataIndex="operations"
-            cell={(value: any, index: number) => {
-              return (
-                <Form.Item>
-                  <div className="array-item-operator">
-                    <ArrayList.Remove
-                      index={index}
-                      onClick={() => mutators.remove(index)}
-                    />
-                    <ArrayList.MoveDown
-                      index={index}
-                      onClick={() => mutators.moveDown(index)}
-                    />
-                    <ArrayList.MoveUp
-                      index={index}
-                      onClick={() => mutators.moveUp(index)}
-                    />
-                    {isFn(renderExtraOperations)
-                      ? renderExtraOperations(index)
-                      : renderExtraOperations}
-                  </div>
-                </Form.Item>
-              )
-            }}
-          />
+          {columns}
+          {editable && operations !== false && (
+            <Table.Column
+              width={operationsWidth || 200}
+              lock="right"
+              {...operations}
+              key="operations"
+              dataIndex="operations"
+              cell={(value: any, index: number) => {
+                return (
+                  <Form.Item>
+                    <div className="array-item-operator">
+                      <ArrayList.Remove
+                        index={index}
+                        onClick={() => mutators.remove(index)}
+                      />
+                      <ArrayList.MoveDown
+                        index={index}
+                        onClick={() => mutators.moveDown(index)}
+                      />
+                      <ArrayList.MoveUp
+                        index={index}
+                        onClick={() => mutators.moveUp(index)}
+                      />
+                      {isFn(renderExtraOperations)
+                        ? renderExtraOperations(index)
+                        : renderExtraOperations}
+                    </div>
+                  </Form.Item>
+                )
+              }}
+            />
+          )}
         </ArrayList.Wrapper>
       )
     }
@@ -228,7 +240,7 @@ export const ArrayTable = styled(
           editable={editable}
           components={{
             ...ArrayComponents,
-            Wrapper: dragable ? DragableTable : ArrayComponents.Wrapper
+            Wrapper: draggable ? DragableTable : ArrayComponents.Wrapper
           }}
           renders={{
             renderAddition,
@@ -238,7 +250,7 @@ export const ArrayTable = styled(
             renderEmpty
           }}
         >
-          {dragable ? (
+          {draggable ? (
             <DragListView onDragEnd={onMove}>{renderTable()}</DragListView>
           ) : (
             renderTable()
@@ -246,9 +258,11 @@ export const ArrayTable = styled(
           <ArrayList.Addition>
             {({ children }) => {
               return (
-                <div className="array-table-addition" onClick={onAdd}>
-                  {children}
-                </div>
+                children && (
+                  <div className="array-table-addition" onClick={onAdd}>
+                    {children}
+                  </div>
+                )
               )
             }}
           </ArrayList.Addition>
@@ -258,9 +272,9 @@ export const ArrayTable = styled(
   }
 )`
   display: inline-block;
-  min-width: 600px;
+  width: 100%;
   max-width: 100%;
-  overflow: scroll;
+  overflow: auto;
   table {
     margin-bottom: 0 !important;
     th,

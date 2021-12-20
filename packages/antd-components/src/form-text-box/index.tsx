@@ -13,7 +13,7 @@ export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
   'text-box',
   styled(({ props, form, className, children }) => {
     const schema = new Schema(props)
-    const mergeProps = schema.getExtendsComponentProps(false)
+    const mergeProps = schema.getExtendsComponentProps()
     const { title, label, text, gutter, style } = Object.assign(
       {
         gutter: 5
@@ -84,7 +84,7 @@ export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
 
     const textChildren = (
       <div
-        className={className}
+        className={`${className} ${mergeProps.className}`}
         style={{
           marginRight: -gutter / 2,
           marginLeft: -gutter / 2

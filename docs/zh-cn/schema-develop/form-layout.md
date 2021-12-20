@@ -38,7 +38,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 给SchemaForm组件传入inline属性即可把表单变成内联模式
+- 给 SchemaForm 组件传入 inline 属性即可把表单变成内联模式
 
 ## 复杂组合布局
 
@@ -322,8 +322,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 抽象了几个可复用的富文本工具方法，主要用在表达式中使用，可以快速实现很多简单的富文本文案场景
-- 每个Field都可以配一个x-props.addonAfter，可以给组件尾部追加文案
-- FormCard是卡片式布局，FormBlock是属于内联式卡片布局
+- 每个 Field 都可以配一个 x-props.addonAfter，可以给组件尾部追加文案
+- FormCard 是卡片式布局，FormBlock 是属于内联式卡片布局
 
 ## 网格布局
 
@@ -365,7 +365,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 使用FormItemGrid可以实现网格布局，如果加了title属性，就能处理FormItem维度的网格布局
+- 使用 FormItemGrid 可以实现网格布局，如果加了 title 属性，就能处理 FormItem 维度的网格布局
 
 ## 分步表单
 
@@ -388,8 +388,8 @@ import 'antd/dist/antd.css'
 
 const actions = createFormActions()
 let cache = {
-  graph:{},
-  current:0
+  graph: {},
+  current: 0
 }
 
 const App = () => (
@@ -494,7 +494,10 @@ const App = () => (
               <Button
                 onClick={() => {
                   actions.setFormGraph(cache.graph)
-                  actions.dispatch(FormStep.ON_FORM_STEP_CURRENT_CHANGE,cache.current)
+                  actions.dispatch(
+                    FormStep.ON_FORM_STEP_CURRENT_CHANGE,
+                    cache.current
+                  )
                 }}
               >
                 回滚状态
@@ -511,6 +514,304 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 使用FormStep组件需要传入dataSource，同时指定对应要控制的字段name，这个name属性是一个FormPathPattern，可以使用匹配语法匹配任何字段
-- 消费FormStep状态，主要使用FormSpy来消费，借助reducer可以自定义状态
-- 借助actions.dispatch可以手工触发FormStep的生命周期钩子
+- 使用 FormStep 组件需要传入 dataSource，同时指定对应要控制的字段 name，这个 name 属性是一个 FormPathPattern，可以使用匹配语法匹配任何字段
+- 消费 FormStep 状态，主要使用 FormSpy 来消费，借助 reducer 可以自定义状态
+- 借助 actions.dispatch 可以手工触发 FormStep 的生命周期钩子
+
+**FormStep API**
+
+## 选项卡表单
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormSpy,
+  createFormActions
+} from '@formily/antd'
+import { Input, FormTab } from '@formily/antd-components'
+import { Button } from 'antd'
+import Printer from '@formily/printer'
+import 'antd/dist/antd.css'
+
+const actions = createFormActions()
+
+const App = () => (
+  <Printer>
+    <SchemaForm
+      components={{ Input }}
+      actions={actions}
+      onSubmit={v => console.log(v)}
+    >
+      <FormTab name="tabs" defaultActiveKey={'tab-2'}>
+        <FormTab.TabPane name="tab-1" tab="选项1">
+          <Field
+            type="string"
+            name="a1"
+            title="字段1"
+            required
+            x-component="Input"
+          />
+        </FormTab.TabPane>
+        <FormTab.TabPane name="tab-2" tab="选项2">
+          <Field
+            type="string"
+            name="a2"
+            title="字段2"
+            required
+            x-component="Input"
+          />
+          <Field
+            type="string"
+            name="a3"
+            title="字段3"
+            required
+            x-component="Input"
+          />
+          <Field
+            type="string"
+            name="a4"
+            title="字段4"
+            required
+            x-component="Input"
+          />
+          <Field
+            type="string"
+            name="a5"
+            title="字段5"
+            required
+            x-component="Input"
+          />
+        </FormTab.TabPane>
+      </FormTab>
+      <FormButtonGroup>
+        <Submit />
+        <Button
+          onClick={() => {
+            actions.dispatch(FormTab.ON_FORM_TAB_ACTIVE_KEY_CHANGE, {
+              value: 'tab-2'
+            })
+          }}
+        >
+          切换到第二个选项
+        </Button>
+        <Button
+          onClick={() => {
+            actions.setFieldState('tabs', state => {
+              state.props['x-component-props'] =
+                state.props['x-component-props'] || {}
+              const { hiddenKeys } = state.props['x-component-props']
+              state.props['x-component-props'].hiddenKeys =
+                hiddenKeys && hiddenKeys.length ? [] : ['tab-2']
+            })
+          }}
+        >
+          隐藏/显示第二个选项卡
+        </Button>
+      </FormButtonGroup>
+    </SchemaForm>
+  </Printer>
+)
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+**案例解析**
+
+- 从@formily/antd-components 中导出 FormTab
+- FormTab 中的渲染是会强制全部渲染的，主要是为了收集校验
+- 如果被隐藏的 Tab 校验错误，在 Tab Title 上会展现 Badge 小红标，同时浏览器自动滚动
+
+## 自适应复合栅格布局
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { Button } from "antd";
+import {
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import styled from "styled-components";
+import {
+  SchemaForm,
+  SchemaField,
+  SchemaMarkupField as Field,  
+  MegaLayout,
+  FormMegaLayout
+} from "@formily/antd";
+import { ArrayList } from "@formily/react-shared-components";
+import { toArr, isFn, FormPath } from "@formily/shared";
+import { FormCard, Input, Checkbox } from "@formily/antd-components";
+import "antd/dist/antd.css";
+
+const ArrayComponents = {
+  CircleButton: props => <Button {...props} />,
+  TextButton: props => <Button text {...props} />,
+  AdditionIcon: () => <div>+Add</div>,
+  RemoveIcon: () => <div>Remove</div>,
+  MoveDownIcon: () => <div>Down</div>,
+  MoveUpIcon: () => <div>Up</div>
+};
+
+const ArrayCustom = props => {
+  const { value, schema, className, editable, path, mutators } = props;
+  const {
+    renderAddition,
+    renderRemove,
+    renderMoveDown,
+    renderMoveUp,
+    renderEmpty,
+    renderExtraOperations,
+    ...componentProps
+  } = schema.getExtendsComponentProps() || {};
+
+  const onAdd = () => {
+    const items = Array.isArray(schema.items)
+      ? schema.items[schema.items.length - 1]
+      : schema.items;
+    mutators.push(items.getEmptyValue());
+  };
+
+  return (
+    <ArrayList
+      value={value}
+      minItems={schema.minItems}
+      maxItems={schema.maxItems}
+      editable={editable}
+      components={ArrayComponents}
+      renders={{
+        renderAddition,
+        renderRemove,
+        renderMoveDown,
+        renderMoveUp,
+        renderEmpty // 允许开发者覆盖默认
+      }}
+    >
+      <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+        {toArr(value).map((item, index) => {
+          return (
+            <div style={{ marginBottom: "16px" }} key={index}>
+              <SchemaField path={FormPath.parse(path).concat(index)} />
+            </div>
+          );
+        })}
+      </div>
+      <ArrayList.Empty>
+        {({ children }) => {
+          return (
+            <div
+              {...componentProps}
+              size="small"
+              className={`card-list-item card-list-empty`}
+              onClick={onAdd}
+            >
+              <div>{children}</div>
+            </div>
+          );
+        }}
+      </ArrayList.Empty>
+      <ArrayList.Addition>
+        {({ children, isEmpty }) => {
+          if (!isEmpty) {
+            return (
+              <div
+                style={{ marginLeft: "12px", cursor: 'pointer' }}
+                className="array-cards-addition"
+                onClick={onAdd}
+              >
+                <PlusCircleOutlined style={{ color: '#1890ff' }}/>
+              </div>
+            );
+          }
+        }}
+      </ArrayList.Addition>
+    </ArrayList>
+  );
+};
+
+ArrayCustom.isFieldComponent = true;
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input, Checkbox, ArrayCustom }}>
+      <FormCard title="基本信息">
+        <FormMegaLayout
+          labelWidth="100"
+          grid
+          full
+          autoRow
+          labelAlign="left"
+          columns="3"
+          responsive={{ lg: 3, m: 2, s: 1 }}
+        >
+          <Field name="username" title="姓名" x-component="Input" required/>
+          <Field name="gender" title="性别" x-component="Input" required/>
+          <Field name="company" title="公司" x-component="Input" required/>
+          <Field title="固定电话" name="phoneList" type="array" required
+            default={[
+              { phone: '010-1234 5678' },
+              { phone: '010-1234 5678' }
+            ]}
+            x-component="ArrayCustom"
+          >
+            <Field type="object" x-mega-props={{ columns: 1 }}>
+              <Field name="phone" x-component="Input" />
+            </Field>
+          </Field>
+
+          <Field
+            title="部门职务"
+            name="departmentList"
+            type="array"
+            required
+            default={[
+              { group: "项目1部", position: '项目经理' },
+              { group: "项目1部", position: '研发经理', isManeger: true }
+            ]}
+            x-component="ArrayCustom"
+          >
+              <Field type="object" x-mega-props={{ columns: 2 }}>
+                <Field name="group" x-mega-props={{ span: 2 }} x-component="Input" />
+                <Field name="position" x-component="Input" />
+                <Field name="isManeger" x-component="Checkbox" x-component-props={{
+                  children: '是否主管'
+                }} />
+              </Field>
+          </Field>
+          
+          <Field
+            title="手机号"
+            name="mobileList"
+            type="array"
+            required
+            default={[
+              { mobile: "136 0123 4567", enableSMS: true },
+              { mobile: "136 0123 4567", enableSMS: false }
+            ]}
+            x-component="ArrayCustom"
+          >
+            <Field type="object" x-mega-props={{ columns: 2 }}>
+              <Field name="mobile" x-component="Input" />
+              <Field name="enableSMS" x-component="Checkbox" x-component-props={{
+                children: '接受短信'
+              }} />
+            </Field>
+          </Field>
+        </FormMegaLayout>
+      </FormCard>      
+    </SchemaForm>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+**案例解析**
+
+- 结合自定义 ArrayList 以及 MegaLayout 的在栅格场景下的应用
+- 配合响应式布局，能够根据屏幕宽度进行自适应
+- 在 ArrayList场景下，如何通过Field（object）来改变columns
