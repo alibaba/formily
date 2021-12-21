@@ -24,7 +24,7 @@ export const complieExpression = <Source = any, Context = any>(
       const vars = Object.keys(context || {})
       const params = vars.map(key => context[key])
       return new Function(...vars, `return (${matched[1]});`)(...params)
-      }catch (e){
+      } catch (e) {
         console.error(e);
         return;
       }
