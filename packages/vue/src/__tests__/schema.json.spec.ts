@@ -910,8 +910,7 @@ describe('expression', () => {
     expect(wrapper.find('.input2').exists()).not.toBeTruthy()
 
     form.values.input = '123'
-
-    expect(wrapper.find('.input2').exists()).toBeTruthy()
+    await waitFor(() => expect(wrapper.find('.input2').exists()).toBeTruthy())
     wrapper.destroy()
   })
 

@@ -1,8 +1,15 @@
-import { defineComponent, inject, ref } from 'vue-demi'
+import {
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  ref,
+  shallowRef,
+  watch,
+} from 'vue-demi'
 import { isVoidField } from '@formily/core'
 import { FormPath } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
-import { toJS } from '@formily/reactive'
+import { autorun, toJS, raw } from '@formily/reactive'
 import { SchemaOptionsSymbol } from '../shared'
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
@@ -73,6 +80,22 @@ export default observer(
 
         return slots
       }
+
+      const valueRef = shallowRef()
+      let dispose: () => void
+      watch(
+        () => props.field,
+        () => {
+          dispose?.()
+          dispose = autorun(() => {
+            if (props.field && !isVoidField(props.field)) {
+              valueRef.value = props.field.value
+            }
+          })
+        },
+        { immediate: true }
+      )
+      onBeforeUnmount(() => dispose?.())
 
       return () => {
         const field = props.field
@@ -186,8 +209,7 @@ export default observer(
                 ? field.pattern === 'readOnly'
                 : undefined,
               ...originData,
-              // toJS is used to avoid some render loop.
-              value: !isVoidField(field) ? toJS(field.value) : undefined,
+              value: valueRef.value,
             }
             const componentData = {
               attrs,
