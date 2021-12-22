@@ -18,11 +18,16 @@ export const complieExpression = <Source = any, Context = any>(
   const seenObjects = []
   const complie = <Source = any>(source: Source) => {
     if (isStr(source)) {
+      try {
       const matched = source.match(ExpRE)
       if (!matched) return source
       const vars = Object.keys(context || {})
       const params = vars.map(key => context[key])
       return new Function(...vars, `return (${matched[1]});`)(...params)
+      } catch (e) {
+        console.error(e);
+        return;
+      }
     } else if (isArr(source)) {
       return source.map(value => complie(value))
     } else if (isPlainObj(source)) {
