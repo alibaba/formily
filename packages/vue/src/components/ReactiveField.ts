@@ -186,8 +186,7 @@ export default observer(
                 ? field.pattern === 'readOnly'
                 : undefined,
               ...originData,
-              // toJS is used to avoid some render loop.
-              value: !isVoidField(field) ? toJS(field.value) : undefined,
+              value: !isVoidField(field) ? field.value : undefined,
             }
             const componentData = {
               attrs,
