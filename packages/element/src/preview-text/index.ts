@@ -25,11 +25,10 @@ const PlaceholderContext = createContext('N/A')
 export const usePlaceholder = (value?: Ref<any>) => {
   const placeholderCtx = useContext(PlaceholderContext)
   const placeholder = computed(() => {
-    return isValid(value.value) && value.value !== ''
+    return isValid(value?.value) && value.value !== ''
       ? value.value
       : resolveComponent(placeholderCtx.value) || 'N/A'
   })
-
   return placeholder
 }
 
