@@ -961,7 +961,9 @@ describe('expression', () => {
 
     expect(wrapper.find('.input2').attributes().value).toEqual('10')
     form.values.input = 10
-    expect(wrapper.find('.input2').attributes().value).toEqual('100')
+    await waitFor(() =>
+      expect(wrapper.find('.input2').attributes().value).toEqual('100')
+    )
     wrapper.destroy()
   })
 })
