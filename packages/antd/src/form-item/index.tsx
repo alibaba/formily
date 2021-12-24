@@ -210,7 +210,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
         </div>
       )
     }
-    return tooltip 
+    return tooltip
   }
 
   const renderLabelText = () => {
@@ -401,7 +401,7 @@ export const FormItem: ComposeFormItem = connect(
       return false
     }
     return {
-      label: field.title || props.label,
+      label: props.label || field.title,
       feedbackStatus: takeFeedbackStatus(),
       feedbackText: takeMessage(),
       asterisk: takeAsterisk(),
