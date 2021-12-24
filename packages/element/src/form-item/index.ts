@@ -136,7 +136,7 @@ export const FormBaseItem = defineComponent<FormItemProps>({
     bordered: { default: true },
     inset: { default: false },
   },
-  setup(props, { slots, attrs, refs }) {
+  setup(props, { slots, refs }) {
     const active = ref(false)
     const deepLayoutRef = useFormLayout()
 
