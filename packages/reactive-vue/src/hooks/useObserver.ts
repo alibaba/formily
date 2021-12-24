@@ -1,8 +1,9 @@
 import { autorun } from '@formily/reactive'
 import { getCurrentInstance, onBeforeUnmount, isVue3 } from 'vue-demi'
+import { IObserverOptions } from '../types'
 
 /* istanbul ignore next */
-export const useObserver = () => {
+export const useObserver = (options?: IObserverOptions) => {
   if (isVue3) {
     const vm = getCurrentInstance()
 
@@ -24,7 +25,15 @@ export const useObserver = () => {
           dispose()
         }
         dispose = autorun(newValue)
-        vm['_updateEffect'] = newValue
+        const update = () => {
+          vm['_updateEffect'] = newValue
+        }
+
+        if (options?.scheduler) {
+          options?.scheduler?.(update)
+        } else {
+          update()
+        }
       },
     })
   }

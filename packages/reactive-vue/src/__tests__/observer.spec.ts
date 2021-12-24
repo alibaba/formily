@@ -70,3 +70,45 @@ test('observer: component with setup', async () => {
   expect(wrapper.find('button').text()).toBe('12')
   wrapper.destroy()
 })
+
+test('observer: component scheduler', async () => {
+  let schedulerRequest = null
+
+  const model = observable<any>({
+    age: 10,
+    setAge() {
+      model.age++
+    },
+  })
+  const Component = observer(
+    {
+      data() {
+        return {
+          model,
+        }
+      },
+      render(this: any, h: CreateElement) {
+        return h('button', {
+          on: { click: this.model.setAge },
+          domProps: { textContent: this.model.age },
+        })
+      },
+    },
+    {
+      scheduler: (update) => {
+        clearTimeout(schedulerRequest)
+        schedulerRequest = setTimeout(() => {
+          update()
+        }, 100)
+      },
+    }
+  )
+  const wrapper = shallowMount(Component)
+
+  expect(wrapper.find('button').text()).toBe('10')
+  wrapper.find('button').trigger('click')
+  setTimeout(() => {
+    expect(wrapper.find('button').text()).toBe('11')
+    wrapper.destroy()
+  }, 150)
+})

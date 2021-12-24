@@ -62,7 +62,14 @@ function observer(Component: any, observerOptions?: IObserverOptions): any {
           // thus if component updated by vue watcher, we could re track and collect dependencies by @formily/reactive
           this._watcher.getter = reactiveRender
         } else {
-          nativeRenderOfVue.call(this, this)
+          const update = () => {
+            nativeRenderOfVue.call(this, this)
+          }
+          if (observerOptions?.scheduler) {
+            observerOptions?.scheduler?.(update)
+          } else {
+            update()
+          }
         }
       })
 
