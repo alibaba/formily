@@ -16,7 +16,8 @@ export const useObserver = () => {
 
     Object.defineProperty(vm, 'update', {
       get() {
-        return vm['_updateEffect']
+        // https://github.com/alibaba/formily/issues/2655
+        return vm['_updateEffect'] || {}
       },
       set(newValue) {
         if (dispose) {
