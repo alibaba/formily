@@ -23,9 +23,9 @@ interface setValidateLanguage {
 ```ts
 import { setValidateLanguage } from '@formily/core'
 
-setValidationLanguage('en-US')
+setValidateLanguage('en-US')
 
-setValidationLanguage('zh-CN')
+setValidateLanguage('zh-CN')
 ```
 
 ## registerValidateFormats
