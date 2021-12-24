@@ -1,4 +1,4 @@
-import { autorun } from '@formily/reactive'
+import { Tracker } from '@formily/reactive'
 import { getCurrentInstance, onBeforeUnmount, isVue3 } from 'vue-demi'
 import { IObserverOptions } from '../types'
 
@@ -6,14 +6,15 @@ import { IObserverOptions } from '../types'
 export const useObserver = (options?: IObserverOptions) => {
   if (isVue3) {
     const vm = getCurrentInstance()
-
-    let dispose: () => void | undefined
-
-    onBeforeUnmount(() => {
-      if (dispose) {
-        dispose()
+    let tracker: Tracker = null
+    const disposeTracker = () => {
+      if (tracker) {
+        tracker.dispose()
+        tracker = null
       }
-    })
+    }
+
+    onBeforeUnmount(disposeTracker)
 
     Object.defineProperty(vm, 'update', {
       get() {
@@ -21,19 +22,21 @@ export const useObserver = (options?: IObserverOptions) => {
         return vm['_updateEffect'] || {}
       },
       set(newValue) {
-        if (dispose) {
-          dispose()
-        }
-        dispose = autorun(newValue)
-        const update = () => {
-          vm['_updateEffect'] = newValue
-        }
+        disposeTracker()
 
-        if (options?.scheduler) {
-          options?.scheduler?.(update)
-        } else {
-          update()
-        }
+        const update = () => tracker.track(newValue)
+
+        tracker = new Tracker(() => {
+          if (options?.scheduler) {
+            options?.scheduler?.(update)
+          } else {
+            update()
+          }
+        })
+
+        update()
+
+        vm['_updateEffect'] = newValue
       },
     })
   }
