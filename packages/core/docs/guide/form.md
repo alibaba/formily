@@ -32,7 +32,7 @@ The field is created mainly through the createField/createArrayField/createObjec
 
 The query method is mainly used to query the field. The query method can pass in the path of the field or regular expression to match the field.
 
-Because the detailed rules of the field path are still more complicated, they will be explained in detail in the following [Path System](/guide/path) article.
+Because the detailed rules of the field path are still more complicated, they will be explained in detail in the following [Path System](/api/entry/form-path) article.
 
 Then calling the query method will return a Query object. The Query object can have a forEach/map/reduce method that traverses all fields in batches, or a take method that takes only the first field that is queried, as well as direct reading of fields. The get method of properties, and the getIn method that can read field properties in depth, the difference between the two methods is that the former can have smart prompts, and the latter has no prompts, so it is recommended that users use the get method.
 
