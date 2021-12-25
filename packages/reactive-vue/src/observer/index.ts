@@ -5,6 +5,7 @@ import collectData from './collectData'
 import { IObserverOptions } from '../types'
 
 export function observer<C>(baseComponent: C, options?: IObserverOptions): C {
+  /* istanbul ignore else */
   if (isVue2) {
     return observerV2(baseComponent, options)
   } else {
