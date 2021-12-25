@@ -106,9 +106,15 @@ test('observer: component scheduler', async () => {
   const wrapper = shallowMount(Component)
 
   expect(wrapper.find('button').text()).toBe('10')
+
   wrapper.find('button').trigger('click')
-  setTimeout(() => {
-    expect(wrapper.find('button').text()).toBe('11')
-    wrapper.destroy()
-  }, 150)
+  await new Promise((r) => setTimeout(r, 150))
+  expect(wrapper.find('button').text()).toBe('11')
+
+  // test second render
+  wrapper.find('button').trigger('click')
+  await new Promise((r) => setTimeout(r, 150))
+  expect(wrapper.find('button').text()).toBe('12')
+
+  wrapper.destroy()
 })
