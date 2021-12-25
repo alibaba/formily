@@ -1,5 +1,3 @@
-# @formily/reactive
+# @formily/path
 
-> Web Reactive Library Like Mobx
-
-## QuikStart
+> Path System
