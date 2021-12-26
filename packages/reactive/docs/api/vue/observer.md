@@ -4,6 +4,19 @@
 
 In Vue, the component rendering method is changed to Reaction, and dependencies are collected every time the view is re-rendered, and dependencies are updated automatically to re-render.
 
+### Signature
+
+```ts
+interface IObserverOptions {
+  scheduler?: (updater: () => void) => void //The scheduler, you can manually control the timing of the update
+  name?: string //name of the packaged component
+}
+
+interface observer<T extends VueComponent> {
+  (component: T, options?: IObserverOptions): T
+}
+```
+
 ## Example
 
 ```html

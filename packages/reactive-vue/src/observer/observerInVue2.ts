@@ -69,7 +69,13 @@ function observer(Component: any, observerOptions?: IObserverOptions): any {
       return this
     }
 
-    const tracker = new Tracker(reactiveRender)
+    const tracker = new Tracker(() => {
+      if (observerOptions?.scheduler) {
+        observerOptions?.scheduler?.(reactiveRender)
+      } else {
+        reactiveRender()
+      }
+    })
 
     this[disposerSymbol] = tracker.dispose
 
