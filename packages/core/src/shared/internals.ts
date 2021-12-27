@@ -114,7 +114,9 @@ export const buildFieldPath = (field: GeneralField) => {
     const currentAddress = segments.slice(0, index + 1)
     const current = fields[currentAddress.join('.')]
     if (prevArray) {
-      prevArray = false
+      if (!isVoidField(current)) {
+        prevArray = false
+      }
       return path
     }
     if (index >= segments.length - 1) {

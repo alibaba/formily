@@ -571,3 +571,52 @@ test('incomplete insertion of array elements', async () => {
   expect(form.fields['array.2.aa']).toBeUndefined()
   expect(form.fields['array.3.aa']).not.toBeUndefined()
 })
+
+test('void array items need skip data', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  const array2 = attach(
+    form.createArrayField({
+      name: 'array2',
+    })
+  )
+  attach(
+    form.createVoidField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createVoidField({
+      name: '0',
+      basePath: 'array2',
+    })
+  )
+  attach(
+    form.createVoidField({
+      name: 'space',
+      basePath: 'array.0',
+    })
+  )
+  const select = attach(
+    form.createField({
+      name: 'select',
+      basePath: 'array.0.space',
+    })
+  )
+  const select2 = attach(
+    form.createField({
+      name: 'select2',
+      basePath: 'array2.0',
+    })
+  )
+
+  select.value = 123
+  select2.value = 123
+  expect(array.value).toEqual([123])
+  expect(array2.value).toEqual([123])
+})
