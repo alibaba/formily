@@ -1,5 +1,41 @@
 # Changelog
 
+## v2.0.7(2021-12-27)
+
+### :tada: Enhancements
+
+1. [feat(devtools): support select node to bind $vm with console (#2682)](https://github.com/alibaba/formily/commit/80ef0792) :point_right: ( [fuzi](https://github.com/fuzi) )
+
+1. [feat(element): improve performance of ArrayTable (#2678)](https://github.com/alibaba/formily/commit/b1f1b4e4) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [feat(reactive-vue): add observer option scheduler (#2672)](https://github.com/alibaba/formily/commit/ca55e484) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :bug: Bug Fixes
+
+1. [fix(core): fix void array items node need skip (#2683)](https://github.com/alibaba/formily/commit/a67ab3a4) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(path): update README.md (#2677)](https://github.com/alibaba/formily/commit/589e74bf) :point_right: ( [AlexStacker](https://github.com/AlexStacker) )
+
+1. [fix(reactive-vue): fix vue3.26 error (#2673)](https://github.com/alibaba/formily/commit/03e9e7d5) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+1. [fix(element): fix usePlaceholder value empty error (#2665)](https://github.com/alibaba/formily/commit/ea8adc37) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [fix(core): fix setValues is not work when called reset (#2649)](https://github.com/alibaba/formily/commit/7d4ef5dc) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :memo: Documents Changes
+
+1. [docs(core): update setValidationLanguage to setValidateLanguage (#2674)](https://github.com/alibaba/formily/commit/31bc258d) :point_right: ( [JuFeng Zhang](https://github.com/JuFeng Zhang) )
+
+1. [docs(core): update form-path doc path](https://github.com/alibaba/formily/commit/7f901de7) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rose: Improve code quality
+
+1. [refactor(vue): switch type files for vue2/vue3 in postinstall (#2640)](https://github.com/alibaba/formily/commit/6015b7c8) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+### :blush: Other Changes
+
+1. [chore(antd/next): improve FormItem props](https://github.com/alibaba/formily/commit/4c36ed26) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.6(2021-12-17)
 
 ### :tada: Enhancements
@@ -882,18 +918,6 @@
 
 1. [feat(project): support bundle dts (#1796)](https://github.com/alibaba/formily/commit/5f8c1879) :point_right: ( [Janry](https://github.com/Janry) )
 
-### :bug: Bug Fixes
-
-1. [fix(vue): fix field doesnt update correctly in designable mode (#1799)](https://github.com/alibaba/formily/commit/837cfc0b) :point_right: ( [月落音阑](https://github.com/月落音阑) )
-
-### :blush: Other Changes
-
-1. [chore(project): improve typings and fix typo (#1802)](https://github.com/alibaba/formily/commit/af23767b) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v2.0.0-beta.78(2021-07-13)
-
-### :tada: Enhancements
-
 1. [feat(form-dialog): add form dialog and form drawer oncancel return value (#1791)](https://github.com/alibaba/formily/commit/f08de0dc) :point_right: ( [张威](https://github.com/张威) )
 
 1. [feat(gitignore): support ignore .history directory (#1792)](https://github.com/alibaba/formily/commit/0035e61c) :point_right: ( [张威](https://github.com/张威) )
@@ -1007,8 +1031,6 @@
 1. [feat(core): add more effects](https://github.com/alibaba/formily/commit/5b42226d) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat(styles): support prefixCls](https://github.com/alibaba/formily/commit/fe53ac42) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [feat(project): support array tabs](https://github.com/alibaba/formily/commit/aed82002) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat: add `tooltip` into FormItem`s props (#1079)](https://github.com/alibaba/formily/commit/bf360963) :point_right: ( [yezihaohao](https://github.com/yezihaohao) )
 
@@ -1163,6 +1185,8 @@
 1. [feat(fix): fix style](https://github.com/alibaba/formily/commit/7841970d) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 ### :bug: Bug Fixes
+
+1. [fix(vue): fix field doesnt update correctly in designable mode (#1799)](https://github.com/alibaba/formily/commit/837cfc0b) :point_right: ( [月落音阑](https://github.com/月落音阑) )
 
 1. [fix(core): fix onFormValuesChange does not trigger with ArrayField initialValue (#1787)](https://github.com/alibaba/formily/commit/0c771f90) :point_right: ( [Janry](https://github.com/Janry) )
 
@@ -1845,6 +1869,8 @@
 1. [test(project): add large test cases](https://github.com/alibaba/formily/commit/68fd2e1c) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 ### :blush: Other Changes
+
+1. [chore(project): improve typings and fix typo (#1802)](https://github.com/alibaba/formily/commit/af23767b) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [chore(designable): fix build failed](https://github.com/alibaba/formily/commit/c133153e) :point_right: ( [janrywang](https://github.com/janrywang) )
 
