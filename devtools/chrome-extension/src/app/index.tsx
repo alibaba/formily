@@ -14,6 +14,13 @@ export default styled(({ className, dataSource }) => {
         dataSource={dataSource}
         onSelect={(info) => {
           select(info)
+          if (chrome && chrome.devtools && chrome.devtools.inspectedWindow) {
+            chrome.devtools.inspectedWindow.eval(
+              `window.__FORMILY_DEV_TOOLS_HOOK__.setVm("${info.key}","${
+                dataSource[info.current][''].id
+              }")`
+            )
+          }
         }}
       />
       <RightPanel
