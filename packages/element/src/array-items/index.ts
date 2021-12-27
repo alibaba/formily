@@ -19,7 +19,7 @@ export interface IArrayItemsItemProps {
 const ArrayItemsInner = observer(
   defineComponent({
     name: 'FArrayItems',
-    setup(props, { attrs }) {
+    setup() {
       const fieldRef = useField<ArrayField>()
       const schemaRef = useFieldSchema()
 
