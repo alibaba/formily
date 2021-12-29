@@ -1,4 +1,14 @@
-import { formatMomentValue } from '../src/__builtins__/moment'
+import moment from 'moment'
+import { formatMomentValue, momentable } from '../src/__builtins__/moment'
+
+test('momentable is usable', () => {
+  expect(moment.isMoment(momentable('2021-09-08'))).toBe(true)
+  expect(
+    momentable(['2021-09-08', '2021-12-29']).every((item) =>
+      moment.isMoment(item)
+    )
+  ).toBe(true)
+})
 
 test('formatMomentValue is usable', () => {
   expect(formatMomentValue('', 'YYYY-MM-DD', '~')).toBe('~')
