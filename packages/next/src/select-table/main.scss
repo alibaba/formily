@@ -1,0 +1,10 @@
+@import '~@alifd/next/lib/core/index-noreset.scss';
+@import '~@alifd/next/lib/form/scss/variable.scss';
+
+$select-table-prefix-cls: '#{$css-prefix}formily-select-table';
+
+.#{$select-table-prefix-cls} {
+  .#{$select-table-prefix-cls}-search {
+    margin-bottom: 8px;
+  }
+}
