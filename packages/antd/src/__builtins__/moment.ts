@@ -21,7 +21,7 @@ export const formatMomentValue = (
       if (isFn(_format)) {
         return _format(date)
       }
-      if (isEmpty(format)) {
+      if (isEmpty(_format)) {
         return date
       }
       return moment(date).format(_format)
