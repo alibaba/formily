@@ -90,6 +90,7 @@ function useOverflow<
   const [overflow, setOverflow] = useState(false)
   const containerRef = useRef<Container>()
   const contentRef = useRef<Content>()
+  const layout = useFormLayout()
 
   useEffect(() => {
     if (containerRef.current && contentRef.current) {
@@ -101,7 +102,7 @@ function useOverflow<
         if (overflow) setOverflow(false)
       }
     }
-  }, [])
+  }, [JSON.stringify(layout.labelCol)])
 
   return {
     overflow,
