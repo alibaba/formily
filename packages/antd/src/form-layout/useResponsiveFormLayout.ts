@@ -82,7 +82,9 @@ export const useResponsiveFormLayout: IUseResponsiveFormLayout = (props) => {
   const [layoutProps, setLayout] = useState<any>(props)
 
   const updateUI = () => {
-    setLayout(calculateProps(ref.current, props))
+    if (ref.current) {
+      setLayout(calculateProps(ref.current, props))
+    }
   }
 
   useEffect(() => {
