@@ -10,8 +10,6 @@ import { usePrefixCls } from '../__builtins__'
 
 const { Search } = Input
 
-import './style.less' // todo temp
-
 type IFilterOption = boolean | ((option: any, keyword: string) => boolean)
 
 type IFilterSort = (optionA: any, optionB: any) => number
@@ -56,7 +54,7 @@ const useColumns = () => {
   return columns
 }
 
-const SelectTable: ComposedSelectTable = observer((props) => {
+export const SelectTable: ComposedSelectTable = observer((props) => {
   const {
     mode,
     dataSource: propsDataSource,

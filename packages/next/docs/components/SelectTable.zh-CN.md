@@ -6,11 +6,9 @@
 
 ```tsx
 import React from 'react'
-import { FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { FormItem, FormButtonGroup, Submit, SelectTable } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-
-import SelectTable from '../../src/select-table/index'
 
 const SchemaField = createSchemaField({
   components: {
@@ -63,11 +61,9 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { FormItem, FormButtonGroup, Submit, SelectTable } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-
-import SelectTable from '../../src/select-table/index'
 
 const SchemaField = createSchemaField({
   components: {
@@ -123,11 +119,9 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { FormItem, FormButtonGroup, Submit, SelectTable } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-
-import SelectTable from '../../src/select-table/index'
 
 const SchemaField = createSchemaField({
   components: {
@@ -189,11 +183,9 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import { FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { FormItem, FormButtonGroup, Submit, SelectTable } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-
-import SelectTable from '../../src/select-table/index'
 
 const SchemaField = createSchemaField({
   components: {
