@@ -78,14 +78,13 @@ export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField>
-        <SchemaField.Object
-          type="object"
+        <SchemaField.Array
+          type="array"
           name="selectTable"
           x-decorator="FormItem"
           x-component="SelectTable"
           x-component-props={{
             bordered: false,
-            mode: 'single',
             showSearch: true,
             optionFilterProp: 'name',
             optionAsValue: true,
@@ -93,6 +92,86 @@ export default () => {
           enum={[
             { key: '1', name: 'Title-1', description: 'description-1' },
             { key: '2', name: 'Title-2', description: 'description-2' },
+          ]}
+        >
+          <SchemaField.Object>
+            <SchemaField.Void
+              name="name"
+              title="Title"
+              x-component="SelectTable.Column"
+            />
+            <SchemaField.Void
+              name="description"
+              title="Description"
+              x-component="SelectTable.Column"
+            />
+          </SchemaField.Object>
+        </SchemaField.Array>
+      </SchemaField>
+      <FormButtonGroup.FormItem>
+        <Submit onSubmit={console.log}>Submit</Submit>
+      </FormButtonGroup.FormItem>
+    </FormProvider>
+  )
+}
+```
+
+## Markup Schema async data source case
+
+```tsx
+import React from 'react'
+import { FormItem, FormButtonGroup, Submit, SelectTable } from '@formily/antd'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    SelectTable,
+  },
+})
+
+const form = createForm()
+
+export default () => {
+  const onSearch = (value) => {
+    const field = form.query('selectTable').take()
+    field.loading = true
+    setTimeout(() => {
+      field.setState({
+        dataSource: [
+          {
+            key: '3',
+            name: 'AAA' + value,
+            description: 'aaa',
+          },
+          {
+            key: '4',
+            name: 'BBB' + value,
+            description: 'bbb',
+          },
+        ],
+        loading: false,
+      })
+    }, 1500)
+  }
+
+  return (
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.Object
+          type="object"
+          name="selectTable"
+          x-decorator="FormItem"
+          x-component="SelectTable"
+          x-component-props={{
+            showSearch: true,
+            filterOption: false,
+            onSearch,
+          }}
+          enum={[
+            { key: '1', name: 'title-1', description: 'description-1' },
+            { key: '2', name: 'title-2', description: 'description-2' },
           ]}
         >
           <SchemaField.Void
@@ -111,6 +190,160 @@ export default () => {
         <Submit onSubmit={console.log}>Submit</Submit>
       </FormButtonGroup.FormItem>
     </FormProvider>
+  )
+}
+```
+
+## Markup Schema read-pretty case
+
+```tsx
+import React from 'react'
+import {
+  Form,
+  FormItem,
+  FormButtonGroup,
+  Submit,
+  SelectTable,
+} from '@formily/antd'
+import { createForm } from '@formily/core'
+import { createSchemaField } from '@formily/react'
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    SelectTable,
+  },
+})
+
+const form = createForm()
+
+export default () => {
+  return (
+    <Form form={form} layout="vertical">
+      <SchemaField>
+        <SchemaField.Object
+          title="single"
+          type="string"
+          name="selectTable1"
+          x-decorator="FormItem"
+          x-component="SelectTable"
+          x-component-props={{
+            mode: 'single',
+          }}
+          default="1"
+          enum={[
+            { key: '1', name: 'title-1', description: 'description-1' },
+            { key: '2', name: 'Title-2', description: 'description-2' },
+          ]}
+          x-read-pretty={true}
+        >
+          <SchemaField.Void
+            name="name"
+            title="Title"
+            x-component="SelectTable.Column"
+          />
+          <SchemaField.Void
+            name="description"
+            title="Description"
+            x-component="SelectTable.Column"
+          />
+        </SchemaField.Object>
+        <SchemaField.Object
+          title="single + optionAsValue"
+          type="string"
+          name="selectTable2"
+          x-decorator="FormItem"
+          x-component="SelectTable"
+          x-component-props={{
+            mode: 'single',
+            optionAsValue: true,
+          }}
+          default={{ key: '1', name: 'Title1', description: 'Description1' }}
+          enum={[
+            { key: '1', name: 'title-1', description: 'description-1' },
+            { key: '2', name: 'Title-2', description: 'description-2' },
+          ]}
+          x-read-pretty={true}
+        >
+          <SchemaField.Void
+            name="name"
+            title="Title"
+            x-component="SelectTable.Column"
+          />
+          <SchemaField.Void
+            name="description"
+            title="Description"
+            x-component="SelectTable.Column"
+          />
+        </SchemaField.Object>
+        <SchemaField.Array
+          title="multiple"
+          type="array"
+          name="selectTable3"
+          x-decorator="FormItem"
+          x-component="SelectTable"
+          x-component-props={{
+            hasBorder: false,
+          }}
+          default={['1', '3']}
+          enum={[
+            { key: '1', name: 'title-1', description: 'description-1' },
+            { key: '2', name: 'Title-2', description: 'description-2' },
+            { key: '3', name: 'title-3', description: 'description-3' },
+          ]}
+          x-read-pretty={true}
+        >
+          <SchemaField.Object>
+            <SchemaField.Void
+              name="name"
+              title="Title"
+              x-component="SelectTable.Column"
+            />
+            <SchemaField.Void
+              name="description"
+              title="Description"
+              x-component="SelectTable.Column"
+            />
+          </SchemaField.Object>
+        </SchemaField.Array>
+        <SchemaField.Array
+          title="multiple + optionAsValue"
+          type="array"
+          name="selectTable4"
+          x-decorator="FormItem"
+          x-component="SelectTable"
+          x-component-props={{
+            optionAsValue: true,
+          }}
+          default={[
+            { key: '1', name: 'title-1', description: 'description-1' },
+            { key: '3', name: 'title-3', description: 'description-3' },
+          ]}
+          enum={[
+            { key: '1', name: 'title-1', description: 'description-1' },
+            { key: '2', name: 'Title-2', description: 'description-2' },
+            { key: '3', name: 'title-3', description: 'description-3' },
+          ]}
+          x-read-pretty={true}
+        >
+          <SchemaField.Object>
+            <SchemaField.Void
+              name="name"
+              title="Title"
+              x-component="SelectTable.Column"
+            />
+            <SchemaField.Void
+              name="description"
+              title="Description"
+              x-component="SelectTable.Column"
+            />
+          </SchemaField.Object>
+        </SchemaField.Array>
+      </SchemaField>
+      <FormButtonGroup.FormItem>
+        <Submit onSubmit={console.log}>Submit</Submit>
+      </FormButtonGroup.FormItem>
+    </Form>
   )
 }
 ```
@@ -271,6 +504,92 @@ export default () => (
 )
 ```
 
+## JSON Schema async data source case
+
+```tsx
+import React from 'react'
+import { FormItem, FormButtonGroup, Submit, SelectTable } from '@formily/antd'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+
+const SchemaField = createSchemaField({
+  components: {
+    SelectTable,
+    FormItem,
+  },
+})
+
+const loadData = async (value) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([
+        { key: '3', name: 'AAA' + value, description: 'aaa' },
+        { key: '4', name: 'BBB' + value, description: 'bbb' },
+      ])
+    }, 1500)
+  })
+}
+
+const useAsyncDataSource = (service, field) => (value) => {
+  field.loading = true
+  service(value).then((data) => {
+    field.setState({
+      dataSource: data,
+      loading: false,
+    })
+  })
+}
+
+const form = createForm()
+
+const schema = {
+  type: 'object',
+  properties: {
+    selectTable: {
+      type: 'array',
+      'x-decorator': 'FormItem',
+      'x-component': 'SelectTable',
+      'x-component-props': {
+        showSearch: true,
+        filterOption: false,
+        onSearch: '{{useAsyncDataSource(loadData,$self)}}',
+      },
+      enum: [
+        { key: '1', name: 'title-1', description: 'description-1' },
+        { key: '2', name: 'title-2', description: 'description-2' },
+      ],
+      properties: {
+        name: {
+          title: 'Title',
+          type: 'string',
+          'x-component': 'SelectTable.Column',
+          'x-component-props': {
+            width: '40%',
+          },
+        },
+        description: {
+          title: 'Description',
+          type: 'string',
+          'x-component': 'SelectTable.Column',
+          'x-component-props': {
+            width: '60%',
+          },
+        },
+      },
+    },
+  },
+}
+
+export default () => (
+  <FormProvider form={form}>
+    <SchemaField schema={schema} scope={{ useAsyncDataSource, loadData }} />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>Submit</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
+
 ## API
 
 ### SelectTable
@@ -282,7 +601,7 @@ export default () => (
 | showSearch       | boolean                                            | show `Search` component                                                                                                                                                                                                                                     | false         |
 | searchProps      | object                                             | `Search` component props                                                                                                                                                                                                                                    | -             |
 | optionFilterProp | string                                             | Which prop value of option will be used for filter if filterOption is true.                                                                                                                                                                                 | `primaryKey`  |
-| primaryKey       | string                                             | Row's unique key                                                                                                                                                                                                                                            | `'key'`       |
+| primaryKey       | `string \| (record) => string`                     | Row's unique key                                                                                                                                                                                                                                            | `'key'`       |
 | filterOption     | `boolean \| (inputValue, option) => boolean`       | If true, filter options by input, if function, filter options against it. The function will receive two arguments, `inputValue` and `option`, if the function returns true, the option will be included in the filtered set; Otherwise, it will be excluded |
 | filterSort       | (optionA, optionB) => number                       | Sort function for search options sorting, see Array.sort's compareFunction                                                                                                                                                                                  | -             |
 | onSearch         | Callback function that is fired when input changed | (inputValue) => void                                                                                                                                                                                                                                        | -             |
