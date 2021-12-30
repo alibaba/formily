@@ -6,7 +6,7 @@
 
 ```tsx
 import React from 'react'
-import { FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -31,7 +31,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="SelectTable"
           x-component-props={{
-            hasBorder: false,
+            bordered: false,
             mode: 'single',
           }}
           enum={[
@@ -63,7 +63,7 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -88,7 +88,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="SelectTable"
           x-component-props={{
-            hasBorder: false,
+            bordered: false,
             mode: 'single',
             showSearch: true,
             optionFilterProp: 'name',
@@ -123,7 +123,7 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -146,7 +146,7 @@ const schema = {
       'x-decorator': 'FormItem',
       'x-component': 'SelectTable',
       'x-component-props': {
-        hasBorder: false,
+        bordered: false,
         mode: 'multiple',
       },
       enum: [
@@ -189,7 +189,7 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import { FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -212,7 +212,7 @@ const schema = {
       'x-decorator': 'FormItem',
       'x-component': 'SelectTable',
       'x-component-props': {
-        hasBorder: false,
+        bordered: false,
         showSearch: true,
         primaryKey: 'key',
         isTree: true,
@@ -291,8 +291,8 @@ export default () => (
 | filterSort       | (optionA, optionB) => number                 | 搜索时对筛选结果项的排序函数, 类似 Array.sort 里的 compareFunction                                                                   | -            |
 | onSearch         | 文本框值变化时回调                           | (inputValue) => void                                                                                                                 | -            |
 
-其余参考 https://fusion.design/pc/component/basic/table
+其余参考 https://ant.design/components/table-cn/
 
 ### SelectTable.Column
 
-参考 https://fusion.design/pc/component/basic/table Table.Column 属性
+参考 https://ant.design/components/table-cn/ Table.Column 属性

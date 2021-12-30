@@ -2,24 +2,25 @@ import React, { useEffect, useState, useMemo } from 'react'
 import { observer, useFieldSchema, useField } from '@formily/react'
 import cls from 'classnames'
 import { isArr } from '@formily/shared'
-import { Search, Table } from '@alifd/next'
-import { TableProps, ColumnProps } from '@alifd/next/types/table'
-import { SearchProps } from '@alifd/next/types/search'
+import { Input, Table } from 'antd'
+import { TableProps, ColumnProps } from 'antd/lib/table'
+import { SearchProps } from 'antd/lib/input'
 import { useFilterOptions } from './useFilterOptions'
-import { useTitleAddon } from './useTitleAddon'
 import { usePrefixCls } from '../__builtins__'
 
-import './main.scss' // todo temp
+const { Search } = Input
+
+import './style.less' // todo temp
 
 type IFilterOption = boolean | ((option: any, keyword: string) => boolean)
 
 type IFilterSort = (optionA: any, optionB: any) => number
 
-export interface ISelectTableColumnProps extends ColumnProps {
+export interface ISelectTableColumnProps extends ColumnProps<any> {
   key: React.ReactText
 }
 
-export interface ISelectTableProps extends TableProps {
+export interface ISelectTableProps extends TableProps<any> {
   mode?: 'multiple' | 'single'
   dataSource?: any[]
   optionAsValue?: boolean
@@ -80,14 +81,8 @@ const SelectTable: ComposedSelectTable = observer((props) => {
   const dataSource = isArr(propsDataSource) ? propsDataSource : field.dataSource
   const columns = useColumns()
 
-  // Fusion Table Checkbox
-  const titleAddon = useTitleAddon(
-    selected,
-    dataSource,
-    primaryKey,
-    mode,
-    onChange
-  )
+  // Antd rowSelection type
+  const modeAsType: any = { multiple: 'checkbox', single: 'radio' }?.[mode]
 
   // Filter dataSource By Search
   const filteredDataSource = useFilterOptions(
@@ -142,11 +137,10 @@ const SelectTable: ComposedSelectTable = observer((props) => {
           ...rowSelection,
           selectedRowKeys: selected,
           onChange: onInnerChange,
-          mode,
-          ...titleAddon,
+          type: modeAsType,
         }}
         columns={props.columns || columns}
-        primaryKey={primaryKey}
+        rowKey={primaryKey}
       >
         {''}
       </Table>
