@@ -1,4 +1,4 @@
-import { isArr, isFn } from '@formily/shared'
+import { isArr, isFn, isEmpty } from '@formily/shared'
 import moment from 'moment'
 
 export const momentable = (value: any, format?: string) => {
@@ -21,12 +21,18 @@ export const formatMomentValue = (
       if (isFn(_format)) {
         return _format(date)
       }
-      return date?.format ? date.format(_format) : date
+      if (isEmpty(_format)) {
+        return date
+      }
+      return moment(date).format(_format)
     } else {
       if (isFn(format)) {
         return format(date)
       }
-      return date?.format ? date.format(format) : date
+      if (isEmpty(format)) {
+        return date
+      }
+      return moment(date).format(format)
     }
   }
   if (isArr(value)) {

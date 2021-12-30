@@ -53,6 +53,10 @@ export default {
             path: 'https://element.formilyjs.org',
           },
           {
+            title: '@formily/antdv',
+            path: 'https://antdv.formilyjs.org',
+          },
+          {
             title: 'aliyun teamix',
             path: 'https://formily.dg.aliyun-inc.com/',
           },
@@ -138,6 +142,10 @@ export default {
           {
             title: '@formily/element',
             path: 'https://element.formilyjs.org',
+          },
+          {
+            title: '@formily/antdv',
+            path: 'https://antdv.formilyjs.org',
           },
           {
             title: 'aliyun teamix',
