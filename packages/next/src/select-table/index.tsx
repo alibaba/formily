@@ -17,8 +17,7 @@ export interface ISelectTableColumnProps extends ColumnProps {
   key: React.ReactText
 }
 
-// @ts-ignore
-export interface ISelectTableProps extends TableProps {
+export interface ISelectTableProps extends Omit<TableProps, 'primaryKey'> {
   mode?: 'multiple' | 'single'
   dataSource?: any[]
   optionAsValue?: boolean
