@@ -38,7 +38,7 @@ export type ArrayBaseMixins = {
   Remove?: React.FC<
     AntdIconProps & {
       index?: number
-      beforeRemove: (index: number, field: ArrayField) => Promise<boolean>
+      beforeRemove?: (index: number, field: ArrayField) => Promise<boolean>
     }
   >
   MoveUp?: React.FC<AntdIconProps & { index?: number }>
