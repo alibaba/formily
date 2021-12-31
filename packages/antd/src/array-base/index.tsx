@@ -35,7 +35,12 @@ export interface IArrayBaseItemProps {
 
 export type ArrayBaseMixins = {
   Addition?: React.FC<IArrayBaseAdditionProps>
-  Remove?: React.FC<AntdIconProps & { index?: number }>
+  Remove?: React.FC<
+    AntdIconProps & {
+      index?: number
+      beforeRemove?: (index: number, field?: ArrayField) => Promise<boolean>
+    }
+  >
   MoveUp?: React.FC<AntdIconProps & { index?: number }>
   MoveDown?: React.FC<AntdIconProps & { index?: number }>
   SortHandle?: React.FC<AntdIconProps & { index?: number }>
@@ -182,8 +187,12 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
       {...props}
       className={cls(`${prefixCls}-remove`, props.className)}
       ref={ref}
-      onClick={(e) => {
+      onClick={async (e) => {
         if (array.props?.disabled) return
+        if (props.beforeRemove) {
+          const res = await props.beforeRemove(index, array?.field)
+          if (!res) return
+        }
         e.stopPropagation()
         array.field?.remove?.(index)
         array.props?.onRemove?.(index)
