@@ -86,9 +86,8 @@ export default () => {
           x-component-props={{
             hasBorder: false,
             showSearch: true,
-            optionFilterProp: 'description',
+            optionFilterProp: 'name',
             optionAsValue: true,
-            primaryKey: (record) => record.key + record.name,
           }}
           enum={[
             { key: '1', name: '标题1', description: '描述1' },

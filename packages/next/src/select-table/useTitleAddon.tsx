@@ -27,9 +27,9 @@ const newCheckbox =
         }
         onChange={(checked) => {
           if (checked) {
-            onChange?.(allDataSourceKeys)
+            onChange?.(allDataSourceKeys, dataSource)
           } else {
-            onChange?.([])
+            onChange?.([], [])
           }
         }}
       />
@@ -42,7 +42,7 @@ const useTitleAddon = (
   primaryKey: string,
   mode: string,
   disabled: boolean,
-  onChange: (checked: boolean) => any
+  onChange: (selectedRowKeys: any[], record: any[]) => any
 ) => {
   if (mode === 'single') {
     return {}

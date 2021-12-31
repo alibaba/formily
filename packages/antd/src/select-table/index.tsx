@@ -99,9 +99,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     : dataSource
   const columns = useColumns()
 
-  // Antd rowSelection type
-  const modeAsType: any = { multiple: 'checkbox', single: 'radio' }?.[mode]
-
   // Filter dataSource By Search
   const filteredDataSource = useFilterOptions(
     dataSource,
@@ -135,19 +132,28 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
 
   const onInnerChange = (selectedRowKeys: any[], records: any[]) => {
     let outputValue = optionAsValue
-      ? records.map(({ __formily_key__, ...validItem }) => validItem)
+      ? records.map((item) => {
+          const validItem = { ...item }
+          delete validItem['__formily_key__']
+          return validItem
+        })
       : selectedRowKeys
     outputValue = mode === 'single' ? outputValue[0] : outputValue
     onChange?.(outputValue)
   }
 
+  // Antd rowSelection type
+  const modeAsType: any = { multiple: 'checkbox', single: 'radio' }?.[mode]
+
   useEffect(() => {
     let inputValue = mode === 'single' ? [value] : isArr(value) ? value : []
     inputValue = optionAsValue
-      ? inputValue.map((v: any) => v?.[primaryKey])
+      ? inputValue.map((record: any) =>
+          isFn(rowKey) ? rowKey(record) : record?.[primaryKey]
+        )
       : inputValue
     setSelected(inputValue)
-  }, [value, mode, primaryKey])
+  }, [value, mode, primaryKey, rowKey])
 
   return (
     <div className={prefixCls}>
