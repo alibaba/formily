@@ -18,7 +18,7 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button, Alert } from 'antd'
+import { Button, Alert, message } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -113,7 +113,18 @@ export default () => {
               }}
             >
               <SchemaField.Void x-component="FormItem">
-                <SchemaField.Void x-component="ArrayTable.Remove" />
+                <SchemaField.Void
+                  x-component="ArrayTable.Remove"
+                  x-component-props={{
+                    beforeRemove: (index: number) => {
+                      if (index === 0) {
+                        message.error('not allowed')
+                        return false
+                      }
+                      return true
+                    },
+                  }}
+                />
                 <SchemaField.Void x-component="ArrayTable.MoveDown" />
                 <SchemaField.Void x-component="ArrayTable.MoveUp" />
               </SchemaField.Void>
