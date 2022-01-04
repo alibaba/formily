@@ -3,20 +3,9 @@ import { Checkbox } from '@alifd/next'
 
 // 重写表格表头Checkbox
 const newCheckbox =
-  (selected, dataSource, primaryKey, disabled, onChange) => () => {
-    const getDataSourceKey = (data: any[], primaryKey: string) => {
-      let keys = []
-      data?.forEach((item: any) => {
-        if (item?.[primaryKey]) {
-          keys = [...keys, item[primaryKey]]
-        }
-        if (item?.children?.length) {
-          keys = [...keys, ...getDataSourceKey(item.children, primaryKey)]
-        }
-      })
-      return keys
-    }
-    const allDataSourceKeys = getDataSourceKey(dataSource, primaryKey)
+  (selected, flatDataSource, primaryKey, disabled, readOnly, onChange) =>
+  () => {
+    const allDataSourceKeys = flatDataSource.map((item) => item?.[primaryKey])
     return (
       <Checkbox
         key="titleAddons"
@@ -26,10 +15,12 @@ const newCheckbox =
           !!(selected?.length && selected.length !== allDataSourceKeys.length)
         }
         onChange={(checked) => {
-          if (checked) {
-            onChange?.(allDataSourceKeys, dataSource)
-          } else {
-            onChange?.([], [])
+          if (!readOnly) {
+            if (checked) {
+              onChange?.(allDataSourceKeys, flatDataSource)
+            } else {
+              onChange?.([], [])
+            }
           }
         }}
       />
@@ -38,10 +29,11 @@ const newCheckbox =
 
 const useTitleAddon = (
   selected: any[],
-  dataSource: any[],
+  flatDataSource: any[],
   primaryKey: string,
   mode: string,
   disabled: boolean,
+  readOnly: boolean,
   onChange: (selectedRowKeys: any[], record: any[]) => any
 ) => {
   if (mode === 'single') {
@@ -53,9 +45,10 @@ const useTitleAddon = (
     }),
     titleAddons: newCheckbox(
       selected,
-      dataSource,
+      flatDataSource,
       primaryKey,
       disabled,
+      readOnly,
       onChange
     ),
   }
