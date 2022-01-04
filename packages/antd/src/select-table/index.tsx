@@ -6,6 +6,8 @@ import { Input, Table } from 'antd'
 import { TableProps, ColumnProps } from 'antd/lib/table'
 import { SearchProps } from 'antd/lib/input'
 import { useFilterOptions } from './useFilterOptions'
+import { useFlatOptions } from './useFlatOptions'
+import { useSize } from './useSize'
 import { usePrefixCls } from '../__builtins__'
 
 const { Search } = Input
@@ -62,10 +64,16 @@ const useColumns = () => {
 }
 
 const addPrimaryKey = (dataSource, rowKey, primaryKey) =>
-  dataSource.map((item) => ({
-    ...item,
-    [primaryKey]: rowKey(item),
-  }))
+  dataSource.map((item) => {
+    const children = isArr(item.children)
+      ? addPrimaryKey(item.children, rowKey, primaryKey)
+      : {}
+    return {
+      ...item,
+      ...children,
+      [primaryKey]: rowKey(item),
+    }
+  })
 
 export const SelectTable: ComposedSelectTable = observer((props) => {
   const {
@@ -91,12 +99,19 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   const field = useField() as any
   const loading = isBool(props.loading) ? props.loading : field.loading
   const disabled = field.disabled
+  const readOnly = field.readOnly
   const readPretty = field.readPretty
+  const { searchSize, tableSize } = useSize(
+    field.decoratorProps?.size,
+    searchProps?.size,
+    props?.size
+  )
   const primaryKey = isFn(rowKey) ? '__formily_key__' : rowKey
   let dataSource = isArr(propsDataSource) ? propsDataSource : field.dataSource
   dataSource = isFn(rowKey)
     ? addPrimaryKey(dataSource, rowKey, primaryKey)
     : dataSource
+  const flatDataSource = useFlatOptions(dataSource)
   const columns = useColumns()
 
   // Filter dataSource By Search
@@ -131,6 +146,9 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   }
 
   const onInnerChange = (selectedRowKeys: any[], records: any[]) => {
+    if (readOnly) {
+      return
+    }
     let outputValue = optionAsValue
       ? records.map((item) => {
           const validItem = { ...item }
@@ -140,6 +158,30 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
       : selectedRowKeys
     outputValue = mode === 'single' ? outputValue[0] : outputValue
     onChange?.(outputValue)
+  }
+
+  const onRowClick = (record) => {
+    if (disabled || readOnly) {
+      return
+    }
+    const selectedRowKey = record?.[primaryKey]
+    const isSelected = selected?.includes(selectedRowKey)
+    let selectedRowKeys = []
+    let records = []
+    if (mode === 'single') {
+      selectedRowKeys = [selectedRowKey]
+      records = [record]
+    } else {
+      if (isSelected) {
+        selectedRowKeys = selected.filter((item) => item !== selectedRowKey)
+      } else {
+        selectedRowKeys = [...selected, selectedRowKey]
+      }
+      records = flatDataSource.filter((item) =>
+        selectedRowKeys.includes(item?.[primaryKey])
+      )
+    }
+    onInnerChange(selectedRowKeys, records)
   }
 
   // Antd rowSelection type
@@ -161,8 +203,12 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
         <Search
           {...searchProps}
           className={cls(`${prefixCls}-search`, searchProps?.className)}
+          style={{ width: '100%', ...searchProps?.style }}
           onSearch={onInnerSearch}
+          onChange={(e) => onInnerSearch(e.target.value)}
           disabled={disabled}
+          readOnly={readOnly}
+          size={searchSize}
           loading={loading} // antd
         />
       ) : null}
@@ -189,6 +235,18 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
         columns={props.columns || columns}
         rowKey={primaryKey}
         loading={loading}
+        size={tableSize}
+        onRow={(record) => {
+          // antd
+          const onRowResult = otherTableProps.onRow?.(record)
+          return {
+            ...onRowResult,
+            onClick: (e) => {
+              onRowResult?.onClick?.(e)
+              onRowClick(record)
+            },
+          }
+        }}
       >
         {''}
       </Table>
