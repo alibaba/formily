@@ -1,5 +1,9 @@
 import { isArr, isEmpty, isFn } from '@formily/shared'
-import moment from 'moment'
+import Moment from 'moment'
+
+const moment = (date: any, format?: string) => {
+  return Moment(date?.toDate ? date.toDate() : date, format)
+}
 
 export const momentable = (value: any, format?: string) => {
   return Array.isArray(value)
