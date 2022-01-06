@@ -1,0 +1,7 @@
+@import '~@alifd/next/lib/core/index-noreset.scss';
+
+.#{$css-prefix}date-picker2 {
+  & > * {
+    width: 100%;
+  }
+}
