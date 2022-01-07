@@ -2,10 +2,10 @@
 
 Hi! I’m really excited that you are interested in contributing to Formily. Before submitting your contribution though, please make sure to take a moment and read through the following guidelines.
 
-- [Issue Reporting Guidelines](#issue-reporting-guidelines)
-- [Pull Request Guidelines](#pull-request-guidelines)
-- [Git Commit Specific](./GIT_COMMIT_SPECIFIC.md)
-
+- [Contributing Guide](#contributing-guide)
+  - [Issue Reporting Guidelines](#issue-reporting-guidelines)
+  - [Pull Request Guidelines](#pull-request-guidelines)
+  - [Git Commit Specific](#git-commit-specific)
 
 ## Issue Reporting Guidelines
 
@@ -39,10 +39,9 @@ Hi! I’m really excited that you are interested in contributing to Formily. Bef
   - Provide detailed description of the bug in the PR. Live demo preferred.
   - Add appropriate test coverage if applicable.
 
-
 ## Git Commit Specific
 
-- Your commits message must follow our [git commit specific](./GIT_COMMIT_SPECIFIC.md).
+- Your commits message must follow our [git commit specific](https://github.com/alibaba/formily/blob/master/.github/GIT_COMMIT_SPECIFIC.md).
 - We will check your commit message, if it does not conform to the specification, the commit will be automatically refused, make sure you have read the specification above.
 - You could use `git cz` with a CLI interface to replace `git commit` command, it will help you to build a proper commit-message, see [commitizen](https://github.com/commitizen/cz-cli).
 - It's OK to have multiple small commits as you work on your branch - we will let GitHub automatically squash it before merging.
