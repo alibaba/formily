@@ -11,7 +11,7 @@ import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from 'antd/lib/button'
 import { ArrayField } from '@formily/core'
 import { useField, useFieldSchema, Schema, JSXComponent } from '@formily/react'
-import { isValid, clone } from '@formily/shared'
+import { isValid, clone, isBool } from '@formily/shared'
 import { SortableHandle } from 'react-sortable-hoc'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
@@ -148,7 +148,7 @@ ArrayBase.Addition = (props) => {
       type="dashed"
       block
       {...props}
-      disabled={array.field?.disabled}
+      disabled={isBool(self?.disabled) ? self?.disabled : array.field?.disabled}
       className={cls(`${prefixCls}-addition`, props.className)}
       onClick={(e) => {
         if (array.props?.disabled) return
