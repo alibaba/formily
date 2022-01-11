@@ -1,10 +1,7 @@
-let IDX = 36,
-  HEX = ''
-while (IDX--) HEX += IDX.toString(36)
+const HEX = '0123456789abcdefghijklmnopqrstuvwxyz'
 
-export function uid(len?: number) {
-  let str = '',
-    num = len || 11
-  while (num--) str += HEX[(Math.random() * 36) | 0]
-  return str
-}
+export const uid = (len = 11) =>
+  new Array(len)
+    .fill('')
+    .map(() => HEX[Math.random() * 36 | 0])
+    .join('')
