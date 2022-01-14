@@ -24,6 +24,56 @@ const usePlaceholder = (value?: any) => {
   return isValid(value) && value !== '' ? value : placeholder
 }
 
+interface IGetValueByValue {
+  (
+    array: any[],
+    inputValue: any,
+    keyMap?: { inputKey?: string; outputKey?: string; childrenKey?: string },
+    path?: any[]
+  ): any
+}
+const getValueByValue: IGetValueByValue = (
+  array,
+  inputValue,
+  keyMap,
+  path = []
+) => {
+  const {
+    inputKey = 'value',
+    outputKey = 'label',
+    childrenKey = 'children',
+  } = keyMap || {}
+  let outputValue: any
+  if (isArr(array)) {
+    if (isArr(inputValue)) {
+      outputValue = inputValue.map((v) =>
+        getValueByValue(array, v, keyMap, path)
+      )
+    } else {
+      array.forEach((obj) => {
+        if (outputValue === undefined) {
+          const currentPath = [...path, obj?.[outputKey]]
+          if (obj?.[inputKey] === inputValue) {
+            outputValue = {
+              leaf: obj?.[outputKey],
+              whole: currentPath,
+            }
+          } else if (obj?.[childrenKey]?.length) {
+            outputValue = getValueByValue(
+              obj?.[childrenKey],
+              inputValue,
+              keyMap,
+              currentPath
+            )
+          }
+        }
+      })
+    }
+    return outputValue
+  }
+  return undefined
+}
+
 const Input: React.FC<InputProps> = (props) => {
   const prefixCls = usePrefixCls('form-text', props)
   return (
@@ -158,27 +208,13 @@ const Cascader: React.FC<CascaderProps> = observer((props) => {
   const getSelected = () => {
     return isArr(props.value) ? props.value : []
   }
-  const findLabel = (value: any, dataSource: any[]) => {
-    for (let i = 0; i < dataSource?.length; i++) {
-      const item = dataSource[i]
-      if (item?.value === value) {
-        return item?.label
-      } else {
-        const childLabel = findLabel(value, item?.children)
-        if (childLabel) return childLabel
-      }
-    }
-  }
   const getLabels = () => {
     const selected = getSelected()
-    if (!selected?.length) {
-      return placeholder
-    }
-    return selected
-      .map((value) => {
-        return findLabel(value, dataSource) || placeholder
-      })
-      .join('/')
+    const labels = getValueByValue(dataSource, selected)
+      ?.filter((item) => isValid(item))
+      ?.map((item) => item?.whole.join('/'))
+      .join(', ')
+    return labels || placeholder
   }
   return (
     <div className={cls(prefixCls, props.className)} style={props.style}>
