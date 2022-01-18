@@ -89,7 +89,7 @@ export class Field<
     this.props = props
     this.designable = designable
     initializeStart()
-    this.makeIndexes(address)
+    this.locate(address)
     this.initialize()
     this.makeObservable()
     this.makeReactive()
@@ -187,6 +187,7 @@ export class Field<
       readOnly: observable.computed,
       readPretty: observable.computed,
       editable: observable.computed,
+      indexes: observable.computed,
       setDisplay: action,
       setTitle: action,
       setDescription: action,

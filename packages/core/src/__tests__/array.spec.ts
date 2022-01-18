@@ -488,14 +488,14 @@ test('nest array remove', async () => {
     })
   )
 
-  attach(
+  const obj00 = attach(
     form.createObjectField({
       name: '0',
       basePath: 'metrics.0.content',
     })
   )
 
-  attach(
+  const obj10 = attach(
     form.createObjectField({
       name: '0',
       basePath: 'metrics.1.content',
@@ -517,7 +517,10 @@ test('nest array remove', async () => {
       initialValue: '123',
     })
   )
-
+  expect(obj00.indexes[0]).toBe(0)
+  expect(obj00.index).toBe(0)
+  expect(obj10.index).toBe(0)
+  expect(obj10.indexes[0]).toBe(1)
   await (form.query('metrics.1.content').take() as any).remove(0)
   expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
   await metrics.remove(1)

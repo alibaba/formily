@@ -1849,7 +1849,7 @@ test('path change will update computed value', () => {
     value(input.value)
   })
   batch(() => {
-    input.makeIndexes('select')
+    input.locate('select')
     input.value = '123'
   })
   expect(value).nthCalledWith(2, '123')

@@ -141,10 +141,7 @@ export const buildFieldPath = (field: GeneralField) => {
   return new FormPath(path)
 }
 
-export const buildNodeIndexes = (
-  field: GeneralField,
-  address: FormPathPattern
-) => {
+export const locateNode = (field: GeneralField, address: FormPathPattern) => {
   field.address = FormPath.parse(address)
   field.path = buildFieldPath(field)
   field.form.indexes[field.path.toString()] = field.address.toString()
@@ -164,7 +161,7 @@ export const patchFieldStates = (
         if (target[oldAddress] === payload) delete target[oldAddress]
       }
       if (address && payload) {
-        buildNodeIndexes(payload, address)
+        locateNode(payload, address)
       }
     }
   })
