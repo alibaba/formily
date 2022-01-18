@@ -7,7 +7,7 @@ import {
   FieldDecorator,
   FieldComponent,
 } from '../types'
-import { buildNodeIndexes, destroy, initFieldUpdate } from '../shared/internals'
+import { locateNode, destroy, initFieldUpdate } from '../shared/internals'
 import { Form } from './Form'
 import { Query } from './Query'
 
@@ -37,9 +37,19 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
 
   disposers: (() => void)[] = []
 
-  makeIndexes(address: FormPathPattern) {
+  locate(address: FormPathPattern) {
     this.form.fields[address.toString()] = this as any
-    buildNodeIndexes(this as any, address)
+    locateNode(this as any, address)
+  }
+
+  get indexes() {
+    return this.path.transform(/\d/, (...args) =>
+      args.map((index) => Number(index))
+    )
+  }
+
+  get index() {
+    return this.indexes[this.indexes.length - 1]
   }
 
   get component() {
