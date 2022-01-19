@@ -971,10 +971,12 @@ export const resetSelf = batch.bound(
     target.inputValue = typedDefaultValue
     target.inputValues = []
     target.caches = {}
-    if (options?.forceClear) {
-      target.value = typedDefaultValue
-    } else if (isValid(target.value)) {
-      target.value = toJS(target.initialValue ?? typedDefaultValue)
+    if (isValid(target.value)) {
+      if (options?.forceClear) {
+        target.value = typedDefaultValue
+      } else {
+        target.value = toJS(target.initialValue ?? typedDefaultValue)
+      }
     }
     if (!noEmit) {
       target.notify(LifeCycleTypes.ON_FIELD_RESET)
