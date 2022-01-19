@@ -25,20 +25,16 @@ export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
       }
       setActiveKey(`tab-${id}`)
     } else if (type == 'remove') {
-      const index = targetKey.match(/-(\d+)/)?.[1]
-      field.remove(Number(index))
-      if (activeKey === targetKey) {
+      const index = Number(targetKey.match(/-(\d+)/)?.[1])
+      if (index - 1 > -1) {
         setActiveKey(`tab-${index - 1}`)
       }
+      field.remove(index)
     }
   }
   const badgedTab = (index: number) => {
     const tab = `${field.title || 'Untitled'} ${index + 1}`
-    const path = field.address.concat(index)
-    const errors = field.form.queryFeedbacks({
-      type: 'error',
-      address: `${path}.**`,
-    })
+    const errors = field.errors
     if (errors.length) {
       return (
         <Badge size="small" className="errors-badge" count={errors.length}>
@@ -64,7 +60,12 @@ export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
           : schema.items
         const key = `tab-${index}`
         return (
-          <Tabs.TabPane key={key} closable={index !== 0} tab={badgedTab(index)}>
+          <Tabs.TabPane
+            key={key}
+            forceRender
+            closable={index !== 0}
+            tab={badgedTab(index)}
+          >
             <RecursionField schema={items} name={index} />
           </Tabs.TabPane>
         )
