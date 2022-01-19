@@ -248,7 +248,7 @@ export class Field<
               this.caches.value = undefined
             }
           } else {
-            this.caches.value = toJS(value)
+            this.caches.value = toJS(value) ?? toJS(this.initialValue)
             if (display === 'none') {
               this.form.deleteValuesIn(this.path)
             }

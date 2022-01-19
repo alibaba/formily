@@ -1,5 +1,5 @@
 import { autorun, batch } from '@formily/reactive'
-import { createForm } from '../'
+import { createForm, onFieldReact, isField } from '../'
 import { DataField } from '../types'
 import { attach, sleep } from './shared'
 
@@ -1878,4 +1878,60 @@ test('object field reset', async () => {
     },
   })
   expect(input.value).toBe('123')
+})
+
+test('field visible default value should work', () => {
+  const form = attach(
+    createForm({
+      effects(form) {
+        onFieldReact('obj.input1', (field) => {
+          field.pattern = 'disabled'
+        })
+        onFieldReact('obj', (field) => {
+          field.visible = form.values.select !== 'none'
+        })
+        onFieldReact('obj.input1', (field) => {
+          if (isField(field)) {
+            field.initialValue = '123'
+          }
+        })
+        onFieldReact('obj.input2', (field) => {
+          if (isField(field)) {
+            field.value = form.values.select
+          }
+        })
+      },
+    })
+  )
+
+  const select = attach(
+    form.createField({
+      name: 'select',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: 'obj',
+    })
+  )
+
+  attach(
+    form.createField({
+      name: 'input1',
+      basePath: 'obj',
+    })
+  )
+
+  attach(
+    form.createField({
+      name: 'input2',
+      basePath: 'obj',
+    })
+  )
+
+  select.value = 'none'
+  expect(form.values.obj?.input1).toBeUndefined()
+  select.value = 'visible'
+  expect(form.values.obj.input1).toBe('123')
 })
