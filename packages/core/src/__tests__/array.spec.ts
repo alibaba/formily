@@ -623,3 +623,28 @@ test('void array items need skip data', () => {
   expect(array.value).toEqual([123])
   expect(array2.value).toEqual([123])
 })
+
+test('array field reset', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'input',
+      initialValue: '123',
+      basePath: 'array.0',
+    })
+  )
+  form.reset('*', { forceClear: true })
+  expect(form.values).toEqual({ array: [] })
+  expect(array.value).toEqual([])
+})
