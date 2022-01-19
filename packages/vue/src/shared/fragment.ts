@@ -1,4 +1,4 @@
-import frag from 'vue-frag'
+import { Fragment as FragmentV2 } from 'vue-frag'
 import { DefineComponent } from '../types'
 import { isVue2, defineComponent } from 'vue-demi'
 
@@ -7,32 +7,16 @@ export const Fragment = '#fragment'
 let FragmentComponent: DefineComponent<{}>
 
 if (isVue2) {
-  FragmentComponent = defineComponent({
+  FragmentComponent = {
     name: 'Fragment',
-    directives: {
-      frag: frag as any,
-    },
-    render(h) {
-      const vm = this as any
-      return h(
-        'div',
-        {
-          directives: [
-            {
-              name: 'frag',
-            },
-          ],
-        },
-        vm?.$scopedSlots?.default?.(vm.$attrs)
-      )
-    },
-  })
+    ...FragmentV2,
+  } as unknown as DefineComponent<{}>
 } else {
   /* istanbul ignore next */
   FragmentComponent = defineComponent({
     name: 'Fragment',
-    setup(props: Record<string, any>, { slots, attrs }) {
-      return () => slots?.default?.(attrs)
+    render() {
+      return this.$slots.default()
     },
   })
 }

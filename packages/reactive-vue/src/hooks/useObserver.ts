@@ -24,11 +24,11 @@ export const useObserver = (options?: IObserverOptions) => {
       set(newValue) {
         disposeTracker()
 
-        const update = () => tracker.track(newValue)
+        const update = () => tracker?.track(newValue)
 
         tracker = new Tracker(() => {
-          if (options?.scheduler) {
-            options?.scheduler?.(update)
+          if (options?.scheduler && typeof options.scheduler === 'function') {
+            options.scheduler(update)
           } else {
             update()
           }

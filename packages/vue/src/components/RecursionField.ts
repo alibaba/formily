@@ -1,4 +1,4 @@
-import { inject, provide, watch, defineComponent, shallowRef } from 'vue-demi'
+import { inject, provide, watch, shallowRef, computed, markRaw } from 'vue-demi'
 import { GeneralField } from '@formily/core'
 import { isFn, isValid } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
@@ -17,29 +17,33 @@ import { Fragment } from '../shared/fragment'
 
 import type { IRecursionFieldProps, DefineComponent } from '../types'
 
-const RecursionField = defineComponent({
+const RecursionField = {
   name: 'RecursionField',
   inheritAttrs: false,
-  props: [
-    'schema',
-    'name',
-    'basePath',
-    'onlyRenderProperties',
-    'onlyRenderSelf',
-    'mapProperties',
-    'filterProperties',
-  ],
+  props: {
+    schema: {
+      required: true,
+    },
+    name: [String, Number],
+    basePath: {},
+    onlyRenderProperties: {
+      type: Boolean,
+      default: undefined,
+    },
+    onlyRenderSelf: {
+      type: Boolean,
+      default: undefined,
+    },
+    mapProperties: {},
+    filterProperties: {},
+  },
   setup(props: IRecursionFieldProps) {
     const parentRef = useField()
     const optionsRef = inject(SchemaOptionsSymbol)
     const scopeRef = inject(SchemaExpressionScopeSymbol)
     const createSchema = (schemaProp: IRecursionFieldProps['schema']) =>
-      new Schema(schemaProp)
-    const fieldSchemaRef = shallowRef(createSchema(props.schema))
-
-    watch([() => props.schema], () => {
-      fieldSchemaRef.value = createSchema(props.schema)
-    })
+      markRaw(new Schema(schemaProp))
+    const fieldSchemaRef = computed(() => createSchema(props.schema))
 
     const getPropsFromSchema = (schema: Schema) =>
       schema?.toFieldProps?.({
@@ -69,38 +73,39 @@ const RecursionField = defineComponent({
     return () => {
       const basePath = getBasePath()
       const fieldProps = fieldPropsRef.value
-
       const renderProperties = (field?: GeneralField) => {
         if (props.onlyRenderSelf) return
         const properties = Schema.getOrderProperties(fieldSchemaRef.value)
         if (!properties.length) return
-        const children = properties.map(({ schema: item, key: name }) => {
-          const base = field?.address || basePath
-          let schema: Schema = item
-          if (isFn(props.mapProperties)) {
-            const mapped = props.mapProperties(item, name)
-            if (mapped) {
-              schema = mapped
+        const children = properties.map(
+          ({ schema: item, key: name }, index) => {
+            const base = field?.address || basePath
+            let schema: Schema = item
+            if (isFn(props.mapProperties)) {
+              const mapped = props.mapProperties(item, name)
+              if (mapped) {
+                schema = mapped
+              }
             }
-          }
-          if (isFn(props.filterProperties)) {
-            if (props.filterProperties(schema, name) === false) {
-              return null
+            if (isFn(props.filterProperties)) {
+              if (props.filterProperties(schema, name) === false) {
+                return null
+              }
             }
-          }
-          return h(
-            RecursionField,
-            {
-              key: name,
-              attrs: {
-                schema,
-                name,
-                basePath: base,
+            return h(
+              RecursionField,
+              {
+                key: `${index}-${name}`,
+                attrs: {
+                  schema,
+                  name,
+                  basePath: base,
+                },
               },
-            },
-            {}
-          )
-        })
+              {}
+            )
+          }
+        )
 
         const slots: Record<string, () => any> = {}
         if (children.length > 0) {
@@ -151,7 +156,10 @@ const RecursionField = defineComponent({
               },
             },
             {
-              default: ({ field }) => [renderProperties(field)],
+              default: (...args) => {
+                const { field } = args[0]
+                return [renderProperties(field)]
+              },
             }
           )
         }
@@ -174,6 +182,6 @@ const RecursionField = defineComponent({
       return render()
     }
   },
-}) as DefineComponent<IRecursionFieldProps>
+} as unknown as DefineComponent<IRecursionFieldProps>
 
 export default RecursionField

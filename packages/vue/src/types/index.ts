@@ -47,7 +47,8 @@ export type IArrayFieldProps = IFieldProps
 export type IObjectFieldProps = IFieldProps
 
 export interface IReactiveFieldProps {
-  field: GeneralField
+  fieldType: 'Field' | 'ArrayField' | 'ObjectField' | 'VoidField'
+  fieldProps: IFieldProps | IVoidFieldProps
 }
 
 export interface IComponentMapper<T extends VueComponent = any> {
@@ -69,11 +70,8 @@ export interface ISchemaFieldVueFactoryOptions<
   scope?: any
 }
 
-export interface ISchemaFieldProps<
-  Decorator extends VueComponent = VueComponent,
-  Component extends VueComponent = VueComponent,
-  InnerField = ObjectField<Decorator, Component>
-> extends Omit<IFieldFactoryProps<Decorator, Component, InnerField>, 'name'> {
+export interface ISchemaFieldProps
+  extends Omit<IRecursionFieldProps, 'name' | 'schema'> {
   schema?: ISchema
   components?: {
     [key: string]: VueComponent
