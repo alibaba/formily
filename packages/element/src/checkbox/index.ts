@@ -169,3 +169,5 @@ const CheckboxGroup = connect(
 export const Checkbox = composeExport(connect(CheckboxOption), {
   Group: CheckboxGroup,
 })
+
+export default Checkbox
