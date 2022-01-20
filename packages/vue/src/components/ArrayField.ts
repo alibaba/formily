@@ -7,6 +7,7 @@ import { getFieldProps } from '../utils/getFieldProps'
 
 let ArrayField: DefineComponent<IArrayFieldProps>
 
+/* istanbul ignore else */
 if (isVue2) {
   ArrayField = {
     functional: true,

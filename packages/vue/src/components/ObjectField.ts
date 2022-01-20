@@ -7,6 +7,7 @@ import { getFieldProps } from '../utils/getFieldProps'
 
 let ObjectField: DefineComponent<IObjectFieldProps>
 
+/* istanbul ignore else */
 if (isVue2) {
   ObjectField = {
     functional: true,

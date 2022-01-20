@@ -7,6 +7,7 @@ import { getVoidFieldProps } from '../utils/getFieldProps'
 
 let VoidField: DefineComponent<IVoidFieldProps>
 
+/* istanbul ignore else */
 if (isVue2) {
   VoidField = {
     functional: true,
