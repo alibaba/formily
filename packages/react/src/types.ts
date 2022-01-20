@@ -173,3 +173,7 @@ export type ISchemaTypeFieldProps<
   Decorator extends ReactComponentPath<Components>,
   Component extends ReactComponentPath<Components>
 > = ISchemaMarkupFieldProps<Components, Decorator, Component>
+
+export interface IExpressionScopeProps {
+  value?: any
+}
