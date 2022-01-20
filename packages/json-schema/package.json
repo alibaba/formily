@@ -1,6 +1,6 @@
 {
   "name": "@formily/json-schema",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -30,9 +30,9 @@
     "typescript": "^4.1.5"
   },
   "dependencies": {
-    "@formily/core": "2.0.8",
-    "@formily/reactive": "2.0.8",
-    "@formily/shared": "2.0.8"
+    "@formily/core": "2.0.9",
+    "@formily/reactive": "2.0.9",
+    "@formily/shared": "2.0.9"
   },
   "publishConfig": {
     "access": "public"
