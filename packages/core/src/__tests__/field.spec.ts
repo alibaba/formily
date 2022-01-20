@@ -1956,7 +1956,10 @@ test('query value with sibling path syntax', () => {
       basePath: 'void.obj',
       reactions: [
         (field) => {
-          fn(field.query('.textarea').value())
+          fn(
+            field.query('.textarea').value(),
+            field.query('.textarea').initialValue()
+          )
         },
       ],
     })
@@ -1965,8 +1968,9 @@ test('query value with sibling path syntax', () => {
     form.createField({
       name: 'textarea',
       basePath: 'void.obj',
+      initialValue: 'aaa',
     })
   )
   textarea.value = '123'
-  expect(fn).toBeCalledWith('123')
+  expect(fn).toBeCalledWith('123', 'aaa')
 })
