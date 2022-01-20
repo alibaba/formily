@@ -90,10 +90,10 @@ export class Query {
   }
 
   value() {
-    return this.form.getValuesIn(this.pattern)
+    return this.get('value')
   }
 
   initialValue() {
-    return this.form.getInitialValuesIn(this.pattern)
+    return this.get('initialValue')
   }
 }

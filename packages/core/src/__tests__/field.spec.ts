@@ -1935,3 +1935,42 @@ test('field visible default value should work', () => {
   select.value = 'visible'
   expect(form.values.obj.input1).toBe('123')
 })
+
+test('query value with sibling path syntax', () => {
+  const form = attach(createForm())
+  const fn = jest.fn()
+  attach(
+    form.createVoidField({
+      name: 'void',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'obj',
+      basePath: 'void',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'input',
+      basePath: 'void.obj',
+      reactions: [
+        (field) => {
+          fn(
+            field.query('.textarea').value(),
+            field.query('.textarea').initialValue()
+          )
+        },
+      ],
+    })
+  )
+  const textarea = attach(
+    form.createField({
+      name: 'textarea',
+      basePath: 'void.obj',
+      initialValue: 'aaa',
+    })
+  )
+  textarea.value = '123'
+  expect(fn).toBeCalledWith('123', 'aaa')
+})
