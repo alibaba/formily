@@ -4,7 +4,7 @@
       <template #default="{ field }">
         <div
           v-for="(item, index) in field.value || []"
-          :key="item.id"
+          :key="`${item.id}-${index}`"
           :style="{ marginBottom: '10px' }"
         >
           <Space>

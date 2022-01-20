@@ -1,81 +1,53 @@
-import { provide, defineComponent, computed, watch } from 'vue-demi'
-import { useField, useForm } from '../hooks'
-import { useAttach } from '../hooks/useAttach'
+import { isVue2, h as _h } from 'vue-demi'
 import ReactiveField from './ReactiveField'
-import { FieldSymbol } from '../shared/context'
-import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
 
 import type { IObjectFieldProps, DefineComponent } from '../types'
+import { getFieldProps } from '../utils/getFieldProps'
 
-export default defineComponent({
-  name: 'ObjectField',
-  props: [
-    'name',
-    'basePath',
-    'title',
-    'description',
-    'value',
-    'initialValue',
-    'required',
-    'display',
-    'pattern',
-    'hidden',
-    'visible',
-    'editable',
-    'disabled',
-    'readOnly',
-    'readPretty',
-    'dataSource',
-    'validateFirst',
-    'validator',
-    'decorator',
-    'component',
-    'reactions',
-    'content',
-    'data',
-  ],
-  setup(props: IObjectFieldProps, { slots }) {
-    const formRef = useForm()
-    const parentRef = useField()
+let ObjectField: DefineComponent<IObjectFieldProps>
 
-    const basePath = computed(() =>
-      props.basePath !== undefined ? props.basePath : parentRef?.value?.address
-    )
-    const createField = () =>
-      formRef.value.createObjectField({
-        ...props,
-        basePath: basePath.value,
-        ...getRawComponent(props),
-      })
-    const [fieldRef, checker] = useAttach(createField())
-    watch(
-      () => props,
-      () => (fieldRef.value = checker(createField())),
-      { deep: true }
-    )
-    watch([formRef, parentRef], () => (fieldRef.value = checker(createField())))
-
-    provide(FieldSymbol, fieldRef)
-
-    return () => {
-      const field = fieldRef.value
+/* istanbul ignore else */
+if (isVue2) {
+  ObjectField = {
+    functional: true,
+    name: 'ObjectField',
+    props: getFieldProps(),
+    render(h, context) {
+      const props = context.props as IObjectFieldProps
+      const attrs = context.data.attrs
       const componentData = {
+        ...context.data,
         props: {
-          field,
+          fieldType: 'ObjectField',
+          fieldProps: {
+            ...attrs,
+            ...props,
+            ...getRawComponent(props),
+          },
         },
       }
-      const children = {
-        ...slots,
+      return _h(ReactiveField, componentData, context.children)
+    },
+  } as unknown as DefineComponent<IObjectFieldProps>
+} else {
+  ObjectField = {
+    name: 'ObjectField',
+    props: getFieldProps(),
+    setup(props: IObjectFieldProps, context) {
+      return () => {
+        const componentData = {
+          fieldType: 'ObjectField',
+          fieldProps: {
+            ...props,
+            ...getRawComponent(props),
+          },
+        } as any
+        const slots = context.slots as any
+        return _h(ReactiveField, componentData, slots)
       }
-      if (slots.default) {
-        children.default = () =>
-          slots.default({
-            field: field,
-            form: field.form,
-          })
-      }
-      return h(ReactiveField, componentData, children)
-    }
-  },
-}) as DefineComponent<IObjectFieldProps>
+    },
+  } as unknown as DefineComponent<IObjectFieldProps>
+}
+
+export default ObjectField

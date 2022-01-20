@@ -19,6 +19,7 @@ export function mapProps<T extends VueComponent = VueComponent>(
   return (target: T) => {
     return observer(
       defineComponent<VueComponentProps<T>>({
+        name: target.name ? `Connected${target.name}` : `ConnectedComponent`,
         // listeners is needed for vue2
         setup(props, { attrs, slots, listeners }: Record<string, any>) {
           const fieldRef = useField()
@@ -73,6 +74,7 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(
   return (target: T) => {
     return observer(
       defineComponent({
+        name: target.name ? `Read${target.name}` : `ReadComponent`,
         setup(props, { attrs, slots, listeners }: Record<string, any>) {
           const fieldRef = useField()
           return () => {

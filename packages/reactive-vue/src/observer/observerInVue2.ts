@@ -70,8 +70,11 @@ function observer(Component: any, observerOptions?: IObserverOptions): any {
     }
 
     const tracker = new Tracker(() => {
-      if (observerOptions?.scheduler) {
-        observerOptions?.scheduler?.(reactiveRender)
+      if (
+        observerOptions?.scheduler &&
+        typeof observerOptions.scheduler === 'function'
+      ) {
+        observerOptions.scheduler(reactiveRender)
       } else {
         reactiveRender()
       }

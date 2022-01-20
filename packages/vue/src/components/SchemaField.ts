@@ -1,11 +1,4 @@
-import {
-  inject,
-  provide,
-  defineComponent,
-  computed,
-  shallowRef,
-  watch,
-} from 'vue-demi'
+import { inject, provide, computed, shallowRef, watch } from 'vue-demi'
 import { ISchema, Schema, SchemaTypes } from '@formily/json-schema'
 import { RecursionField } from '../components'
 import {
@@ -14,7 +7,6 @@ import {
   SchemaOptionsSymbol,
 } from '../shared'
 import {
-  ComponentPath,
   ISchemaFieldVueFactoryOptions,
   SchemaVueComponents,
   ISchemaFieldProps,
@@ -47,88 +39,101 @@ const getRandomName = () => {
   return `NO_NAME_FIELD_$${env.nonameId++}`
 }
 
-const markupProps = [
-  'version',
-  'name',
-  'title',
-  'description',
-  'default',
-  'readOnly',
-  'writeOnly',
-  'enum',
-  'const',
-  'multipleOf',
-  'maximum',
-  'exclusiveMaximum',
-  'minimum',
-  'exclusiveMinimum',
-  'maxLength',
-  'minLength',
-  'pattern',
-  'maxItems',
-  'minItems',
-  'uniqueItems',
-  'maxProperties',
-  'minProperties',
-  'required',
-  'format',
-  'properties',
-  'items',
-  'additionalItems',
-  'patternProperties',
-  'additionalProperties',
-  'xIndex',
-  'xPattern',
-  'xDisplay',
-  'xValidator',
-  'xDecorator',
-  'xDecoratorProps',
-  'xComponent',
-  'xComponentProps',
-  'xReactions',
-  'xContent',
-  'xVisible',
-  'xHidden',
-  'xDisabled',
-  'xEditable',
-  'xReadOnly',
-  'xReadPretty',
-]
+const markupProps = {
+  version: String,
+  name: [String, Number],
+  title: {},
+  description: {},
+  default: {},
+  readOnly: {
+    type: Boolean,
+    default: undefined,
+  },
+  writeOnly: {
+    type: Boolean,
+    default: undefined,
+  },
+  enum: {},
+  const: {},
+  multipleOf: Number,
+  maximum: Number,
+  exclusiveMaximum: Number,
+  minimum: Number,
+  exclusiveMinimum: Number,
+  maxLength: Number,
+  minLength: Number,
+  pattern: {},
+  maxItems: Number,
+  minItems: Number,
+  uniqueItems: {
+    type: Boolean,
+    default: undefined,
+  },
+  maxProperties: Number,
+  minProperties: Number,
+  required: {
+    type: [Boolean, Array, String],
+    default: undefined,
+  },
+  format: String,
+  properties: {},
+  items: {},
+  additionalItems: {},
+  patternProperties: {},
+  additionalProperties: {},
+  xIndex: Number,
+  xPattern: {},
+  xDisplay: {},
+  xValidator: {},
+  xDecorator: {},
+  xDecoratorProps: {},
+  xComponent: {},
+  xComponentProps: {},
+  xReactions: {},
+  xContent: {},
+  xVisible: {
+    type: Boolean,
+    default: undefined,
+  },
+  xHidden: {
+    type: Boolean,
+    default: undefined,
+  },
+  xDisabled: {
+    type: Boolean,
+    default: undefined,
+  },
+  xEditable: {
+    type: Boolean,
+    default: undefined,
+  },
+  xReadOnly: {
+    type: Boolean,
+    default: undefined,
+  },
+  xReadPretty: {
+    type: Boolean,
+    default: undefined,
+  },
+}
 
 export function createSchemaField<
   Components extends SchemaVueComponents = SchemaVueComponents
 >(options: ISchemaFieldVueFactoryOptions<Components>): SchemaFieldComponents {
-  const SchemaField = defineComponent({
+  const SchemaField = {
     name: 'SchemaField',
     inheritAttrs: false,
-    props: [
-      'schema',
-      'components',
-      'scope',
-      'name',
-      'basePath',
-      'title',
-      'description',
-      'value',
-      'initialValue',
-      'required',
-      'display',
-      'pattern',
-      'hidden',
-      'visible',
-      'editable',
-      'disabled',
-      'readOnly',
-      'readPretty',
-      'dataSource',
-      'validateFirst',
-      'validator',
-      'decorator',
-      'component',
-      'reactions',
-      'content',
-      'data',
-    ],
+    props: {
+      schema: {},
+      scope: {},
+      components: {},
+      name: [String, Number],
+      basePath: {},
+      onlyRenderProperties: { type: Boolean, default: undefined },
+      onlyRenderSelf: { type: Boolean, default: undefined },
+      mapProperties: {},
+      filterProperties: {},
+    },
     setup(props: ISchemaFieldProps, { slots }) {
       const schemaRef = computed(() =>
         Schema.isSchemaInstance(props.schema)
@@ -194,22 +199,24 @@ export function createSchemaField<
         )
       }
     },
-  })
+  }
 
-  const MarkupField = defineComponent({
+  const MarkupField = {
     name: 'MarkupField',
-    props: [...markupProps, 'type'],
+    props: {
+      type: String,
+      ...markupProps,
+    },
     setup(props: ISchemaMarkupFieldProps, { slots }) {
       const parentRef = inject(SchemaMarkupSymbol, null)
-      if (!parentRef || !parentRef.value) return () => h(Fragment, {}, {})
-      const resolvedProps = resolveSchemaProps(props)
+      if (!parentRef || !parentRef.value) return () => h('template', {}, {})
 
       const name = props.name || getRandomName()
       const appendArraySchema = (schema: ISchema) => {
         if (parentRef.value.items) {
           return parentRef.value.addProperty(name, schema)
         } else {
-          return parentRef.value.setItems(resolvedProps)
+          return parentRef.value.setItems(resolveSchemaProps(props))
         }
       }
 
@@ -222,9 +229,12 @@ export function createSchemaField<
             parentRef.value.type === 'object' ||
             parentRef.value.type === 'void'
           ) {
-            schemaRef.value = parentRef.value.addProperty(name, resolvedProps)
+            schemaRef.value = parentRef.value.addProperty(
+              name,
+              resolveSchemaProps(props)
+            )
           } else if (parentRef.value.type === 'array') {
-            const schema = appendArraySchema(resolvedProps)
+            const schema = appendArraySchema(resolveSchemaProps(props))
             schemaRef.value = Array.isArray(schema) ? schema[0] : schema
           }
         },
@@ -233,19 +243,15 @@ export function createSchemaField<
       provide(SchemaMarkupSymbol, schemaRef)
 
       return () => {
-        const children: Record<string, () => any> = {}
-        if (slots.default) {
-          children.default = () => slots.default()
-        }
-        return h(Fragment, {}, children)
+        return h('div', { style: 'display: none;' }, slots)
       }
     },
-  })
+  }
 
   const SchemaFieldFactory = (type: SchemaTypes, name: string) => {
-    return defineComponent({
+    return {
       name: name,
-      props: [...markupProps],
+      props: { ...markupProps },
       setup(props: ISchemaTypeFieldProps, { slots }) {
         return () =>
           h(
@@ -259,7 +265,7 @@ export function createSchemaField<
             slots
           )
       },
-    })
+    }
   }
 
   return {
@@ -273,5 +279,5 @@ export function createSchemaField<
     SchemaDateTimeField: SchemaFieldFactory('datetime', 'SchemaDatetimeField'),
     SchemaVoidField: SchemaFieldFactory('void', 'SchemaVoidField'),
     SchemaNumberField: SchemaFieldFactory('number', 'SchemaNumberField'),
-  } as SchemaFieldComponents
+  } as unknown as SchemaFieldComponents
 }

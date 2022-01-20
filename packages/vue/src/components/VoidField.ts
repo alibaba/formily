@@ -1,75 +1,53 @@
-import { provide, defineComponent, computed, watch } from 'vue-demi'
-import { useField, useForm } from '../hooks'
-import { useAttach } from '../hooks/useAttach'
+import { isVue2, h as _h } from 'vue-demi'
 import ReactiveField from './ReactiveField'
-import { FieldSymbol } from '../shared/context'
-import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
 
 import type { IVoidFieldProps, DefineComponent } from '../types'
+import { getVoidFieldProps } from '../utils/getFieldProps'
 
-export default defineComponent({
-  name: 'VoidField',
-  props: [
-    'name',
-    'basePath',
-    'title',
-    'description',
-    'display',
-    'pattern',
-    'hidden',
-    'visible',
-    'editable',
-    'disabled',
-    'readOnly',
-    'readPretty',
-    'decorator',
-    'component',
-    'reactions',
-    'content',
-    'data',
-  ],
-  setup(props: IVoidFieldProps, { slots }) {
-    const formRef = useForm()
-    const parentRef = useField()
+let VoidField: DefineComponent<IVoidFieldProps>
 
-    const basePath = computed(() =>
-      props.basePath !== undefined ? props.basePath : parentRef?.value?.address
-    )
-    const createField = () =>
-      formRef.value.createVoidField({
-        ...props,
-        basePath: basePath.value,
-        ...getRawComponent(props),
-      })
-    const [fieldRef, checker] = useAttach(createField())
-    watch(
-      () => props,
-      () => (fieldRef.value = checker(createField())),
-      { deep: true }
-    )
-    watch([formRef, parentRef], () => (fieldRef.value = checker(createField())))
-
-    provide(FieldSymbol, fieldRef)
-
-    return () => {
-      const field = fieldRef.value
+/* istanbul ignore else */
+if (isVue2) {
+  VoidField = {
+    functional: true,
+    name: 'VoidField',
+    props: getVoidFieldProps(),
+    render(h, context) {
+      const props = context.props as IVoidFieldProps
+      const attrs = context.data.attrs
       const componentData = {
+        ...context.data,
         props: {
-          field,
+          fieldType: 'VoidField',
+          fieldProps: {
+            ...attrs,
+            ...props,
+            ...getRawComponent(props),
+          },
         },
       }
-      const children = {
-        ...slots,
+      return _h(ReactiveField, componentData, context.children)
+    },
+  } as unknown as DefineComponent<IVoidFieldProps>
+} else {
+  VoidField = {
+    name: 'VoidField',
+    props: getVoidFieldProps(),
+    setup(props: IVoidFieldProps, context) {
+      return () => {
+        const componentData = {
+          fieldType: 'VoidField',
+          fieldProps: {
+            ...props,
+            ...getRawComponent(props),
+          },
+        } as any
+        const slots = context.slots as any
+        return _h(ReactiveField, componentData, slots)
       }
-      if (slots.default) {
-        children.default = () =>
-          slots.default({
-            field: field,
-            form: field.form,
-          })
-      }
-      return h(ReactiveField, componentData, children)
-    }
-  },
-}) as DefineComponent<IVoidFieldProps>
+    },
+  } as unknown as DefineComponent<IVoidFieldProps>
+}
+
+export default VoidField
