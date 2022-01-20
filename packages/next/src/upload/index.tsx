@@ -27,6 +27,7 @@ type ComposedUpload = React.FC<ExtendUploadProps> & {
 }
 
 type IUploadProps = {
+  value?: any[]
   serviceErrorMessage?: string
   onChange?: (...args: any) => void
   formatter?: (...args: any) => any
@@ -175,6 +176,7 @@ function useUploadProps<T extends IUploadProps = ExtendUploadProps>({
   }
   return {
     ...props,
+    value: normalizeFileList(props.value),
     onChange,
     formatter,
   }
