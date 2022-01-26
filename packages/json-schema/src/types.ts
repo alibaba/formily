@@ -7,8 +7,8 @@ export type SchemaEnum<Message> = Array<
   | string
   | number
   | boolean
-  | { label: Message; value: any; [key: string]: any }
-  | { key: any; title: Message; [key: string]: any }
+  | { label?: Message; value?: any; [key: string]: any }
+  | { key?: any; title?: Message; [key: string]: any }
 >
 
 export type SchemaTypes =
