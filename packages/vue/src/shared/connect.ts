@@ -110,6 +110,7 @@ export function connect<T extends VueComponent>(
   if (isVue2) {
     const functionalComponent = defineComponent({
       functional: true,
+      name: target.name,
       render(h, context) {
         return h(Component, context.data, context.children)
       },
@@ -117,6 +118,7 @@ export function connect<T extends VueComponent>(
     return markRaw(functionalComponent) as T
   } else {
     const functionalComponent = defineComponent({
+      name: target.name,
       setup(props, { attrs, slots }) {
         return () => {
           return h(Component, { props, attrs }, slots)
