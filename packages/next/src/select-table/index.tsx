@@ -231,7 +231,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
             : {
                 ...rowSelection,
                 getProps: (record, index) => ({
-                  ...(rowSelection?.getProps(record, index) as any),
+                  ...(rowSelection?.getProps?.(record, index) as any),
                   disabled,
                 }), // fusion
                 selectedRowKeys: selected,

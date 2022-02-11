@@ -224,7 +224,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
             : {
                 ...rowSelection,
                 getCheckboxProps: (record) => ({
-                  ...(rowSelection?.getCheckboxProps(record) as any),
+                  ...(rowSelection?.getCheckboxProps?.(record) as any),
                   disabled,
                 }), // antd
                 selectedRowKeys: selected,
