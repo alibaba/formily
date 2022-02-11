@@ -488,14 +488,14 @@ test('nest array remove', async () => {
     })
   )
 
-  attach(
+  const obj00 = attach(
     form.createObjectField({
       name: '0',
       basePath: 'metrics.0.content',
     })
   )
 
-  attach(
+  const obj10 = attach(
     form.createObjectField({
       name: '0',
       basePath: 'metrics.1.content',
@@ -517,7 +517,10 @@ test('nest array remove', async () => {
       initialValue: '123',
     })
   )
-
+  expect(obj00.indexes[0]).toBe(0)
+  expect(obj00.index).toBe(0)
+  expect(obj10.index).toBe(0)
+  expect(obj10.indexes[0]).toBe(1)
   await (form.query('metrics.1.content').take() as any).remove(0)
   expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
   await metrics.remove(1)
@@ -619,4 +622,29 @@ test('void array items need skip data', () => {
   select2.value = 123
   expect(array.value).toEqual([123])
   expect(array2.value).toEqual([123])
+})
+
+test('array field reset', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'input',
+      initialValue: '123',
+      basePath: 'array.0',
+    })
+  )
+  form.reset('*', { forceClear: true })
+  expect(form.values).toEqual({ array: [] })
+  expect(array.value).toEqual([])
 })

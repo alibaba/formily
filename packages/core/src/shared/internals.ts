@@ -141,10 +141,7 @@ export const buildFieldPath = (field: GeneralField) => {
   return new FormPath(path)
 }
 
-export const buildNodeIndexes = (
-  field: GeneralField,
-  address: FormPathPattern
-) => {
+export const locateNode = (field: GeneralField, address: FormPathPattern) => {
   field.address = FormPath.parse(address)
   field.path = buildFieldPath(field)
   field.form.indexes[field.path.toString()] = field.address.toString()
@@ -164,7 +161,7 @@ export const patchFieldStates = (
         if (target[oldAddress] === payload) delete target[oldAddress]
       }
       if (address && payload) {
-        buildNodeIndexes(payload, address)
+        locateNode(payload, address)
       }
     }
   })
@@ -974,10 +971,12 @@ export const resetSelf = batch.bound(
     target.inputValue = typedDefaultValue
     target.inputValues = []
     target.caches = {}
-    if (options?.forceClear) {
-      target.value = typedDefaultValue
-    } else if (isValid(target.value)) {
-      target.value = toJS(target.initialValue ?? typedDefaultValue)
+    if (isValid(target.value)) {
+      if (options?.forceClear) {
+        target.value = typedDefaultValue
+      } else {
+        target.value = toJS(target.initialValue ?? typedDefaultValue)
+      }
     }
     if (!noEmit) {
       target.notify(LifeCycleTypes.ON_FIELD_RESET)

@@ -89,7 +89,7 @@ export class Field<
     this.props = props
     this.designable = designable
     initializeStart()
-    this.makeIndexes(address)
+    this.locate(address)
     this.initialize()
     this.makeObservable()
     this.makeReactive()
@@ -187,6 +187,7 @@ export class Field<
       readOnly: observable.computed,
       readPretty: observable.computed,
       editable: observable.computed,
+      indexes: observable.computed,
       setDisplay: action,
       setTitle: action,
       setDescription: action,
@@ -247,7 +248,7 @@ export class Field<
               this.caches.value = undefined
             }
           } else {
-            this.caches.value = toJS(value)
+            this.caches.value = toJS(value) ?? toJS(this.initialValue)
             if (display === 'none') {
               this.form.deleteValuesIn(this.path)
             }

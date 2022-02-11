@@ -1,5 +1,39 @@
 # Changelog
 
+## v2.0.9(2022-01-20)
+
+### :tada: Enhancements
+
+1. [feat(react): improve expression scopes (#2778)](https://github.com/alibaba/formily/commit/25c48970) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [feat(core): support index/indexes properties (#2769)](https://github.com/alibaba/formily/commit/36143ef0) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [feat(next/antd): support disabled props from field in ArrayBase.Addition (#2746)](https://github.com/alibaba/formily/commit/29624ca5) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+1. [feat(next): add date-picker2 (#2737)](https://github.com/alibaba/formily/commit/36d377cc) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :bug: Bug Fixes
+
+1. [fix(antd/next): fix upload can not preview placeholder (#2784)](https://github.com/alibaba/formily/commit/4660fd81) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): fix query sibling value is not work (#2781)](https://github.com/alibaba/formily/commit/c5dfb538) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(antd): fix ArrayTabs auto switch activeKey (#2774)](https://github.com/alibaba/formily/commit/72e0bdbd) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix: correct indian rupee regexp (#2714)](https://github.com/alibaba/formily/commit/b2269019) :point_right: ( [catch on me](https://github.com/catch on me) )
+
+1. [fix(element): fix ArrayTable style error (#2760)](https://github.com/alibaba/formily/commit/3b24f7f7) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+### :rose: Improve code quality
+
+1. [refactor(vue): change Field component type to functional (#2773)](https://github.com/alibaba/formily/commit/ffbaba25) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+### :blush: Other Changes
+
+1. [chore: change pr template and commit message specific link (#2742)](https://github.com/alibaba/formily/commit/129cd693) :point_right: ( [zhouxinyong](https://github.com/zhouxinyong) )
+
+1. [chore(antd): improve typings (#2733)](https://github.com/alibaba/formily/commit/994180d8) :point_right: ( [rash](https://github.com/rash) )
+
 ## v2.0.8(2022-01-05)
 
 ### :tada: Enhancements
@@ -884,28 +918,6 @@
 
 1. [feat(packages): add react 18 test cases (#1834)](https://github.com/alibaba/formily/commit/aa792203) :point_right: ( [Janry](https://github.com/Janry) )
 
-### :bug: Bug Fixes
-
-1. [fix(react): fix select type validate error #1838 (#1844)](https://github.com/alibaba/formily/commit/b7975baf) :point_right: ( [张威](https://github.com/张威) )
-
-1. [fix(antd): fix sideEffects mismatch when use babel-plugin-import (#1843)](https://github.com/alibaba/formily/commit/eaccb72a) :point_right: ( [KM.Seven](https://github.com/KM.Seven) )
-
-1. [fix(core): fix object field's children auto clean but they are not additionalProperty (#1840)](https://github.com/alibaba/formily/commit/dd313646) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix ArrayField operation will trigger memo leak (#1831)](https://github.com/alibaba/formily/commit/021c155a) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(path): fix segments match (#1826)](https://github.com/alibaba/formily/commit/6e541dcb) :point_right: ( [砂糖梨子](https://github.com/砂糖梨子) )
-
-### :memo: Documents Changes
-
-1. [docs(main): add schema fragment controlled case (#1852)](https://github.com/alibaba/formily/commit/2212486b) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v2.0.0-beta.80(2021-07-19)
-
-### :tada: Enhancements
-
-1. [feat(element): improve docs & add components (#1821)](https://github.com/alibaba/formily/commit/eddc3077) :point_right: ( [Muyao](https://github.com/Muyao) )
-
 1. [feat(reactive): support autorun.memo/autorun.effect (#1819)](https://github.com/alibaba/formily/commit/e43dda6a) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [feat(setters): support declaration to ReactionsSetter (#1805)](https://github.com/alibaba/formily/commit/b421ae6f) :point_right: ( [Janry](https://github.com/Janry) )
@@ -1174,11 +1186,19 @@
 
 ### :bug: Bug Fixes
 
+1. [fix(react): fix select type validate error #1838 (#1844)](https://github.com/alibaba/formily/commit/b7975baf) :point_right: ( [张威](https://github.com/张威) )
+
+1. [fix(antd): fix sideEffects mismatch when use babel-plugin-import (#1843)](https://github.com/alibaba/formily/commit/eaccb72a) :point_right: ( [KM.Seven](https://github.com/KM.Seven) )
+
+1. [fix(core): fix object field's children auto clean but they are not additionalProperty (#1840)](https://github.com/alibaba/formily/commit/dd313646) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): fix ArrayField operation will trigger memo leak (#1831)](https://github.com/alibaba/formily/commit/021c155a) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(path): fix segments match (#1826)](https://github.com/alibaba/formily/commit/6e541dcb) :point_right: ( [砂糖梨子](https://github.com/砂糖梨子) )
+
 1. [fix(antd/next): form-grid and layout props optional with default value (#1809)](https://github.com/alibaba/formily/commit/2738e418) :point_right: ( [gwsbhqt](https://github.com/gwsbhqt) )
 
 1. [fix(vue): fix field doesnt update correctly in designable mode (#1799)](https://github.com/alibaba/formily/commit/837cfc0b) :point_right: ( [月落音阑](https://github.com/月落音阑) )
-
-1. [fix(core): fix onFormValuesChange does not trigger with ArrayField initialValue (#1787)](https://github.com/alibaba/formily/commit/0c771f90) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(element): fix vuepress doc not identify fetch (#1769)](https://github.com/alibaba/formily/commit/bc4348e3) :point_right: ( [Muyao](https://github.com/Muyao) )
 
@@ -1611,6 +1631,8 @@
 1. [fix(pkg): add access=public to allow lerna to publish scoped package](https://github.com/alibaba/formily/commit/b41d1fab) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 ### :memo: Documents Changes
+
+1. [docs(main): add schema fragment controlled case (#1852)](https://github.com/alibaba/formily/commit/2212486b) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [docs(project): improve english docs](https://github.com/alibaba/formily/commit/49a74f0a) :point_right: ( [janrywang](https://github.com/janrywang) )
 

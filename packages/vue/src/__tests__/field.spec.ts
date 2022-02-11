@@ -1,7 +1,13 @@
 import Vue, { FunctionalComponentOptions } from 'vue'
 import { render, fireEvent, waitFor } from '@testing-library/vue'
 import { defineComponent, h } from '@vue/composition-api'
-import { createForm, Field as FieldType } from '@formily/core'
+import {
+  createForm,
+  Field as FieldType,
+  isField,
+  isVoidField,
+  onFieldChange,
+} from '@formily/core'
 import { useField, useFormEffects, connect, mapProps, mapReadPretty } from '../'
 import {
   FormProvider,
@@ -12,7 +18,6 @@ import {
 } from '../vue2-components'
 import ReactiveField from '../components/ReactiveField'
 // import { expectThrowError } from './shared'
-import { isField, isVoidField, onFieldChange } from '@formily/core'
 
 Vue.component('FormProvider', FormProvider)
 Vue.component('ArrayField', ArrayField)
@@ -205,10 +210,10 @@ test('render field with html attrs', async () => {
 
 test('ReactiveField', () => {
   render({
-    template: `<ReactiveField :field="null" />`,
+    template: `<ReactiveField />`,
   })
   render({
-    template: `<ReactiveField :field="null">
+    template: `<ReactiveField>
       <div></div>
     </ReactiveField>`,
   })
@@ -371,9 +376,6 @@ test('connect', async () => {
 
   const form = createForm()
   const { queryByText, getByTestId } = render({
-    components: {
-      CustomFormItem,
-    },
     data() {
       return {
         form,
@@ -381,13 +383,14 @@ test('connect', async () => {
         CustomField,
         CustomField2,
         CustomField3,
+        CustomFormItem,
       }
     },
     template: `<FormProvider :form="form">
       <Field name="aa" :decorator="[Decorator]" :component="[CustomField]" />
       <Field name="bb" :decorator="[Decorator]" :component="[CustomField2]" />
       <Field name="cc" :decorator="[Decorator]" :component="[CustomField3]" />
-      <CustomFormItem>dd</CustomFormItem>
+      <component :is="CustomFormItem">dd</component>
     </FormProvider>`,
   })
   form.query('aa').take((field) => {
