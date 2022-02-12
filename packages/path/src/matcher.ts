@@ -86,11 +86,29 @@ export class Matcher {
     return String(this.path[pos] ?? '')
   }
 
-  matchIdentifier(node: IdentifierNode, pos: number) {
-    const current = this.take(pos)
+  matchExcludeIdentifier(matched: boolean, node: Node, pos: number) {
     const isLastToken = pos === this.path.length - 1
     const isContainToken = pos < this.path.length
-    const isOverToken = !isContainToken
+    if (matched) {
+      if (node.after) {
+        if (isContainToken) {
+          return this.next(node, pos)
+        } else {
+          return true
+        }
+      }
+      if (isLastToken) {
+        return false
+      }
+    }
+    if (isLastToken) {
+      return true
+    }
+    return isContainToken
+  }
+
+  matchIdentifier(node: IdentifierNode, pos: number) {
+    const current = this.take(pos)
     let matched = false
     if (isExpandOperator(node.after)) {
       if (current.indexOf(node.value) === 0) {
@@ -98,14 +116,7 @@ export class Matcher {
         matched = true
       }
       if (this.excluding) {
-        if (!matched && isContainToken) {
-          return true
-        }
-        if (node.after.after) {
-          return this.next(node.after, pos)
-        } else {
-          return !isOverToken
-        }
+        return this.matchExcludeIdentifier(matched, node.after, pos)
       } else {
         return matched && this.next(node.after, pos)
       }
@@ -114,22 +125,7 @@ export class Matcher {
       matched = true
     }
     if (this.excluding) {
-      if (matched) {
-        if (node.after) {
-          if (isContainToken) {
-            return this.next(node, pos)
-          } else {
-            return true
-          }
-        }
-        if (isLastToken) {
-          return false
-        }
-      }
-      if (isLastToken) {
-        return true
-      }
-      return isContainToken
+      return this.matchExcludeIdentifier(matched, node, pos)
     } else {
       return matched && this.next(node, pos)
     }
