@@ -220,7 +220,7 @@ export class Matcher {
       if (record?.score >= 0) {
         record.score++
       }
-      return current && pos < source.length - 1 ? match(pos + 1) : true
+      return current && (pos < source.length - 1 ? match(pos + 1) : true)
     }
     return { matched: match(), record }
   }

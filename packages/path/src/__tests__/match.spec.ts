@@ -31,6 +31,11 @@ const unmatch = (obj) => {
   }
 }
 
+test('basic match', () => {
+  expect(Path.parse('xxx').match('')).toBeFalsy()
+  expect(Path.parse('xxx').match('aaa')).toBeFalsy()
+})
+
 test('test matchGroup', () => {
   const pattern = new Path('*(aa,bb,cc)')
   expect(pattern.matchAliasGroup('aa', 'bb')).toEqual(true)
