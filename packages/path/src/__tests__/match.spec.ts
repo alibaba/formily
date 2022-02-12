@@ -81,9 +81,9 @@ test('exclude match', () => {
   expect(
     Path.parse('*(!basic.name,basic.name.*,versionTag)').match('basic.name')
   ).toBeFalsy()
-  // expect(
-  //   Path.parse('*(!basic.name,basic.name.*,versionTag)').match('basic.name.kkk')
-  // ).toBeFalsy()
+  expect(
+    Path.parse('*(!basic.name,basic.name.*,versionTag)').match('basic.name.kkk')
+  ).toBeFalsy()
   expect(Path.parse('aa.*(!bb)').match('kk.mm.aa.bb.cc')).toBeFalsy()
   expect(Path.parse('aa.*(!bb)').match('aa')).toBeFalsy()
   expect(Path.parse('aa.*(!bb.*)').match('aa')).toBeFalsy()
