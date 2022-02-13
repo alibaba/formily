@@ -1,5 +1,10 @@
 import React, { useMemo } from 'react'
-import { FormProvider, JSXComponent, useForm } from '@formily/react'
+import {
+  FormProvider,
+  ExpressionScope,
+  JSXComponent,
+  useForm,
+} from '@formily/react'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
 import { ConfigProvider } from '@alifd/next'
 import {
@@ -34,21 +39,23 @@ export const Form: React.FC<FormProps> = ({
   }, [lang])
 
   const renderContent = (form: FormType) => (
-    <PreviewText.Placeholder value={previewTextPlaceholder}>
-      <FormLayout {...props}>
-        {React.createElement(
-          component,
-          {
-            onSubmit(e: React.FormEvent) {
-              e?.stopPropagation?.()
-              e?.preventDefault?.()
-              form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
+    <ExpressionScope value={{ $$form: form }}>
+      <PreviewText.Placeholder value={previewTextPlaceholder}>
+        <FormLayout {...props}>
+          {React.createElement(
+            component,
+            {
+              onSubmit(e: React.FormEvent) {
+                e?.stopPropagation?.()
+                e?.preventDefault?.()
+                form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
+              },
             },
-          },
-          props.children
-        )}
-      </FormLayout>
-    </PreviewText.Placeholder>
+            props.children
+          )}
+        </FormLayout>
+      </PreviewText.Placeholder>
+    </ExpressionScope>
   )
 
   if (form)
