@@ -45,11 +45,11 @@ export class Matcher {
 
   next(node: Node, pos: number) {
     const isLastToken = pos === this.path.length - 1
-    const isOverToken = pos > this.path.length
+    //  const isOverToken = pos > this.path.length
     if (node.after) {
-      if (isOverToken) {
-        return false
-      }
+      // if (isOverToken) {
+      //   return false
+      // }
       return this.matchNode(node.after, pos)
     }
 
@@ -60,9 +60,6 @@ export class Matcher {
         if (pos === 0 || node.optional) return true
         return !!this.take(pos)
       }
-    }
-    if (this.excluding) {
-      this.excluding = false
     }
     if (isLastToken) {
       return !!this.take(pos)
@@ -89,13 +86,12 @@ export class Matcher {
   matchExcludeIdentifier(matched: boolean, node: Node, pos: number) {
     const isLastToken = pos === this.path.length - 1
     const isContainToken = pos < this.path.length
+    if (!node.after) {
+      this.excluding = false
+    }
     if (matched) {
       if (node.after) {
-        if (isContainToken) {
-          return this.next(node, pos)
-        } else {
-          return true
-        }
+        return this.next(node, pos)
       }
       if (isLastToken) {
         return false
@@ -161,7 +157,7 @@ export class Matcher {
       excluding = !this.excluding
     }
     return toArr(node.value)[excluding ? 'every' : 'some']((item) => {
-      this.wildcards = this.stack.slice() as any
+      this.wildcards = this.stack.slice() as WildcardOperatorNode[]
       this.excluding = excluding
       return this.matchNode(item, pos)
     })
@@ -205,7 +201,7 @@ export class Matcher {
     } else if (isRangeExpression(node)) {
       return this.matchRangeExpression(node, pos)
     }
-    return true
+    return false
   }
 
   match(path: Segments) {

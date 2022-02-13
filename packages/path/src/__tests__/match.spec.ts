@@ -1,5 +1,6 @@
 import expect from 'expect'
 import { Path } from '../'
+import { Matcher } from '../matcher'
 
 const match = (obj) => {
   for (let name in obj) {
@@ -34,6 +35,18 @@ const unmatch = (obj) => {
 test('basic match', () => {
   expect(Path.parse('xxx').match('')).toBeFalsy()
   expect(Path.parse('xxx').match('aaa')).toBeFalsy()
+  expect(Path.parse('xxx.eee').match('xxx')).toBeFalsy()
+  expect(Path.parse('*(xxx.eee~)').match('xxx')).toBeFalsy()
+  expect(Path.parse('xxx.eee~').match('xxx.eee')).toBeTruthy()
+  expect(Path.parse('*(!xxx.eee,yyy)').match('xxx')).toBeFalsy()
+  expect(Path.parse('*(!xxx.eee,yyy)').match('xxx.ooo.ppp')).toBeTruthy()
+  expect(Path.parse('*(!xxx.eee,yyy)').match('xxx.eee')).toBeFalsy()
+  expect(Path.parse('*(!xxx.eee~,yyy)').match('xxx.eee')).toBeFalsy()
+  expect(Path.parse('~.aa').match('xxx.aa')).toBeTruthy()
+})
+
+test('not expect match not', () => {
+  expect(new Matcher({}).match(['']).matched).toBeFalsy()
 })
 
 test('test matchGroup', () => {
@@ -237,6 +250,16 @@ match({
   ],
   't.0.value~': [['t', '0', 'value']],
   'a.*[10:50].*(!a,b)': [
+    ['a', 49, 's'],
+    ['a', 10, 's'],
+    ['a', 50, 's'],
+  ],
+  'a.*[10:].*(!a,b)': [
+    ['a', 49, 's'],
+    ['a', 10, 's'],
+    ['a', 50, 's'],
+  ],
+  'a.*[].*(!a,b)': [
     ['a', 49, 's'],
     ['a', 10, 's'],
     ['a', 50, 's'],
