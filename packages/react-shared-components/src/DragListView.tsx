@@ -8,7 +8,7 @@ export const DragListView: React.FC<IDragListViewProps> = ({
 }) => {
   return (
     <ReactDragListView
-      handlerSelector=".drag-handler"
+      handleSelector=".drag-handler"
       nodeSelector=".drag-item"
       {...props}
     >
