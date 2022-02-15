@@ -6,17 +6,18 @@ const newCheckbox =
   (selected, flatDataSource, primaryKey, disabled, readOnly, onChange) =>
   () => {
     const allDataSourceKeys = flatDataSource.map((item) => item?.[primaryKey])
+    const indeterminate = !!(
+      selected?.length && selected.length !== allDataSourceKeys.length
+    )
     return (
       <Checkbox
         key="titleAddons"
         checked={!!selected?.length}
         disabled={disabled}
-        indeterminate={
-          !!(selected?.length && selected.length !== allDataSourceKeys.length)
-        }
+        indeterminate={indeterminate}
         onChange={(checked) => {
           if (!readOnly) {
-            if (checked) {
+            if (checked || indeterminate) {
               onChange?.(allDataSourceKeys, flatDataSource)
             } else {
               onChange?.([], [])

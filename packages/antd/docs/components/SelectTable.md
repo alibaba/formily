@@ -448,6 +448,9 @@ const schema = {
             .toLowerCase()
             .localeCompare(optionB.description.toLowerCase()),
         optionAsValue: true,
+        rowSelection: {
+          checkStrictly: false,
+        },
       },
       enum: [
         { key: '1', name: 'title-1', description: 'A-description' },
@@ -467,6 +470,11 @@ const schema = {
                   description: 'Z-description',
                 },
               ],
+            },
+            {
+              key: '2-2',
+              name: 'title2-2',
+              description: 'YY-description',
             },
           ],
         },
@@ -607,6 +615,14 @@ export default () => (
 | onSearch         | Callback function that is fired when input changed | (inputValue) => void                                                                                                                                                                                                                                        | -             |
 
 `TableProps` type definition reference antd https://ant.design/components/table/
+
+### rowSelection
+
+| Property name | Type    | Description                                                                | Default value |
+| ------------- | ------- | -------------------------------------------------------------------------- | ------------- |
+| checkStrictly | boolean | Check table row precisely; parent row and children rows are not associated | true          |
+
+`rowSelectionProps` type definition reference antd https://ant.design/components/table/#rowSelection
 
 ### SelectTable.Column
 
