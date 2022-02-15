@@ -9,6 +9,7 @@ import { useFilterOptions } from './useFilterOptions'
 import { useFlatOptions } from './useFlatOptions'
 import { useTitleAddon } from './useTitleAddon'
 import { useSize } from './useSize'
+import { useCheckSlackly, getCheckedProps } from './useCheckSlackly'
 import { usePrefixCls } from '../__builtins__'
 
 type IFilterOption = boolean | ((option: any, keyword: string) => boolean)
@@ -32,6 +33,9 @@ export interface ISelectTableProps extends Omit<TableProps, 'primaryKey'> {
   onSearch?: (keyword: string) => void
   onChange?: (value: any) => void
   value?: any
+  rowSelection?: TableProps['rowSelection'] & {
+    checkStrictly?: boolean
+  }
 }
 
 type ComposedSelectTable = React.FC<ISelectTableProps> & {
@@ -180,6 +184,22 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
         selectedRowKeys.includes(item?.[primaryKey])
       )
     }
+    if (rowSelection?.checkStrictly !== false) {
+      onInnerChange(selectedRowKeys, records)
+    } else {
+      onSlacklyChange(selectedRowKeys)
+    }
+  }
+
+  // Fusion TreeData SlacklyChange
+  const onSlacklyChange = (prevSelectedRowKeys: any[]) => {
+    const { selectedRowKeys, records } = useCheckSlackly(
+      prevSelectedRowKeys,
+      selected,
+      primaryKey,
+      flatDataSource
+    )
+
     onInnerChange(selectedRowKeys, records)
   }
 
@@ -232,10 +252,16 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
                 ...rowSelection,
                 getProps: (record, index) => ({
                   ...(rowSelection?.getProps?.(record, index) as any),
+                  ...(rowSelection?.checkStrictly !== false
+                    ? {}
+                    : getCheckedProps(record, primaryKey, selected)), // 父子关联模式indeterminate值
                   disabled,
                 }), // fusion
                 selectedRowKeys: selected,
-                onChange: onInnerChange,
+                onChange:
+                  rowSelection?.checkStrictly !== false
+                    ? onInnerChange
+                    : onSlacklyChange,
                 mode,
                 ...titleAddon,
               }
