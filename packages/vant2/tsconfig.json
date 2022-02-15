@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./lib",
+    "skipLibCheck": true,
+    "paths": {
+      "@formily/*": ["../../packages/*", "../../devtools/*"]
+    },
+    "plugins": [{ "transform": "./transformer.ts", "after": true }],
+    "lib": ["ESNext", "DOM"]
+  },
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["./esm/*", "./lib/*"]
+}

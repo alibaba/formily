@@ -1,0 +1,23 @@
+@import '../__builtins__/styles/common.scss';
+
+.#{$formily-prefix}-preview-text {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 16px;
+  overflow: hidden;
+  color: #323233;
+  font-size: 14px;
+  line-height: 24px;
+  background-color: #fff;
+}
+
+.#{$formily-prefix}-preview-title {
+  display: inline-block;
+  width: 6.2em;
+  color: #646566;
+  margin-right: 12px;
+}
