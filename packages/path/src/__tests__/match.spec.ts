@@ -1,5 +1,6 @@
 import expect from 'expect'
 import { Path } from '../'
+import { Matcher } from '../matcher'
 
 const match = (obj) => {
   for (let name in obj) {
@@ -30,6 +31,23 @@ const unmatch = (obj) => {
     })
   }
 }
+
+test('basic match', () => {
+  expect(Path.parse('xxx').match('')).toBeFalsy()
+  expect(Path.parse('xxx').match('aaa')).toBeFalsy()
+  expect(Path.parse('xxx.eee').match('xxx')).toBeFalsy()
+  expect(Path.parse('*(xxx.eee~)').match('xxx')).toBeFalsy()
+  expect(Path.parse('xxx.eee~').match('xxx.eee')).toBeTruthy()
+  expect(Path.parse('*(!xxx.eee,yyy)').match('xxx')).toBeFalsy()
+  expect(Path.parse('*(!xxx.eee,yyy)').match('xxx.ooo.ppp')).toBeTruthy()
+  expect(Path.parse('*(!xxx.eee,yyy)').match('xxx.eee')).toBeFalsy()
+  expect(Path.parse('*(!xxx.eee~,yyy)').match('xxx.eee')).toBeFalsy()
+  expect(Path.parse('~.aa').match('xxx.aa')).toBeTruthy()
+})
+
+test('not expect match not', () => {
+  expect(new Matcher({}).match(['']).matched).toBeFalsy()
+})
 
 test('test matchGroup', () => {
   const pattern = new Path('*(aa,bb,cc)')
@@ -115,8 +133,8 @@ test('test optional wild match', () => {
   expect(Path.parse('*(aa.**,bb.**)').match(['bb'])).toEqual(true)
   expect(Path.parse('*(aa.**,bb.**)').match(['bb', 'cc', 'dd'])).toEqual(true)
   expect(Path.parse('*(aa.**,bb.**)').match(['cc'])).toEqual(false)
-  expect(Path.parse('*(aa.**,bb.**).bb').match(['aa', 'oo'])).toEqual(false)
-  expect(Path.parse('*(aa.**,bb.**).bb').match(['bb', 'oo'])).toEqual(false)
+  expect(Path.parse('*(aa.**,bb.**).bb').match(['aa', 'oo'])).toEqual(true)
+  expect(Path.parse('*(aa.**,bb.**).bb').match(['bb', 'oo'])).toEqual(true)
   expect(Path.parse('*(aa.**,bb.**).bb').match(['aa', 'oo', 'bb'])).toEqual(
     true
   )
@@ -125,9 +143,15 @@ test('test optional wild match', () => {
   )
   expect(
     Path.parse('*(aa.**,bb.**).bb').match(['aa', 'oo', 'kk', 'dd', 'bb'])
+  ).toEqual(true)
+  expect(
+    Path.parse('*(aa.**,bb.**).bb').match(['cc', 'oo', 'kk', 'dd', 'bb'])
   ).toEqual(false)
   expect(
     Path.parse('*(aa.**,bb.**).bb').match(['bb', 'oo', 'kk', 'dd', 'bb'])
+  ).toEqual(true)
+  expect(
+    Path.parse('*(aa.**,bb.**).bb').match(['kk', 'oo', 'kk', 'dd', 'bb'])
   ).toEqual(false)
 })
 
@@ -149,6 +173,12 @@ test('test group', () => {
 test('test segments', () => {
   const node = Path.parse('a.0.b')
   expect(node.match(['a', 0, 'b'])).toEqual(true)
+})
+
+test('nested group match', () => {
+  expect(
+    Path.parse('aa.*.*(bb,cc).dd.*(kk,oo).ee').match('aa.0.cc.dd.kk.ee')
+  ).toEqual(true)
 })
 
 test('group match with destructor', () => {
@@ -224,6 +254,16 @@ match({
     ['a', 10, 's'],
     ['a', 50, 's'],
   ],
+  'a.*[10:].*(!a,b)': [
+    ['a', 49, 's'],
+    ['a', 10, 's'],
+    ['a', 50, 's'],
+  ],
+  'a.*[].*(!a,b)': [
+    ['a', 49, 's'],
+    ['a', 10, 's'],
+    ['a', 50, 's'],
+  ],
   'a.*[:50].*(!a,b)': [
     ['a', 49, 's'],
     ['a', 10, 's'],
@@ -247,6 +287,7 @@ match({
     ['a', 'b'],
     ['a', 'b', 'c'],
   ],
+  'aa.*.*(bb,cc).dd': [['aa', '0', 'cc', 'dd']],
   'aaa.products.0.*': [['aaa', 'products', '0', 'aaa']],
   'aa~.ccc': [
     ['aa', 'ccc'],
