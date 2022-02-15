@@ -3,7 +3,7 @@ import {
   FormProvider,
   ExpressionScope,
   JSXComponent,
-  useForm,
+  useParentForm,
 } from '@formily/react'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
 import { ConfigProvider } from '@alifd/next'
@@ -11,6 +11,7 @@ import {
   getValidateLocaleIOSCode,
   setValidateLanguage,
   Form as FormType,
+  ObjectField,
   IFormFeedback,
 } from '@formily/core'
 import { PreviewText } from '../preview-text'
@@ -30,7 +31,7 @@ export const Form: React.FC<FormProps> = ({
   previewTextPlaceholder,
   ...props
 }) => {
-  const top = useForm()
+  const top = useParentForm()
   const lang =
     (ConfigProvider as any).getContext()?.locale?.momentLocale ?? 'zh-CN'
   useMemo(() => {
@@ -38,7 +39,7 @@ export const Form: React.FC<FormProps> = ({
     setValidateLanguage(validateLanguage)
   }, [lang])
 
-  const renderContent = (form: FormType) => (
+  const renderContent = (form: FormType | ObjectField) => (
     <ExpressionScope value={{ $$form: form }}>
       <PreviewText.Placeholder value={previewTextPlaceholder}>
         <FormLayout {...props}>

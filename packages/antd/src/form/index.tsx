@@ -1,7 +1,7 @@
 import React from 'react'
-import { Form as FormType, IFormFeedback } from '@formily/core'
+import { Form as FormType, ObjectField, IFormFeedback } from '@formily/core'
 import {
-  useForm,
+  useParentForm,
   FormProvider,
   ExpressionScope,
   JSXComponent,
@@ -24,8 +24,8 @@ export const Form: React.FC<FormProps> = ({
   previewTextPlaceholder,
   ...props
 }) => {
-  const top = useForm()
-  const renderContent = (form: FormType) => (
+  const top = useParentForm()
+  const renderContent = (form: FormType | ObjectField) => (
     <ExpressionScope value={{ $$form: form }}>
       <PreviewText.Placeholder value={previewTextPlaceholder}>
         <FormLayout {...props}>
