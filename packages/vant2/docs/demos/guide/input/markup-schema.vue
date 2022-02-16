@@ -13,14 +13,12 @@
       />
       <SchemaStringField
         x-pattern="readPretty"
-        name="input-read"
+        name="inputRead"
         x-component="Input"
         :x-component-props="{ label: '输入框', placeholder: '请输入' }"
       />
     </SchemaField>
-    <Submit @submit="log" round block :style="{ 'margin-top': '16px' }"
-      >提交</Submit
-    >
+    <Submit :style="{ 'margin-top': '16px' }" round block @submit="log">提交</Submit>
   </FormProvider>
 </template>
 

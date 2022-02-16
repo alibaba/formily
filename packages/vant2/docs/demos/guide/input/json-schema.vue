@@ -1,9 +1,7 @@
 <template>
   <Form :form="form">
     <SchemaField :schema="schema" />
-    <Submit @submit="onSubmit" round block :style="{ 'margin-top': '16px' }"
-      >提交</Submit
-    >
+    <Submit :style="{ 'margin-top': '16px' }" round block @submit="onSubmit">提交</Submit>
   </Form>
 </template>
 
@@ -25,7 +23,7 @@ const schema = {
       'x-component': 'Input.TextArea',
       'x-component-props': { label: '文本框', placeholder: '请输入' },
     },
-    input: {
+    inputRead: {
       type: 'string',
       'x-component': 'Input',
       'x-pattern': 'readPretty',
