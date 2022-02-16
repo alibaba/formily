@@ -1,9 +1,14 @@
 <template>
   <FormProvider :form="form">
     <Field name="customCalendar" :component="[CustomCalendar]" />
-    <Submit :style="{ 'margin-top': '16px' }" round block @submit="log"
-      >提交</Submit
+    <Submit 
+      :style="{ 'margin-top': '16px' }" 
+      round 
+      block 
+      @submit="log"
     >
+      提交
+    </Submit>
   </FormProvider>
 </template>
 

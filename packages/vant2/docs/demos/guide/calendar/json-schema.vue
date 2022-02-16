@@ -1,9 +1,14 @@
 <template>
   <Form :form="form">
     <SchemaField :schema="schema" />
-    <Submit :style="{ 'margin-top': '16px' }" round block @submit="onSubmit"
-      >提交</Submit
+    <Submit 
+      :style="{ 'margin-top': '16px' }" 
+      round 
+      block 
+      @submit="onSubmit"
     >
+      提交
+    </Submit>
   </Form>
 </template>
 
