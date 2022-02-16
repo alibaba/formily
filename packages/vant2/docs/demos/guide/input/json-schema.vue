@@ -1,29 +1,35 @@
 <template>
   <Form :form="form">
     <SchemaField :schema="schema" />
-    <Submit @submit="onSubmit">提交</Submit>
+    <Submit @submit="onSubmit" round block :style="{ 'margin-top': '16px' }"
+      >提交</Submit
+    >
   </Form>
 </template>
 
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, FormItem, Input, Submit } from '@formily/element'
+import { Form, Submit, Input } from '@formily/vant2'
 
 const schema = {
   type: 'object',
   properties: {
     input: {
       type: 'string',
-      title: '输入框',
-      'x-decorator': 'FormItem',
       'x-component': 'Input',
+      'x-component-props': { label: '输入框', placeholder: '请输入' },
     },
     textarea: {
       type: 'string',
-      title: '文本框',
-      'x-decorator': 'FormItem',
       'x-component': 'Input.TextArea',
+      'x-component-props': { label: '文本框', placeholder: '请输入' },
+    },
+    input: {
+      type: 'string',
+      'x-component': 'Input',
+      'x-pattern': 'readPretty',
+      'x-component-props': { label: '输入框', placeholder: '请输入' },
     },
   },
 }
@@ -31,7 +37,6 @@ const schema = {
 const form = createForm()
 const { SchemaField } = createSchemaField({
   components: {
-    FormItem,
     Input,
   },
 })

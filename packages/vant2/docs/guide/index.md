@@ -1,8 +1,8 @@
-# Element-UI
+# Vant
 
 ## 介绍
 
-@formily/element 是基于 Element UI 封装的针对表单场景专业级(Professional)组件库，它主要有以下几个特点：
+@formily/vant2 是基于 Vant 2 封装的针对表单场景专业级(Professional)组件库，它主要有以下几个特点：
 
 - 更丰富的组件体系
 
@@ -69,8 +69,8 @@
 ## 安装
 
 ```bash
-$ npm install --save element-ui
-$ npm install --save @formily/core @formily/vue @vue/composition-api @formily/element
+$ npm install --save vant
+$ npm install --save @formily/core @formily/vue @vue/composition-api @formily/vant2
 ```
 
 ## 按需打包

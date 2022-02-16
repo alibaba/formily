@@ -1,17 +1,17 @@
 import { composeExport, transformComponent } from '../__builtins__/shared'
 import { connect, mapProps, mapReadPretty } from '@formily/vue'
 import { PreviewText } from '../preview-text'
-import type { Field as ElInputProps } from 'vant'
-import { Field as ElInput } from 'vant'
+import type { Field as VanInputProps } from 'vant'
+import { Field as VanInput } from 'vant'
 
-export type InputProps = ElInputProps
+export type InputProps = VanInputProps
 
-const TransformElInput = transformComponent<InputProps>(ElInput, {
+const TransformVanInput = transformComponent<InputProps>(VanInput, {
   change: 'input',
 })
 
 const InnerInput = connect(
-  TransformElInput,
+  TransformVanInput,
   mapProps({ readOnly: 'readonly' }),
   mapReadPretty(PreviewText.Input)
 )
