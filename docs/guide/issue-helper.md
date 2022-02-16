@@ -65,7 +65,7 @@ const form = createForm({
   effects() {
     onFieldMount('version', async (field) => {
       const { versions: unsort } = await fetch(
-        'https://registry.nlark.com/@formily/core'
+        'https://registry.npmmirror.com/@formily/core'
       ).then((res) => res.json())
 
       const versions = Object.keys(unsort).sort((v1, v2) =>
