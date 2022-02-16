@@ -80,11 +80,11 @@ order: 1
 
 **hidden**
 
-为 true 时是 display 为 hidden，为 false 时是 display 为 visible
+为 true 时， display 为 hidden；为 false 时 display 为 visible
 
 **visible**
 
-为 true 时是 display 为 visible，为 false 时是 display 为 none
+为 true 时， display 为 visible；为 false 时 display 为 none
 
 ## 方法
 
