@@ -34,6 +34,22 @@ const schema = {
         },
       ],
     },
+    multipleRead: {
+      type: 'array',
+      'x-component': 'Checkbox.Group',
+      'x-pattern': 'readPretty',
+      default: [1, 2],
+      enum: [
+        {
+          label: '选项1',
+          name: 1,
+        },
+        {
+          label: '选项2',
+          name: 2,
+        },
+      ],
+    },
   },
 }
 
@@ -64,7 +80,7 @@ export default {
 .checkbox {
   ::v-deep {
     .van-checkbox {
-      margin: 0 0 8px 20px;
+      margin: 0 0 8px;
     }
   }
 }

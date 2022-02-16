@@ -13,6 +13,21 @@
         <div>{{ option.label }}</div>
       </template>
     </ArrayField>
+
+    <ArrayField
+      name="multipleRead"
+      :initialValue="[1, 2]"
+      pattern="readPretty"
+      :dataSource="[
+        { label: '选项1', name: 1 },
+        { label: '选项2', name: 2 },
+      ]"
+      :component="[Checkbox.Group]"
+    >
+      <template v-slot:option="{ option }">
+        <div>{{ option.label }}</div>
+      </template>
+    </ArrayField>
     <Submit :style="{ 'margin-top': '16px' }" round block @submit="onSubmit">
       提交
     </Submit>
@@ -46,7 +61,7 @@ export default {
 .checkbox {
   ::v-deep {
     .van-checkbox {
-      margin: 0 0 8px 20px;
+      margin: 0 0 8px;
     }
   }
 }

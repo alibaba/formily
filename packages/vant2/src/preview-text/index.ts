@@ -36,7 +36,7 @@ const Input = defineComponent({
       return h(
         Space,
         {
-          class: [prefixCls],
+          class: [`${stylePrefix}-preview-input`],
           style: attrs.style,
         },
         {
@@ -47,7 +47,7 @@ const Input = defineComponent({
               h(
                 'span',
                 {
-                  class: [`${stylePrefix}-preview-title`],
+                  class: [`${stylePrefix}-preview-input-title`],
                 },
                 {
                   default: () => [attrs.label],
@@ -102,14 +102,13 @@ const Checkbox = observer(
         }
         return selected.map(({ value, label }, key) => {
           const text =
-            dataSource?.find((item) => item.value == value)?.label || label
+            dataSource?.find((item) => item.name == value)?.label || label
           return h(
             Tag,
             {
               key,
               props: {
-                type: 'info',
-                effect: 'light',
+                type: 'primary',
               },
             },
             {
