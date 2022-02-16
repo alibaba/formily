@@ -16,4 +16,4 @@
 
 ## API
 
-参考 [https://element.eleme.io/#/zh-CN/component/input](https://element.eleme.io/#/zh-CN/component/input)
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field)

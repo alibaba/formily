@@ -8,6 +8,7 @@ import {
 import { h } from '@formily/vue'
 import { isValid } from '@formily/shared'
 import { stylePrefix } from '../__builtins__/configs'
+import { Space } from '../space'
 
 const prefixCls = `${stylePrefix}-preview-text`
 const PlaceholderContext = createContext('N/A')
@@ -30,7 +31,7 @@ const Input = defineComponent({
     const placeholder = usePlaceholder(value)
     return () => {
       return h(
-        'div',
+        Space,
         {
           class: [prefixCls],
           style: attrs.style,
