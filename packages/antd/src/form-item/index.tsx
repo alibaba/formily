@@ -123,7 +123,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
   const formLayout = useFormItemLayout(props)
   const { containerRef, contentRef, overflow } = useOverflow<
     HTMLDivElement,
-    HTMLLabelElement
+    HTMLSpanElement
   >()
   const {
     label,
@@ -218,8 +218,10 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
   const renderLabelText = () => {
     const labelChildren = (
       <div className={`${prefixCls}-label-content`} ref={containerRef}>
-        {asterisk && <span className={`${prefixCls}-asterisk`}>{'*'}</span>}
-        <label ref={contentRef}>{label}</label>
+        <span ref={contentRef}>
+          {asterisk && <span className={`${prefixCls}-asterisk`}>{'*'}</span>}
+          <label>{label}</label>
+        </span>
       </div>
     )
 
