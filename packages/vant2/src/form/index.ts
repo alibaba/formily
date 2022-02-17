@@ -4,6 +4,7 @@ import { defineComponent } from '@vue/composition-api'
 import { FormLayout, FormLayoutProps } from '../form-layout'
 import { PreviewText } from '../preview-text'
 import { Component, VNode } from 'vue'
+import { Form as VanFrom } from 'vant'
 
 const FormProvider = _FormProvider as unknown as Component
 
@@ -17,26 +18,15 @@ export interface FormProps extends FormLayoutProps {
 
 export const Form = defineComponent<FormProps>({
   name: 'FForm',
-  props: [
-    'form',
-    'component',
-    'previewTextPlaceholder',
-    'onAutoSubmit',
-    'onAutoSubmitFailed',
-  ],
+  props: ['form', 'previewTextPlaceholder'],
   setup(props, { attrs, slots, listeners }) {
     const top = useForm()
 
     return () => {
-      const {
-        form,
-        component = 'form',
-        onAutoSubmit = listeners?.autoSubmit,
-        onAutoSubmitFailed = listeners?.autoSubmitFailed,
-        previewTextPlaceholder = slots?.previewTextPlaceholder,
-      } = props
+      const { form, previewTextPlaceholder = slots?.previewTextPlaceholder } =
+        props
 
-      const renderContent = (form: FormType) => {
+      const renderContent = () => {
         return h(
           PreviewText.Placeholder,
           {
@@ -56,17 +46,9 @@ export const Form = defineComponent<FormProps>({
                 {
                   default: () => [
                     h(
-                      component,
+                      VanFrom,
                       {
-                        on: {
-                          submit: (e: Event) => {
-                            e?.stopPropagation?.()
-                            e?.preventDefault?.()
-                            form
-                              .submit(onAutoSubmit as (e: any) => void)
-                              .catch(onAutoSubmitFailed as (e: any) => void)
-                          },
-                        },
+                        on: listeners,
                       },
                       slots
                     ),

@@ -1,6 +1,10 @@
 <template>
   <FormProvider :form="form">
-    <Field name="input" title="输入框" :component="[Input, { label: '输入框', placeholder: '请输入' }]" />
+    <Field
+      name="input"
+      title="输入框"
+      :component="[Input, { label: '输入框', placeholder: '请输入' }]"
+    />
     <Field
       name="textarea"
       title="文本框"
@@ -12,12 +16,7 @@
       pattern="readPretty"
       :component="[Input, { label: '输入框', placeholder: '请输入' }]"
     />
-    <Submit 
-      :style="{ 'margin-top': '16px' }" 
-      round 
-      block 
-      @submit="onSubmit"
-    >
+    <Submit :style="{ 'margin-top': '16px' }" round block @submit="log">
       提交
     </Submit>
   </FormProvider>

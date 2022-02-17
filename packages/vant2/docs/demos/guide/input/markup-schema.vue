@@ -18,12 +18,7 @@
         :x-component-props="{ label: '输入框', placeholder: '请输入' }"
       />
     </SchemaField>
-    <Submit 
-      :style="{ 'margin-top': '16px' }" 
-      round 
-      block 
-      @submit="onSubmit"
-    >
+    <Submit :style="{ 'margin-top': '16px' }" round block @submit="log">
       提交
     </Submit>
   </FormProvider>

@@ -25,7 +25,7 @@
         x-component="Checkbox.Group"
       />
     </SchemaField>
-    <Submit :style="{ 'margin-top': '16px' }" round block @submit="onSubmit">
+    <Submit :style="{ 'margin-top': '16px' }" round block @submit="log">
       提交
     </Submit>
   </Form>
@@ -51,7 +51,7 @@ export default {
     }
   },
   methods: {
-    onSubmit(value) {
+    log(value) {
       console.log(value)
     },
   },
