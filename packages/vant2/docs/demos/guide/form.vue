@@ -3,7 +3,7 @@
     <SchemaField>
       <SchemaStringField
         name="input"
-        x-component="Input"
+        x-component="Field"
         :x-component-props="{
           label: '输入框',
           placeholder: '请输入',
@@ -34,10 +34,10 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, Field, Checkbox, Input, Select, Submit } from '@formily/vant2'
+import { Form, Field, Checkbox, Select, Submit } from '@formily/vant2'
 
 const form = createForm()
-const fields = createSchemaField({ components: { Input, Field, Checkbox } })
+const fields = createSchemaField({ components: { Field, Checkbox } })
 
 export default {
   components: { Submit, Form, ...fields },
