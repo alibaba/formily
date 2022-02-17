@@ -5,11 +5,14 @@ import {
   transformComponent,
   resolveComponent,
 } from '../__builtins__/shared'
-import type { CheckboxGroup as ElCheckboxGroupProps } from 'vant'
-import { Checkbox as ElCheckbox, CheckboxGroup as ElCheckboxGroup } from 'vant'
+import type { CheckboxGroup as VanCheckboxGroupProps } from 'vant'
+import {
+  Checkbox as VanCheckbox,
+  CheckboxGroup as VanCheckboxGroup,
+} from 'vant'
 import { PreviewText } from '../preview-text'
 
-const TransformElCheckbox = transformComponent(ElCheckbox, {
+const TransformVanCheckbox = transformComponent(VanCheckbox, {
   change: 'input',
 })
 
@@ -38,7 +41,7 @@ const CheckboxOption = defineComponent({
         delete newProps.value
 
         return h(
-          ElCheckbox,
+          VanCheckbox,
           {
             attrs: {
               ...newProps,
@@ -49,7 +52,7 @@ const CheckboxOption = defineComponent({
       }
 
       return h(
-        TransformElCheckbox,
+        TransformVanCheckbox,
         {
           attrs: {
             ...props,
@@ -64,12 +67,12 @@ const CheckboxOption = defineComponent({
   },
 })
 
-export type CheckboxGroupProps = ElCheckboxGroupProps & {
+export type CheckboxGroupProps = VanCheckboxGroupProps & {
   value: any[]
   options?: Array<string>
 }
 
-const TransformElCheckboxGroup = transformComponent(ElCheckboxGroup, {
+const TransformVanCheckboxGroup = transformComponent(VanCheckboxGroup, {
   change: 'input',
 })
 
@@ -121,7 +124,7 @@ const CheckboxGroupOption = defineComponent<CheckboxGroupProps>({
             }
           : slots
       return h(
-        TransformElCheckboxGroup,
+        TransformVanCheckboxGroup,
         {
           attrs: {
             ...attrs,
