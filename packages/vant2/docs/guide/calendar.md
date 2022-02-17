@@ -20,4 +20,4 @@
 
 ## API
 
-参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/calendar](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/calendar)
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/calendar#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/calendar#api)

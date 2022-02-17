@@ -16,4 +16,4 @@
 
 ## API
 
-参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/checkbox](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/checkbox)
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/checkbox#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/checkbox#api)

@@ -4,4 +4,4 @@
 
 ## API
 
-参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/cascader](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/cascader)
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/cascader#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/cascader#api)

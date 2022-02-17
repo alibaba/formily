@@ -16,4 +16,4 @@
 
 ## API
 
-参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field)
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field#api)
