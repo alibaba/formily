@@ -26,8 +26,8 @@ export const usePlaceholder = (value?: Ref<any>) => {
   return placeholder
 }
 
-const Input = defineComponent({
-  name: 'FPreviewTextInput',
+const VanField = defineComponent({
+  name: 'FPreviewTextField',
   props: ['value'],
   setup(props, { attrs, slots }) {
     const value = toRef(props, 'value')
@@ -36,7 +36,7 @@ const Input = defineComponent({
       return h(
         Space,
         {
-          class: [`${stylePrefix}-preview-input`],
+          class: [`${stylePrefix}-preview-field`],
           style: attrs.style,
         },
         {
@@ -47,7 +47,7 @@ const Input = defineComponent({
               h(
                 'span',
                 {
-                  class: [`${stylePrefix}-preview-input-title`],
+                  class: [`${stylePrefix}-preview-field-title`],
                 },
                 {
                   default: () => [attrs.label],
@@ -155,7 +155,7 @@ const Text = defineComponent<any>({
 })
 
 export const PreviewText = composeExport(Text, {
-  Input,
+  VanField,
   Checkbox,
   Placeholder: PlaceholderContext.Provider,
   usePlaceholder,

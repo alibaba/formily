@@ -10,24 +10,29 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, Submit, Input } from '@formily/vant2'
+import { Form, Submit, Field as VanField } from '@formily/vant2'
 
 const schema = {
   type: 'object',
   properties: {
-    input: {
+    field: {
       type: 'string',
-      'x-component': 'Input',
+      'x-component': 'VanField',
       'x-component-props': { label: '输入框', placeholder: '请输入' },
     },
     textarea: {
       type: 'string',
-      'x-component': 'Input.TextArea',
-      'x-component-props': { label: '文本框', placeholder: '请输入' },
+      'x-component': 'VanField',
+      'x-component-props': {
+        autosize: true,
+        type: 'textarea',
+        label: '文本框',
+        placeholder: '请输入',
+      },
     },
-    inputRead: {
+    fieldRead: {
       type: 'string',
-      'x-component': 'Input',
+      'x-component': 'VanField',
       'x-pattern': 'readPretty',
       'x-component-props': { label: '输入框', placeholder: '请输入' },
     },
@@ -37,7 +42,7 @@ const schema = {
 const form = createForm()
 const { SchemaField } = createSchemaField({
   components: {
-    Input,
+    VanField,
   },
 })
 

@@ -1,20 +1,28 @@
 <template>
   <FormProvider :form="form">
     <Field
-      name="input"
+      name="field"
       title="输入框"
-      :component="[Input, { label: '输入框', placeholder: '请输入' }]"
+      :component="[VanField, { label: '输入框', placeholder: '请输入' }]"
     />
     <Field
       name="textarea"
       title="文本框"
-      :component="[Input.TextArea, { label: '文本框', placeholder: '请输入' }]"
+      :component="[
+        VanField,
+        {
+          autosize: true,
+          type: 'textarea',
+          label: '文本框',
+          placeholder: '请输入',
+        },
+      ]"
     />
     <Field
-      name="inputRead"
+      name="fieldRead"
       title="输入框"
       pattern="readPretty"
-      :component="[Input, { label: '输入框', placeholder: '请输入' }]"
+      :component="[VanField, { label: '输入框', placeholder: '请输入' }]"
     />
     <Submit :style="{ 'margin-top': '16px' }" round block @submit="log">
       提交
@@ -25,7 +33,7 @@
 <script>
 import { createForm } from '@formily/core'
 import { FormProvider, Field } from '@formily/vue'
-import { Input, Submit } from '@formily/vant2'
+import { Field as VanField, Submit } from '@formily/vant2'
 
 const form = createForm()
 
@@ -33,7 +41,7 @@ export default {
   components: { FormProvider, Field, Submit },
   data() {
     return {
-      Input,
+      VanField,
       form,
     }
   },

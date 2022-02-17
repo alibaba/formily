@@ -1,14 +1,12 @@
 <template>
-  <Form :form="form" @failed="onFailed" @submit="onSubmit">
+  <Form :form="form" @autoSubmit="log" @autoSubmitFailed="log">
     <SchemaField>
       <SchemaStringField
         name="input"
         x-component="Input"
         :x-component-props="{
-          name: 'input',
           label: '输入框',
           placeholder: '请输入',
-          rules: [{ pattern, message: '请输入正确内容' }],
         }"
         :required="true"
       />
@@ -16,9 +14,7 @@
         name="multiple"
         x-decorator="Field"
         :x-decorator-props="{
-          name: 'multiple',
           label: '选择',
-          rules: [{ validator, message: '请输入正确内容' }],
         }"
         :enum="[
           { label: '选项1', name: 1 },
@@ -28,6 +24,7 @@
         :x-component-props="{
           direction: 'horizontal',
         }"
+        :required="true"
       />
     </SchemaField>
     <Submit :style="{ 'margin-top': '16px' }" round block> 提交 </Submit>
@@ -54,15 +51,6 @@ export default {
   methods: {
     log(value) {
       console.log(value)
-    },
-    validator(val) {
-      return !!val.length
-    },
-    onFailed(value) {
-      console.log('onFailed', value)
-    },
-    onSubmit(value) {
-      console.log('onSubmit: ', value)
     },
   },
 }

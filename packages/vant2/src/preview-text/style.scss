@@ -1,6 +1,6 @@
 @import '../__builtins__/styles/common.scss';
 
-.#{$formily-prefix}-preview-input {
+.#{$formily-prefix}-preview-field {
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -15,7 +15,7 @@
   background-color: #fff;
 }
 
-.#{$formily-prefix}-preview-input-title {
+.#{$formily-prefix}-preview-field-title {
   display: inline-block;
   width: 6.2em;
   color: #646566;
