@@ -1,10 +1,6 @@
 # Calendar
 
-> 日历 (使用自定义组件)
-
-## 自定义 Calendar
-
-<dumi-previewer demoPath="guide/calendar/custom-calendar" />
+> 日历
 
 ## Markup Schema 案例
 

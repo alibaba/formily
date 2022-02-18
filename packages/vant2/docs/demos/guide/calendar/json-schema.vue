@@ -10,29 +10,39 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, Submit } from '@formily/vant2'
-import CustomCalendar from './custom-calendar'
+import { Form, Calendar, Submit } from '@formily/vant2'
 
-const schema = {
-  type: 'object',
-  properties: {
-    customCalendar: {
-      type: 'string',
-      'x-component': 'CustomCalendar',
-    },
-  },
-}
-
-const form = createForm()
 const { SchemaField } = createSchemaField({
   components: {
-    CustomCalendar,
+    Calendar,
   },
 })
 
 export default {
   components: { Form, SchemaField, Submit },
   data() {
+    const schema = {
+      type: 'object',
+      properties: {
+        calendar: {
+          type: 'string',
+          'x-component': 'Calendar',
+          'x-component-props': {
+            fieldProps: {
+              label: '日历',
+              placeholder: '选择日历',
+              format: (date) =>
+                date && `${date.getMonth() + 1}/${date.getDate()}`,
+            },
+            popupProps: {},
+            calendarProps: {},
+          },
+        },
+      },
+    }
+
+    const form = createForm()
+
     return {
       form,
       schema,

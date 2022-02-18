@@ -1,6 +1,7 @@
 import './style'
 
 export * from './area'
+export * from './calendar'
 export * from './checkbox'
 export * from './datetime-picker'
 export * from './form'

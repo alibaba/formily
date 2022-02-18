@@ -6,16 +6,16 @@
         x-component="Area"
         :x-component-props="{
           fieldProps: {
+            label: '城市',
+            placeholder: '选择城市',
             format: (val) =>
               (val || [])
                 .filter((item) => !!item)
                 .map((item) => item && item.name)
                 .join('/'),
-            label: '城市',
-            placeholder: '选择城市',
           },
           popupProps: {},
-          pickerProps: {
+          areaProps: {
             areaList: {
               province_list: {
                 110000: '北京市',

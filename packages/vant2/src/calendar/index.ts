@@ -3,18 +3,22 @@ import { observer } from '@formily/reactive-vue'
 import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { ref, defineComponent } from '@vue/composition-api'
 import { PreviewText } from '../preview-text'
-import type { Area as VanAreaProps } from 'vant'
-import { Area as VanArea } from 'vant'
+import type { Calendar as VanCalendarProps } from 'vant'
+import { Calendar as VanCalendar } from 'vant'
 import { Field as VanField } from 'vant'
 import { Popup as VanPopup } from 'vant'
 
-export type AreaProps = VanAreaProps
+export type CalendarProps = VanCalendarProps
 
-const BaseArea = observer(
+const BaseCalendar = observer(
   defineComponent({
-    name: 'FArea',
+    name: 'FCalendar',
     setup(props, { attrs, emit, slots, listeners }) {
-      const { fieldProps = {}, popupProps = {}, areaProps = {} } = attrs as any
+      const {
+        fieldProps = {},
+        popupProps = {},
+        calendarProps = {},
+      } = attrs as any
       const { format } = fieldProps
       const show = ref(false)
 
@@ -42,42 +46,23 @@ const BaseArea = observer(
                 slots
               ),
               h(
-                VanPopup,
+                VanCalendar,
                 {
                   attrs: {
                     value: show.value,
-                    round: true,
-                    position: 'bottom',
-                    ...popupProps,
+                    ...calendarProps,
                   },
                   on: {
                     input: (val) => {
                       show.value = val
                     },
+                    confirm: (val) => {
+                      emit('change', val)
+                      show.value = false
+                    },
                   },
                 },
-                {
-                  default: () => [
-                    h(
-                      VanArea,
-                      {
-                        attrs: {
-                          ...areaProps,
-                        },
-                        on: {
-                          cancel: () => {
-                            show.value = false
-                          },
-                          confirm: (val) => {
-                            emit('change', val)
-                            show.value = false
-                          },
-                        },
-                      },
-                      {}
-                    ),
-                  ],
-                }
+                {}
               ),
             ],
           }
@@ -87,10 +72,10 @@ const BaseArea = observer(
   })
 )
 
-export const Area = connect(
-  BaseArea,
+export const Calendar = connect(
+  BaseCalendar,
   mapProps({ readOnly: 'readonly' })
   // mapReadPretty(PreviewText.Uploader)
 )
 
-export default Area
+export default Calendar

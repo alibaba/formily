@@ -1,30 +1,39 @@
 <template>
-  <FormProvider :form="form">
-    <Field name="customCalendar" :component="[CustomCalendar]" />
-    <Submit 
-      :style="{ 'margin-top': '16px' }" 
-      round 
-      block 
-      @submit="log"
-    >
+  <Form :form="form">
+    <Field
+      name="calendar"
+      :component="[
+        Calendar,
+        {
+          fieldProps: {
+            label: '日历',
+            placeholder: '选择日历',
+            format: (date) =>
+              date && `${date.getMonth() + 1}/${date.getDate()}`,
+          },
+          popupProps: {},
+          calendarProps: {},
+        },
+      ]"
+    />
+    <Submit :style="{ 'margin-top': '16px' }" round block @submit="log">
       提交
     </Submit>
-  </FormProvider>
+  </Form>
 </template>
 
 <script>
 import { createForm } from '@formily/core'
-import { FormProvider, Field } from '@formily/vue'
-import { Submit } from '@formily/vant2'
-import CustomCalendar from './custom-calendar'
+import { Field } from '@formily/vue'
+import { Calendar, Submit, Form } from '@formily/vant2'
 
 const form = createForm()
 
 export default {
-  components: { FormProvider, Field, Submit },
+  components: { Form, Field, Submit },
   data() {
     return {
-      CustomCalendar,
+      Calendar,
       form,
     }
   },

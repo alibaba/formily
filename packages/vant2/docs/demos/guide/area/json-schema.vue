@@ -38,7 +38,7 @@ export default {
               placeholder: '选择城市',
             },
             popupProps: {},
-            pickerProps: {
+            areaProps: {
               areaList: {
                 province_list: {
                   110000: '北京市',

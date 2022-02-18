@@ -1,34 +1,41 @@
 <template>
-  <FormProvider :form="form">
+  <Form :form="form">
     <SchemaField>
-      <SchemaStringField name="customCalendar" x-component="CustomCalendar" />
+      <SchemaStringField
+        name="calendar"
+        x-component="Calendar"
+        :x-component-props="{
+          fieldProps: {
+            label: '日历',
+            placeholder: '选择日历',
+            format: (date) =>
+              date && `${date.getMonth() + 1}/${date.getDate()}`,
+          },
+          popupProps: {},
+          calendarProps: {},
+        }"
+      />
     </SchemaField>
-    <Submit 
-      :style="{ 'margin-top': '16px' }" 
-      round 
-      block 
-      @submit="log"
-    >
+    <Submit :style="{ 'margin-top': '16px' }" round block @submit="log">
       提交
     </Submit>
-  </FormProvider>
+  </Form>
 </template>
 
 <script>
 import { createForm } from '@formily/core'
-import { createSchemaField, FormProvider } from '@formily/vue'
-import { Submit } from '@formily/vant2'
-import CustomCalendar from './custom-calendar'
+import { createSchemaField } from '@formily/vue'
+import { Calendar, Submit, Form } from '@formily/vant2'
 
 const form = createForm()
 const fields = createSchemaField({
   components: {
-    CustomCalendar,
+    Calendar,
   },
 })
 
 export default {
-  components: { FormProvider, ...fields, Submit },
+  components: { ...fields, Submit, Form },
   data() {
     return {
       form,
