@@ -1,3 +1,3 @@
 // 依赖
-import '../input/style'
+import '../field/style'
 import './style.scss'

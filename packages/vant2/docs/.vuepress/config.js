@@ -4,7 +4,7 @@ const utils = require('./util')
 const componentFiles = utils
   .getFiles(path.resolve(__dirname, '../guide'))
   .map((item) => item.replace(/(\.md)/g, ''))
-  .filter((item) => !['el-form', 'el-form-item', 'index'].includes(item))
+  .filter((item) => !['index'].includes(item))
 
 module.exports = {
   title: 'Vant2',

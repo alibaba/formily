@@ -33,7 +33,6 @@ const RadioGroupOption = defineComponent<RadioGroupProps>({
   },
   setup(customProps, { attrs, slots, listeners }) {
     return () => {
-      debugger
       const options = customProps.options || []
       const children =
         options.length !== 0
