@@ -38,4 +38,5 @@ export const Uploader = connect(
   mapProps({ readOnly: 'readonly' })
   // mapReadPretty(PreviewText.Uploader)
 )
+
 export default Uploader
