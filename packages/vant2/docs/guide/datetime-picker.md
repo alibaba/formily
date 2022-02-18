@@ -1,6 +1,18 @@
 # DatetimePicker
 
-> 时间选择 (参考 Calendar 自定义组件的实现方式)
+> 时间选择
+
+## Markup Schema 案例
+
+<dumi-previewer demoPath="guide/datetime-picker/markup-schema" />
+
+## JSON Schema 案例
+
+<dumi-previewer demoPath="guide/datetime-picker/json-schema" />
+
+## Template 案例
+
+<dumi-previewer demoPath="guide/datetime-picker/template" />
 
 ## API
 

@@ -10,11 +10,11 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, Picker, Submit } from '@formily/vant2'
+import { Form, DatetimePicker, Submit } from '@formily/vant2'
 
 const { SchemaField } = createSchemaField({
   components: {
-    Picker,
+    DatetimePicker,
   },
 })
 
@@ -24,26 +24,17 @@ export default {
     const schema = {
       type: 'object',
       properties: {
-        picker: {
+        datetimePicker: {
           type: 'string',
-          'x-component': 'Picker',
+          'x-component': 'DatetimePicker',
           'x-component-props': {
             fieldProps: {
-              label: '城市',
-              placeholder: '选择城市',
+              label: '时间选择器',
+              placeholder: '请选择时间',
             },
             popupProps: {},
-            pickerProps: {
-              columns: [
-                '杭州',
-                '宁波',
-                '温州',
-                '绍兴',
-                '湖州',
-                '嘉兴',
-                '金华',
-                '衢州',
-              ],
+            datetimePickerProps: {
+              type: 'time',
             },
           },
         },
