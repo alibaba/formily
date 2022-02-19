@@ -3,18 +3,25 @@ import { observer } from '@formily/reactive-vue'
 import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { ref, defineComponent } from '@vue/composition-api'
 import { PreviewText } from '../preview-text'
-import type { Calendar as VanCalendarProps } from 'vant'
-import { Calendar as VanCalendar } from 'vant'
+import type { Cascader as VanCascaderProps } from 'vant'
+import { Cascader as VanCascader } from 'vant'
 import { Field as VanField } from 'vant'
 import { Popup as VanPopup } from 'vant'
 
-export type CalendarProps = VanCalendarProps
+export type CascaderProps = VanCascaderProps
 
-const BaseCalendar = observer(
+const BaseCascader = observer(
   defineComponent({
-    name: 'FCalendar',
+    name: 'FCascader',
     setup(props, { attrs, emit, slots, listeners }) {
-      const { fieldProps = {}, calendarProps = {} } = attrs as any
+      const {
+        fieldProps = {},
+        popupProps = {},
+        cascaderProps = {},
+        fieldListeners = {},
+        popupListeners = {},
+        cascaderListeners = {},
+      } = attrs as any
       const { format } = fieldProps
       const show = ref(false)
 
@@ -37,28 +44,50 @@ const BaseCalendar = observer(
                     click: () => {
                       show.value = true
                     },
+                    ...fieldListeners,
                   },
                 },
                 slots
               ),
               h(
-                VanCalendar,
+                VanPopup,
                 {
                   attrs: {
                     value: show.value,
-                    ...calendarProps,
+                    round: true,
+                    position: 'bottom',
+                    ...popupProps,
                   },
                   on: {
                     input: (val) => {
                       show.value = val
                     },
-                    confirm: (val) => {
-                      emit('change', val)
-                      show.value = false
-                    },
+                    ...popupListeners,
                   },
                 },
-                {}
+                {
+                  default: () => [
+                    h(
+                      VanCascader,
+                      {
+                        attrs: {
+                          ...cascaderProps,
+                        },
+                        on: {
+                          close: () => {
+                            show.value = false
+                          },
+                          finish: (val) => {
+                            emit('change', val)
+                            show.value = false
+                          },
+                          ...cascaderListeners,
+                        },
+                      },
+                      {}
+                    ),
+                  ],
+                }
               ),
             ],
           }
@@ -68,10 +97,10 @@ const BaseCalendar = observer(
   })
 )
 
-export const Calendar = connect(
-  BaseCalendar,
+export const Cascader = connect(
+  BaseCascader,
   mapProps({ readOnly: 'readonly' })
   // mapReadPretty(PreviewText.Uploader)
 )
 
-export default Calendar
+export default Cascader

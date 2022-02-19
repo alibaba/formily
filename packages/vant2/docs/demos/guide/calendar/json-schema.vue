@@ -34,7 +34,6 @@ export default {
               format: (date) =>
                 date && `${date.getMonth() + 1}/${date.getDate()}`,
             },
-            popupProps: {},
             calendarProps: {},
           },
         },

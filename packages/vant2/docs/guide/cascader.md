@@ -1,6 +1,18 @@
 # Cascader
 
-> 级联选择 (参考 Calendar 自定义组件的实现方式)
+> 级联选择
+
+## Markup Schema 案例
+
+<dumi-previewer demoPath="guide/cascader/markup-schema" />
+
+## JSON Schema 案例
+
+<dumi-previewer demoPath="guide/cascader/json-schema" />
+
+## Template 案例
+
+<dumi-previewer demoPath="guide/cascader/template" />
 
 ## API
 
