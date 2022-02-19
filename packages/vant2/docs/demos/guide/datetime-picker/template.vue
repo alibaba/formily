@@ -13,6 +13,9 @@
           datetimePickerProps: {
             type: 'time',
           },
+          fieldListeners: {},
+          popupListeners: {},
+          datetimePickerListeners: {},
         },
       ]"
     />

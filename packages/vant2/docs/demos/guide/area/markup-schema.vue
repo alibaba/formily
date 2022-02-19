@@ -31,6 +31,9 @@
               },
             },
           },
+          fieldListeners: {},
+          popupListeners: {},
+          areaListeners: {},
         }"
       />
     </SchemaField>

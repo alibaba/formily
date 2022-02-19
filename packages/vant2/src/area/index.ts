@@ -14,7 +14,14 @@ const BaseArea = observer(
   defineComponent({
     name: 'FArea',
     setup(props, { attrs, emit, slots, listeners }) {
-      const { fieldProps = {}, popupProps = {}, areaProps = {} } = attrs as any
+      const {
+        fieldProps = {},
+        popupProps = {},
+        areaProps = {},
+        fieldListeners = {},
+        popupListeners = {},
+        areaListeners = {},
+      } = attrs as any
       const { format } = fieldProps
       const show = ref(false)
 
@@ -37,6 +44,7 @@ const BaseArea = observer(
                     click: () => {
                       show.value = true
                     },
+                    ...fieldListeners,
                   },
                 },
                 slots
@@ -54,6 +62,7 @@ const BaseArea = observer(
                     input: (val) => {
                       show.value = val
                     },
+                    ...popupListeners,
                   },
                 },
                 {
@@ -72,6 +81,7 @@ const BaseArea = observer(
                             emit('change', val)
                             show.value = false
                           },
+                          ...areaListeners,
                         },
                       },
                       {}

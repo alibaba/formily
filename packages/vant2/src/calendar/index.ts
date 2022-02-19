@@ -14,7 +14,12 @@ const BaseCalendar = observer(
   defineComponent({
     name: 'FCalendar',
     setup(props, { attrs, emit, slots, listeners }) {
-      const { fieldProps = {}, calendarProps = {} } = attrs as any
+      const {
+        fieldProps = {},
+        calendarProps = {},
+        fieldListeners = {},
+        calendarListeners = {},
+      } = attrs as any
       const { format } = fieldProps
       const show = ref(false)
 
@@ -37,6 +42,7 @@ const BaseCalendar = observer(
                     click: () => {
                       show.value = true
                     },
+                    ...fieldListeners,
                   },
                 },
                 slots
@@ -57,6 +63,7 @@ const BaseCalendar = observer(
                       show.value = false
                     },
                   },
+                  ...calendarListeners,
                 },
                 {}
               ),

@@ -36,6 +36,9 @@ export default {
             datetimePickerProps: {
               type: 'time',
             },
+            fieldListeners: {},
+            popupListeners: {},
+            datetimePickerListeners: {},
           },
         },
       },

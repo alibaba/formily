@@ -18,6 +18,9 @@ const BaseDatetimePicker = observer(
         fieldProps = {},
         popupProps = {},
         datetimePickerProps = {},
+        fieldListeners = {},
+        popupListeners = {},
+        datetimePickerListeners = {},
       } = attrs as any
       const show = ref(false)
 
@@ -40,6 +43,7 @@ const BaseDatetimePicker = observer(
                     click: () => {
                       show.value = true
                     },
+                    ...fieldListeners,
                   },
                 },
                 slots
@@ -57,6 +61,7 @@ const BaseDatetimePicker = observer(
                     input: (val) => {
                       show.value = val
                     },
+                    ...popupListeners,
                   },
                 },
                 {
@@ -76,6 +81,7 @@ const BaseDatetimePicker = observer(
                             emit('change', val)
                             show.value = false
                           },
+                          ...datetimePickerListeners,
                         },
                       },
                       {}

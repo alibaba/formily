@@ -18,6 +18,9 @@ const BasePicker = observer(
         fieldProps = {},
         popupProps = {},
         pickerProps = {},
+        fieldListeners = {},
+        popupListeners = {},
+        pickerListeners = {},
       } = attrs as any
       const show = ref(false)
 
@@ -40,6 +43,7 @@ const BasePicker = observer(
                     click: () => {
                       show.value = true
                     },
+                    ...fieldListeners,
                   },
                 },
                 slots
@@ -57,6 +61,7 @@ const BasePicker = observer(
                     input: (val) => {
                       show.value = val
                     },
+                    ...popupListeners,
                   },
                 },
                 {
@@ -76,6 +81,7 @@ const BasePicker = observer(
                             emit('change', val)
                             show.value = false
                           },
+                          ...pickerListeners,
                         },
                       },
                       {}

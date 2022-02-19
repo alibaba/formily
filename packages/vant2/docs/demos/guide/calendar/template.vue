@@ -12,6 +12,8 @@
               date && `${date.getMonth() + 1}/${date.getDate()}`,
           },
           calendarProps: {},
+          fieldListeners: {},
+          calendarListeners: {},
         },
       ]"
     />

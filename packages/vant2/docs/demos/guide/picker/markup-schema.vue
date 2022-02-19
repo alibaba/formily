@@ -22,6 +22,9 @@
               '衢州',
             ],
           },
+          fieldListeners: {},
+          popupListeners: {},
+          pickerListeners: {},
         }"
       />
     </SchemaField>
