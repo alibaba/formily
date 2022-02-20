@@ -698,6 +698,19 @@ describe('merge', () => {
     })
   })
 
+  test('empty', () => {
+    expect(
+      merge(
+        {
+          aa: undefined,
+        },
+        {
+          aa: {},
+        }
+      )
+    ).toEqual({ aa: {} })
+  })
+
   test('clone', () => {
     const target = {
       aa: {

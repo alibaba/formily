@@ -25,7 +25,13 @@ function isSpecial(value: any) {
   if (isFn(value['toJSON'])) {
     return true
   }
-  return !isPlainObj(value)
+  if (!isPlainObj(value)) {
+    return true
+  }
+  if (getKeys(value).length === 0) {
+    return true
+  }
+  return false
 }
 
 function emptyTarget(val: any) {
