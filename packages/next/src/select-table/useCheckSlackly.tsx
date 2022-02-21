@@ -1,3 +1,5 @@
+import { isArr } from '@formily/shared'
+
 /**
  * 获取该字段Checkbox的indeterminate属性
  * @param record 字段项
@@ -29,15 +31,17 @@ const getCheckedProps = (record: any, primaryKey: string, selected: any[]) => {
  * @param primaryKey 键名称
  * @returns 键值数组集合
  */
-const getTreeKeys = (tree: any[] = [], primaryKey: string) =>
-  tree.reduce(
-    (prev, current) => [
-      ...prev,
-      current[primaryKey],
-      ...getTreeKeys(current?.children, primaryKey),
-    ],
-    []
-  )
+const getTreeKeys = (tree: any[], primaryKey: string) =>
+  isArr(tree)
+    ? tree.reduce(
+        (prev, current) => [
+          ...prev,
+          current[primaryKey],
+          ...getTreeKeys(current?.children, primaryKey),
+        ],
+        []
+      )
+    : []
 
 /**
  * 获取最终选中值（添加选中所有子元素的父元素，或移除未选中所有子元素的父元素）
