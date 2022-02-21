@@ -3,8 +3,8 @@ import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { ref, defineComponent } from '@vue/composition-api'
 import type { DatetimePicker as VanDatetimePickerProps } from 'vant'
 import { DatetimePicker as VanDatetimePicker } from 'vant'
-import { BaseField } from '../field'
 import { Popup as VanPopup } from 'vant'
+import FormItem from '../form-item'
 import { PreviewText } from '../preview-text'
 
 export type DatetimePickerProps = VanDatetimePickerProps
@@ -30,7 +30,7 @@ const BaseDatetimePicker = observer(
           {
             default: () => [
               h(
-                BaseField,
+                FormItem,
                 {
                   attrs: {
                     value: attrs.value,

@@ -2,13 +2,13 @@
   <FormProvider :form="form">
     <SchemaField>
       <SchemaStringField
-        name="field"
-        x-component="VanField"
+        name="input"
+        x-component="Input"
         :x-component-props="{ label: '输入框', placeholder: '请输入' }"
       />
       <SchemaStringField
         name="textarea"
-        x-component="VanField"
+        x-component="Input"
         :x-component-props="{
           autosize: true,
           type: 'textarea',
@@ -18,8 +18,8 @@
       />
       <SchemaStringField
         x-pattern="readPretty"
-        name="fieldRead"
-        x-component="VanField"
+        name="inputRead"
+        x-component="Input"
         :x-component-props="{ label: '输入框', placeholder: '请输入' }"
       />
     </SchemaField>
@@ -32,12 +32,12 @@
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField, FormProvider } from '@formily/vue'
-import { Field as VanField, Submit } from '@formily/vant2'
+import { Input, Submit } from '@formily/vant2'
 
 const form = createForm()
 const fields = createSchemaField({
   components: {
-    VanField,
+    Input,
   },
 })
 

@@ -4,7 +4,7 @@ import { ref, defineComponent } from '@vue/composition-api'
 import { Popup as VanPopup } from 'vant'
 import { Area as VanArea } from 'vant'
 import { PreviewText } from '../preview-text'
-import { BaseField } from '../field'
+import FormItem from '../form-item'
 
 const BaseArea = observer(
   defineComponent({
@@ -28,7 +28,7 @@ const BaseArea = observer(
           {
             default: () => [
               h(
-                BaseField,
+                FormItem,
                 {
                   attrs: {
                     value: format ? format(attrs.value) : attrs.value,

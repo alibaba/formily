@@ -1,6 +1,6 @@
 @import '../__builtins__/styles/common.scss';
 
-.#{$formily-prefix}-field-asterisk::before {
+.#{$formily-prefix}-input-asterisk::before {
   position: absolute;
   left: 8px;
   color: #ee0a24;

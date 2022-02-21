@@ -4,7 +4,7 @@ import { ref, defineComponent } from '@vue/composition-api'
 import type { Picker as VanPickerProps } from 'vant'
 import { Picker as VanPicker } from 'vant'
 import { Popup as VanPopup } from 'vant'
-import { BaseField } from '../field'
+import FormItem from '../form-item'
 import { PreviewText } from '../preview-text'
 
 export type PickerProps = VanPickerProps
@@ -30,7 +30,7 @@ const BasePicker = observer(
           {
             default: () => [
               h(
-                BaseField,
+                FormItem,
                 {
                   attrs: {
                     value: attrs.value,

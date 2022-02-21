@@ -2,15 +2,15 @@
   <Form :form="form" :previewTextPlaceholder="vnode">
     <SchemaField>
       <SchemaStringField
-        name="field"
-        x-component="Field"
+        name="input"
+        x-component="Input"
         :x-component-props="{ label: '文本预览' }"
         default="Hello world"
       />
 
       <SchemaStringField
         name="switch"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{ label: '开关' }"
         x-component="PreviewText.Switch"
         :default="true"
@@ -18,7 +18,7 @@
 
       <SchemaArrayField
         name="checkboxGroup"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '复选框组',
         }"
@@ -36,7 +36,7 @@
 
       <SchemaArrayField
         name="radio"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '单选框',
         }"
@@ -53,7 +53,7 @@
 
       <SchemaStringField
         name="stepper"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '步进器',
         }"
@@ -63,7 +63,7 @@
 
       <SchemaStringField
         name="rate"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '评分',
         }"
@@ -76,7 +76,7 @@
 
       <SchemaStringField
         name="slider"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '滑块',
         }"
@@ -86,7 +86,7 @@
 
       <SchemaStringField
         name="uploader"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '文件上传',
         }"
@@ -199,12 +199,7 @@
       :style="{ 'margin-top': '16px' }"
       round
       block
-      @click="
-        () =>
-          form.setState((state) => {
-            state.editable = !state.editable
-          })
-      "
+      @click="changeEditable"
     >
       切换阅读态
     </Submit>
@@ -212,15 +207,17 @@
 </template>
 
 <script>
+import { h } from '@vue/composition-api'
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import { Form, PreviewText, Field, Submit } from '@formily/vant2'
+import { Form, PreviewText, Input, FormItem, Submit } from '@formily/vant2'
 
 const form = createForm()
 const fields = createSchemaField({
   components: {
     PreviewText,
-    Field,
+    Input,
+    FormItem,
   },
 })
 
@@ -231,6 +228,13 @@ export default {
       form,
       vnode: () => h('div', {}, '123'),
     }
+  },
+  methods: {
+    changeEditable() {
+      this.form.setState((state) => {
+        state.editable = !state.editable
+      })
+    },
   },
 }
 </script>

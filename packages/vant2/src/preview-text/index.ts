@@ -15,8 +15,9 @@ import {
   Switch as VanSwitch,
   Rate as VanRate,
   Uploader as VanUploader,
+  Tag,
+  Field as VanInput,
 } from 'vant'
-import { Tag, Field as VField } from 'vant'
 
 const prefixCls = `${stylePrefix}-preview-text`
 const PlaceholderContext = createContext('N/A')
@@ -31,8 +32,8 @@ export const usePlaceholder = (value?: Ref<any>) => {
   return placeholder
 }
 
-const VanField = defineComponent({
-  name: 'FPreviewTextVanField',
+const Input = defineComponent({
+  name: 'FPreviewTextInput',
   props: ['value'],
   setup(props, { attrs, slots }) {
     const value = toRef(props, 'value')
@@ -41,8 +42,12 @@ const VanField = defineComponent({
       return h(
         'div',
         {
-          class: [`${stylePrefix}-preview-field`],
+          class: [prefixCls, `${stylePrefix}-preview-input`],
           style: attrs.style,
+          attrs: {
+            ...attrs,
+            disabled: false,
+          },
         },
         {
           default: () => [
@@ -50,7 +55,7 @@ const VanField = defineComponent({
               h(
                 'span',
                 {
-                  class: [`${stylePrefix}-preview-field-title`],
+                  class: [`${stylePrefix}-preview-input-title`],
                 },
                 {
                   default: () => [attrs.label],
@@ -145,9 +150,12 @@ const Switch = observer(
         return h(
           VanSwitch,
           {
+            class: [prefixCls],
+            style: attrs.style,
             attrs: {
               size: 20,
               ...attrs,
+              disabled: false,
             },
           },
           slots
@@ -166,7 +174,12 @@ const Stepper = observer(
         return h(
           'div',
           {
-            attrs,
+            class: [prefixCls],
+            style: attrs.style,
+            attrs: {
+              ...attrs,
+              disabled: false,
+            },
           },
           {
             default: () => [attrs.value || placeholder.value],
@@ -187,17 +200,23 @@ const Rate = observer(
           ? h(
               VanRate,
               {
+                class: [prefixCls],
+                style: attrs.style,
                 attrs: {
                   size: 20,
                   count: Math.ceil(attrs.value && Number(attrs.value)),
                   ...attrs,
+                  disabled: false,
                 },
               },
               slots
             )
           : h(
               'div',
-              {},
+              {
+                class: [prefixCls],
+                style: attrs.style,
+              },
               {
                 default: () => [placeholder.value],
               }
@@ -216,7 +235,12 @@ const Slider = observer(
         return h(
           'div',
           {
-            attrs,
+            class: [prefixCls],
+            style: attrs.style,
+            attrs: {
+              ...attrs,
+              disabled: false,
+            },
           },
           {
             default: () => [attrs.value || placeholder.value],
@@ -237,11 +261,14 @@ const Uploader = observer(
           ? h(
               VanUploader,
               {
+                class: [prefixCls],
+                style: attrs.style,
                 attrs: {
                   ...attrs,
                   deletable: false,
                   showUpload: false,
                   fileList: attrs.value,
+                  disabled: false,
                 },
                 on: listeners,
               },
@@ -250,6 +277,8 @@ const Uploader = observer(
           : h(
               'div',
               {
+                class: [prefixCls],
+                style: attrs.style,
                 attrs,
               },
               {
@@ -269,10 +298,13 @@ const Picker = observer(
       const placeholder = usePlaceholder()
       return () => {
         return h(
-          VField,
+          VanInput,
           {
+            class: [prefixCls],
+            style: attrs.style,
             attrs: {
               ...fieldProps,
+              disabled: false,
             },
           },
           {
@@ -292,10 +324,13 @@ const DatetimePicker = observer(
       const placeholder = usePlaceholder()
       return () => {
         return h(
-          VField,
+          VanInput,
           {
+            class: [prefixCls],
+            style: attrs.style,
             attrs: {
               ...fieldProps,
+              disabled: false,
             },
           },
           {
@@ -315,10 +350,13 @@ const Calendar = observer(
       const placeholder = usePlaceholder()
       return () => {
         return h(
-          VField,
+          VanInput,
           {
+            class: [prefixCls],
+            style: attrs.style,
             attrs: {
               ...fieldProps,
+              disabled: false,
             },
           },
           {
@@ -338,10 +376,13 @@ const Cascader = observer(
       const placeholder = usePlaceholder()
       return () => {
         return h(
-          VField,
+          VanInput,
           {
+            class: [prefixCls],
+            style: attrs.style,
             attrs: {
               ...fieldProps,
+              disabled: false,
             },
           },
           {
@@ -361,10 +402,13 @@ const Area = observer(
       const placeholder = usePlaceholder()
       return () => {
         return h(
-          VField,
+          VanInput,
           {
+            class: [prefixCls],
+            style: attrs.style,
             attrs: {
               ...fieldProps,
+              disabled: false,
             },
           },
           {
@@ -397,7 +441,7 @@ const Text = defineComponent<any>({
 })
 
 export const PreviewText = composeExport(Text, {
-  Field: VanField,
+  Input,
   Checkbox,
   Switch,
   Stepper,

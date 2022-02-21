@@ -3,8 +3,8 @@ import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { ref, defineComponent } from '@vue/composition-api'
 import type { Cascader as VanCascaderProps } from 'vant'
 import { Cascader as VanCascader } from 'vant'
-import { BaseField } from '../field'
 import { Popup as VanPopup } from 'vant'
+import FormItem from '../form-item'
 import { PreviewText } from '../preview-text'
 
 export type CascaderProps = VanCascaderProps
@@ -31,7 +31,7 @@ const BaseCascader = observer(
           {
             default: () => [
               h(
-                BaseField,
+                FormItem,
                 {
                   attrs: {
                     value: format ? format(attrs.value) : attrs.value,

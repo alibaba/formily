@@ -2,15 +2,15 @@
   <Form :form="form" @autoSubmit="log" @autoSubmitFailed="log">
     <SchemaField>
       <SchemaStringField
-        name="field"
-        x-component="Field"
+        name="input"
+        x-component="Input"
         :x-component-props="{ label: '输入框', placeholder: '请输入' }"
         required
       />
 
       <SchemaStringField
         name="switch"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '开关',
         }"
@@ -22,7 +22,7 @@
 
       <SchemaStringField
         name="checkbox"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '复选框',
         }"
@@ -35,7 +35,7 @@
 
       <SchemaArrayField
         name="checkboxGroup"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '复选框组',
         }"
@@ -51,7 +51,7 @@
 
       <SchemaArrayField
         name="radio"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           asterisk: true,
           label: '单选框',
@@ -75,7 +75,7 @@
 
       <SchemaStringField
         name="stepper"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '步进器',
         }"
@@ -84,7 +84,7 @@
 
       <SchemaStringField
         name="rate"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '评分',
         }"
@@ -93,7 +93,7 @@
 
       <SchemaStringField
         name="slider"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '滑块',
         }"
@@ -102,7 +102,7 @@
 
       <SchemaStringField
         name="uploader"
-        x-decorator="Field"
+        x-decorator="FormItem"
         :x-decorator-props="{
           label: '文件上传',
         }"
@@ -212,7 +212,8 @@ import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
 import {
   Form,
-  Field,
+  FormItem,
+  Input,
   Switch,
   Checkbox,
   Radio,
@@ -230,7 +231,8 @@ import {
 const form = createForm()
 const fields = createSchemaField({
   components: {
-    Field,
+    Input,
+    FormItem,
     Switch,
     Checkbox,
     Radio,

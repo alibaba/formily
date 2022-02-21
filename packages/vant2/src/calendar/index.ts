@@ -3,7 +3,7 @@ import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { ref, defineComponent } from '@vue/composition-api'
 import type { Calendar as VanCalendarProps } from 'vant'
 import { Calendar as VanCalendar } from 'vant'
-import { BaseField } from '../field'
+import FormItem from '../form-item'
 import { PreviewText } from '../preview-text'
 
 export type CalendarProps = VanCalendarProps
@@ -28,7 +28,7 @@ const BaseCalendar = observer(
           {
             default: () => [
               h(
-                BaseField,
+                FormItem,
                 {
                   attrs: {
                     value: format ? format(attrs.value) : attrs.value,
