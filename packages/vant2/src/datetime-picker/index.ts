@@ -1,18 +1,17 @@
-import { transformComponent } from '../__builtins__/shared'
 import { observer } from '@formily/reactive-vue'
 import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { ref, defineComponent } from '@vue/composition-api'
-import { PreviewText } from '../preview-text'
 import type { DatetimePicker as VanDatetimePickerProps } from 'vant'
 import { DatetimePicker as VanDatetimePicker } from 'vant'
 import { BaseField } from '../field'
 import { Popup as VanPopup } from 'vant'
+import { PreviewText } from '../preview-text'
 
 export type DatetimePickerProps = VanDatetimePickerProps
 
 const BaseDatetimePicker = observer(
   defineComponent({
-    name: 'FDatetimePicker',
+    name: 'FBaseDatetimePicker',
     setup(props, { attrs, emit, slots, listeners }) {
       const {
         fieldProps = {},
@@ -99,8 +98,8 @@ const BaseDatetimePicker = observer(
 
 export const DatetimePicker = connect(
   BaseDatetimePicker,
-  mapProps({ readOnly: 'readonly' })
-  // mapReadPretty(PreviewText.Uploader)
+  mapProps({ readOnly: 'readonly' }),
+  mapReadPretty(PreviewText.DatetimePicker)
 )
 
 export default DatetimePicker

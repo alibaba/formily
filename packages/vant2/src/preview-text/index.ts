@@ -8,10 +8,15 @@ import {
 import { Field } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 import { h, useField } from '@formily/vue'
-import { isArr, isValid } from '@formily/shared'
+import { isArr, isValid, isEmpty } from '@formily/shared'
 import { stylePrefix } from '../__builtins__/configs'
 import { Space } from '../space'
-import { Tag } from 'vant'
+import {
+  Switch as VanSwitch,
+  Rate as VanRate,
+  Uploader as VanUploader,
+} from 'vant'
+import { Tag, Field as VField } from 'vant'
 
 const prefixCls = `${stylePrefix}-preview-text`
 const PlaceholderContext = createContext('N/A')
@@ -27,22 +32,20 @@ export const usePlaceholder = (value?: Ref<any>) => {
 }
 
 const VanField = defineComponent({
-  name: 'FPreviewTextField',
+  name: 'FPreviewTextVanField',
   props: ['value'],
   setup(props, { attrs, slots }) {
     const value = toRef(props, 'value')
     const placeholder = usePlaceholder(value)
     return () => {
       return h(
-        Space,
+        'div',
         {
           class: [`${stylePrefix}-preview-field`],
           style: attrs.style,
         },
         {
           default: () => [
-            slots?.prepend?.(),
-            slots?.prefix?.(),
             [
               h(
                 'span',
@@ -55,8 +58,6 @@ const VanField = defineComponent({
               ),
             ],
             placeholder.value,
-            slots?.suffix?.(),
-            slots?.append?.(),
           ],
         }
       )
@@ -66,7 +67,7 @@ const VanField = defineComponent({
 
 const Checkbox = observer(
   defineComponent({
-    name: 'FPreviewTextSelect',
+    name: 'FPreviewTextCheckbox',
     props: [],
     setup(_props, { attrs }) {
       const fieldRef = useField<Field>()
@@ -80,12 +81,13 @@ const Checkbox = observer(
       const placeholder = usePlaceholder()
       const getSelected = () => {
         const value = props.value
+
         if (props.multiple) {
           return isArr(value)
             ? value.map((val) => ({ label: val, value: val }))
             : []
         } else {
-          return isValid(value) ? [{ label: value, value }] : []
+          return !isEmpty(value) ? [{ label: value, value }] : []
         }
       }
 
@@ -108,6 +110,7 @@ const Checkbox = observer(
             {
               key,
               props: {
+                size: 'medium',
                 type: 'primary',
               },
             },
@@ -127,6 +130,245 @@ const Checkbox = observer(
           },
           {
             default: () => getLabels(),
+          }
+        )
+      }
+    },
+  })
+)
+
+const Switch = observer(
+  defineComponent({
+    name: 'FPreviewTextSwitch',
+    setup(props, { attrs, slots, listeners }) {
+      return () => {
+        return h(
+          VanSwitch,
+          {
+            attrs: {
+              size: 20,
+              ...attrs,
+            },
+          },
+          slots
+        )
+      }
+    },
+  })
+)
+
+const Stepper = observer(
+  defineComponent({
+    name: 'FPreviewTextStepper',
+    setup(props, { attrs, slots, listeners }) {
+      const placeholder = usePlaceholder()
+      return () => {
+        return h(
+          'div',
+          {
+            attrs,
+          },
+          {
+            default: () => [attrs.value || placeholder.value],
+          }
+        )
+      }
+    },
+  })
+)
+
+const Rate = observer(
+  defineComponent({
+    name: 'FPreviewTextRate',
+    setup(props, { attrs, slots, listeners }) {
+      const placeholder = usePlaceholder()
+      return () => {
+        return attrs.value
+          ? h(
+              VanRate,
+              {
+                attrs: {
+                  size: 20,
+                  count: Math.ceil(attrs.value && Number(attrs.value)),
+                  ...attrs,
+                },
+              },
+              slots
+            )
+          : h(
+              'div',
+              {},
+              {
+                default: () => [placeholder.value],
+              }
+            )
+      }
+    },
+  })
+)
+
+const Slider = observer(
+  defineComponent({
+    name: 'FPreviewTextSlider',
+    setup(props, { attrs, slots, listeners }) {
+      const placeholder = usePlaceholder()
+      return () => {
+        return h(
+          'div',
+          {
+            attrs,
+          },
+          {
+            default: () => [attrs.value || placeholder.value],
+          }
+        )
+      }
+    },
+  })
+)
+
+const Uploader = observer(
+  defineComponent({
+    name: 'FPreviewTextUploader',
+    setup(props, { attrs, slots, listeners }) {
+      const placeholder = usePlaceholder()
+      return () => {
+        return (attrs.value as [])?.length
+          ? h(
+              VanUploader,
+              {
+                attrs: {
+                  ...attrs,
+                  deletable: false,
+                  showUpload: false,
+                  fileList: attrs.value,
+                },
+                on: listeners,
+              },
+              slots
+            )
+          : h(
+              'div',
+              {
+                attrs,
+              },
+              {
+                default: () => [placeholder.value],
+              }
+            )
+      }
+    },
+  })
+)
+
+const Picker = observer(
+  defineComponent({
+    name: 'FPreviewTextPicker',
+    setup(props, { attrs, slots, listeners }) {
+      const { fieldProps = {} } = attrs as any
+      const placeholder = usePlaceholder()
+      return () => {
+        return h(
+          VField,
+          {
+            attrs: {
+              ...fieldProps,
+            },
+          },
+          {
+            input: () => attrs.value || placeholder.value,
+          }
+        )
+      }
+    },
+  })
+)
+
+const DatetimePicker = observer(
+  defineComponent({
+    name: 'FPreviewTextDatetimePicker',
+    setup(props, { attrs, slots, listeners }) {
+      const { fieldProps = {} } = attrs as any
+      const placeholder = usePlaceholder()
+      return () => {
+        return h(
+          VField,
+          {
+            attrs: {
+              ...fieldProps,
+            },
+          },
+          {
+            input: () => attrs.value || placeholder.value,
+          }
+        )
+      }
+    },
+  })
+)
+
+const Calendar = observer(
+  defineComponent({
+    name: 'FPreviewTextCalendar',
+    setup(props, { attrs, slots, listeners }) {
+      const { fieldProps = {} } = attrs as any
+      const placeholder = usePlaceholder()
+      return () => {
+        return h(
+          VField,
+          {
+            attrs: {
+              ...fieldProps,
+            },
+          },
+          {
+            input: () => attrs.value || placeholder.value,
+          }
+        )
+      }
+    },
+  })
+)
+
+const Cascader = observer(
+  defineComponent({
+    name: 'FPreviewTextCascader',
+    setup(props, { attrs, slots, listeners }) {
+      const { fieldProps = {} } = attrs as any
+      const placeholder = usePlaceholder()
+      return () => {
+        return h(
+          VField,
+          {
+            attrs: {
+              ...fieldProps,
+            },
+          },
+          {
+            input: () => attrs.value || placeholder.value,
+          }
+        )
+      }
+    },
+  })
+)
+
+const Area = observer(
+  defineComponent({
+    name: 'FPreviewTextArea',
+    setup(props, { attrs, slots, listeners }) {
+      const { fieldProps = {} } = attrs as any
+      const placeholder = usePlaceholder()
+      return () => {
+        return h(
+          VField,
+          {
+            attrs: {
+              ...fieldProps,
+            },
+          },
+          {
+            input: () => attrs.value || placeholder.value,
           }
         )
       }
@@ -155,8 +397,18 @@ const Text = defineComponent<any>({
 })
 
 export const PreviewText = composeExport(Text, {
-  VanField,
+  Field: VanField,
   Checkbox,
+  Switch,
+  Stepper,
+  Rate,
+  Slider,
+  Uploader,
+  Picker,
+  DatetimePicker,
+  Area,
+  Calendar,
+  Cascader,
   Placeholder: PlaceholderContext.Provider,
   usePlaceholder,
 })

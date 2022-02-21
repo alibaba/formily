@@ -1,14 +1,10 @@
-import { transformComponent } from '../__builtins__/shared'
 import { observer } from '@formily/reactive-vue'
 import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { ref, defineComponent } from '@vue/composition-api'
-import { PreviewText } from '../preview-text'
-import type { Area as VanAreaProps } from 'vant'
-import { Area as VanArea } from 'vant'
-import { BaseField } from '../field'
 import { Popup as VanPopup } from 'vant'
-
-export type AreaProps = VanAreaProps
+import { Area as VanArea } from 'vant'
+import { PreviewText } from '../preview-text'
+import { BaseField } from '../field'
 
 const BaseArea = observer(
   defineComponent({
@@ -99,8 +95,8 @@ const BaseArea = observer(
 
 export const Area = connect(
   BaseArea,
-  mapProps({ readOnly: 'readonly' })
-  // mapReadPretty(PreviewText.Uploader)
+  mapProps({ readOnly: 'readonly' }),
+  mapReadPretty(PreviewText.Area)
 )
 
 export default Area

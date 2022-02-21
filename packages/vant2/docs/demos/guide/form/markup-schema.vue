@@ -2,6 +2,12 @@
   <Form :form="form" @autoSubmit="log" @autoSubmitFailed="log">
     <SchemaField>
       <SchemaStringField
+        name="field"
+        x-component="Field"
+        :x-component-props="{ label: '输入框', placeholder: '请输入' }"
+      />
+
+      <SchemaStringField
         name="switch"
         x-decorator="Field"
         :x-decorator-props="{
@@ -234,7 +240,6 @@ export default {
   data() {
     return {
       form,
-      pattern: /\d{6}/,
     }
   },
 

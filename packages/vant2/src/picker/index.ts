@@ -1,18 +1,17 @@
-import { transformComponent } from '../__builtins__/shared'
 import { observer } from '@formily/reactive-vue'
 import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { ref, defineComponent } from '@vue/composition-api'
-import { PreviewText } from '../preview-text'
 import type { Picker as VanPickerProps } from 'vant'
 import { Picker as VanPicker } from 'vant'
-import { BaseField } from '../field'
 import { Popup as VanPopup } from 'vant'
+import { BaseField } from '../field'
+import { PreviewText } from '../preview-text'
 
 export type PickerProps = VanPickerProps
 
 const BasePicker = observer(
   defineComponent({
-    name: 'FPicker',
+    name: 'FBasePicker',
     setup(props, { attrs, emit, slots, listeners }) {
       const {
         fieldProps = {},
@@ -99,8 +98,8 @@ const BasePicker = observer(
 
 export const Picker = connect(
   BasePicker,
-  mapProps({ readOnly: 'readonly' })
-  // mapReadPretty(PreviewText.Uploader)
+  mapProps({ readOnly: 'readonly' }),
+  mapReadPretty(PreviewText.Picker)
 )
 
 export default Picker

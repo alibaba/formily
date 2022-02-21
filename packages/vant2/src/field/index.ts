@@ -33,7 +33,7 @@ export const BaseField = observer(
 
 export const Field = connect(
   BaseField,
-  mapReadPretty(PreviewText.VanField),
+  mapReadPretty(PreviewText.Field),
   mapProps(
     { validateStatus: true, required: true, readOnly: 'readonly' },
     (props, field) => {

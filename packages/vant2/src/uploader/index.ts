@@ -2,9 +2,9 @@ import { transformComponent } from '../__builtins__/shared'
 import { observer } from '@formily/reactive-vue'
 import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { defineComponent } from '@vue/composition-api'
-import { PreviewText } from '../preview-text'
 import type { Uploader as VanUploaderProps } from 'vant'
 import { Uploader as VanUploader } from 'vant'
+import { PreviewText } from '../preview-text'
 
 export type UploaderProps = VanUploaderProps
 
@@ -14,7 +14,7 @@ const TransformVanUploader = transformComponent<UploaderProps>(VanUploader, {
 
 const BaseUploader = observer(
   defineComponent({
-    name: 'FField',
+    name: 'FBaseUploader',
     setup(props, { attrs, slots, listeners }) {
       return () => {
         return h(
@@ -35,8 +35,8 @@ const BaseUploader = observer(
 
 export const Uploader = connect(
   BaseUploader,
-  mapProps({ readOnly: 'readonly' })
-  // mapReadPretty(PreviewText.Uploader)
+  mapProps({ readOnly: 'readonly' }),
+  mapReadPretty(PreviewText.Uploader)
 )
 
 export default Uploader

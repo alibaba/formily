@@ -1,36 +1,19 @@
 <template>
-  <Form :form="form" @autoSubmit="log" @autoSubmitFailed="log">
+  <Form :form="form">
     <SchemaField>
       <SchemaStringField
         name="field"
-        x-component="Field"
-        :x-component-props="{ label: '输入框', placeholder: '请输入' }"
-        required
+        x-component="PreviewText.Field"
+        :x-component-props="{ label: '文本预览' }"
+        default="Hello world"
       />
 
       <SchemaStringField
         name="switch"
         x-decorator="Field"
-        :x-decorator-props="{
-          label: '开关',
-        }"
-        x-component="Switch"
-        :x-component-props="{
-          size: 20,
-        }"
-      />
-
-      <SchemaStringField
-        name="checkbox"
-        x-decorator="Field"
-        :x-decorator-props="{
-          label: '复选框',
-        }"
-        x-component="Checkbox"
-        :x-component-props="{
-          shape: 'square',
-        }"
-        required
+        :x-decorator-props="{ label: '开关' }"
+        x-component="PreviewText.Switch"
+        :default="true"
       />
 
       <SchemaArrayField
@@ -40,12 +23,14 @@
           label: '复选框组',
         }"
         :enum="[
-          { label: '复选框 1', name: 1, shape: 'square' },
-          { label: '复选框 2', name: 2, shape: 'square' },
+          { label: '复选框 1', name: 123, shape: 'square' },
+          { label: '复选框 2', name: 222, shape: 'square' },
         ]"
-        x-component="Checkbox.Group"
+        :default="[123, 222]"
+        x-component="PreviewText.Checkbox"
         :x-component-props="{
           direction: 'horizontal',
+          multiple: true,
         }"
       />
 
@@ -53,23 +38,16 @@
         name="radio"
         x-decorator="Field"
         :x-decorator-props="{
-          asterisk: true,
           label: '单选框',
         }"
         :enum="[
           { label: '单选框 1', name: 1 },
           { label: '单选框 1', name: 2 },
         ]"
-        x-component="Radio.Group"
+        :default="1"
+        x-component="PreviewText.Checkbox"
         :x-component-props="{
           direction: 'horizontal',
-        }"
-        :x-validator="{
-          validator(value) {
-            if (!value) return ''
-            return value === 1
-          },
-          message: '错误了',
         }"
       />
 
@@ -79,7 +57,8 @@
         :x-decorator-props="{
           label: '步进器',
         }"
-        x-component="Stepper"
+        :default="50"
+        x-component="PreviewText.Stepper"
       />
 
       <SchemaStringField
@@ -88,7 +67,11 @@
         :x-decorator-props="{
           label: '评分',
         }"
-        x-component="Rate"
+        :default="3.5"
+        x-component="PreviewText.Rate"
+        :x-component-props="{
+          allowHalf: true,
+        }"
       />
 
       <SchemaStringField
@@ -97,7 +80,8 @@
         :x-decorator-props="{
           label: '滑块',
         }"
-        x-component="Slider"
+        :default="50"
+        x-component="PreviewText.Slider"
       />
 
       <SchemaStringField
@@ -106,12 +90,17 @@
         :x-decorator-props="{
           label: '文件上传',
         }"
-        x-component="Uploader"
+        :default="[
+          { url: 'https://img01.yzcdn.cn/vant/leaf.jpg' },
+          { url: 'https://cloud-image', isImage: true },
+        ]"
+        x-component="PreviewText.Uploader"
       />
 
       <SchemaStringField
         name="picker"
-        x-component="Picker"
+        default="湖州"
+        x-component="PreviewText.Picker"
         :x-component-props="{
           fieldProps: {
             label: '选择器',
@@ -134,7 +123,8 @@
 
       <SchemaStringField
         name="datetimePicker"
-        x-component="DatetimePicker"
+        default="05:15"
+        x-component="PreviewText.DatetimePicker"
         :x-component-props="{
           fieldProps: {
             label: '时间选择',
@@ -152,7 +142,8 @@
 
       <SchemaStringField
         name="area"
-        x-component="Area"
+        default="北京市/北京市/东城区"
+        x-component="PreviewText.Area"
         :x-component-props="{
           fieldProps: {
             label: '地区选择',
@@ -188,7 +179,8 @@
 
       <SchemaStringField
         name="calendar"
-        x-component="Calendar"
+        default="2/24"
+        x-component="PreviewText.Calendar"
         :x-component-props="{
           fieldProps: {
             label: '日历',
@@ -202,46 +194,19 @@
         }"
       />
     </SchemaField>
-
-    <Submit :style="{ 'margin-top': '16px' }" round block> 提交 </Submit>
   </Form>
 </template>
 
 <script>
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
-import {
-  Form,
-  Field,
-  Switch,
-  Checkbox,
-  Radio,
-  Stepper,
-  Rate,
-  Slider,
-  Uploader,
-  Picker,
-  DatetimePicker,
-  Area,
-  Calendar,
-  Submit,
-} from '@formily/vant2'
+import { Form, PreviewText, Field, Submit } from '@formily/vant2'
 
 const form = createForm()
 const fields = createSchemaField({
   components: {
+    PreviewText,
     Field,
-    Switch,
-    Checkbox,
-    Radio,
-    Stepper,
-    Rate,
-    Slider,
-    Uploader,
-    Picker,
-    DatetimePicker,
-    Area,
-    Calendar,
   },
 })
 
@@ -251,12 +216,6 @@ export default {
     return {
       form,
     }
-  },
-
-  methods: {
-    log(value) {
-      console.log(value)
-    },
   },
 }
 </script>

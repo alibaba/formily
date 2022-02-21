@@ -17,7 +17,7 @@ const TransformVanCheckbox = transformComponent(VanCheckbox, {
 })
 
 const CheckboxOption = defineComponent({
-  name: 'Checkbox',
+  name: 'FCheckboxOption',
   inheritAttrs: false,
   props: {
     option: {
@@ -77,7 +77,7 @@ const TransformVanCheckboxGroup = transformComponent(VanCheckboxGroup, {
 })
 
 const CheckboxGroupOption = defineComponent<CheckboxGroupProps>({
-  name: 'CheckboxGroup',
+  name: 'FCheckboxGroupOption',
   props: {
     options: {
       type: Array,

@@ -1,18 +1,17 @@
-import { transformComponent } from '../__builtins__/shared'
 import { observer } from '@formily/reactive-vue'
 import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { ref, defineComponent } from '@vue/composition-api'
-import { PreviewText } from '../preview-text'
 import type { Cascader as VanCascaderProps } from 'vant'
 import { Cascader as VanCascader } from 'vant'
 import { BaseField } from '../field'
 import { Popup as VanPopup } from 'vant'
+import { PreviewText } from '../preview-text'
 
 export type CascaderProps = VanCascaderProps
 
 const BaseCascader = observer(
   defineComponent({
-    name: 'FCascader',
+    name: 'FBaseCascader',
     setup(props, { attrs, emit, slots, listeners }) {
       const {
         fieldProps = {},
@@ -99,8 +98,8 @@ const BaseCascader = observer(
 
 export const Cascader = connect(
   BaseCascader,
-  mapProps({ readOnly: 'readonly' })
-  // mapReadPretty(PreviewText.Uploader)
+  mapProps({ readOnly: 'readonly' }),
+  mapReadPretty(PreviewText.Cascader)
 )
 
 export default Cascader

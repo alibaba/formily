@@ -1,17 +1,16 @@
-import { transformComponent } from '../__builtins__/shared'
 import { observer } from '@formily/reactive-vue'
 import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { ref, defineComponent } from '@vue/composition-api'
-import { PreviewText } from '../preview-text'
 import type { Calendar as VanCalendarProps } from 'vant'
 import { Calendar as VanCalendar } from 'vant'
 import { BaseField } from '../field'
+import { PreviewText } from '../preview-text'
 
 export type CalendarProps = VanCalendarProps
 
 const BaseCalendar = observer(
   defineComponent({
-    name: 'FCalendar',
+    name: 'FBaseCalendar',
     setup(props, { attrs, emit, slots, listeners }) {
       const {
         fieldProps = {},
@@ -76,8 +75,8 @@ const BaseCalendar = observer(
 
 export const Calendar = connect(
   BaseCalendar,
-  mapProps({ readOnly: 'readonly' })
-  // mapReadPretty(PreviewText.Uploader)
+  mapProps({ readOnly: 'readonly' }),
+  mapReadPretty(PreviewText.Calendar)
 )
 
 export default Calendar
