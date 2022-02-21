@@ -577,6 +577,138 @@ describe('merge', () => {
         },
       },
     })
+    expect(
+      merge(
+        {
+          react: {
+            $$typeof: true,
+            _owner: true,
+            aa: 123,
+          },
+        },
+        {
+          react: {
+            $$typeof: true,
+            _owner: true,
+            bb: 321,
+          },
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      react: {
+        $$typeof: true,
+        _owner: true,
+        bb: 321,
+      },
+    })
+    expect(
+      merge(
+        {
+          react: {
+            _isAMomentObject: true,
+            aa: 123,
+          },
+        },
+        {
+          react: {
+            _isAMomentObject: true,
+            bb: 321,
+          },
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      react: {
+        _isAMomentObject: true,
+        bb: 321,
+      },
+    })
+    expect(
+      merge(
+        {
+          react: {
+            _isJSONSchemaObject: true,
+            aa: 123,
+          },
+        },
+        {
+          react: {
+            _isJSONSchemaObject: true,
+            bb: 321,
+          },
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      react: {
+        _isJSONSchemaObject: true,
+        bb: 321,
+      },
+    })
+    const toJSObj = {
+      toJS: () => {},
+      bb: 321,
+    }
+    expect(
+      merge(
+        {
+          toJSObj: {
+            toJS: () => {},
+            aa: 123,
+          },
+        },
+        {
+          toJSObj,
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      toJSObj,
+    })
+    const toJSONObj = {
+      toJSON: () => {},
+      bb: 321,
+    }
+    expect(
+      merge(
+        {
+          toJSONObj: {
+            toJS: () => {},
+            aa: 123,
+          },
+        },
+        {
+          toJSONObj,
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      toJSONObj,
+    })
+  })
+
+  test('empty', () => {
+    expect(
+      merge(
+        {
+          aa: undefined,
+        },
+        {
+          aa: {},
+        }
+      )
+    ).toEqual({ aa: {} })
   })
 
   test('clone', () => {

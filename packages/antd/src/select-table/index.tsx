@@ -26,7 +26,6 @@ export interface ISelectTableProps extends TableProps<any> {
   optionAsValue?: boolean
   showSearch?: boolean
   searchProps?: SearchProps
-  optionFilterProp?: string
   primaryKey?: string | ((record: any) => string)
   filterOption?: IFilterOption
   filterSort?: IFilterSort
@@ -82,7 +81,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     optionAsValue,
     showSearch,
     filterOption,
-    optionFilterProp,
     filterSort,
     onSearch,
     searchProps,
@@ -117,7 +115,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   // Filter dataSource By Search
   const filteredDataSource = useFilterOptions(
     dataSource,
-    optionFilterProp || primaryKey,
     searchValue,
     filterOption
   )
