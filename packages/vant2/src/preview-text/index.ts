@@ -155,7 +155,7 @@ const Switch = observer(
             attrs: {
               size: 20,
               ...attrs,
-              disabled: false,
+              disabled: true,
             },
           },
           slots

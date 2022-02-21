@@ -1,18 +1,18 @@
-# Field
+# Input
 
 > 输入框
 
 ## Markup Schema 案例
 
-<dumi-previewer demoPath="guide/field/markup-schema" />
+<dumi-previewer demoPath="guide/input/markup-schema" />
 
 ## JSON Schema 案例
 
-<dumi-previewer demoPath="guide/field/json-schema" />
+<dumi-previewer demoPath="guide/input/json-schema" />
 
 ## Template 案例
 
-<dumi-previewer demoPath="guide/field/template" />
+<dumi-previewer demoPath="guide/input/template" />
 
 ## API
 

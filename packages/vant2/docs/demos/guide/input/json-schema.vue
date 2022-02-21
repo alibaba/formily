@@ -32,7 +32,7 @@ const schema = {
     },
     fieldRead: {
       type: 'string',
-      'x-component': 'VanField',
+      'x-component': 'Input',
       'x-pattern': 'readPretty',
       'x-component-props': { label: '输入框', placeholder: '请输入' },
     },
@@ -42,7 +42,7 @@ const schema = {
 const form = createForm()
 const { SchemaField } = createSchemaField({
   components: {
-    VanField,
+    Input,
   },
 })
 
