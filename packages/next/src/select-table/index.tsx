@@ -20,7 +20,8 @@ export interface ISelectTableColumnProps extends ColumnProps {
   key: React.ReactText
 }
 
-export interface ISelectTableProps extends Omit<TableProps, 'primaryKey'> {
+export interface ISelectTableProps
+  extends Omit<TableProps, 'primaryKey' | 'onChange'> {
   mode?: 'multiple' | 'single'
   dataSource?: any[]
   optionAsValue?: boolean
@@ -30,7 +31,7 @@ export interface ISelectTableProps extends Omit<TableProps, 'primaryKey'> {
   filterOption?: IFilterOption
   filterSort?: IFilterSort
   onSearch?: (keyword: string) => void
-  onChange?: (value: any) => void
+  onChange?: (value: any, options: any) => void
   value?: any
   rowSelection?: TableProps['rowSelection'] & {
     checkStrictly?: boolean
@@ -149,15 +150,17 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     if (readOnly) {
       return
     }
-    let outputValue = optionAsValue
-      ? records.map((item) => {
-          const validItem = { ...item }
-          delete validItem['__formily_key__']
-          return validItem
-        })
-      : selectedRowKeys
-    outputValue = mode === 'single' ? outputValue[0] : outputValue
-    onChange?.(outputValue)
+    let outputOptions = records.map((item) => {
+      const validItem = { ...item }
+      delete validItem['__formily_key__']
+      return validItem
+    })
+    let outputValue = optionAsValue ? outputOptions : selectedRowKeys
+    if (mode === 'single') {
+      outputValue = outputValue[0]
+      outputOptions = outputOptions[0]
+    }
+    onChange?.(outputValue, outputOptions)
   }
 
   const onRowClick = (record) => {

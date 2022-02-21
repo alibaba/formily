@@ -86,7 +86,6 @@ export default () => {
           x-component-props={{
             bordered: false,
             showSearch: true,
-            optionFilterProp: 'name',
             optionAsValue: true,
           }}
           enum={[
