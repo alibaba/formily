@@ -5,7 +5,7 @@ import { ref, defineComponent } from '@vue/composition-api'
 import { PreviewText } from '../preview-text'
 import type { Area as VanAreaProps } from 'vant'
 import { Area as VanArea } from 'vant'
-import { Field as VanField } from 'vant'
+import { BaseField } from '../field'
 import { Popup as VanPopup } from 'vant'
 
 export type AreaProps = VanAreaProps
@@ -32,7 +32,7 @@ const BaseArea = observer(
           {
             default: () => [
               h(
-                VanField,
+                BaseField,
                 {
                   attrs: {
                     value: format ? format(attrs.value) : attrs.value,

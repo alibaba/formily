@@ -1,0 +1,9 @@
+@import '../__builtins__/styles/common.scss';
+
+.#{$formily-prefix}-field-asterisk::before {
+  position: absolute;
+  left: 8px;
+  color: #ee0a24;
+  font-size: 14px;
+  content: '*';
+}

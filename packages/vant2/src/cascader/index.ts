@@ -5,7 +5,7 @@ import { ref, defineComponent } from '@vue/composition-api'
 import { PreviewText } from '../preview-text'
 import type { Cascader as VanCascaderProps } from 'vant'
 import { Cascader as VanCascader } from 'vant'
-import { Field as VanField } from 'vant'
+import { BaseField } from '../field'
 import { Popup as VanPopup } from 'vant'
 
 export type CascaderProps = VanCascaderProps
@@ -32,7 +32,7 @@ const BaseCascader = observer(
           {
             default: () => [
               h(
-                VanField,
+                BaseField,
                 {
                   attrs: {
                     value: format ? format(attrs.value) : attrs.value,

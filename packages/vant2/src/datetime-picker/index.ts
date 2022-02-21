@@ -5,7 +5,7 @@ import { ref, defineComponent } from '@vue/composition-api'
 import { PreviewText } from '../preview-text'
 import type { DatetimePicker as VanDatetimePickerProps } from 'vant'
 import { DatetimePicker as VanDatetimePicker } from 'vant'
-import { Field as VanField } from 'vant'
+import { BaseField } from '../field'
 import { Popup as VanPopup } from 'vant'
 
 export type DatetimePickerProps = VanDatetimePickerProps
@@ -31,7 +31,7 @@ const BaseDatetimePicker = observer(
           {
             default: () => [
               h(
-                VanField,
+                BaseField,
                 {
                   attrs: {
                     value: attrs.value,

@@ -5,8 +5,7 @@ import { ref, defineComponent } from '@vue/composition-api'
 import { PreviewText } from '../preview-text'
 import type { Calendar as VanCalendarProps } from 'vant'
 import { Calendar as VanCalendar } from 'vant'
-import { Field as VanField } from 'vant'
-import { Popup as VanPopup } from 'vant'
+import { BaseField } from '../field'
 
 export type CalendarProps = VanCalendarProps
 
@@ -30,7 +29,7 @@ const BaseCalendar = observer(
           {
             default: () => [
               h(
-                VanField,
+                BaseField,
                 {
                   attrs: {
                     value: format ? format(attrs.value) : attrs.value,

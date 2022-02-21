@@ -3,13 +3,14 @@ import { isVoidField } from '@formily/core'
 import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
 import { defineComponent } from '@vue/composition-api'
 import { resolveComponent } from '../__builtins__/shared'
+import { stylePrefix } from '../__builtins__/configs'
 import { PreviewText } from '../preview-text'
 import type { Field as VanFieldProps } from 'vant'
 import { Field as VanField } from 'vant'
 
 export type FieldProps = VanFieldProps
 
-const BaseField = observer(
+export const BaseField = observer(
   defineComponent({
     name: 'FField',
     setup(props, { attrs, slots, listeners }) {
@@ -17,6 +18,7 @@ const BaseField = observer(
         return h(
           VanField,
           {
+            class: { [`${stylePrefix}-field-asterisk`]: attrs.asterisk },
             attrs,
             on: listeners,
           },
@@ -46,6 +48,7 @@ export const Field = connect(
               : buf.concat([text])
           }, [])
         }
+
         if (field.validating) return
         if (props.feedbackText) return props.feedbackText
         if (field.selfErrors.length) return split(field.selfErrors)
@@ -55,9 +58,7 @@ export const Field = connect(
       const errorMessages = takeMessage()
       return {
         errorMessage: resolveComponent(
-          Array.isArray(errorMessages)
-            ? errorMessages.join(', ')
-            : errorMessages
+          Array.isArray(errorMessages) ? errorMessages.join('') : errorMessages
         ),
         extra: props.extra || field.description,
       }
@@ -85,6 +86,7 @@ export const Field = connect(
       if ('asterisk' in props) {
         asterisk = props.asterisk
       }
+
       return {
         asterisk,
       }

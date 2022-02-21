@@ -5,7 +5,7 @@ import { ref, defineComponent } from '@vue/composition-api'
 import { PreviewText } from '../preview-text'
 import type { Picker as VanPickerProps } from 'vant'
 import { Picker as VanPicker } from 'vant'
-import { Field as VanField } from 'vant'
+import { BaseField } from '../field'
 import { Popup as VanPopup } from 'vant'
 
 export type PickerProps = VanPickerProps
@@ -31,7 +31,7 @@ const BasePicker = observer(
           {
             default: () => [
               h(
-                VanField,
+                BaseField,
                 {
                   attrs: {
                     value: attrs.value,
