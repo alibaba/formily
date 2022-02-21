@@ -1,4 +1,4 @@
-import { isValid } from './isEmpty'
+import { isValid, isEmpty } from './isEmpty'
 import { isFn, isPlainObj } from './checkers'
 
 function defaultIsMergeableObject(value: any) {
@@ -99,10 +99,9 @@ function mergeObject(target: any, source: any, options: Options) {
     if (propertyIsUnsafe(target, key)) {
       return
     }
-    if (!target[key]) {
+    if (isEmpty(target[key])) {
       destination[key] = source[key]
-    }
-    if (
+    } else if (
       propertyIsOnObject(target, key) &&
       options.isMergeableObject(source[key])
     ) {
