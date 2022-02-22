@@ -86,7 +86,6 @@ export default () => {
           x-component-props={{
             hasBorder: false,
             showSearch: true,
-            optionFilterProp: 'name',
             optionAsValue: true,
           }}
           enum={[
@@ -452,6 +451,9 @@ const schema = {
             .toLowerCase()
             .localeCompare(optionB.description.toLowerCase()),
         optionAsValue: true,
+        rowSelection: {
+          checkStrictly: false,
+        },
       },
       enum: [
         { key: '1', name: 'title-1', description: 'A-description' },
@@ -471,6 +473,11 @@ const schema = {
                   description: 'Z-description',
                 },
               ],
+            },
+            {
+              key: '2-2',
+              name: 'title2-2',
+              description: 'YY-description',
             },
           ],
         },
@@ -599,19 +606,26 @@ export default () => (
 
 ### SelectTable
 
-| Property name    | Type                                               | Description                                                                                                                                                                                                                                                 | Default value |
-| ---------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| mode             | `'multiple' \| 'single'`                           | Set mode of SelectTable                                                                                                                                                                                                                                     | `'multiple'`  |
-| optionAsValue    | boolean                                            | use `option` as value                                                                                                                                                                                                                                       | false         |
-| showSearch       | boolean                                            | show `Search` component                                                                                                                                                                                                                                     | false         |
-| searchProps      | object                                             | `Search` component props                                                                                                                                                                                                                                    | -             |
-| optionFilterProp | string                                             | Which prop value of option will be used for filter if filterOption is true.                                                                                                                                                                                 | `primaryKey`  |
-| primaryKey       | `string \| (record) => string`                     | Row's unique key                                                                                                                                                                                                                                            | `'key'`       |
-| filterOption     | `boolean \| (inputValue, option) => boolean`       | If true, filter options by input, if function, filter options against it. The function will receive two arguments, `inputValue` and `option`, if the function returns true, the option will be included in the filtered set; Otherwise, it will be excluded |
-| filterSort       | (optionA, optionB) => number                       | Sort function for search options sorting, see Array.sort's compareFunction                                                                                                                                                                                  | -             |
-| onSearch         | Callback function that is fired when input changed | (inputValue) => void                                                                                                                                                                                                                                        | -             |
+| Property name | Type                                               | Description                                                                                                                                                                                                                                                 | Default value |
+| ------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| mode          | `'multiple' \| 'single'`                           | Set mode of SelectTable                                                                                                                                                                                                                                     | `'multiple'`  |
+| optionAsValue | boolean                                            | use `option` as value                                                                                                                                                                                                                                       | false         |
+| showSearch    | boolean                                            | show `Search` component                                                                                                                                                                                                                                     | false         |
+| searchProps   | object                                             | `Search` component props                                                                                                                                                                                                                                    | -             |
+| primaryKey    | `string \| (record) => string`                     | Row's unique key                                                                                                                                                                                                                                            | `'key'`       |
+| filterOption  | `boolean \| (inputValue, option) => boolean`       | If true, filter options by input, if function, filter options against it. The function will receive two arguments, `inputValue` and `option`, if the function returns true, the option will be included in the filtered set; Otherwise, it will be excluded |
+| filterSort    | (optionA, optionB) => number                       | Sort function for search options sorting, see Array.sort's compareFunction                                                                                                                                                                                  | -             |
+| onSearch      | Callback function that is fired when input changed | (inputValue) => void                                                                                                                                                                                                                                        | -             |
 
 `TableProps` type definition reference fusion https://fusion.design/pc/component/basic/table
+
+### rowSelection
+
+| Property name | Type    | Description                                                                | Default value |
+| ------------- | ------- | -------------------------------------------------------------------------- | ------------- |
+| checkStrictly | boolean | Check table row precisely; parent row and children rows are not associated | true          |
+
+`rowSelectionProps` type definition reference fusion https://fusion.design/pc/component/basic/table rowSelection
 
 ### SelectTable.Column
 

@@ -7,6 +7,25 @@ function includes(test: React.ReactNode, search: string) {
   return toArray(test).join('').toUpperCase().includes(search)
 }
 
+function includesOption(option: any, search: string) {
+  const searched = new Set()
+  const _includesOption = (option: any) => {
+    const keys = Object.keys(option || {})
+    return keys.some((key) => {
+      const value = option[key]
+      if (React.isValidElement(value)) return false
+      if (key !== 'children' && !searched.has(value)) {
+        if (typeof value === 'object') {
+          searched.add(value)
+          return _includesOption(value)
+        }
+        return includes(value, search)
+      }
+    })
+  }
+  return _includesOption(option)
+}
+
 function toArray<T>(value: T | T[]): T[] {
   if (isArr(value)) {
     return value
@@ -16,7 +35,6 @@ function toArray<T>(value: T | T[]): T[] {
 
 const useFilterOptions = (
   options: any[],
-  searchKey?: string,
   searchValue?: string,
   filterOption?: IFilterOption
 ) =>
@@ -27,7 +45,7 @@ const useFilterOptions = (
     const upperSearch = searchValue.toUpperCase()
     const filterFunc = isFn(filterOption)
       ? filterOption
-      : (_: string, option: any) => includes(option[searchKey], upperSearch)
+      : (_: string, option: any) => includesOption(option, upperSearch)
 
     const doFilter = (arr: any[]) => {
       const filterArr: any[] = []
@@ -47,6 +65,6 @@ const useFilterOptions = (
     }
 
     return doFilter(options)
-  }, [options, searchKey, searchValue, filterOption])
+  }, [options, searchValue, filterOption])
 
 export { useFilterOptions }

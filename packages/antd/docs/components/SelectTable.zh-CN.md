@@ -86,7 +86,6 @@ export default () => {
           x-component-props={{
             bordered: false,
             showSearch: true,
-            optionFilterProp: 'name',
             optionAsValue: true,
           }}
           enum={[
@@ -448,6 +447,9 @@ const schema = {
             .toLowerCase()
             .localeCompare(optionB.description.toLowerCase()),
         optionAsValue: true,
+        rowSelection: {
+          checkStrictly: false,
+        },
       },
       enum: [
         { key: '1', name: '标题1', description: 'A-描述' },
@@ -463,6 +465,11 @@ const schema = {
               children: [
                 { key: '2-1-1', name: '标题2-1-1', description: 'Z-描述' },
               ],
+            },
+            {
+              key: '2-2',
+              name: '标题2-2',
+              description: 'YY-描述',
             },
           ],
         },
@@ -590,19 +597,26 @@ export default () => (
 
 ### SelectTable
 
-| 属性名           | 类型                                         | 描述                                                                                                                                 | 默认值       |
-| ---------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
-| mode             | `'multiple' \| 'single'`                     | 设置 SelectTable 模式为单选或多选                                                                                                    | `'multiple'` |
-| optionAsValue    | boolean                                      | 使用表格行数据作为值                                                                                                                 | false        |
-| showSearch       | boolean                                      | 是否显示搜索组件                                                                                                                     | false        |
-| searchProps      | object                                       | Search 组件属性                                                                                                                      | -            |
-| optionFilterProp | string                                       | 搜索时过滤对应的 option 属性                                                                                                         | `primaryKey` |
-| primaryKey       | `string \| (record) => string`               | 表格行 key 的取值                                                                                                                    | `'key'`      |
-| filterOption     | `boolean \| (inputValue, option) => boolean` | 是否根据输入项进行筛选。当其为一个函数时，会接收 inputValue option 两个参数，当 option 符合筛选条件时，应返回 true，反之则返回 false | true         |
-| filterSort       | (optionA, optionB) => number                 | 搜索时对筛选结果项的排序函数, 类似 Array.sort 里的 compareFunction                                                                   | -            |
-| onSearch         | 文本框值变化时回调                           | (inputValue) => void                                                                                                                 | -            |
+| 属性名        | 类型                                         | 描述                                                                                                                                 | 默认值       |
+| ------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
+| mode          | `'multiple' \| 'single'`                     | 设置 SelectTable 模式为单选或多选                                                                                                    | `'multiple'` |
+| optionAsValue | boolean                                      | 使用表格行数据作为值                                                                                                                 | false        |
+| showSearch    | boolean                                      | 是否显示搜索组件                                                                                                                     | false        |
+| searchProps   | object                                       | Search 组件属性                                                                                                                      | -            |
+| primaryKey    | `string \| (record) => string`               | 表格行 key 的取值                                                                                                                    | `'key'`      |
+| filterOption  | `boolean \| (inputValue, option) => boolean` | 是否根据输入项进行筛选。当其为一个函数时，会接收 inputValue option 两个参数，当 option 符合筛选条件时，应返回 true，反之则返回 false | true         |
+| filterSort    | (optionA, optionB) => number                 | 搜索时对筛选结果项的排序函数, 类似 Array.sort 里的 compareFunction                                                                   | -            |
+| onSearch      | 文本框值变化时回调                           | (inputValue) => void                                                                                                                 | -            |
 
-其余参考 https://ant.design/components/table-cn/
+参考 https://ant.design/components/table-cn/
+
+### rowSelection
+
+| 属性名        | 类型    | 描述                                                         | 默认值 |
+| ------------- | ------- | ------------------------------------------------------------ | ------ |
+| checkStrictly | boolean | checkable 状态下节点选择完全受控（父子数据选中状态不再关联） | true   |
+
+参考 https://ant.design/components/table/#rowSelection
 
 ### SelectTable.Column
 

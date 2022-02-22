@@ -26,12 +26,11 @@ export interface ISelectTableProps extends TableProps<any> {
   optionAsValue?: boolean
   showSearch?: boolean
   searchProps?: SearchProps
-  optionFilterProp?: string
   primaryKey?: string | ((record: any) => string)
   filterOption?: IFilterOption
   filterSort?: IFilterSort
   onSearch?: (keyword: string) => void
-  onChange?: (value: any) => void
+  onChange?: (value: any, options: any) => void
   value?: any
 }
 
@@ -82,7 +81,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     optionAsValue,
     showSearch,
     filterOption,
-    optionFilterProp,
     filterSort,
     onSearch,
     searchProps,
@@ -117,7 +115,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   // Filter dataSource By Search
   const filteredDataSource = useFilterOptions(
     dataSource,
-    optionFilterProp || primaryKey,
     searchValue,
     filterOption
   )
@@ -149,15 +146,17 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     if (readOnly) {
       return
     }
-    let outputValue = optionAsValue
-      ? records.map((item) => {
-          const validItem = { ...item }
-          delete validItem['__formily_key__']
-          return validItem
-        })
-      : selectedRowKeys
-    outputValue = mode === 'single' ? outputValue[0] : outputValue
-    onChange?.(outputValue)
+    let outputOptions = records.map((item) => {
+      const validItem = { ...item }
+      delete validItem['__formily_key__']
+      return validItem
+    })
+    let outputValue = optionAsValue ? outputOptions : selectedRowKeys
+    if (mode === 'single') {
+      outputValue = outputValue[0]
+      outputOptions = outputOptions[0]
+    }
+    onChange?.(outputValue, outputOptions)
   }
 
   const onRowClick = (record) => {
@@ -224,7 +223,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
             : {
                 ...rowSelection,
                 getCheckboxProps: (record) => ({
-                  ...(rowSelection?.getCheckboxProps(record) as any),
+                  ...(rowSelection?.getCheckboxProps?.(record) as any),
                   disabled,
                 }), // antd
                 selectedRowKeys: selected,

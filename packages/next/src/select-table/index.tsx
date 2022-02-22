@@ -9,6 +9,7 @@ import { useFilterOptions } from './useFilterOptions'
 import { useFlatOptions } from './useFlatOptions'
 import { useTitleAddon } from './useTitleAddon'
 import { useSize } from './useSize'
+import { useCheckSlackly, getCheckedProps } from './useCheckSlackly'
 import { usePrefixCls } from '../__builtins__'
 
 type IFilterOption = boolean | ((option: any, keyword: string) => boolean)
@@ -19,19 +20,22 @@ export interface ISelectTableColumnProps extends ColumnProps {
   key: React.ReactText
 }
 
-export interface ISelectTableProps extends Omit<TableProps, 'primaryKey'> {
+export interface ISelectTableProps
+  extends Omit<TableProps, 'primaryKey' | 'onChange'> {
   mode?: 'multiple' | 'single'
   dataSource?: any[]
   optionAsValue?: boolean
   showSearch?: boolean
   searchProps?: SearchProps
-  optionFilterProp?: string
   primaryKey?: string | ((record: any) => string)
   filterOption?: IFilterOption
   filterSort?: IFilterSort
   onSearch?: (keyword: string) => void
-  onChange?: (value: any) => void
+  onChange?: (value: any, options: any) => void
   value?: any
+  rowSelection?: TableProps['rowSelection'] & {
+    checkStrictly?: boolean
+  }
 }
 
 type ComposedSelectTable = React.FC<ISelectTableProps> & {
@@ -81,7 +85,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     optionAsValue,
     showSearch,
     filterOption,
-    optionFilterProp,
     filterSort,
     onSearch,
     searchProps,
@@ -116,7 +119,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   // Filter dataSource By Search
   const filteredDataSource = useFilterOptions(
     dataSource,
-    optionFilterProp || primaryKey,
     searchValue,
     filterOption
   )
@@ -148,15 +150,17 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     if (readOnly) {
       return
     }
-    let outputValue = optionAsValue
-      ? records.map((item) => {
-          const validItem = { ...item }
-          delete validItem['__formily_key__']
-          return validItem
-        })
-      : selectedRowKeys
-    outputValue = mode === 'single' ? outputValue[0] : outputValue
-    onChange?.(outputValue)
+    let outputOptions = records.map((item) => {
+      const validItem = { ...item }
+      delete validItem['__formily_key__']
+      return validItem
+    })
+    let outputValue = optionAsValue ? outputOptions : selectedRowKeys
+    if (mode === 'single') {
+      outputValue = outputValue[0]
+      outputOptions = outputOptions[0]
+    }
+    onChange?.(outputValue, outputOptions)
   }
 
   const onRowClick = (record) => {
@@ -180,6 +184,22 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
         selectedRowKeys.includes(item?.[primaryKey])
       )
     }
+    if (rowSelection?.checkStrictly !== false) {
+      onInnerChange(selectedRowKeys, records)
+    } else {
+      onSlacklyChange(selectedRowKeys)
+    }
+  }
+
+  // Fusion TreeData SlacklyChange
+  const onSlacklyChange = (prevSelectedRowKeys: any[]) => {
+    const { selectedRowKeys, records } = useCheckSlackly(
+      prevSelectedRowKeys,
+      selected,
+      primaryKey,
+      flatDataSource
+    )
+
     onInnerChange(selectedRowKeys, records)
   }
 
@@ -231,11 +251,17 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
             : {
                 ...rowSelection,
                 getProps: (record, index) => ({
-                  ...(rowSelection?.getProps(record, index) as any),
+                  ...(rowSelection?.getProps?.(record, index) as any),
+                  ...(rowSelection?.checkStrictly !== false
+                    ? {}
+                    : getCheckedProps(record, primaryKey, selected)), // 父子关联模式indeterminate值
                   disabled,
                 }), // fusion
                 selectedRowKeys: selected,
-                onChange: onInnerChange,
+                onChange:
+                  rowSelection?.checkStrictly !== false
+                    ? onInnerChange
+                    : onSlacklyChange,
                 mode,
                 ...titleAddon,
               }
