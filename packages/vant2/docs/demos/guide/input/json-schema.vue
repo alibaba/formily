@@ -30,12 +30,6 @@ const schema = {
         placeholder: '请输入',
       },
     },
-    fieldRead: {
-      type: 'string',
-      'x-component': 'Input',
-      'x-pattern': 'readPretty',
-      'x-component-props': { label: '输入框', placeholder: '请输入' },
-    },
   },
 }
 

@@ -5,7 +5,7 @@
       :component="[
         DatetimePicker,
         {
-          fieldProps: {
+          formItemProps: {
             label: '时间选择器',
             placeholder: '请选择时间',
           },

@@ -5,7 +5,7 @@
         name="cascader"
         x-component="Cascader"
         :x-component-props="{
-          fieldProps: {
+          formItemProps: {
             label: '地区',
             placeholder: '请选择所在地区',
             format: (data) => {

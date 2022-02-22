@@ -113,7 +113,7 @@
         name="picker"
         x-component="Picker"
         :x-component-props="{
-          fieldProps: {
+          formItemProps: {
             label: '选择器',
             placeholder: '点击选择城市',
           },
@@ -130,13 +130,18 @@
             ],
           },
         }"
+        required
+        :x-validator="{
+          pattern: /湖州/,
+          message: '错误了',
+        }"
       />
 
       <SchemaStringField
         name="datetimePicker"
         x-component="DatetimePicker"
         :x-component-props="{
-          fieldProps: {
+          formItemProps: {
             label: '时间选择',
             placeholder: '点击选择时间',
           },
@@ -154,7 +159,7 @@
         name="area"
         x-component="Area"
         :x-component-props="{
-          fieldProps: {
+          formItemProps: {
             label: '地区选择',
             placeholder: '点击选择省市区',
             format: (val) =>
@@ -190,7 +195,7 @@
         name="calendar"
         x-component="Calendar"
         :x-component-props="{
-          fieldProps: {
+          formItemProps: {
             label: '日历',
             placeholder: '选择日历',
             format: (date) =>

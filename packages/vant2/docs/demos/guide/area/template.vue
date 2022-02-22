@@ -5,7 +5,7 @@
       :component="[
         Area,
         {
-          fieldProps: {
+          formItemProps: {
             format: (val) =>
               (val || [])
                 .filter((item) => !!item)

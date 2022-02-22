@@ -19710,10 +19710,10 @@ value-equal@^1.0.1:
   resolved "https://registry.yarnpkg.com/value-equal/-/value-equal-1.0.1.tgz#1e0b794c734c5c0cade179c437d356d931a34d6c"
   integrity sha512-NOJ6JZCAWr0zlxZt+xqCHNTEKOsrks2HQd4MqhP1qy4z1SkbEP467eNx6TgDKXMvUOb+OENfJCZwM+16n7fRfw==
 
-vant@^2.12.39:
-  version "2.12.39"
-  resolved "https://registry.npm.qianxin-inc.cn/vant/download/vant-2.12.39.tgz#2cb976c124b4b11bfed340030b5dc90285a3bb66"
-  integrity sha1-LLl2wSS0sRv+00ADC13JAoWju2Y=
+vant@^2.12.44:
+  version "2.12.44"
+  resolved "https://registry.npm.qianxin-inc.cn/vant/download/vant-2.12.44.tgz#bb8ca87512a91a98d577d6c275fc37ae8b8c7258"
+  integrity sha1-u4yodRKpGpjVd9bCdfw3rouMclg=
   dependencies:
     "@babel/runtime" "7.x"
     "@vant/icons" "^1.7.1"

@@ -14,7 +14,7 @@ const BaseDatetimePicker = observer(
     name: 'FBaseDatetimePicker',
     setup(props, { attrs, emit, slots, listeners }) {
       const {
-        fieldProps = {},
+        formItemProps = {},
         popupProps = {},
         datetimePickerProps = {},
         fieldListeners = {},
@@ -36,7 +36,7 @@ const BaseDatetimePicker = observer(
                     value: attrs.value,
                     readonly: true,
                     clickable: true,
-                    ...fieldProps,
+                    ...formItemProps,
                   },
                   on: {
                     click: () => {

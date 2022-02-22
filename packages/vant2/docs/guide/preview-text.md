@@ -14,23 +14,35 @@
 
 ### PreviewText.Input
 
-参考 [https://element.eleme.io/#/zh-CN/component/input](https://element.eleme.io/#/zh-CN/component/input)
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field#api)
 
-### PreviewText.Select
+### PreviewText.Checkbox
 
-参考 [https://element.eleme.io/#/zh-CN/component/select](https://element.eleme.io/#/zh-CN/component/select)
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/checkbox#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/checkbox#api)
 
-### PreviewText.Cascader
+### PreviewText.Switch
 
-参考 [https://element.eleme.io/#/zh-CN/component/cascader](https://element.eleme.io/#/zh-CN/component/cascader)
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/switch#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/switch#api)
 
-### PreviewText.DatePicker
+### PreviewText.Stepper
 
-参考 [https://element.eleme.io/#/zh-CN/component/date-picker](https://element.eleme.io/#/zh-CN/component/date-picker)
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/stepper#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/stepper#api)
 
-### PreviewText.TimePicker
+### PreviewText.Rate
 
-参考 [https://element.eleme.io/#/zh-CN/component/time-picker](https://element.eleme.io/#/zh-CN/component/time-picker)
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/rate#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/rate#api)
+
+### PreviewText.Slider
+
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/slider#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/slider#api)
+
+### PreviewText.Uploader
+
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/uploader#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/uploader#api)
+
+### PreviewText.Picker、PreviewText.DatetimePicker、PreviewText.Calendar、PreviewText.Cascader、PreviewText.Area
+
+参考 [https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field#api](https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field#api)
 
 ### PreviewText
 

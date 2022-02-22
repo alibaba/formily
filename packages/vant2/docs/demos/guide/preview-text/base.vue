@@ -102,7 +102,7 @@
         default="湖州"
         x-component="PreviewText.Picker"
         :x-component-props="{
-          fieldProps: {
+          formItemProps: {
             label: '选择器',
             placeholder: '点击选择城市',
           },
@@ -126,7 +126,7 @@
         default="05:15"
         x-component="PreviewText.DatetimePicker"
         :x-component-props="{
-          fieldProps: {
+          formItemProps: {
             label: '时间选择',
             placeholder: '点击选择时间',
           },
@@ -145,7 +145,7 @@
         default="北京市/北京市/东城区"
         x-component="PreviewText.Area"
         :x-component-props="{
-          fieldProps: {
+          formItemProps: {
             label: '地区选择',
             placeholder: '点击选择省市区',
             format: (val) =>
@@ -182,7 +182,7 @@
         default="2/24"
         x-component="PreviewText.Calendar"
         :x-component-props="{
-          fieldProps: {
+          formItemProps: {
             label: '日历',
             placeholder: '选择日历',
             format: (date) =>

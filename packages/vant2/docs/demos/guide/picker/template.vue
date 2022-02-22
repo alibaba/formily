@@ -5,7 +5,7 @@
       :component="[
         Picker,
         {
-          fieldProps: {
+          formItemProps: {
             label: '城市',
             placeholder: '选择城市',
           },

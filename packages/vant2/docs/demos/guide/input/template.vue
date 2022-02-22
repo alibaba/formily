@@ -18,12 +18,6 @@
         },
       ]"
     />
-    <Field
-      name="inputRead"
-      title="输入框"
-      pattern="readPretty"
-      :component="[Input, { label: '输入框', placeholder: '请输入' }]"
-    />
     <Submit :style="{ 'margin-top': '16px' }" round block @submit="log">
       提交
     </Submit>

@@ -34,22 +34,6 @@ const schema = {
         },
       ],
     },
-    multipleRead: {
-      type: 'array',
-      'x-component': 'Checkbox.Group',
-      'x-pattern': 'readPretty',
-      default: [1, 2],
-      enum: [
-        {
-          label: '选项1',
-          name: 1,
-        },
-        {
-          label: '选项2',
-          name: 2,
-        },
-      ],
-    },
   },
 }
 

@@ -6,40 +6,20 @@
 
 - 更丰富的组件体系
 
-  - 布局组件
-
-    - FormLayout
-    - FormItem
-    - FormGrid
-    - FormButtonGroup
-    - Space
-    - Submit
-    - Reset
-
   - 输入控件
     - Input
-    - Password
-    - Select
-    - DatePicker
-    - TimePicker
-    - InputNumber
-    - Transfer
-    - Cascader
     - Radio
     - Checkbox
-    - Upload
     - Switch
-  - 场景组件
-    - ArrayCards
-    - ArrayItems
-    - ArrayTable
-    - ArrayTabs
-    - FormCollapse
-    - FormStep
-    - FormTab
-    - FormDialog
-    - FormDrawer
-    - Editable
+    - Rate
+    - Slider
+    - Stepper
+    - Uploader
+    - Cascader
+    - Calendar
+    - Picker
+    - DatetimePicker
+    - Area
   - 阅读态组件
     - PreviewText
 
@@ -51,68 +31,12 @@
   - 提供了 PreviewText 组件，用户可以基于它自己做阅读态封装，灵活性更强
 - 类型更加友好
   - 每个组件都有着极其完整的类型定义，用户在实际开发过程中，可以感受到前所未有的智能提示体验
-- 更完备的布局控制能力
-  - 基于 FormLayout、FormItem、FormGrid 组件，提供更智能的布局能力。
-- 更优雅易用的 API
-  - FormStep，用户只需要关注 FormStep Reactive Model 即可，通过 createFormStep 就可以创建出 Reactive Model，传给 FormStep 组件即可快速通讯。同理，FormTab/FormCollapse 也是一样的通讯模式
-  - 弹窗表单，抽屉表单，想必过去，用户几乎每次都得在这两个场景上写大量的代码，这次直接提供了极其简易的 API 让用户使用，最大化提升开发效率
-
-## 注意
-
-因为 Element UI 是基于 Sass 构建的，如果你用 Webpack 配置请使用以下两个 Sass 工具
-
-```
-"sass": "^1.32.11",
-"sass-loader": "^8.0.2"
-```
 
 ## 安装
 
 ```bash
-$ npm install --save vant
+$ npm install --save vant@latest-v2
 $ npm install --save @formily/core @formily/vue @vue/composition-api @formily/vant2
-```
-
-## 按需打包
-
-`Element-UI` 按需引入参见 [https://element.eleme.io/#/zh-CN/component/quickstart#an-xu-yin-ru](https://element.eleme.io/#/zh-CN/component/quickstart#an-xu-yin-ru)
-
-`@formily/element`按需引入需借助 `babel-plugin-import`
-
-#### 安装 `babel-plugin-import`
-
-```shell
-npm install babel-plugin-import --save-dev
-```
-
-或者
-
-```shell
-yarn add babel-plugin-import --dev
-```
-
-修改 `.babelrc`
-
-```json
-{
-  "plugins": [
-    [
-      "component",
-      {
-        "libraryName": "element-ui",
-        "styleLibraryName": "theme-chalk"
-      }
-    ],
-    [
-      "import",
-      {
-        "libraryName": "@formily/element",
-        "libraryDirectory": "esm",
-        "style": true
-      }
-    ]
-  ]
-}
 ```
 
 ## Q/A

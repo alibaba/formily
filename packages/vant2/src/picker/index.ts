@@ -14,7 +14,7 @@ const BasePicker = observer(
     name: 'FBasePicker',
     setup(props, { attrs, emit, slots, listeners }) {
       const {
-        fieldProps = {},
+        formItemProps = {},
         popupProps = {},
         pickerProps = {},
         fieldListeners = {},
@@ -36,7 +36,7 @@ const BasePicker = observer(
                     value: attrs.value,
                     readonly: true,
                     clickable: true,
-                    ...fieldProps,
+                    ...formItemProps,
                   },
                   on: {
                     click: () => {

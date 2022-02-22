@@ -13,12 +13,12 @@ const BaseCalendar = observer(
     name: 'FBaseCalendar',
     setup(props, { attrs, emit, slots, listeners }) {
       const {
-        fieldProps = {},
+        formItemProps = {},
         calendarProps = {},
         fieldListeners = {},
         calendarListeners = {},
       } = attrs as any
-      const { format } = fieldProps
+      const { format } = formItemProps
       const show = ref(false)
 
       return () => {
@@ -34,7 +34,7 @@ const BaseCalendar = observer(
                     value: format ? format(attrs.value) : attrs.value,
                     readonly: true,
                     clickable: true,
-                    ...fieldProps,
+                    ...formItemProps,
                   },
                   on: {
                     click: () => {

@@ -5,7 +5,7 @@
         name="area"
         x-component="Area"
         :x-component-props="{
-          fieldProps: {
+          formItemProps: {
             label: '城市',
             placeholder: '选择城市',
             format: (val) =>

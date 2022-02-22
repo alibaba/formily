@@ -28,7 +28,7 @@ export default {
           type: 'array',
           'x-component': 'Area',
           'x-component-props': {
-            fieldProps: {
+            formItemProps: {
               format: (val) =>
                 (val || [])
                   .filter((item) => !!item)

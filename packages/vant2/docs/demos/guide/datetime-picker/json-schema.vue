@@ -28,7 +28,7 @@ export default {
           type: 'string',
           'x-component': 'DatetimePicker',
           'x-component-props': {
-            fieldProps: {
+            formItemProps: {
               label: '时间选择器',
               placeholder: '请选择时间',
             },

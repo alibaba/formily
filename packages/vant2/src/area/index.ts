@@ -11,14 +11,14 @@ const BaseArea = observer(
     name: 'FArea',
     setup(props, { attrs, emit, slots, listeners }) {
       const {
-        fieldProps = {},
+        formItemProps = {},
         popupProps = {},
         areaProps = {},
         fieldListeners = {},
         popupListeners = {},
         areaListeners = {},
       } = attrs as any
-      const { format } = fieldProps
+      const { format } = formItemProps
       const show = ref(false)
 
       return () => {
@@ -34,7 +34,7 @@ const BaseArea = observer(
                     value: format ? format(attrs.value) : attrs.value,
                     readonly: true,
                     clickable: true,
-                    ...fieldProps,
+                    ...formItemProps,
                   },
                   on: {
                     click: () => {

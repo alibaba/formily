@@ -14,14 +14,14 @@ const BaseCascader = observer(
     name: 'FBaseCascader',
     setup(props, { attrs, emit, slots, listeners }) {
       const {
-        fieldProps = {},
+        formItemProps = {},
         popupProps = {},
         cascaderProps = {},
         fieldListeners = {},
         popupListeners = {},
         cascaderListeners = {},
       } = attrs as any
-      const { format } = fieldProps
+      const { format } = formItemProps
       const show = ref(false)
 
       return () => {
@@ -37,7 +37,7 @@ const BaseCascader = observer(
                     value: format ? format(attrs.value) : attrs.value,
                     readonly: true,
                     clickable: true,
-                    ...fieldProps,
+                    ...formItemProps,
                   },
                   on: {
                     click: () => {

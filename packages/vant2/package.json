@@ -42,7 +42,7 @@
     "ttypescript": "^1.5.12",
     "vue": "^2.6.0",
     "vuepress": "^1.8.2",
-    "vant": "^2.12.39",
+    "vant": "^2.12.44",
     "vuepress-plugin-typescript": "^0.3.1"
   },
   "dependencies": {
@@ -58,7 +58,7 @@
   },
   "peerDependencies": {
     "@vue/composition-api": "^1.0.0-beta.1",
-    "vant": "^2.12.39",
+    "vant": "^2.12.44",
     "vue": "^2.6.0"
   },
   "publishConfig": {

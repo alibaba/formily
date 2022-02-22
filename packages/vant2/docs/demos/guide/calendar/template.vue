@@ -5,7 +5,7 @@
       :component="[
         Calendar,
         {
-          fieldProps: {
+          formItemProps: {
             label: '日历',
             placeholder: '选择日历',
             format: (date) =>

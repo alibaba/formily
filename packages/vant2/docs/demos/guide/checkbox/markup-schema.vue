@@ -14,16 +14,6 @@
         ]"
         x-component="Checkbox.Group"
       />
-      <SchemaArrayField
-        :default="[1, 2]"
-        x-pattern="readPretty"
-        name="multipleRead"
-        :enum="[
-          { label: '选项1', name: 1 },
-          { label: '选项2', name: 2 },
-        ]"
-        x-component="Checkbox.Group"
-      />
     </SchemaField>
     <Submit :style="{ 'margin-top': '16px' }" round block @submit="log">
       提交

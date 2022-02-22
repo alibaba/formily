@@ -68,7 +68,7 @@ export function createCodeSandBox(codeStr) {
             '@formily/vant2': 'latest',
             axios: '^0.21.1',
             'core-js': '^3.6.5',
-            vant: '^2.12.39',
+            vant: '^2.12.44',
             'vue-demi': 'latest',
             vue: '^2.6.11',
           },

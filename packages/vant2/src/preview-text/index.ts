@@ -294,7 +294,7 @@ const Picker = observer(
   defineComponent({
     name: 'FPreviewTextPicker',
     setup(props, { attrs, slots, listeners }) {
-      const { fieldProps = {} } = attrs as any
+      const { formItemProps = {} } = attrs as any
       const placeholder = usePlaceholder()
       return () => {
         return h(
@@ -303,7 +303,7 @@ const Picker = observer(
             class: [prefixCls],
             style: attrs.style,
             attrs: {
-              ...fieldProps,
+              ...formItemProps,
               disabled: false,
             },
           },
@@ -320,7 +320,7 @@ const DatetimePicker = observer(
   defineComponent({
     name: 'FPreviewTextDatetimePicker',
     setup(props, { attrs, slots, listeners }) {
-      const { fieldProps = {} } = attrs as any
+      const { formItemProps = {} } = attrs as any
       const placeholder = usePlaceholder()
       return () => {
         return h(
@@ -329,7 +329,7 @@ const DatetimePicker = observer(
             class: [prefixCls],
             style: attrs.style,
             attrs: {
-              ...fieldProps,
+              ...formItemProps,
               disabled: false,
             },
           },
@@ -346,7 +346,7 @@ const Calendar = observer(
   defineComponent({
     name: 'FPreviewTextCalendar',
     setup(props, { attrs, slots, listeners }) {
-      const { fieldProps = {} } = attrs as any
+      const { formItemProps = {} } = attrs as any
       const placeholder = usePlaceholder()
       return () => {
         return h(
@@ -355,7 +355,7 @@ const Calendar = observer(
             class: [prefixCls],
             style: attrs.style,
             attrs: {
-              ...fieldProps,
+              ...formItemProps,
               disabled: false,
             },
           },
@@ -372,7 +372,7 @@ const Cascader = observer(
   defineComponent({
     name: 'FPreviewTextCascader',
     setup(props, { attrs, slots, listeners }) {
-      const { fieldProps = {} } = attrs as any
+      const { formItemProps = {} } = attrs as any
       const placeholder = usePlaceholder()
       return () => {
         return h(
@@ -381,7 +381,7 @@ const Cascader = observer(
             class: [prefixCls],
             style: attrs.style,
             attrs: {
-              ...fieldProps,
+              ...formItemProps,
               disabled: false,
             },
           },
@@ -398,7 +398,7 @@ const Area = observer(
   defineComponent({
     name: 'FPreviewTextArea',
     setup(props, { attrs, slots, listeners }) {
-      const { fieldProps = {} } = attrs as any
+      const { formItemProps = {} } = attrs as any
       const placeholder = usePlaceholder()
       return () => {
         return h(
@@ -407,7 +407,7 @@ const Area = observer(
             class: [prefixCls],
             style: attrs.style,
             attrs: {
-              ...fieldProps,
+              ...formItemProps,
               disabled: false,
             },
           },
