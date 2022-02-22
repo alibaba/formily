@@ -64,6 +64,10 @@ export default {
             title: 'antd-formily-boost',
             path: 'https://github.com/fishedee/antd-formily-boost',
           },
+          {
+            title: '@formily/vant2',
+            path: 'https://vant2.formilyjs.org',
+          },
         ],
       },
       {
@@ -154,6 +158,10 @@ export default {
           {
             title: 'antd-formily-boost',
             path: 'https://github.com/fishedee/antd-formily-boost',
+          },
+          {
+            title: '@formily/vant2',
+            path: 'https://vant2.formilyjs.org',
           },
         ],
       },
