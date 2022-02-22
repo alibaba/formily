@@ -12,7 +12,7 @@ export type PickerProps = VanPickerProps
 const BasePicker = observer(
   defineComponent({
     name: 'FBasePicker',
-    setup(props, { attrs, emit, slots, listeners }) {
+    setup(props, { attrs, emit, slots }) {
       const {
         formItemProps = {},
         popupProps = {},

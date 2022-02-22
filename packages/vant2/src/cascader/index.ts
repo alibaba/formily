@@ -12,7 +12,7 @@ export type CascaderProps = VanCascaderProps
 const BaseCascader = observer(
   defineComponent({
     name: 'FBaseCascader',
-    setup(props, { attrs, emit, slots, listeners }) {
+    setup(props, { attrs, emit, slots }) {
       const {
         formItemProps = {},
         popupProps = {},

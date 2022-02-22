@@ -12,7 +12,7 @@ export type DatetimePickerProps = VanDatetimePickerProps
 const BaseDatetimePicker = observer(
   defineComponent({
     name: 'FBaseDatetimePicker',
-    setup(props, { attrs, emit, slots, listeners }) {
+    setup(props, { attrs, emit, slots }) {
       const {
         formItemProps = {},
         popupProps = {},

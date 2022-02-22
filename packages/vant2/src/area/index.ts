@@ -9,7 +9,7 @@ import FormItem from '../form-item'
 const BaseArea = observer(
   defineComponent({
     name: 'FArea',
-    setup(props, { attrs, emit, slots, listeners }) {
+    setup(props, { attrs, emit, slots }) {
       const {
         formItemProps = {},
         popupProps = {},

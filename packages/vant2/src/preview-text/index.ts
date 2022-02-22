@@ -35,7 +35,7 @@ export const usePlaceholder = (value?: Ref<any>) => {
 const Input = defineComponent({
   name: 'FPreviewTextInput',
   props: ['value'],
-  setup(props, { attrs, slots }) {
+  setup(props, { attrs }) {
     const value = toRef(props, 'value')
     const placeholder = usePlaceholder(value)
     return () => {
@@ -145,7 +145,7 @@ const Checkbox = observer(
 const Switch = observer(
   defineComponent({
     name: 'FPreviewTextSwitch',
-    setup(props, { attrs, slots, listeners }) {
+    setup(props, { attrs, slots }) {
       return () => {
         return h(
           VanSwitch,
@@ -168,7 +168,7 @@ const Switch = observer(
 const Stepper = observer(
   defineComponent({
     name: 'FPreviewTextStepper',
-    setup(props, { attrs, slots, listeners }) {
+    setup(props, { attrs }) {
       const placeholder = usePlaceholder()
       return () => {
         return h(
@@ -193,7 +193,7 @@ const Stepper = observer(
 const Rate = observer(
   defineComponent({
     name: 'FPreviewTextRate',
-    setup(props, { attrs, slots, listeners }) {
+    setup(props, { attrs, slots }) {
       const placeholder = usePlaceholder()
       return () => {
         return attrs.value
@@ -229,7 +229,7 @@ const Rate = observer(
 const Slider = observer(
   defineComponent({
     name: 'FPreviewTextSlider',
-    setup(props, { attrs, slots, listeners }) {
+    setup(props, { attrs }) {
       const placeholder = usePlaceholder()
       return () => {
         return h(
@@ -254,7 +254,7 @@ const Slider = observer(
 const Uploader = observer(
   defineComponent({
     name: 'FPreviewTextUploader',
-    setup(props, { attrs, slots, listeners }) {
+    setup(props, { attrs, slots }) {
       const placeholder = usePlaceholder()
       return () => {
         return (attrs.value as [])?.length
@@ -293,7 +293,7 @@ const Uploader = observer(
 const Picker = observer(
   defineComponent({
     name: 'FPreviewTextPicker',
-    setup(props, { attrs, slots, listeners }) {
+    setup(props, { attrs }) {
       const { formItemProps = {} } = attrs as any
       const placeholder = usePlaceholder()
       return () => {
@@ -319,7 +319,7 @@ const Picker = observer(
 const DatetimePicker = observer(
   defineComponent({
     name: 'FPreviewTextDatetimePicker',
-    setup(props, { attrs, slots, listeners }) {
+    setup(props, { attrs }) {
       const { formItemProps = {} } = attrs as any
       const placeholder = usePlaceholder()
       return () => {
@@ -345,7 +345,7 @@ const DatetimePicker = observer(
 const Calendar = observer(
   defineComponent({
     name: 'FPreviewTextCalendar',
-    setup(props, { attrs, slots, listeners }) {
+    setup(props, { attrs }) {
       const { formItemProps = {} } = attrs as any
       const placeholder = usePlaceholder()
       return () => {
@@ -371,7 +371,7 @@ const Calendar = observer(
 const Cascader = observer(
   defineComponent({
     name: 'FPreviewTextCascader',
-    setup(props, { attrs, slots, listeners }) {
+    setup(props, { attrs }) {
       const { formItemProps = {} } = attrs as any
       const placeholder = usePlaceholder()
       return () => {
@@ -397,7 +397,7 @@ const Cascader = observer(
 const Area = observer(
   defineComponent({
     name: 'FPreviewTextArea',
-    setup(props, { attrs, slots, listeners }) {
+    setup(props, { attrs }) {
       const { formItemProps = {} } = attrs as any
       const placeholder = usePlaceholder()
       return () => {

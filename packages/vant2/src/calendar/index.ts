@@ -11,7 +11,7 @@ export type CalendarProps = VanCalendarProps
 const BaseCalendar = observer(
   defineComponent({
     name: 'FBaseCalendar',
-    setup(props, { attrs, emit, slots, listeners }) {
+    setup(props, { attrs, emit, slots }) {
       const {
         formItemProps = {},
         calendarProps = {},

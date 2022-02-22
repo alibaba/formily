@@ -1,5 +1,5 @@
 import { transformComponent } from '../__builtins__/shared'
-import { connect, mapProps, mapReadPretty, h } from '@formily/vue'
+import { connect, mapProps, mapReadPretty } from '@formily/vue'
 import type { Stepper as VanStepperProps } from 'vant'
 import { Stepper as VanStepper } from 'vant'
 import { PreviewText } from '../preview-text'
