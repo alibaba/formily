@@ -75,11 +75,13 @@ const calculate = (
 }
 
 export class Parser extends Tokenizer {
-  public isMatchPattern: boolean
+  public isMatchPattern = false
 
-  public isWildMatchPattern: boolean
+  public isWildMatchPattern = false
 
-  public haveExcludePattern: boolean
+  public haveExcludePattern = false
+
+  public haveRelativePattern = false
 
   public base: Path
 
@@ -353,6 +355,7 @@ export class Parser extends Tokenizer {
       this.data.segments = this.base.toArr()
       while (this.state.type === dotTok) {
         this.relative = this.data.segments.pop()
+        this.haveRelativePattern = true
         this.next()
       }
       return createTreeBySegments(

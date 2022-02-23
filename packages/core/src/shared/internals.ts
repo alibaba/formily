@@ -106,9 +106,15 @@ export const getTypedDefaultValue = (field: Field) => {
 }
 
 export const buildFieldPath = (field: GeneralField) => {
+  return buildDataPath(field.form.fields, field.address)
+}
+
+export const buildDataPath = (
+  fields: Record<string, GeneralField>,
+  pattern: FormPath
+) => {
   let prevArray = false
-  const fields = field.form.fields
-  const segments = field.address.segments
+  const segments = pattern.segments
   const path = segments.reduce((path: string[], key: string, index: number) => {
     const currentPath = path.concat(key)
     const currentAddress = segments.slice(0, index + 1)
@@ -120,9 +126,6 @@ export const buildFieldPath = (field: GeneralField) => {
       return path
     }
     if (index >= segments.length - 1) {
-      if (isVoidField(field)) {
-        return currentPath
-      }
       return currentPath
     }
     if (isVoidField(current)) {
