@@ -133,6 +133,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
       entire: pattern.entire,
       segments: pattern.segments.slice(),
       isRegExp: false,
+      haveRelativePattern: pattern.haveRelativePattern,
       isWildMatchPattern: pattern.isWildMatchPattern,
       isMatchPattern: pattern.isMatchPattern,
       haveExcludePattern: pattern.haveExcludePattern,
@@ -157,6 +158,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
         segments,
         tree,
         isRegExp: false,
+        haveRelativePattern: parser.haveRelativePattern,
         isWildMatchPattern: false,
         haveExcludePattern: false,
         isMatchPattern: false,
@@ -166,6 +168,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
         entire: pattern,
         segments: [],
         isRegExp: false,
+        haveRelativePattern: false,
         isWildMatchPattern: parser.isWildMatchPattern,
         haveExcludePattern: parser.haveExcludePattern,
         isMatchPattern: true,
@@ -181,6 +184,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
         return buf.concat(parseString(key))
       }, []),
       isRegExp: false,
+      haveRelativePattern: false,
       isWildMatchPattern: false,
       haveExcludePattern: false,
       isMatchPattern: false,
@@ -190,6 +194,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
       entire: pattern,
       segments: [],
       isRegExp: true,
+      haveRelativePattern: false,
       isWildMatchPattern: false,
       haveExcludePattern: false,
       isMatchPattern: true,
@@ -199,6 +204,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
       entire: '',
       isRegExp: false,
       segments: pattern !== undefined ? [pattern] : [],
+      haveRelativePattern: false,
       isWildMatchPattern: false,
       haveExcludePattern: false,
       isMatchPattern: false,
@@ -227,6 +233,7 @@ export class Path {
   public isMatchPattern: boolean
   public isWildMatchPattern: boolean
   public isRegExp: boolean
+  public haveRelativePattern: boolean
   public haveExcludePattern: boolean
   public matchScore: number
   public tree: Node
@@ -241,12 +248,14 @@ export class Path {
       isRegExp,
       isMatchPattern,
       isWildMatchPattern,
+      haveRelativePattern,
       haveExcludePattern,
     } = parse(input, base)
     this.entire = entire
     this.segments = segments
     this.isMatchPattern = isMatchPattern
     this.isWildMatchPattern = isWildMatchPattern
+    this.haveRelativePattern = haveRelativePattern
     this.isRegExp = isRegExp
     this.haveExcludePattern = haveExcludePattern
     this.tree = tree as Node

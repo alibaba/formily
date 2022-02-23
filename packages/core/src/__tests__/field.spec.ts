@@ -1974,3 +1974,31 @@ test('query value with sibling path syntax', () => {
   textarea.value = '123'
   expect(fn).toBeCalledWith('123', 'aaa')
 })
+
+test('relative query with void field', () => {
+  const form = attach(createForm())
+  attach(
+    form.createVoidField({
+      name: 'void',
+    })
+  )
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'void',
+    })
+  )
+  attach(
+    form.createVoidField({
+      name: 'mm',
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      basePath: 'mm',
+    })
+  )
+
+  expect(bb.query('.aa').take()).toBe(aa)
+})
