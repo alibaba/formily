@@ -134,7 +134,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   // readPretty Value
   const readPrettyDataSource = useMemo(
     () =>
-      orderedFilteredDataSource.filter((item) =>
+      orderedFilteredDataSource?.filter((item) =>
         selected?.includes(item?.[primaryKey])
       ),
     [orderedFilteredDataSource, selected, primaryKey]
