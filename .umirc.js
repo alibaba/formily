@@ -57,16 +57,16 @@ export default {
             path: 'https://antdv.formilyjs.org',
           },
           {
+            title: '@formily/vant',
+            path: 'https://vant.formilyjs.org',
+          },
+          {
             title: 'aliyun teamix',
             path: 'https://formily.dg.aliyun-inc.com/',
           },
           {
             title: 'antd-formily-boost',
             path: 'https://github.com/fishedee/antd-formily-boost',
-          },
-          {
-            title: '@formily/vant',
-            path: 'https://vant.formilyjs.org',
           },
         ],
       },
@@ -152,16 +152,16 @@ export default {
             path: 'https://antdv.formilyjs.org',
           },
           {
+            title: '@formily/vant',
+            path: 'https://vant.formilyjs.org',
+          },
+          {
             title: 'aliyun teamix',
             path: 'https://formily.dg.aliyun-inc.com/',
           },
           {
             title: 'antd-formily-boost',
             path: 'https://github.com/fishedee/antd-formily-boost',
-          },
-          {
-            title: '@formily/vant',
-            path: 'https://vant.formilyjs.org',
           },
         ],
       },
