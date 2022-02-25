@@ -16,6 +16,16 @@ const isMatcher = Symbol('PATH_MATCHER')
 
 const isValid = (val: any) => val !== undefined && val !== null
 
+const isSimplePath = (val: string) =>
+  val.indexOf('*') === -1 &&
+  val.indexOf('~') === -1 &&
+  val.indexOf('[') === -1 &&
+  val.indexOf(']') === -1 &&
+  val.indexOf(',') === -1 &&
+  val.indexOf(':') === -1 &&
+  val.indexOf(' ') === -1 &&
+  val[0] !== '.'
+
 const isAssignable = (val: any) =>
   typeof val === 'object' || typeof val === 'function'
 
@@ -140,7 +150,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
       tree: pattern.tree,
     }
   } else if (isStr(pattern)) {
-    if (!pattern)
+    if (!pattern) {
       return {
         entire: '',
         segments: [],
@@ -149,6 +159,17 @@ const parse = (pattern: Pattern, base?: Pattern) => {
         haveExcludePattern: false,
         isMatchPattern: false,
       }
+    }
+    if (isSimplePath(pattern)) {
+      return {
+        entire: pattern,
+        segments: pattern.split('.'),
+        isRegExp: false,
+        isWildMatchPattern: false,
+        haveExcludePattern: false,
+        isMatchPattern: false,
+      }
+    }
     const parser = new Parser(pattern, Path.parse(base))
     const tree = parser.parse()
     if (!parser.isMatchPattern) {
