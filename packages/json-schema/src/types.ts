@@ -89,7 +89,7 @@ export type SchemaReaction<Field = any> =
       }
       [key: string]: any
     }
-  | ((field: Field) => void)
+  | ((field: Field, scope: any) => void)
 
 export type SchemaReactions<Field = any> =
   | SchemaReaction<Field>
