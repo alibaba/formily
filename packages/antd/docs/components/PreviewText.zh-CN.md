@@ -6,7 +6,7 @@
 
 ```tsx
 import React from 'react'
-import { PreviewText, FormItem, FormLayout } from '@formily/antd/src'
+import { PreviewText, FormItem, FormLayout } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -18,8 +18,6 @@ const SchemaField = createSchemaField({
 })
 
 const form = createForm()
-
-console.log('s')
 
 export default () => {
   return (
