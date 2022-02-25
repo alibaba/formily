@@ -600,7 +600,8 @@ export default () => (
 | 属性名        | 类型                                         | 描述                                                                                                                                 | 默认值       |
 | ------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
 | mode          | `'multiple' \| 'single'`                     | 设置 SelectTable 模式为单选或多选                                                                                                    | `'multiple'` |
-| optionAsValue | boolean                                      | 使用表格行数据作为值                                                                                                                 | false        |
+| valueType     | `'all' \| 'parent' \| 'child' \| 'path'`     | 返回值类型，checkStrictly 设置为 `false` 时有效                                                                                      | `'all'`      |
+| optionAsValue | boolean                                      | 使用表格行数据作为值，valueType 值为 `'path'` 时无效                                                                                 | false        |
 | showSearch    | boolean                                      | 是否显示搜索组件                                                                                                                     | false        |
 | searchProps   | object                                       | Search 组件属性                                                                                                                      | -            |
 | primaryKey    | `string \| (record) => string`               | 表格行 key 的取值                                                                                                                    | `'key'`      |
