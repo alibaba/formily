@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { observer, useFieldSchema, useField, Schema } from '@formily/react'
 import cls from 'classnames'
 import { isArr, isBool, isFn } from '@formily/shared'
@@ -8,6 +8,7 @@ import { SearchProps } from 'antd/lib/input'
 import { useFilterOptions } from './useFilterOptions'
 import { useFlatOptions } from './useFlatOptions'
 import { useSize } from './useSize'
+import { getUISelected, getOutputData } from './utils'
 import { usePrefixCls } from '../__builtins__'
 
 const { Search } = Input
@@ -24,6 +25,7 @@ export interface ISelectTableProps extends TableProps<any> {
   mode?: 'multiple' | 'single'
   dataSource?: any[]
   optionAsValue?: boolean
+  valueType: 'all' | 'parent' | 'child' | 'path'
   showSearch?: boolean
   searchProps?: SearchProps
   primaryKey?: string | ((record: any) => string)
@@ -79,6 +81,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     mode,
     dataSource: propsDataSource,
     optionAsValue,
+    valueType,
     showSearch,
     filterOption,
     filterSort,
@@ -92,7 +95,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     ...otherTableProps
   } = props
   const prefixCls = usePrefixCls('formily-select-table', props)
-  const [selected, setSelected] = useState<any[]>()
   const [searchValue, setSearchValue] = useState<string>()
   const field = useField() as any
   const loading = isBool(props.loading) ? props.loading : field.loading
@@ -105,12 +107,26 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     props?.size
   )
   const primaryKey = isFn(rowKey) ? '__formily_key__' : rowKey
+  const columns = useColumns()
+
+  // dataSource
   let dataSource = isArr(propsDataSource) ? propsDataSource : field.dataSource
   dataSource = isFn(rowKey)
     ? addPrimaryKey(dataSource, rowKey, primaryKey)
     : dataSource
   const flatDataSource = useFlatOptions(dataSource)
-  const columns = useColumns()
+
+  // selected keys for Table UI
+  const selected = getUISelected(
+    value,
+    flatDataSource,
+    primaryKey,
+    valueType,
+    optionAsValue,
+    mode,
+    rowSelection?.checkStrictly,
+    rowKey
+  )
 
   // Filter dataSource By Search
   const filteredDataSource = useFilterOptions(
@@ -130,7 +146,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   // readPretty Value
   const readPrettyDataSource = useMemo(
     () =>
-      orderedFilteredDataSource.filter((item) =>
+      orderedFilteredDataSource?.filter((item) =>
         selected?.includes(item?.[primaryKey])
       ),
     [orderedFilteredDataSource, selected, primaryKey]
@@ -146,16 +162,16 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     if (readOnly) {
       return
     }
-    let outputOptions = records.map((item) => {
-      const validItem = { ...item }
-      delete validItem['__formily_key__']
-      return validItem
-    })
-    let outputValue = optionAsValue ? outputOptions : selectedRowKeys
-    if (mode === 'single') {
-      outputValue = outputValue[0]
-      outputOptions = outputOptions[0]
-    }
+    const { outputValue, outputOptions } = getOutputData(
+      selectedRowKeys,
+      records,
+      dataSource,
+      primaryKey,
+      valueType,
+      optionAsValue,
+      mode,
+      rowSelection?.checkStrictly
+    )
     onChange?.(outputValue, outputOptions)
   }
 
@@ -185,16 +201,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
 
   // Antd rowSelection type
   const modeAsType: any = { multiple: 'checkbox', single: 'radio' }?.[mode]
-
-  useEffect(() => {
-    let inputValue = mode === 'single' ? [value] : isArr(value) ? value : []
-    inputValue = optionAsValue
-      ? inputValue.map((record: any) =>
-          isFn(rowKey) ? rowKey(record) : record?.[primaryKey]
-        )
-      : inputValue
-    setSelected(inputValue)
-  }, [value, mode, primaryKey, rowKey])
 
   return (
     <div className={prefixCls}>
