@@ -32,6 +32,7 @@ interface IGetValueByValue {
     path?: any[]
   ): any
 }
+
 const getValueByValue: IGetValueByValue = (
   array,
   inputValue,
@@ -144,8 +145,8 @@ const TreeSelect: React.FC<TreeSelectProps<any>> = observer((props) => {
   const prefixCls = usePrefixCls('form-text', props)
   const dataSource = field?.dataSource?.length
     ? field.dataSource
-    : props?.options?.length
-    ? props.options
+    : props?.treeData?.length
+    ? props.treeData
     : []
   const getSelected = () => {
     const value = props.value
@@ -166,13 +167,17 @@ const TreeSelect: React.FC<TreeSelectProps<any>> = observer((props) => {
     }
   }
 
-  const findLabel = (value: any, dataSource: any[]) => {
+  const findLabel = (
+    value: any,
+    dataSource: any[],
+    treeNodeLabelProp?: string
+  ) => {
     for (let i = 0; i < dataSource?.length; i++) {
       const item = dataSource[i]
       if (item?.value === value) {
-        return item?.label
+        return item?.label ?? item[treeNodeLabelProp]
       } else {
-        const childLabel = findLabel(value, item?.children)
+        const childLabel = findLabel(value, item?.children, treeNodeLabelProp)
         if (childLabel) return childLabel
       }
     }
@@ -184,7 +189,9 @@ const TreeSelect: React.FC<TreeSelectProps<any>> = observer((props) => {
     return selected.map(({ value, label }, key) => {
       return (
         <Tag key={key}>
-          {findLabel(value, dataSource) || label || placeholder}
+          {findLabel(value, dataSource, props.treeNodeLabelProp) ||
+            label ||
+            placeholder}
         </Tag>
       )
     })

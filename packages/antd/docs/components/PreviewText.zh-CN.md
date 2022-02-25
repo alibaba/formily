@@ -6,7 +6,7 @@
 
 ```tsx
 import React from 'react'
-import { PreviewText, FormItem, FormLayout } from '@formily/antd'
+import { PreviewText, FormItem, FormLayout } from '@formily/antd/src'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -18,6 +18,8 @@ const SchemaField = createSchemaField({
 })
 
 const form = createForm()
+
+console.log('s')
 
 export default () => {
   return (
@@ -42,6 +44,33 @@ export default () => {
               { label: 'A111', value: '123' },
               { label: 'A222', value: '222' },
             ]}
+          />
+          <SchemaField.String
+            x-decorator="FormItem"
+            title="树选择预览"
+            x-component="PreviewText.TreeSelect"
+            x-component-props={{
+              multiple: true,
+            }}
+            default={['123', '222']}
+            enum={[
+              { label: 'A111', value: '123' },
+              { label: 'A222', value: '222' },
+            ]}
+          />
+          <SchemaField.String
+            x-decorator="FormItem"
+            title="树形选择预览(treeData)"
+            x-component="PreviewText.TreeSelect"
+            x-component-props={{
+              multiple: true,
+              treeNodeLabelProp: 'name',
+              treeData: [
+                { name: 'A111', value: '123' },
+                { name: 'A222', value: '222' },
+              ],
+            }}
+            default={['123', '222']}
           />
           <SchemaField.String
             x-decorator="FormItem"
