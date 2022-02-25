@@ -165,6 +165,7 @@ export const collectionHandlers = {
 
 export const baseHandlers: ProxyHandler<any> = {
   get(target, key, receiver) {
+    if (!key) return
     const result = target[key] // use Reflect.get is too slow
     if (typeof key === 'symbol' && wellKnownSymbols.has(key)) {
       return result
