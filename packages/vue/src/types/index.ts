@@ -133,3 +133,7 @@ export type ISchemaTypeFieldProps<
   Decorator extends ComponentPath<Components> = ComponentPath<Components>,
   Component extends ComponentPath<Components> = ComponentPath<Components>
 > = Omit<ISchemaMarkupFieldProps<Components, Decorator, Component>, 'type'>
+
+export type IExpressionScopeProps = {
+  value: any
+}
