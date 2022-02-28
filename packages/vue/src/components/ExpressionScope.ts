@@ -4,9 +4,7 @@ import { IExpressionScopeProps } from '../types'
 
 export const ExpressionScope = defineComponent({
   name: 'ExpressionScope',
-  props: {
-    value: { type: Object, default: () => {} },
-  },
+  props: ['value'],
   setup(props: IExpressionScopeProps, { slots }) {
     const scopeRef = inject<Ref>(SchemaExpressionScopeSymbol)
     const expressionScopeRef = computed(() => ({
