@@ -3,18 +3,16 @@ import { GeneralField, isVoidField } from '@formily/core'
 import { FormPath } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
 import { toJS } from '@formily/reactive'
-import { SchemaOptionsSymbol, FieldSymbol } from '../shared'
-import h from '../shared/h'
+import { SchemaOptionsSymbol, FieldSymbol, h, Fragment } from '../shared'
 import { useAttach } from '../hooks/useAttach'
-import { Fragment } from '../shared/fragment'
+import { useField, useForm } from '../hooks'
 
 import type {
   IReactiveFieldProps,
-  VueComponent,
   VueComponentProps,
   DefineComponent,
 } from '../types'
-import { useField, useForm } from '..'
+import type { VNode } from 'vue'
 
 function isVueOptions(options: any) {
   if (!options) {
@@ -27,54 +25,60 @@ function isVueOptions(options: any) {
   )
 }
 
-const mergeChildren = (
+const wrapFragment = (childNodes: VNode[] | VNode): VNode => {
+  if (!Array.isArray(childNodes)) {
+    return childNodes
+  }
+  if (childNodes.length >= 1) {
+    return h(Fragment, {}, { default: () => childNodes })
+  }
+  return childNodes[0]
+}
+
+const resolveComponent = (children: unknown[], extract: any) => {
+  if (typeof extract === 'string') {
+    return () => [...children, extract]
+  }
+  // not component
+  if (!isVueOptions(extract) && typeof extract !== 'function') {
+    return
+  }
+  // for scoped slot
+  if (extract.length > 1 || extract?.render?.length > 1) {
+    return (scopedProps: VueComponentProps<any>) => [
+      ...children,
+      h(extract, { props: scopedProps }, {}),
+    ]
+  }
+  return () => [...children, h(extract, {}, {})]
+}
+
+const mergeSlots = (
   field: GeneralField,
   slots: Record<string, any>,
   content: any
 ) => {
-  if (!Object.keys(slots).length && !content) return {}
+  if (!Object.keys(slots).length && !content) return h('template', {}, {})
 
   const originDefaultSlot = slots.default
 
   const defaultSlot = () =>
     originDefaultSlot?.({ field, form: field.form }) ?? []
 
-  if (typeof content === 'string') {
-    slots['default'] = () => [...defaultSlot(), content]
-  } else if (isVueOptions(content) || typeof content === 'function') {
-    // scoped slot for class component
-    if (isVueOptions(content) && content?.render?.length > 1) {
-      slots['default'] = (scopedProps: VueComponentProps<any>) => [
-        ...defaultSlot(),
-        h(content, { props: scopedProps }, {}),
-      ]
-    } else {
-      slots['default'] = () => [...defaultSlot(), h(content, {}, {})]
-    }
-  } else if (content && typeof content === 'object') {
+  if (content && typeof content === 'object' && !isVueOptions(content)) {
+    const newSlots: Record<string, any> = {}
     // for named slots
     Object.keys(content).forEach((key) => {
       const child = content[key]
-      const slot = slots?.[key] ? slots?.[key]() : []
-      if (typeof child === 'string') {
-        slots[key] = () => [...slot, child]
-      } else if (isVueOptions(child) || typeof child === 'function') {
-        // scoped slot for class component
-        if (isVueOptions(child) && child?.render?.length > 1) {
-          slots[key] = (scopedProps: VueComponentProps<any>) => [
-            ...slot,
-            h(child, { props: scopedProps }, {}),
-          ]
-        } else {
-          slots[key] = () => [...slot, h(child, {}, {})]
-        }
-      }
+      const slot = typeof slots?.[key] === 'function' ? slots[key]() : []
+      newSlots[key] = resolveComponent(slot, child)
     })
-  } else {
-    slots['default'] = defaultSlot
+    return newSlots
   }
 
-  return slots
+  return {
+    default: resolveComponent(defaultSlot(), content) ?? defaultSlot,
+  }
 }
 
 export default observer({
@@ -93,7 +97,6 @@ export default observer({
     const formRef = useForm()
     const parentRef = useField()
     const optionsRef = inject(SchemaOptionsSymbol, ref(null))
-    const key = Math.floor(Date.now() * Math.random()).toString(16)
     const fieldRef = useAttach(
       computed(() =>
         formRef?.value?.[`create${props.fieldType}`]?.({
@@ -106,102 +109,80 @@ export default observer({
 
     return () => {
       const field = fieldRef.value
-      let children = {}
+      const options = optionsRef.value
       if (!field) {
-        children = slots
-      } else if (field.display !== 'visible') {
-        children = {
-          ...slots,
-          default: () => [h('template', {}, {})],
+        return slots.default?.()
+      }
+      if (field.display !== 'visible') {
+        return h('template', {}, {})
+      }
+
+      const mergedSlots = mergeSlots(field, slots, field.content)
+
+      const renderDecorator = (childNodes: any[]) => {
+        if (!field.decoratorType) {
+          return wrapFragment(childNodes)
         }
-      } else {
-        const renderDecorator = (childNodes: any[]) => {
-          if (!field?.decorator?.[0]) {
-            return {
-              default: () => childNodes,
-            }
-          } else {
-            const decorator = (FormPath.getIn(
-              optionsRef.value?.components,
-              field.decorator[0]
-            ) ?? field.decorator[0]) as VueComponent
-            const decoratorData = toJS(field.decorator[1]) || {}
-            const style = decoratorData?.style
-            const classes = decoratorData?.class
-            delete decoratorData.style
-            delete decoratorData.class
-            return {
-              default: () =>
-                h(
-                  decorator,
-                  {
-                    style,
-                    class: classes,
-                    attrs: {
-                      ...decoratorData,
-                    },
-                  },
-                  {
-                    default: () => childNodes,
-                  }
-                ),
-            }
-          }
+        const finalComponent =
+          FormPath.getIn(options?.components, field.decoratorType as string) ??
+          field.decoratorType
+        const componentAttrs = toJS(field.decorator[1]) || {}
+        const componentData = {
+          attrs: componentAttrs,
+          style: componentAttrs?.style,
+          class: componentAttrs?.class,
+        }
+        delete componentData.attrs.style
+        delete componentData.attrs.class
+
+        return h(finalComponent, componentData, {
+          default: () => childNodes,
+        })
+      }
+
+      const renderComponent = () => {
+        if (!field.componentType) return wrapFragment(mergedSlots.default?.())
+
+        const component =
+          FormPath.getIn(options?.components, field.componentType as string) ??
+          field.componentType
+
+        const originData = toJS(field.component[1]) || {}
+        const events = {} as Record<string, any>
+        const originChange = originData['@change'] || originData['onChange']
+        const originFocus = originData['@focus'] || originData['onFocus']
+        const originBlur = originData['@blur'] || originData['onBlur']
+
+        // '@xxx' has higher priority
+        Object.keys(originData)
+          .filter((key) => key.startsWith('on'))
+          .forEach((eventKey) => {
+            const eventName = `${eventKey[2].toLowerCase()}${eventKey.slice(3)}`
+            events[eventName] = originData[eventKey]
+          })
+
+        Object.keys(originData)
+          .filter((key) => key.startsWith('@'))
+          .forEach((eventKey) => {
+            events[eventKey.slice(1)] = originData[eventKey]
+            delete originData[eventKey]
+          })
+
+        events.change = (...args: any[]) => {
+          if (!isVoidField(field)) field.onInput(...args)
+          originChange?.(...args)
+        }
+        events.focus = (...args: any[]) => {
+          if (!isVoidField(field)) field.onFocus(...args)
+          originFocus?.(...args)
+        }
+        events.blur = (...args: any[]) => {
+          if (!isVoidField(field)) field.onBlur(...args)
+          originBlur?.(...args)
         }
 
-        const renderComponent = () => {
-          if (!field?.component?.[0]) {
-            return slots.default?.({
-              field: field,
-              form: field.form,
-            })
-          }
-
-          const component = (FormPath.getIn(
-            optionsRef.value?.components,
-            field.component[0]
-          ) ?? field.component[0]) as VueComponent
-          const originData = toJS(field.component[1]) || {}
-          const events = {} as Record<string, any>
-          const originChange = originData['@change'] || originData['onChange']
-          const originFocus = originData['@focus'] || originData['onFocus']
-          const originBlur = originData['@blur'] || originData['onBlur']
-
-          // '@xxx' has higher priority
-          Object.keys(originData)
-            .filter((key) => key.startsWith('on'))
-            .forEach((eventKey) => {
-              const eventName = `${eventKey[2].toLowerCase()}${eventKey.slice(
-                3
-              )}`
-              events[eventName] = originData[eventKey]
-            })
-
-          Object.keys(originData)
-            .filter((key) => key.startsWith('@'))
-            .forEach((eventKey) => {
-              events[eventKey.slice(1)] = originData[eventKey]
-              delete originData[eventKey]
-            })
-
-          events.change = (...args: any[]) => {
-            if (!isVoidField(field)) field.onInput(...args)
-            originChange?.(...args)
-          }
-          events.focus = (...args: any[]) => {
-            if (!isVoidField(field)) field.onFocus(...args)
-            originFocus?.(...args)
-          }
-          events.blur = (...args: any[]) => {
-            if (!isVoidField(field)) field.onBlur(...args)
-            originBlur?.(...args)
-          }
-
-          const style = originData?.style
-          const classes = originData?.class
-          delete originData.style
-          delete originData.class
-          const attrs = {
+        const componentData = {
+          attrs: {
             disabled: !isVoidField(field)
               ? field.pattern === 'disabled' || field.pattern === 'readPretty'
               : undefined,
@@ -210,29 +191,18 @@ export default observer({
               : undefined,
             ...originData,
             value: !isVoidField(field) ? field.value : undefined,
-          }
-          const componentData = {
-            attrs,
-            style,
-            class: classes,
-            on: events,
-          }
-
-          const componentChildren = mergeChildren(
-            field,
-            {
-              ...slots,
-            },
-            field.content
-          )
-
-          return h(component, componentData, componentChildren)
+          },
+          style: originData?.style,
+          class: originData?.class,
+          on: events,
         }
+        delete componentData.attrs.style
+        delete componentData.attrs.class
 
-        children = renderDecorator([renderComponent()])
+        return h(component, componentData, mergedSlots)
       }
 
-      return h(Fragment, { key }, children)
+      return renderDecorator([renderComponent()])
     }
   },
 } as unknown as DefineComponent<IReactiveFieldProps>)
