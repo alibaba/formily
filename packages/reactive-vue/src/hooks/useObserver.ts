@@ -34,9 +34,9 @@ export const useObserver = (options?: IObserverOptions) => {
           }
         })
 
-        update()
+       // update()
 
-        vm['_updateEffect'] = newValue
+        vm['_updateEffect'] = update
       },
     })
   }
