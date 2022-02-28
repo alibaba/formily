@@ -224,7 +224,7 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
   }, [totalPage, current])
 
   const renderPagination = () => {
-    if (totalPage <= 1) return
+    if (totalPage <= 1 || props.pagination === false) return
     return (
       <div className={`${prefixCls}-pagination`}>
         <Space>
@@ -291,7 +291,7 @@ export const ArrayTable: ComposedArrayTable = observer(
     }
 
     return (
-      <ArrayTablePagination {...pagination} dataSource={dataSource}>
+      <ArrayTablePagination pagination={props.pagination} {...pagination} dataSource={dataSource}>
         {(dataSource, pager) => (
           <div ref={ref} className={prefixCls}>
             <ArrayBase>
