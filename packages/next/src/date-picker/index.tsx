@@ -48,7 +48,7 @@ const mapDateFormat = function (type?: 'month' | 'year' | 'week') {
     const onChange = props.onChange
     return {
       ...props,
-      format: format === 'YYYY-MM-DD HH:mm:ss' ? 'YYYY-MM-DD' : format,
+      format,
       value: momentable(props.value, format === 'YYYY-wo' ? 'YYYY-w' : format),
       onChange: (value: moment.Moment | moment.Moment[]) => {
         if (onChange) {
