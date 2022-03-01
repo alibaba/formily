@@ -1,3 +1,4 @@
+// This file just converts types
 import * as components from './components'
 
 import type Vue from 'vue'
@@ -61,7 +62,7 @@ const VoidField = _VoidField as unknown as DefineComponent<
 const RecursionField = _RecursionField as unknown as DefineComponent<
   Omit<IRecursionFieldProps, 'name'>
 >
-const FormConsumer = _FormConsumer as unknown as Vue
+const FormConsumer = _FormConsumer as unknown as DefineComponent<{}>
 const FormProvider = _FormProvider as unknown as DefineComponent<IProviderProps>
 const createSchemaField = _createSchemaField as unknown as CreateSchemaField
 
