@@ -7,6 +7,11 @@
   visibility: visible;
 }
 
+// fix https://github.com/alibaba/formily/issues/2891
+.@{array-items-prefix-cls}-item {
+  z-index: 100000;
+}
+
 .@{array-items-prefix-cls}-card {
   display: flex;
   border: 1px solid @border-color-split;
