@@ -1,6 +1,6 @@
 {
   "name": "@formily/grid",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -30,7 +30,7 @@
     "typescript": "^4.1.0"
   },
   "dependencies": {
-    "@formily/reactive": "2.0.12",
+    "@formily/reactive": "2.0.13",
     "@juggle/resize-observer": "^3.3.1"
   },
   "publishConfig": {
