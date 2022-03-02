@@ -14,10 +14,7 @@ import type {
 } from '../types'
 import type { VNode } from 'vue'
 
-function isVueOptions(options: any) {
-  if (!options) {
-    return false
-  }
+function isVueOptions(options: Record<string, unknown>) {
   return (
     typeof options.template === 'string' ||
     typeof options.render === 'function' ||
@@ -29,56 +26,71 @@ const wrapFragment = (childNodes: VNode[] | VNode): VNode => {
   if (!Array.isArray(childNodes)) {
     return childNodes
   }
-  if (childNodes.length >= 1) {
+  if (childNodes.length > 1) {
     return h(Fragment, {}, { default: () => childNodes })
   }
   return childNodes[0]
 }
 
-const resolveComponent = (children: unknown[], extract: any) => {
-  if (typeof extract === 'string') {
-    return () => [...children, extract]
+const resolveComponent = (render: () => unknown[], extra?: any) => {
+  if (extra === undefined || extra === null) {
+    return render
+  }
+  if (typeof extra === 'string') {
+    return () => [...render(), extra]
   }
   // not component
-  if (!isVueOptions(extract) && typeof extract !== 'function') {
-    return
+  if (!isVueOptions(extra) && typeof extra !== 'function') {
+    return render
   }
   // for scoped slot
-  if (extract.length > 1 || extract?.render?.length > 1) {
+  if (extra.length > 1 || extra?.render?.length > 1) {
     return (scopedProps: VueComponentProps<any>) => [
-      ...children,
-      h(extract, { props: scopedProps }, {}),
+      ...render(),
+      h(extra, { props: scopedProps }, {}),
     ]
   }
-  return () => [...children, h(extract, {}, {})]
+  return () => [...render(), h(extra, {}, {})]
 }
 
 const mergeSlots = (
   field: GeneralField,
   slots: Record<string, any>,
   content: any
-) => {
-  if (!Object.keys(slots).length && !content) return h('template', {}, {})
+): Record<string, (...args: any) => any[]> => {
+  const slotNames = Object.keys(slots)
+  if (!slotNames.length) {
+    if (!content) {
+      return {}
+    }
+    if (typeof content === 'string') {
+      return {
+        default: resolveComponent(() => [], content),
+      }
+    }
+  }
+  const patchSlot = (slotName: string) => () =>
+    slots[slotName]?.({ field, form: field.form }) ?? []
+  const patchedSlots: Record<string, (...args: any) => unknown[]> = {}
+  slotNames.forEach((name) => {
+    patchedSlots[name] = patchSlot(name)
+  })
 
-  const originDefaultSlot = slots.default
-
-  const defaultSlot = () =>
-    originDefaultSlot?.({ field, form: field.form }) ?? []
-
+  // for named slots
   if (content && typeof content === 'object' && !isVueOptions(content)) {
-    const newSlots: Record<string, any> = {}
-    // for named slots
     Object.keys(content).forEach((key) => {
       const child = content[key]
-      const slot = typeof slots?.[key] === 'function' ? slots[key]() : []
-      newSlots[key] = resolveComponent(slot, child)
+      const slot = patchedSlots[key] ?? (() => [])
+      patchedSlots[key] = resolveComponent(slot, child)
     })
-    return newSlots
+    return patchedSlots
   }
-
-  return {
-    default: resolveComponent(defaultSlot(), content) ?? defaultSlot,
-  }
+  // maybe default slot is empty
+  patchedSlots['default'] = resolveComponent(
+    patchedSlots['default'] ?? (() => []),
+    content
+  )
+  return patchedSlots
 }
 
 export default observer({
@@ -106,7 +118,6 @@ export default observer({
       )
     )
     provide(FieldSymbol, fieldRef)
-
     return () => {
       const field = fieldRef.value
       const options = optionsRef.value
@@ -141,7 +152,7 @@ export default observer({
       }
 
       const renderComponent = () => {
-        if (!field.componentType) return wrapFragment(mergedSlots.default?.())
+        if (!field.componentType) return wrapFragment(mergedSlots?.default?.())
 
         const component =
           FormPath.getIn(options?.components, field.componentType as string) ??
