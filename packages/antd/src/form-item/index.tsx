@@ -171,7 +171,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
     // 栅格模式
   }
   if (labelCol || wrapperCol) {
-    if (!labelStyle.width && !wrapperStyle.width) {
+    if (!labelStyle.width && !wrapperStyle.width && layout !== 'vertical') {
       enableCol = true
     }
   }
