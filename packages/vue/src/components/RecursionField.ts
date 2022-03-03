@@ -17,6 +17,10 @@ import { Fragment } from '../shared/fragment'
 
 import type { IRecursionFieldProps, DefineComponent } from '../types'
 
+const resolveEmptySlot = (slots: Record<any, (...args: any[]) => any[]>) => {
+  return Object.keys(slots).length ? h(Fragment, {}, slots) : undefined
+}
+
 const RecursionField = {
   name: 'RecursionField',
   inheritAttrs: false,
@@ -73,52 +77,67 @@ const RecursionField = {
     return () => {
       const basePath = getBasePath()
       const fieldProps = fieldPropsRef.value
-      const renderProperties = (field?: GeneralField) => {
-        if (props.onlyRenderSelf) return
+
+      const generateSlotsByProperties = (scoped = false) => {
+        if (props.onlyRenderSelf) return {}
         const properties = Schema.getOrderProperties(fieldSchemaRef.value)
-        if (!properties.length) return
-        const children = properties.map(
-          ({ schema: item, key: name }, index) => {
-            const base = field?.address || basePath
-            let schema: Schema = item
-            if (isFn(props.mapProperties)) {
-              const mapped = props.mapProperties(item, name)
-              if (mapped) {
-                schema = mapped
-              }
+        if (!properties.length) return {}
+        const renderMap: Record<string, ((field?: GeneralField) => unknown)[]> =
+          {}
+        const setRender = (
+          key: string,
+          value: (field?: GeneralField) => unknown
+        ) => {
+          if (!renderMap[key]) {
+            renderMap[key] = []
+          }
+          renderMap[key].push(value)
+        }
+        properties.forEach(({ schema: item, key: name }, index) => {
+          let schema: Schema = item
+          if (isFn(props.mapProperties)) {
+            const mapped = props.mapProperties(item, name)
+            if (mapped) {
+              schema = mapped
             }
-            if (isFn(props.filterProperties)) {
-              if (props.filterProperties(schema, name) === false) {
-                return null
-              }
+          }
+          if (isFn(props.filterProperties)) {
+            if (props.filterProperties(schema, name) === false) {
+              return null
             }
-            return h(
+          }
+          setRender(schema['x-slot'] ?? 'default', (field?: GeneralField) =>
+            h(
               RecursionField,
               {
                 key: `${index}-${name}`,
                 attrs: {
                   schema,
                   name,
-                  basePath: base,
+                  basePath: field?.address || basePath,
                 },
+                slot: schema['x-slot'],
               },
               {}
             )
-          }
-        )
-
-        const slots: Record<string, () => any> = {}
-        if (children.length > 0) {
-          slots.default = () => [...children]
-        }
-
-        return h(Fragment, {}, slots)
+          )
+        })
+        const slots = {}
+        Object.keys(renderMap).forEach((key) => {
+          const renderFns = renderMap[key]
+          slots[key] = scoped
+            ? ({ field }) => renderFns.map((fn) => fn(field))
+            : () => renderFns.map((fn) => fn())
+        })
+        return slots
       }
 
       const render = () => {
-        if (!isValid(props.name)) return renderProperties()
+        if (!isValid(props.name))
+          return resolveEmptySlot(generateSlotsByProperties())
         if (fieldSchemaRef.value.type === 'object') {
-          if (props.onlyRenderProperties) return renderProperties()
+          if (props.onlyRenderProperties)
+            return resolveEmptySlot(generateSlotsByProperties())
           return h(
             ObjectField,
             {
@@ -128,9 +147,7 @@ const RecursionField = {
                 basePath: basePath,
               },
             },
-            {
-              default: ({ field }) => [renderProperties(field)],
-            }
+            generateSlotsByProperties(true)
           )
         } else if (fieldSchemaRef.value.type === 'array') {
           return h(
@@ -145,7 +162,9 @@ const RecursionField = {
             {}
           )
         } else if (fieldSchemaRef.value.type === 'void') {
-          if (props.onlyRenderProperties) return renderProperties()
+          if (props.onlyRenderProperties)
+            return resolveEmptySlot(generateSlotsByProperties())
+          const slots = generateSlotsByProperties(true)
           return h(
             VoidField,
             {
@@ -155,12 +174,7 @@ const RecursionField = {
                 basePath: basePath,
               },
             },
-            {
-              default: (...args) => {
-                const { field } = args[0]
-                return [renderProperties(field)]
-              },
-            }
+            slots
           )
         }
 

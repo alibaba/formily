@@ -40,9 +40,8 @@ if (isVue2) {
             ...props,
             ...getRawComponent(props),
           },
-        } as any
-        const slots = context.slots as any
-        return _h(ReactiveField, componentData, slots)
+        } as Record<string, unknown>
+        return _h(ReactiveField, componentData, context.slots)
       }
     },
   } as unknown as DefineComponent<IFieldProps>

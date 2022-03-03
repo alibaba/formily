@@ -785,6 +785,139 @@ describe('x-content', () => {
     expect(queryByTestId('previewer5')).toBeVisible()
     expect(queryByTestId('previewer5').textContent).toEqual('123')
   })
+
+  test('wrong x-content will be ignore', () => {
+    const form = createForm()
+    const { SchemaField } = createSchemaField({
+      components: {
+        Previewer,
+      },
+    })
+    const { queryAllByTestId, container } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'object',
+            properties: {
+              input1: {
+                type: 'string',
+                'x-component': 'Previewer',
+                'x-content': {
+                  default: {
+                    someAttr: '123',
+                  },
+                },
+              },
+              input2: {
+                type: 'string',
+                'x-component': 'Previewer',
+                'x-content': {
+                  default: null,
+                },
+              },
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    queryAllByTestId('previewer').forEach((el) => expect(el).toBeVisible())
+    queryAllByTestId('previewer').forEach((el) =>
+      expect(el.textContent).toEqual('')
+    )
+  })
+})
+
+describe('x-slot', () => {
+  test('x-slot works in void field properties', () => {
+    const form = createForm()
+    const Content = {
+      render(h) {
+        return h('span', '123')
+      },
+    }
+    const { SchemaField } = createSchemaField({
+      components: {
+        Previewer4,
+        Content,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'void',
+            'x-component': 'Previewer4',
+            properties: {
+              content: {
+                type: 'void',
+                'x-component': 'Content',
+                'x-slot': 'content',
+              },
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('previewer4')).toBeVisible()
+    expect(queryByTestId('previewer4').textContent).toEqual('123')
+  })
+  test('x-slot works in object field properties', () => {
+    const form = createForm()
+    const Content = {
+      render(h) {
+        return h('span', '123')
+      },
+    }
+    const { SchemaField } = createSchemaField({
+      components: {
+        Previewer4,
+        Content,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'object',
+            'x-component': 'Previewer4',
+            properties: {
+              content: {
+                type: 'void',
+                'x-component': 'Content',
+                'x-slot': 'content',
+              },
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('previewer4')).toBeVisible()
+    expect(queryByTestId('previewer4').textContent).toEqual('123')
+  })
 })
 
 describe('scope', () => {
