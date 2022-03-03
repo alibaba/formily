@@ -49,7 +49,8 @@ export function createPortalRoot<T extends React.ReactNode>(
   function unmount() {
     if (PortalMap.has(id)) {
       PortalMap.set(id, null)
-    } else if (host) {
+    }
+    if (host) {
       ReactDOM.unmountComponentAtNode(host)
       host.parentNode?.removeChild(host)
     }
