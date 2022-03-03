@@ -9,14 +9,16 @@ import { useFlatOptions } from './useFlatOptions'
  */
 const getTreeKeys = (tree: any[], primaryKey: string) =>
   isArr(tree)
-    ? tree.reduce(
-        (prev, current) => [
+    ? tree.reduce((prev, current) => {
+        if (current?.disabled) {
+          return prev
+        }
+        return [
           ...prev,
           current[primaryKey],
           ...getTreeKeys(current?.children, primaryKey),
-        ],
-        []
-      )
+        ]
+      }, [])
     : []
 
 /**
@@ -41,10 +43,11 @@ const hasSelectedKey = (tree: any[], selected: any[], primaryKey: string) => {
  * @returns 是否全部被选中
  */
 const isAllSelected = (list: any[], selected: any[], primaryKey: string) => {
-  const selectedList = list.filter((item) =>
+  const validList = list.filter((item) => !item?.disabled)
+  const selectedList = validList.filter((item) =>
     selected?.includes(item[primaryKey])
   )
-  return selectedList.length === list.length
+  return selectedList.length === validList.length
 }
 
 /**
@@ -69,8 +72,10 @@ const completedKeys = (
         primaryKey
       )
       if (isAllSelected(item.children, allSelectedKeys, primaryKey)) {
-        // 如果该元素的子元素全部选中，则也选中该项（即包含全选子元素的父元素）
-        allSelectedKeys = [...new Set([...allSelectedKeys, item[primaryKey]])]
+        // 如果该元素的子元素全部选中，且该元素未禁用，则也选中该项（即包含全选子元素的父元素）
+        if (!item?.disabled) {
+          allSelectedKeys = [...new Set([...allSelectedKeys, item[primaryKey]])]
+        }
       } else {
         // 如果该元素的子元素未全部选中，则移除该项
         allSelectedKeys = allSelectedKeys.filter(
@@ -175,7 +180,7 @@ const getOutputData = (
     })
   } else if (valueType === 'path') {
     outputValue = getSelectedPath(dataSource, keys, primaryKey)
-    outputOptions = options
+    outputOptions = [...options]
   } else {
     // valueType === 'all'
     outputValue = [...keys]

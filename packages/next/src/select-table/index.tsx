@@ -180,7 +180,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   }
 
   const onRowClick = (record) => {
-    if (disabled || readOnly) {
+    if (disabled || readOnly || record?.disabled) {
       return
     }
     const selectedRowKey = record?.[primaryKey]
@@ -203,7 +203,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     if (rowSelection?.checkStrictly !== false) {
       onInnerChange(selectedRowKeys, records)
     } else {
-      // fusion
       onSlacklyChange(selectedRowKeys)
     }
   }
@@ -259,7 +258,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
                 getProps: (record, index) => ({
                   ...(rowSelection?.getProps?.(record, index) as any),
                   indeterminate: getIndeterminate(record, selected, primaryKey), // 父子关联模式indeterminate值
-                  disabled,
+                  disabled: disabled || record?.disabled,
                 }), // fusion
                 selectedRowKeys: selected,
                 onChange:

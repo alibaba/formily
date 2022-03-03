@@ -5,7 +5,8 @@ import { Checkbox } from '@alifd/next'
 const newCheckbox =
   (selected, flatDataSource, primaryKey, disabled, readOnly, onChange) =>
   () => {
-    const allDataSourceKeys = flatDataSource.map((item) => item?.[primaryKey])
+    const allDataSource = flatDataSource.filter((item) => !item.disabled)
+    const allDataSourceKeys = allDataSource.map((item) => item?.[primaryKey])
     const indeterminate = !!(
       selected?.length && selected.length !== allDataSourceKeys.length
     )
@@ -18,7 +19,7 @@ const newCheckbox =
         onChange={(checked) => {
           if (!readOnly) {
             if (checked || indeterminate) {
-              onChange?.(allDataSourceKeys, flatDataSource)
+              onChange?.(allDataSourceKeys, allDataSource)
             } else {
               onChange?.([], [])
             }
