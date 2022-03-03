@@ -8,6 +8,7 @@ import { SearchProps } from 'antd/lib/input'
 import { useFilterOptions } from './useFilterOptions'
 import { useFlatOptions } from './useFlatOptions'
 import { useSize } from './useSize'
+import { useCheckSlackly } from './useCheckSlackly'
 import { getUISelected, getOutputData } from './utils'
 import { usePrefixCls } from '../__builtins__'
 
@@ -176,7 +177,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   }
 
   const onRowClick = (record) => {
-    if (disabled || readOnly) {
+    if (disabled || readOnly || record?.disabled) {
       return
     }
     const selectedRowKey = record?.[primaryKey]
@@ -196,6 +197,21 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
         selectedRowKeys.includes(item?.[primaryKey])
       )
     }
+    if (rowSelection?.checkStrictly !== false) {
+      onInnerChange(selectedRowKeys, records)
+    } else {
+      onSlacklyChange(selectedRowKeys)
+    }
+  }
+
+  // Antd TreeData SlacklyChange for onRowClick
+  const onSlacklyChange = (currentSelected: any[]) => {
+    let { selectedRowKeys, records } = useCheckSlackly(
+      currentSelected,
+      selected,
+      primaryKey,
+      flatDataSource
+    )
     onInnerChange(selectedRowKeys, records)
   }
 
@@ -230,7 +246,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
                 ...rowSelection,
                 getCheckboxProps: (record) => ({
                   ...(rowSelection?.getCheckboxProps?.(record) as any),
-                  disabled,
+                  disabled: disabled || record?.disabled,
                 }), // antd
                 selectedRowKeys: selected,
                 onChange: onInnerChange,
