@@ -16,25 +16,34 @@ export const useObserver = (options?: IObserverOptions) => {
 
     onBeforeUnmount(disposeTracker)
 
-    Object.defineProperty(vm, 'update', {
+    Object.defineProperty(vm, 'effect', {
       get() {
         // https://github.com/alibaba/formily/issues/2655
         return vm['_updateEffect'] || {}
       },
       set(newValue) {
-        disposeTracker()
+        vm['_updateEffectRun'] = newValue.run
+        const newTracker = () => {
+          disposeTracker()
+          tracker = new Tracker(() => {
+            if (options?.scheduler && typeof options.scheduler === 'function') {
+              options.scheduler(update)
+            } else {
+              update()
+            }
+          })
+        }
+        const update = function () {
+          newTracker()
+          let refn: any = null
+          tracker?.track(() => {
+            refn = vm['_updateEffectRun'].call(newValue)
+          })
+          return refn
+        }
 
-        const update = () => tracker?.track(newValue)
-
-        tracker = new Tracker(() => {
-          if (options?.scheduler && typeof options.scheduler === 'function') {
-            options.scheduler(update)
-          } else {
-            update()
-          }
-        })
-
-        vm['_updateEffect'] = update
+        newValue.run = update
+        vm['_updateEffect'] = newValue
       },
     })
   }
