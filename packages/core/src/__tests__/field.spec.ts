@@ -2002,3 +2002,42 @@ test('relative query with void field', () => {
 
   expect(bb.query('.aa').take()).toBe(aa)
 })
+
+test('empty string or number value need rewrite default value', () => {
+  const form = attach(
+    createForm<any>({
+      values: {
+        aa: '',
+        bb: 0,
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      initialValue: 'test',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      initialValue: 123,
+    })
+  )
+  attach(
+    form.createField({
+      name: 'cc',
+      initialValue: 'test',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'dd',
+      initialValue: 123,
+    })
+  )
+  expect(form.values.aa).toEqual('')
+  expect(form.values.bb).toEqual(0)
+  expect(form.values.cc).toEqual('test')
+  expect(form.values.dd).toEqual(123)
+})
