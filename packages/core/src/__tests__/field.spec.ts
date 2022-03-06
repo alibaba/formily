@@ -2005,7 +2005,7 @@ test('relative query with void field', () => {
 
 test('empty string or number value need rewrite default value', () => {
   const form = attach(
-    createForm({
+    createForm<any>({
       values: {
         aa: '',
         bb: 0,
