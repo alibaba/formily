@@ -94,15 +94,18 @@ function useOverflow<
   const labelCol = JSON.stringify(layout.labelCol)
 
   useEffect(() => {
-    if (containerRef.current && contentRef.current) {
-      const contentWidth = contentRef.current.getBoundingClientRect().width
-      const containerWidth = containerRef.current.getBoundingClientRect().width
-      if (contentWidth && containerWidth && containerWidth < contentWidth) {
-        if (!overflow) setOverflow(true)
-      } else {
-        if (overflow) setOverflow(false)
+    requestAnimationFrame(() => {
+      if (containerRef.current && contentRef.current) {
+        const contentWidth = contentRef.current.getBoundingClientRect().width
+        const containerWidth =
+          containerRef.current.getBoundingClientRect().width
+        if (contentWidth && containerWidth && containerWidth < contentWidth) {
+          if (!overflow) setOverflow(true)
+        } else {
+          if (overflow) setOverflow(false)
+        }
       }
-    }
+    })
   }, [labelCol])
 
   return {
