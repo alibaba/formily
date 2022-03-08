@@ -15,11 +15,13 @@ if (isVue2) {
     props: getFieldProps(),
     render(h, context) {
       const props = context.props as IFieldProps
+      const attrs = context.data.attrs
       const componentData = {
         ...context.data,
         props: {
           fieldType: 'Field',
           fieldProps: {
+            ...attrs,
             ...props,
             ...getRawComponent(props),
           },

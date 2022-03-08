@@ -1,4 +1,4 @@
-import { computed, inject, provide, ref } from 'vue-demi'
+import { inject, provide, Ref, ref, shallowRef, watch } from 'vue-demi'
 import { GeneralField, isVoidField } from '@formily/core'
 import { FormPath } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
@@ -109,14 +109,17 @@ export default observer({
     const formRef = useForm()
     const parentRef = useField()
     const optionsRef = inject(SchemaOptionsSymbol, ref(null))
-    const fieldRef = useAttach(
-      computed(() =>
-        formRef?.value?.[`create${props.fieldType}`]?.({
-          ...props.fieldProps,
-          basePath: props.fieldProps?.basePath ?? parentRef.value?.address,
-        })
-      )
+    const createField = () =>
+      formRef?.value?.[`create${props.fieldType}`]?.({
+        ...props.fieldProps,
+        basePath: props.fieldProps?.basePath ?? parentRef.value?.address,
+      })
+    const fieldRef = shallowRef(createField()) as Ref<GeneralField>
+    watch(
+      () => props.fieldProps,
+      () => (fieldRef.value = createField())
     )
+    useAttach(fieldRef)
     provide(FieldSymbol, fieldRef)
     return () => {
       const field = fieldRef.value

@@ -1027,6 +1027,11 @@ export const allowAssignDefaultValue = (target: any, source: any) => {
     return false
   }
 
+  if (typeof target === typeof source) {
+    if (target === '') return false
+    if (target === 0) return false
+  }
+
   if (isEmptyTarget) {
     if (isEmptySource) {
       return false
