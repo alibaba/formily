@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox } from '@alifd/next'
+import { Checkbox } from 'antd'
 
 // 重写表格表头Checkbox
 const newCheckbox =
@@ -31,9 +31,9 @@ const newCheckbox =
         checked={!!currentSelected?.length}
         disabled={disabled}
         indeterminate={indeterminate}
-        onChange={(checked) => {
+        onChange={(e) => {
           if (!readOnly) {
-            if (checked || indeterminate) {
+            if (e.target.checked || indeterminate) {
               onChange?.(currentDataSourceKeys, currentDataSource)
             } else {
               onChange?.([], [])
@@ -57,10 +57,7 @@ const useTitleAddon = (
     return {}
   }
   return {
-    titleProps: () => ({
-      style: { display: 'none' },
-    }),
-    titleAddons: newCheckbox(
+    columnTitle: newCheckbox(
       selected,
       filteredFlatDataSource,
       primaryKey,

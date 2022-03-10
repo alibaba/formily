@@ -8,6 +8,7 @@ import { SearchProps } from 'antd/lib/input'
 import { useFilterOptions } from './useFilterOptions'
 import { useFlatOptions } from './useFlatOptions'
 import { useSize } from './useSize'
+import { useTitleAddon } from './useTitleAddon'
 import { useCheckSlackly } from './useCheckSlackly'
 import { getUISelected, getOutputData } from './utils'
 import { usePrefixCls } from '../__builtins__'
@@ -115,19 +116,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   dataSource = isFn(rowKey)
     ? addPrimaryKey(dataSource, rowKey, primaryKey)
     : dataSource
-  const flatDataSource = useFlatOptions(dataSource)
-
-  // selected keys for Table UI
-  const selected = getUISelected(
-    value,
-    flatDataSource,
-    primaryKey,
-    valueType,
-    optionAsValue,
-    mode,
-    rowSelection?.checkStrictly,
-    rowKey
-  )
 
   // Filter dataSource By Search
   const filteredDataSource = useFilterOptions(
@@ -144,13 +132,25 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     return [...filteredDataSource].sort((a, b) => filterSort(a, b))
   }, [filteredDataSource, filterSort])
 
+  const flatDataSource = useFlatOptions(dataSource)
+
+  // selected keys for Table UI
+  const selected = getUISelected(
+    value,
+    flatDataSource,
+    primaryKey,
+    valueType,
+    optionAsValue,
+    mode,
+    rowSelection?.checkStrictly,
+    rowKey
+  )
+
   // readPretty Value
-  const readPrettyDataSource = useMemo(
-    () =>
-      orderedFilteredDataSource?.filter((item) =>
-        selected?.includes(item?.[primaryKey])
-      ),
-    [orderedFilteredDataSource, selected, primaryKey]
+  const readPrettyDataSource = useFilterOptions(
+    orderedFilteredDataSource,
+    selected,
+    (value, item) => value.includes(item[primaryKey])
   )
 
   const onInnerSearch = (searchText) => {
@@ -177,7 +177,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   }
 
   const onRowClick = (record) => {
-    if (disabled || readOnly || record?.disabled) {
+    if (readPretty || disabled || readOnly || record?.disabled) {
       return
     }
     const selectedRowKey = record?.[primaryKey]
@@ -204,7 +204,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     }
   }
 
-  // Antd TreeData SlacklyChange for onRowClick
+  // TreeData SlacklyChange
   const onSlacklyChange = (currentSelected: any[]) => {
     let { selectedRowKeys, records } = useCheckSlackly(
       currentSelected,
@@ -215,12 +215,23 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     onInnerChange(selectedRowKeys, records)
   }
 
+  // Table All Checkbox
+  const titleAddon = useTitleAddon(
+    selected,
+    useFlatOptions(filteredDataSource),
+    primaryKey,
+    mode,
+    disabled,
+    readOnly,
+    onInnerChange
+  )
+
   // Antd rowSelection type
   const modeAsType: any = { multiple: 'checkbox', single: 'radio' }?.[mode]
 
   return (
     <div className={prefixCls}>
-      {showSearch && !readPretty ? (
+      {showSearch ? (
         <Search
           {...searchProps}
           className={cls(`${prefixCls}-search`, searchProps?.className)}
@@ -244,6 +255,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
             ? undefined
             : {
                 ...rowSelection,
+                ...titleAddon,
                 getCheckboxProps: (record) => ({
                   ...(rowSelection?.getCheckboxProps?.(record) as any),
                   disabled: disabled || record?.disabled,
@@ -281,6 +293,7 @@ SelectTable.Column = TableColumn
 
 SelectTable.defaultProps = {
   showSearch: false,
+  valueType: 'all',
   primaryKey: 'key',
   mode: 'multiple',
 }

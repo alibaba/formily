@@ -12,6 +12,9 @@ function includesOption(option: any, search: string) {
   const _includesOption = (option: any) => {
     const keys = Object.keys(option || {})
     return keys.some((key) => {
+      if (key === '__level') {
+        return false
+      }
       const value = option[key]
       if (React.isValidElement(value)) return false
       if (key !== 'children' && !searched.has(value)) {
@@ -21,6 +24,7 @@ function includesOption(option: any, search: string) {
         }
         return includes(value, search)
       }
+      return false
     })
   }
   return _includesOption(option)
@@ -35,17 +39,16 @@ function toArray<T>(value: T | T[]): T[] {
 
 const useFilterOptions = (
   options: any[],
-  searchValue?: string,
+  searchValue?: string | string[],
   filterOption?: IFilterOption
 ) =>
   React.useMemo(() => {
     if (!searchValue || filterOption === false) {
       return options
     }
-    const upperSearch = searchValue.toUpperCase()
     const filterFunc = isFn(filterOption)
       ? filterOption
-      : (_: string, option: any) => includesOption(option, upperSearch)
+      : (value: any, option: any) => includesOption(option, value.toUpperCase())
 
     const doFilter = (arr: any[]) => {
       const filterArr: any[] = []
