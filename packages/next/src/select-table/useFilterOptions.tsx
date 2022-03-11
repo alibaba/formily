@@ -40,7 +40,8 @@ function toArray<T>(value: T | T[]): T[] {
 const useFilterOptions = (
   options: any[],
   searchValue?: string | string[],
-  filterOption?: IFilterOption
+  filterOption?: IFilterOption,
+  checkStrictly?: boolean
 ) =>
   React.useMemo(() => {
     if (!searchValue || filterOption === false) {
@@ -57,7 +58,8 @@ const useFilterOptions = (
           const filterChildren = doFilter(item.children)
           if (filterChildren.length) {
             filterArr.push({ ...item, children: filterChildren })
-          } else if (filterFunc(searchValue, item)) {
+          } else if (filterFunc(searchValue, item) && checkStrictly !== false) {
+            // 父子关系启用时，没有可用子元素，不添加父元素
             filterArr.push({ ...item, children: [] })
           }
         } else if (filterFunc(searchValue, item)) {
