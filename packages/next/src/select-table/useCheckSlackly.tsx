@@ -19,27 +19,31 @@ interface ICheckSlackly {
     currentSelected: any[],
     allSelected: any[],
     primaryKey: string,
-    flatDataSource: any[]
+    flatDataSource: any[],
+    flatFilteredDataSource: any[]
   ): {
     selectedRowKeys: any[]
     records: any[]
   }
 }
 
+// 父子节点（节点状态按全完整数据计算，节点操作按筛选数据计算）
 const useCheckSlackly: ICheckSlackly = (
   currentSelected, // onChange 返回的 keys
   allSelected, // Table UI 展示的 keys
   primaryKey,
-  flatDataSource
+  flatDataSource,
+  flatFilteredDataSource
 ) => {
   const isSelected = currentSelected.length > allSelected.length // 判断是选中还是取消
   const currentKey = [...currentSelected, ...allSelected].find(
     (key) => !(currentSelected.includes(key) && allSelected.includes(key)) // 当前变化key不同时存在于两个selected
   )
-  const currentRecords = flatDataSource.find(
+  // 从过滤后的数据中获取当前record
+  const currentRecord = flatFilteredDataSource.find(
     (item) => item[primaryKey] === currentKey
   )
-  const currentTreeKeys = getTreeKeys([currentRecords], primaryKey)
+  const currentTreeKeys = getTreeKeys([currentRecord], primaryKey)
   let newSelectedRowKeys = []
   if (isSelected) {
     // 选中当前key及其子keys
