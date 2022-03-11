@@ -1,10 +1,11 @@
 import React from 'react'
 import { Checkbox } from '@alifd/next'
 
-// 重写表格表头Checkbox
+// 重写表格表头Checkbox（节点状态按全完整数据计算，节点操作按筛选数据计算）
 const newCheckbox =
   (
     selected,
+    flatDataSource,
     filteredFlatDataSource,
     primaryKey,
     disabled,
@@ -12,31 +13,46 @@ const newCheckbox =
     onChange
   ) =>
   () => {
-    const currentDataSource = filteredFlatDataSource.filter(
-      (item) => !item.disabled
+    // 当前可全选的keys
+    const currentSelected = filteredFlatDataSource
+      .filter((item) => !item.disabled)
+      .map((item) => item?.[primaryKey])
+
+    // 点击全选的完整数据（筛选前后）
+    const newSelected = [...new Set([...selected, ...currentSelected])]
+    const newRecords = flatDataSource.filter((item) =>
+      newSelected.includes(item[primaryKey])
     )
-    const currentDataSourceKeys = currentDataSource.map(
-      (item) => item?.[primaryKey]
+
+    // 取消全选的剩余数据（筛选前后）
+    const restSelected = selected.filter(
+      (key) => !currentSelected.includes(key)
     )
-    const currentSelected = selected.filter((item) =>
-      currentDataSourceKeys.includes(item)
+    const restRecords = flatDataSource.filter((item) =>
+      restSelected.includes(item[primaryKey])
     )
-    const indeterminate = !!(
-      currentSelected?.length &&
-      currentSelected.length !== currentDataSource.length
+
+    // 全选框是否选中
+    const checked = Boolean(
+      selected?.length &&
+        selected?.length ===
+          flatDataSource.filter((item) => !item.disabled).length
     )
+    // 全选框是否未完全选中
+    const indeterminate = Boolean(selected?.length && !checked)
+
     return (
       <Checkbox
         key="titleAddons"
-        checked={!!currentSelected?.length}
         disabled={disabled}
+        checked={checked}
         indeterminate={indeterminate}
         onChange={(checked) => {
           if (!readOnly) {
-            if (checked || indeterminate) {
-              onChange?.(currentDataSourceKeys, currentDataSource)
+            if (checked) {
+              onChange?.(newSelected, newRecords)
             } else {
-              onChange?.([], [])
+              onChange?.(restSelected, restRecords)
             }
           }
         }}
@@ -46,6 +62,7 @@ const newCheckbox =
 
 const useTitleAddon = (
   selected: any[],
+  flatDataSource: any[],
   filteredFlatDataSource: any[],
   primaryKey: string,
   mode: string,
@@ -62,6 +79,7 @@ const useTitleAddon = (
     }),
     titleAddons: newCheckbox(
       selected,
+      flatDataSource,
       filteredFlatDataSource,
       primaryKey,
       disabled,

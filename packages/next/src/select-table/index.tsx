@@ -135,6 +135,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   }, [filteredDataSource, filterSort])
 
   const flatDataSource = useFlatOptions(dataSource)
+  const flatFilteredDataSource = useFlatOptions(filteredDataSource)
 
   // selected keys for Table UI
   const selected = getUISelected(
@@ -212,7 +213,8 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
       currentSelected,
       selected,
       primaryKey,
-      flatDataSource
+      flatDataSource,
+      flatFilteredDataSource
     )
     onInnerChange(selectedRowKeys, records)
   }
@@ -220,7 +222,8 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   // Table All Checkbox
   const titleAddon = useTitleAddon(
     selected,
-    useFlatOptions(filteredDataSource),
+    flatDataSource,
+    flatFilteredDataSource,
     primaryKey,
     mode,
     disabled,
