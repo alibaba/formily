@@ -264,12 +264,16 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
                 ...titleAddon,
                 getProps: (record, index) => ({
                   ...(rowSelection?.getProps?.(record, index) as any),
-                  indeterminate: getIndeterminate(
-                    record,
-                    flatDataSource,
-                    selected,
-                    primaryKey
-                  ), // 父子关联模式indeterminate值
+                  ...(rowSelection?.checkStrictly !== false
+                    ? {}
+                    : {
+                        indeterminate: getIndeterminate(
+                          record,
+                          flatDataSource,
+                          selected,
+                          primaryKey
+                        ),
+                      }), // 父子关联模式indeterminate值
                   disabled: disabled || record?.disabled,
                 }), // fusion
                 selectedRowKeys: selected,
