@@ -123,7 +123,8 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   const filteredDataSource = useFilterOptions(
     dataSource,
     searchValue,
-    filterOption
+    filterOption,
+    rowSelection?.checkStrictly
   )
 
   // Order dataSource By filterSort
@@ -162,13 +163,18 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     onSearch?.(formatted)
   }
 
-  const onInnerChange = (selectedRowKeys: any[], records: any[]) => {
+  const onInnerChange = (selectedRowKeys: any[]) => {
     if (readOnly) {
       return
     }
+    // 筛选后onChange默认的records数据不完整，此处需使用完整数据过滤
+    const wholeRecords = flatDataSource.filter((item) =>
+      selectedRowKeys.includes(item?.[primaryKey])
+    )
+
     const { outputValue, outputOptions } = getOutputData(
       selectedRowKeys,
-      records,
+      wholeRecords,
       dataSource,
       primaryKey,
       valueType,
@@ -176,6 +182,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
       mode,
       rowSelection?.checkStrictly
     )
+
     onChange?.(outputValue, outputOptions)
   }
 
@@ -186,22 +193,17 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     const selectedRowKey = record?.[primaryKey]
     const isSelected = selected?.includes(selectedRowKey)
     let selectedRowKeys = []
-    let records = []
     if (mode === 'single') {
       selectedRowKeys = [selectedRowKey]
-      records = [record]
     } else {
       if (isSelected) {
         selectedRowKeys = selected.filter((item) => item !== selectedRowKey)
       } else {
         selectedRowKeys = [...selected, selectedRowKey]
       }
-      records = flatDataSource.filter((item) =>
-        selectedRowKeys.includes(item?.[primaryKey])
-      )
     }
     if (rowSelection?.checkStrictly !== false) {
-      onInnerChange(selectedRowKeys, records)
+      onInnerChange(selectedRowKeys)
     } else {
       onSlacklyChange(selectedRowKeys)
     }
@@ -209,14 +211,15 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
 
   // TreeData SlacklyChange
   const onSlacklyChange = (currentSelected: any[]) => {
-    let { selectedRowKeys, records } = useCheckSlackly(
+    let { selectedRowKeys } = useCheckSlackly(
       currentSelected,
       selected,
-      primaryKey,
       flatDataSource,
-      flatFilteredDataSource
+      flatFilteredDataSource,
+      primaryKey,
+      rowSelection?.checkStrictly
     )
-    onInnerChange(selectedRowKeys, records)
+    onInnerChange(selectedRowKeys)
   }
 
   // Table All Checkbox
@@ -228,6 +231,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     mode,
     disabled,
     readOnly,
+    rowSelection?.checkStrictly,
     onInnerChange
   )
 
@@ -260,7 +264,12 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
                 ...titleAddon,
                 getProps: (record, index) => ({
                   ...(rowSelection?.getProps?.(record, index) as any),
-                  indeterminate: getIndeterminate(record, selected, primaryKey), // 父子关联模式indeterminate值
+                  indeterminate: getIndeterminate(
+                    record,
+                    flatDataSource,
+                    selected,
+                    primaryKey
+                  ), // 父子关联模式indeterminate值
                   disabled: disabled || record?.disabled,
                 }), // fusion
                 selectedRowKeys: selected,

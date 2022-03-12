@@ -444,7 +444,7 @@ export class Grid<Container extends HTMLElement> {
       const dispose = reaction(() => ({ ...this.options }), digest)
       resizeObserver.observe(this.container)
       mutationObserver.observe(this.container, {
-        attributeFilter: ['style', 'class', 'data-grid-span'],
+        attributeFilter: ['data-grid-span'],
         attributes: true,
       })
       initialize()

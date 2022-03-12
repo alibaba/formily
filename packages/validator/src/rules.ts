@@ -46,9 +46,13 @@ const extendSameRules = (
 const RULES: IRegistryRules = {
   format(value, rule) {
     if (isValidateEmpty(value)) return ''
-    return !new RegExp(getValidateFormats(rule.format) || '').test(value)
-      ? rule.message
-      : ''
+    if (rule.format) {
+      const format = getValidateFormats(rule.format)
+      if (format) {
+        return !new RegExp(format).test(value) ? rule.message : ''
+      }
+    }
+    return ''
   },
   required(value, rule) {
     if (rule.required === false) return ''
