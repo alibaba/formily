@@ -1,5 +1,27 @@
 # Changelog
 
+## v2.0.15(2022-03-13)
+
+### :tada: Enhancements
+
+1. [feat(next/antd): fix selected bug3 by search in SelectTable (#2927)](https://github.com/alibaba/formily/commit/bc943de3) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+1. [feat(vue): improve performance of mapProps (#2909)](https://github.com/alibaba/formily/commit/5ca0456a) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+### :bug: Bug Fixes
+
+1. [fix(grid): fix grid mutation observer infinite loop (#2925)](https://github.com/alibaba/formily/commit/72534b43) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(validator): fix unexpect validate with empty format (#2926)](https://github.com/alibaba/formily/commit/7da26285) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(next/antd): fix label overflow invalid in FormGrid (#2910)](https://github.com/alibaba/formily/commit/485702cd) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+1. [fix(vue): fix error when designable is true (#2908)](https://github.com/alibaba/formily/commit/398fac96) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+### :rocket: Improve Performance
+
+1. [perf(reactive-vue): optimize vue3 tracker performance consumption of multiple instances (#2911)](https://github.com/alibaba/formily/commit/83e6a35c) :point_right: ( [e_the](https://github.com/e_the) )
+
 ## v2.0.14(2022-03-06)
 
 ### :tada: Enhancements
@@ -891,12 +913,6 @@
 1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/278e496d) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 ## v2.0.0-beta.87(2021-08-05)
-
-### :blush: Other Changes
-
-1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/e5b239df) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-beta.86(2021-08-05)
 
 ### :tada: Enhancements
 
@@ -1924,13 +1940,13 @@
 
 ### :blush: Other Changes
 
+1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/e5b239df) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 1. [chore(core): improve heart](https://github.com/alibaba/formily/commit/de97e76f) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(designable): add save service to playground](https://github.com/alibaba/formily/commit/badd7f9a) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(designable-antd): update locale namespace](https://github.com/alibaba/formily/commit/6b2bb938) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [chore(flow): update release.yml](https://github.com/alibaba/formily/commit/1de0f56f) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(ts): map @formily/\* to src folder during development (#1917)](https://github.com/alibaba/formily/commit/65259a06) :point_right: ( [JuFeng Zhang](https://github.com/JuFeng Zhang) )
 
