@@ -392,6 +392,19 @@ test('validate custom formats', async () => {
   noError(await validate('中文', 'custom'))
 })
 
+test('validate undefined format', async () => {
+  expect(
+    (
+      await validate('a', {
+        required: false,
+        pattern: '(\\d{3,4}-\\d{7,8}-\\d{4})|(4\\d{4,9})|(\\d{3,4}-\\d{7,8})',
+        format: undefined,
+        message: 'error',
+      })
+    ).error
+  ).toEqual(['error'])
+})
+
 test('validator return boolean', async () => {
   hasError(
     await validate('123', {
