@@ -1,6 +1,6 @@
 {
   "name": "@formily/next",
-  "version": "2.0.14",
+  "version": "2.0.15",
   "license": "MIT",
   "main": "lib",
   "umd:main": "dist/formily.next.umd.production.js",
@@ -51,13 +51,13 @@
     "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
-    "@formily/core": "2.0.14",
-    "@formily/grid": "2.0.14",
-    "@formily/json-schema": "2.0.14",
-    "@formily/react": "2.0.14",
-    "@formily/reactive": "2.0.14",
-    "@formily/reactive-react": "2.0.14",
-    "@formily/shared": "2.0.14",
+    "@formily/core": "2.0.15",
+    "@formily/grid": "2.0.15",
+    "@formily/json-schema": "2.0.15",
+    "@formily/react": "2.0.15",
+    "@formily/reactive": "2.0.15",
+    "@formily/reactive-react": "2.0.15",
+    "@formily/shared": "2.0.15",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3"

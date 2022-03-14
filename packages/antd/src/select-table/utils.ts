@@ -139,7 +139,7 @@ const deleteTreeItem = (tree: any[], key: string) =>
  * @returns 最终输出的 keys 和 options
  */
 const getOutputData = (
-  keys,
+  keys, // selected
   options,
   dataSource,
   primaryKey,
@@ -257,6 +257,36 @@ const getUISelected = (
   return newKeys
 }
 
+/**
+ * 获取兼容筛选模式下是否全部选中子元素
+ * @param selected 已选中项
+ * @param dataSource 当前数据结构
+ * @param usableKeys 当前数据结构的可执行项
+ * @param checkStrictly
+ * @param primaryKey
+ * @returns 是否全部选中
+ */
+const getCompatibleAllSelected = (
+  selected,
+  dataSource,
+  usableKeys,
+  checkStrictly,
+  primaryKey
+) => {
+  if (!usableKeys.length) {
+    return false
+  }
+  // 当前模式下已选中的项
+  const currentSelected = selected.filter((item) => usableKeys.includes(item))
+  // 获取有效选中（父子模式或非父子模式）
+  const validSelected =
+    checkStrictly !== false
+      ? currentSelected // 非父子模式选中项
+      : completedKeys(dataSource, currentSelected, primaryKey) // 父子模式选中项
+  // 有效选中项数量等于可执行项数量则全部选中子元素
+  return validSelected.length === usableKeys.length
+}
+
 export {
   hasSelectedKey,
   getTreeKeys,
@@ -265,4 +295,5 @@ export {
   getUISelected,
   getOutputData,
   completedKeys,
+  getCompatibleAllSelected,
 }
