@@ -52,7 +52,7 @@ const useColumns = () => {
   const schema = useFieldSchema()
   const columns: ISelectTableColumnProps[] = []
   const validSchema = (
-    schema.type === 'array' && schema?.items ? schema.items : schema
+    schema?.type === 'array' && schema?.items ? schema.items : schema
   ) as Schema
 
   validSchema?.mapProperties((schema, name) => {
