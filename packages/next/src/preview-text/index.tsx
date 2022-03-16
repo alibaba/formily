@@ -208,7 +208,7 @@ const Cascader: React.FC<CascaderProps> = observer((props) => {
     ? props.dataSource
     : []
   const getSelected = () => {
-    return isArr(props.value) ? props.value : []
+    return isArr(props.value) ? props.value : [props.value]
   }
   const getLabels = () => {
     const selected = getSelected()
