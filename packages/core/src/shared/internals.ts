@@ -5,6 +5,7 @@ import {
   pascalCase,
   isFn,
   isValid,
+  isUndef,
   isEmpty,
   isPlainObj,
   isNumberLike,
@@ -974,11 +975,15 @@ export const resetSelf = batch.bound(
     target.inputValue = typedDefaultValue
     target.inputValues = []
     target.caches = {}
-    if (isValid(target.value)) {
+    if (!isUndef(target.value)) {
       if (options?.forceClear) {
         target.value = typedDefaultValue
       } else {
-        target.value = toJS(target.initialValue ?? typedDefaultValue)
+        target.value = toJS(
+          !isUndef(target.initialValue)
+            ? target.initialValue
+            : typedDefaultValue
+        )
       }
     }
     if (!noEmit) {
@@ -1016,10 +1021,10 @@ export const getValidFieldDefaultValue = (value: any, initialValue: any) => {
 }
 
 export const allowAssignDefaultValue = (target: any, source: any) => {
-  const isEmptyTarget = isEmpty(target)
-  const isEmptySource = isEmpty(source)
-  const isValidTarget = isValid(target)
-  const isValidSource = isValid(source)
+  const isEmptyTarget = target !== null && isEmpty(target)
+  const isEmptySource = source !== null && isEmpty(source)
+  const isValidTarget = !isUndef(target)
+  const isValidSource = !isUndef(source)
   if (!isValidTarget) {
     if (isValidSource) {
       return true
