@@ -7,6 +7,11 @@ export const usePrefixCls = (
     prefixCls?: string
   }
 ) => {
-  const { getPrefixCls } = useContext(ConfigProvider.ConfigContext)
-  return getPrefixCls(tag, props?.prefixCls)
+  if ('ConfigContext' in ConfigProvider) {
+    const { getPrefixCls } = useContext(ConfigProvider.ConfigContext)
+    return getPrefixCls(tag, props?.prefixCls)
+  } else {
+    const prefix = props?.prefixCls ?? 'ant-'
+    return `${prefix}${tag ?? ''}`
+  }
 }
