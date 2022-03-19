@@ -705,14 +705,22 @@ test('reset', async () => {
       required: true,
     })
   )
+  const dd = attach(
+    form.createField({
+      name: 'dd',
+      required: true,
+    })
+  )
   expect(aa.value).toEqual(123)
   expect(bb.value).toEqual(123)
   expect(cc.value).toEqual(null)
   expect(form.values.aa).toEqual(123)
   expect(form.values.bb).toEqual(123)
   expect(form.values.cc).toEqual(null)
-  aa.onInput(null)
-  expect(form.values.aa).toEqual(null)
+  aa.onInput('xxxxx')
+  expect(form.values.aa).toEqual('xxxxx')
+  dd.onInput(null)
+  expect(form.values.dd).toEqual(null)
   aa.reset()
   expect(aa.value).toEqual(123)
   expect(form.values.aa).toEqual(123)
@@ -727,6 +735,9 @@ test('reset', async () => {
   cc.reset()
   expect(cc.value).toBeNull()
   expect(form.values.cc).toBeNull()
+  dd.reset()
+  expect(dd.value).toBeUndefined()
+  expect(form.values.dd).toBeUndefined()
 
   aa.reset({
     forceClear: true,
@@ -2041,7 +2052,7 @@ test('empty string or number or null value need rewrite default value', () => {
       values: {
         aa: '',
         bb: 0,
-        cc: null,
+        ee: null,
       },
     })
   )
@@ -2069,8 +2080,15 @@ test('empty string or number or null value need rewrite default value', () => {
       initialValue: 123,
     })
   )
+  attach(
+    form.createField({
+      name: 'ee',
+      initialValue: 'test',
+    })
+  )
   expect(form.values.aa).toEqual('')
   expect(form.values.bb).toEqual(0)
-  expect(form.values.cc).toBeNull()
+  expect(form.values.cc).toEqual('test')
   expect(form.values.dd).toEqual(123)
+  expect(form.values.ee).toEqual(null)
 })
