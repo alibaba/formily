@@ -33,13 +33,13 @@ export const useObserver = (options?: IObserverOptions) => {
             }
           })
         }
-        let runUpdate = () => {
-          tracker?.track(() => {
-            vm['_updateEffectRun'].call(newValue)
-          })
-        }
+
         const update = function () {
-          nextTick(runUpdate)
+          let refn = null
+          tracker?.track(() => {
+            refn = vm['_updateEffectRun'].call(newValue)
+          })
+          return refn
         }
         newTracker()
         newValue.run = update
