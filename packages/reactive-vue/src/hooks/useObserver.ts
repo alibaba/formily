@@ -29,17 +29,17 @@ export const useObserver = (options?: IObserverOptions) => {
             if (options?.scheduler && typeof options.scheduler === 'function') {
               options.scheduler(update)
             } else {
-              update()
+              nextTick(update)
             }
           })
         }
-        let runUpdate = () => {
-          tracker?.track(() => {
-            vm['_updateEffectRun'].call(newValue)
-          })
-        }
+
         const update = function () {
-          nextTick(runUpdate)
+          let refn = null
+          tracker?.track(() => {
+            refn = vm['_updateEffectRun'].call(newValue)
+          })
+          return refn
         }
         newTracker()
         newValue.run = update
