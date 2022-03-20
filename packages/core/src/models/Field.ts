@@ -53,6 +53,7 @@ import {
 } from '../shared/internals'
 import { Form } from './Form'
 import { BaseField } from './BaseField'
+import { IFormFeedback } from '..'
 export class Field<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
@@ -276,33 +277,33 @@ export class Field<
     createReactions(this)
   }
 
-  get selfErrors() {
+  get selfErrors(): FeedbackMessage {
     return queryFeedbackMessages(this, {
       type: 'error',
     })
   }
 
-  get errors() {
+  get errors(): IFormFeedback[] {
     return this.form.errors.filter(createChildrenFeedbackFilter(this))
   }
 
-  get selfWarnings() {
+  get selfWarnings(): FeedbackMessage {
     return queryFeedbackMessages(this, {
       type: 'warning',
     })
   }
 
-  get warnings() {
+  get warnings(): IFormFeedback[] {
     return this.form.warnings.filter(createChildrenFeedbackFilter(this))
   }
 
-  get selfSuccesses() {
+  get selfSuccesses(): FeedbackMessage {
     return queryFeedbackMessages(this, {
       type: 'success',
     })
   }
 
-  get successes() {
+  get successes(): IFormFeedback[] {
     return this.form.successes.filter(createChildrenFeedbackFilter(this))
   }
 
