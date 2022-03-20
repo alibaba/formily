@@ -28,7 +28,6 @@ test('observable contains', () => {
   expect(contains(obj, obj.other)).toBe(true)
   expect(contains(obj, other)).toBe(true)
 
-  // Are these expected behaviors?
-  expect(contains(obj, obj.arr)).toBe(false)
-  expect(contains(obj, arr)).toBe(false)
+  expect(contains(obj, obj.arr)).toBe(true)
+  expect(contains(obj, arr)).toBe(true)
 })

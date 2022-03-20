@@ -45,31 +45,6 @@ test('shallow observe', () => {
   expect(handler).toHaveBeenCalledTimes(2)
 })
 
-// test('auto dispose observe', () => {
-//   const obs = observable<any>({
-//     aa: {
-//       bb: {
-//         cc: [11, 22, 33],
-//       },
-//     },
-//   })
-//   const handler = jest.fn()
-//   observe(obs, handler)
-//   observe(obs.aa, handler)
-//   observe(obs.aa.bb, handler)
-//   expect(getDeepObservers(obs.aa).length).toEqual(1)
-//   expect(getDeepObservers(obs.aa.bb).length).toEqual(1)
-//   obs.aa.bb = { kk: 'mm' }
-//   expect(getDeepObservers(obs.aa.bb).length).toEqual(1)
-//   expect(getDeepObservers(obs.aa).length).toEqual(1)
-//   expect(getObservers(obs.aa).length).toEqual(0)
-//   expect(handler).toBeCalledTimes(3)
-//   observe(obs.aa, handler)
-//   expect(getObservers(obs.aa).length).toEqual(0)
-//   expect(getDeepObservers(obs.aa).length).toEqual(2)
-//   delete obs.aa
-// })
-
 test('root replace observe', () => {
   const obs = observable<any>({
     aa: {
@@ -159,4 +134,14 @@ test('array delete', () => {
   expect(fn.mock.calls[1][0]).toBe('0.value')
 
   dispose()
+})
+
+test('observe dynamic tree', () => {
+  const handler = jest.fn()
+  const tree = observable<any>({})
+  const childTree = observable({})
+  tree.children = childTree
+  observe(tree, handler)
+  tree.children.aa = 123
+  expect(handler).toBeCalledTimes(1)
 })
