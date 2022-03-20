@@ -29,7 +29,7 @@ export const useObserver = (options?: IObserverOptions) => {
             if (options?.scheduler && typeof options.scheduler === 'function') {
               options.scheduler(update)
             } else {
-              nextTick(update)
+              update()
             }
           })
         }
