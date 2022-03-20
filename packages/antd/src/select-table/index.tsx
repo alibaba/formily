@@ -8,7 +8,8 @@ import { SearchProps } from 'antd/lib/input'
 import { useFilterOptions } from './useFilterOptions'
 import { useFlatOptions } from './useFlatOptions'
 import { useSize } from './useSize'
-import { useCheckSlackly } from './useCheckSlackly'
+import { useTitleAddon } from './useTitleAddon'
+import { useCheckSlackly, getIndeterminate } from './useCheckSlackly'
 import { getUISelected, getOutputData } from './utils'
 import { usePrefixCls } from '../__builtins__'
 
@@ -49,7 +50,7 @@ const useColumns = () => {
   const schema = useFieldSchema()
   const columns: ISelectTableColumnProps[] = []
   const validSchema = (
-    schema.type === 'array' && schema?.items ? schema.items : schema
+    schema?.type === 'array' && schema?.items ? schema.items : schema
   ) as Schema
 
   validSchema?.mapProperties((schema, name) => {
@@ -115,7 +116,25 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   dataSource = isFn(rowKey)
     ? addPrimaryKey(dataSource, rowKey, primaryKey)
     : dataSource
+
+  // Filter dataSource By Search
+  const filteredDataSource = useFilterOptions(
+    dataSource,
+    searchValue,
+    filterOption,
+    rowSelection?.checkStrictly
+  )
+
+  // Order dataSource By filterSort
+  const orderedFilteredDataSource = useMemo(() => {
+    if (!filterSort) {
+      return filteredDataSource
+    }
+    return [...filteredDataSource].sort((a, b) => filterSort(a, b))
+  }, [filteredDataSource, filterSort])
+
   const flatDataSource = useFlatOptions(dataSource)
+  const flatFilteredDataSource = useFlatOptions(filteredDataSource)
 
   // selected keys for Table UI
   const selected = getUISelected(
@@ -129,28 +148,11 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     rowKey
   )
 
-  // Filter dataSource By Search
-  const filteredDataSource = useFilterOptions(
-    dataSource,
-    searchValue,
-    filterOption
-  )
-
-  // Order dataSource By filterSort
-  const orderedFilteredDataSource = useMemo(() => {
-    if (!filterSort) {
-      return filteredDataSource
-    }
-    return [...filteredDataSource].sort((a, b) => filterSort(a, b))
-  }, [filteredDataSource, filterSort])
-
   // readPretty Value
-  const readPrettyDataSource = useMemo(
-    () =>
-      orderedFilteredDataSource?.filter((item) =>
-        selected?.includes(item?.[primaryKey])
-      ),
-    [orderedFilteredDataSource, selected, primaryKey]
+  const readPrettyDataSource = useFilterOptions(
+    orderedFilteredDataSource,
+    selected,
+    (value, item) => value.includes(item[primaryKey])
   )
 
   const onInnerSearch = (searchText) => {
@@ -159,13 +161,17 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     onSearch?.(formatted)
   }
 
-  const onInnerChange = (selectedRowKeys: any[], records: any[]) => {
+  const onInnerChange = (selectedRowKeys: any[]) => {
     if (readOnly) {
       return
     }
+    // 筛选后onChange默认的records数据不完整，此处需使用完整数据过滤
+    const wholeRecords = flatDataSource.filter((item) =>
+      selectedRowKeys.includes(item?.[primaryKey])
+    )
     const { outputValue, outputOptions } = getOutputData(
       selectedRowKeys,
-      records,
+      wholeRecords,
       dataSource,
       primaryKey,
       valueType,
@@ -173,54 +179,65 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
       mode,
       rowSelection?.checkStrictly
     )
+
     onChange?.(outputValue, outputOptions)
   }
 
   const onRowClick = (record) => {
-    if (disabled || readOnly || record?.disabled) {
+    if (readPretty || disabled || readOnly || record?.disabled) {
       return
     }
     const selectedRowKey = record?.[primaryKey]
     const isSelected = selected?.includes(selectedRowKey)
     let selectedRowKeys = []
-    let records = []
     if (mode === 'single') {
       selectedRowKeys = [selectedRowKey]
-      records = [record]
     } else {
       if (isSelected) {
         selectedRowKeys = selected.filter((item) => item !== selectedRowKey)
       } else {
         selectedRowKeys = [...selected, selectedRowKey]
       }
-      records = flatDataSource.filter((item) =>
-        selectedRowKeys.includes(item?.[primaryKey])
-      )
     }
     if (rowSelection?.checkStrictly !== false) {
-      onInnerChange(selectedRowKeys, records)
+      onInnerChange(selectedRowKeys)
     } else {
       onSlacklyChange(selectedRowKeys)
     }
   }
 
-  // Antd TreeData SlacklyChange for onRowClick
+  // TreeData SlacklyChange
   const onSlacklyChange = (currentSelected: any[]) => {
-    let { selectedRowKeys, records } = useCheckSlackly(
+    let { selectedRowKeys } = useCheckSlackly(
       currentSelected,
       selected,
+      flatDataSource,
+      flatFilteredDataSource,
       primaryKey,
-      flatDataSource
+      rowSelection?.checkStrictly
     )
-    onInnerChange(selectedRowKeys, records)
+    onInnerChange(selectedRowKeys)
   }
+
+  // Table All Checkbox
+  const titleAddon = useTitleAddon(
+    selected,
+    flatDataSource,
+    flatFilteredDataSource,
+    primaryKey,
+    mode,
+    disabled,
+    readOnly,
+    rowSelection?.checkStrictly,
+    onInnerChange
+  )
 
   // Antd rowSelection type
   const modeAsType: any = { multiple: 'checkbox', single: 'radio' }?.[mode]
 
   return (
     <div className={prefixCls}>
-      {showSearch && !readPretty ? (
+      {showSearch ? (
         <Search
           {...searchProps}
           className={cls(`${prefixCls}-search`, searchProps?.className)}
@@ -244,13 +261,36 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
             ? undefined
             : {
                 ...rowSelection,
+                ...titleAddon,
                 getCheckboxProps: (record) => ({
                   ...(rowSelection?.getCheckboxProps?.(record) as any),
                   disabled: disabled || record?.disabled,
                 }), // antd
+                ...(rowSelection?.checkStrictly !== false
+                  ? {}
+                  : {
+                      renderCell: (checked, record, index, originNode) => {
+                        return React.cloneElement(
+                          originNode as React.ReactElement,
+                          {
+                            indeterminate: getIndeterminate(
+                              record,
+                              flatDataSource,
+                              selected,
+                              primaryKey
+                            ),
+                          }
+                        )
+                      },
+                    }),
                 selectedRowKeys: selected,
-                onChange: onInnerChange,
+                onChange:
+                  rowSelection?.checkStrictly !== false
+                    ? onInnerChange
+                    : onSlacklyChange,
                 type: modeAsType,
+                preserveSelectedRowKeys: true,
+                checkStrictly: true,
               }
         }
         columns={props.columns || columns}
@@ -281,6 +321,7 @@ SelectTable.Column = TableColumn
 
 SelectTable.defaultProps = {
   showSearch: false,
+  valueType: 'all',
   primaryKey: 'key',
   mode: 'multiple',
 }

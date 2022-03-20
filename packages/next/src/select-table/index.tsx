@@ -52,7 +52,7 @@ const useColumns = () => {
   const schema = useFieldSchema()
   const columns: ISelectTableColumnProps[] = []
   const validSchema = (
-    schema.type === 'array' && schema?.items ? schema.items : schema
+    schema?.type === 'array' && schema?.items ? schema.items : schema
   ) as Schema
 
   validSchema?.mapProperties((schema, name) => {
@@ -118,7 +118,25 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   dataSource = isFn(rowKey)
     ? addPrimaryKey(dataSource, rowKey, primaryKey)
     : dataSource
+
+  // Filter dataSource By Search
+  const filteredDataSource = useFilterOptions(
+    dataSource,
+    searchValue,
+    filterOption,
+    rowSelection?.checkStrictly
+  )
+
+  // Order dataSource By filterSort
+  const orderedFilteredDataSource = useMemo(() => {
+    if (!filterSort) {
+      return filteredDataSource
+    }
+    return [...filteredDataSource].sort((a, b) => filterSort(a, b))
+  }, [filteredDataSource, filterSort])
+
   const flatDataSource = useFlatOptions(dataSource)
+  const flatFilteredDataSource = useFlatOptions(filteredDataSource)
 
   // selected keys for Table UI
   const selected = getUISelected(
@@ -132,28 +150,11 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     rowKey
   )
 
-  // Filter dataSource By Search
-  const filteredDataSource = useFilterOptions(
-    dataSource,
-    searchValue,
-    filterOption
-  )
-
-  // Order dataSource By filterSort
-  const orderedFilteredDataSource = useMemo(() => {
-    if (!filterSort) {
-      return filteredDataSource
-    }
-    return [...filteredDataSource].sort((a, b) => filterSort(a, b))
-  }, [filteredDataSource, filterSort])
-
   // readPretty Value
-  const readPrettyDataSource = useMemo(
-    () =>
-      orderedFilteredDataSource?.filter((item) =>
-        selected?.includes(item?.[primaryKey])
-      ),
-    [orderedFilteredDataSource, selected, primaryKey]
+  const readPrettyDataSource = useFilterOptions(
+    orderedFilteredDataSource,
+    selected,
+    (value, item) => value.includes(item[primaryKey])
   )
 
   const onInnerSearch = (searchText) => {
@@ -162,13 +163,18 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     onSearch?.(formatted)
   }
 
-  const onInnerChange = (selectedRowKeys: any[], records: any[]) => {
+  const onInnerChange = (selectedRowKeys: any[]) => {
     if (readOnly) {
       return
     }
+    // 筛选后onChange默认的records数据不完整，此处需使用完整数据过滤
+    const wholeRecords = flatDataSource.filter((item) =>
+      selectedRowKeys.includes(item?.[primaryKey])
+    )
+
     const { outputValue, outputOptions } = getOutputData(
       selectedRowKeys,
-      records,
+      wholeRecords,
       dataSource,
       primaryKey,
       valueType,
@@ -176,62 +182,62 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
       mode,
       rowSelection?.checkStrictly
     )
+
     onChange?.(outputValue, outputOptions)
   }
 
   const onRowClick = (record) => {
-    if (disabled || readOnly || record?.disabled) {
+    if (readPretty || disabled || readOnly || record?.disabled) {
       return
     }
     const selectedRowKey = record?.[primaryKey]
     const isSelected = selected?.includes(selectedRowKey)
     let selectedRowKeys = []
-    let records = []
     if (mode === 'single') {
       selectedRowKeys = [selectedRowKey]
-      records = [record]
     } else {
       if (isSelected) {
         selectedRowKeys = selected.filter((item) => item !== selectedRowKey)
       } else {
         selectedRowKeys = [...selected, selectedRowKey]
       }
-      records = flatDataSource.filter((item) =>
-        selectedRowKeys.includes(item?.[primaryKey])
-      )
     }
     if (rowSelection?.checkStrictly !== false) {
-      onInnerChange(selectedRowKeys, records)
+      onInnerChange(selectedRowKeys)
     } else {
       onSlacklyChange(selectedRowKeys)
     }
   }
 
-  // Fusion TreeData SlacklyChange
+  // TreeData SlacklyChange
   const onSlacklyChange = (currentSelected: any[]) => {
-    let { selectedRowKeys, records } = useCheckSlackly(
+    let { selectedRowKeys } = useCheckSlackly(
       currentSelected,
       selected,
+      flatDataSource,
+      flatFilteredDataSource,
       primaryKey,
-      flatDataSource
+      rowSelection?.checkStrictly
     )
-    onInnerChange(selectedRowKeys, records)
+    onInnerChange(selectedRowKeys)
   }
 
-  // Fusion Table Checkbox
+  // Table All Checkbox
   const titleAddon = useTitleAddon(
     selected,
     flatDataSource,
+    flatFilteredDataSource,
     primaryKey,
     mode,
     disabled,
     readOnly,
+    rowSelection?.checkStrictly,
     onInnerChange
   )
 
   return (
     <div className={prefixCls}>
-      {showSearch && !readPretty ? (
+      {showSearch ? (
         <Search
           {...searchProps}
           className={cls(`${prefixCls}-search`, searchProps?.className)}
@@ -255,9 +261,19 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
             ? undefined
             : {
                 ...rowSelection,
+                ...titleAddon,
                 getProps: (record, index) => ({
                   ...(rowSelection?.getProps?.(record, index) as any),
-                  indeterminate: getIndeterminate(record, selected, primaryKey), // 父子关联模式indeterminate值
+                  ...(rowSelection?.checkStrictly !== false
+                    ? {}
+                    : {
+                        indeterminate: getIndeterminate(
+                          record,
+                          flatDataSource,
+                          selected,
+                          primaryKey
+                        ),
+                      }), // 父子关联模式indeterminate值
                   disabled: disabled || record?.disabled,
                 }), // fusion
                 selectedRowKeys: selected,
@@ -266,7 +282,6 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
                     ? onInnerChange
                     : onSlacklyChange,
                 mode,
-                ...titleAddon,
               }
         }
         columns={props.columns || columns}

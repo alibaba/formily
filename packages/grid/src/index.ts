@@ -379,13 +379,13 @@ export class Grid<Container extends HTMLElement> {
   get templateColumns() {
     if (!this.width) return ''
     if (this.maxWidth === Infinity) {
-      return `repeat(${this.columns},1fr)`
+      return `repeat(${this.columns},minmax(0,1fr))`
     }
     if (this.options.strictAutoFit !== true) {
       const columnWidth =
         (this.width - (this.columns - 1) * this.columnGap) / this.columns
       if (columnWidth < this.minWidth || columnWidth > this.maxWidth) {
-        return `repeat(${this.columns},1fr)`
+        return `repeat(${this.columns},minmax(0,1fr))`
       }
     }
     return `repeat(${this.columns},minmax(${this.minWidth}px,${this.maxWidth}px))`
@@ -444,7 +444,7 @@ export class Grid<Container extends HTMLElement> {
       const dispose = reaction(() => ({ ...this.options }), digest)
       resizeObserver.observe(this.container)
       mutationObserver.observe(this.container, {
-        attributeFilter: ['style', 'class', 'data-grid-span'],
+        attributeFilter: ['data-grid-span'],
         attributes: true,
       })
       initialize()

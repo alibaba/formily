@@ -53,15 +53,17 @@ export default () => {
             x-decorator="FormItem"
             title="Cascader预览"
             x-component="PreviewText.Cascader"
-            default={['hangzhou', 'yuhang']}
+            default={'yuhang'}
             enum={[
               {
                 label: '杭州',
                 value: 'hangzhou',
-              },
-              {
-                label: '余杭',
-                value: 'yuhang',
+                children: [
+                  {
+                    label: '余杭',
+                    value: 'yuhang',
+                  },
+                ],
               },
             ]}
           />
@@ -142,15 +144,17 @@ export default () => {
               x-decorator="FormItem"
               title="Cascader预览"
               x-component="PreviewText.Cascader"
-              default={['hangzhou', 'yuhang']}
+              default={'yuhang'}
               enum={[
                 {
                   label: '杭州',
                   value: 'hangzhou',
-                },
-                {
-                  label: '余杭',
-                  value: 'yuhang',
+                  children: [
+                    {
+                      label: '余杭',
+                      value: 'yuhang',
+                    },
+                  ],
                 },
               ]}
             />

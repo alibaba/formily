@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox } from '@alifd/next'
+import { Checkbox } from 'antd'
 import { completedKeys, getCompatibleAllSelected } from './utils'
 
 // 重写表格表头Checkbox（节点状态按全完整数据计算，节点操作按筛选数据计算）
@@ -24,9 +24,9 @@ const newCheckbox =
     // 全选框是否未完全选中
     const indeterminate = Boolean(selected?.length && !checked)
 
-    const onInnerChange = (checked) => {
+    const onInnerChange = (e) => {
       if (!readOnly) {
-        let isSelected = checked
+        let isSelected = e.target.checked
         // 当前可执行全选的keys
         const usableKeys = flatFilteredDataSource
           .filter((item) => !item.disabled)
@@ -83,10 +83,7 @@ const useTitleAddon = (
     return {}
   }
   return {
-    titleProps: () => ({
-      style: { display: 'none' },
-    }),
-    titleAddons: newCheckbox(
+    columnTitle: newCheckbox(
       selected,
       flatDataSource,
       flatFilteredDataSource,
