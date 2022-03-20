@@ -1,4 +1,4 @@
-import { createForm } from '../'
+import { createForm } from '..'
 import {
   isArrayField,
   isArrayFieldState,
