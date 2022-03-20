@@ -1,5 +1,6 @@
 import { createForm } from '../'
 import { onFieldValueChange, onFormValuesChange } from '../effects'
+import { DataField } from '../types'
 import { attach } from './shared'
 
 test('create array field', () => {
@@ -647,4 +648,52 @@ test('array field reset', () => {
   form.reset('*', { forceClear: true })
   expect(form.values).toEqual({ array: [] })
   expect(array.value).toEqual([])
+})
+
+test('array field remove can not memory leak', async () => {
+  const handler = jest.fn()
+  const form = attach(
+    createForm({
+      values: {
+        array: [{ aa: 1 }, { aa: 2 }],
+      },
+      effects() {
+        onFieldValueChange('array.*.aa', handler)
+      },
+    })
+  )
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'array.0',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '1',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'array.1',
+    })
+  )
+  await array.remove(0)
+  form.query('array.0.aa').take((field) => {
+    ;(field as DataField).value = '123'
+  })
+  expect(handler).toBeCalledTimes(2)
 })
