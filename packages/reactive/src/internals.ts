@@ -48,6 +48,7 @@ export const createObservable = (
   const raw = ProxyRaw.get(value)
   if (!!raw) {
     const node = getDataNode(raw)
+    if (!node.target) node.target = target
     node.key = key
     return value
   }
