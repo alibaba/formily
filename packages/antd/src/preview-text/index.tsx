@@ -203,7 +203,7 @@ const TreeSelect: React.FC<TreeSelectProps<any>> = observer((props) => {
   )
 })
 
-const Cascader: React.FC<CascaderProps> = observer((props) => {
+const Cascader: React.FC<CascaderProps<any>> = observer((props) => {
   const field = useField<Field>()
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)
@@ -213,13 +213,15 @@ const Cascader: React.FC<CascaderProps> = observer((props) => {
     ? props.options
     : []
   const getSelected = () => {
-    return isArr(props.value) ? props.value : []
+    return props.multiple
+      ? props.value.map((item) => item[item.length - 1])
+      : props.value.slice(props.value.length - 1)
   }
   const getLabels = () => {
     const selected = getSelected()
     const labels = getValueByValue(dataSource, selected)
       ?.filter((item) => isValid(item))
-      ?.map((item) => item?.whole.join('/'))
+      ?.map((item) => item?.whole?.join('/'))
       .join(', ')
     return labels || placeholder
   }
