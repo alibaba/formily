@@ -683,6 +683,7 @@ test('reset', async () => {
       },
       initialValues: {
         aa: 123,
+        cc: null,
       },
     })
   )
@@ -698,12 +699,28 @@ test('reset', async () => {
       required: true,
     })
   )
+  const cc = attach(
+    form.createField({
+      name: 'cc',
+      required: true,
+    })
+  )
+  const dd = attach(
+    form.createField({
+      name: 'dd',
+      required: true,
+    })
+  )
   expect(aa.value).toEqual(123)
   expect(bb.value).toEqual(123)
+  expect(cc.value).toEqual(null)
   expect(form.values.aa).toEqual(123)
   expect(form.values.bb).toEqual(123)
+  expect(form.values.cc).toEqual(null)
   aa.onInput('xxxxx')
   expect(form.values.aa).toEqual('xxxxx')
+  dd.onInput(null)
+  expect(form.values.dd).toEqual(null)
   aa.reset()
   expect(aa.value).toEqual(123)
   expect(form.values.aa).toEqual(123)
@@ -712,17 +729,40 @@ test('reset', async () => {
   bb.reset()
   expect(bb.value).toBeUndefined()
   expect(form.values.bb).toBeUndefined()
+
+  cc.onInput('xxxxx')
+  expect(form.values.cc).toEqual('xxxxx')
+  cc.reset()
+  expect(cc.value).toBeNull()
+  expect(form.values.cc).toBeNull()
+  dd.reset()
+  expect(dd.value).toBeUndefined()
+  expect(form.values.dd).toBeUndefined()
+
   aa.reset({
     forceClear: true,
   })
   expect(aa.value).toBeUndefined()
   expect(form.values.aa).toBeUndefined()
+  cc.reset({
+    forceClear: true,
+  })
+  expect(cc.value).toBeUndefined()
+  expect(form.values.cc).toBeUndefined()
+
   expect(aa.valid).toBeTruthy()
   await aa.reset({
     forceClear: true,
     validate: true,
   })
   expect(aa.valid).toBeFalsy()
+
+  expect(cc.valid).toBeTruthy()
+  await cc.reset({
+    forceClear: true,
+    validate: true,
+  })
+  expect(cc.valid).toBeFalsy()
 })
 
 test('match', () => {
@@ -1550,6 +1590,9 @@ test('initial value with empty', () => {
   const form = attach(createForm())
   const array = attach(form.createField({ name: 'array', initialValue: '' }))
   expect(array.value).toEqual('')
+
+  const beNull = attach(form.createField({ name: 'null', initialValue: null }))
+  expect(beNull.value).toEqual(null)
 })
 
 test('field submit', async () => {
@@ -2003,12 +2046,13 @@ test('relative query with void field', () => {
   expect(bb.query('.aa').take()).toBe(aa)
 })
 
-test('empty string or number value need rewrite default value', () => {
+test('empty string or number or null value need rewrite default value', () => {
   const form = attach(
     createForm<any>({
       values: {
         aa: '',
         bb: 0,
+        ee: null,
       },
     })
   )
@@ -2036,8 +2080,15 @@ test('empty string or number value need rewrite default value', () => {
       initialValue: 123,
     })
   )
+  attach(
+    form.createField({
+      name: 'ee',
+      initialValue: 'test',
+    })
+  )
   expect(form.values.aa).toEqual('')
   expect(form.values.bb).toEqual(0)
   expect(form.values.cc).toEqual('test')
   expect(form.values.dd).toEqual(123)
+  expect(form.values.ee).toEqual(null)
 })
