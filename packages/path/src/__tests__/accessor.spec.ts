@@ -311,3 +311,45 @@ test('complex destructing', () => {
     },
   })
 })
+
+test('test getIn with invalid value', () => {
+  const value = {
+    array: [null, undefined, { nil: null, undef: undefined }],
+    nil: null,
+    undef: undefined,
+  }
+  expect(getIn(value, 'array.0')).toBeNull()
+  expect(getIn(value, 'array.1')).toBeUndefined()
+  expect(getIn(value, 'array.2.nil')).toBeNull()
+  expect(getIn(value, 'array.2.undef')).toBeUndefined()
+  expect(getIn(value, 'nil')).toBeNull()
+  expect(getIn(value, 'undef')).toBeUndefined()
+})
+
+test('test setIn with invalid value', () => {
+  const value = {
+    a: 1,
+    b: 2,
+    array: [null, undefined, { nil: null, undef: undefined }],
+    nil: null,
+    undef: undefined,
+  }
+  setIn(value, 'a', null)
+  setIn(value, 'b', undefined)
+  // undefined 与 null 互转
+  setIn(value, 'array.0', undefined)
+  setIn(value, 'array.1', null)
+  setIn(value, 'array.2.nil', undefined)
+  setIn(value, 'array.2.undef', null)
+  setIn(value, 'nil', undefined)
+  setIn(value, 'undef', null)
+
+  expect(getIn(value, 'a')).toBeNull()
+  expect(getIn(value, 'b')).toBeUndefined()
+  expect(getIn(value, 'array.0')).toBeUndefined()
+  expect(getIn(value, 'array.1')).toBeNull()
+  expect(getIn(value, 'array.2.nil')).toBeUndefined()
+  expect(getIn(value, 'array.2.undef')).toBeNull()
+  expect(getIn(value, 'nil')).toBeUndefined()
+  expect(getIn(value, 'undef')).toBeNull()
+})

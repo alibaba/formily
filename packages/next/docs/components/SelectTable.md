@@ -602,6 +602,43 @@ export default () => (
 )
 ```
 
+## Pure JSX case
+
+```tsx
+import React from 'react'
+import { FormItem, FormButtonGroup, Submit, SelectTable } from '@formily/next'
+import { createForm } from '@formily/core'
+import { FormProvider, Field } from '@formily/react'
+
+const form = createForm()
+
+export default () => (
+  <FormProvider form={form}>
+    <Field
+      name="SelectTable"
+      dataSource={[
+        { key: '1', name: 'title-1', description: 'description-1' },
+        { key: '2', name: 'title-2', description: 'description-2' },
+      ]}
+      decorator={[FormItem]}
+      component={[
+        SelectTable,
+        {
+          hasBorder: false,
+          columns: [
+            { dataIndex: 'name', title: 'Title' },
+            { dataIndex: 'description', title: 'Description' },
+          ],
+        },
+      ]}
+    />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>Submit</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
+
 ## API
 
 ### SelectTable

@@ -5,6 +5,7 @@ import {
   pascalCase,
   isFn,
   isValid,
+  isUndef,
   isEmpty,
   isPlainObj,
   isNumberLike,
@@ -161,7 +162,10 @@ export const patchFieldStates = (
     } else if (type === 'update') {
       if (payload) {
         target[address] = payload
-        if (target[oldAddress] === payload) delete target[oldAddress]
+        if (target[oldAddress] === payload) {
+          target[oldAddress]?.dispose()
+          delete target[oldAddress]
+        }
       }
       if (address && payload) {
         locateNode(payload, address)
@@ -505,9 +509,9 @@ export const cleanupArrayChildren = (field: ArrayField, start: number) => {
 
   const isNeedCleanup = (identifier: string) => {
     const afterStr = identifier.slice(address.length)
-    const number = afterStr.match(NumberIndexReg)?.[1]
-    if (number === undefined) return false
-    const index = Number(number)
+    const numStr = afterStr.match(NumberIndexReg)?.[1]
+    if (numStr === undefined) return false
+    const index = Number(numStr)
     return index >= start
   }
 
@@ -974,11 +978,15 @@ export const resetSelf = batch.bound(
     target.inputValue = typedDefaultValue
     target.inputValues = []
     target.caches = {}
-    if (isValid(target.value)) {
+    if (!isUndef(target.value)) {
       if (options?.forceClear) {
         target.value = typedDefaultValue
       } else {
-        target.value = toJS(target.initialValue ?? typedDefaultValue)
+        target.value = toJS(
+          !isUndef(target.initialValue)
+            ? target.initialValue
+            : typedDefaultValue
+        )
       }
     }
     if (!noEmit) {
@@ -1016,10 +1024,10 @@ export const getValidFieldDefaultValue = (value: any, initialValue: any) => {
 }
 
 export const allowAssignDefaultValue = (target: any, source: any) => {
-  const isEmptyTarget = isEmpty(target)
-  const isEmptySource = isEmpty(source)
-  const isValidTarget = isValid(target)
-  const isValidSource = isValid(source)
+  const isEmptyTarget = target !== null && isEmpty(target)
+  const isEmptySource = source !== null && isEmpty(source)
+  const isValidTarget = !isUndef(target)
+  const isValidSource = !isUndef(source)
   if (!isValidTarget) {
     if (isValidSource) {
       return true

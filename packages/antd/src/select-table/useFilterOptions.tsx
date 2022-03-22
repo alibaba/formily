@@ -53,7 +53,7 @@ const useFilterOptions = (
 
     const doFilter = (arr: any[]) => {
       const filterArr: any[] = []
-      arr.forEach((item) => {
+      arr?.forEach((item) => {
         if (item?.children?.length) {
           const filterChildren = doFilter(item.children)
           if (filterChildren.length) {

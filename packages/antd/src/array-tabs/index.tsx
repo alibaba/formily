@@ -34,7 +34,9 @@ export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
   }
   const badgedTab = (index: number) => {
     const tab = `${field.title || 'Untitled'} ${index + 1}`
-    const errors = field.errors
+    const errors = field.errors.filter((error) =>
+      error.address.includes(`${field.address}.${index}`)
+    )
     if (errors.length) {
       return (
         <Badge size="small" className="errors-badge" count={errors.length}>

@@ -281,9 +281,6 @@ export default () => {
           name="selectTable3"
           x-decorator="FormItem"
           x-component="SelectTable"
-          x-component-props={{
-            hasBorder: false,
-          }}
           default={['1', '3']}
           enum={[
             { key: '1', name: '标题1', description: '描述1' },
@@ -586,6 +583,42 @@ const schema = {
 export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} scope={{ useAsyncDataSource, loadData }} />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
+
+## 纯 JSX 案例
+
+```tsx
+import React from 'react'
+import { FormItem, FormButtonGroup, Submit, SelectTable } from '@formily/antd'
+import { createForm } from '@formily/core'
+import { FormProvider, Field } from '@formily/react'
+
+const form = createForm()
+
+export default () => (
+  <FormProvider form={form}>
+    <Field
+      name="SelectTable"
+      dataSource={[
+        { key: '1', name: '标题1', description: '描述1' },
+        { key: '2', name: '标题2', description: '描述2' },
+      ]}
+      decorator={[FormItem]}
+      component={[
+        SelectTable,
+        {
+          columns: [
+            { dataIndex: 'name', title: '标题' },
+            { dataIndex: 'description', title: '描述' },
+          ],
+        },
+      ]}
+    />
     <FormButtonGroup>
       <Submit onSubmit={console.log}>提交</Submit>
     </FormButtonGroup>

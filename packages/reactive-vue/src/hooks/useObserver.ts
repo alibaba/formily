@@ -1,5 +1,5 @@
 import { Tracker } from '@formily/reactive'
-import { getCurrentInstance, onBeforeUnmount, isVue3, nextTick } from 'vue-demi'
+import { getCurrentInstance, onBeforeUnmount, isVue3 } from 'vue-demi'
 import { IObserverOptions } from '../types'
 
 /* istanbul ignore next */
@@ -33,13 +33,13 @@ export const useObserver = (options?: IObserverOptions) => {
             }
           })
         }
-        let runUpdate = () => {
-          tracker?.track(() => {
-            vm['_updateEffectRun'].call(newValue)
-          })
-        }
+
         const update = function () {
-          nextTick(runUpdate)
+          let refn = null
+          tracker?.track(() => {
+            refn = vm['_updateEffectRun'].call(newValue)
+          })
+          return refn
         }
         newTracker()
         newValue.run = update
