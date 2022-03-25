@@ -29,9 +29,9 @@ export interface IFormStepProps extends StepsProps {
   formStep?: IFormStep
 }
 
-type ComposedFormTab = React.FC<IFormStepProps> & {
-  StepPane?: React.FC<StepProps>
-  createFormStep?: (defaultCurrent?: number) => IFormStep
+type ComposedFormStep = React.FC<IFormStepProps> & {
+  StepPane: React.FC<StepProps>
+  createFormStep: (defaultCurrent?: number) => IFormStep
 }
 
 type SchemaStep = {
@@ -126,7 +126,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
   return markRaw(formStep)
 }
 
-export const FormStep: ComposedFormTab = connect(
+export const FormStep: ComposedFormStep = connect(
   observer(({ formStep, className, ...props }: IFormStepProps) => {
     const field = useField<VoidField>()
     const prefixCls = usePrefixCls('formily-step', props)
