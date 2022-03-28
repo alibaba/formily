@@ -126,7 +126,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
   return markRaw(formStep)
 }
 
-export const FormStep: ComposedFormStep = connect(
+export const FormStep = connect(
   observer(({ formStep, className, ...props }: IFormStepProps) => {
     const field = useField<VoidField>()
     const prefixCls = usePrefixCls('formily-step', props)
@@ -152,7 +152,7 @@ export const FormStep: ComposedFormStep = connect(
       </div>
     )
   })
-)
+) as unknown as ComposedFormStep
 
 const StepPane: React.FC<StepProps> = ({ children }) => {
   return <Fragment>{children}</Fragment>
