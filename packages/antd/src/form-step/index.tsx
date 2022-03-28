@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { action, markRaw, model } from '@formily/reactive'
+import { define, observable, action, markRaw, model } from '@formily/reactive'
 import { Steps } from 'antd'
 import cls from 'classnames'
 import { StepsProps, StepProps } from 'antd/lib/steps'
@@ -29,9 +29,9 @@ export interface IFormStepProps extends StepsProps {
   formStep?: IFormStep
 }
 
-type ComposedFormTab = React.FC<IFormStepProps> & {
-  StepPane?: React.FC<StepProps>
-  createFormStep?: (defaultCurrent?: number) => IFormStep
+type ComposedFormStep = React.FC<IFormStepProps> & {
+  StepPane: React.FC<StepProps>
+  createFormStep: (defaultCurrent?: number) => IFormStep
 }
 
 type SchemaStep = {
@@ -61,11 +61,18 @@ const parseSteps = (schema: Schema) => {
 }
 
 const createFormStep = (defaultCurrent = 0): IFormStep => {
-  const env: FormStepEnv = {
-    form: null,
-    field: null,
-    steps: [],
-  }
+  const env: FormStepEnv = define(
+    {
+      form: null,
+      field: null,
+      steps: [],
+    },
+    {
+      form: observable.ref,
+      field: observable.ref,
+      steps: observable.shallow,
+    }
+  )
 
   const setDisplay = action.bound((target: number) => {
     const currentStep = env.steps[target]
@@ -126,7 +133,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
   return markRaw(formStep)
 }
 
-export const FormStep: ComposedFormTab = connect(
+export const FormStep = connect(
   observer(({ formStep, className, ...props }: IFormStepProps) => {
     const field = useField<VoidField>()
     const prefixCls = usePrefixCls('formily-step', props)
@@ -152,7 +159,7 @@ export const FormStep: ComposedFormTab = connect(
       </div>
     )
   })
-)
+) as unknown as ComposedFormStep
 
 const StepPane: React.FC<StepProps> = ({ children }) => {
   return <Fragment>{children}</Fragment>

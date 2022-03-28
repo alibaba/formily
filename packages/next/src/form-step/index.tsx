@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { model, markRaw, action } from '@formily/reactive'
+import { define, observable, model, markRaw, action } from '@formily/reactive'
 import cls from 'classnames'
 import {
   StepProps as StepsProps,
@@ -64,11 +64,18 @@ const parseSteps = (schema: Schema) => {
 }
 
 const createFormStep = (defaultCurrent = 0): IFormStep => {
-  const env: FormStepEnv = {
-    form: null,
-    field: null,
-    steps: [],
-  }
+  const env: FormStepEnv = define(
+    {
+      form: null,
+      field: null,
+      steps: [],
+    },
+    {
+      form: observable.ref,
+      field: observable.ref,
+      steps: observable.shallow,
+    }
+  )
 
   const setDisplay = action.bound((target: number) => {
     const currentStep = env.steps[target]

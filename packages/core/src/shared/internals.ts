@@ -158,7 +158,7 @@ export const patchFieldStates = (
 ) => {
   patches.forEach(({ type, address, oldAddress, payload }) => {
     if (type === 'remove') {
-      destroy(target, address)
+      destroy(target, address, false)
     } else if (type === 'update') {
       if (payload) {
         target[address] = payload
@@ -176,9 +176,17 @@ export const patchFieldStates = (
 
 export const destroy = (
   target: Record<string, GeneralField>,
-  address: string
+  address: string,
+  removeValue = true
 ) => {
-  target[address]?.dispose()
+  const field = target[address]
+  field?.dispose()
+  if (isDataField(field) && removeValue) {
+    const form = field.form
+    const path = field.path
+    form.deleteValuesIn(path)
+    form.deleteInitialValuesIn(path)
+  }
   delete target[address]
 }
 

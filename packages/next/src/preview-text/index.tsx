@@ -208,13 +208,13 @@ const Cascader: React.FC<CascaderProps> = observer((props) => {
     ? props.dataSource
     : []
   const getSelected = () => {
-    return isArr(props.value) ? props.value : [props.value]
+    return props.multiple ? props.value : [props.value]
   }
   const getLabels = () => {
     const selected = getSelected()
     const labels = getValueByValue(dataSource, selected)
       ?.filter((item) => isValid(item))
-      ?.map((item) => item?.whole.join('/'))
+      ?.map((item) => item?.whole?.join('/'))
       .join(', ')
     return labels || placeholder
   }
