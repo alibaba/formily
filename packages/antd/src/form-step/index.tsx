@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { action, markRaw, model } from '@formily/reactive'
+import { define, observable, action, markRaw, model } from '@formily/reactive'
 import { Steps } from 'antd'
 import cls from 'classnames'
 import { StepsProps, StepProps } from 'antd/lib/steps'
@@ -61,11 +61,18 @@ const parseSteps = (schema: Schema) => {
 }
 
 const createFormStep = (defaultCurrent = 0): IFormStep => {
-  const env: FormStepEnv = {
-    form: null,
-    field: null,
-    steps: [],
-  }
+  const env: FormStepEnv = define(
+    {
+      form: null,
+      field: null,
+      steps: [],
+    },
+    {
+      form: observable.ref,
+      field: observable.ref,
+      steps: observable.shallow,
+    }
+  )
 
   const setDisplay = action.bound((target: number) => {
     const currentStep = env.steps[target]

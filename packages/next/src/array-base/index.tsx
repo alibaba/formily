@@ -83,18 +83,22 @@ const useRecord = (record?: number) => {
   return ctx ? ctx.record : record
 }
 
+const getSchemaDefaultValue = (schema: Schema) => {
+  if (schema?.type === 'array') return []
+  if (schema?.type === 'boolean') return true
+  if (schema?.type === 'date') return ''
+  if (schema?.type === 'datetime') return ''
+  if (schema?.type === 'number') return 0
+  if (schema?.type === 'object') return {}
+  if (schema?.type === 'string') return ''
+  return null
+}
+
 const getDefaultValue = (defaultValue: any, schema: Schema) => {
   if (isValid(defaultValue)) return clone(defaultValue)
   if (Array.isArray(schema?.items))
-    return getDefaultValue(defaultValue, schema.items[0])
-  if (schema?.items?.type === 'array') return []
-  if (schema?.items?.type === 'boolean') return true
-  if (schema?.items?.type === 'date') return ''
-  if (schema?.items?.type === 'datetime') return ''
-  if (schema?.items?.type === 'number') return 0
-  if (schema?.items?.type === 'object') return {}
-  if (schema?.items?.type === 'string') return ''
-  return null
+    return getSchemaDefaultValue(schema.items[0])
+  return getSchemaDefaultValue(schema.items)
 }
 
 export const ArrayBase: ComposedArrayBase = (props) => {
