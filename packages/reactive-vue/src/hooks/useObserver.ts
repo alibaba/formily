@@ -13,6 +13,9 @@ export const useObserver = (options?: IObserverOptions) => {
         tracker = null
       }
     }
+    const vmUpdate = () => {
+      vm?.proxy?.$forceUpdate()
+    }
 
     onBeforeUnmount(disposeTracker)
 
@@ -27,9 +30,9 @@ export const useObserver = (options?: IObserverOptions) => {
         const newTracker = () => {
           tracker = new Tracker(() => {
             if (options?.scheduler && typeof options.scheduler === 'function') {
-              options.scheduler(update)
+              options.scheduler(vmUpdate)
             } else {
-              update()
+              vmUpdate()
             }
           })
         }

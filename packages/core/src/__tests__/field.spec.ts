@@ -2092,3 +2092,18 @@ test('empty string or number or null value need rewrite default value', () => {
   expect(form.values.dd).toEqual(123)
   expect(form.values.ee).toEqual(null)
 })
+
+test('destroy field need auto remove initialValues', () => {
+  const form = attach(createForm<any>())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      initialValue: 'test',
+    })
+  )
+  expect(form.initialValues.aa).toEqual('test')
+  expect(form.values.aa).toEqual('test')
+  aa.destroy()
+  expect(form.initialValues.aa).toBeUndefined()
+  expect(form.values.aa).toBeUndefined()
+})

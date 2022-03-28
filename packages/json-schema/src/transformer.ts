@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { untracked, autorun, observable } from '@formily/reactive'
 import {
   isArr,
