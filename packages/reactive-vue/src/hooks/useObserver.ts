@@ -14,7 +14,7 @@ export const useObserver = (options?: IObserverOptions) => {
       }
     }
     const vmUpdate = () => {
-      vm?.proxy?.$forceUpdate
+      vm?.proxy?.$forceUpdate()
     }
 
     onBeforeUnmount(disposeTracker)
