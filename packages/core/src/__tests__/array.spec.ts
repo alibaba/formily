@@ -1,5 +1,9 @@
 import { createForm } from '../'
-import { onFieldValueChange, onFormValuesChange } from '../effects'
+import {
+  onFieldValueChange,
+  onFormInitialValuesChange,
+  onFormValuesChange,
+} from '../effects'
 import { DataField } from '../types'
 import { attach } from './shared'
 
@@ -420,10 +424,12 @@ test('array field move api with children', async () => {
 test('array field remove memo leak', async () => {
   const handler = jest.fn()
   const valuesChange = jest.fn()
+  const initialValuesChange = jest.fn()
   const form = attach(
     createForm({
       effects() {
         onFormValuesChange(valuesChange)
+        onFormInitialValuesChange(initialValuesChange)
         onFieldValueChange('*', handler)
       },
     })
@@ -450,6 +456,7 @@ test('array field remove memo leak', async () => {
   )
   expect(handler).toBeCalledTimes(0)
   expect(valuesChange).toBeCalledTimes(4)
+  expect(initialValuesChange).toBeCalledTimes(0)
 })
 
 test('nest array remove', async () => {

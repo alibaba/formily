@@ -330,7 +330,6 @@ export default observer(() => {
 
   if (oldTypeRef.current !== currentType) {
     form.clearFormGraph('container.*') //回收字段模型
-    form.deleteValuesIn('container') //清空字段值
   }
 
   oldTypeRef.current = currentType
@@ -364,7 +363,6 @@ const Custom = observer(() => {
 
   useEffect(() => {
     form.clearFormGraph(`${field.address}.*`) //回收字段模型
-    form.deleteValuesIn(field.path) //清空字段值
     //可以异步获取
     setSchema(DYNAMIC_INJECT_SCHEMA[form.values.type])
   }, [form.values.type])
