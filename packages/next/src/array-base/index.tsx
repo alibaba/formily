@@ -47,8 +47,8 @@ export type ArrayBaseMixins = {
   SortHandle?: React.FC<IconProps & { index?: number }>
   Index?: React.FC
   useArray?: () => IArrayBaseContext
-  useIndex?: () => number
-  useRecord?: () => any
+  useIndex?: (index?: number) => number
+  useRecord?: (record?: number) => any
 }
 
 export interface IArrayBaseProps {
