@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import { isArr, isEmpty, isValid } from '@formily/shared'
+import { isArr, isEmpty, isValid, toArr } from '@formily/shared'
 import { Field } from '@formily/core'
 import { useField, observer } from '@formily/react'
 import { InputProps } from '@alifd/next/lib/input'
@@ -208,7 +208,7 @@ const Cascader: React.FC<CascaderProps> = observer((props) => {
     ? props.dataSource
     : []
   const getSelected = () => {
-    return props.multiple ? props.value : [props.value]
+    return props.multiple ? toArr(props.value) : [props.value]
   }
   const getLabels = () => {
     const selected = getSelected()
