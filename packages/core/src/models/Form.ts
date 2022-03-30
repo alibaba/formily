@@ -563,7 +563,7 @@ export class Form<ValueType extends object = any> {
 
   onUnmount = () => {
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
-    this.query('*').forEach((field) => field.destroy())
+    this.query('*').forEach((field) => field.destroy(false))
     this.disposers.forEach((dispose) => dispose())
     this.unmounted = true
     this.indexes = {}
