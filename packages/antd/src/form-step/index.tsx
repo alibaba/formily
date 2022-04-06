@@ -120,7 +120,9 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
     async next() {
       try {
         await env.form.validate()
-        next()
+        if (env.form.valid) {
+          next()
+        }
       } catch {}
     },
     async back() {
