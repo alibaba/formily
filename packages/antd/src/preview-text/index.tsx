@@ -216,7 +216,7 @@ const Cascader: React.FC<CascaderProps> = observer((props) => {
     const val = toArr(props.value)
     return props.multiple
       ? val.map((item) => item[item.length - 1])
-      : val.slice(props.value.length - 1)
+      : val.slice(val.length - 1)
   }
   const getLabels = () => {
     const selected = getSelected()
