@@ -46,6 +46,14 @@
     "react-dom": ">=16.8.0",
     "react-is": ">=16.8.0 || >=17.0.0"
   },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@umijs/plugin-sass": "^1.1.1",
     "dumi": "^1.1.0-rc.8"
