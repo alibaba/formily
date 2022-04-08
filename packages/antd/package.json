@@ -45,13 +45,21 @@
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
-    "antd": "^4.0.0",
+    "@ant-design/icons": "4.x",
+    "antd": "4.x",
     "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0",
     "react-is": ">=16.8.0 || >=17.0.0"
   },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    }
+  },
   "dependencies": {
-    "@ant-design/icons": "^4.0.0",
     "@formily/core": "2.0.18",
     "@formily/grid": "2.0.18",
     "@formily/json-schema": "2.0.18",
