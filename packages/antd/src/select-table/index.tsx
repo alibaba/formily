@@ -27,7 +27,7 @@ export interface ISelectTableProps extends TableProps<any> {
   mode?: 'multiple' | 'single'
   dataSource?: any[]
   optionAsValue?: boolean
-  valueType: 'all' | 'parent' | 'child' | 'path'
+  valueType?: 'all' | 'parent' | 'child' | 'path'
   showSearch?: boolean
   searchProps?: SearchProps
   primaryKey?: string | ((record: any) => string)
