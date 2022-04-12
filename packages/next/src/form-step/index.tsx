@@ -92,14 +92,12 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
 
   const next = () => {
     if (formStep.allowNext) {
-      setDisplay(formStep.current + 1)
       formStep.setCurrent(formStep.current + 1)
     }
   }
 
   const back = () => {
     if (formStep.allowBack) {
-      setDisplay(formStep.current - 1)
       formStep.setCurrent(formStep.current - 1)
     }
   }
@@ -112,6 +110,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
     },
     current: defaultCurrent,
     setCurrent(key: number) {
+      setDisplay(key)
       formStep.current = key
     },
     get allowNext() {
