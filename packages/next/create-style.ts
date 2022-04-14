@@ -17,5 +17,16 @@ ${files
   .join('')}`,
       'utf8'
     )
+
+    fs.writeFile(
+      path.resolve(__dirname, './index.scss'),
+      `// auto generated code
+${files
+  .map((p) => {
+    return `@import '${path.join('lib/', p)}';\n`
+  })
+  .join('')}`,
+      'utf8'
+    )
   }
 )
