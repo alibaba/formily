@@ -40,19 +40,29 @@ const mapDateFormat = function (type?: 'month' | 'year' | 'week') {
     } else if (_type === 'week') {
       return 'YYYY-wo'
     }
-    return props['showTime'] ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+    return 'YYYY-MM-DD'
   }
 
   return (props: any) => {
-    const format = props['format'] || getDefaultFormat(props)
+    const dateFormat = props['format'] || getDefaultFormat(props)
+
+    let valueFormat = dateFormat
+    if (props.showTime) {
+      const timeFormat = props.showTime.format || 'HH:mm:ss'
+      valueFormat = `${valueFormat} ${timeFormat}`
+    }
+
     const onChange = props.onChange
     return {
       ...props,
-      format,
-      value: momentable(props.value, format === 'YYYY-wo' ? 'YYYY-w' : format),
+      format: dateFormat,
+      value: momentable(
+        props.value,
+        valueFormat === 'YYYY-wo' ? 'YYYY-w' : valueFormat
+      ),
       onChange: (value: moment.Moment | moment.Moment[]) => {
         if (onChange) {
-          onChange(formatMomentValue(value, format))
+          onChange(formatMomentValue(value, valueFormat))
         }
       },
     }
