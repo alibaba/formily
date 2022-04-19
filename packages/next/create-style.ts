@@ -17,5 +17,15 @@ ${files
   .join('')}`,
       'utf8'
     )
+    fs.writeFile(
+      path.resolve(__dirname, './src/main.scss'),
+      `// auto generated code
+${files
+  .map((path) => {
+    return `@import '${path}';\n`
+  })
+  .join('')}`,
+      'utf8'
+    )
   }
 )
