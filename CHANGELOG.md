@@ -1,5 +1,37 @@
 # Changelog
 
+## v2.0.19(2022-04-19)
+
+### :tada: Enhancements
+
+1. [feat(antd/next): add style generator (#3053)](https://github.com/alibaba/formily/commit/fddd591a) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [feat(reactive): remove reactive tracker default batch (#3052)](https://github.com/alibaba/formily/commit/4a8760fa) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :bug: Bug Fixes
+
+1. [fix(element): fix FormDialog/FormDrawer promise status error (#3049)](https://github.com/alibaba/formily/commit/d1700cee) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [fix(next): fix date time picker value format (#3044)](https://github.com/alibaba/formily/commit/cee97228) :point_right: ( [Eric Zhang](https://github.com/Eric Zhang) )
+
+1. [fix(antd/next): form step setCurrent bug (#3039)](https://github.com/alibaba/formily/commit/7aba4847) :point_right: ( [戣蓦](https://github.com/戣蓦) )
+
+1. [fix(antd/next): valueType should not be required attribute since it has default value (#3036)](https://github.com/alibaba/formily/commit/7b8669ba) :point_right: ( [戣蓦](https://github.com/戣蓦) )
+
+1. [fix(antd): fix array-collapse badge no style (#3029)](https://github.com/alibaba/formily/commit/c25c3ac6) :point_right: ( [shaaaaaaaa](https://github.com/shaaaaaaaa) )
+
+1. [fix(antd/next): fix form tab type check issue (#3025)](https://github.com/alibaba/formily/commit/f0511355) :point_right: ( [戣蓦](https://github.com/戣蓦) )
+
+1. [fix(antd): fix error, can't read 'length' of undefined (#3020) (#3021)](https://github.com/alibaba/formily/commit/10503b83) :point_right: ( [melodyYang](https://github.com/melodyYang) )
+
+### :hammer_and_wrench: Update Workflow Scripts
+
+1. [build: add peerDependenciesMeta (#3026)](https://github.com/alibaba/formily/commit/bbc2a51b) :point_right: ( [うまる](https://github.com/うまる) )
+
+### :blush: Other Changes
+
+1. [chore(deps): bump moment from 2.29.1 to 2.29.2 (#3033)](https://github.com/alibaba/formily/commit/c26e011c) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
+
 ## v2.0.18(2022-03-30)
 
 ### :bug: Bug Fixes
@@ -891,10 +923,6 @@
 1. [docs(site): update controlled docs](https://github.com/alibaba/formily/commit/b13c3433) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 ## v2.0.0-rc.1(2021-08-13)
-
-### No Change Log
-
-## v2.0.0-rc.0(2021-08-13)
 
 ### :tada: Enhancements
 
