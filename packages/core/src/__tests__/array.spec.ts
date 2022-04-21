@@ -698,9 +698,20 @@ test('array field remove can not memory leak', async () => {
       basePath: 'array.1',
     })
   )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      basePath: 'array.1',
+      reactions: (field) => {
+        field.visible = field.query('.aa').value() === '123'
+      },
+    })
+  )
+  expect(bb.visible).toBeFalsy()
   await array.remove(0)
   form.query('array.0.aa').take((field) => {
     ;(field as DataField).value = '123'
   })
-  expect(handler).toBeCalledTimes(2)
+  expect(bb.visible).toBeTruthy()
+  expect(handler).toBeCalledTimes(1)
 })
