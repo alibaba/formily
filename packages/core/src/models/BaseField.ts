@@ -291,8 +291,8 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
     this.form.removeEffects(this)
   }
 
-  destroy = () => {
-    destroy(this.form.fields, this.address.toString())
+  destroy = (forceClear = true) => {
+    destroy(this.form.fields, this.address.toString(), forceClear)
   }
 
   match = (pattern: FormPathPattern) => {

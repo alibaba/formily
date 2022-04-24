@@ -47,8 +47,8 @@ export type ArrayBaseMixins = {
   SortHandle?: React.FC<AntdIconProps & { index?: number }>
   Index?: React.FC
   useArray?: () => IArrayBaseContext
-  useIndex?: () => number
-  useRecord?: () => any
+  useIndex?: (index?: number) => number
+  useRecord?: (record?: number) => any
 }
 
 export interface IArrayBaseProps {
@@ -85,13 +85,13 @@ const useRecord = (record?: number) => {
 
 const getSchemaDefaultValue = (schema: Schema) => {
   if (schema?.type === 'array') return []
-  if (schema?.type === 'boolean') return true
-  if (schema?.type === 'date') return ''
-  if (schema?.type === 'datetime') return ''
-  if (schema?.type === 'number') return 0
   if (schema?.type === 'object') return {}
-  if (schema?.type === 'string') return ''
-  return null
+  if (schema?.type === 'void') {
+    for (let key in schema.properties) {
+      const value = getSchemaDefaultValue(schema.properties[key])
+      if (isValid(value)) return value
+    }
+  }
 }
 
 const getDefaultValue = (defaultValue: any, schema: Schema) => {

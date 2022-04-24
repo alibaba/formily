@@ -163,7 +163,6 @@ export const patchFieldStates = (
       if (payload) {
         target[address] = payload
         if (target[oldAddress] === payload) {
-          target[oldAddress]?.dispose()
           delete target[oldAddress]
         }
       }
@@ -387,10 +386,11 @@ export const spliceArrayState = (
     if (number === undefined) return false
     const index = Number(number)
     return (
-      index >= startIndex &&
-      !fields[
-        `${preStr}${afterStr.replace(/^\.\d+/, `.${index + deleteCount}`)}`
-      ]
+      (index > startIndex &&
+        !fields[
+          `${preStr}${afterStr.replace(/^\.\d+/, `.${index + deleteCount}`)}`
+        ]) ||
+      index === startIndex
     )
   }
   const moveIndex = (identifier: string) => {

@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import { isArr, isValid } from '@formily/shared'
+import { isArr, toArr, isValid } from '@formily/shared'
 import { Field } from '@formily/core'
 import { observer, useField } from '@formily/react'
 import { InputProps } from 'antd/lib/input'
@@ -213,9 +213,10 @@ const Cascader: React.FC<CascaderProps> = observer((props) => {
     ? props.options
     : []
   const getSelected = () => {
+    const val = toArr(props.value)
     return props.multiple
-      ? props.value.map((item) => item[item.length - 1])
-      : props.value.slice(props.value.length - 1)
+      ? val.map((item) => item[item.length - 1])
+      : val.slice(val.length - 1)
   }
   const getLabels = () => {
     const selected = getSelected()
