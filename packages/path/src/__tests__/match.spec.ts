@@ -202,6 +202,12 @@ test('group match with destructor', () => {
   ).toEqual(true)
 })
 
+test('all range match', () => {
+  expect(
+    Path.parse('array.*[:].*[:].*[:].bb').match('array.0.0.0.aa')
+  ).toBeFalsy()
+})
+
 match({
   '*': [[], ['aa'], ['aa', 'bb', 'cc'], ['aa', 'dd', 'gg']],
   '*.a.b': [

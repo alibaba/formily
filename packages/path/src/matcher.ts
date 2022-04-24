@@ -178,7 +178,8 @@ export class Matcher {
       if (node.end) {
         return current <= Number(node.end.value)
       } else {
-        return true
+        this.wildcards = this.stack.slice() as WildcardOperatorNode[]
+        return this.next(node, pos)
       }
     }
   }
