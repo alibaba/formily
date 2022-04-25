@@ -65,6 +65,11 @@ export interface ISchemaFieldReactFactoryOptions<
   scope?: any
 }
 
+export interface ISchemaFieldOptionContext {
+  getComponent: (name: string) => JSXComponent
+  scope?: any
+}
+
 export interface ISchemaFieldProps<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
