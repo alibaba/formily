@@ -11,6 +11,14 @@ $array-base-prefix-cls: '#{$css-prefix}formily-array-base';
   &:hover {
     color: $color-text1-1;
   }
+
+  &-disabled {
+    color: $color-text1-1;
+    cursor: not-allowed !important;
+    &:hover {
+      color: $color-text1-1;
+    }
+  }
 }
 
 .#{$array-base-prefix-cls}-addition {
@@ -26,6 +34,14 @@ $array-base-prefix-cls: '#{$css-prefix}formily-array-base';
   &:hover {
     color: $color-text1-1;
   }
+
+  &-disabled {
+    color: $color-text1-1;
+    cursor: not-allowed !important;
+    &:hover {
+      color: $color-text1-1;
+    }
+  }
 }
 
 .#{$array-base-prefix-cls}-move-up {
@@ -36,6 +52,14 @@ $array-base-prefix-cls: '#{$css-prefix}formily-array-base';
 
   &:hover {
     color: $color-text1-1;
+  }
+
+  &-disabled {
+    color: $color-text1-1;
+    cursor: not-allowed !important;
+    &:hover {
+      color: $color-text1-1;
+    }
   }
 }
 

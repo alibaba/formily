@@ -17,7 +17,7 @@ import {
   JSXComponent,
   ExpressionScope,
 } from '@formily/react'
-import { isValid, clone, isBool } from '@formily/shared'
+import { isValid, clone } from '@formily/shared'
 import { SortableHandle } from 'react-sortable-hoc'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
@@ -164,7 +164,7 @@ ArrayBase.Addition = (props) => {
       type="dashed"
       block
       {...props}
-      disabled={isBool(self?.disabled) ? self?.disabled : array.field?.disabled}
+      disabled={self?.disabled}
       className={cls(`${prefixCls}-addition`, props.className)}
       onClick={(e) => {
         if (array.props?.disabled) return
@@ -189,6 +189,7 @@ ArrayBase.Addition = (props) => {
 
 ArrayBase.Remove = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
+  const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
   if (!array) return null
@@ -196,10 +197,14 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
   return (
     <DeleteOutlined
       {...props}
-      className={cls(`${prefixCls}-remove`, props.className)}
+      className={cls(
+        `${prefixCls}-remove`,
+        self?.disabled ? `${prefixCls}-remove-disabled` : '',
+        props.className
+      )}
       ref={ref}
       onClick={(e) => {
-        if (array.props?.disabled) return
+        if (self?.disabled) return
         e.stopPropagation()
         array.field?.remove?.(index)
         array.props?.onRemove?.(index)
@@ -213,6 +218,7 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
 
 ArrayBase.MoveDown = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
+  const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
   if (!array) return null
@@ -220,10 +226,14 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
   return (
     <DownOutlined
       {...props}
-      className={cls(`${prefixCls}-move-down`, props.className)}
+      className={cls(
+        `${prefixCls}-move-down`,
+        self?.disabled ? `${prefixCls}-move-down-disabled` : '',
+        props.className
+      )}
       ref={ref}
       onClick={(e) => {
-        if (array.props?.disabled) return
+        if (self?.disabled) return
         e.stopPropagation()
         array.field?.moveDown?.(index)
         array.props?.onMoveDown?.(index)
@@ -237,6 +247,7 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
 
 ArrayBase.MoveUp = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
+  const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
   if (!array) return null
@@ -244,10 +255,14 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
   return (
     <UpOutlined
       {...props}
-      className={cls(`${prefixCls}-move-up`, props.className)}
+      className={cls(
+        `${prefixCls}-move-up`,
+        self?.disabled ? `${prefixCls}-move-up-disabled` : '',
+        props.className
+      )}
       ref={ref}
       onClick={(e) => {
-        if (array.props?.disabled) return
+        if (self?.disabled) return
         e.stopPropagation()
         array?.field?.moveUp(index)
         array?.props?.onMoveUp?.(index)
