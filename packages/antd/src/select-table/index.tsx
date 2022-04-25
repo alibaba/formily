@@ -136,6 +136,16 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   const flatDataSource = useFlatOptions(dataSource)
   const flatFilteredDataSource = useFlatOptions(filteredDataSource)
 
+  function unique(arr, u_key) {
+    let map = new Map()
+    arr.forEach((item) => {
+      if (!map.has(item[u_key])) {
+        map.set(item[u_key], item)
+      }
+    })
+    return [...map.values()]
+  }
+
   // selected keys for Table UI
   const selected = getUISelected(
     value,
@@ -165,8 +175,12 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     if (readOnly) {
       return
     }
-    // 筛选后onChange默认的records数据不完整，此处需使用完整数据过滤
-    const wholeRecords = flatDataSource.filter((item) =>
+    // 筛选后onChange默认的records数据不完整，此处需使用完整数据过滤, 且optionAsValue时，翻页或搜索导致flatDataSource可能不包含已选value
+    const realDataSource =
+      optionAsValue && value?.length
+        ? unique([...flatDataSource, ...value], primaryKey)
+        : flatDataSource
+    const wholeRecords = realDataSource.filter((item) =>
       selectedRowKeys.includes(item?.[primaryKey])
     )
     const { outputValue, outputOptions } = getOutputData(

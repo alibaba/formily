@@ -16,6 +16,7 @@ import {
   ISchemaMarkupFieldProps,
   ISchemaTypeFieldProps,
 } from '../types'
+import { FormPath } from '@formily/shared'
 const env = {
   nonameId: 0,
 }
@@ -55,9 +56,10 @@ export function createSchemaField<Components extends SchemaReactComponents>(
       <SchemaOptionsContext.Provider
         value={{
           ...options,
-          components: {
-            ...options.components,
-            ...props.components,
+          getComponent(name) {
+            const propsComponent = FormPath.getIn(props.components, name)
+            if (propsComponent) return propsComponent
+            return FormPath.getIn(options.components, name)
           },
         }}
       >
