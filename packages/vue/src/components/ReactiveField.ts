@@ -1,8 +1,8 @@
-import { inject, provide, Ref, ref, shallowRef, watch } from 'vue-demi'
+import { inject, provide, Ref, ref, shallowRef, watch, isVue2 } from 'vue-demi'
 import { GeneralField, isVoidField } from '@formily/core'
 import { FormPath } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
-import { toJS } from '@formily/reactive'
+import { toJS, reaction } from '@formily/reactive'
 import { SchemaOptionsSymbol, FieldSymbol, h, Fragment } from '../shared'
 import { useAttach } from '../hooks/useAttach'
 import { useField, useForm } from '../hooks'
@@ -93,6 +93,17 @@ const mergeSlots = (
   return patchedSlots
 }
 
+const createFieldInVue2 = (innerCreateField) => {
+  return () => {
+    let res: GeneralField
+    const disposer = reaction(() => {
+      res = innerCreateField()
+    })
+    disposer()
+    return res
+  }
+}
+
 export default observer({
   name: 'ReactiveField',
   props: {
@@ -109,11 +120,16 @@ export default observer({
     const formRef = useForm()
     const parentRef = useField()
     const optionsRef = inject(SchemaOptionsSymbol, ref(null))
-    const createField = () =>
+    let createField = () =>
       formRef?.value?.[`create${props.fieldType}`]?.({
         ...props.fieldProps,
         basePath: props.fieldProps?.basePath ?? parentRef.value?.address,
       })
+
+    if (isVue2) {
+      createField = createFieldInVue2(createField)
+    }
+
     const fieldRef = shallowRef(createField()) as Ref<GeneralField>
     watch(
       () => props.fieldProps,
