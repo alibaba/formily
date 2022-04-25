@@ -36,48 +36,27 @@ export function mapProps<T extends VueComponent = VueComponent>(
     }, input)
 
   return (target: T) => {
-    /* istanbul ignore else */
-    if (isVue2) {
-      return defineComponent<VueComponentProps<T>>({
-        functional: true,
+    return observer(
+      defineComponent({
         name: target.name ? `Connected${target.name}` : `ConnectedComponent`,
-        render(createElement, context) {
+        setup(props, { attrs, slots, listeners }) {
           const fieldRef = useField()
-          const { data } = context
-          const attrs = fieldRef.value
-            ? transform(
-                { ...data.attrs, ...data.props } as VueComponentProps<T>,
-                fieldRef.value
-              )
-            : { ...data.attrs, ...data.props }
-          return createElement(target, { ...data, attrs }, context.children)
+          return () => {
+            const newAttrs = fieldRef.value
+              ? transform({ ...attrs } as VueComponentProps<T>, fieldRef.value)
+              : { ...attrs }
+            return h(
+              target,
+              {
+                attrs: newAttrs,
+                on: listeners,
+              },
+              slots
+            )
+          }
         },
       })
-    } else {
-      return observer(
-        defineComponent({
-          name: target.name ? `Connected${target.name}` : `ConnectedComponent`,
-          setup(props, { attrs, slots }) {
-            const fieldRef = useField()
-            return () => {
-              const newAttrs = fieldRef.value
-                ? transform(
-                    { ...attrs } as VueComponentProps<T>,
-                    fieldRef.value
-                  )
-                : { ...attrs }
-              return h(
-                target,
-                {
-                  attrs: newAttrs,
-                },
-                slots
-              )
-            }
-          },
-        })
-      )
-    }
+    )
   }
 }
 
