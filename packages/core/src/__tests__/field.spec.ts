@@ -2107,3 +2107,48 @@ test('destroy field need auto remove initialValues', () => {
   expect(form.initialValues.aa).toBeUndefined()
   expect(form.values.aa).toBeUndefined()
 })
+
+test('validateFirst', async () => {
+  const form = attach(createForm<any>({
+    validateFirst: false
+  }))
+  const aaValidate = jest.fn(() => 'aaError')
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      validateFirst: true,
+      validator: [
+        aaValidate,
+        aaValidate,
+      ]
+    })
+  )
+  await aa.onInput('aa')
+  const bbValidate = jest.fn(() => 'bbError')
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      validator: [
+        bbValidate,
+        bbValidate,
+      ],
+      validateFirst: false,
+    })
+  )
+  await bb.onInput('bb')
+  const ccValidate = jest.fn(() => 'ccError')
+  const cc = attach(
+    form.createField({
+      name: 'cc',
+      validator: [
+        ccValidate,
+        ccValidate,
+      ],
+    })
+  )
+  await cc.onInput('cc')
+
+  expect(aaValidate).toBeCalledTimes(1)
+  expect(bbValidate).toBeCalledTimes(2)
+  expect(ccValidate).toBeCalledTimes(2)
+})
