@@ -39,7 +39,7 @@ export function mapProps<T extends VueComponent = VueComponent>(
     return observer(
       defineComponent({
         name: target.name ? `Connected${target.name}` : `ConnectedComponent`,
-        setup(props, { attrs, slots, listeners }) {
+        setup(props, { attrs, slots, listeners }: any) {
           const fieldRef = useField()
           return () => {
             const newAttrs = fieldRef.value
