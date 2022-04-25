@@ -140,12 +140,12 @@ export default () => {
       field.setState({
         dataSource: [
           {
-            key: 'AAA' + value,
+            key: '3',
             name: 'AAA' + value,
             description: 'aaa',
           },
           {
-            key: 'BBB' + value,
+            key: '4',
             name: 'BBB' + value,
             description: 'bbb',
           },
@@ -167,7 +167,6 @@ export default () => {
             showSearch: true,
             filterOption: false,
             onSearch,
-            optionAsValue: true,
           }}
           enum={[
             { key: '1', name: '标题1', description: '描述1' },
@@ -524,8 +523,8 @@ const loadData = async (value) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
-        { key: 'AAA' + value, name: 'AAA' + value, description: 'aaa' },
-        { key: 'BBB' + value, name: 'BBB' + value, description: 'bbb' },
+        { key: '3', name: 'AAA' + value, description: 'aaa' },
+        { key: '4', name: 'BBB' + value, description: 'bbb' },
       ])
     }, 1500)
   })
@@ -554,7 +553,6 @@ const schema = {
         showSearch: true,
         filterOption: false,
         onSearch: '{{useAsyncDataSource(loadData,$self)}}',
-        optionAsValue: true,
       },
       enum: [
         { key: '1', name: '标题1', description: '描述1' },

@@ -138,6 +138,21 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   const flatDataSource = useFlatOptions(dataSource)
   const flatFilteredDataSource = useFlatOptions(filteredDataSource)
 
+  // 分页或异步查询时，dataSource会丢失已选数据，配置optionAsValue则无法获取已选数据，需要进行合并
+  const getWholeDataSource = () => {
+    if (optionAsValue && mode === 'multiple' && value?.length) {
+      const map = new Map()
+      const arr = [...flatDataSource, ...value]
+      arr.forEach((item) => {
+        if (!map.has(item[primaryKey])) {
+          map.set(item[primaryKey], item)
+        }
+      })
+      return [...map.values()]
+    }
+    return flatDataSource
+  }
+
   // selected keys for Table UI
   const selected = getUISelected(
     value,
@@ -168,7 +183,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
       return
     }
     // 筛选后onChange默认的records数据不完整，此处需使用完整数据过滤
-    const wholeRecords = flatDataSource.filter((item) =>
+    const wholeRecords = getWholeDataSource().filter((item) =>
       selectedRowKeys.includes(item?.[primaryKey])
     )
 
