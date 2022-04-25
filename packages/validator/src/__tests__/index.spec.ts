@@ -1,4 +1,5 @@
 import { FormValidator } from '../index'
+import { FormPath } from '@formily/shared'
 
 const batchTestRules = async (rules: any[], options?: any) => {
   const validator = new FormValidator(options)
@@ -135,14 +136,192 @@ test('max', async () => {
   ])
 })
 
+test('maximum', async () => {
+  await batchTestRules([
+    {
+      value: 123,
+      rules: {
+        maximum: 999,
+        message: 'The value should be no more than 999'
+      },
+      errors: []
+    },
+    {
+      value: 999,
+      rules: {
+        maximum: 999,
+        message: 'The value should be no more than 999'
+      },
+      errors: []
+    },
+    {
+      value: 1000,
+      rules: {
+        maximum: 999,
+        message: 'The value should be no more than 999'
+      },
+      errors: ['The value should be no more than 999']
+    }
+  ])
+})
+
+test('exclusiveMaximum', async () => {
+  await batchTestRules([
+    {
+      value: 123,
+      rules: {
+        exclusiveMaximum: 999,
+        message: 'The value should be less than 999'
+      },
+      errors: []
+    },
+    {
+      value: 999,
+      rules: {
+        exclusiveMaximum: 999,
+        message: 'The value should be less than 999'
+      },
+      errors: ['The value should be less than 999']
+    },
+    {
+      value: 1000,
+      rules: {
+        exclusiveMaximum: 999,
+        message: 'The value should be less than 999'
+      },
+      errors: ['The value should be less than 999']
+    }
+  ])
+})
+
+test('minimum', async () => {
+  await batchTestRules([
+    {
+      value: 123,
+      rules: {
+        minimum: 999,
+        message: 'The value should be more than 999'
+      },
+      errors: ['The value should be more than 999']
+    },
+    {
+      value: 999,
+      rules: {
+        minimum: 999,
+        message: 'The value should be more than 999'
+      },
+      errors: []
+    },
+    {
+      value: 1000,
+      rules: {
+        minimum: 999,
+        message: 'The value should be no more than 999'
+      },
+      errors: []
+    }
+  ])
+})
+
+test('exclusiveMinimum', async () => {
+  await batchTestRules([
+    {
+      value: 123,
+      rules: {
+        exclusiveMinimum: 999,
+        message: 'The value should be more than 999'
+      },
+      errors: ['The value should be more than 999']
+    },
+    {
+      value: 999,
+      rules: {
+        exclusiveMinimum: 999,
+        message: 'The value should be less than 999'
+      },
+      errors: ['The value should be less than 999']
+    },
+    {
+      value: 1000,
+      rules: {
+        exclusiveMinimum: 999,
+        message: 'The value should be less than 999'
+      },
+      errors: []
+    }
+  ])
+})
+
+test('len', async () => {
+  await batchTestRules([
+    {
+      value: '123',
+      rules: {
+        len: 3,
+        message: 'This length of value should be 3'
+      },
+      errors: []
+    },
+    {
+      value: [1, 2],
+      rules: {
+        len: 3,
+        message: 'This length of value should be 3'
+      },
+      errors: ['This length of value should be 3']
+    }
+  ])
+})
+
+test('min', async () => {
+  await batchTestRules([
+    {
+      value: '123',
+      rules: {
+        min: 3
+      },
+      errors: []
+    },
+    {
+      value: '12',
+      rules: {
+        min: 3,
+        message: 'The length of value must be at least 3'
+      },
+      errors: ['The length of value must be at least 3']
+    }
+  ])
+})
+
 test('whitespace', async () => {
   await batchTestRules([
     {
       value: '   ',
       rules: {
-        whitespace: true
+        whitespace: true,
+        message: 'This field cannot be empty'
       },
       errors: ['This field cannot be empty']
+    }
+  ])
+})
+
+test('enum', async () => {
+  await batchTestRules([
+    {
+      value: 1,
+      rules: {
+        enum: [1, 2, 3]
+      },
+      errors: []
+    },
+    {
+      value: 4,
+      rules: {
+        enum: [1, 2, 3],
+        message: 'value should be in [1, 2, 3]'
+      },
+      errors: ['value should be in [1, 2, 3]']
     }
   ])
 })
@@ -155,7 +334,8 @@ test('validateFirst', async () => {
         value: '   ',
         rules: [
           {
-            whitespace: true
+            whitespace: true,
+            message: 'This field cannot be empty'
           },
           secondValidator
         ],
@@ -171,15 +351,163 @@ test('validateFirst', async () => {
 
 //内置正则库测试
 test('formats', async () => {
-  //todo
+  await batchTestRules([
+    {
+      value: 'https://www.mock.com',
+      rules: {
+        format: 'url'
+      },
+      errors: []
+    },
+    {
+      value: 'email@163.com',
+      rules: {
+        format: 'email'
+      },
+      errors: []
+    },
+    {
+      value: '0000:0000:0000:0000:0000:0000:0000:0000',
+      rules: {
+        format: 'ipv6'
+      },
+      errors: []
+    },
+    {
+      value: '127.0.0.1',
+      rules: {
+        format: 'ipv4'
+      },
+      errors: []
+    },
+    {
+      value: 123,
+      rules: {
+        format: 'number'
+      },
+      errors: []
+    },
+    {
+      value: 'a',
+      rules: {
+        format: 'number'
+      },
+      errors: ['This field is not a number']
+    },
+    {
+      value: 123,
+      rules: {
+        format: 'integer'
+      },
+      errors: []
+    },
+    {
+      value: 123.01,
+      rules: {
+        format: 'integer'
+      },
+      errors: ['This field is not an integer number']
+    },
+    {
+      value: 12345,
+      rules: {
+        format: 'qq'
+      },
+      errors: []
+    },
+    {
+      value: 18391241101,
+      rules: {
+        format: 'phone'
+      },
+      errors: []
+    },
+    {
+      value: '11011919701144001x',
+      rules: {
+        format: 'idcard'
+      },
+      errors: []
+    },
+    {
+      value: 'https://taobao.com',
+      rules: {
+        format: 'taodomain'
+      },
+      errors: []
+    },
+    {
+      value: '$123',
+      rules: {
+        format: 'money'
+      },
+      errors: []
+    },
+    {
+      value: '哈喽',
+      rules: {
+        format: 'zh'
+      },
+      errors: []
+    },
+    {
+      value: '1970-01-01 00:00:00',
+      rules: {
+        format: 'date'
+      },
+      errors: []
+    },
+    {
+      value: 123456,
+      rules: {
+        format: 'zip'
+      },
+      errors: []
+    }
+  ])
 })
 
 //模板引擎测试
 test('template', async () => {
-  //todo
+  FormValidator.registerMTEngine((message, context) => {
+    return message.replace(/\{\{\s*(.+)\s*\}\}/g, (_, $0) => {
+      return FormPath.getIn(context, $0)
+    })
+  })
+
+  const validator = new FormValidator()
+  const rules = [
+    {
+      validator(value) {
+        return value === 123
+          ? 'This field can not be 123. {{payload.hello}}'
+          : ''
+      },
+      payload: {
+        hello: 'hello world'
+      }
+    }
+  ]
+  validator.register('aa', validate => {
+    return validate(123, rules).then(({ errors }) => {
+      expect(errors).toEqual(['This field can not be 123. hello world'])
+    })
+  })
+  await validator.validate()
 })
 
 //自定义规则测试
 test('custom rules', async () => {
-  //todo
+  FormValidator.registerRules({
+    custom: value => {
+      return value === '123' ? 'This field can not be 123' : ''
+    }
+  })
+  const validator = new FormValidator()
+  validator.register('aa', validate => {
+    return validate('123', { custom: true }).then(({ errors }) => {
+      expect(errors).toEqual(['This field can not be 123'])
+    })
+  })
+  await validator.validate()
 })

@@ -265,7 +265,7 @@ registerValidationMTEngine(callback:(message,context)=>any) : void
  import { createForm,registerValidationMTEngine } from '@formily/core'
 
  registerValidationMTEngine((message,context)=>{
-   return message.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, $0) => {
+   return message.replace(/\{\{\s*(.+)\s*\}\}/g, (_, $0) => {
        return FormPath.getIn(context, $0)
    })
  })
