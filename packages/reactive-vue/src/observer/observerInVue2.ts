@@ -69,7 +69,16 @@ function observer(Component: any, observerOptions?: IObserverOptions): any {
       return this
     }
 
+    reactiveRender.$vm = this
+
     const tracker = new Tracker(() => {
+      if (
+        reactiveRender.$vm._isBeingDestroyed ||
+        reactiveRender.$vm._isDestroyed
+      ) {
+        return tracker.dispose()
+      }
+
       if (
         observerOptions?.scheduler &&
         typeof observerOptions.scheduler === 'function'
