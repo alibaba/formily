@@ -118,3 +118,34 @@ test('observer: component scheduler', async () => {
 
   wrapper.destroy()
 })
+
+test('observer: stop tracking if watcher is destroyed', async () => {
+  let count = 0
+  const model = observable<any>({
+    age: 10,
+    name: 'test',
+  })
+
+  const Component = observer({
+    name: 'test',
+    data() {
+      return {
+        model: model,
+      }
+    },
+    render() {
+      count++
+      return h('div', [this.model.name, this.model.age])
+    },
+  })
+
+  const wrapper = shallowMount(Component)
+
+  const childInst = wrapper.find({ name: 'test' })
+
+  expect(childInst.exists()).toBe(true)
+  ;(childInst.vm as any)._isDestroyed = true
+  model.age++
+  wrapper.destroy()
+  expect(count).toEqual(1) // 不触发 reactiveRender
+})
