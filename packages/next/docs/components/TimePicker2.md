@@ -1,8 +1,8 @@
 # TimePicker2
 
-> Time选择器
+> Time 选择器
 
-## Markup Schema 
+## Markup Schema Example
 
 ```tsx
 import React from 'react'
@@ -42,7 +42,7 @@ export default () => (
 )
 ```
 
-## JSON Schema 
+## JSON Schema Case
 
 ```tsx
 import React from 'react'
@@ -87,7 +87,7 @@ export default () => (
 )
 ```
 
-## 纯 JSX 案例
+## Pure JSX case
 
 ```tsx
 import React from 'react'
