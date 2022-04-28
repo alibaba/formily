@@ -11,6 +11,10 @@ import {
   RangePickerProps as DateRangePickerProps,
 } from '@alifd/next/lib/date-picker'
 import { TimePickerProps } from '@alifd/next/lib/time-picker'
+import {
+  TimePickerProps as TimePicker2Props,
+  RangePickerProps as TimeRangePicker2Props,
+} from '@alifd/next/types/time-picker2'
 import { Tag } from '@alifd/next'
 import cls from 'classnames'
 import { formatMomentValue, usePrefixCls } from '../__builtins__'
@@ -251,6 +255,26 @@ const TimePicker: React.FC<TimePickerProps> = (props) => {
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
+const TimePicker2: React.FC<TimePicker2Props> = (props) => {
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
+  const getLabels = () => {
+    const labels = formatMomentValue(props.value, props.format, placeholder)
+    return isArr(labels) ? labels.join('~') : labels
+  }
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+}
+
+const TimeRangePicker2: React.FC<TimeRangePicker2Props> = (props) => {
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
+  const getLabels = () => {
+    const labels = formatMomentValue(props.value, props.format, placeholder)
+    return isArr(labels) ? labels.join('~') : labels
+  }
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+}
+
 const Text = (props: React.PropsWithChildren<any>) => {
   const prefixCls = usePrefixCls('form-text', props)
 
@@ -268,6 +292,8 @@ Text.Cascader = Cascader
 Text.DatePicker = DatePicker
 Text.DateRangePicker = DateRangePicker
 Text.TimePicker = TimePicker
+Text.TimePicker2 = TimePicker2
+Text.TimeRangePicker2 = TimeRangePicker2
 Text.Placeholder = Placeholder
 Text.usePlaceholder = usePlaceholder
 
