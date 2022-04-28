@@ -29,7 +29,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('Drawer Form', (resolve) => {
+        FormDrawer('Drawer Form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={14}>
               <SchemaField>
@@ -64,7 +64,15 @@ export default () => {
               </SchemaField>
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>Submit</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    Submit
+                  </Submit>
                   <Reset>Reset</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
@@ -146,13 +154,21 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('Pop-up form', (resolve) => {
+        FormDrawer('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={14}>
               <SchemaField schema={schema} />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>Submit</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    Submit
+                  </Submit>
                   <Reset>Reset</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
@@ -193,7 +209,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('Pop-up form', (resolve) => {
+        FormDrawer('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={14}>
               <Field
@@ -226,7 +242,15 @@ export default () => {
               />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>Submit</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    Submit
+                  </Submit>
                   <Reset>Reset</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
@@ -272,7 +296,7 @@ export default () => {
     >
       <Button
         onClick={() => {
-          FormDrawer('Pop-up form', (resolve) => {
+          FormDrawer('Pop-up form', () => {
             return (
               <FormLayout labelCol={6} wrapperCol={14}>
                 <Field
@@ -305,7 +329,15 @@ export default () => {
                 />
                 <FormDrawer.Footer>
                   <FormButtonGroup align="right">
-                    <Submit onClick={resolve}>Submit</Submit>
+                    <Submit
+                      onSubmit={() => {
+                        return new Promise((resolve) => {
+                          setTimeout(resolve, 1000)
+                        })
+                      }}
+                    >
+                      Submit
+                    </Submit>
                     <Reset>Reset</Reset>
                   </FormButtonGroup>
                 </FormDrawer.Footer>
