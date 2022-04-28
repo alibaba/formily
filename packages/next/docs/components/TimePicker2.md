@@ -1,18 +1,18 @@
-# TimePicker
+# TimePicker2
 
-> Time Picker
+> Time选择器
 
-## Markup Schema example
+## Markup Schema 
 
 ```tsx
 import React from 'react'
-import { TimePicker, FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { TimePicker2, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
-    TimePicker,
+    TimePicker2,
     FormItem,
   },
 })
@@ -26,7 +26,13 @@ export default () => (
         name="time"
         title="time"
         x-decorator="FormItem"
-        x-component="TimePicker"
+        x-component="TimePicker2"
+      />
+      <SchemaField.String
+        name="[startTime,endTime]"
+        title="Time Range"
+        x-decorator="FormItem"
+        x-component="TimePicker2.RangePicker"
       />
     </SchemaField>
     <FormButtonGroup>
@@ -36,17 +42,17 @@ export default () => (
 )
 ```
 
-## JSON Schema case
+## JSON Schema 
 
 ```tsx
 import React from 'react'
-import { TimePicker, FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { TimePicker2, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
-    TimePicker,
+    TimePicker2,
     FormItem,
   },
 })
@@ -59,7 +65,13 @@ const schema = {
     time: {
       title: 'Time',
       'x-decorator': 'FormItem',
-      'x-component': 'TimePicker',
+      'x-component': 'TimePicker2',
+      type: 'string',
+    },
+    '[startTime,endTime]': {
+      title: 'Time Range',
+      'x-decorator': 'FormItem',
+      'x-component': 'TimePicker2.RangePicker',
       type: 'string',
     },
   },
@@ -75,11 +87,11 @@ export default () => (
 )
 ```
 
-## Pure JSX case
+## 纯 JSX 案例
 
 ```tsx
 import React from 'react'
-import { TimePicker, FormItem, FormButtonGroup, Submit } from '@formily/next'
+import { TimePicker2, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
 
@@ -89,9 +101,15 @@ export default () => (
   <FormProvider form={form}>
     <Field
       name="time"
-      title="time"
+      title="Time"
       decorator={[FormItem]}
-      component={[TimePicker]}
+      component={[TimePicker2]}
+    />
+    <Field
+      name="[startTime,endTime]"
+      title="Time Range"
+      decorator={[FormItem]}
+      component={[TimePicker2.RangePicker]}
     />
     <FormButtonGroup>
       <Submit onSubmit={console.log}>Submit</Submit>
@@ -102,4 +120,4 @@ export default () => (
 
 ## API
 
-Reference https://fusion.design/pc/component/basic/time-picker
+参考 https://fusion.design/pc/component/basic/time-picker
