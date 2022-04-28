@@ -120,4 +120,4 @@ export default () => (
 
 ## API
 
-参考 https://fusion.design/pc/component/basic/time-picker
+参考 https://fusion.design/pc/component/basic/time-picker2
