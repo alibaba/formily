@@ -9,7 +9,7 @@ import { terser } from 'rollup-plugin-terser'
 
 const presets = () => {
   const externals = {
-    antd: 'Antd',
+    antd: 'antd',
     vue: 'Vue',
     react: 'React',
     moment: 'moment',
