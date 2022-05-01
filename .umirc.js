@@ -53,6 +53,10 @@ export default {
             path: 'https://element.formilyjs.org',
           },
           {
+            title: '@formily/element-plus',
+            path: 'https://element-plus.formilyjs.org',
+          },
+          {
             title: '@formily/antdv',
             path: 'https://antdv.formilyjs.org',
           },
@@ -150,6 +154,10 @@ export default {
           {
             title: '@formily/element',
             path: 'https://element.formilyjs.org',
+          },
+          {
+            title: '@formily/element-plus',
+            path: 'https://element-plus.formilyjs.org',
           },
           {
             title: '@formily/antdv',
