@@ -12,7 +12,9 @@ import { ISchema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
 import { ArrayBase, ArrayBaseMixins } from '../array-base'
 
-type ComposedArrayItems = React.FC<React.HTMLAttributes<HTMLDivElement>> &
+type ComposedArrayItems = React.FC<
+  React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+> &
   ArrayBaseMixins & {
     Item?: React.FC<
       React.HTMLAttributes<HTMLDivElement> & {

@@ -13,7 +13,7 @@ When the dependent data in the callback function changes, the callback function 
 ## Signature
 
 ```ts
-type FormConsumer = React.FC<{ children: (form: Form) => React.ReactNode }>
+type FormConsumer = React.FC<React.PropsWithChildren<{ children: (form: Form) =>> React.ReactNode }>
 ```
 
 Form reference [Form](https://core.formilyjs.org/api/models/form)

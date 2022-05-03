@@ -5,7 +5,9 @@ type ActionResponseProps = {
   response?: React.ReactNode
 }
 
-export const ActionResponse: React.FC<ActionResponseProps> = (props) => {
+export const ActionResponse: React.FC<
+  React.PropsWithChildren<ActionResponseProps>
+> = (props) => {
   return (
     <div className="as-wrapper">
       <div className="as-actions">{props.children}</div>

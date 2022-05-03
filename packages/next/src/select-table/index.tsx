@@ -40,8 +40,10 @@ export interface ISelectTableProps
   }
 }
 
-type ComposedSelectTable = React.FC<ISelectTableProps> & {
-  Column?: React.FC<ISelectTableColumnProps>
+type ComposedSelectTable = React.FC<
+  React.PropsWithChildren<ISelectTableProps>
+> & {
+  Column?: React.FC<React.PropsWithChildren<ISelectTableColumnProps>>
 }
 
 const isColumnComponent = (schema: Schema) => {
@@ -315,7 +317,8 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   )
 })
 
-const TableColumn: React.FC<ISelectTableColumnProps> = () => <></>
+const TableColumn: React.FC<React.PropsWithChildren<ISelectTableColumnProps>> =
+  () => <></>
 
 SelectTable.Column = TableColumn
 

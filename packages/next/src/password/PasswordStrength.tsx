@@ -155,7 +155,9 @@ const getStrength = (val) => {
   }
 }
 
-export const PasswordStrength: React.FC<IPasswordStrengthProps> = (props) => {
+export const PasswordStrength: React.FC<
+  React.PropsWithChildren<IPasswordStrengthProps>
+> = (props) => {
   if (isFn(props.children)) {
     return props.children(getStrength(String(props.value)))
   } else {

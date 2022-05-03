@@ -29,8 +29,8 @@ export interface IFormStepProps extends StepsProps {
   formStep?: IFormStep
 }
 
-type ComposedFormStep = React.FC<IFormStepProps> & {
-  StepPane: React.FC<StepProps>
+type ComposedFormStep = React.FC<React.PropsWithChildren<IFormStepProps>> & {
+  StepPane: React.FC<React.PropsWithChildren<StepProps>>
   createFormStep: (defaultCurrent?: number) => IFormStep
 }
 
@@ -162,7 +162,9 @@ export const FormStep = connect(
   })
 ) as unknown as ComposedFormStep
 
-const StepPane: React.FC<StepProps> = ({ children }) => {
+const StepPane: React.FC<React.PropsWithChildren<StepProps>> = ({
+  children,
+}) => {
   return <Fragment>{children}</Fragment>
 }
 

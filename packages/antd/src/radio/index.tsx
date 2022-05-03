@@ -3,8 +3,8 @@ import { Radio as AntdRadio } from 'antd'
 import { RadioProps, RadioGroupProps } from 'antd/lib/radio'
 import { PreviewText } from '../preview-text'
 
-type ComposedRadio = React.FC<RadioProps> & {
-  Group?: React.FC<RadioGroupProps>
+type ComposedRadio = React.FC<React.PropsWithChildren<RadioProps>> & {
+  Group?: React.FC<React.PropsWithChildren<RadioGroupProps>>
   __ANT_RADIO?: boolean
 }
 

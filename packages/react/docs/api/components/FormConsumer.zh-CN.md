@@ -13,7 +13,7 @@ order: 7
 ## 签名
 
 ```ts
-type FormConsumer = React.FC<{ children: (form: Form) => React.ReactNode }>
+type FormConsumer = React.FC<React.PropsWithChildren<{ children: (form: Form) =>> React.ReactNode }>
 ```
 
 Form 参考[Form](https://core.formilyjs.org/api/models/form)

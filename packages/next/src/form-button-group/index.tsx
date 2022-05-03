@@ -29,8 +29,10 @@ type IFormButtonGroupProps = Omit<ISpaceProps, 'align' | 'size'> & {
   gutter?: number
 }
 
-type ComposedButtonGroup = React.FC<IFormButtonGroupProps> & {
-  Sticky: React.FC<IStickyProps>
+type ComposedButtonGroup = React.FC<
+  React.PropsWithChildren<IFormButtonGroupProps>
+> & {
+  Sticky: React.FC<React.PropsWithChildren<IStickyProps>>
   FormItem: React.FC<
     IFormItemProps & {
       gutter?: number

@@ -16,9 +16,9 @@ test('render form', () => {
   expect(form.mounted).toBeTruthy()
 })
 
-const DisplayParentForm: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
-  props
-) => {
+const DisplayParentForm: React.FC<
+  React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+> = (props) => {
   return <div {...props}>{useParentForm()?.displayName}</div>
 }
 

@@ -38,7 +38,9 @@ const useBasePath = (props: IRecursionFieldProps) => {
   return props.basePath || parent?.address
 }
 
-export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
+export const RecursionField: React.FC<
+  React.PropsWithChildren<IRecursionFieldProps>
+> = (props) => {
   const basePath = useBasePath(props)
   const fieldSchema = useMemo(() => new Schema(props.schema), [props.schema])
   const fieldProps = useFieldProps(fieldSchema)

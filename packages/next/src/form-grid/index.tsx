@@ -21,8 +21,8 @@ export interface IGridColumnProps {
   className?: string
 }
 
-type ComposedFormGrid = React.FC<IFormGridProps> & {
-  GridColumn: React.FC<IGridColumnProps>
+type ComposedFormGrid = React.FC<React.PropsWithChildren<IFormGridProps>> & {
+  GridColumn: React.FC<React.PropsWithChildren<IGridColumnProps>>
   useFormGrid: () => Grid<HTMLElement>
   createFormGrid: (props: IFormGridProps) => Grid<HTMLElement>
   /**
@@ -99,15 +99,14 @@ export const FormGrid: ComposedFormGrid = observer(
   }
 ) as any
 
-export const GridColumn: React.FC<IGridColumnProps> = observer(
-  ({ gridSpan, children, ...props }) => {
+export const GridColumn: React.FC<React.PropsWithChildren<IGridColumnProps>> =
+  observer(({ gridSpan, children, ...props }) => {
     return (
       <div {...props} data-grid-span={gridSpan}>
         {children}
       </div>
     )
-  }
-)
+  })
 
 GridColumn.defaultProps = {
   gridSpan: 1,

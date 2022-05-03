@@ -3,7 +3,9 @@ import { useAttach } from '../hooks/useAttach'
 import { FormContext, ContextCleaner } from '../shared'
 import { IProviderProps } from '../types'
 
-export const FormProvider: React.FC<IProviderProps> = (props) => {
+export const FormProvider: React.FC<React.PropsWithChildren<IProviderProps>> = (
+  props
+) => {
   const form = useAttach(props.form)
   return (
     <ContextCleaner>

@@ -13,8 +13,8 @@ import {
   mapStatus,
 } from '../__builtins__'
 
-type ComposedTimePicker = React.FC<TimePickerProps> & {
-  RangePicker?: React.FC<RangePickerProps>
+type ComposedTimePicker = React.FC<React.PropsWithChildren<TimePickerProps>> & {
+  RangePicker?: React.FC<React.PropsWithChildren<RangePickerProps>>
 }
 
 const mapTimeFormat = function () {

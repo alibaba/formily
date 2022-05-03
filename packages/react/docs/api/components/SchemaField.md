@@ -13,16 +13,18 @@ When using the SchemaField component, you need to create a SchemaField component
 
 ```ts
 //SchemaField component and its static properties
-type ComposeSchemaField = React.FC<ISchemaFieldProps> & {
-  Markup: React.FC<ISchema>
-  String: React.FC<Omit<ISchema, 'type'>>
-  Object: React.FC<Omit<ISchema, 'type'>>
-  Array: React.FC<Omit<ISchema, 'type'>>
-  Date: React.FC<Omit<ISchema, 'type'>>
-  DateTime: React.FC<Omit<ISchema, 'type'>>
-  Boolean: React.FC<Omit<ISchema, 'type'>>
-  Number: React.FC<Omit<ISchema, 'type'>>
-  Void: React.FC<Omit<ISchema, 'type'>>
+type ComposeSchemaField = React.FC<
+  React.PropsWithChildren<ISchemaFieldProps>
+> & {
+  Markup: React.FC<React.PropsWithChildren<ISchema>>
+  String: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Object: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Array: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Date: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  DateTime: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Boolean: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Number: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Void: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
 }
 
 //Factory function parameter attributes

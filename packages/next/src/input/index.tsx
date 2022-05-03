@@ -4,8 +4,8 @@ import { InputProps, TextAreaProps } from '@alifd/next/lib/input'
 import { PreviewText } from '../preview-text'
 import { mapSize, mapStatus } from '../__builtins__'
 
-type ComposedInput = React.FC<InputProps> & {
-  TextArea?: React.FC<TextAreaProps>
+type ComposedInput = React.FC<React.PropsWithChildren<InputProps>> & {
+  TextArea?: React.FC<React.PropsWithChildren<TextAreaProps>>
 }
 
 export const Input: ComposedInput = connect(
