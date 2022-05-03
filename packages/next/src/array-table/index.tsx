@@ -10,6 +10,7 @@ import {
   observer,
   useFieldSchema,
   RecursionField,
+  ReactFC,
 } from '@formily/react'
 import { isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
@@ -24,7 +25,7 @@ interface ObservableColumnSource {
   name: string
 }
 
-interface IArrayTablePaginationProps extends PaginationProps {
+interface IArrayTablePaginationProps extends Omit<PaginationProps, 'children'> {
   dataSource?: any[]
   children?: (
     dataSource: any[],
@@ -40,9 +41,9 @@ export interface ExtendTableProps extends TableProps {
   pagination?: PaginationProps
 }
 
-type ComposedArrayTable = React.FC<React.PropsWithChildren<ExtendTableProps>> &
+type ComposedArrayTable = ReactFC<ExtendTableProps> &
   ArrayBaseMixins & {
-    Column?: React.FC<React.PropsWithChildren<ColumnProps>>
+    Column?: ReactFC<ColumnProps>
   }
 
 const isColumnComponent = (schema: Schema) => {
@@ -143,58 +144,59 @@ const schedulerRequest = {
   request: null,
 }
 
-const StatusSelect: React.FC<React.PropsWithChildren<IStatusSelectProps>> =
-  observer(
-    ({ pageSize, ...props }) => {
-      const field = useField<ArrayField>()
-      const prefixCls = usePrefixCls('formily-array-table')
-      const errors = field.errors
-      const parseIndex = (address: string) => {
-        return Number(
-          address
-            .slice(address.indexOf(field.address.toString()) + 1)
-            .match(/(\d+)/)?.[1]
-        )
-      }
-      const options = props.dataSource?.map(({ label, value }) => {
-        const hasError = errors.some(({ address }) => {
-          const currentIndex = parseIndex(address)
-          const startIndex = (value - 1) * pageSize
-          const endIndex = value * pageSize
-          return currentIndex >= startIndex && currentIndex <= endIndex
-        })
-        return {
-          label: hasError ? <Badge dot>{label}</Badge> : label,
-          value,
-        }
-      })
-
-      return (
-        <Select
-          {...props}
-          value={props.value}
-          onChange={props.onChange}
-          dataSource={options}
-          useVirtual
-          className={cls(`${prefixCls}-status-select`, {
-            'has-error': errors?.length,
-          })}
-        />
+const StatusSelect: ReactFC<IStatusSelectProps> = observer(
+  ({ pageSize, ...props }) => {
+    const field = useField<ArrayField>()
+    const prefixCls = usePrefixCls('formily-array-table')
+    const errors = field.errors
+    const parseIndex = (address: string) => {
+      return Number(
+        address
+          .slice(address.indexOf(field.address.toString()) + 1)
+          .match(/(\d+)/)?.[1]
       )
-    },
-    {
-      scheduler: (update) => {
-        clearTimeout(schedulerRequest.request)
-        schedulerRequest.request = setTimeout(() => {
-          update()
-        }, 100)
-      },
     }
-  )
+    const options = props.dataSource?.map(({ label, value }) => {
+      const hasError = errors.some(({ address }) => {
+        const currentIndex = parseIndex(address)
+        const startIndex = (value - 1) * pageSize
+        const endIndex = value * pageSize
+        return currentIndex >= startIndex && currentIndex <= endIndex
+      })
+      return {
+        label: hasError ? <Badge dot>{label}</Badge> : label,
+        value,
+      }
+    })
 
-const ArrayTablePagination: React.FC<
-  React.PropsWithChildren<IArrayTablePaginationProps>
-> = ({ dataSource, ...props }) => {
+    return (
+      <Select
+        {...props}
+        value={props.value}
+        onChange={props.onChange}
+        dataSource={options}
+        useVirtual
+        className={cls(`${prefixCls}-status-select`, {
+          'has-error': errors?.length,
+        })}
+      />
+    )
+  },
+  {
+    scheduler: (update) => {
+      clearTimeout(schedulerRequest.request)
+      schedulerRequest.request = setTimeout(() => {
+        update()
+      }, 100)
+    },
+  }
+)
+
+const ArrayTablePagination: ReactFC<IArrayTablePaginationProps> = ({
+  children,
+  dataSource,
+  ...props
+}) => {
   const [current, setCurrent] = useState(1)
   const prefixCls = usePrefixCls('formily-array-table')
   const pageSize = props.pageSize || 10
@@ -247,7 +249,7 @@ const ArrayTablePagination: React.FC<
 
   return (
     <Fragment>
-      {props.children?.(
+      {children?.(
         dataSource?.slice(startIndex, endIndex + 1),
         renderPagination()
       )}

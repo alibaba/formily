@@ -17,4 +17,4 @@ export type ReactPropsWithChildren<P> = Modify<
   P
 >
 
-export type ReactFC<P> = React.FC<ReactPropsWithChildren<P>>
+export type ReactFC<P = {}> = React.FC<ReactPropsWithChildren<P>>

@@ -206,8 +206,8 @@ const TreeSelect: React.FC<React.PropsWithChildren<TreeSelectProps<any>>> =
     )
   })
 
-const Cascader: React.FC<React.PropsWithChildren<CascaderProps>> = observer(
-  (props) => {
+const Cascader: React.FC<React.PropsWithChildren<CascaderProps<any>>> =
+  observer((props) => {
     const field = useField<Field>()
     const placeholder = usePlaceholder()
     const prefixCls = usePrefixCls('form-text', props)
@@ -235,8 +235,7 @@ const Cascader: React.FC<React.PropsWithChildren<CascaderProps>> = observer(
         {getLabels()}
       </div>
     )
-  }
-)
+  })
 
 const DatePicker: React.FC<React.PropsWithChildren<DatePickerProps>> = (
   props
@@ -250,20 +249,21 @@ const DatePicker: React.FC<React.PropsWithChildren<DatePickerProps>> = (
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
-const DateRangePicker: React.FC<React.PropsWithChildren<DateRangePickerProps>> =
-  (props) => {
-    const placeholder = usePlaceholder()
-    const prefixCls = usePrefixCls('form-text', props)
-    const getLabels = () => {
-      const labels = formatMomentValue(props.value, props.format, placeholder)
-      return isArr(labels) ? labels.join('~') : labels
-    }
-    return (
-      <div className={cls(prefixCls, props.className)} style={props.style}>
-        {getLabels()}
-      </div>
-    )
+const DateRangePicker: React.FC<
+  React.PropsWithChildren<DateRangePickerProps>
+> = (props) => {
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
+  const getLabels = () => {
+    const labels = formatMomentValue(props.value, props.format, placeholder)
+    return isArr(labels) ? labels.join('~') : labels
   }
+  return (
+    <div className={cls(prefixCls, props.className)} style={props.style}>
+      {getLabels()}
+    </div>
+  )
+}
 
 const TimePicker: React.FC<React.PropsWithChildren<TimePickerProps>> = (
   props
@@ -281,20 +281,21 @@ const TimePicker: React.FC<React.PropsWithChildren<TimePickerProps>> = (
   )
 }
 
-const TimeRangePicker: React.FC<React.PropsWithChildren<TimeRangePickerProps>> =
-  (props) => {
-    const placeholder = usePlaceholder()
-    const prefixCls = usePrefixCls('form-text', props)
-    const getLabels = () => {
-      const labels = formatMomentValue(props.value, props.format, placeholder)
-      return isArr(labels) ? labels.join('~') : labels
-    }
-    return (
-      <div className={cls(prefixCls, props.className)} style={props.style}>
-        {getLabels()}
-      </div>
-    )
+const TimeRangePicker: React.FC<
+  React.PropsWithChildren<TimeRangePickerProps>
+> = (props) => {
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
+  const getLabels = () => {
+    const labels = formatMomentValue(props.value, props.format, placeholder)
+    return isArr(labels) ? labels.join('~') : labels
   }
+  return (
+    <div className={cls(prefixCls, props.className)} style={props.style}>
+      {getLabels()}
+    </div>
+  )
+}
 
 const Text = (props: React.PropsWithChildren<any>) => {
   const prefixCls = usePrefixCls('form-text', props)

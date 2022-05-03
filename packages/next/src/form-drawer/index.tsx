@@ -7,7 +7,7 @@ import {
   Form,
 } from '@formily/core'
 import { toJS } from '@formily/reactive'
-import { FormProvider, observer, Observer } from '@formily/react'
+import { FormProvider, observer, Observer, ReactFC } from '@formily/react'
 import {
   isNum,
   isStr,
@@ -167,7 +167,7 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   return formDrawer
 }
 
-const DrawerFooter: React.FC = (props) => {
+const DrawerFooter: ReactFC = (props) => {
   const ref = useRef<HTMLDivElement>()
   const [footer, setFooter] = useState<HTMLDivElement>()
   const footerRef = useRef<HTMLDivElement>()
