@@ -1,6 +1,6 @@
 {
   "name": "@formily/benchmark",
-  "version": "2.0.20",
+  "version": "2.1.0",
   "license": "MIT",
   "private": true,
   "repository": {
@@ -40,8 +40,8 @@
     "react-is": "next"
   },
   "dependencies": {
-    "@formily/reactive": "2.0.20",
-    "@formily/reactive-react": "2.0.20",
+    "@formily/reactive": "2.1.0",
+    "@formily/reactive-react": "2.1.0",
     "react": "next",
     "react-dom": "next",
     "react-is": "next"
