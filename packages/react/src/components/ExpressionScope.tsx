@@ -1,10 +1,8 @@
 import React, { useContext } from 'react'
 import { SchemaExpressionScopeContext } from '../shared'
-import { IExpressionScopeProps } from '../types'
+import { IExpressionScopeProps, ReactFC } from '../types'
 
-export const ExpressionScope: React.FC<
-  React.PropsWithChildren<IExpressionScopeProps>
-> = (props) => {
+export const ExpressionScope: ReactFC<IExpressionScopeProps> = (props) => {
   const scope = useContext(SchemaExpressionScopeContext)
   return (
     <SchemaExpressionScopeContext.Provider value={{ ...scope, ...props.value }}>
