@@ -23,7 +23,7 @@ export interface FormProps extends IFormLayoutProps {
   previewTextPlaceholder?: React.ReactNode
 }
 
-export const Form: React.FC<FormProps> = ({
+export const Form: React.FC<React.PropsWithChildren<FormProps>> = ({
   form,
   component,
   onAutoSubmit,

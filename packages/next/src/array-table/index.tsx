@@ -10,6 +10,7 @@ import {
   observer,
   useFieldSchema,
   RecursionField,
+  ReactFC,
 } from '@formily/react'
 import { isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
@@ -24,7 +25,7 @@ interface ObservableColumnSource {
   name: string
 }
 
-interface IArrayTablePaginationProps extends PaginationProps {
+interface IArrayTablePaginationProps extends Omit<PaginationProps, 'children'> {
   dataSource?: any[]
   children?: (
     dataSource: any[],
@@ -40,9 +41,9 @@ export interface ExtendTableProps extends TableProps {
   pagination?: PaginationProps
 }
 
-type ComposedArrayTable = React.FC<ExtendTableProps> &
+type ComposedArrayTable = ReactFC<ExtendTableProps> &
   ArrayBaseMixins & {
-    Column?: React.FC<ColumnProps>
+    Column?: ReactFC<ColumnProps>
   }
 
 const isColumnComponent = (schema: Schema) => {
@@ -143,7 +144,7 @@ const schedulerRequest = {
   request: null,
 }
 
-const StatusSelect: React.FC<IStatusSelectProps> = observer(
+const StatusSelect: ReactFC<IStatusSelectProps> = observer(
   ({ pageSize, ...props }) => {
     const field = useField<ArrayField>()
     const prefixCls = usePrefixCls('formily-array-table')
@@ -191,7 +192,8 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(
   }
 )
 
-const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = ({
+const ArrayTablePagination: ReactFC<IArrayTablePaginationProps> = ({
+  children,
   dataSource,
   ...props
 }) => {
@@ -247,7 +249,7 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = ({
 
   return (
     <Fragment>
-      {props.children?.(
+      {children?.(
         dataSource?.slice(startIndex, endIndex + 1),
         renderPagination()
       )}

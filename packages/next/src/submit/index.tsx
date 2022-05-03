@@ -11,7 +11,7 @@ interface ISubmitProps extends ButtonProps {
   onSubmitFailed?: (feedbacks: IFormFeedback[]) => void
 }
 
-export const Submit: React.FC<ISubmitProps> = observer(
+export const Submit: React.FC<React.PropsWithChildren<ISubmitProps>> = observer(
   ({ onSubmit, onSubmitFailed, onSubmitSuccess, ...props }: ISubmitProps) => {
     const form = useParentForm()
     return (

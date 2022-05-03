@@ -6,6 +6,7 @@
  */
 import React, { useRef, useLayoutEffect, useState } from 'react'
 import StickyBox, { StickyBoxMode } from 'react-sticky-box'
+import { ReactFC } from '@formily/react'
 import { Space } from 'antd'
 import { SpaceProps } from 'antd/lib/space'
 import { BaseItem, IFormItemProps } from '../form-item'
@@ -30,9 +31,9 @@ type IFormButtonGroupProps = Omit<SpaceProps, 'align' | 'size'> & {
   gutter?: number
 }
 
-type ComposedButtonGroup = React.FC<IFormButtonGroupProps> & {
-  Sticky: React.FC<IStickyProps>
-  FormItem: React.FC<
+type ComposedButtonGroup = ReactFC<IFormButtonGroupProps> & {
+  Sticky: ReactFC<React.PropsWithChildren<IStickyProps>>
+  FormItem: ReactFC<
     IFormItemProps & {
       gutter?: number
     }

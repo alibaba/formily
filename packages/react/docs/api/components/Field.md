@@ -15,7 +15,7 @@ When we use the Field component, we must remember to pass the name attribute.
 ## Signature
 
 ```ts
-type Field = React.FC<IFieldFactoryProps>
+type Field = React.FC<React.PropsWithChildren<IFieldFactoryProps>>
 ```
 
 ## Example

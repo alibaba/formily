@@ -78,7 +78,7 @@ const getValueByValue: IGetValueByValue = (
   return undefined
 }
 
-const Input: React.FC<InputProps> = (props) => {
+const Input: React.FC<React.PropsWithChildren<InputProps>> = (props) => {
   const prefixCls = usePrefixCls('form-text', props)
   return (
     <div className={cls(prefixCls, props.className)}>
@@ -91,161 +91,149 @@ const Input: React.FC<InputProps> = (props) => {
   )
 }
 
-const Select: React.FC<SelectProps> = observer((props) => {
-  const field = useField<Field>()
-  const prefixCls = usePrefixCls('form-text', props)
-  const dataSource: any[] = field?.dataSource?.length
-    ? field.dataSource
-    : props?.dataSource?.length
-    ? props.dataSource
-    : []
-  const placeholder = usePlaceholder()
-  const getSelected = () => {
-    const value = props.value
-    if (props.mode === 'multiple' || props.mode === 'tag') {
-      if (props.useDetailValue) {
-        return isArr(value) ? value : []
+const Select: React.FC<React.PropsWithChildren<SelectProps>> = observer(
+  (props) => {
+    const field = useField<Field>()
+    const prefixCls = usePrefixCls('form-text', props)
+    const dataSource: any[] = field?.dataSource?.length
+      ? field.dataSource
+      : props?.dataSource?.length
+      ? props.dataSource
+      : []
+    const placeholder = usePlaceholder()
+    const getSelected = () => {
+      const value = props.value
+      if (props.mode === 'multiple' || props.mode === 'tag') {
+        if (props.useDetailValue) {
+          return isArr(value) ? value : []
+        } else {
+          return isArr(value)
+            ? value.map((val) => ({ label: val, value: val }))
+            : []
+        }
       } else {
-        return isArr(value)
-          ? value.map((val) => ({ label: val, value: val }))
-          : []
-      }
-    } else {
-      if (props.useDetailValue) {
-        return isValid(value) ? [value] : []
-      } else {
-        return isValid(value) ? [{ label: value, value }] : []
-      }
-    }
-  }
-
-  const getLabel = (target: any) => {
-    return (
-      dataSource?.find((item) => item.value == target?.value)?.label ||
-      target.label ||
-      placeholder
-    )
-  }
-
-  const getLabels = () => {
-    const selected = getSelected()
-    if (!selected.length) return placeholder
-    if (selected.length === 1) return getLabel(selected[0])
-    return selected.map((item, key) => {
-      return (
-        <Tag type="primary" size="small" key={key}>
-          {getLabel(item)}
-        </Tag>
-      )
-    })
-  }
-
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
-})
-
-const TreeSelect: React.FC<TreeSelectProps> = observer((props) => {
-  const field = useField<Field>()
-  const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
-  const dataSource = field?.dataSource?.length
-    ? field.dataSource
-    : props?.dataSource?.length
-    ? props.dataSource
-    : []
-  const getSelected = () => {
-    const value = props.value
-    if (props.multiple) {
-      if (props['useDetailValue']) {
-        return isArr(value) ? value : []
-      } else {
-        return isArr(value)
-          ? value.map((val) => ({ label: val, value: val }))
-          : []
-      }
-    } else {
-      if (props['useDetailValue']) {
-        return value ? [value] : []
-      } else {
-        return value ? [{ label: value, value }] : []
+        if (props.useDetailValue) {
+          return isValid(value) ? [value] : []
+        } else {
+          return isValid(value) ? [{ label: value, value }] : []
+        }
       }
     }
-  }
 
-  const findLabel = (value: any, dataSource: any[]) => {
-    for (let i = 0; i < dataSource?.length; i++) {
-      const item = dataSource[i]
-      if (item?.value === value) {
-        return item?.label
+    const getLabel = (target: any) => {
+      return (
+        dataSource?.find((item) => item.value == target?.value)?.label ||
+        target.label ||
+        placeholder
+      )
+    }
+
+    const getLabels = () => {
+      const selected = getSelected()
+      if (!selected.length) return placeholder
+      if (selected.length === 1) return getLabel(selected[0])
+      return selected.map((item, key) => {
+        return (
+          <Tag type="primary" size="small" key={key}>
+            {getLabel(item)}
+          </Tag>
+        )
+      })
+    }
+
+    return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+  }
+)
+
+const TreeSelect: React.FC<React.PropsWithChildren<TreeSelectProps>> = observer(
+  (props) => {
+    const field = useField<Field>()
+    const placeholder = usePlaceholder()
+    const prefixCls = usePrefixCls('form-text', props)
+    const dataSource = field?.dataSource?.length
+      ? field.dataSource
+      : props?.dataSource?.length
+      ? props.dataSource
+      : []
+    const getSelected = () => {
+      const value = props.value
+      if (props.multiple) {
+        if (props['useDetailValue']) {
+          return isArr(value) ? value : []
+        } else {
+          return isArr(value)
+            ? value.map((val) => ({ label: val, value: val }))
+            : []
+        }
       } else {
-        const childLabel = findLabel(value, item?.children)
-        if (childLabel) return childLabel
+        if (props['useDetailValue']) {
+          return value ? [value] : []
+        } else {
+          return value ? [{ label: value, value }] : []
+        }
       }
     }
-  }
 
-  const getLabels = () => {
-    const selected = getSelected()
-    if (!selected?.length)
-      return (
-        <Tag type="primary" size="small">
-          {placeholder}
-        </Tag>
-      )
-    return selected.map(({ value, label }, key) => {
-      return (
-        <Tag type="primary" size="small" key={key}>
-          {findLabel(value, dataSource) || label || placeholder}
-        </Tag>
-      )
-    })
-  }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
-})
+    const findLabel = (value: any, dataSource: any[]) => {
+      for (let i = 0; i < dataSource?.length; i++) {
+        const item = dataSource[i]
+        if (item?.value === value) {
+          return item?.label
+        } else {
+          const childLabel = findLabel(value, item?.children)
+          if (childLabel) return childLabel
+        }
+      }
+    }
 
-const Cascader: React.FC<CascaderProps> = observer((props) => {
-  const field = useField<Field>()
-  const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
-  const dataSource: any[] = field?.dataSource?.length
-    ? field.dataSource
-    : props?.dataSource?.length
-    ? props.dataSource
-    : []
-  const getSelected = () => {
-    return props.multiple ? toArr(props.value) : [props.value]
+    const getLabels = () => {
+      const selected = getSelected()
+      if (!selected?.length)
+        return (
+          <Tag type="primary" size="small">
+            {placeholder}
+          </Tag>
+        )
+      return selected.map(({ value, label }, key) => {
+        return (
+          <Tag type="primary" size="small" key={key}>
+            {findLabel(value, dataSource) || label || placeholder}
+          </Tag>
+        )
+      })
+    }
+    return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
   }
-  const getLabels = () => {
-    const selected = getSelected()
-    const labels = getValueByValue(dataSource, selected)
-      ?.filter((item) => isValid(item))
-      ?.map((item) => item?.whole?.join('/'))
-      .join(', ')
-    return labels || placeholder
-  }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
-})
+)
 
-const DatePicker: React.FC<DatePickerProps> = (props) => {
-  const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
-  const getLabels = () => {
-    const labels = formatMomentValue(props.value, props.format, placeholder)
-    return isArr(labels) ? labels.join('~') : labels
+const Cascader: React.FC<React.PropsWithChildren<CascaderProps>> = observer(
+  (props) => {
+    const field = useField<Field>()
+    const placeholder = usePlaceholder()
+    const prefixCls = usePrefixCls('form-text', props)
+    const dataSource: any[] = field?.dataSource?.length
+      ? field.dataSource
+      : props?.dataSource?.length
+      ? props.dataSource
+      : []
+    const getSelected = () => {
+      return props.multiple ? toArr(props.value) : [props.value]
+    }
+    const getLabels = () => {
+      const selected = getSelected()
+      const labels = getValueByValue(dataSource, selected)
+        ?.filter((item) => isValid(item))
+        ?.map((item) => item?.whole?.join('/'))
+        .join(', ')
+      return labels || placeholder
+    }
+    return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
   }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
-}
+)
 
-const DateRangePicker: React.FC<DateRangePickerProps> = (props) => {
-  const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
-  const getLabels = () => {
-    const labels = formatMomentValue(props.value, props.format, placeholder)
-    return isArr(labels) ? labels.join('~') : labels
-  }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
-}
-
-const TimePicker: React.FC<TimePickerProps> = (props) => {
+const DatePicker: React.FC<React.PropsWithChildren<DatePickerProps>> = (
+  props
+) => {
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)
   const getLabels = () => {
@@ -255,7 +243,20 @@ const TimePicker: React.FC<TimePickerProps> = (props) => {
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
-const TimePicker2: React.FC<TimePicker2Props> = (props) => {
+const DateRangePicker: React.FC<React.PropsWithChildren<DateRangePickerProps>> =
+  (props) => {
+    const placeholder = usePlaceholder()
+    const prefixCls = usePrefixCls('form-text', props)
+    const getLabels = () => {
+      const labels = formatMomentValue(props.value, props.format, placeholder)
+      return isArr(labels) ? labels.join('~') : labels
+    }
+    return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+  }
+
+const TimePicker: React.FC<React.PropsWithChildren<TimePickerProps>> = (
+  props
+) => {
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)
   const getLabels = () => {
@@ -265,7 +266,21 @@ const TimePicker2: React.FC<TimePicker2Props> = (props) => {
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
-const TimeRangePicker2: React.FC<TimeRangePicker2Props> = (props) => {
+const TimePicker2: React.FC<React.PropsWithChildren<TimePicker2Props>> = (
+  props
+) => {
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
+  const getLabels = () => {
+    const labels = formatMomentValue(props.value, props.format, placeholder)
+    return isArr(labels) ? labels.join('~') : labels
+  }
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+}
+
+const TimeRangePicker2: React.FC<
+  React.PropsWithChildren<TimeRangePicker2Props>
+> = (props) => {
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)
   const getLabels = () => {

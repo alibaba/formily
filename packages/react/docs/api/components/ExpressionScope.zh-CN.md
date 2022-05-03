@@ -14,7 +14,7 @@ order: 8
 interface IExpressionScopeProps {
   value?: any
 }
-type ExpressionScope = React.FC<IExpressionScopeProps>
+type ExpressionScope = React.FC<React.PropsWithChildren<IExpressionScopeProps>>
 ```
 
 ## 用例

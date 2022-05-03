@@ -11,6 +11,7 @@ import {
   observer,
   useFieldSchema,
   RecursionField,
+  ReactFC,
 } from '@formily/react'
 import { isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
@@ -36,9 +37,9 @@ interface IStatusSelectProps extends SelectProps<any> {
   pageSize?: number
 }
 
-type ComposedArrayTable = React.FC<TableProps<any>> &
+type ComposedArrayTable = React.FC<React.PropsWithChildren<TableProps<any>>> &
   ArrayBaseMixins & {
-    Column?: React.FC<ColumnProps<any>>
+    Column?: React.FC<React.PropsWithChildren<ColumnProps<any>>>
   }
 
 const SortableRow = SortableElement((props: any) => <tr {...props} />)
@@ -144,7 +145,7 @@ const schedulerRequest = {
   request: null,
 }
 
-const StatusSelect: React.FC<IStatusSelectProps> = observer(
+const StatusSelect: ReactFC<IStatusSelectProps> = observer(
   (props) => {
     const field = useField<ArrayField>()
     const prefixCls = usePrefixCls('formily-array-table')
@@ -157,10 +158,11 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(
       )
     }
     const options = props.options?.map(({ label, value }) => {
+      const val = Number(value)
       const hasError = errors.some(({ address }) => {
         const currentIndex = parseIndex(address)
-        const startIndex = (value - 1) * props.pageSize
-        const endIndex = value * props.pageSize
+        const startIndex = (val - 1) * props.pageSize
+        const endIndex = val * props.pageSize
         return currentIndex >= startIndex && currentIndex <= endIndex
       })
       return {
@@ -196,7 +198,7 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(
   }
 )
 
-const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
+const ArrayTablePagination: ReactFC<IArrayTablePaginationProps> = (props) => {
   const [current, setCurrent] = useState(1)
   const prefixCls = usePrefixCls('formily-array-table')
   const pageSize = props.pageSize || 10
@@ -315,7 +317,7 @@ export const ArrayTable: ComposedArrayTable = observer(
                           return ref.current?.querySelector('tbody')
                         }}
                         onSortStart={({ node }) => {
-                          addTdStyles(node)
+                          addTdStyles(node as HTMLElement)
                         }}
                         onSortEnd={({ oldIndex, newIndex }) => {
                           field.move(oldIndex, newIndex)

@@ -34,7 +34,7 @@ type CustomProps = {
 }
 
 const Decorator: React.FC = (props) => <div>{props.children}</div>
-const Input: React.FC<InputProps> = (props) => (
+const Input: React.FC<React.PropsWithChildren<InputProps>> = (props) => (
   <input
     {...props}
     value={props.value || ''}

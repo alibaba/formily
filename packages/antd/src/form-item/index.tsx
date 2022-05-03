@@ -48,8 +48,8 @@ export interface IFormItemProps {
   bordered?: boolean
 }
 
-type ComposeFormItem = React.FC<IFormItemProps> & {
-  BaseItem?: React.FC<IFormItemProps>
+type ComposeFormItem = React.FC<React.PropsWithChildren<IFormItemProps>> & {
+  BaseItem?: React.FC<React.PropsWithChildren<IFormItemProps>>
 }
 
 const useFormItemLayout = (props: IFormItemProps) => {
@@ -121,7 +121,10 @@ const ICON_MAP = {
   warning: <ExclamationCircleOutlined />,
 }
 
-export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
+export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
+  children,
+  ...props
+}) => {
   const [active, setActive] = useState(false)
   const formLayout = useFormItemLayout(props)
   const { containerRef, contentRef, overflow } = useOverflow<

@@ -7,7 +7,7 @@ import {
   SchemaOptionsContext,
   SchemaExpressionScopeContext,
 } from '../shared'
-import { IRecursionFieldProps } from '../types'
+import { IRecursionFieldProps, ReactFC } from '../types'
 import { useField } from '../hooks'
 import { ObjectField } from './ObjectField'
 import { ArrayField } from './ArrayField'
@@ -38,7 +38,7 @@ const useBasePath = (props: IRecursionFieldProps) => {
   return props.basePath || parent?.address
 }
 
-export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
+export const RecursionField: ReactFC<IRecursionFieldProps> = (props) => {
   const basePath = useBasePath(props)
   const fieldSchema = useMemo(() => new Schema(props.schema), [props.schema])
   const fieldProps = useFieldProps(fieldSchema)

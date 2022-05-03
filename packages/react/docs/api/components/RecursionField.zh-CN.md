@@ -21,7 +21,7 @@ interface IRecursionFieldProps {
   filterProperties?: (schema: Schema, name: string) => boolean //schema properties过滤器，被过滤掉的schema节点不会被渲染
 }
 
-type RecursionField = React.FC<IRecursionFieldProps>
+type RecursionField = React.FC<React.PropsWithChildren<IRecursionFieldProps>>
 ```
 
 ## 用例

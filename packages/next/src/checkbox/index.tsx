@@ -7,8 +7,8 @@ import {
 import { PreviewText } from '../preview-text'
 import { mapSize } from '../__builtins__'
 
-type ComposedCheckbox = React.FC<CheckboxProps> & {
-  Group?: React.FC<CheckboxGroupProps>
+type ComposedCheckbox = React.FC<React.PropsWithChildren<CheckboxProps>> & {
+  Group?: React.FC<React.PropsWithChildren<CheckboxGroupProps>>
 }
 
 export const Checkbox: ComposedCheckbox = connect(

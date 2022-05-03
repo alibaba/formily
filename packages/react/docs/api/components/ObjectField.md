@@ -15,7 +15,7 @@ When we use the ObjectField component, we must remember to pass the name attribu
 ## Signature
 
 ```ts
-type ObjectField = React.FC<IFieldFactoryProps>
+type ObjectField = React.FC<React.PropsWithChildren<IFieldFactoryProps>>
 ```
 
 ## Custom component use case

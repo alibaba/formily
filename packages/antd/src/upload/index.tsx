@@ -26,8 +26,8 @@ export type IDraggerUploadProps = Omit<AntdDraggerProps, 'onChange'> & {
   serviceErrorMessage?: string
 }
 
-type ComposedUpload = React.FC<IUploadProps> & {
-  Dragger?: React.FC<IDraggerUploadProps>
+type ComposedUpload = React.FC<React.PropsWithChildren<IUploadProps>> & {
+  Dragger?: React.FC<React.PropsWithChildren<IDraggerUploadProps>>
 }
 
 type IExtendsUploadProps = {

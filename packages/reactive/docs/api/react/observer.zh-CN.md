@@ -74,7 +74,7 @@ interface IObserverProps {
   children?: () => React.ReactElement
 }
 
-type Observer = React.FC<IObserverProps>
+type Observer = React.FC<React.PropsWithChildren<IObserverProps>>
 ```
 
 ### 用例

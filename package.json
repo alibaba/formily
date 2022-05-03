@@ -43,8 +43,8 @@
     "lint": "eslint ."
   },
   "resolutions": {
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
     "@mapbox/hast-util-to-jsx": "~1.0.0",
     "yargs": "^16.x",
     "commander": "^6.x"
@@ -63,8 +63,8 @@
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.6.8",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.8.2",
     "@umijs/plugin-sass": "^1.1.1",
@@ -125,8 +125,8 @@
     "pretty-quick": "^3.1.0",
     "querystring": "^0.2.1",
     "raw-loader": "^4.0.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-mde": "^11.5.0",
     "react-test-renderer": "^16.11.0",
     "rimraf": "^3.0.0",
