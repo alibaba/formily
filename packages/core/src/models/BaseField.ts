@@ -124,6 +124,10 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
     return this.display === 'visible'
   }
 
+  get destroyed() {
+    return !this.form.fields[this.address.toString()]
+  }
+
   set hidden(hidden: boolean) {
     if (!isValid(hidden)) return
     if (hidden) {
