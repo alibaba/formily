@@ -1063,7 +1063,14 @@ export const createReactions = (field: GeneralField) => {
   field.form.addEffects(field, () => {
     reactions.forEach((reaction) => {
       if (isFn(reaction)) {
-        field.disposers.push(autorun(batch.scope.bound(() => reaction(field))))
+        field.disposers.push(
+          autorun(
+            batch.scope.bound(() => {
+              if (!field.form.fields[field.address.toString()]) return
+              reaction(field)
+            })
+          )
+        )
       }
     })
   })
