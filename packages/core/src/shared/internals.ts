@@ -1066,7 +1066,7 @@ export const createReactions = (field: GeneralField) => {
         field.disposers.push(
           autorun(
             batch.scope.bound(() => {
-              if (!field.form.fields[field.address.toString()]) return
+              if (field.destroyed) return
               reaction(field)
             })
           )
