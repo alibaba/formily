@@ -176,7 +176,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
                   }}
                   onlyRenderProperties
                 />
-                {props?.extra}
+                {panelProps?.extra}
               </ArrayBase.Item>
             )
 
