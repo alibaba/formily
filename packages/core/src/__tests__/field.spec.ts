@@ -2164,3 +2164,22 @@ test('reactions should not be triggered when field destroyed', () => {
   obs.bb = 111
   expect(handler).toBeCalledTimes(2)
 })
+
+test('conflict name for errors filter', async () => {
+  const form = attach(createForm<any>())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  const aa1 = attach(
+    form.createField({
+      name: 'aa1',
+      required: true,
+    })
+  )
+
+  await aa1.onInput('')
+  expect(aa.invalid).toBe(false)
+})
