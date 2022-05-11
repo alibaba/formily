@@ -2164,3 +2164,27 @@ test('reactions should not be triggered when field destroyed', () => {
   obs.bb = 111
   expect(handler).toBeCalledTimes(2)
 })
+
+test('parent readPretty will overwrite self disabled or readOnly', () => {
+  const form = attach(
+    createForm<any>({
+      readPretty: true,
+    })
+  )
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      initialValue: 'test',
+      disabled: true,
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      initialValue: 'test',
+      editable: true,
+    })
+  )
+  expect(aa.pattern).toBe('readPretty')
+  expect(bb.pattern).toBe('editable')
+})
