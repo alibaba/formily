@@ -2188,3 +2188,22 @@ test('parent readPretty will overwrite self disabled or readOnly', () => {
   expect(aa.pattern).toBe('readPretty')
   expect(bb.pattern).toBe('editable')
 })
+
+test('conflict name for errors filter', async () => {
+  const form = attach(createForm<any>())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  const aa1 = attach(
+    form.createField({
+      name: 'aa1',
+      required: true,
+    })
+  )
+
+  await aa1.onInput('')
+  expect(aa.invalid).toBe(false)
+})
