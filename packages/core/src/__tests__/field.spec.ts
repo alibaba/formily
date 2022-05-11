@@ -2188,3 +2188,17 @@ test('parent readPretty will overwrite self disabled or readOnly', () => {
   expect(aa.pattern).toBe('readPretty')
   expect(bb.pattern).toBe('editable')
 })
+
+test('field destroyed can not be assign value', () => {
+  const form = attach(createForm<any>())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  aa.destroy()
+  aa.initialValue = 222
+  aa.value = 111
+  expect(form.values).toEqual({})
+  expect(form.initialValues).toEqual({})
+})
