@@ -351,6 +351,7 @@ export class Field<
   }
 
   set value(value: ValueType) {
+    if (this.destroyed) return
     if (!this.initialized) {
       if (this.display === 'none') {
         this.caches.value = value
@@ -364,6 +365,7 @@ export class Field<
   }
 
   set initialValue(initialValue: ValueType) {
+    if (this.destroyed) return
     if (!this.initialized) {
       if (
         !allowAssignDefaultValue(this.initialValue, initialValue) &&

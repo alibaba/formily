@@ -2207,3 +2207,17 @@ test('conflict name for errors filter', async () => {
   await aa1.onInput('')
   expect(aa.invalid).toBe(false)
 })
+
+test('field destroyed can not be assign value', () => {
+  const form = attach(createForm<any>())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  aa.destroy()
+  aa.initialValue = 222
+  aa.value = 111
+  expect(form.values).toEqual({})
+  expect(form.initialValues).toEqual({})
+})
