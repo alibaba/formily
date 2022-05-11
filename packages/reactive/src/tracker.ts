@@ -1,7 +1,12 @@
 import { ReactionStack } from './environment'
 import { isFn } from './checkers'
 import { Reaction } from './types'
-import { disposeBindingReactions, releaseBindingReactions } from './reaction'
+import {
+  batchEnd,
+  batchStart,
+  disposeBindingReactions,
+  releaseBindingReactions,
+} from './reaction'
 
 export class Tracker {
   private results: any
@@ -23,11 +28,13 @@ export class Tracker {
     if (ReactionStack.indexOf(this.track) === -1) {
       releaseBindingReactions(this.track)
       try {
+        batchStart()
         ReactionStack.push(this.track)
         this.results = tracker()
       } finally {
         ReactionStack.pop()
         this.track._boundary++
+        batchEnd()
         this.track._boundary = 0
       }
     }
