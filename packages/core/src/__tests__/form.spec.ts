@@ -1597,3 +1597,21 @@ test('form clearFormGraph need clear field values', () => {
   form.clearFormGraph('*')
   expect(form.values.aa).toBeUndefined()
 })
+
+test('form clearFormGraph not clear field values', () => {
+  const form = attach(
+    createForm({
+      values: {
+        aa: '123',
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  expect(form.values.aa).toEqual('123')
+  form.clearFormGraph('*', false)
+  expect(form.values.aa).toEqual('123')
+})
