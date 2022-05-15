@@ -110,7 +110,9 @@ export const FormCollapse: ComposedFormCollapse = observer(
     const panels = usePanels()
     const prefixCls = usePrefixCls('formily-collapse', props)
     const _formCollapse = useMemo(() => {
-      return formCollapse ? formCollapse : createFormCollapse()
+      return formCollapse
+        ? formCollapse
+        : createFormCollapse(props.defaultExpandedKeys)
     }, [])
 
     const takeExpandedKeys = () => {

@@ -1,4 +1,4 @@
-import { autorun, batch } from '@formily/reactive'
+import { autorun, batch, observable } from '@formily/reactive'
 import { createForm, onFieldReact, isField } from '../'
 import { DataField } from '../types'
 import { attach, sleep } from './shared'
@@ -2109,18 +2109,17 @@ test('destroy field need auto remove initialValues', () => {
 })
 
 test('validateFirst', async () => {
-  const form = attach(createForm<any>({
-    validateFirst: false
-  }))
+  const form = attach(
+    createForm<any>({
+      validateFirst: false,
+    })
+  )
   const aaValidate = jest.fn(() => 'aaError')
   const aa = attach(
     form.createField({
       name: 'aa',
       validateFirst: true,
-      validator: [
-        aaValidate,
-        aaValidate,
-      ]
+      validator: [aaValidate, aaValidate],
     })
   )
   await aa.onInput('aa')
@@ -2128,10 +2127,7 @@ test('validateFirst', async () => {
   const bb = attach(
     form.createField({
       name: 'bb',
-      validator: [
-        bbValidate,
-        bbValidate,
-      ],
+      validator: [bbValidate, bbValidate],
       validateFirst: false,
     })
   )
@@ -2140,10 +2136,7 @@ test('validateFirst', async () => {
   const cc = attach(
     form.createField({
       name: 'cc',
-      validator: [
-        ccValidate,
-        ccValidate,
-      ],
+      validator: [ccValidate, ccValidate],
     })
   )
   await cc.onInput('cc')
@@ -2151,4 +2144,80 @@ test('validateFirst', async () => {
   expect(aaValidate).toBeCalledTimes(1)
   expect(bbValidate).toBeCalledTimes(2)
   expect(ccValidate).toBeCalledTimes(2)
+})
+
+test('reactions should not be triggered when field destroyed', () => {
+  const form = attach(createForm<any>())
+  const handler = jest.fn()
+  const obs = observable({ bb: 123 })
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      initialValue: 'test',
+      reactions() {
+        handler(obs.bb)
+      },
+    })
+  )
+  obs.bb = 321
+  aa.destroy()
+  obs.bb = 111
+  expect(handler).toBeCalledTimes(2)
+})
+
+test('parent readPretty will overwrite self disabled or readOnly', () => {
+  const form = attach(
+    createForm<any>({
+      readPretty: true,
+    })
+  )
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      initialValue: 'test',
+      disabled: true,
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      initialValue: 'test',
+      editable: true,
+    })
+  )
+  expect(aa.pattern).toBe('readPretty')
+  expect(bb.pattern).toBe('editable')
+})
+
+test('conflict name for errors filter', async () => {
+  const form = attach(createForm<any>())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  const aa1 = attach(
+    form.createField({
+      name: 'aa1',
+      required: true,
+    })
+  )
+
+  await aa1.onInput('')
+  expect(aa.invalid).toBe(false)
+})
+
+test('field destroyed can not be assign value', () => {
+  const form = attach(createForm<any>())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  aa.destroy()
+  aa.initialValue = 222
+  aa.value = 111
+  expect(form.values).toEqual({})
+  expect(form.initialValues).toEqual({})
 })

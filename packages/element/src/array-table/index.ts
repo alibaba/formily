@@ -1,4 +1,11 @@
-import { computed, defineComponent, ref, Ref } from '@vue/composition-api'
+import {
+  computed,
+  defineComponent,
+  ref,
+  Ref,
+  provide,
+  inject,
+} from '@vue/composition-api'
 import {
   GeneralField,
   IVoidFieldFactoryProps,
@@ -13,7 +20,7 @@ import {
   Fragment,
 } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
-import { isArr, isBool } from '@formily/shared'
+import { isArr, isBool, isFn } from '@formily/shared'
 import { ArrayBase } from '../array-base'
 import { stylePrefix } from '../__builtins__/configs'
 import { composeExport } from '../__builtins__/shared'
@@ -64,6 +71,14 @@ type ColumnProps = ElColumnProps & {
     $index: number
   }) => VNode
 }
+
+interface PaginationAction {
+  totalPage?: number
+  pageSize?: number
+  changePage?: (page: number) => void
+}
+
+const PaginationSymbol = Symbol('pagination')
 
 const isColumnComponent = (schema: Schema) => {
   return schema['x-component']?.indexOf('Column') > -1
@@ -320,6 +335,10 @@ const StatusSelect = observer(
   }
 )
 
+const usePagination = () => {
+  return inject<Ref<PaginationAction>>(PaginationSymbol, ref({}))
+}
+
 const ArrayTablePagination = defineComponent<IArrayTablePaginationProps>({
   inheritAttrs: false,
   props: ['pageSize', 'dataSource'],
@@ -395,6 +414,15 @@ const ArrayTablePagination = defineComponent<IArrayTablePaginationProps>({
         }
       )
     }
+
+    const paginationContext = computed<PaginationAction>(() => {
+      return {
+        totalPage: totalPage.value,
+        pageSize: pageSize.value,
+        changePage: (page: number) => (current.value = page),
+      }
+    })
+    provide(PaginationSymbol, paginationContext)
 
     return () => {
       return h(
@@ -556,11 +584,41 @@ const ArrayTableColumn: Component = {
   },
 }
 
+const ArrayAddition = defineComponent({
+  name: 'ArrayAddition',
+  setup(props, { attrs, listeners, slots }) {
+    const array = ArrayBase.useArray()
+    const paginationRef = usePagination()
+
+    const onClick = listeners['click']
+    listeners['click'] = (e) => {
+      const { totalPage = 0, pageSize = 10, changePage } = paginationRef.value
+      // 如果添加数据后超过当前页，则自动切换到下一页
+      const total = array?.field?.value?.value.length || 0
+      if (total === (totalPage - 1) * pageSize + 1 && isFn(changePage)) {
+        changePage(totalPage)
+      }
+      if (onClick) onClick(e)
+    }
+    return () => {
+      return h(
+        ArrayBase.Addition,
+        {
+          props,
+          attrs,
+          on: listeners,
+        },
+        slots
+      )
+    }
+  },
+})
+
 export const ArrayTable = composeExport(ArrayTableInner, {
   Column: ArrayTableColumn,
   Index: ArrayBase.Index,
   SortHandle: ArrayBase.SortHandle,
-  Addition: ArrayBase.Addition,
+  Addition: ArrayAddition,
   Remove: ArrayBase.Remove,
   MoveDown: ArrayBase.MoveDown,
   MoveUp: ArrayBase.MoveUp,
