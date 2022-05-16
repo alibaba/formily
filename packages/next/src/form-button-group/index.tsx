@@ -5,23 +5,13 @@
  * 4. 吸底布局
  */
 import React, { useRef, useLayoutEffect, useState } from 'react'
-import StickyBox, { StickyBoxMode } from 'react-sticky-box'
+import StickyBox, { StickyBoxCompProps } from 'react-sticky-box'
 import { ReactFC } from '@formily/react'
 import { Space, ISpaceProps } from '../space'
 import { BaseItem, IFormItemProps } from '../form-item'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
-interface IStickyProps {
-  offsetTop?: number
-  offsetBottom?: number
-  bottom?: boolean
-  onChangeMode?: (
-    oldMode: StickyBoxMode | undefined,
-    newMode: StickyBoxMode
-  ) => any
-  style?: React.CSSProperties
-  className?: string
-  padding?: number
+interface IStickyProps extends StickyBoxCompProps {
   align?: React.CSSProperties['textAlign']
 }
 

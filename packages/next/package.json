@@ -68,7 +68,7 @@
     "@formily/shared": "2.1.2",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
-    "react-sticky-box": "^0.9.3"
+    "react-sticky-box": "^1.0.2"
   },
   "publishConfig": {
     "access": "public"
