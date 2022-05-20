@@ -21,12 +21,14 @@ type DatePickerProps<PickerProps> = Exclude<
   onChange: (value: string | string[]) => void
 }
 
-type ComposedDatePicker = React.FC<NextDatePickerProps> & {
-  RangePicker?: React.FC<RangePickerProps>
-  MonthPicker?: React.FC<NextDatePickerProps>
-  YearPicker?: React.FC<NextDatePickerProps>
-  WeekPicker?: React.FC<NextDatePickerProps>
-  QuarterPicker?: React.FC<NextDatePickerProps>
+type ComposedDatePicker = React.FC<
+  React.PropsWithChildren<NextDatePickerProps>
+> & {
+  RangePicker?: React.FC<React.PropsWithChildren<RangePickerProps>>
+  MonthPicker?: React.FC<React.PropsWithChildren<NextDatePickerProps>>
+  YearPicker?: React.FC<React.PropsWithChildren<NextDatePickerProps>>
+  WeekPicker?: React.FC<React.PropsWithChildren<NextDatePickerProps>>
+  QuarterPicker?: React.FC<React.PropsWithChildren<NextDatePickerProps>>
 }
 
 const mapDateFormat = function (type?: 'month' | 'year' | 'week' | 'quarter') {

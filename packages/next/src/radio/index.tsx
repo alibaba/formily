@@ -7,8 +7,8 @@ import {
 import { PreviewText } from '../preview-text'
 import { mapSize } from '../__builtins__'
 
-type ComposedRadio = React.FC<RadioProps> & {
-  Group?: React.FC<RadioGroupProps>
+type ComposedRadio = React.FC<React.PropsWithChildren<RadioProps>> & {
+  Group?: React.FC<React.PropsWithChildren<RadioGroupProps>>
 }
 
 export const Radio: ComposedRadio = connect(

@@ -40,11 +40,15 @@ export interface IArrayBaseItemProps {
 }
 
 export type ArrayBaseMixins = {
-  Addition?: React.FC<IArrayBaseAdditionProps>
-  Remove?: React.FC<AntdIconProps & { index?: number }>
-  MoveUp?: React.FC<AntdIconProps & { index?: number }>
-  MoveDown?: React.FC<AntdIconProps & { index?: number }>
-  SortHandle?: React.FC<AntdIconProps & { index?: number }>
+  Addition?: React.FC<React.PropsWithChildren<IArrayBaseAdditionProps>>
+  Remove?: React.FC<React.PropsWithChildren<AntdIconProps & { index?: number }>>
+  MoveUp?: React.FC<React.PropsWithChildren<AntdIconProps & { index?: number }>>
+  MoveDown?: React.FC<
+    React.PropsWithChildren<AntdIconProps & { index?: number }>
+  >
+  SortHandle?: React.FC<
+    React.PropsWithChildren<AntdIconProps & { index?: number }>
+  >
   Index?: React.FC
   useArray?: () => IArrayBaseContext
   useIndex?: (index?: number) => number
@@ -59,9 +63,9 @@ export interface IArrayBaseProps {
   onMoveUp?: (index: number) => void
 }
 
-type ComposedArrayBase = React.FC<IArrayBaseProps> &
+type ComposedArrayBase = React.FC<React.PropsWithChildren<IArrayBaseProps>> &
   ArrayBaseMixins & {
-    Item?: React.FC<IArrayBaseItemProps>
+    Item?: React.FC<React.PropsWithChildren<IArrayBaseItemProps>>
     mixin?: <T extends JSXComponent>(target: T) => T & ArrayBaseMixins
   }
 

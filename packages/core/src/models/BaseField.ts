@@ -95,9 +95,16 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
   }
 
   get pattern(): FieldPatternTypes {
-    const parentPattern = (this.parent as any)?.pattern
-    if (isValid(this.selfPattern)) return this.selfPattern
-    return parentPattern || this.form.pattern || 'editable'
+    const parentPattern: FieldPatternTypes =
+      (this.parent as any)?.pattern || this.form.pattern || 'editable'
+    const selfPattern = this.selfPattern
+    if (isValid(selfPattern)) {
+      if (parentPattern === 'readPretty' && selfPattern !== 'editable') {
+        return parentPattern
+      }
+      return selfPattern
+    }
+    return parentPattern
   }
 
   get editable() {
@@ -122,6 +129,10 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
 
   get visible() {
     return this.display === 'visible'
+  }
+
+  get destroyed() {
+    return !this.form.fields[this.address.toString()]
   }
 
   set hidden(hidden: boolean) {

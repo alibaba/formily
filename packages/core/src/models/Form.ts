@@ -593,9 +593,9 @@ export class Form<ValueType extends object = any> {
     this.graph.setGraph(graph)
   }
 
-  clearFormGraph = (pattern: FormPathPattern = '*') => {
+  clearFormGraph = (pattern: FormPathPattern = '*', forceClear = true) => {
     this.query(pattern).forEach((field) => {
-      field.destroy()
+      field.destroy(forceClear)
     })
   }
 

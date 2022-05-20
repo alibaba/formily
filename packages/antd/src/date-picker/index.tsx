@@ -16,8 +16,10 @@ type DatePickerProps<PickerProps> = Exclude<
   onChange: (value: string | string[]) => void
 }
 
-type ComposedDatePicker = React.FC<AntdDatePickerProps> & {
-  RangePicker?: React.FC<RangePickerProps>
+type ComposedDatePicker = React.FC<
+  React.PropsWithChildren<AntdDatePickerProps>
+> & {
+  RangePicker?: React.FC<React.PropsWithChildren<RangePickerProps>>
 }
 
 const mapDateFormat = function () {

@@ -159,13 +159,21 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('弹窗表单', (resolve) => {
+        FormDrawer('弹窗表单', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={14}>
               <SchemaField schema={schema} />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>提交</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    提交
+                  </Submit>
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
@@ -206,7 +214,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDrawer('弹窗表单', (resolve) => {
+        FormDrawer('弹窗表单', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={14}>
               <Field
@@ -239,7 +247,15 @@ export default () => {
               />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
-                  <Submit onClick={resolve}>提交</Submit>
+                  <Submit
+                    onSubmit={() => {
+                      return new Promise((resolve) => {
+                        setTimeout(resolve, 1000)
+                      })
+                    }}
+                  >
+                    提交
+                  </Submit>
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
@@ -285,7 +301,7 @@ export default () => {
     >
       <Button
         onClick={() => {
-          FormDrawer('弹窗表单', (resolve) => {
+          FormDrawer('弹窗表单', () => {
             return (
               <FormLayout labelCol={6} wrapperCol={14}>
                 <Field
@@ -318,7 +334,15 @@ export default () => {
                 />
                 <FormDrawer.Footer>
                   <FormButtonGroup align="right">
-                    <Submit onClick={resolve}>提交</Submit>
+                    <Submit
+                      onSubmit={() => {
+                        return new Promise((resolve) => {
+                          setTimeout(resolve, 1000)
+                        })
+                      }}
+                    >
+                      提交
+                    </Submit>
                     <Reset>重置</Reset>
                   </FormButtonGroup>
                 </FormDrawer.Footer>

@@ -21,7 +21,7 @@ interface IRecursionFieldProps {
   filterProperties?: (schema: Schema, name: string) => boolean //schema properties filter, the filtered schema nodes will not be rendered
 }
 
-type RecursionField = React.FC<IRecursionFieldProps>
+type RecursionField = React.FC<React.PropsWithChildren<IRecursionFieldProps>>
 ```
 
 ## Example

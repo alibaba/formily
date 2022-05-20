@@ -10,7 +10,7 @@ export interface IResetProps extends IFieldResetOptions, ButtonProps {
   onResetValidateFailed?: (feedbacks: IFormFeedback[]) => void
 }
 
-export const Reset: React.FC<IResetProps> = ({
+export const Reset: React.FC<React.PropsWithChildren<IResetProps>> = ({
   forceClear,
   validate,
   onResetValidateFailed,

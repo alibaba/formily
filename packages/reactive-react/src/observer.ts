@@ -1,16 +1,16 @@
 import React, { forwardRef, memo, Fragment } from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import { useObserver } from './hooks'
-import { IObserverOptions, IObserverProps } from './types'
+import { IObserverOptions, IObserverProps, ReactFC } from './types'
 
 export function observer<
   P,
   Options extends IObserverOptions = IObserverOptions
 >(
-  component: React.FunctionComponent<P>,
+  component: ReactFC<P>,
   options?: Options
 ): React.MemoExoticComponent<
-  React.FunctionComponent<
+  ReactFC<
     Options extends { forwardRef: true }
       ? P & {
           ref?: 'ref' extends keyof P ? P['ref'] : React.RefAttributes<any>

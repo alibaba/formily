@@ -656,7 +656,7 @@ export const serialize = (model: any, getter?: any) => {
 export const createChildrenFeedbackFilter = (field: Field) => {
   const identifier = field.address?.toString()
   return ({ address }: IFormFeedback) => {
-    return address.indexOf(identifier) === 0
+    return address === identifier || address.indexOf(identifier + '.') === 0
   }
 }
 
@@ -1063,7 +1063,14 @@ export const createReactions = (field: GeneralField) => {
   field.form.addEffects(field, () => {
     reactions.forEach((reaction) => {
       if (isFn(reaction)) {
-        field.disposers.push(autorun(batch.scope.bound(() => reaction(field))))
+        field.disposers.push(
+          autorun(
+            batch.scope.bound(() => {
+              if (field.destroyed) return
+              reaction(field)
+            })
+          )
+        )
       }
     })
   })

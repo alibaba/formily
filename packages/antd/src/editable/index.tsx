@@ -13,8 +13,10 @@ import cls from 'classnames'
 
 type IPopoverProps = PopoverProps
 
-type ComposedEditable = React.FC<IFormItemProps> & {
-  Popover?: React.FC<IPopoverProps & { title?: React.ReactNode }>
+type ComposedEditable = React.FC<React.PropsWithChildren<IFormItemProps>> & {
+  Popover?: React.FC<
+    React.PropsWithChildren<IPopoverProps & { title?: React.ReactNode }>
+  >
 }
 
 const useParentPattern = () => {

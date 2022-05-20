@@ -33,8 +33,10 @@ export interface IFormCollapseProps extends CollapseProps {
   formCollapse?: IFormCollapse
 }
 
-type ComposedFormCollapse = React.FC<IFormCollapseProps> & {
-  CollapsePanel?: React.FC<CollapsePanelProps>
+type ComposedFormCollapse = React.FC<
+  React.PropsWithChildren<IFormCollapseProps>
+> & {
+  CollapsePanel?: React.FC<React.PropsWithChildren<CollapsePanelProps>>
   createFormCollapse?: (
     defaultActiveKeys?: CollapseProps['expandedKeys']
   ) => IFormCollapse
@@ -108,7 +110,9 @@ export const FormCollapse: ComposedFormCollapse = observer(
     const panels = usePanels()
     const prefixCls = usePrefixCls('formily-collapse', props)
     const _formCollapse = useMemo(() => {
-      return formCollapse ? formCollapse : createFormCollapse()
+      return formCollapse
+        ? formCollapse
+        : createFormCollapse(props.defaultExpandedKeys)
     }, [])
 
     const takeExpandedKeys = () => {
@@ -156,7 +160,9 @@ export const FormCollapse: ComposedFormCollapse = observer(
   }
 )
 
-const CollapsePanel: React.FC<CollapsePanelProps> = ({ children }) => {
+const CollapsePanel: React.FC<React.PropsWithChildren<CollapsePanelProps>> = ({
+  children,
+}) => {
   return <Fragment>{children}</Fragment>
 }
 

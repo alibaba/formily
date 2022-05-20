@@ -24,8 +24,8 @@ export interface IFormTabPaneProps extends TabPaneProps {
   key: string | number
 }
 
-type ComposedFormTab = React.FC<IFormTabProps> & {
-  TabPane: React.FC<IFormTabPaneProps>
+type ComposedFormTab = React.FC<React.PropsWithChildren<IFormTabProps>> & {
+  TabPane: React.FC<React.PropsWithChildren<IFormTabPaneProps>>
   createFormTab: (defaultActiveKey?: string) => IFormTab
 }
 
@@ -109,7 +109,9 @@ export const FormTab: ComposedFormTab = observer(
   }
 ) as unknown as ComposedFormTab
 
-const TabPane: React.FC<IFormTabPaneProps> = ({ children }) => {
+const TabPane: React.FC<React.PropsWithChildren<IFormTabPaneProps>> = ({
+  children,
+}) => {
   return <Fragment>{children}</Fragment>
 }
 

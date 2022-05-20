@@ -100,7 +100,7 @@ const createIssueURL = ({
   type,
   title,
   version,
-  package,
+  package: pkg,
   reproduceLink,
   reproduceStep,
   expected,
@@ -129,7 +129,7 @@ ${expected || ''}
 ${actually || ''}
 
 ### Package
-${package}@${version}
+${pkg}@${version}
 
 ---
 

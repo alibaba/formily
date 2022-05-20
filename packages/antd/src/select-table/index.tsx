@@ -38,8 +38,10 @@ export interface ISelectTableProps extends TableProps<any> {
   value?: any
 }
 
-type ComposedSelectTable = React.FC<ISelectTableProps> & {
-  Column?: React.FC<ISelectTableColumnProps>
+type ComposedSelectTable = React.FC<
+  React.PropsWithChildren<ISelectTableProps>
+> & {
+  Column?: React.FC<React.PropsWithChildren<ISelectTableColumnProps>>
 }
 
 const isColumnComponent = (schema: Schema) => {
@@ -274,7 +276,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
         rowSelection={
           readPretty
             ? undefined
-            : {
+            : ({
                 ...rowSelection,
                 ...titleAddon,
                 getCheckboxProps: (record) => ({
@@ -306,7 +308,7 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
                 type: modeAsType,
                 preserveSelectedRowKeys: true,
                 checkStrictly: true,
-              }
+              } as any)
         }
         columns={props.columns || columns}
         rowKey={primaryKey}
@@ -330,7 +332,9 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
   )
 })
 
-const TableColumn: React.FC<ISelectTableColumnProps> = () => <></>
+const TableColumn: React.FC<
+  React.PropsWithChildren<ISelectTableColumnProps>
+> = () => <></>
 
 SelectTable.Column = TableColumn
 

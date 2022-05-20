@@ -15,7 +15,7 @@ order: 0
 ## 签名
 
 ```ts
-type Field = React.FC<IFieldFactoryProps>
+type Field = React.FC<React.PropsWithChildren<IFieldFactoryProps>>
 ```
 
 ## 用例

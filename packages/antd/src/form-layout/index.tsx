@@ -61,7 +61,7 @@ export const useFormLayout = () => ({
   ...useFormShallowLayout(),
 })
 
-export const FormLayout: React.FC<IFormLayoutProps> & {
+export const FormLayout: React.FC<React.PropsWithChildren<IFormLayoutProps>> & {
   useFormLayout: () => IFormLayoutContext
   useFormDeepLayout: () => IFormLayoutContext
   useFormShallowLayout: () => IFormLayoutContext

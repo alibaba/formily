@@ -20,7 +20,7 @@ const spaceSize = {
   large: 24,
 }
 
-export const Space: React.FC<ISpaceProps> = ({
+export const Space: React.FC<React.PropsWithChildren<ISpaceProps>> = ({
   direction,
   size,
   align,

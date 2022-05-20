@@ -13,16 +13,18 @@ SchemaField 组件是专门用于解析[JSON-Schema](/api/shared/schema)动态�
 
 ```ts
 //SchemaField组件与其静态属性
-type ComposeSchemaField = React.FC<ISchemaFieldProps> & {
-  Markup: React.FC<ISchema>
-  String: React.FC<Omit<ISchema, 'type'>>
-  Object: React.FC<Omit<ISchema, 'type'>>
-  Array: React.FC<Omit<ISchema, 'type'>>
-  Date: React.FC<Omit<ISchema, 'type'>>
-  DateTime: React.FC<Omit<ISchema, 'type'>>
-  Boolean: React.FC<Omit<ISchema, 'type'>>
-  Number: React.FC<Omit<ISchema, 'type'>>
-  Void: React.FC<Omit<ISchema, 'type'>>
+type ComposeSchemaField = React.FC<
+  React.PropsWithChildren<ISchemaFieldProps>
+> & {
+  Markup: React.FC<React.PropsWithChildren<ISchema>>
+  String: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Object: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Array: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Date: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  DateTime: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Boolean: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Number: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
+  Void: React.FC<React.PropsWithChildren<Omit<ISchema, 'type'>>>
 }
 
 //工厂函数参数属性

@@ -1,4 +1,11 @@
-import React, { Fragment, useState, useRef, useEffect } from 'react'
+import React, {
+  Fragment,
+  useState,
+  useRef,
+  useEffect,
+  createContext,
+  useContext,
+} from 'react'
 import { Table, Pagination, Select, Badge } from '@alifd/next'
 import { PaginationProps } from '@alifd/next/lib/pagination'
 import { TableProps, ColumnProps } from '@alifd/next/lib/table'
@@ -10,8 +17,9 @@ import {
   observer,
   useFieldSchema,
   RecursionField,
+  ReactFC,
 } from '@formily/react'
-import { isArr, isBool } from '@formily/shared'
+import { isArr, isBool, isFn } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
 import { ArrayBase, ArrayBaseMixins } from '../array-base'
@@ -24,7 +32,7 @@ interface ObservableColumnSource {
   name: string
 }
 
-interface IArrayTablePaginationProps extends PaginationProps {
+interface IArrayTablePaginationProps extends Omit<PaginationProps, 'children'> {
   dataSource?: any[]
   children?: (
     dataSource: any[],
@@ -40,10 +48,16 @@ export interface ExtendTableProps extends TableProps {
   pagination?: PaginationProps
 }
 
-type ComposedArrayTable = React.FC<ExtendTableProps> &
+type ComposedArrayTable = ReactFC<ExtendTableProps> &
   ArrayBaseMixins & {
-    Column?: React.FC<ColumnProps>
+    Column?: ReactFC<ColumnProps>
   }
+
+interface PaginationAction {
+  totalPage?: number
+  pageSize?: number
+  changePage?: (page: number) => void
+}
 
 const isColumnComponent = (schema: Schema) => {
   return schema['x-component']?.indexOf('Column') > -1
@@ -143,7 +157,7 @@ const schedulerRequest = {
   request: null,
 }
 
-const StatusSelect: React.FC<IStatusSelectProps> = observer(
+const StatusSelect: ReactFC<IStatusSelectProps> = observer(
   ({ pageSize, ...props }) => {
     const field = useField<ArrayField>()
     const prefixCls = usePrefixCls('formily-array-table')
@@ -191,7 +205,13 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(
   }
 )
 
-const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = ({
+const PaginationContext = createContext<PaginationAction>({})
+const usePagination = () => {
+  return useContext(PaginationContext)
+}
+
+const ArrayTablePagination: ReactFC<IArrayTablePaginationProps> = ({
+  children,
   dataSource,
   ...props
 }) => {
@@ -247,10 +267,14 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = ({
 
   return (
     <Fragment>
-      {props.children?.(
-        dataSource?.slice(startIndex, endIndex + 1),
-        renderPagination()
-      )}
+      <PaginationContext.Provider
+        value={{ totalPage, pageSize, changePage: handleChange }}
+      >
+        {children?.(
+          dataSource?.slice(startIndex, endIndex + 1),
+          renderPagination()
+        )}
+      </PaginationContext.Provider>
     </Fragment>
   )
 }
@@ -313,5 +337,24 @@ ArrayTable.Column = () => {
 }
 
 ArrayBase.mixin(ArrayTable)
+
+const Addition: ArrayBaseMixins['Addition'] = (props) => {
+  const array = ArrayBase.useArray()
+  const { totalPage = 0, pageSize = 10, changePage } = usePagination()
+  return (
+    <ArrayBase.Addition
+      {...props}
+      onClick={(e) => {
+        // 如果添加数据后将超过当前页，则自动切换到下一页
+        const total = array?.field?.value.length || 0
+        if (total === totalPage * pageSize + 1 && isFn(changePage)) {
+          changePage(totalPage + 1)
+        }
+        props.onClick?.(e)
+      }}
+    />
+  )
+}
+ArrayTable.Addition = Addition
 
 export default ArrayTable

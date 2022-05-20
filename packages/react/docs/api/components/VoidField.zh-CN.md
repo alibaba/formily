@@ -15,7 +15,7 @@ order: 3
 ## 签名
 
 ```ts
-type VoidField = React.FC<IVoidFieldFactoryProps>
+type VoidField = React.FC<React.PropsWithChildren<IVoidFieldFactoryProps>>
 ```
 
 ## 用例

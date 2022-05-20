@@ -17,9 +17,9 @@ type ExtendsUploadProps = NextUploadProps & {
 
 type FileList = Parameters<ExtendsUploadProps['onChange']>[0]
 
-type ComposedUpload = React.FC<IUploadProps> & {
-  Card?: React.FC<ICardUploadProps>
-  Dragger?: React.FC<IUploadProps>
+type ComposedUpload = React.FC<React.PropsWithChildren<IUploadProps>> & {
+  Card?: React.FC<React.PropsWithChildren<ICardUploadProps>>
+  Dragger?: React.FC<React.PropsWithChildren<IUploadProps>>
 }
 
 type IExtendsUploadProps = {

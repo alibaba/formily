@@ -15,7 +15,7 @@ order: 2
 ## 签名
 
 ```ts
-type ObjectField = React.FC<IFieldFactoryProps>
+type ObjectField = React.FC<React.PropsWithChildren<IFieldFactoryProps>>
 ```
 
 ## 自定义组件用例

@@ -2,7 +2,7 @@ import React, { Fragment, useRef, useLayoutEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { createForm, IFormProps, Form } from '@formily/core'
 import { toJS } from '@formily/reactive'
-import { FormProvider, Observer, observer } from '@formily/react'
+import { FormProvider, Observer, observer, ReactFC } from '@formily/react'
 import {
   isNum,
   isStr,
@@ -192,7 +192,7 @@ export function FormDialog(title: any, id: any, renderer?: any): IFormDialog {
   return formDialog
 }
 
-const DialogFooter: React.FC = (props) => {
+const DialogFooter: ReactFC = (props) => {
   const ref = useRef<HTMLDivElement>()
   const [footer, setFooter] = useState<HTMLDivElement>()
   const footerRef = useRef<HTMLDivElement>()

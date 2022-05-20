@@ -100,7 +100,7 @@ const createIssueURL = ({
   type,
   title,
   version,
-  package,
+  package: pkg,
   reproduceLink,
   reproduceStep,
   expected,
@@ -129,7 +129,7 @@ ${expected || ''}
 ${actually || ''}
 
 ### Package
-${package}@${version}
+${pkg}@${version}
 
 ---
 
@@ -351,7 +351,7 @@ export default () => {
                 请尽可能详尽地说明这个需求的用例和场景。最重要的是：解释清楚是怎样的用户体验需求催生了这个功能上的需求。
               </p>
               <p>
-                Fomrily 的一个重要设计原则是保持 API
+                Formily 的一个重要设计原则是保持 API
                 的简洁和直接。通常来说，我们只考虑添加在现有的 API
                 下无法轻松实现的功能。新功能的用例也应当足够常见。
               </p>

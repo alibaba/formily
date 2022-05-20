@@ -51,11 +51,9 @@ export default () => (
         title="日期范围"
         x-decorator="FormItem"
         x-component="DatePicker2.RangePicker"
-        x-component-props={
-          {
-            // showTime: true,
-          }
-        }
+        x-component-props={{
+          showTime: true,
+        }}
       />
       <SchemaField.String
         name="range_month"

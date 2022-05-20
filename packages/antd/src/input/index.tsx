@@ -5,8 +5,8 @@ import { InputProps, TextAreaProps } from 'antd/lib/input'
 import { PreviewText } from '../preview-text'
 import { LoadingOutlined } from '@ant-design/icons'
 
-type ComposedInput = React.FC<InputProps> & {
-  TextArea?: React.FC<TextAreaProps>
+type ComposedInput = React.FC<React.PropsWithChildren<InputProps>> & {
+  TextArea?: React.FC<React.PropsWithChildren<TextAreaProps>>
 }
 
 export const Input: ComposedInput = connect(

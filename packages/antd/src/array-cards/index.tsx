@@ -13,7 +13,8 @@ import { ISchema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
 import { ArrayBase, ArrayBaseMixins } from '../array-base'
 
-type ComposedArrayCards = React.FC<CardProps> & ArrayBaseMixins
+type ComposedArrayCards = React.FC<React.PropsWithChildren<CardProps>> &
+  ArrayBaseMixins
 
 const isAdditionComponent = (schema: ISchema) => {
   return schema['x-component']?.indexOf('Addition') > -1
