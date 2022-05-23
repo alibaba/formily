@@ -74,18 +74,12 @@ const notify = (
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
-    if (isValid(event.target.value) || isValid(event.target.checked))
-      return true
     if (
-      event.target.tagName &&
-      event.target.tagName !== 'INPUT' &&
-      event.target.tagName !== 'TEXTAREA' &&
-      event.target.tagName !== 'SELECT'
-    ) {
-      return false
-    }
+      typeof event.target === 'object' &&
+      ('value' in event.target || 'checked' in event.target)
+    )
+      return true
     if (stopPropagation) event.stopPropagation?.()
-    return true
   }
   return false
 }

@@ -2221,3 +2221,16 @@ test('field destroyed can not be assign value', () => {
   expect(form.values).toEqual({})
   expect(form.initialValues).toEqual({})
 })
+
+test('onInput could pass value with target', async () => {
+  const form = attach(createForm<any>())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  await aa.onInput({
+    target: '123',
+  })
+  expect(aa.value).toEqual({ target: '123' })
+})
