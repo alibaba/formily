@@ -6,6 +6,7 @@ import {
   SchemaMarkupContext,
   SchemaExpressionScopeContext,
   SchemaOptionsContext,
+  SchemaComponentsContext,
 } from '../shared'
 import {
   ReactComponentPath,
@@ -16,7 +17,7 @@ import {
   ISchemaMarkupFieldProps,
   ISchemaTypeFieldProps,
 } from '../types'
-import { FormPath } from '@formily/shared'
+import { lazyMerge } from '@formily/shared'
 const env = {
   nonameId: 0,
 }
@@ -53,25 +54,17 @@ export function createSchemaField<Components extends SchemaReactComponents>(
     }
 
     return (
-      <SchemaOptionsContext.Provider
-        value={{
-          ...options,
-          getComponent(name) {
-            const propsComponent = FormPath.getIn(props.components, name)
-            if (propsComponent) return propsComponent
-            return FormPath.getIn(options.components, name)
-          },
-        }}
-      >
-        <SchemaExpressionScopeContext.Provider
-          value={{
-            ...options.scope,
-            ...props.scope,
-          }}
+      <SchemaOptionsContext.Provider value={options}>
+        <SchemaComponentsContext.Provider
+          value={lazyMerge(options.components, props.components)}
         >
-          {renderMarkup()}
-          {renderChildren()}
-        </SchemaExpressionScopeContext.Provider>
+          <SchemaExpressionScopeContext.Provider
+            value={lazyMerge(options.scope, props.scope)}
+          >
+            {renderMarkup()}
+            {renderChildren()}
+          </SchemaExpressionScopeContext.Provider>
+        </SchemaComponentsContext.Provider>
       </SchemaOptionsContext.Provider>
     )
   }

@@ -25,6 +25,20 @@ const getDescriptor = Object.getOwnPropertyDescriptor
 
 const getProto = Object.getPrototypeOf
 
+const ClassDescriptorMap = new WeakMap()
+
+function getPropertyDescriptor(obj: any, key: PropertyKey) {
+  const constructor = obj.constructor
+  const cache = ClassDescriptorMap.get(constructor) || {}
+  const descriptor = cache[key]
+  if (descriptor) return descriptor
+  const newDesc =
+    getDescriptor(obj, key) || getPropertyDescriptor(getProto(obj), key)
+  ClassDescriptorMap.set(constructor, cache)
+  cache[key] = newDesc
+  return newDesc
+}
+
 function getGetterAndSetter(target: any, key: PropertyKey, value: any) {
   if (!target) {
     if (value) {
@@ -36,9 +50,9 @@ function getGetterAndSetter(target: any, key: PropertyKey, value: any) {
     }
     return []
   }
-  const descriptor = getDescriptor(target, key)
+  const descriptor = getPropertyDescriptor(target, key)
   if (descriptor) return [descriptor.get, descriptor.set]
-  return getGetterAndSetter(getProto(target), key, value)
+  return []
 }
 
 export const computed: IComputed = createAnnotation(
@@ -49,7 +63,7 @@ export const computed: IComputed = createAnnotation(
 
     const context = target ? target : store
     const property = target ? key : 'value'
-    const [getter, setter] = getGetterAndSetter(context, property, value)
+    const [getter, setter] = getGetterAndSetter(target, property, value)
 
     function compute() {
       store.value = getter?.call(context)
