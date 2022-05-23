@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Tabs, Badge } from 'antd'
 import { ArrayField } from '@formily/core'
 import {
@@ -6,8 +6,29 @@ import {
   observer,
   useFieldSchema,
   RecursionField,
+  ReactFC,
 } from '@formily/react'
 import { TabsProps } from 'antd/lib/tabs'
+
+interface IFeedbackBadgeProps {
+  index: number
+}
+
+const FeedbackBadge: ReactFC<IFeedbackBadgeProps> = observer((props) => {
+  const field = useField<ArrayField>()
+  const tab = `${field.title || 'Untitled'} ${props.index + 1}`
+  const errors = field.errors.filter((error) =>
+    error.address.includes(`${field.address}.${props.index}`)
+  )
+  if (errors.length) {
+    return (
+      <Badge size="small" className="errors-badge" count={errors.length}>
+        {tab}
+      </Badge>
+    )
+  }
+  return <Fragment>{tab}</Fragment>
+})
 
 export const ArrayTabs: React.FC<React.PropsWithChildren<TabsProps>> = observer(
   (props) => {
@@ -33,20 +54,7 @@ export const ArrayTabs: React.FC<React.PropsWithChildren<TabsProps>> = observer(
         field.remove(index)
       }
     }
-    const badgedTab = (index: number) => {
-      const tab = `${field.title || 'Untitled'} ${index + 1}`
-      const errors = field.errors.filter((error) =>
-        error.address.includes(`${field.address}.${index}`)
-      )
-      if (errors.length) {
-        return (
-          <Badge size="small" className="errors-badge" count={errors.length}>
-            {tab}
-          </Badge>
-        )
-      }
-      return tab
-    }
+
     return (
       <Tabs
         {...props}
@@ -67,7 +75,7 @@ export const ArrayTabs: React.FC<React.PropsWithChildren<TabsProps>> = observer(
               key={key}
               forceRender
               closable={index !== 0}
-              tab={badgedTab(index)}
+              tab={<FeedbackBadge index={index} />}
             >
               <RecursionField schema={items} name={index} />
             </Tabs.TabPane>
