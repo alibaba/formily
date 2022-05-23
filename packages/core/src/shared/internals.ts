@@ -74,7 +74,10 @@ const notify = (
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
-    if (isValid(event.target.value) || isValid(event.target.checked))
+    if (
+      typeof event.target === 'object' &&
+      ('value' in event.target || 'checked' in event.target)
+    )
       return true
     if (stopPropagation) event.stopPropagation?.()
   }
