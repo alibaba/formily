@@ -115,10 +115,12 @@ export const patchSchemaCompile = (
   scope: any,
   demand = false
 ) => {
-  traverseSchema(sourceSchema, (value, path) => {
+  traverseSchema(sourceSchema, (value, path, omitCompile) => {
     let compiled = value
     let collected = hasCollected(() => {
-      compiled = compile(value, scope)
+      if (!omitCompile) {
+        compiled = compile(value, scope)
+      }
     })
     if (compiled === undefined) return
     if (demand) {
