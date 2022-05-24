@@ -3,17 +3,24 @@ import { FormPath } from '@formily/shared'
 
 test('traverseSchema', () => {
   const visited = []
+  const omitted = []
   traverseSchema(
     {
       type: 'string',
+      title: '{{aa}}',
       required: true,
       'x-validator': 'phone',
+      'x-compile-omitted': ['title'],
       default: {
         input: 123,
       },
     },
-    (value, path) => {
-      visited.push(path)
+    (value, path, omitCompile) => {
+      if (omitCompile) {
+        omitted.push(value)
+      } else {
+        visited.push(path)
+      }
     }
   )
   expect(visited).toEqual([
@@ -22,6 +29,7 @@ test('traverseSchema', () => {
     ['required'],
     ['default'],
   ])
+  expect(omitted).toEqual(['{{aa}}'])
 })
 
 test('traverse circular reference', () => {
