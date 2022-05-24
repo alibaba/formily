@@ -168,6 +168,10 @@ export default {
             path: 'https://vant.formilyjs.org',
           },
           {
+            title: '@formily/semi',
+            path: 'https://semi.formilyjs.org',
+          },
+          {
             title: 'aliyun teamix',
             path: 'https://formily.dg.aliyun-inc.com/',
           },
