@@ -151,12 +151,11 @@ function deepmerge(target: any, source: any, options?: Options) {
   }
 }
 
-export const lazyMerge = <T extends object>(target: T, source: T) => {
+export const lazyMerge = <T extends object>(target: T, source: T): T => {
   if (!isValid(source)) return target
   if (!isValid(target)) return source
   if (typeof target !== 'object') return source
   if (typeof source !== 'object') return target
-
   return new Proxy(
     {},
     {
@@ -185,7 +184,7 @@ export const lazyMerge = <T extends object>(target: T, source: T) => {
         return false
       },
     }
-  )
+  ) as any
 }
 
 export const merge = deepmerge

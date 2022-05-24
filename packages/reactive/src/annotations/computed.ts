@@ -28,12 +28,18 @@ const getProto = Object.getPrototypeOf
 const ClassDescriptorMap = new WeakMap()
 
 function getPropertyDescriptor(obj: any, key: PropertyKey) {
+  if (!obj) return
+  return getDescriptor(obj, key) || getPropertyDescriptor(getProto(obj), key)
+}
+
+function getPropertyDescriptorCache(obj: any, key: PropertyKey) {
   const constructor = obj.constructor
+  if (constructor === Object || constructor === Array)
+    return getPropertyDescriptor(obj, key)
   const cache = ClassDescriptorMap.get(constructor) || {}
   const descriptor = cache[key]
   if (descriptor) return descriptor
-  const newDesc =
-    getDescriptor(obj, key) || getPropertyDescriptor(getProto(obj), key)
+  const newDesc = getPropertyDescriptor(obj, key)
   ClassDescriptorMap.set(constructor, cache)
   cache[key] = newDesc
   return newDesc
@@ -50,8 +56,10 @@ function getGetterAndSetter(target: any, key: PropertyKey, value: any) {
     }
     return []
   }
-  const descriptor = getPropertyDescriptor(target, key)
-  if (descriptor) return [descriptor.get, descriptor.set]
+  const descriptor = getPropertyDescriptorCache(target, key)
+  if (descriptor) {
+    return [descriptor.get, descriptor.set]
+  }
   return []
 }
 

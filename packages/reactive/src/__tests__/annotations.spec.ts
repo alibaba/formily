@@ -1,4 +1,4 @@
-import { observable, action, model } from '../'
+import { observable, action, model, define } from '../'
 import { autorun, reaction } from '../autorun'
 import { observe } from '../observe'
 import { isObservable } from '../externals'
@@ -291,4 +291,58 @@ test('computed no track get', () => {
   untracked(() => {
     expect(compu.value).toBe(123)
   })
+})
+
+test('computed cache descriptor', () => {
+  class A {
+    _value = 0
+    constructor() {
+      define(this, {
+        _value: observable.ref,
+        value: observable.computed,
+      })
+    }
+
+    get value() {
+      return this._value
+    }
+  }
+  const obs1 = new A()
+  const obs2 = new A()
+  const handler1 = jest.fn()
+  const handler2 = jest.fn()
+  autorun(() => {
+    handler1(obs1.value)
+  })
+  autorun(() => {
+    handler2(obs2.value)
+  })
+  expect(handler1).toBeCalledTimes(1)
+  expect(handler2).toBeCalledTimes(1)
+  obs1._value = 123
+  obs2._value = 123
+  expect(handler1).toBeCalledTimes(2)
+  expect(handler2).toBeCalledTimes(2)
+})
+
+test('computed normal object', () => {
+  const obs = define(
+    {
+      _value: 0,
+      get value() {
+        return this._value
+      },
+    },
+    {
+      _value: observable.ref,
+      value: observable.computed,
+    }
+  )
+  const handler = jest.fn()
+  autorun(() => {
+    handler(obs.value)
+  })
+  expect(handler).toBeCalledTimes(1)
+  obs._value = 123
+  expect(handler).toBeCalledTimes(2)
 })
