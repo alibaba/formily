@@ -5,13 +5,13 @@
  * 4. 吸底布局
  */
 import React, { useRef, useLayoutEffect, useState } from 'react'
-import StickyBox, { StickyBoxCompProps } from 'react-sticky-box'
+import StickyBox from 'react-sticky-box'
 import { ReactFC } from '@formily/react'
 import { Space, ISpaceProps } from '../space'
 import { BaseItem, IFormItemProps } from '../form-item'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
-interface IStickyProps extends StickyBoxCompProps {
+interface IStickyProps extends React.ComponentProps<typeof StickyBox> {
   align?: React.CSSProperties['textAlign']
 }
 

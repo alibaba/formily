@@ -71,8 +71,7 @@ export interface ISchemaFieldReactFactoryOptions<
 }
 
 export interface ISchemaFieldOptionContext {
-  getComponent: (name: string) => JSXComponent
-  scope?: any
+  components: SchemaReactComponents
 }
 
 export interface ISchemaFieldProps<
