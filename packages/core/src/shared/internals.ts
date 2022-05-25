@@ -707,7 +707,7 @@ export const triggerFormInitialValuesChange = (
   if (Array.isArray(change.object) && change.key === 'length') return
   if (
     contains(form.initialValues, change.object) ||
-    contains(form.initialValues, change.value)
+    form.initialValues === change.value
   ) {
     if (change.type === 'add' || change.type === 'set') {
       patchFormValues(form, path.slice(1), change.value)
@@ -721,8 +721,7 @@ export const triggerFormInitialValuesChange = (
 export const triggerFormValuesChange = (form: Form, change: DataChange) => {
   if (Array.isArray(change.object) && change.key === 'length') return
   if (
-    (contains(form.values, change.object) ||
-      contains(form.values, change.value)) &&
+    (contains(form.values, change.object) || form.values === change.value) &&
     form.initialized
   ) {
     form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)

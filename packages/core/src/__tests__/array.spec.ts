@@ -715,3 +715,57 @@ test('array field remove can not memory leak', async () => {
   expect(bb.visible).toBeTruthy()
   expect(handler).toBeCalledTimes(1)
 })
+
+test('array field patch values', async () => {
+  const form = attach(createForm())
+
+  const arr = attach(
+    form.createArrayField({
+      name: 'a',
+    })
+  )
+
+  await arr.unshift({})
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'a',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'c',
+      initialValue: 'A',
+      basePath: 'a.0',
+    })
+  )
+  expect(form.values).toEqual({ a: [{ c: 'A' }] })
+  await arr.unshift({})
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'a',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'c',
+      initialValue: 'A',
+      basePath: 'a.0',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '1',
+      basePath: 'a',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'c',
+      initialValue: 'A',
+      basePath: 'a.1',
+    })
+  )
+  expect(form.values).toEqual({ a: [{ c: 'A' }, { c: 'A' }] })
+})
