@@ -1,6 +1,6 @@
 {
   "name": "@formily/shared",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -31,7 +31,7 @@
     "build:umd": "rollup --config"
   },
   "dependencies": {
-    "@formily/path": "2.1.2",
+    "@formily/path": "2.1.3",
     "camel-case": "^4.1.1",
     "lower-case": "^2.0.1",
     "no-case": "^3.0.4",
