@@ -199,6 +199,10 @@ export const patchFormValues = (
   const patch = (source: any, path: Array<string | number> = []) => {
     const targetValue = form.getValuesIn(path)
     const targetField = form.query(path).take()
+    const isUnVoidField = targetField && !isVoidField(targetField)
+
+    if (isUnVoidField && targetField.display === 'none') return
+
     if (allowAssignDefaultValue(targetValue, source)) {
       update(path, source)
     } else {
@@ -210,7 +214,7 @@ export const patchFormValues = (
         })
       } else {
         if (targetField) {
-          if (!isVoidField(targetField) && !targetField.selfModified) {
+          if (isUnVoidField && !targetField.selfModified) {
             update(path, source)
           }
         } else if (form.initialized) {

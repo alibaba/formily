@@ -2234,3 +2234,17 @@ test('onInput could pass value with target', async () => {
   })
   expect(aa.value).toEqual({ target: '123' })
 })
+
+test('field destroyed or display none should not be assign value from patch initialValues', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      display: 'none',
+    })
+  )
+
+  aa.initialValue = '123'
+
+  expect(form.values).toEqual({})
+})
