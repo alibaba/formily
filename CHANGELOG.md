@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.1.4(2022-05-29)
+
+### :bug: Bug Fixes
+
+1. [fix(core): fix patch initialValues should be prevent with display none (#3156)](https://github.com/alibaba/formily/commit/a21182db) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(next): fix space item empty style (#3149)](https://github.com/alibaba/formily/commit/18700a90) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :blush: Other Changes
+
+1. [chore: improve performance](https://github.com/alibaba/formily/commit/9164a280) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.1.3(2022-05-25)
 
 ### :tada: Enhancements
@@ -922,12 +934,6 @@
 
 ## v2.0.0-rc.7(2021-09-15)
 
-### :bug: Bug Fixes
-
-1. [fix(json-schema/reactive): fix circular reference check logic](https://github.com/alibaba/formily/commit/b356dad3) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.0-rc.6(2021-09-14)
-
 ### :tada: Enhancements
 
 1. [feat(element): add FormCollapse component (#2119)](https://github.com/alibaba/formily/commit/48ed7b08) :point_right: ( [Muyao](https://github.com/Muyao) )
@@ -1204,6 +1210,8 @@
 
 ### :bug: Bug Fixes
 
+1. [fix(json-schema/reactive): fix circular reference check logic](https://github.com/alibaba/formily/commit/b356dad3) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 1. [fix(react): fix x-component-props is not reactive](https://github.com/alibaba/formily/commit/d91ebfff) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(antd/next): fix props.prefix is not work for FormGrid/FormLayout (#2151)](https://github.com/alibaba/formily/commit/bcdac582) :point_right: ( [Janry](https://github.com/Janry) )
@@ -1353,8 +1361,6 @@
 1. [fix(validator): fix typo](https://github.com/alibaba/formily/commit/b1a83d2b) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(path): fix realative path for sibling in array (#1492)](https://github.com/alibaba/formily/commit/860264d6) :point_right: ( [JustDs](https://github.com/JustDs) )
-
-1. [fix(json-schema): remove array patch state logic](https://github.com/alibaba/formily/commit/73bd9a47) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(antd/next): fix gridSpan calculate algorithm (#1440)](https://github.com/alibaba/formily/commit/3b1f1cfa) :point_right: ( [Nokecy](https://github.com/Nokecy) )
 
