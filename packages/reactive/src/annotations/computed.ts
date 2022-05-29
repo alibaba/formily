@@ -45,22 +45,26 @@ function getPropertyDescriptorCache(obj: any, key: PropertyKey) {
   return newDesc
 }
 
-function getGetterAndSetter(target: any, key: PropertyKey, value: any) {
+function getPrototypeDescriptor(
+  target: any,
+  key: PropertyKey,
+  value: any
+): PropertyDescriptor {
   if (!target) {
     if (value) {
       if (isFn(value)) {
-        return [value]
+        return { get: value }
       } else {
-        return [value.get, value.set]
+        return value
       }
     }
-    return []
+    return {}
   }
   const descriptor = getPropertyDescriptorCache(target, key)
   if (descriptor) {
-    return [descriptor.get, descriptor.set]
+    return descriptor
   }
-  return []
+  return {}
 }
 
 export const computed: IComputed = createAnnotation(
@@ -71,10 +75,10 @@ export const computed: IComputed = createAnnotation(
 
     const context = target ? target : store
     const property = target ? key : 'value'
-    const [getter, setter] = getGetterAndSetter(target, property, value)
+    const descriptor = getPrototypeDescriptor(target, property, value)
 
     function compute() {
-      store.value = getter?.call(context)
+      store.value = descriptor.get?.call(context)
     }
     function reaction() {
       if (ReactionStack.indexOf(reaction) === -1) {
@@ -126,7 +130,7 @@ export const computed: IComputed = createAnnotation(
     function set(value: any) {
       try {
         batchStart()
-        setter?.call(context, value)
+        descriptor.set?.call(context, value)
       } finally {
         batchEnd()
       }
