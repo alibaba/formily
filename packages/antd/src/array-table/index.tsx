@@ -5,6 +5,7 @@ import React, {
   useEffect,
   createContext,
   useContext,
+  useCallback,
 } from 'react'
 import { Table, Pagination, Space, Select, Badge } from 'antd'
 import { PaginationProps } from 'antd/lib/pagination'
@@ -313,6 +314,26 @@ export const ArrayTable: ComposedArrayTable = observer(
         })
       }
     }
+    const WrapperComp = useCallback(
+      (props: any) => (
+        <SortableBody
+          useDragHandle
+          lockAxis="y"
+          helperClass={`${prefixCls}-sort-helper`}
+          helperContainer={() => {
+            return ref.current?.querySelector('tbody')
+          }}
+          onSortStart={({ node }) => {
+            addTdStyles(node as HTMLElement)
+          }}
+          onSortEnd={({ oldIndex, newIndex }) => {
+            field.move(oldIndex, newIndex)
+          }}
+          {...props}
+        />
+      ),
+      []
+    )
 
     return (
       <ArrayTablePagination {...pagination} dataSource={dataSource}>
@@ -330,23 +351,7 @@ export const ArrayTable: ComposedArrayTable = observer(
                 dataSource={dataSource}
                 components={{
                   body: {
-                    wrapper: (props: any) => (
-                      <SortableBody
-                        useDragHandle
-                        lockAxis="y"
-                        helperClass={`${prefixCls}-sort-helper`}
-                        helperContainer={() => {
-                          return ref.current?.querySelector('tbody')
-                        }}
-                        onSortStart={({ node }) => {
-                          addTdStyles(node as HTMLElement)
-                        }}
-                        onSortEnd={({ oldIndex, newIndex }) => {
-                          field.move(oldIndex, newIndex)
-                        }}
-                        {...props}
-                      />
-                    ),
+                    wrapper: WrapperComp,
                     row: RowComp,
                   },
                 }}
