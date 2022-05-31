@@ -8,7 +8,9 @@ export interface ISectionProps {
   scale?: number
 }
 
-export const Section: React.FC<ISectionProps> = (props) => {
+export const Section: React.FC<React.PropsWithChildren<ISectionProps>> = (
+  props
+) => {
   return (
     <section className="site-section" style={props.style}>
       <div className="site-section-title" style={props.titleStyle}>

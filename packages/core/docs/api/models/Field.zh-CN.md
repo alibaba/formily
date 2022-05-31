@@ -10,53 +10,55 @@ order: 1
 
 ## 属性
 
-| 属性           | 描述                         | 类型                                               | 是否只读 | 默认值       |
-| -------------- | ---------------------------- | -------------------------------------------------- | -------- | ------------ |
-| initialized    | 字段是否已被初始化           | Boolean                                            | 否       | `false`      |
-| mounted        | 字段是否已挂载               | Boolean                                            | 否       | `false`      |
-| unmounted      | 字段是否已卸载               | Boolean                                            | 否       | `false`      |
-| address        | 字段节点路径                 | [FormPath](/api/entry/form-path)                   | 是       |              |
-| path           | 字段数据路径                 | [FormPath](/api/entry/form-path)                   | 是       |              |
-| title          | 字段标题                     | [FieldMessage](#fieldmessage)                      | 否       | `""`         |
-| description    | 字段描述                     | [FieldMessage](#fieldmessage)                      | 否       | `""`         |
-| loading        | 字段加载状态                 | Boolean                                            | 否       | `false`      |
-| validating     | 字段是否正在校验             | Boolean                                            | 否       | `false`      |
-| modified       | 字段子树是否被手动修改过     | Boolean                                            | 否       | `false`      |
-| selfModified   | 字段自身是否被手动修改过     | Boolean                                            | 否       | `false`      |
-| active         | 字段是否处于激活态           | Boolean                                            | 否       | `false`      |
-| visited        | 字段是否被浏览过             | Boolean                                            | 否       | `false`      |
-| inputValue     | 字段输入值                   | Any                                                | 否       | `null`       |
-| inputValues    | 字段输入值集合               | Array                                              | 否       | `[]`         |
-| dataSource     | 字段数据源                   | Array                                              | 否       | `[]`         |
-| validator      | 字段校验器                   | [FieldValidator](#fieldvalidator)                  | 否       | `null`       |
-| decorator      | 字段装饰器                   | Any[]                                              | 否       | `null`       |
-| component      | 字段组件                     | Any[]                                              | 否       | `null`       |
-| feedbacks      | 字段反馈信息                 | [IFieldFeedback](#ifieldfeedback)[]                | 否       | `[]`         |
-| parent         | 父级字段                     | [GeneralField](#generalfield)                      | 是       | `null`       |
-| errors         | 字段汇总(包含子节点)错误消息 | [IFormFeedback](/api/models/form/#iformfeedback)[] | 是       | `[]`         |
-| warnings       | 字段汇总(包含子节点)警告消息 | [IFormFeedback](/api/models/form/#iformfeedback)[] | 是       | `[]`         |
-| successes      | 字段汇总(包含子节点)成功消息 | [IFormFeedback](/api/models/form/#iformfeedback)[] | 是       | `[]`         |
-| valid          | 字段是否合法(包含子节点)     | Boolean                                            | 否       | `true`       |
-| invalid        | 字段是否非法(包含子节点)     | Boolean                                            | 否       | `false`      |
-| value          | 字段值                       | Any                                                | 否       |              |
-| initialValue   | 字段默认值                   | Any                                                | 否       |              |
-| display        | 字段展示状态                 | [FieldDisplayTypes](#fielddisplaytypes)            | 否       | `"visible"`  |
-| pattern        | 字段交互模式                 | [FieldPatternTypes](#fieldpatterntypes)            | 否       | `"editable"` |
-| required       | 字段是否必填                 | Boolean                                            | 否       | `false`      |
-| hidden         | 字段是否隐藏                 | Boolean                                            | 否       | `false`      |
-| visible        | 字段是否显示                 | Boolean                                            | 否       | `true`       |
-| disabled       | 字段是否禁用                 | Boolean                                            | 否       | `false`      |
-| readOnly       | 字段是否只读                 | Boolean                                            | 否       | `false`      |
-| readPretty     | 字段是否为阅读态             | Boolean                                            | 否       | `false`      |
-| editable       | 字段是可编辑                 | Boolean                                            | 否       | `true`       |
-| validateStatus | 字段校验状态                 | [FieldValidateStatus](#fieldvalidatestatus)        | 是       | `null`       |
-| content        | 字段内容，一般作为子节点     | any                                                | 否       | `null`       |
-| data           | 字段扩展属性                 | Object                                             | 否       | `null`       |
-| selfErrors     | 字段自身错误消息             | [FieldMessage](#fieldmessage)[]                    | 否       | `[]`         |
-| selfWarnings   | 字段自身警告消息             | [FieldMessage](#fieldmessage)[]                    | 否       | `[]`         |
-| selfSuccesses  | 字段自身成功消息             | [FieldMessage](#fieldmessage)[]                    | 否       | `[]`         |
-| selfValid      | 字段自身是否合法             | Boolean                                            | 否       | `true`       |
-| selfInvalid    | 字段自身是否非法             | Boolean                                            | 否       | `false`      |
+| 属性           | 描述                              | 类型                                               | 是否只读 | 默认值       |
+| -------------- | --------------------------------- | -------------------------------------------------- | -------- | ------------ |
+| initialized    | 字段是否已被初始化                | Boolean                                            | 否       | `false`      |
+| mounted        | 字段是否已挂载                    | Boolean                                            | 否       | `false`      |
+| unmounted      | 字段是否已卸载                    | Boolean                                            | 否       | `false`      |
+| address        | 字段节点路径                      | [FormPath](/api/entry/form-path)                   | 是       |              |
+| path           | 字段数据路径                      | [FormPath](/api/entry/form-path)                   | 是       |              |
+| title          | 字段标题                          | [FieldMessage](#fieldmessage)                      | 否       | `""`         |
+| description    | 字段描述                          | [FieldMessage](#fieldmessage)                      | 否       | `""`         |
+| loading        | 字段加载状态                      | Boolean                                            | 否       | `false`      |
+| validating     | 字段是否正在校验                  | Boolean                                            | 否       | `false`      |
+| modified       | 字段子树是否被手动修改过          | Boolean                                            | 否       | `false`      |
+| selfModified   | 字段自身是否被手动修改过          | Boolean                                            | 否       | `false`      |
+| active         | 字段是否处于激活态                | Boolean                                            | 否       | `false`      |
+| visited        | 字段是否被浏览过                  | Boolean                                            | 否       | `false`      |
+| inputValue     | 字段输入值                        | Any                                                | 否       | `null`       |
+| inputValues    | 字段输入值集合                    | Array                                              | 否       | `[]`         |
+| dataSource     | 字段数据源                        | Array                                              | 否       | `[]`         |
+| validator      | 字段校验器                        | [FieldValidator](#fieldvalidator)                  | 否       | `null`       |
+| decorator      | 字段装饰器                        | Any[]                                              | 否       | `null`       |
+| component      | 字段组件                          | Any[]                                              | 否       | `null`       |
+| feedbacks      | 字段反馈信息                      | [IFieldFeedback](#ifieldfeedback)[]                | 否       | `[]`         |
+| parent         | 父级字段                          | [GeneralField](#generalfield)                      | 是       | `null`       |
+| errors         | 字段汇总(包含子节点)错误消息      | [IFormFeedback](/api/models/form/#iformfeedback)[] | 是       | `[]`         |
+| warnings       | 字段汇总(包含子节点)警告消息      | [IFormFeedback](/api/models/form/#iformfeedback)[] | 是       | `[]`         |
+| successes      | 字段汇总(包含子节点)成功消息      | [IFormFeedback](/api/models/form/#iformfeedback)[] | 是       | `[]`         |
+| valid          | 字段是否合法(包含子节点)          | Boolean                                            | 否       | `true`       |
+| invalid        | 字段是否非法(包含子节点)          | Boolean                                            | 否       | `false`      |
+| value          | 字段值                            | Any                                                | 否       |              |
+| initialValue   | 字段默认值                        | Any                                                | 否       |              |
+| display        | 字段展示状态                      | [FieldDisplayTypes](#fielddisplaytypes)            | 否       | `"visible"`  |
+| pattern        | 字段交互模式                      | [FieldPatternTypes](#fieldpatterntypes)            | 否       | `"editable"` |
+| required       | 字段是否必填                      | Boolean                                            | 否       | `false`      |
+| hidden         | 字段是否隐藏                      | Boolean                                            | 否       | `false`      |
+| visible        | 字段是否显示                      | Boolean                                            | 否       | `true`       |
+| disabled       | 字段是否禁用                      | Boolean                                            | 否       | `false`      |
+| readOnly       | 字段是否只读                      | Boolean                                            | 否       | `false`      |
+| readPretty     | 字段是否为阅读态                  | Boolean                                            | 否       | `false`      |
+| editable       | 字段是可编辑                      | Boolean                                            | 否       | `true`       |
+| validateStatus | 字段校验状态                      | [FieldValidateStatus](#fieldvalidatestatus)        | 是       | `null`       |
+| content        | 字段内容，一般作为子节点          | any                                                | 否       | `null`       |
+| data           | 字段扩展属性                      | Object                                             | 否       | `null`       |
+| selfErrors     | 字段自身错误消息                  | [FieldMessage](#fieldmessage)[]                    | 否       | `[]`         |
+| selfWarnings   | 字段自身警告消息                  | [FieldMessage](#fieldmessage)[]                    | 否       | `[]`         |
+| selfSuccesses  | 字段自身成功消息                  | [FieldMessage](#fieldmessage)[]                    | 否       | `[]`         |
+| selfValid      | 字段自身是否合法                  | Boolean                                            | 否       | `true`       |
+| selfInvalid    | 字段自身是否非法                  | Boolean                                            | 否       | `false`      |
+| indexes        | 字段数字索引集合                  | Number                                             | 是       | `-`          |
+| index          | 字段数字索引，取 indexes 最后一个 | Number                                             | 是       | `-`          |
 
 #### 详细解释
 
@@ -78,11 +80,11 @@ order: 1
 
 **hidden**
 
-为 true 时是 display 为 hidden，为 false 时是 display 为 visible
+为 true 时， display 为 hidden；为 false 时 display 为 visible
 
 **visible**
 
-为 true 时是 display 为 visible，为 false 时是 display 为 none
+为 true 时， display 为 visible；为 false 时 display 为 none
 
 ## 方法
 

@@ -23,9 +23,11 @@ import { usePrefixCls } from '../__builtins__'
 export interface IArrayCollapseProps extends CollapseProps {
   defaultOpenPanelCount?: number
 }
-type ComposedArrayCollapse = React.FC<IArrayCollapseProps> &
+type ComposedArrayCollapse = React.FC<
+  React.PropsWithChildren<IArrayCollapseProps>
+> &
   ArrayBaseMixins & {
-    CollapsePanel?: React.FC<CollapsePanelProps>
+    CollapsePanel?: React.FC<React.PropsWithChildren<CollapsePanelProps>>
   }
 
 const isAdditionComponent = (schema: ISchema) => {
@@ -174,7 +176,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
                   }}
                   onlyRenderProperties
                 />
-                {props?.extra}
+                {panelProps?.extra}
               </ArrayBase.Item>
             )
 
@@ -221,7 +223,9 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
   }
 )
 
-const CollapsePanel: React.FC<CollapsePanelProps> = ({ children }) => {
+const CollapsePanel: React.FC<React.PropsWithChildren<CollapsePanelProps>> = ({
+  children,
+}) => {
   return <Fragment>{children}</Fragment>
 }
 

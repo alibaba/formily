@@ -3,6 +3,8 @@ const has = Object.prototype.hasOwnProperty
 
 const toString = Object.prototype.toString
 
+export const isUndef = (val: any) => val === undefined
+
 export const isValid = (val: any) => val !== undefined && val !== null
 
 export function isEmpty(val: any, strict = false): boolean {

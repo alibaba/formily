@@ -7,7 +7,7 @@ import {
   FieldDecorator,
   FieldComponent,
 } from '../types'
-import { buildNodeIndexes, initFieldUpdate } from '../shared/internals'
+import { locateNode, destroy, initFieldUpdate } from '../shared/internals'
 import { Form } from './Form'
 import { Query } from './Query'
 
@@ -37,9 +37,19 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
 
   disposers: (() => void)[] = []
 
-  makeIndexes(address: FormPathPattern) {
+  locate(address: FormPathPattern) {
     this.form.fields[address.toString()] = this as any
-    buildNodeIndexes(this as any, address)
+    locateNode(this as any, address)
+  }
+
+  get indexes() {
+    return this.path.transform(/\d/, (...args) =>
+      args.map((index) => Number(index))
+    )
+  }
+
+  get index() {
+    return this.indexes[this.indexes.length - 1]
   }
 
   get component() {
@@ -85,9 +95,16 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
   }
 
   get pattern(): FieldPatternTypes {
-    const parentPattern = (this.parent as any)?.pattern
-    if (isValid(this.selfPattern)) return this.selfPattern
-    return parentPattern || this.form.pattern || 'editable'
+    const parentPattern: FieldPatternTypes =
+      (this.parent as any)?.pattern || this.form.pattern || 'editable'
+    const selfPattern = this.selfPattern
+    if (isValid(selfPattern)) {
+      if (parentPattern === 'readPretty' && selfPattern !== 'editable') {
+        return parentPattern
+      }
+      return selfPattern
+    }
+    return parentPattern
   }
 
   get editable() {
@@ -112,6 +129,10 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
 
   get visible() {
     return this.display === 'visible'
+  }
+
+  get destroyed() {
+    return !this.form.fields[this.address.toString()]
   }
 
   set hidden(hidden: boolean) {
@@ -281,9 +302,8 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
     this.form.removeEffects(this)
   }
 
-  destroy = () => {
-    this.dispose()
-    delete this.form.fields[this.address.toString()]
+  destroy = (forceClear = true) => {
+    destroy(this.form.fields, this.address.toString(), forceClear)
   }
 
   match = (pattern: FormPathPattern) => {

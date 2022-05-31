@@ -5,6 +5,7 @@ import {
   pascalCase,
   isFn,
   isValid,
+  isUndef,
   isEmpty,
   isPlainObj,
   isNumberLike,
@@ -73,18 +74,12 @@ const notify = (
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
-    if (isValid(event.target.value) || isValid(event.target.checked))
-      return true
     if (
-      event.target.tagName &&
-      event.target.tagName !== 'INPUT' &&
-      event.target.tagName !== 'TEXTAREA' &&
-      event.target.tagName !== 'SELECT'
-    ) {
-      return false
-    }
+      typeof event.target === 'object' &&
+      ('value' in event.target || 'checked' in event.target)
+    )
+      return true
     if (stopPropagation) event.stopPropagation?.()
-    return true
   }
   return false
 }
@@ -100,22 +95,32 @@ export const getValuesFromEvent = (args: any[]) => {
   })
 }
 
+export const getTypedDefaultValue = (field: Field) => {
+  if (isArrayField(field)) return []
+  if (isObjectField(field)) return {}
+}
+
 export const buildFieldPath = (field: GeneralField) => {
+  return buildDataPath(field.form.fields, field.address)
+}
+
+export const buildDataPath = (
+  fields: Record<string, GeneralField>,
+  pattern: FormPath
+) => {
   let prevArray = false
-  const fields = field.form.fields
-  const segments = field.address.segments
+  const segments = pattern.segments
   const path = segments.reduce((path: string[], key: string, index: number) => {
     const currentPath = path.concat(key)
     const currentAddress = segments.slice(0, index + 1)
     const current = fields[currentAddress.join('.')]
     if (prevArray) {
-      prevArray = false
+      if (!isVoidField(current)) {
+        prevArray = false
+      }
       return path
     }
     if (index >= segments.length - 1) {
-      if (isVoidField(field)) {
-        return currentPath
-      }
       return currentPath
     }
     if (isVoidField(current)) {
@@ -134,10 +139,7 @@ export const buildFieldPath = (field: GeneralField) => {
   return new FormPath(path)
 }
 
-export const buildNodeIndexes = (
-  field: GeneralField,
-  address: FormPathPattern
-) => {
+export const locateNode = (field: GeneralField, address: FormPathPattern) => {
   field.address = FormPath.parse(address)
   field.path = buildFieldPath(field)
   field.form.indexes[field.path.toString()] = field.address.toString()
@@ -150,18 +152,35 @@ export const patchFieldStates = (
 ) => {
   patches.forEach(({ type, address, oldAddress, payload }) => {
     if (type === 'remove') {
-      target[address]?.dispose()
-      delete target[address]
+      destroy(target, address, false)
     } else if (type === 'update') {
       if (payload) {
         target[address] = payload
-        if (target[oldAddress] === payload) delete target[oldAddress]
+        if (target[oldAddress] === payload) {
+          delete target[oldAddress]
+        }
       }
       if (address && payload) {
-        buildNodeIndexes(payload, address)
+        locateNode(payload, address)
       }
     }
   })
+}
+
+export const destroy = (
+  target: Record<string, GeneralField>,
+  address: string,
+  removeValue = true
+) => {
+  const field = target[address]
+  field?.dispose()
+  if (isDataField(field) && removeValue) {
+    const form = field.form
+    const path = field.path
+    form.deleteValuesIn(path)
+    form.deleteInitialValuesIn(path)
+  }
+  delete target[address]
 }
 
 export const patchFormValues = (
@@ -180,6 +199,10 @@ export const patchFormValues = (
   const patch = (source: any, path: Array<string | number> = []) => {
     const targetValue = form.getValuesIn(path)
     const targetField = form.query(path).take()
+    const isUnVoidField = targetField && !isVoidField(targetField)
+
+    if (isUnVoidField && targetField.display === 'none') return
+
     if (allowAssignDefaultValue(targetValue, source)) {
       update(path, source)
     } else {
@@ -191,7 +214,7 @@ export const patchFormValues = (
         })
       } else {
         if (targetField) {
-          if (!isVoidField(targetField) && !targetField.selfModified) {
+          if (isUnVoidField && !targetField.selfModified) {
             update(path, source)
           }
         } else if (form.initialized) {
@@ -280,7 +303,7 @@ export const validateToFeedbacks = async (
 ) => {
   const results = await validate(field.value, field.validator, {
     triggerType,
-    validateFirst: field.props.validateFirst || field.form.props.validateFirst,
+    validateFirst: field.props.validateFirst ?? field.form.props.validateFirst,
     context: { field, form: field.form },
   })
 
@@ -333,7 +356,8 @@ export const spliceArrayState = (
   }
   const address = field.address.toString()
   const addrLength = address.length
-  const fields = field.form.fields
+  const form = field.form
+  const fields = form.fields
   const fieldPatches: INodePatch<GeneralField>[] = []
   const offset = insertCount - deleteCount
   const isArrayChildren = (identifier: string) => {
@@ -360,10 +384,11 @@ export const spliceArrayState = (
     if (number === undefined) return false
     const index = Number(number)
     return (
-      index >= startIndex &&
-      !fields[
-        `${preStr}${afterStr.replace(/^\.\d+/, `.${index + deleteCount}`)}`
-      ]
+      (index > startIndex &&
+        !fields[
+          `${preStr}${afterStr.replace(/^\.\d+/, `.${index + deleteCount}`)}`
+        ]) ||
+      index === startIndex
     )
   }
   const moveIndex = (identifier: string) => {
@@ -389,6 +414,9 @@ export const spliceArrayState = (
           })
         }
         if (isInsertNode(identifier) || isDeleteNode(identifier)) {
+          if (isDataField(field)) {
+            form.deleteInitialValuesIn(field.path)
+          }
           fieldPatches.push({ type: 'remove', address: identifier })
         }
       }
@@ -487,9 +515,9 @@ export const cleanupArrayChildren = (field: ArrayField, start: number) => {
 
   const isNeedCleanup = (identifier: string) => {
     const afterStr = identifier.slice(address.length)
-    const number = afterStr.match(NumberIndexReg)?.[1]
-    if (number === undefined) return false
-    const index = Number(number)
+    const numStr = afterStr.match(NumberIndexReg)?.[1]
+    if (numStr === undefined) return false
+    const index = Number(numStr)
     return index >= start
   }
 
@@ -626,7 +654,7 @@ export const serialize = (model: any, getter?: any) => {
 export const createChildrenFeedbackFilter = (field: Field) => {
   const identifier = field.address?.toString()
   return ({ address }: IFormFeedback) => {
-    return address.indexOf(identifier) === 0
+    return address === identifier || address.indexOf(identifier + '.') === 0
   }
 }
 
@@ -683,7 +711,7 @@ export const triggerFormInitialValuesChange = (
   if (Array.isArray(change.object) && change.key === 'length') return
   if (
     contains(form.initialValues, change.object) ||
-    contains(form.initialValues, change.value)
+    form.initialValues === change.value
   ) {
     if (change.type === 'add' || change.type === 'set') {
       patchFormValues(form, path.slice(1), change.value)
@@ -697,8 +725,7 @@ export const triggerFormInitialValuesChange = (
 export const triggerFormValuesChange = (form: Form, change: DataChange) => {
   if (Array.isArray(change.object) && change.key === 'length') return
   if (
-    (contains(form.values, change.object) ||
-      contains(form.values, change.value)) &&
+    (contains(form.values, change.object) || form.values === change.value) &&
     form.initialized
   ) {
     form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
@@ -948,23 +975,24 @@ export const validateSelf = batch.bound(
 
 export const resetSelf = batch.bound(
   async (target: Field, options?: IFieldResetOptions, noEmit = false) => {
+    const typedDefaultValue = getTypedDefaultValue(target)
     target.modified = false
     target.selfModified = false
     target.visited = false
     target.feedbacks = []
-    target.inputValue = undefined
+    target.inputValue = typedDefaultValue
     target.inputValues = []
     target.caches = {}
-    if (options?.forceClear) {
-      if (isArrayField(target)) {
-        target.value = []
-      } else if (isObjectField(target)) {
-        target.value = {}
+    if (!isUndef(target.value)) {
+      if (options?.forceClear) {
+        target.value = typedDefaultValue
       } else {
-        target.value = undefined
+        target.value = toJS(
+          !isUndef(target.initialValue)
+            ? target.initialValue
+            : typedDefaultValue
+        )
       }
-    } else if (isValid(target.value)) {
-      target.value = toJS(target.initialValue)
     }
     if (!noEmit) {
       target.notify(LifeCycleTypes.ON_FIELD_RESET)
@@ -1001,15 +1029,20 @@ export const getValidFieldDefaultValue = (value: any, initialValue: any) => {
 }
 
 export const allowAssignDefaultValue = (target: any, source: any) => {
-  const isEmptyTarget = isEmpty(target)
-  const isEmptySource = isEmpty(source)
-  const isValidTarget = isValid(target)
-  const isValidSource = isValid(source)
+  const isEmptyTarget = target !== null && isEmpty(target)
+  const isEmptySource = source !== null && isEmpty(source)
+  const isValidTarget = !isUndef(target)
+  const isValidSource = !isUndef(source)
   if (!isValidTarget) {
     if (isValidSource) {
       return true
     }
     return false
+  }
+
+  if (typeof target === typeof source) {
+    if (target === '') return false
+    if (target === 0) return false
   }
 
   if (isEmptyTarget) {
@@ -1027,7 +1060,14 @@ export const createReactions = (field: GeneralField) => {
   field.form.addEffects(field, () => {
     reactions.forEach((reaction) => {
       if (isFn(reaction)) {
-        field.disposers.push(autorun(batch.scope.bound(() => reaction(field))))
+        field.disposers.push(
+          autorun(
+            batch.scope.bound(() => {
+              if (field.destroyed) return
+              reaction(field)
+            })
+          )
+        )
       }
     })
   })

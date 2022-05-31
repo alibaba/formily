@@ -1,0 +1,8 @@
+@import '~@alifd/next/lib/core/index-noreset.scss';
+@import '~@alifd/next/lib/form/scss/variable.scss';
+
+$space-prefix-cls: '#{$css-prefix}space';
+
+.#{$space-prefix-cls}-item:empty {
+  display: none !important;
+}

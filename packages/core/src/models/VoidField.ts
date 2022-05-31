@@ -35,7 +35,7 @@ export class VoidField<
     this.props = props
     this.designable = designable
     initializeStart()
-    this.makeIndexes(address)
+    this.locate(address)
     this.initialize()
     this.makeObservable()
     this.makeReactive()
@@ -66,6 +66,7 @@ export class VoidField<
   protected makeObservable() {
     if (this.designable) return
     define(this, {
+      path: observable.ref,
       title: observable.ref,
       description: observable.ref,
       selfDisplay: observable.ref,
@@ -89,6 +90,7 @@ export class VoidField<
       editable: observable.computed,
       component: observable.computed,
       decorator: observable.computed,
+      indexes: observable.computed,
       setTitle: action,
       setDescription: action,
       setDisplay: action,

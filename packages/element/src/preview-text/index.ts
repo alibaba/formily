@@ -1,4 +1,4 @@
-import { defineComponent, computed } from '@vue/composition-api'
+import { defineComponent, computed, toRef, Ref } from '@vue/composition-api'
 import {
   createContext,
   resolveComponent,
@@ -22,22 +22,22 @@ import { formatDate } from 'element-ui/src/utils/date-util'
 const prefixCls = `${stylePrefix}-preview-text`
 const PlaceholderContext = createContext('N/A')
 
-export const usePlaceholder = (value?: any) => {
+export const usePlaceholder = (value?: Ref<any>) => {
   const placeholderCtx = useContext(PlaceholderContext)
   const placeholder = computed(() => {
-    return isValid(value) && value !== ''
-      ? value
+    return isValid(value?.value) && value.value !== ''
+      ? value.value
       : resolveComponent(placeholderCtx.value) || 'N/A'
   })
-
   return placeholder
 }
 
 const Input = defineComponent<InputProps>({
   name: 'FPreviewTextInput',
-  props: [],
-  setup(_props, { attrs, slots }) {
-    const placeholder = usePlaceholder(attrs.value)
+  props: ['value'],
+  setup(props, { attrs, slots }) {
+    const value = toRef(props, 'value')
+    const placeholder = usePlaceholder(value)
     return () => {
       return h(
         Space,

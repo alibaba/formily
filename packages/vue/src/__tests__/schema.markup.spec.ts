@@ -332,7 +332,15 @@ describe('recursion field', () => {
         const schemaRef = useFieldSchema()
         return () => {
           return h('div', { attrs: { 'data-testid': 'object' } }, [
-            h('RecursionField', { props: { schema: schemaRef.value } }),
+            h('RecursionField', {
+              props: {
+                schema: schemaRef.value,
+                mapProperties: (schema) => {
+                  schema.default = '123'
+                  return schema
+                },
+              },
+            }),
           ])
         }
       },
@@ -340,18 +348,16 @@ describe('recursion field', () => {
 
     const CustomObject2 = defineComponent({
       setup() {
-        const fieldRef = useField()
         const schemaRef = useFieldSchema()
         return () => {
           const schema = schemaRef.value
-          const field = fieldRef.value
-          return h('div', { attrs: { 'data-testid': 'only-properties' } }, [
+          return h('div', { attrs: { 'data-testid': 'object' } }, [
             h('RecursionField', {
               props: {
-                name: schema.name,
-                basePath: field.address,
                 schema,
-                onlyRenderProperties: true,
+                mapProperties: () => {
+                  return null
+                },
               },
             }),
           ])
@@ -382,15 +388,12 @@ describe('recursion field', () => {
           <SchemaObjectField x-component="CustomObject2">
             <SchemaStringField x-component="Input" />
           </SchemaObjectField>
-          <SchemaVoidField x-component="CustomObject2">
-            <SchemaStringField x-component="Input" />
-          </SchemaVoidField>
         </SchemaField>
       </FormProvider>`,
     })
-    expect(queryAllByTestId('input').length).toEqual(3)
-    expect(queryAllByTestId('object').length).toEqual(1)
-    expect(queryAllByTestId('only-properties').length).toEqual(2)
+    expect(queryAllByTestId('input').length).toEqual(2)
+    expect(queryAllByTestId('input')[0].getAttribute('value')).toEqual('123')
+    expect(queryAllByTestId('input')[1].getAttribute('value')).toBeFalsy()
   })
 
   test('filterProperties', () => {

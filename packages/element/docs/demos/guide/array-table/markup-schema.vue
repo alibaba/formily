@@ -57,6 +57,7 @@
               title: 'Operations',
               prop: 'operations',
               width: 200,
+              fixed: 'right',
             }"
           >
             <SchemaVoidField x-component="FormItem">

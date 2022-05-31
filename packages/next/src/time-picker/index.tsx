@@ -27,10 +27,11 @@ const mapTimeFormat = function () {
   }
 }
 
-export const TimePicker: React.FC<TimePickerProps> = connect(
-  NextTimePicker,
-  mapProps(mapTimeFormat(), mapSize, mapStatus),
-  mapReadPretty(PreviewText.TimePicker)
-)
+export const TimePicker: React.FC<React.PropsWithChildren<TimePickerProps>> =
+  connect(
+    NextTimePicker,
+    mapProps(mapTimeFormat(), mapSize, mapStatus),
+    mapReadPretty(PreviewText.TimePicker)
+  )
 
 export default TimePicker

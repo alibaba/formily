@@ -1,6 +1,6 @@
 {
   "name": "@formily/antd",
-  "version": "2.0.5",
+  "version": "2.1.4",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -43,26 +43,33 @@
     "dumi": "^1.1.0-rc.8"
   },
   "peerDependencies": {
-    "@types/react": ">=16.8.0 || >=17.0.0",
-    "@types/react-dom": ">=16.8.0 || >=17.0.0",
-    "antd": "^4.0.0",
-    "react": ">=16.8.0 || >=17.0.0",
+    "@ant-design/icons": "4.x",
+    "@types/react": ">=16.8.0",
+    "@types/react-dom": ">=16.8.0",
+    "antd": "4.x",
+    "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
-    "react-is": ">=16.8.0 || >=17.0.0"
+    "react-is": ">=16.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    }
   },
   "dependencies": {
-    "@ant-design/icons": "^4.0.0",
-    "@formily/core": "2.0.5",
-    "@formily/grid": "2.0.5",
-    "@formily/json-schema": "2.0.5",
-    "@formily/react": "2.0.5",
-    "@formily/reactive": "2.0.5",
-    "@formily/reactive-react": "2.0.5",
-    "@formily/shared": "2.0.5",
-    "@juggle/resize-observer": "^3.3.1",
+    "@formily/core": "2.1.4",
+    "@formily/grid": "2.1.4",
+    "@formily/json-schema": "2.1.4",
+    "@formily/react": "2.1.4",
+    "@formily/reactive": "2.1.4",
+    "@formily/reactive-react": "2.1.4",
+    "@formily/shared": "2.1.4",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
-    "react-sticky-box": "^0.9.3"
+    "react-sticky-box": "^1.0.2"
   },
   "publishConfig": {
     "access": "public"

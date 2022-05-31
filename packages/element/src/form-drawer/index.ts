@@ -365,7 +365,7 @@ export function FormDrawer(
                   formDrawer.close()
                 }
               })
-              .catch(reject)
+              .catch(() => {})
           },
           async () => {
             await loading(drawerProps.loadingText, () =>

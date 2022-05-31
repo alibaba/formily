@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import { ReactFC } from '@formily/react'
 import { isFn } from '@formily/shared'
 
 type ReactRenderPropsChildren<T = any> =
@@ -155,7 +156,7 @@ const getStrength = (val) => {
   }
 }
 
-export const PasswordStrength: React.FC<IPasswordStrengthProps> = (props) => {
+export const PasswordStrength: ReactFC<IPasswordStrengthProps> = (props) => {
   if (isFn(props.children)) {
     return props.children(getStrength(String(props.value)))
   } else {

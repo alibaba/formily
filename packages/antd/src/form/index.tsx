@@ -1,6 +1,11 @@
 import React from 'react'
-import { Form as FormType, IFormFeedback } from '@formily/core'
-import { useForm, FormProvider, JSXComponent } from '@formily/react'
+import { Form as FormType, ObjectField, IFormFeedback } from '@formily/core'
+import {
+  useParentForm,
+  FormProvider,
+  ExpressionScope,
+  JSXComponent,
+} from '@formily/react'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
 import { PreviewText } from '../preview-text'
 export interface FormProps extends IFormLayoutProps {
@@ -11,7 +16,7 @@ export interface FormProps extends IFormLayoutProps {
   previewTextPlaceholder?: React.ReactNode
 }
 
-export const Form: React.FC<FormProps> = ({
+export const Form: React.FC<React.PropsWithChildren<FormProps>> = ({
   form,
   component,
   onAutoSubmit,
@@ -19,23 +24,25 @@ export const Form: React.FC<FormProps> = ({
   previewTextPlaceholder,
   ...props
 }) => {
-  const top = useForm()
-  const renderContent = (form: FormType) => (
-    <PreviewText.Placeholder value={previewTextPlaceholder}>
-      <FormLayout {...props}>
-        {React.createElement(
-          component,
-          {
-            onSubmit(e: React.FormEvent) {
-              e?.stopPropagation?.()
-              e?.preventDefault?.()
-              form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
+  const top = useParentForm()
+  const renderContent = (form: FormType | ObjectField) => (
+    <ExpressionScope value={{ $$form: form }}>
+      <PreviewText.Placeholder value={previewTextPlaceholder}>
+        <FormLayout {...props}>
+          {React.createElement(
+            component,
+            {
+              onSubmit(e: React.FormEvent) {
+                e?.stopPropagation?.()
+                e?.preventDefault?.()
+                form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
+              },
             },
-          },
-          props.children
-        )}
-      </FormLayout>
-    </PreviewText.Placeholder>
+            props.children
+          )}
+        </FormLayout>
+      </PreviewText.Placeholder>
+    </ExpressionScope>
   )
   if (form)
     return <FormProvider form={form}>{renderContent(form)}</FormProvider>

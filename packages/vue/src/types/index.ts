@@ -1,5 +1,5 @@
-import type { Vue2Component } from './vue2'
-import type { Vue3Component } from './vue3'
+import { Component } from 'vue'
+import * as VueDemi from 'vue-demi'
 import {
   Form,
   IFieldFactoryProps,
@@ -13,18 +13,19 @@ import {
 } from '@formily/core'
 import type { FormPathPattern } from '@formily/shared'
 import type { ISchema, Schema, SchemaKey } from '@formily/json-schema'
-import type { DefineComponent as DefineVue3Component } from '@type-helper/vue3'
 
-export type DefineComponent<Props = Record<string, any>> =
-  DefineVue3Component<Props>
+class Helper<Props> {
+  Return = VueDemi.defineComponent({} as { props: Record<keyof Props, any> })
+}
 
-export type VueComponent<Props = Record<string, any>> =
-  | Vue2Component<Props>
-  | Vue3Component<Props>
-  | Props
+export type DefineComponent<Props> = Helper<Props>['Return']
+
+export type VueComponent = Component
+
 export type VueComponentOptionsWithProps = {
   props: unknown
 }
+
 export type VueComponentProps<T extends VueComponent> =
   T extends VueComponentOptionsWithProps ? T['props'] : T
 
@@ -46,7 +47,8 @@ export type IArrayFieldProps = IFieldProps
 export type IObjectFieldProps = IFieldProps
 
 export interface IReactiveFieldProps {
-  field: GeneralField
+  fieldType: 'Field' | 'ArrayField' | 'ObjectField' | 'VoidField'
+  fieldProps: IFieldProps | IVoidFieldProps
 }
 
 export interface IComponentMapper<T extends VueComponent = any> {
@@ -68,11 +70,8 @@ export interface ISchemaFieldVueFactoryOptions<
   scope?: any
 }
 
-export interface ISchemaFieldProps<
-  Decorator extends VueComponent = VueComponent,
-  Component extends VueComponent = VueComponent,
-  InnerField = ObjectField<Decorator, Component>
-> extends Omit<IFieldFactoryProps<Decorator, Component, InnerField>, 'name'> {
+export interface ISchemaFieldProps
+  extends Omit<IRecursionFieldProps, 'name' | 'schema'> {
   schema?: ISchema
   components?: {
     [key: string]: VueComponent
@@ -134,3 +133,7 @@ export type ISchemaTypeFieldProps<
   Decorator extends ComponentPath<Components> = ComponentPath<Components>,
   Component extends ComponentPath<Components> = ComponentPath<Components>
 > = Omit<ISchemaMarkupFieldProps<Components, Decorator, Component>, 'type'>
+
+export type IExpressionScopeProps = {
+  value: any
+}

@@ -9,7 +9,13 @@ import {
   onBeforeUnmount,
   PropType,
 } from '@vue/composition-api'
-import { Fragment, useField, useFieldSchema, h } from '@formily/vue'
+import {
+  Fragment,
+  useField,
+  useFieldSchema,
+  h,
+  ExpressionScope,
+} from '@formily/vue'
 import { isValid, uid, clone } from '@formily/shared'
 import { ArrayField } from '@formily/core'
 import { stylePrefix } from '../__builtins__/configs'
@@ -166,7 +172,13 @@ const ArrayBaseItem = defineComponent({
   setup(props: IArrayBaseItemProps, { slots }) {
     provide(ItemSymbol, props)
     return () => {
-      return h(Fragment, {}, slots)
+      return h(
+        ExpressionScope,
+        { props: { value: { $record: props.record, $index: props.index } } },
+        {
+          default: () => h(Fragment, {}, slots),
+        }
+      )
     }
   },
 })
@@ -430,3 +442,5 @@ export const ArrayBase = composeExport(ArrayBaseInner, {
   useKey: useKey,
   useRecord: useRecord,
 })
+
+export default ArrayBase

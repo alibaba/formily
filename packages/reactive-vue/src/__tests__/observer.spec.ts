@@ -70,3 +70,82 @@ test('observer: component with setup', async () => {
   expect(wrapper.find('button').text()).toBe('12')
   wrapper.destroy()
 })
+
+test('observer: component scheduler', async () => {
+  let schedulerRequest = null
+
+  const model = observable<any>({
+    age: 10,
+    setAge() {
+      model.age++
+    },
+  })
+  const Component = observer(
+    {
+      data() {
+        return {
+          model,
+        }
+      },
+      render(this: any, h: CreateElement) {
+        return h('button', {
+          on: { click: this.model.setAge },
+          domProps: { textContent: this.model.age },
+        })
+      },
+    },
+    {
+      scheduler: (update) => {
+        clearTimeout(schedulerRequest)
+        schedulerRequest = setTimeout(() => {
+          update()
+        }, 100)
+      },
+    }
+  )
+  const wrapper = shallowMount(Component)
+
+  expect(wrapper.find('button').text()).toBe('10')
+
+  wrapper.find('button').trigger('click')
+  await new Promise((r) => setTimeout(r, 150))
+  expect(wrapper.find('button').text()).toBe('11')
+
+  // test second render
+  wrapper.find('button').trigger('click')
+  await new Promise((r) => setTimeout(r, 150))
+  expect(wrapper.find('button').text()).toBe('12')
+
+  wrapper.destroy()
+})
+
+test('observer: stop tracking if watcher is destroyed', async () => {
+  let count = 0
+  const model = observable<any>({
+    age: 10,
+    name: 'test',
+  })
+
+  const Component = observer({
+    name: 'test',
+    data() {
+      return {
+        model: model,
+      }
+    },
+    render() {
+      count++
+      return h('div', [this.model.name, this.model.age])
+    },
+  })
+
+  const wrapper = shallowMount(Component)
+
+  const childInst = wrapper.find({ name: 'test' })
+
+  expect(childInst.exists()).toBe(true)
+  ;(childInst.vm as any)._isDestroyed = true
+  model.age++
+  wrapper.destroy()
+  expect(count).toEqual(1) // 不触发 reactiveRender
+})

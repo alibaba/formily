@@ -9,7 +9,7 @@ export const observer = function (opts: any, options?: IObserverOptions): any {
     name,
     ...opts,
     setup(props: Record<string, any>, context: any) {
-      useObserver()
+      useObserver(options)
       return opts?.setup?.(props, context)
     },
   }

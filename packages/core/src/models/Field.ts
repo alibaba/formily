@@ -53,6 +53,7 @@ import {
 } from '../shared/internals'
 import { Form } from './Form'
 import { BaseField } from './BaseField'
+import { IFormFeedback } from '..'
 export class Field<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
@@ -89,7 +90,7 @@ export class Field<
     this.props = props
     this.designable = designable
     initializeStart()
-    this.makeIndexes(address)
+    this.locate(address)
     this.initialize()
     this.makeObservable()
     this.makeReactive()
@@ -158,10 +159,10 @@ export class Field<
       decoratorType: observable.ref,
       componentType: observable.ref,
       content: observable.ref,
+      feedbacks: observable.ref,
       decoratorProps: observable,
       componentProps: observable,
       validator: observable.shallow,
-      feedbacks: observable.shallow,
       data: observable.shallow,
       component: observable.computed,
       decorator: observable.computed,
@@ -187,6 +188,7 @@ export class Field<
       readOnly: observable.computed,
       readPretty: observable.computed,
       editable: observable.computed,
+      indexes: observable.computed,
       setDisplay: action,
       setTitle: action,
       setDescription: action,
@@ -247,7 +249,7 @@ export class Field<
               this.caches.value = undefined
             }
           } else {
-            this.caches.value = toJS(value)
+            this.caches.value = toJS(value) ?? toJS(this.initialValue)
             if (display === 'none') {
               this.form.deleteValuesIn(this.path)
             }
@@ -275,33 +277,33 @@ export class Field<
     createReactions(this)
   }
 
-  get selfErrors() {
+  get selfErrors(): FeedbackMessage {
     return queryFeedbackMessages(this, {
       type: 'error',
     })
   }
 
-  get errors() {
+  get errors(): IFormFeedback[] {
     return this.form.errors.filter(createChildrenFeedbackFilter(this))
   }
 
-  get selfWarnings() {
+  get selfWarnings(): FeedbackMessage {
     return queryFeedbackMessages(this, {
       type: 'warning',
     })
   }
 
-  get warnings() {
+  get warnings(): IFormFeedback[] {
     return this.form.warnings.filter(createChildrenFeedbackFilter(this))
   }
 
-  get selfSuccesses() {
+  get selfSuccesses(): FeedbackMessage {
     return queryFeedbackMessages(this, {
       type: 'success',
     })
   }
 
-  get successes() {
+  get successes(): IFormFeedback[] {
     return this.form.successes.filter(createChildrenFeedbackFilter(this))
   }
 
@@ -349,6 +351,7 @@ export class Field<
   }
 
   set value(value: ValueType) {
+    if (this.destroyed) return
     if (!this.initialized) {
       if (this.display === 'none') {
         this.caches.value = value
@@ -362,6 +365,7 @@ export class Field<
   }
 
   set initialValue(initialValue: ValueType) {
+    if (this.destroyed) return
     if (!this.initialized) {
       if (
         !allowAssignDefaultValue(this.initialValue, initialValue) &&
@@ -454,10 +458,13 @@ export class Field<
   getState: IModelGetter<IFieldState> = createStateGetter(this)
 
   onInput = async (...args: any[]) => {
-    if (args[0]?.target) {
-      if (!isHTMLInputEvent(args[0])) return
+    const getValues = (args: any[]) => {
+      if (args[0]?.target) {
+        if (!isHTMLInputEvent(args[0])) return args
+      }
+      return getValuesFromEvent(args)
     }
-    const values = getValuesFromEvent(args)
+    const values = getValues(args)
     const value = values[0]
     this.caches.inputting = true
     this.inputValue = value

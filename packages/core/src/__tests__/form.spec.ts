@@ -1561,3 +1561,57 @@ test('validator order with format', async () => {
     ['The field value is required'],
   ])
 })
+
+test('form unmount can not effect field values', () => {
+  const form = attach(
+    createForm({
+      values: {
+        aa: '123',
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  expect(form.values.aa).toEqual('123')
+  form.onUnmount()
+  expect(form.values.aa).toEqual('123')
+})
+
+test('form clearFormGraph need clear field values', () => {
+  const form = attach(
+    createForm({
+      values: {
+        aa: '123',
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  expect(form.values.aa).toEqual('123')
+  form.clearFormGraph('*')
+  expect(form.values.aa).toBeUndefined()
+})
+
+test('form clearFormGraph not clear field values', () => {
+  const form = attach(
+    createForm({
+      values: {
+        aa: '123',
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  expect(form.values.aa).toEqual('123')
+  form.clearFormGraph('*', false)
+  expect(form.values.aa).toEqual('123')
+})

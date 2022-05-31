@@ -16,6 +16,16 @@ const isMatcher = Symbol('PATH_MATCHER')
 
 const isValid = (val: any) => val !== undefined && val !== null
 
+const isSimplePath = (val: string) =>
+  val.indexOf('*') === -1 &&
+  val.indexOf('~') === -1 &&
+  val.indexOf('[') === -1 &&
+  val.indexOf(']') === -1 &&
+  val.indexOf(',') === -1 &&
+  val.indexOf(':') === -1 &&
+  val.indexOf(' ') === -1 &&
+  val[0] !== '.'
+
 const isAssignable = (val: any) =>
   typeof val === 'object' || typeof val === 'function'
 
@@ -53,6 +63,7 @@ const setIn = (segments: Segments, source: any, value: any) => {
       }
       if (!isValid(source[index])) {
         if (value === undefined) {
+          if (source[index] === null) source[index] = value
           return
         }
         if (i < segments.length - 1) {
@@ -133,13 +144,14 @@ const parse = (pattern: Pattern, base?: Pattern) => {
       entire: pattern.entire,
       segments: pattern.segments.slice(),
       isRegExp: false,
+      haveRelativePattern: pattern.haveRelativePattern,
       isWildMatchPattern: pattern.isWildMatchPattern,
       isMatchPattern: pattern.isMatchPattern,
       haveExcludePattern: pattern.haveExcludePattern,
       tree: pattern.tree,
     }
   } else if (isStr(pattern)) {
-    if (!pattern)
+    if (!pattern) {
       return {
         entire: '',
         segments: [],
@@ -148,6 +160,17 @@ const parse = (pattern: Pattern, base?: Pattern) => {
         haveExcludePattern: false,
         isMatchPattern: false,
       }
+    }
+    if (isSimplePath(pattern)) {
+      return {
+        entire: pattern,
+        segments: pattern.split('.'),
+        isRegExp: false,
+        isWildMatchPattern: false,
+        haveExcludePattern: false,
+        isMatchPattern: false,
+      }
+    }
     const parser = new Parser(pattern, Path.parse(base))
     const tree = parser.parse()
     if (!parser.isMatchPattern) {
@@ -157,6 +180,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
         segments,
         tree,
         isRegExp: false,
+        haveRelativePattern: parser.haveRelativePattern,
         isWildMatchPattern: false,
         haveExcludePattern: false,
         isMatchPattern: false,
@@ -166,6 +190,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
         entire: pattern,
         segments: [],
         isRegExp: false,
+        haveRelativePattern: false,
         isWildMatchPattern: parser.isWildMatchPattern,
         haveExcludePattern: parser.haveExcludePattern,
         isMatchPattern: true,
@@ -181,6 +206,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
         return buf.concat(parseString(key))
       }, []),
       isRegExp: false,
+      haveRelativePattern: false,
       isWildMatchPattern: false,
       haveExcludePattern: false,
       isMatchPattern: false,
@@ -190,6 +216,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
       entire: pattern,
       segments: [],
       isRegExp: true,
+      haveRelativePattern: false,
       isWildMatchPattern: false,
       haveExcludePattern: false,
       isMatchPattern: true,
@@ -199,6 +226,7 @@ const parse = (pattern: Pattern, base?: Pattern) => {
       entire: '',
       isRegExp: false,
       segments: pattern !== undefined ? [pattern] : [],
+      haveRelativePattern: false,
       isWildMatchPattern: false,
       haveExcludePattern: false,
       isMatchPattern: false,
@@ -227,6 +255,7 @@ export class Path {
   public isMatchPattern: boolean
   public isWildMatchPattern: boolean
   public isRegExp: boolean
+  public haveRelativePattern: boolean
   public haveExcludePattern: boolean
   public matchScore: number
   public tree: Node
@@ -241,12 +270,14 @@ export class Path {
       isRegExp,
       isMatchPattern,
       isWildMatchPattern,
+      haveRelativePattern,
       haveExcludePattern,
     } = parse(input, base)
     this.entire = entire
     this.segments = segments
     this.isMatchPattern = isMatchPattern
     this.isWildMatchPattern = isWildMatchPattern
+    this.haveRelativePattern = haveRelativePattern
     this.isRegExp = isRegExp
     this.haveExcludePattern = haveExcludePattern
     this.tree = tree as Node

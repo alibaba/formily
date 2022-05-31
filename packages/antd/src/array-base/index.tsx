@@ -10,7 +10,13 @@ import {
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from 'antd/lib/button'
 import { ArrayField } from '@formily/core'
-import { useField, useFieldSchema, Schema, JSXComponent } from '@formily/react'
+import {
+  useField,
+  useFieldSchema,
+  Schema,
+  JSXComponent,
+  ExpressionScope,
+} from '@formily/react'
 import { isValid, clone } from '@formily/shared'
 import { SortableHandle } from 'react-sortable-hoc'
 import { usePrefixCls } from '../__builtins__'
@@ -34,15 +40,19 @@ export interface IArrayBaseItemProps {
 }
 
 export type ArrayBaseMixins = {
-  Addition?: React.FC<IArrayBaseAdditionProps>
-  Remove?: React.FC<AntdIconProps & { index?: number }>
-  MoveUp?: React.FC<AntdIconProps & { index?: number }>
-  MoveDown?: React.FC<AntdIconProps & { index?: number }>
-  SortHandle?: React.FC<AntdIconProps & { index?: number }>
+  Addition?: React.FC<React.PropsWithChildren<IArrayBaseAdditionProps>>
+  Remove?: React.FC<React.PropsWithChildren<AntdIconProps & { index?: number }>>
+  MoveUp?: React.FC<React.PropsWithChildren<AntdIconProps & { index?: number }>>
+  MoveDown?: React.FC<
+    React.PropsWithChildren<AntdIconProps & { index?: number }>
+  >
+  SortHandle?: React.FC<
+    React.PropsWithChildren<AntdIconProps & { index?: number }>
+  >
   Index?: React.FC
   useArray?: () => IArrayBaseContext
-  useIndex?: () => number
-  useRecord?: () => any
+  useIndex?: (index?: number) => number
+  useRecord?: (record?: number) => any
 }
 
 export interface IArrayBaseProps {
@@ -53,9 +63,9 @@ export interface IArrayBaseProps {
   onMoveUp?: (index: number) => void
 }
 
-type ComposedArrayBase = React.FC<IArrayBaseProps> &
+type ComposedArrayBase = React.FC<React.PropsWithChildren<IArrayBaseProps>> &
   ArrayBaseMixins & {
-    Item?: React.FC<IArrayBaseItemProps>
+    Item?: React.FC<React.PropsWithChildren<IArrayBaseItemProps>>
     mixin?: <T extends JSXComponent>(target: T) => T & ArrayBaseMixins
   }
 
@@ -77,18 +87,22 @@ const useRecord = (record?: number) => {
   return ctx ? ctx.record : record
 }
 
+const getSchemaDefaultValue = (schema: Schema) => {
+  if (schema?.type === 'array') return []
+  if (schema?.type === 'object') return {}
+  if (schema?.type === 'void') {
+    for (let key in schema.properties) {
+      const value = getSchemaDefaultValue(schema.properties[key])
+      if (isValid(value)) return value
+    }
+  }
+}
+
 const getDefaultValue = (defaultValue: any, schema: Schema) => {
   if (isValid(defaultValue)) return clone(defaultValue)
   if (Array.isArray(schema?.items))
-    return getDefaultValue(defaultValue, schema.items[0])
-  if (schema?.items?.type === 'array') return []
-  if (schema?.items?.type === 'boolean') return true
-  if (schema?.items?.type === 'date') return ''
-  if (schema?.items?.type === 'datetime') return ''
-  if (schema?.items?.type === 'number') return 0
-  if (schema?.items?.type === 'object') return {}
-  if (schema?.items?.type === 'string') return ''
-  return null
+    return getSchemaDefaultValue(schema.items[0])
+  return getSchemaDefaultValue(schema.items)
 }
 
 export const ArrayBase: ComposedArrayBase = (props) => {
@@ -102,7 +116,13 @@ export const ArrayBase: ComposedArrayBase = (props) => {
 }
 
 ArrayBase.Item = ({ children, ...props }) => {
-  return <ItemContext.Provider value={props}>{children}</ItemContext.Provider>
+  return (
+    <ItemContext.Provider value={props}>
+      <ExpressionScope value={{ $record: props.record, $index: props.index }}>
+        {children}
+      </ExpressionScope>
+    </ItemContext.Provider>
+  )
 }
 
 const SortHandle = SortableHandle((props: any) => {
@@ -148,7 +168,7 @@ ArrayBase.Addition = (props) => {
       type="dashed"
       block
       {...props}
-      disabled={array.field?.disabled}
+      disabled={self?.disabled}
       className={cls(`${prefixCls}-addition`, props.className)}
       onClick={(e) => {
         if (array.props?.disabled) return
@@ -173,6 +193,7 @@ ArrayBase.Addition = (props) => {
 
 ArrayBase.Remove = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
+  const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
   if (!array) return null
@@ -180,10 +201,14 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
   return (
     <DeleteOutlined
       {...props}
-      className={cls(`${prefixCls}-remove`, props.className)}
+      className={cls(
+        `${prefixCls}-remove`,
+        self?.disabled ? `${prefixCls}-remove-disabled` : '',
+        props.className
+      )}
       ref={ref}
       onClick={(e) => {
-        if (array.props?.disabled) return
+        if (self?.disabled) return
         e.stopPropagation()
         array.field?.remove?.(index)
         array.props?.onRemove?.(index)
@@ -197,6 +222,7 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
 
 ArrayBase.MoveDown = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
+  const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
   if (!array) return null
@@ -204,10 +230,14 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
   return (
     <DownOutlined
       {...props}
-      className={cls(`${prefixCls}-move-down`, props.className)}
+      className={cls(
+        `${prefixCls}-move-down`,
+        self?.disabled ? `${prefixCls}-move-down-disabled` : '',
+        props.className
+      )}
       ref={ref}
       onClick={(e) => {
-        if (array.props?.disabled) return
+        if (self?.disabled) return
         e.stopPropagation()
         array.field?.moveDown?.(index)
         array.props?.onMoveDown?.(index)
@@ -221,6 +251,7 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
 
 ArrayBase.MoveUp = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
+  const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
   if (!array) return null
@@ -228,10 +259,14 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
   return (
     <UpOutlined
       {...props}
-      className={cls(`${prefixCls}-move-up`, props.className)}
+      className={cls(
+        `${prefixCls}-move-up`,
+        self?.disabled ? `${prefixCls}-move-up-disabled` : '',
+        props.className
+      )}
       ref={ref}
       onClick={(e) => {
-        if (array.props?.disabled) return
+        if (self?.disabled) return
         e.stopPropagation()
         array?.field?.moveUp(index)
         array?.props?.onMoveUp?.(index)

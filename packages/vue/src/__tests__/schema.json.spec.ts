@@ -1,11 +1,16 @@
 import { createForm } from '@formily/core'
+import { observer } from '@formily/reactive-vue'
 import { Schema } from '@formily/json-schema'
 import { render, waitFor } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import Vue, { FunctionalComponentOptions } from 'vue'
-import { FormProvider, createSchemaField } from '../vue2-components'
-import { connect, mapProps, mapReadPretty } from '../'
-import { defineComponent } from 'vue-demi'
+import {
+  FormProvider,
+  createSchemaField,
+  RecursionField,
+} from '../vue2-components'
+import { connect, mapProps, mapReadPretty, useField, useFieldSchema } from '../'
+import { defineComponent, h } from 'vue-demi'
 
 Vue.component('FormProvider', FormProvider)
 
@@ -40,6 +45,26 @@ const Input2: FunctionalComponentOptions = {
     })
   },
 }
+
+const ArrayItems = observer(
+  defineComponent({
+    setup() {
+      const fieldRef = useField()
+      const schemaRef = useFieldSchema()
+
+      return () => {
+        const field = fieldRef.value
+        const schema = schemaRef.value
+        const items = field.value?.map?.((item, index) => {
+          return h(RecursionField, {
+            props: { schema: schema.items, name: index },
+          })
+        })
+        return h('div', { attrs: { 'data-testid': 'array-items' } }, [items])
+      }
+    },
+  })
+)
 
 const Previewer: FunctionalComponentOptions = {
   functional: true,
@@ -760,6 +785,139 @@ describe('x-content', () => {
     expect(queryByTestId('previewer5')).toBeVisible()
     expect(queryByTestId('previewer5').textContent).toEqual('123')
   })
+
+  test('wrong x-content will be ignore', () => {
+    const form = createForm()
+    const { SchemaField } = createSchemaField({
+      components: {
+        Previewer,
+      },
+    })
+    const { queryAllByTestId, container } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'object',
+            properties: {
+              input1: {
+                type: 'string',
+                'x-component': 'Previewer',
+                'x-content': {
+                  default: {
+                    someAttr: '123',
+                  },
+                },
+              },
+              input2: {
+                type: 'string',
+                'x-component': 'Previewer',
+                'x-content': {
+                  default: null,
+                },
+              },
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    queryAllByTestId('previewer').forEach((el) => expect(el).toBeVisible())
+    queryAllByTestId('previewer').forEach((el) =>
+      expect(el.textContent).toEqual('')
+    )
+  })
+})
+
+describe('x-slot', () => {
+  test('x-slot works in void field properties', () => {
+    const form = createForm()
+    const Content = {
+      render(h) {
+        return h('span', '123')
+      },
+    }
+    const { SchemaField } = createSchemaField({
+      components: {
+        Previewer4,
+        Content,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'void',
+            'x-component': 'Previewer4',
+            properties: {
+              content: {
+                type: 'void',
+                'x-component': 'Content',
+                'x-slot': 'content',
+              },
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('previewer4')).toBeVisible()
+    expect(queryByTestId('previewer4').textContent).toEqual('123')
+  })
+  test('x-slot works in object field properties', () => {
+    const form = createForm()
+    const Content = {
+      render(h) {
+        return h('span', '123')
+      },
+    }
+    const { SchemaField } = createSchemaField({
+      components: {
+        Previewer4,
+        Content,
+      },
+    })
+    const { queryByTestId } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'object',
+            'x-component': 'Previewer4',
+            properties: {
+              content: {
+                type: 'void',
+                'x-component': 'Content',
+                'x-slot': 'content',
+              },
+            },
+          }),
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField
+          name="string"
+          :schema="schema"
+        />
+      </FormProvider>`,
+    })
+    expect(queryByTestId('previewer4')).toBeVisible()
+    expect(queryByTestId('previewer4').textContent).toEqual('123')
+  })
 })
 
 describe('scope', () => {
@@ -910,8 +1068,7 @@ describe('expression', () => {
     expect(wrapper.find('.input2').exists()).not.toBeTruthy()
 
     form.values.input = '123'
-
-    expect(wrapper.find('.input2').exists()).toBeTruthy()
+    await waitFor(() => expect(wrapper.find('.input2').exists()).toBeTruthy())
     wrapper.destroy()
   })
 
@@ -962,13 +1119,15 @@ describe('expression', () => {
 
     expect(wrapper.find('.input2').attributes().value).toEqual('10')
     form.values.input = 10
-    expect(wrapper.find('.input2').attributes().value).toEqual('100')
+    await waitFor(() =>
+      expect(wrapper.find('.input2').attributes().value).toEqual('100')
+    )
     wrapper.destroy()
   })
 })
 
 describe('schema controlled', () => {
-  test('view updated with schema', async () => {
+  test('view update correctly when schema changed', async () => {
     const form = createForm({})
     const { SchemaField } = createSchemaField({
       components: {
@@ -998,7 +1157,6 @@ describe('schema controlled', () => {
       },
       methods: {
         changeSchema() {
-          this.form = createForm()
           this.schema = {
             type: 'object',
             properties: {
@@ -1017,13 +1175,87 @@ describe('schema controlled', () => {
           <button @click="changeSchema()">changeSchema</button>
         </FormProvider>`,
     })
-    const wrapper = mount(component, { attachToDocument: true })
+    const { queryByTestId, getByText } = render(component)
 
-    expect(wrapper.contains('.input')).toBe(true)
-    expect(wrapper.contains('.input2')).toBe(true)
-    await wrapper.find('button').trigger('click')
-    expect(wrapper.contains('.input2')).toBe(true)
-    expect(wrapper.contains('.input')).toBe(false)
-    wrapper.destroy()
+    expect(queryByTestId('input')).toBeVisible()
+    expect(queryByTestId('input2')).toBeVisible()
+    getByText('changeSchema').click()
+    await waitFor(() => {
+      expect(queryByTestId('input2')).toBeVisible()
+      expect(queryByTestId('input')).toBeNull()
+    })
+  })
+  test('view updated correctly with schema fragment changed', async () => {
+    const form = createForm({})
+    const { SchemaField } = createSchemaField({
+      components: {
+        Input,
+        Input2,
+        ArrayItems,
+      },
+    })
+    const frag1 = {
+      type: 'object',
+      properties: {
+        input1: {
+          type: 'string',
+          'x-component': 'Input',
+        },
+      },
+    }
+    const frag2 = {
+      type: 'array',
+      'x-component': 'ArrayItems',
+      items: {
+        type: 'object',
+        properties: {
+          input2: {
+            type: 'string',
+            'x-component': 'Input2',
+          },
+        },
+      },
+    }
+    const component = defineComponent({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: {
+            type: 'object',
+            properties: {
+              input: frag1,
+            },
+          },
+        }
+      },
+      methods: {
+        changeSchema() {
+          this.form.clearFormGraph('input')
+          this.form.deleteValuesIn('input')
+          this.schema = {
+            type: 'object',
+            properties: {
+              input: frag2,
+            },
+          }
+        },
+      },
+      template: `<FormProvider :form="form">
+          <SchemaField
+            :schema="schema"
+          />
+          <button @click="changeSchema()">changeSchema</button>
+        </FormProvider>`,
+    })
+    const { queryByTestId, getByText } = render(component)
+
+    expect(queryByTestId('input')).toBeVisible()
+    expect(queryByTestId('array-items')).toBeNull()
+    getByText('changeSchema').click()
+    await waitFor(() => {
+      expect(queryByTestId('input')).toBeNull()
+      expect(queryByTestId('array-items')).toBeVisible()
+    })
   })
 })

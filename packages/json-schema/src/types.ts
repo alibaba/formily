@@ -7,8 +7,8 @@ export type SchemaEnum<Message> = Array<
   | string
   | number
   | boolean
-  | { label: Message; value: any; [key: string]: any }
-  | { key: any; title: Message; [key: string]: any }
+  | { label?: Message; value?: any; [key: string]: any }
+  | { key?: any; title?: Message; [key: string]: any }
 >
 
 export type SchemaTypes =
@@ -64,7 +64,15 @@ export type SchemaEffectTypes =
 export type SchemaReaction<Field = any> =
   | {
       dependencies?:
-        | Array<string | { name?: string; source?: string; property?: string }>
+        | Array<
+            | string
+            | {
+                name?: string
+                type?: string
+                source?: string
+                property?: string
+              }
+          >
         | Record<string, string>
       when?: string | boolean
       target?: string
@@ -81,7 +89,7 @@ export type SchemaReaction<Field = any> =
       }
       [key: string]: any
     }
-  | ((field: Field) => void)
+  | ((field: Field, scope: any) => void)
 
 export type SchemaReactions<Field = any> =
   | SchemaReaction<Field>
@@ -281,6 +289,8 @@ export type ISchema<
   ['x-read-only']?: boolean
 
   ['x-read-pretty']?: boolean
+
+  ['x-compile-omitted']?: string[]
 
   [key: `x-${string | number}` | symbol]: any
 }>

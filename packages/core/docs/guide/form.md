@@ -32,7 +32,7 @@ The field is created mainly through the createField/createArrayField/createObjec
 
 The query method is mainly used to query the field. The query method can pass in the path of the field or regular expression to match the field.
 
-Because the detailed rules of the field path are still more complicated, they will be explained in detail in the following [Path System](/guide/path) article.
+Because the detailed rules of the field path are still more complicated, they will be explained in detail in the following [Path System](/api/entry/form-path) article.
 
 Then calling the query method will return a Query object. The Query object can have a forEach/map/reduce method that traverses all fields in batches, or a take method that takes only the first field that is queried, as well as direct reading of fields. The get method of properties, and the getIn method that can read field properties in depth, the difference between the two methods is that the former can have smart prompts, and the latter has no prompts, so it is recommended that users use the get method.
 
@@ -99,7 +99,7 @@ For example, the form value is `{xx:123}`, and the default form value is `{xx:32
 - If `xx` has a field model
   - If the form value is assigned first, the default value is assigned later
     - If the current field has been modified by the user (modified is true), then the default value cannot overwrite the form value, and finally submit the data `{xx:123}`
-    - If the current field has not been modified by the user (modified is false), then the default value will directly override the field value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted `{xx:312}`
+    - If the current field has not been modified by the user (modified is false), then the default value will directly override the field value. This scenario is suitable for asynchronous data echo scenarios. Different business states have different default data echoes, and the data is finally submitted `{xx:321}`
   - If the default value is assigned first, and the form value is assigned later, the form value directly overrides the default value. This scenario is suitable for synchronizing the default value and finally submitting the data `{xx:123}`
 
 **No conflicts**

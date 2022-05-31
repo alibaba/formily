@@ -1,4 +1,5 @@
-import { isValid } from './isEmpty'
+import { isValid, isEmpty } from './isEmpty'
+import { isFn, isPlainObj } from './checkers'
 
 function defaultIsMergeableObject(value: any) {
   return isNonNullObject(value) && !isSpecial(value)
@@ -9,21 +10,22 @@ function isNonNullObject(value: any) {
 }
 
 function isSpecial(value: any) {
-  const stringValue = Object.prototype.toString.call(value)
-
-  return (
-    stringValue === '[object RegExp]' ||
-    stringValue === '[object Date]' ||
-    isReactElement(value)
-  )
-}
-
-// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
-const canUseSymbol = typeof Symbol === 'function' && Symbol.for
-const REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7
-
-function isReactElement(value) {
-  return value.$$typeof === REACT_ELEMENT_TYPE
+  if ('$$typeof' in value && '_owner' in value) {
+    return true
+  }
+  if (value['_isAMomentObject']) {
+    return true
+  }
+  if (value['_isJSONSchemaObject']) {
+    return true
+  }
+  if (isFn(value['toJS'])) {
+    return true
+  }
+  if (isFn(value['toJSON'])) {
+    return true
+  }
+  return !isPlainObj(value)
 }
 
 function emptyTarget(val: any) {
@@ -97,10 +99,9 @@ function mergeObject(target: any, source: any, options: Options) {
     if (propertyIsUnsafe(target, key)) {
       return
     }
-    if (!target[key]) {
+    if (isEmpty(target[key])) {
       destination[key] = source[key]
-    }
-    if (
+    } else if (
       propertyIsOnObject(target, key) &&
       options.isMergeableObject(source[key])
     ) {
@@ -148,6 +149,42 @@ function deepmerge(target: any, source: any, options?: Options) {
   } else {
     return mergeObject(target, source, options)
   }
+}
+
+export const lazyMerge = <T extends object>(target: T, source: T): T => {
+  if (!isValid(source)) return target
+  if (!isValid(target)) return source
+  if (typeof target !== 'object') return source
+  if (typeof source !== 'object') return target
+  return new Proxy(
+    {},
+    {
+      get(_, key) {
+        if (key in source) return source[key]
+        return target[key]
+      },
+      ownKeys() {
+        const keys = Object.keys(target)
+        for (let key in source) {
+          if (!(key in target)) {
+            keys.push(key)
+          }
+        }
+        return keys
+      },
+      getOwnPropertyDescriptor() {
+        return {
+          enumerable: true,
+          configurable: true,
+          writable: false,
+        }
+      },
+      has(_, key: string) {
+        if (key in source || key in target) return true
+        return false
+      },
+    }
+  ) as any
 }
 
 export const merge = deepmerge

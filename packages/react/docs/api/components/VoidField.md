@@ -15,7 +15,7 @@ When we use the VoidField component, we must remember to pass the name attribute
 ## Signature
 
 ```ts
-type VoidField = React.FC<IVoidFieldFactoryProps>
+type VoidField = React.FC<React.PropsWithChildren<IVoidFieldFactoryProps>>
 ```
 
 ## Example

@@ -45,6 +45,33 @@ export default () => {
           />
           <SchemaField.String
             x-decorator="FormItem"
+            title="树选择预览"
+            x-component="PreviewText.TreeSelect"
+            x-component-props={{
+              multiple: true,
+            }}
+            default={['123', '222']}
+            enum={[
+              { label: 'A111', value: '123' },
+              { label: 'A222', value: '222' },
+            ]}
+          />
+          <SchemaField.String
+            x-decorator="FormItem"
+            title="树选择（treeData）预览"
+            x-component="PreviewText.TreeSelect"
+            x-component-props={{
+              multiple: true,
+              treeNodeLabelProp: 'name',
+              treeData: [
+                { name: 'A111', value: '123' },
+                { name: 'A222', value: '222' },
+              ],
+            }}
+            default={['123', '222']}
+          />
+          <SchemaField.String
+            x-decorator="FormItem"
             title="日期预览"
             x-component="PreviewText.DatePicker"
             default={'2020-11-23 22:15:20'}
@@ -53,15 +80,17 @@ export default () => {
             x-decorator="FormItem"
             title="Cascader预览"
             x-component="PreviewText.Cascader"
-            default={['hangzhou', 'yuhang']}
+            default={'yuhang'}
             enum={[
               {
                 label: '杭州',
                 value: 'hangzhou',
-              },
-              {
-                label: '余杭',
-                value: 'yuhang',
+                children: [
+                  {
+                    label: '余杭',
+                    value: 'yuhang',
+                  },
+                ],
               },
             ]}
           />
@@ -142,15 +171,17 @@ export default () => {
               x-decorator="FormItem"
               title="Cascader预览"
               x-component="PreviewText.Cascader"
-              default={['hangzhou', 'yuhang']}
+              default={'yuhang'}
               enum={[
                 {
                   label: '杭州',
                   value: 'hangzhou',
-                },
-                {
-                  label: '余杭',
-                  value: 'yuhang',
+                  children: [
+                    {
+                      label: '余杭',
+                      value: 'yuhang',
+                    },
+                  ],
                 },
               ]}
             />

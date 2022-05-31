@@ -17,9 +17,11 @@ import { CollapseProps, PanelProps } from '@alifd/next/lib/collapse'
 export interface IArrayCollapseProps extends CollapseProps {
   defaultOpenPanelCount?: number
 }
-type ComposedArrayCollapse = React.FC<IArrayCollapseProps> &
+type ComposedArrayCollapse = React.FC<
+  React.PropsWithChildren<IArrayCollapseProps>
+> &
   ArrayBaseMixins & {
-    CollapsePanel?: React.FC<PanelProps>
+    CollapsePanel?: React.FC<React.PropsWithChildren<PanelProps>>
   }
 
 const isAdditionComponent = (schema: ISchema) => {
@@ -213,7 +215,9 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
   }
 )
 
-const CollapsePanel: React.FC<PanelProps> = ({ children }) => {
+const CollapsePanel: React.FC<React.PropsWithChildren<PanelProps>> = ({
+  children,
+}) => {
   return <Fragment>{children}</Fragment>
 }
 

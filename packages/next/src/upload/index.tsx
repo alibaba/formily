@@ -10,27 +10,28 @@ import {
 import { isArr, toArr } from '@formily/shared'
 import { UPLOAD_PLACEHOLDER } from './placeholder'
 
-type UploadProps = NextUploadProps & {
+type ExtendsUploadProps = NextUploadProps & {
   textContent?: React.ReactNode
   serviceErrorMessage?: string
 }
 
-type FileList = Parameters<UploadProps['onChange']>[0]
+type FileList = Parameters<ExtendsUploadProps['onChange']>[0]
 
-type ExtendUploadProps = UploadProps & { serviceErrorMessage?: string }
-
-type ExtendCardProps = CardProps & { serviceErrorMessage?: string }
-
-type ComposedUpload = React.FC<ExtendUploadProps> & {
-  Card?: React.FC<ExtendCardProps>
-  Dragger?: React.FC<ExtendUploadProps>
+type ComposedUpload = React.FC<React.PropsWithChildren<IUploadProps>> & {
+  Card?: React.FC<React.PropsWithChildren<ICardUploadProps>>
+  Dragger?: React.FC<React.PropsWithChildren<IUploadProps>>
 }
 
-type IUploadProps = {
+type IExtendsUploadProps = {
+  value?: any[]
   serviceErrorMessage?: string
   onChange?: (...args: any) => void
   formatter?: (...args: any) => any
 }
+
+export type IUploadProps = ExtendsUploadProps & { serviceErrorMessage?: string }
+
+export type ICardUploadProps = CardProps & { serviceErrorMessage?: string }
 
 const testOpts = (
   ext: RegExp,
@@ -100,7 +101,7 @@ const getState = (target: any) => {
   return target?.state || target?.status
 }
 
-const normalizeFileList = (fileList: UploadProps['value']) => {
+const normalizeFileList = (fileList: IUploadProps['value']) => {
   if (fileList && fileList.length) {
     return fileList.map(({ ...file }, index) => {
       delete file['originFileObj']
@@ -156,7 +157,7 @@ const useUploadValidator = (serviceErrorMessage = 'Upload Service Error') => {
   })
 }
 
-function useUploadProps<T extends IUploadProps = ExtendUploadProps>({
+function useUploadProps<T extends IExtendsUploadProps = IUploadProps>({
   serviceErrorMessage,
   ...props
 }: T) {
@@ -175,12 +176,13 @@ function useUploadProps<T extends IUploadProps = ExtendUploadProps>({
   }
   return {
     ...props,
+    value: normalizeFileList(props.value),
     onChange,
     formatter,
   }
 }
 
-const getPlaceholder = (props: UploadProps) => {
+const getPlaceholder = (props: IUploadProps) => {
   if (props.shape !== 'card') {
     return (
       <Button>

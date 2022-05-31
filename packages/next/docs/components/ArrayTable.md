@@ -68,7 +68,7 @@ export default () => {
                 align: 'center',
               }}
             >
-              <SchemaField.String
+              <SchemaField.Void
                 x-decorator="FormItem"
                 required
                 x-component="ArrayTable.Index"

@@ -1,7 +1,7 @@
 import type { Component } from 'vue'
 import { merge } from '@formily/shared'
 import { h } from '@formily/vue'
-import { isVue2, h as hInVue2, defineComponent } from 'vue-demi'
+import { isVue2, defineComponent } from 'vue-demi'
 
 type ListenersTransformRules = Record<string, string>
 

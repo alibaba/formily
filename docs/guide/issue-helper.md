@@ -65,7 +65,7 @@ const form = createForm({
   effects() {
     onFieldMount('version', async (field) => {
       const { versions: unsort } = await fetch(
-        'https://registry.nlark.com/@formily/core'
+        'https://registry.npmmirror.com/@formily/core'
       ).then((res) => res.json())
 
       const versions = Object.keys(unsort).sort((v1, v2) =>
@@ -100,7 +100,7 @@ const createIssueURL = ({
   type,
   title,
   version,
-  package,
+  package: pkg,
   reproduceLink,
   reproduceStep,
   expected,
@@ -129,7 +129,7 @@ ${expected || ''}
 ${actually || ''}
 
 ### Package
-${package}@${version}
+${pkg}@${version}
 
 ---
 
@@ -219,7 +219,7 @@ export default () => {
                   <ul>
                     <li>
                       <a
-                        href="https://codesandbox.io/s/7ql5g"
+                        href="https://codesandbox.io/s/formily-react-antd-pure-jsx-omncis"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -228,7 +228,7 @@ export default () => {
                     </li>
                     <li>
                       <a
-                        href="https://codesandbox.io/s/pxqz2"
+                        href="https://codesandbox.io/s/formily-react-antd-markup-schema-fvpevx"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -237,7 +237,7 @@ export default () => {
                     </li>
                     <li>
                       <a
-                        href="https://codesandbox.io/s/jcpnx"
+                        href="https://codesandbox.io/s/formily-react-antd-json-schema-28p0fh"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -251,7 +251,7 @@ export default () => {
                   <ul>
                     <li>
                       <a
-                        href="https://codesandbox.io/s/festive-austin-mkiuc"
+                        href="https://codesandbox.io/s/formily-react-next-pure-jsx-ji9iiu"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -260,7 +260,7 @@ export default () => {
                     </li>
                     <li>
                       <a
-                        href="https://codesandbox.io/s/quirky-roentgen-jwsdh"
+                        href="https://codesandbox.io/s/formily-react-next-markup-schema-i7dm17"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -269,7 +269,7 @@ export default () => {
                     </li>
                     <li>
                       <a
-                        href="https://codesandbox.io/s/ancient-https-w2i7v"
+                        href="https://codesandbox.io/s/formily-react-next-json-schema-1lm35h"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -283,7 +283,7 @@ export default () => {
                   <ul>
                     <li>
                       <a
-                        href="https://codesandbox.io/s/quizzical-fermi-mbt2x"
+                        href="https://codesandbox.io/s/formily-antd-vue-pure-jsx-pp3gvv"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -292,7 +292,7 @@ export default () => {
                     </li>
                     <li>
                       <a
-                        href="https://codesandbox.io/s/dreamy-fermi-7pftm"
+                        href="https://codesandbox.io/s/formily-vue-ant-design-vue-markup-schema-donivp"
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -301,7 +301,7 @@ export default () => {
                     </li>
                     <li>
                       <a
-                        href="https://codesandbox.io/s/interesting-faraday-0iu5c"
+                        href="https://codesandbox.io/s/formily-vue-ant-design-vue-json-schema-25g4z1"
                         target="_blank"
                         rel="noreferrer"
                       >

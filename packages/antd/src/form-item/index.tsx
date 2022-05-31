@@ -42,13 +42,14 @@ export interface IFormItemProps {
   feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none' | (string & {})
   feedbackStatus?: 'error' | 'warning' | 'success' | 'pending' | (string & {})
   feedbackIcon?: React.ReactNode
+  getPopupContainer?: (node: HTMLElement) => HTMLElement
   asterisk?: boolean
   gridSpan?: number
   bordered?: boolean
 }
 
-type ComposeFormItem = React.FC<IFormItemProps> & {
-  BaseItem?: React.FC<IFormItemProps>
+type ComposeFormItem = React.FC<React.PropsWithChildren<IFormItemProps>> & {
+  BaseItem?: React.FC<React.PropsWithChildren<IFormItemProps>>
 }
 
 const useFormItemLayout = (props: IFormItemProps) => {
@@ -89,18 +90,23 @@ function useOverflow<
   const [overflow, setOverflow] = useState(false)
   const containerRef = useRef<Container>()
   const contentRef = useRef<Content>()
+  const layout = useFormLayout()
+  const labelCol = JSON.stringify(layout.labelCol)
 
   useEffect(() => {
-    if (containerRef.current && contentRef.current) {
-      const contentWidth = contentRef.current.getBoundingClientRect().width
-      const containerWidth = containerRef.current.getBoundingClientRect().width
-      if (contentWidth && containerWidth && containerWidth < contentWidth) {
-        if (!overflow) setOverflow(true)
-      } else {
-        if (overflow) setOverflow(false)
+    requestAnimationFrame(() => {
+      if (containerRef.current && contentRef.current) {
+        const contentWidth = contentRef.current.getBoundingClientRect().width
+        const containerWidth =
+          containerRef.current.getBoundingClientRect().width
+        if (contentWidth && containerWidth && containerWidth < contentWidth) {
+          if (!overflow) setOverflow(true)
+        } else {
+          if (overflow) setOverflow(false)
+        }
       }
-    }
-  }, [])
+    })
+  }, [labelCol])
 
   return {
     overflow,
@@ -115,12 +121,15 @@ const ICON_MAP = {
   warning: <ExclamationCircleOutlined />,
 }
 
-export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
+export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
+  children,
+  ...props
+}) => {
   const [active, setActive] = useState(false)
   const formLayout = useFormItemLayout(props)
   const { containerRef, contentRef, overflow } = useOverflow<
     HTMLDivElement,
-    HTMLLabelElement
+    HTMLSpanElement
   >()
   const {
     label,
@@ -136,6 +145,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
     fullness,
     feedbackLayout,
     feedbackIcon,
+    getPopupContainer,
     inset,
     bordered = true,
     labelWidth,
@@ -167,7 +177,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
     // 栅格模式
   }
   if (labelCol || wrapperCol) {
-    if (!labelStyle.width && !wrapperStyle.width) {
+    if (!labelStyle.width && !wrapperStyle.width && layout !== 'vertical') {
       enableCol = true
     }
   }
@@ -189,6 +199,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
           </div>
         }
         visible={!!feedbackText}
+        getPopupContainer={getPopupContainer}
       >
         {children}
       </Popover>
@@ -213,8 +224,10 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
   const renderLabelText = () => {
     const labelChildren = (
       <div className={`${prefixCls}-label-content`} ref={containerRef}>
-        {asterisk && <span className={`${prefixCls}-asterisk`}>{'*'}</span>}
-        <label ref={contentRef}>{label}</label>
+        <span ref={contentRef}>
+          {asterisk && <span className={`${prefixCls}-asterisk`}>{'*'}</span>}
+          <label>{label}</label>
+        </span>
       </div>
     )
 
@@ -398,7 +411,7 @@ export const FormItem: ComposeFormItem = connect(
       return false
     }
     return {
-      label: field.title || props.label,
+      label: props.label || field.title,
       feedbackStatus: takeFeedbackStatus(),
       feedbackText: takeMessage(),
       asterisk: takeAsterisk(),

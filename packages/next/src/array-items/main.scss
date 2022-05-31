@@ -8,6 +8,11 @@ $array-items-prefix-cls: '#{$css-prefix}formily-array-items';
   }
 }
 
+// fix https://github.com/alibaba/formily/issues/2891
+.#{$array-items-prefix-cls}-item {
+  z-index: 100000;
+}
+
 .#{$array-items-prefix-cls}-sort-handler {
   cursor: move;
   color: #888 !important;

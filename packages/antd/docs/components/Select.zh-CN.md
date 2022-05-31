@@ -149,6 +149,7 @@ export default () => (
         x-component="Select"
         x-component-props={{
           showSearch: true,
+          filterOption: false,
           style: {
             width: 300,
           },

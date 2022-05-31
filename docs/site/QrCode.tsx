@@ -6,7 +6,9 @@ export interface IQrCodeProps {
   link?: string
 }
 
-export const QrCode: React.FC<IQrCodeProps> = (props) => {
+export const QrCode: React.FC<React.PropsWithChildren<IQrCodeProps>> = (
+  props
+) => {
   return (
     <div className="qrcode">
       <div className="qrcode-title">

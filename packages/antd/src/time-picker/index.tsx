@@ -8,8 +8,10 @@ import {
 import { PreviewText } from '../preview-text'
 import { formatMomentValue, momentable } from '../__builtins__'
 
-type ComposedTimePicker = React.FC<AntdTimePickerProps> & {
-  RangePicker?: React.FC<TimeRangePickerProps>
+type ComposedTimePicker = React.FC<
+  React.PropsWithChildren<AntdTimePickerProps>
+> & {
+  RangePicker?: React.FC<React.PropsWithChildren<TimeRangePickerProps>>
 }
 
 const mapTimeFormat = function () {

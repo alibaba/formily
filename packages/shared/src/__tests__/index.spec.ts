@@ -18,7 +18,7 @@ import { globalThisPolyfill } from '../global'
 import { isValid, isEmpty } from '../isEmpty'
 import { stringLength } from '../string'
 import { Subscribable } from '../subscribable'
-import { merge } from '../merge'
+import { lazyMerge, merge } from '../merge'
 import { instOf } from '../instanceof'
 import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../checkers'
 import { defaults } from '../defaults'
@@ -577,6 +577,138 @@ describe('merge', () => {
         },
       },
     })
+    expect(
+      merge(
+        {
+          react: {
+            $$typeof: true,
+            _owner: true,
+            aa: 123,
+          },
+        },
+        {
+          react: {
+            $$typeof: true,
+            _owner: true,
+            bb: 321,
+          },
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      react: {
+        $$typeof: true,
+        _owner: true,
+        bb: 321,
+      },
+    })
+    expect(
+      merge(
+        {
+          react: {
+            _isAMomentObject: true,
+            aa: 123,
+          },
+        },
+        {
+          react: {
+            _isAMomentObject: true,
+            bb: 321,
+          },
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      react: {
+        _isAMomentObject: true,
+        bb: 321,
+      },
+    })
+    expect(
+      merge(
+        {
+          react: {
+            _isJSONSchemaObject: true,
+            aa: 123,
+          },
+        },
+        {
+          react: {
+            _isJSONSchemaObject: true,
+            bb: 321,
+          },
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      react: {
+        _isJSONSchemaObject: true,
+        bb: 321,
+      },
+    })
+    const toJSObj = {
+      toJS: () => {},
+      bb: 321,
+    }
+    expect(
+      merge(
+        {
+          toJSObj: {
+            toJS: () => {},
+            aa: 123,
+          },
+        },
+        {
+          toJSObj,
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      toJSObj,
+    })
+    const toJSONObj = {
+      toJSON: () => {},
+      bb: 321,
+    }
+    expect(
+      merge(
+        {
+          toJSONObj: {
+            toJS: () => {},
+            aa: 123,
+          },
+        },
+        {
+          toJSONObj,
+        },
+        {
+          assign: true,
+        }
+      )
+    ).toEqual({
+      toJSONObj,
+    })
+  })
+
+  test('empty', () => {
+    expect(
+      merge(
+        {
+          aa: undefined,
+        },
+        {
+          aa: {},
+        }
+      )
+    ).toEqual({ aa: {} })
   })
 
   test('clone', () => {
@@ -644,6 +776,63 @@ describe('merge', () => {
   })
   test('merge unmatch', () => {
     expect(merge({ aa: 123 }, [111])).toEqual([111])
+  })
+
+  test('lazy merge', () => {
+    const merge1 = lazyMerge<any>(1, 2)
+    expect(merge1).toBe(2)
+    const merge2 = lazyMerge<any>('123', '321')
+    expect(merge2).toBe('321')
+    const merge3 = lazyMerge<any>(1, undefined)
+    expect(merge3).toBe(1)
+    const merge4 = lazyMerge<any>('123', undefined)
+    expect(merge4).toBe('123')
+    const merge5 = lazyMerge<any>(undefined, '123')
+    expect(merge5).toBe('123')
+    const merge6 = lazyMerge([1, 2, 3], [3, 4])
+    expect(merge6[0]).toBe(3)
+    expect(merge6[1]).toBe(4)
+    expect(merge6[2]).toBe(3)
+    const merge7 = lazyMerge<any>(
+      {
+        get x() {
+          return 'x'
+        },
+      },
+      {
+        get y() {
+          return 'y'
+        },
+      }
+    )
+    expect(merge7.x).toBe('x')
+    expect(merge7.y).toBe('y')
+    const effects = {
+      a: 1,
+      b: 2,
+    }
+    const merge8 = lazyMerge<any>(
+      {
+        get x() {
+          return effects.a
+        },
+      },
+      {
+        get y() {
+          return effects.b
+        },
+      }
+    )
+    expect(merge8.x).toBe(1)
+    expect(merge8.y).toBe(2)
+    effects.a = 123
+    effects.b = 321
+    expect(merge8.x).toBe(123)
+    expect(merge8.y).toBe(321)
+    expect(Object.keys(merge8)).toEqual(['x', 'y'])
+    expect('x' in merge8).toBe(true)
+    expect('y' in merge8).toBe(true)
+    expect('z' in merge8).toBe(false)
   })
 })
 

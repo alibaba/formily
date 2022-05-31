@@ -2,9 +2,6 @@ import { defineComponent } from 'vue-demi'
 import { observer } from '@formily/reactive-vue'
 import { useForm } from '../hooks'
 import h from '../shared/h'
-import { Fragment } from '../shared/fragment'
-
-import type { DefineComponent } from '../types'
 
 export default observer(
   defineComponent({
@@ -13,17 +10,23 @@ export default observer(
     setup(props, { slots }) {
       const formRef = useForm()
       return () => {
-        const children = {
-          ...slots,
-        }
-        if (slots.default) {
-          children.default = () =>
-            slots.default({
-              form: formRef.value,
-            })
-        }
-        return h(Fragment, {}, children)
+        // just like <Fragment>
+        return h(
+          'div',
+          { style: { display: 'contents' } },
+          {
+            default: () =>
+              slots.default?.({
+                form: formRef.value,
+              }),
+          }
+        )
       }
     },
-  }) as unknown as DefineComponent
+  }),
+  {
+    // make sure observables updated <cannot be tracked by tests>
+    scheduler: /* istanbul ignore next */ (update) =>
+      Promise.resolve().then(update),
+  }
 )

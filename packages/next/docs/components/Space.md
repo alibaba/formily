@@ -50,6 +50,16 @@ export default () => (
             name="lastName"
             x-decorator="FormItem"
             x-component="Input"
+            x-visible="{{$values.firstName === '123'}}"
+            required
+          />
+          <SchemaField.String
+            name="kk"
+            x-decorator="FormItem"
+            x-component="Input"
+            x-decorator-props={{
+              addonAfter: 'Unit',
+            }}
             required
           />
         </SchemaField.Void>

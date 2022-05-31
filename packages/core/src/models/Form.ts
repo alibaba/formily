@@ -563,7 +563,7 @@ export class Form<ValueType extends object = any> {
 
   onUnmount = () => {
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
-    this.query('*').forEach((field) => field.destroy())
+    this.query('*').forEach((field) => field.destroy(false))
     this.disposers.forEach((dispose) => dispose())
     this.unmounted = true
     this.indexes = {}
@@ -593,9 +593,9 @@ export class Form<ValueType extends object = any> {
     this.graph.setGraph(graph)
   }
 
-  clearFormGraph = (pattern: FormPathPattern = '*') => {
+  clearFormGraph = (pattern: FormPathPattern = '*', forceClear = true) => {
     this.query(pattern).forEach((field) => {
-      field.destroy()
+      field.destroy(forceClear)
     })
   }
 

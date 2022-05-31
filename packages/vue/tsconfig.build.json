@@ -5,6 +5,6 @@
     "paths": {
       "@formily/*": ["packages/*", "devtools/*"]
     },
-    "declaration": true
+    "declaration": false
   }
 }

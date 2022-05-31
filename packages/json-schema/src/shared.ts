@@ -98,7 +98,7 @@ export const traverse = (
 
 export const traverseSchema = (
   schema: ISchema,
-  visitor: (value: any, path: any[]) => void
+  visitor: (value: any, path: any[], omitCompile?: boolean) => void
 ) => {
   if (schema['x-validator'] !== undefined) {
     visitor(schema['x-validator'], ['x-validator'])
@@ -107,6 +107,7 @@ export const traverseSchema = (
   const root = schema
   const traverse = (target: any, path = []) => {
     if (
+      path[0] === 'x-compile-omitted' ||
       path[0] === 'x-validator' ||
       path[0] === 'version' ||
       path[0] === '_isJSONSchemaObject'
@@ -114,6 +115,10 @@ export const traverseSchema = (
       return
     if (String(path[0]).indexOf('x-') == -1 && isFn(target)) return
     if (SchemaNestedMap[path[0]]) return
+    if (schema['x-compile-omitted']?.indexOf(path[0]) > -1) {
+      visitor(target, path, true)
+      return
+    }
     if (isPlainObj(target)) {
       if (path[0] === 'default' || path[0] === 'x-value') {
         visitor(target, path)

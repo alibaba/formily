@@ -360,7 +360,7 @@ export function FormDialog(
                   formDialog.close()
                 }
               })
-              .catch(reject)
+              .catch(() => {})
           },
           async () => {
             await loading(dialogProps.loadingText, () =>

@@ -330,7 +330,6 @@ export default observer(() => {
 
   if (oldTypeRef.current !== currentType) {
     form.clearFormGraph('container.*') //Recycle field model
-    form.deleteValuesIn('container') //Clear field values
   }
 
   oldTypeRef.current = currentType
@@ -364,7 +363,6 @@ const Custom = observer(() => {
 
   useEffect(() => {
     form.clearFormGraph(`${field.address}.*`) //Recycle field model
-    form.deleteValuesIn(field.path) //clear field values
     //Can be obtained asynchronously
     setSchema(DYNAMIC_INJECT_SCHEMA[form.values.type])
   }, [form.values.type])

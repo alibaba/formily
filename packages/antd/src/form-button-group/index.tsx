@@ -5,23 +5,14 @@
  * 4. 吸底布局
  */
 import React, { useRef, useLayoutEffect, useState } from 'react'
-import StickyBox, { StickyBoxMode } from 'react-sticky-box'
+import { ReactFC } from '@formily/react'
 import { Space } from 'antd'
 import { SpaceProps } from 'antd/lib/space'
 import { BaseItem, IFormItemProps } from '../form-item'
 import { usePrefixCls } from '../__builtins__'
+import StickyBox from 'react-sticky-box'
 import cls from 'classnames'
-interface IStickyProps {
-  offsetTop?: number
-  offsetBottom?: number
-  bottom?: boolean
-  onChangeMode?: (
-    oldMode: StickyBoxMode | undefined,
-    newMode: StickyBoxMode
-  ) => any
-  style?: React.CSSProperties
-  className?: string
-  padding?: number
+interface IStickyProps extends React.ComponentProps<typeof StickyBox> {
   align?: React.CSSProperties['textAlign']
 }
 
@@ -30,9 +21,9 @@ type IFormButtonGroupProps = Omit<SpaceProps, 'align' | 'size'> & {
   gutter?: number
 }
 
-type ComposedButtonGroup = React.FC<IFormButtonGroupProps> & {
-  Sticky: React.FC<IStickyProps>
-  FormItem: React.FC<
+type ComposedButtonGroup = ReactFC<IFormButtonGroupProps> & {
+  Sticky: ReactFC<React.PropsWithChildren<IStickyProps>>
+  FormItem: ReactFC<
     IFormItemProps & {
       gutter?: number
     }

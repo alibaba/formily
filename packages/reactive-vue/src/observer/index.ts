@@ -4,10 +4,8 @@ import { observer as observerV3 } from './observerInVue3'
 import collectData from './collectData'
 import { IObserverOptions } from '../types'
 
-export function observer<C>(
-  baseComponent: C,
-  options?: IObserverOptions & { forwardRef: true }
-): C {
+export function observer<C>(baseComponent: C, options?: IObserverOptions): C {
+  /* istanbul ignore else */
   if (isVue2) {
     return observerV2(baseComponent, options)
   } else {

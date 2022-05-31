@@ -138,6 +138,26 @@ describe('makeObservable', () => {
     expect(handler).toBeCalledTimes(2)
     expect(target.cc).toEqual(44)
   })
+  test('unexpect target', () => {
+    const testFn = jest.fn()
+    const testArr = []
+    const obs1 = define(4 as any, {
+      value: observable.computed,
+    })
+    const obs2 = define('123' as any, {
+      value: observable.computed,
+    })
+    const obs3 = define(testFn as any, {
+      value: observable.computed,
+    })
+    const obs4 = define(testArr as any, {
+      value: observable.computed,
+    })
+    expect(obs1).toBe(4)
+    expect(obs2).toBe('123')
+    expect(obs3).toBe(testFn)
+    expect(obs4).toBe(testArr)
+  })
 })
 
 test('define model', () => {

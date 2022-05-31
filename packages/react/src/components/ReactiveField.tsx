@@ -1,18 +1,21 @@
 import React, { Fragment, useContext } from 'react'
 import { toJS } from '@formily/reactive'
 import { observer } from '@formily/reactive-react'
-import { isFn, FormPath } from '@formily/shared'
+import { FormPath, isFn } from '@formily/shared'
 import { isVoidField, GeneralField, Form } from '@formily/core'
-import { SchemaOptionsContext } from '../shared'
+import { SchemaComponentsContext } from '../shared'
+import { RenderPropsChildren } from '../types'
 interface IReactiveFieldProps {
   field: GeneralField
-  children?:
-    | ((field: GeneralField, form: Form) => React.ReactChild)
-    | React.ReactNode
+  children?: RenderPropsChildren<GeneralField>
 }
 
-const mergeChildren = (children: React.ReactNode, content: React.ReactNode) => {
+const mergeChildren = (
+  children: RenderPropsChildren<GeneralField>,
+  content: React.ReactNode
+) => {
   if (!children && !content) return
+  if (isFn(children)) return
   return (
     <Fragment>
       {children}
@@ -21,11 +24,14 @@ const mergeChildren = (children: React.ReactNode, content: React.ReactNode) => {
   )
 }
 
-const renderChildren = (children: React.ReactNode, ...args: any[]) =>
-  isFn(children) ? children(...args) : children
+const renderChildren = (
+  children: RenderPropsChildren<GeneralField>,
+  field?: GeneralField,
+  form?: Form
+) => (isFn(children) ? children(field, form) : children)
 
 const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
-  const options = useContext(SchemaOptionsContext)
+  const components = useContext(SchemaComponentsContext)
   if (!props.field) {
     return <Fragment>{renderChildren(props.children)}</Fragment>
   }
@@ -41,8 +47,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
       return <Fragment>{children}</Fragment>
     }
     const finalComponent =
-      FormPath.getIn(options?.components, field.decoratorType) ??
-      field.decoratorType
+      FormPath.getIn(components, field.decoratorType) ?? field.decoratorType
 
     return React.createElement(
       finalComponent,
@@ -79,8 +84,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
       ? field.pattern === 'readOnly'
       : undefined
     const finalComponent =
-      FormPath.getIn(options?.components, field.componentType) ??
-      field.componentType
+      FormPath.getIn(components, field.componentType) ?? field.componentType
     return React.createElement(
       finalComponent,
       {

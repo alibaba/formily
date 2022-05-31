@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { untracked, autorun, observable } from '@formily/reactive'
 import {
   isArr,
@@ -8,6 +7,7 @@ import {
   isFn,
   isPlainObj,
   reduce,
+  lazyMerge,
 } from '@formily/shared'
 import { Schema } from './schema'
 import {
@@ -100,10 +100,13 @@ const setSchemaFieldState = (
   if (target) {
     if (request.state) {
       field.form.setFieldState(target, (state) =>
-        patchCompile(state, request.state, {
-          ...scope,
-          $target: state,
-        })
+        patchCompile(
+          state,
+          request.state,
+          lazyMerge(scope, {
+            $target: state,
+          })
+        )
       )
     }
     if (request.schema) {
@@ -111,20 +114,21 @@ const setSchemaFieldState = (
         patchSchemaCompile(
           state,
           request.schema,
-          {
-            ...scope,
+          lazyMerge(scope, {
             $target: state,
-          },
+          }),
           demand
         )
       )
     }
     if (isStr(runner) && runner) {
       field.form.setFieldState(target, (state) => {
-        shallowCompile(`{{function(){${runner}}}}`, {
-          ...scope,
-          $target: state,
-        })()
+        shallowCompile(
+          `{{function(){${runner}}}}`,
+          lazyMerge(scope, {
+            $target: state,
+          })
+        )()
       })
     }
   } else {
@@ -154,8 +158,7 @@ const getBaseScope = (
   const $self = field
   const $form = field.form
   const $values = field.form.values
-  return {
-    ...options.scope,
+  return lazyMerge(options.scope, {
     $form,
     $self,
     $observable,
@@ -163,7 +166,7 @@ const getBaseScope = (
     $memo,
     $props,
     $values,
-  }
+  })
 }
 
 const getBaseReactions =
@@ -189,18 +192,17 @@ const getUserReactions = (
       const reaction = shallowCompile(unCompiled, baseScope)
       if (!reaction) return
       if (isFn(reaction)) {
-        return reaction(field)
+        return reaction(field, baseScope)
       }
       const { when, fulfill, otherwise, target, effects } = reaction
       const run = () => {
         const $deps = getDependencies(field, reaction.dependencies)
         const $dependencies = $deps
-        const scope = {
-          ...baseScope,
+        const scope = lazyMerge(baseScope, {
           $target: null,
           $deps,
           $dependencies,
-        }
+        })
         const compiledWhen = shallowCompile(when, scope)
         const condition = when ? compiledWhen : true
         const request = condition ? fulfill : otherwise

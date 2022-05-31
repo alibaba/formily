@@ -1,13 +1,9 @@
-import React, { Fragment, useContext, useRef, useMemo } from 'react'
+import React, { Fragment, useContext, useMemo } from 'react'
 import { isFn, isValid } from '@formily/shared'
 import { GeneralField } from '@formily/core'
 import { Schema } from '@formily/json-schema'
-import {
-  SchemaContext,
-  SchemaOptionsContext,
-  SchemaExpressionScopeContext,
-} from '../shared'
-import { IRecursionFieldProps } from '../types'
+import { SchemaContext, SchemaExpressionScopeContext } from '../shared'
+import { IRecursionFieldProps, ReactFC } from '../types'
 import { useField } from '../hooks'
 import { ObjectField } from './ObjectField'
 import { ArrayField } from './ArrayField'
@@ -15,18 +11,9 @@ import { Field } from './Field'
 import { VoidField } from './VoidField'
 
 const useFieldProps = (schema: Schema) => {
-  const options = useContext(SchemaOptionsContext)
   const scope = useContext(SchemaExpressionScopeContext)
-  const scopeRef = useRef<any>()
-  scopeRef.current = scope
   return schema.toFieldProps({
-    ...options,
-    get scope() {
-      return {
-        ...options.scope,
-        ...scopeRef.current,
-      }
-    },
+    scope,
   }) as any
 }
 
@@ -38,7 +25,7 @@ const useBasePath = (props: IRecursionFieldProps) => {
   return props.basePath || parent?.address
 }
 
-export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
+export const RecursionField: ReactFC<IRecursionFieldProps> = (props) => {
   const basePath = useBasePath(props)
   const fieldSchema = useMemo(() => new Schema(props.schema), [props.schema])
   const fieldProps = useFieldProps(fieldSchema)

@@ -34,7 +34,7 @@ type CustomProps = {
 }
 
 const Decorator: React.FC = (props) => <div>{props.children}</div>
-const Input: React.FC<InputProps> = (props) => (
+const Input: React.FC<React.PropsWithChildren<InputProps>> = (props) => (
   <input
     {...props}
     value={props.value || ''}
@@ -237,31 +237,37 @@ test('connect', async () => {
 })
 
 test('fields unmount and validate', async () => {
-  const fn = jest.fn();
+  const fn = jest.fn()
   const form = createForm({
     initialValues: {
       parent: {
         type: 'mounted',
-      }
+      },
     },
     effects: () => {
       onFieldUnmount('parent.child', () => {
         fn()
       })
-    }
+    },
   })
   const Parent = observer(() => {
-    const field = useField()
+    const field = useField<FieldType>()
     if (field.value.type === 'mounted') {
-      return <Field name='child' component={[Input]} validator={{required: true}} />
+      return (
+        <Field
+          name="child"
+          component={[Input]}
+          validator={{ required: true }}
+        />
+      )
     }
-    return <div data-testid='unmounted'></div>
+    return <div data-testid="unmounted"></div>
   })
   act(async () => {
     const MyComponent = () => {
       return (
         <FormProvider form={form}>
-          <Field name='parent' component={[Parent]} />
+          <Field name="parent" component={[Parent]} />
         </FormProvider>
       )
     }
@@ -269,18 +275,18 @@ test('fields unmount and validate', async () => {
     try {
       await form.validate()
     } catch {}
-  
+
     expect(form.invalid).toBeTruthy()
-  
+
     form.query('parent').take((field) => {
       field.setState((state) => {
         state.value.type = 'unmounted'
       })
     })
-  
+
     await waitFor(() => {
       expect(fn.mock.calls.length).toBe(1)
-    });
+    })
     await form.validate()
     expect(form.invalid).toBeFalsy()
   })

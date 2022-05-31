@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { model, markRaw, action } from '@formily/reactive'
+import { define, observable, model, markRaw, action } from '@formily/reactive'
 import cls from 'classnames'
 import {
   StepProps as StepsProps,
@@ -32,8 +32,8 @@ export interface IFormStepProps extends StepsProps {
   formStep?: IFormStep
 }
 
-type ComposedFormTab = React.FC<IFormStepProps> & {
-  StepPane?: React.FC<StepProps>
+type ComposedFormTab = React.FC<React.PropsWithChildren<IFormStepProps>> & {
+  StepPane?: React.FC<React.PropsWithChildren<StepProps>>
   createFormStep?: (defaultCurrent?: number) => IFormStep
 }
 
@@ -64,11 +64,18 @@ const parseSteps = (schema: Schema) => {
 }
 
 const createFormStep = (defaultCurrent = 0): IFormStep => {
-  const env: FormStepEnv = {
-    form: null,
-    field: null,
-    steps: [],
-  }
+  const env: FormStepEnv = define(
+    {
+      form: null,
+      field: null,
+      steps: [],
+    },
+    {
+      form: observable.ref,
+      field: observable.ref,
+      steps: observable.shallow,
+    }
+  )
 
   const setDisplay = action.bound((target: number) => {
     const currentStep = env.steps[target]
@@ -85,14 +92,12 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
 
   const next = () => {
     if (formStep.allowNext) {
-      setDisplay(formStep.current + 1)
       formStep.setCurrent(formStep.current + 1)
     }
   }
 
   const back = () => {
     if (formStep.allowBack) {
-      setDisplay(formStep.current - 1)
       formStep.setCurrent(formStep.current - 1)
     }
   }
@@ -105,6 +110,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
     },
     current: defaultCurrent,
     setCurrent(key: number) {
+      setDisplay(key)
       formStep.current = key
     },
     get allowNext() {
@@ -116,7 +122,9 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
     async next() {
       try {
         await env.form.validate()
-        next()
+        if (env.form.valid) {
+          next()
+        }
       } catch {}
     },
     async back() {
@@ -157,7 +165,9 @@ export const FormStep: ComposedFormTab = connect(
   })
 )
 
-const StepPane: React.FC<StepProps> = ({ children }) => {
+const StepPane: React.FC<React.PropsWithChildren<StepProps>> = ({
+  children,
+}) => {
   return <Fragment>{children}</Fragment>
 }
 

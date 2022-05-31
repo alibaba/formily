@@ -89,7 +89,9 @@ export const useResponsiveFormLayout: IUseResponsiveFormLayout = (
   const layoutProps = ref<IProps>(props)
 
   const updateUI = () => {
-    layoutProps.value = calculateProps(root.value, props)
+    if (root.value) {
+      layoutProps.value = calculateProps(root.value, props)
+    }
   }
 
   onMounted(() => {

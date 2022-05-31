@@ -1,6 +1,6 @@
 import { define, observable, batch, reaction } from '@formily/reactive'
 import { ChildListMutationObserver } from './observer'
-
+import { ResizeObserver } from '@juggle/resize-observer'
 export interface IGridOptions {
   maxRows?: number
   maxColumns?: number | number[]
@@ -311,24 +311,42 @@ export class Grid<Container extends HTMLElement> {
 
     const baseColumns = this.childSize
 
-    const maxWidthColumns = Math.min(
-      originTotalColumns,
-      Math.round(this.width / (this.maxWidth + this.columnGap))
+    const strictMaxWidthColumns = Math.round(
+      this.width / (this.maxWidth + this.columnGap)
     )
 
-    const minWidthColumns = Math.min(
+    const looseMaxWidthColumns = Math.min(
       originTotalColumns,
-      Math.round(this.width / (this.minWidth + this.columnGap))
+      strictMaxWidthColumns
     )
+
+    const maxWidthColumns = this.options.strictAutoFit
+      ? strictMaxWidthColumns
+      : looseMaxWidthColumns
+
+    const strictMinWidthColumns = Math.round(
+      this.width / (this.minWidth + this.columnGap)
+    )
+
+    const looseMinWidthColumns = Math.min(
+      originTotalColumns,
+      strictMinWidthColumns
+    )
+
+    const minWidthColumns = this.options.strictAutoFit
+      ? strictMinWidthColumns
+      : looseMinWidthColumns
 
     const minCalculatedColumns = Math.min(
       baseColumns,
+      originTotalColumns,
       maxWidthColumns,
       minWidthColumns
     )
 
     const maxCalculatedColumns = Math.max(
       baseColumns,
+      originTotalColumns,
       maxWidthColumns,
       minWidthColumns
     )
@@ -361,13 +379,13 @@ export class Grid<Container extends HTMLElement> {
   get templateColumns() {
     if (!this.width) return ''
     if (this.maxWidth === Infinity) {
-      return `repeat(${this.columns},1fr)`
+      return `repeat(${this.columns},minmax(0,1fr))`
     }
     if (this.options.strictAutoFit !== true) {
       const columnWidth =
         (this.width - (this.columns - 1) * this.columnGap) / this.columns
       if (columnWidth < this.minWidth || columnWidth > this.maxWidth) {
-        return `repeat(${this.columns},1fr)`
+        return `repeat(${this.columns},minmax(0,1fr))`
       }
     }
     return `repeat(${this.columns},minmax(${this.minWidth}px,${this.maxWidth}px))`
@@ -426,7 +444,7 @@ export class Grid<Container extends HTMLElement> {
       const dispose = reaction(() => ({ ...this.options }), digest)
       resizeObserver.observe(this.container)
       mutationObserver.observe(this.container, {
-        attributeFilter: ['style', 'class', 'data-grid-span'],
+        attributeFilter: ['data-grid-span'],
         attributes: true,
       })
       initialize()

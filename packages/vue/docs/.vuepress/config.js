@@ -53,6 +53,7 @@ module.exports = {
             '/api/components/recursion-field-with-component',
             '/api/components/form-provider',
             '/api/components/form-consumer',
+            '/api/components/expression-scope',
           ],
         },
         {

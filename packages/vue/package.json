@@ -1,6 +1,6 @@
 {
   "name": "@formily/vue",
-  "version": "2.0.5",
+  "version": "2.1.4",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -8,17 +8,25 @@
   "unpkg": "dist/formily.vue.umd.production.js",
   "jsdelivr": "dist/formily.vue.umd.production.js",
   "jsnext:main": "esm",
-  "types": "lib/index.d.ts",
+  "types": "type-artefacts/cur/index.d.ts",
   "engines": {
     "npm": ">=3.0.0"
   },
   "scripts": {
+    "postinstall": "node ./scripts/postinstall.js",
     "start": "vuepress dev docs",
-    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
+    "build": "rimraf -rf lib esm dist type-artefacts && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:types",
     "build:cjs": "tsc --project tsconfig.build.json",
     "build:esm": "tsc --project tsconfig.build.json --module es2015 --outDir esm",
     "build:umd": "rollup --config",
+    "build:types": "npm run build:types-vue2 && npm run build:types-vue3 && rimraf type-artefacts/**/*.js type-artefacts/**/**/*.js",
+    "build:types-vue2": "tsc --project tsconfig.types.json --outDir type-artefacts/v2",
+    "build:types-vue3": "npx vue-demi-switch 3 vue3 && tsc --project tsconfig.types.json --outDir type-artefacts/v3 && tsc --project tsconfig.types.json --outDir type-artefacts/cur && npx vue-demi-switch 2",
     "build:docs": "vuepress build docs"
+  },
+  "bin": {
+    "formily-vue-fix": "bin/formily-vue-fix.js",
+    "formily-vue-switch": "bin/formily-vue-switch.js"
   },
   "devDependencies": {
     "@ant-design/icons": "^2.1.1",
@@ -32,18 +40,18 @@
     "codesandbox": "^2.2.3",
     "core-js": "^2.4.0",
     "vue": "^2.6.12",
+    "vue3": "npm:vue@3",
     "vuepress": "^1.8.2",
     "vuepress-plugin-typescript": "^0.3.1"
   },
   "dependencies": {
-    "@formily/core": "2.0.5",
-    "@formily/json-schema": "2.0.5",
-    "@formily/reactive": "2.0.5",
-    "@formily/reactive-vue": "2.0.5",
-    "@formily/shared": "2.0.5",
-    "@formily/validator": "2.0.5",
-    "@type-helper/vue2": "npm:vue@2",
-    "@type-helper/vue3": "npm:vue@3",
+    "@formily/core": "2.1.4",
+    "@formily/json-schema": "2.1.4",
+    "@formily/reactive": "2.1.4",
+    "@formily/reactive-vue": "2.1.4",
+    "@formily/shared": "2.1.4",
+    "@formily/validator": "2.1.4",
+    "fs-extra": "^10.0.0",
     "vue-demi": "^0.9.0",
     "vue-frag": "^1.1.4"
   },

@@ -26,12 +26,6 @@ $array-table-prefix-cls: '#{$formily-prefix}-array-table';
   }
 
   .#{$namespace}-table {
-    overflow: visible;
-
-    &__body-wrapper {
-      overflow: visible;
-    }
-
     .cell {
       overflow: visible;
     }

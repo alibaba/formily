@@ -1,4 +1,11 @@
-import React, { Fragment, useState, useRef, useEffect } from 'react'
+import React, {
+  Fragment,
+  useState,
+  useRef,
+  useEffect,
+  createContext,
+  useContext,
+} from 'react'
 import { Table, Pagination, Space, Select, Badge } from 'antd'
 import { PaginationProps } from 'antd/lib/pagination'
 import { TableProps, ColumnProps } from 'antd/lib/table'
@@ -7,13 +14,13 @@ import cls from 'classnames'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import { GeneralField, FieldDisplayTypes, ArrayField } from '@formily/core'
 import {
-  useForm,
   useField,
   observer,
   useFieldSchema,
   RecursionField,
+  ReactFC,
 } from '@formily/react'
-import { isArr, isBool } from '@formily/shared'
+import { isArr, isBool, isFn } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
 import { ArrayBase, ArrayBaseMixins } from '../array-base'
@@ -37,10 +44,16 @@ interface IStatusSelectProps extends SelectProps<any> {
   pageSize?: number
 }
 
-type ComposedArrayTable = React.FC<TableProps<any>> &
+type ComposedArrayTable = React.FC<React.PropsWithChildren<TableProps<any>>> &
   ArrayBaseMixins & {
-    Column?: React.FC<ColumnProps<any>>
+    Column?: React.FC<React.PropsWithChildren<ColumnProps<any>>>
   }
+
+interface PaginationAction {
+  totalPage?: number
+  pageSize?: number
+  changePage?: (page: number) => void
+}
 
 const SortableRow = SortableElement((props: any) => <tr {...props} />)
 const SortableBody = SortableContainer((props: any) => <tbody {...props} />)
@@ -141,54 +154,69 @@ const useAddition = () => {
   }, null)
 }
 
-const StatusSelect: React.FC<IStatusSelectProps> = observer((props) => {
-  const form = useForm()
-  const field = useField<ArrayField>()
-  const prefixCls = usePrefixCls('formily-array-table')
-  const errors = form.queryFeedbacks({
-    type: 'error',
-    address: `${field.address}.*`,
-  })
-  const parseIndex = (address: string) => {
-    return Number(
-      address
-        .slice(address.indexOf(field.address.toString()) + 1)
-        .match(/(\d+)/)?.[1]
-    )
-  }
+const schedulerRequest = {
+  request: null,
+}
 
-  const options = props.options?.map(({ label, value }) => {
-    const hasError = errors.some(({ address }) => {
-      const currentIndex = parseIndex(address)
-      const startIndex = (value - 1) * props.pageSize
-      const endIndex = value * props.pageSize
-      return currentIndex >= startIndex && currentIndex <= endIndex
-    })
-    return {
-      label: hasError ? <Badge dot>{label}</Badge> : label,
-      value,
+const StatusSelect: ReactFC<IStatusSelectProps> = observer(
+  (props) => {
+    const field = useField<ArrayField>()
+    const prefixCls = usePrefixCls('formily-array-table')
+    const errors = field.errors
+    const parseIndex = (address: string) => {
+      return Number(
+        address
+          .slice(address.indexOf(field.address.toString()) + 1)
+          .match(/(\d+)/)?.[1]
+      )
     }
-  })
+    const options = props.options?.map(({ label, value }) => {
+      const val = Number(value)
+      const hasError = errors.some(({ address }) => {
+        const currentIndex = parseIndex(address)
+        const startIndex = (val - 1) * props.pageSize
+        const endIndex = val * props.pageSize
+        return currentIndex >= startIndex && currentIndex <= endIndex
+      })
+      return {
+        label: hasError ? <Badge dot>{label}</Badge> : label,
+        value,
+      }
+    })
 
-  const width = String(options?.length).length * 15
+    const width = String(options?.length).length * 15
 
-  return (
-    <Select
-      value={props.value}
-      onChange={props.onChange}
-      options={options}
-      virtual
-      style={{
-        width: width < 60 ? 60 : width,
-      }}
-      className={cls(`${prefixCls}-status-select`, {
-        'has-error': errors?.length,
-      })}
-    />
-  )
-})
+    return (
+      <Select
+        value={props.value}
+        onChange={props.onChange}
+        options={options}
+        virtual
+        style={{
+          width: width < 60 ? 60 : width,
+        }}
+        className={cls(`${prefixCls}-status-select`, {
+          'has-error': errors?.length,
+        })}
+      />
+    )
+  },
+  {
+    scheduler: (update) => {
+      clearTimeout(schedulerRequest.request)
+      schedulerRequest.request = setTimeout(() => {
+        update()
+      }, 100)
+    },
+  }
+)
 
-const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
+const PaginationContext = createContext<PaginationAction>({})
+const usePagination = () => {
+  return useContext(PaginationContext)
+}
+
+const ArrayTablePagination: ReactFC<IArrayTablePaginationProps> = (props) => {
   const [current, setCurrent] = useState(1)
   const prefixCls = usePrefixCls('formily-array-table')
   const pageSize = props.pageSize || 10
@@ -243,10 +271,14 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
 
   return (
     <Fragment>
-      {props.children?.(
-        dataSource?.slice(startIndex, endIndex + 1),
-        renderPagination()
-      )}
+      <PaginationContext.Provider
+        value={{ totalPage, pageSize, changePage: handleChange }}
+      >
+        {props.children?.(
+          dataSource?.slice(startIndex, endIndex + 1),
+          renderPagination()
+        )}
+      </PaginationContext.Provider>
     </Fragment>
   )
 }
@@ -307,7 +339,7 @@ export const ArrayTable: ComposedArrayTable = observer(
                           return ref.current?.querySelector('tbody')
                         }}
                         onSortStart={({ node }) => {
-                          addTdStyles(node)
+                          addTdStyles(node as HTMLElement)
                         }}
                         onSortEnd={({ oldIndex, newIndex }) => {
                           field.move(oldIndex, newIndex)
@@ -346,5 +378,24 @@ ArrayTable.Column = () => {
 }
 
 ArrayBase.mixin(ArrayTable)
+
+const Addition: ArrayBaseMixins['Addition'] = (props) => {
+  const array = ArrayBase.useArray()
+  const { totalPage = 0, pageSize = 10, changePage } = usePagination()
+  return (
+    <ArrayBase.Addition
+      {...props}
+      onClick={(e) => {
+        // 如果添加数据后将超过当前页，则自动切换到下一页
+        const total = array?.field?.value.length || 0
+        if (total === totalPage * pageSize + 1 && isFn(changePage)) {
+          changePage(totalPage + 1)
+        }
+        props.onClick?.(e)
+      }}
+    />
+  )
+}
+ArrayTable.Addition = Addition
 
 export default ArrayTable

@@ -15,7 +15,7 @@ When we use the ArrayField component, we must remember to pass the name attribut
 ## Signature
 
 ```ts
-type ArrayField = React.FC<IFieldFactoryProps>
+type ArrayField = React.FC<React.PropsWithChildren<IFieldFactoryProps>>
 ```
 
 ## Custom component use case
