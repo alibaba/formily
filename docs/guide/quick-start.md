@@ -53,7 +53,7 @@ import { FormProvider, Field } from '@formily/react'
 import { FormItem, Input } from '@formily/antd'
 ```
 
-## Exmaple
+## Example
 
 ```tsx
 /**
