@@ -42,7 +42,7 @@ onFieldReact('*(A,B,C)', (field) => {
     "dependencies": ["aa"],
     "fulfill": {
       "state": {
-        "visible": "$deps[0] == '123'"
+        "visible": "{{$deps[0] == '123'}}"
       }
     }
   }
