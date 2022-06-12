@@ -28,7 +28,7 @@ export interface IFormSpyProps {
 }
 
 export type RenderPropsChildren<Payload> =
-  | ((field: Payload, form: Form) => ReactChild)
+  | ((field: Payload, form: Form) => React.ReactNode)
   | React.ReactNode
 
 export interface IFieldProps<
