@@ -5,6 +5,7 @@ import { FormPath, isFn } from '@formily/shared'
 import { isVoidField, GeneralField, Form } from '@formily/core'
 import { SchemaComponentsContext } from '../shared'
 import { RenderPropsChildren } from '../types'
+import { isStr } from 'packages/path/src/shared'
 interface IReactiveFieldProps {
   field: GeneralField
   children?: RenderPropsChildren<GeneralField>
@@ -46,8 +47,9 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     if (!field.decoratorType) {
       return <Fragment>{children}</Fragment>
     }
-    const finalComponent =
-      FormPath.getIn(components, field.decoratorType) ?? field.decoratorType
+    const finalComponent = !isStr(field.decoratorType)
+      ? field.decoratorType
+      : FormPath.getIn(components, field.decoratorType)
 
     return React.createElement(
       finalComponent,
@@ -83,8 +85,9 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     const readOnly = !isVoidField(field)
       ? field.pattern === 'readOnly'
       : undefined
-    const finalComponent =
-      FormPath.getIn(components, field.componentType) ?? field.componentType
+    const finalComponent = !isStr(field.componentType)
+      ? field.componentType
+      : FormPath.getIn(components, field.componentType)
     return React.createElement(
       finalComponent,
       {
