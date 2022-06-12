@@ -2247,4 +2247,9 @@ test('field destroyed or display none should not be assign value from patch init
   aa.initialValue = '123'
 
   expect(form.values).toEqual({})
+
+  aa.display = 'visible'
+
+  expect(aa.value).toBe('123')
+  expect(form.values).toEqual({ aa: '123' })
 })
