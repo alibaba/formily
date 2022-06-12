@@ -1,7 +1,8 @@
 import React, { Fragment, useContext } from 'react'
+import { isValidElementType } from 'react-is'
 import { toJS } from '@formily/reactive'
 import { observer } from '@formily/reactive-react'
-import { FormPath, isFn, isStr } from '@formily/shared'
+import { FormPath, isFn } from '@formily/shared'
 import { isVoidField, GeneralField, Form } from '@formily/core'
 import { SchemaComponentsContext } from '../shared'
 import { RenderPropsChildren } from '../types'
@@ -46,7 +47,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     if (!field.decoratorType) {
       return <Fragment>{children}</Fragment>
     }
-    const finalComponent = !isStr(field.decoratorType)
+    const finalComponent = isValidElementType(field.decoratorType)
       ? field.decoratorType
       : FormPath.getIn(components, field.decoratorType)
 
@@ -84,7 +85,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     const readOnly = !isVoidField(field)
       ? field.pattern === 'readOnly'
       : undefined
-    const finalComponent = !isStr(field.componentType)
+    const finalComponent = isValidElementType(field.componentType)
       ? field.componentType
       : FormPath.getIn(components, field.componentType)
     return React.createElement(
