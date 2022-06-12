@@ -201,7 +201,10 @@ export const patchFormValues = (
     const targetField = form.query(path).take()
     const isUnVoidField = targetField && !isVoidField(targetField)
 
-    if (isUnVoidField && targetField.display === 'none') return
+    if (isUnVoidField && targetField.display === 'none') {
+      targetField.caches.value = clone(source)
+      return
+    }
 
     if (allowAssignDefaultValue(targetValue, source)) {
       update(path, source)
