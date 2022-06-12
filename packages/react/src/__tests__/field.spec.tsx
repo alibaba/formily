@@ -33,7 +33,7 @@ type CustomProps = {
   list?: string[]
 }
 
-const Decorator: React.FC = (props) => <div>{props.children}</div>
+const Decorator = (props) => <div>{props.children}</div>
 const Input: React.FC<React.PropsWithChildren<InputProps>> = (props) => (
   <input
     {...props}

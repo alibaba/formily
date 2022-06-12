@@ -45,16 +45,19 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   )
   if (field.display !== 'visible') return null
 
+  const getComponent = (target: any) => {
+    return isValidComponent(target)
+      ? target
+      : FormPath.getIn(components, target) ?? target
+  }
+
   const renderDecorator = (children: React.ReactNode) => {
     if (!field.decoratorType) {
       return <Fragment>{children}</Fragment>
     }
-    const finalComponent = isValidComponent(field.decoratorType)
-      ? field.decoratorType
-      : FormPath.getIn(components, field.decoratorType) ?? field.decoratorType
 
     return React.createElement(
-      finalComponent,
+      getComponent(field.decoratorType),
       toJS(field.decoratorProps),
       children
     )
@@ -87,11 +90,8 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     const readOnly = !isVoidField(field)
       ? field.pattern === 'readOnly'
       : undefined
-    const finalComponent = isValidComponent(field.componentType)
-      ? field.componentType
-      : FormPath.getIn(components, field.componentType) ?? field.componentType
     return React.createElement(
-      finalComponent,
+      getComponent(field.componentType),
       {
         disabled,
         readOnly,
