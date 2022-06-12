@@ -107,7 +107,7 @@ describe('markup schema field', () => {
   })
   test('void', () => {
     const form = createForm()
-    const VoidComponent: React.FC = (props) => {
+    const VoidComponent = (props) => {
       return <div data-testid="void-component">{props.children}</div>
     }
     const SchemaField = createSchemaField({
@@ -178,7 +178,7 @@ describe('markup schema field', () => {
   })
   test('props children', () => {
     const form = createForm()
-    const Text: React.FC = (props) => {
+    const Text = (props) => {
       return <div data-testid="children-test">{props.children}</div>
     }
     const SchemaField = createSchemaField({
@@ -201,7 +201,7 @@ describe('markup schema field', () => {
   })
   test('x-content', () => {
     const form = createForm()
-    const Text: React.FC = (props) => {
+    const Text = (props) => {
       return <div data-testid="content-test">{props.children}</div>
     }
     const SchemaField = createSchemaField({

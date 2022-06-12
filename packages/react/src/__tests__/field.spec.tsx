@@ -1,7 +1,7 @@
 import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { render, fireEvent, waitFor } from '@testing-library/react'
-import { createForm, onFieldUnmount } from '@formily/core'
+import { createForm, onFieldUnmount, isArrayField } from '@formily/core'
 import {
   isField,
   Field as FieldType,
@@ -33,7 +33,7 @@ type CustomProps = {
   list?: string[]
 }
 
-const Decorator: React.FC = (props) => <div>{props.children}</div>
+const Decorator = (props) => <div>{props.children}</div>
 const Input: React.FC<React.PropsWithChildren<InputProps>> = (props) => (
   <input
     {...props}
@@ -145,6 +145,47 @@ test('useAttach', () => {
   rerender(<MyComponent name="bb" />)
   expect(form.query('aa').take().mounted).toBeFalsy()
   expect(form.query('bb').take().mounted).toBeTruthy()
+})
+
+test('useAttach with array field', async () => {
+  const form = createForm()
+  const MyComponent = () => {
+    return (
+      <FormProvider form={form}>
+        <ArrayField
+          name="array"
+          initialValue={[{ input: '11' }, { input: '22' }]}
+        >
+          {(field) => {
+            return field.value.map((val, index) => {
+              return (
+                <Field
+                  key={index}
+                  name={index + '.input'}
+                  decorator={[Decorator]}
+                  component={[Input]}
+                />
+              )
+            })
+          }}
+        </ArrayField>
+      </FormProvider>
+    )
+  }
+  render(<MyComponent />)
+  await waitFor(() => {
+    expect(form.query('array.0.input').take().mounted).toBeTruthy()
+    expect(form.query('array.1.input').take().mounted).toBeTruthy()
+  })
+  form.query('array').take((field) => {
+    if (isArrayField(field)) {
+      field.moveDown(0)
+    }
+  })
+  await waitFor(() => {
+    expect(form.query('array.0.input').take().mounted).toBeTruthy()
+    expect(form.query('array.1.input').take().mounted).toBeTruthy()
+  })
 })
 
 test('useFormEffects', async () => {
