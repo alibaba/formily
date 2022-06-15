@@ -59,6 +59,7 @@ export default () => {
         <SchemaField.String
           name="undestructor"
           title="before deconstruction"
+          default={['2020-11-20', '2021-12-30']}
           x-decorator="FormItem"
           x-component="DatePicker.RangePicker"
         />
@@ -127,6 +128,7 @@ const schema = {
     undestructor: {
       type: 'string',
       title: 'before deconstruction',
+      default={['2020-11-20', '2021-12-30']},
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.RangePicker',
     },
@@ -201,6 +203,7 @@ export default () => {
       <Field
         name="undestructor"
         title="before deconstruction"
+        initialValue={['2020-11-20', '2021-12-30']}
         decorator={[FormItem]}
         component={[DatePicker.RangePicker]}
       />
