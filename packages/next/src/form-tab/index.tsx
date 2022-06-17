@@ -30,7 +30,7 @@ export interface IFormTabPaneProps extends TabPaneProps {
 }
 
 interface IFeedbackBadgeProps {
-  key: SchemaKey
+  name: SchemaKey
   tab: React.ReactNode
 }
 
@@ -74,7 +74,7 @@ const FeedbackBadge: ReactFC<IFeedbackBadgeProps> = observer((props) => {
   const field = useField()
   const errors = field.form.queryFeedbacks({
     type: 'error',
-    address: `${field.address.concat(props.key)}.*`,
+    address: `${field.address.concat(props.name)}.*`,
   })
   if (errors.length) {
     return (
@@ -110,7 +110,7 @@ export const FormTab: ComposedFormTab = observer(
           <Tabs.Item
             key={key}
             {...props}
-            tab={<FeedbackBadge key={name} tab={props.tab} />}
+            tab={<FeedbackBadge name={name} tab={props.tab} />}
           >
             <RecursionField schema={schema} name={name} />
           </Tabs.Item>
