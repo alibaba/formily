@@ -23,7 +23,7 @@
 
 原始分支是 alibaba/formily master，拉取后的分支应该是 quirkyshop/formily master
 
-> 注意：建议分支名为[feat]-[name]，[feat]是这个分支的类型，可选的有[feat][unitest][doc][bugfix][other]，[name]则是名字，自定义就好了。eg. unittest-core(意为：对核心补充单测)
+> 注意：建议分支名为[feat]-[name]，[feat]是这个分支的类型，可选的有[feat][unitest][docs][bugfix][other]，[name]则是名字，自定义就好了。eg. unittest-core(意为：对核心补充单测)
 
 #### 提交代码
 
