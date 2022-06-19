@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import {
   FormProvider,
-  ExpressionScope,
+  RecordScope,
   JSXComponent,
   useParentForm,
 } from '@formily/react'
@@ -13,6 +13,7 @@ import {
   Form as FormType,
   ObjectField,
   IFormFeedback,
+  isForm,
 } from '@formily/core'
 import { PreviewText } from '../preview-text'
 export interface FormProps extends IFormLayoutProps {
@@ -40,7 +41,7 @@ export const Form: React.FC<React.PropsWithChildren<FormProps>> = ({
   }, [lang])
 
   const renderContent = (form: FormType | ObjectField) => (
-    <ExpressionScope value={{ $$form: form }}>
+    <RecordScope getRecord={() => (isForm(form) ? form.values : form.value)}>
       <PreviewText.Placeholder value={previewTextPlaceholder}>
         <FormLayout {...props}>
           {React.createElement(
@@ -56,7 +57,7 @@ export const Form: React.FC<React.PropsWithChildren<FormProps>> = ({
           )}
         </FormLayout>
       </PreviewText.Placeholder>
-    </ExpressionScope>
+    </RecordScope>
   )
 
   if (form)

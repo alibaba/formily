@@ -187,6 +187,15 @@ export interface IExpressionScopeProps {
   value?: any
 }
 
+export interface IRecordScopeProps {
+  getIndex?(): number
+  getRecord(): any
+}
+
+export interface IRecordsScopeProps {
+  getRecords(): any[]
+}
+
 export type ReactChild = React.ReactElement | string | number
 
 export { ReactFC }
