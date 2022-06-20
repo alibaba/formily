@@ -4,7 +4,6 @@ import { RecursionField } from './RecursionField'
 import { render } from '../shared/render'
 import {
   SchemaMarkupContext,
-  SchemaExpressionScopeContext,
   SchemaOptionsContext,
   SchemaComponentsContext,
 } from '../shared'
@@ -18,6 +17,7 @@ import {
   ISchemaTypeFieldProps,
 } from '../types'
 import { lazyMerge } from '@formily/shared'
+import { ExpressionScope } from './ExpressionScope'
 const env = {
   nonameId: 0,
 }
@@ -58,12 +58,10 @@ export function createSchemaField<Components extends SchemaReactComponents>(
         <SchemaComponentsContext.Provider
           value={lazyMerge(options.components, props.components)}
         >
-          <SchemaExpressionScopeContext.Provider
-            value={lazyMerge(options.scope, props.scope)}
-          >
+          <ExpressionScope value={lazyMerge(options.scope, props.scope)}>
             {renderMarkup()}
             {renderChildren()}
-          </SchemaExpressionScopeContext.Provider>
+          </ExpressionScope>
         </SchemaComponentsContext.Provider>
       </SchemaOptionsContext.Provider>
     )

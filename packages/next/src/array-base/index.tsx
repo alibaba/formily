@@ -8,7 +8,8 @@ import {
   useFieldSchema,
   Schema,
   JSXComponent,
-  ExpressionScope,
+  RecordScope,
+  RecordsScope,
 } from '@formily/react'
 import { SortableHandle } from 'react-sortable-hoc'
 import {
@@ -105,18 +106,25 @@ export const ArrayBase: ComposedArrayBase = (props) => {
   const field = useField<ArrayField>()
   const schema = useFieldSchema()
   return (
-    <ArrayBaseContext.Provider value={{ field, schema, props }}>
-      {props.children}
-    </ArrayBaseContext.Provider>
+    <RecordsScope getRecords={() => field.value}>
+      <ArrayBaseContext.Provider value={{ field, schema, props }}>
+        {props.children}
+      </ArrayBaseContext.Provider>
+    </RecordsScope>
   )
 }
 
 ArrayBase.Item = ({ children, ...props }) => {
   return (
     <ItemContext.Provider value={props}>
-      <ExpressionScope value={{ $record: props.record, $index: props.index }}>
+      <RecordScope
+        getIndex={() => props.index}
+        getRecord={() =>
+          typeof props.record === 'function' ? props.record() : props.record
+        }
+      >
         {children}
-      </ExpressionScope>
+      </RecordScope>
     </ItemContext.Provider>
   )
 }

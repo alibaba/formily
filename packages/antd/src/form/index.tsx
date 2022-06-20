@@ -1,10 +1,15 @@
 import React from 'react'
-import { Form as FormType, ObjectField, IFormFeedback } from '@formily/core'
+import {
+  Form as FormType,
+  ObjectField,
+  IFormFeedback,
+  isForm,
+} from '@formily/core'
 import {
   useParentForm,
   FormProvider,
-  ExpressionScope,
   JSXComponent,
+  RecordScope,
 } from '@formily/react'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
 import { PreviewText } from '../preview-text'
@@ -26,7 +31,7 @@ export const Form: React.FC<React.PropsWithChildren<FormProps>> = ({
 }) => {
   const top = useParentForm()
   const renderContent = (form: FormType | ObjectField) => (
-    <ExpressionScope value={{ $$form: form }}>
+    <RecordScope getRecord={() => (isForm(form) ? form.values : form.value)}>
       <PreviewText.Placeholder value={previewTextPlaceholder}>
         <FormLayout {...props}>
           {React.createElement(
@@ -42,7 +47,7 @@ export const Form: React.FC<React.PropsWithChildren<FormProps>> = ({
           )}
         </FormLayout>
       </PreviewText.Placeholder>
-    </ExpressionScope>
+    </RecordScope>
   )
   if (form)
     return <FormProvider form={form}>{renderContent(form)}</FormProvider>

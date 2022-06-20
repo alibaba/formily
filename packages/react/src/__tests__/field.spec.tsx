@@ -208,14 +208,14 @@ test('useFormEffects', async () => {
       </FormProvider>
     )
 
-    expect(queryByTestId('custom-value').textContent).toEqual('')
+    expect(queryByTestId('custom-value')?.textContent).toEqual('')
     form.query('aa').take((aa) => {
       if (isField(aa)) {
         aa.setValue('123')
       }
     })
     await waitFor(() => {
-      expect(queryByTestId('custom-value').textContent).toEqual('123')
+      expect(queryByTestId('custom-value')?.textContent).toEqual('123')
     })
     rerender(
       <FormProvider form={form}>

@@ -6,6 +6,8 @@ import {
   useFieldSchema,
   useField,
   RecursionField,
+  RecordScope,
+  RecordsScope,
 } from '../index'
 import { render, fireEvent, waitFor, act } from '@testing-library/react'
 
@@ -865,7 +867,7 @@ test('void field children', async () => {
     </FormProvider>
   )
   await waitFor(() => {
-    expect(queryByTestId('btn').textContent).toBe('placeholder')
+    expect(queryByTestId('btn')?.textContent).toBe('placeholder')
   })
 })
 
@@ -967,5 +969,88 @@ test('multi x-reactions isolate effect', async () => {
     expect(getByTestId('btn').textContent).toBe('Click 123')
     expect(getByTestId('input')).not.toBeNull()
     expect(otherEffect).toBeCalledTimes(1)
+  })
+})
+
+test('nested record scope', async () => {
+  const form = createForm()
+  const SchemaField = createSchemaField({
+    components: {
+      Text: (props) => <div data-testid="text">{props.text}</div>,
+    },
+  })
+
+  const { queryByTestId } = render(
+    <FormProvider form={form}>
+      <RecordScope getRecord={() => ({ bb: '321' })} getIndex={() => 1}>
+        <RecordScope getRecord={() => ({ aa: '123' })} getIndex={() => 2}>
+          <SchemaField>
+            <SchemaField.Void
+              x-component="Text"
+              x-component-props={{
+                text: '{{$record.aa + $record.$lookup.bb + $index + $lookup.$index}}',
+              }}
+            />
+          </SchemaField>
+        </RecordScope>
+      </RecordScope>
+    </FormProvider>
+  )
+  await waitFor(() => {
+    expect(queryByTestId('text')?.textContent).toBe('12332121')
+  })
+})
+
+test('literal record scope', async () => {
+  const form = createForm()
+  const SchemaField = createSchemaField({
+    components: {
+      Text: (props) => <div data-testid="text">{props.text}</div>,
+    },
+  })
+
+  const { queryByTestId } = render(
+    <FormProvider form={form}>
+      <RecordScope getRecord={() => '123'} getIndex={() => 2}>
+        <SchemaField>
+          <SchemaField.Void
+            x-component="Text"
+            x-component-props={{
+              text: '{{$record + $index}}',
+            }}
+          />
+        </SchemaField>
+      </RecordScope>
+    </FormProvider>
+  )
+  await waitFor(() => {
+    expect(queryByTestId('text')?.textContent).toBe('1232')
+  })
+})
+
+test('records scope', async () => {
+  const form = createForm()
+  const SchemaField = createSchemaField({
+    components: {
+      Text: (props) => <div data-testid="text">{props.text}</div>,
+    },
+  })
+
+  const { queryByTestId } = render(
+    <FormProvider form={form}>
+      <RecordsScope getRecords={() => [1, 2, 3]}>
+        <SchemaField>
+          <SchemaField.Void
+            x-component="Text"
+            x-component-props={{
+              text: '{{$records[2]}}',
+            }}
+          />
+        </SchemaField>
+      </RecordsScope>
+    </FormProvider>
+  )
+  await waitFor(() => {
+    expect(queryByTestId('text')?.textContent).toBe('3')
   })
 })

@@ -192,7 +192,11 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
                 key={index}
                 title={title()}
               >
-                <ArrayBase.Item index={index} key={index} record={item}>
+                <ArrayBase.Item
+                  index={index}
+                  key={index}
+                  record={() => dataSource[index]}
+                >
                   {content}
                 </ArrayBase.Item>
               </Collapse.Panel>

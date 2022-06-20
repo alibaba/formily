@@ -122,14 +122,10 @@ export default () => (
   <Section
     title="High-Quality Community Group"
     style={{ marginTop: 140 }}
-    titleStyle={{ paddingBottom: 140, fontWeight: 'bold' }}
+    titleStyle={{ paddingBottom: 20, fontWeight: 'bold' }}
   >
     <QrCodeGroup>
-      <QrCode link="//img.alicdn.com/imgextra/i2/O1CN01n7kuJW1nrXhBw3Nud_!!6000000005143-0-tps-1284-1644.jpg" />
-      <QrCode
-        title="Already Full"
-        link="//img.alicdn.com/imgextra/i3/O1CN018neaqX1HvbT6SUIbp_!!6000000000820-0-tps-1284-1644.jpg"
-      />
+      <QrCode link="//img.alicdn.com/imgextra/i1/O1CN011zlc5b1uu1BDUpNg1_!!6000000006096-2-tps-978-1380.png" />
     </QrCodeGroup>
   </Section>
 )

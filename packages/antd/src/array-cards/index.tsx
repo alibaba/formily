@@ -98,7 +98,11 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
         />
       )
       return (
-        <ArrayBase.Item key={index} index={index} record={item}>
+        <ArrayBase.Item
+          key={index}
+          index={index}
+          record={() => dataSource[index]}
+        >
           <Card
             {...props}
             onChange={() => {}}

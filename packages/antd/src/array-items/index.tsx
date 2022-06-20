@@ -96,7 +96,11 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
               ? schema.items[index] || schema.items[0]
               : schema.items
             return (
-              <ArrayBase.Item key={index} index={index} record={item}>
+              <ArrayBase.Item
+                key={index}
+                index={index}
+                record={() => dataSource[index]}
+              >
                 <SortableItem key={`item-${index}`} index={index}>
                   <div className={`${prefixCls}-item-inner`}>
                     <RecursionField schema={items} name={index} />

@@ -120,16 +120,12 @@ import './site/styles.less'
 
 export default () => (
   <Section
-    title="高质量技术交流"
+    title="全球互助共建答疑大群"
     style={{ marginTop: 140 }}
-    titleStyle={{ paddingBottom: 140 }}
+    titleStyle={{ paddingBottom: 20, fontWeight: 'bold' }}
   >
     <QrCodeGroup>
-      <QrCode link="//img.alicdn.com/imgextra/i2/O1CN01n7kuJW1nrXhBw3Nud_!!6000000005143-0-tps-1284-1644.jpg" />
-      <QrCode
-        title="该群已满"
-        link="//img.alicdn.com/imgextra/i3/O1CN018neaqX1HvbT6SUIbp_!!6000000000820-0-tps-1284-1644.jpg"
-      />
+      <QrCode link="//img.alicdn.com/imgextra/i1/O1CN011zlc5b1uu1BDUpNg1_!!6000000006096-2-tps-978-1380.png" />
     </QrCodeGroup>
   </Section>
 )
