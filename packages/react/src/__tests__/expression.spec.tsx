@@ -70,6 +70,6 @@ test('x-compile-omitted', async () => {
     </FormProvider>
   )
   await waitFor(() => {
-    expect(queryByTestId('input').textContent).toBe('{{fake}}123321extra')
+    expect(queryByTestId('input')?.textContent).toBe('{{fake}}123321extra')
   })
 })
