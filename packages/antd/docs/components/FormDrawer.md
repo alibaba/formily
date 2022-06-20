@@ -62,7 +62,7 @@ export default () => {
                   x-component="Input"
                 />
               </SchemaField>
-              <FormDrawer.Footer>
+              <FormDrawer.Extra>
                 <FormButtonGroup align="right">
                   <Submit
                     onSubmit={() => {
@@ -75,7 +75,7 @@ export default () => {
                   </Submit>
                   <Reset>Reset</Reset>
                 </FormButtonGroup>
-              </FormDrawer.Footer>
+              </FormDrawer.Extra>
             </FormLayout>
           )
         })
@@ -163,7 +163,7 @@ export default () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField schema={schema} />
-              <FormDrawer.Footer>
+              <FormDrawer.Extra>
                 <FormButtonGroup align="right">
                   <Submit
                     onSubmit={() => {
@@ -176,7 +176,7 @@ export default () => {
                   </Submit>
                   <Reset>Reset</Reset>
                 </FormButtonGroup>
-              </FormDrawer.Footer>
+              </FormDrawer.Extra>
             </FormLayout>
           )
         })
@@ -245,7 +245,7 @@ export default () => {
                 decorator={[FormItem]}
                 component={[Input]}
               />
-              <FormDrawer.Footer>
+              <FormDrawer.Extra>
                 <FormButtonGroup align="right">
                   <Submit
                     onSubmit={() => {
@@ -258,7 +258,7 @@ export default () => {
                   </Submit>
                   <Reset>Reset</Reset>
                 </FormButtonGroup>
-              </FormDrawer.Footer>
+              </FormDrawer.Extra>
             </FormLayout>
           )
         })
@@ -314,6 +314,10 @@ interface FormDrawer {
 ```
 
 `DrawerProps` type definition reference ant design [Drawer API](https://ant.design/components/drawer-cn/#API)
+
+### FormDrawer.Extra
+
+No attributes, only child nodes are received
 
 ### FormDrawer.Footer
 
