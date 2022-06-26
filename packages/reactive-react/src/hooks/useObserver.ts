@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tracker } from '@formily/reactive'
-import { GarbageCollector } from '../shared'
+import { GarbageCollector, immediate } from '../shared'
 import { IObserverOptions } from '../types'
 import { useForceUpdate } from './useForceUpdate'
 
@@ -46,10 +46,12 @@ export const useObserver = <T extends () => any>(
     gcRef.current.close()
     return () => {
       unMountRef.current = true
-      if (trackerRef.current) {
-        trackerRef.current.dispose()
-        trackerRef.current = null
-      }
+      immediate(() => {
+        if (trackerRef.current && unMountRef.current) {
+          trackerRef.current.dispose()
+          trackerRef.current = null
+        }
+      })
     }
   }, [])
 
