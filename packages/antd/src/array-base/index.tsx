@@ -74,6 +74,8 @@ const ArrayBaseContext = createContext<IArrayBaseContext>(null)
 
 const ItemContext = createContext<IArrayBaseItemProps>(null)
 
+const takeRecord = (val: any) => (typeof val === 'function' ? val() : val)
+
 const useArray = () => {
   return useContext(ArrayBaseContext)
 }
@@ -85,7 +87,7 @@ const useIndex = (index?: number) => {
 
 const useRecord = (record?: number) => {
   const ctx = useContext(ItemContext)
-  return ctx ? ctx.record : record
+  return takeRecord(ctx ? ctx.record : record)
 }
 
 const getSchemaDefaultValue = (schema: Schema) => {
@@ -123,9 +125,7 @@ ArrayBase.Item = ({ children, ...props }) => {
     <ItemContext.Provider value={props}>
       <RecordScope
         getIndex={() => props.index}
-        getRecord={() =>
-          typeof props.record === 'function' ? props.record() : props.record
-        }
+        getRecord={() => takeRecord(props.record)}
       >
         {children}
       </RecordScope>
