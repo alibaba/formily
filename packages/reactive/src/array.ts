@@ -33,7 +33,7 @@ export class ArraySet<T> {
 
   forEach(callback: (value: T) => void) {
     if (this.value.length === 0) return
-    for (let index = 0, len = this.value.length; index < len; index++) {
+    for (let index = 0; index < this.value.length; index++) {
       callback(this.value[index])
     }
   }
