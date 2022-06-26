@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import ReactDOM, { createPortal } from 'react-dom'
+import { createPortal } from 'react-dom'
 import { observable } from '@formily/reactive'
 import { Observer } from '@formily/react'
 import { render as reactRender, unmount as reactUnmount } from './render'
