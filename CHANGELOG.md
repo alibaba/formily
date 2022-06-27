@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.8(2022-06-28)
+
+### :blush: Other Changes
+
+1. [chore(reactive): improve strict mode update strategy](https://github.com/alibaba/formily/commit/c3002bde) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.1.7(2022-06-27)
 
 ### :bug: Bug Fixes
@@ -916,38 +922,6 @@
 
 ## v2.0.0-rc.11(2021-09-25)
 
-### :bug: Bug Fixes
-
-1. [fix(core/json-schema): fix props unexpect patch and field reactions unexpect react (#2232)](https://github.com/alibaba/formily/commit/62fbe265) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd/next): remove duplicated exports (#2231)](https://github.com/alibaba/formily/commit/2c8cedb1) :point_right: ( [Robin Wong](https://github.com/Robin Wong) )
-
-1. [fix(vue): fix vue2 scopedSlot and slot pass problem (#2221)](https://github.com/alibaba/formily/commit/2489182c) :point_right: ( [Muyao](https://github.com/Muyao) )
-
-1. [fix(antd/next): fix FormDialog typings](https://github.com/alibaba/formily/commit/4b170ca7) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-### :memo: Documents Changes
-
-1. [docs(vue): add more scopedSlot content tests and readme (#2226)](https://github.com/alibaba/formily/commit/ff7e790f) :point_right: ( [lirui](https://github.com/lirui) )
-
-1. [docs(project): update login-register.md](https://github.com/alibaba/formily/commit/79f948b3) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [doc: fix typo for Ant Design in docs/guide/quick-start.md (#2201)](https://github.com/alibaba/formily/commit/151f6845) :point_right: ( [vagusX](https://github.com/vagusX) )
-
-### :rose: Improve code quality
-
-1. [refactor(element): refactor element slot pass way (#2236)](https://github.com/alibaba/formily/commit/da28fe7e) :point_right: ( [Muyao](https://github.com/Muyao) )
-
-### :rocket: Improve Performance
-
-1. [perf(antd/next): improve FormItem render performance (#2237)](https://github.com/alibaba/formily/commit/64445d09) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :blush: Other Changes
-
-1. [chore: update ci.yml](https://github.com/alibaba/formily/commit/4845ddfe) :point_right: ( [Janry](https://github.com/Janry) )
-
-## v2.0.0-rc.10(2021-09-21)
-
 ### :tada: Enhancements
 
 1. [feat(element): support element-ui slot (#2162)](https://github.com/alibaba/formily/commit/205e164c) :point_right: ( [Muyao](https://github.com/Muyao) )
@@ -965,8 +939,6 @@
 1. [feat(designable): support componentsIcon/componentsSourceIcon](https://github.com/alibaba/formily/commit/5255e0da) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat(core): support field destroy method (#1895)](https://github.com/alibaba/formily/commit/52457e10) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(antd/next): improve FormDialog/FormDrawer typings and api (#1886)](https://github.com/alibaba/formily/commit/e3d7d264) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [feat(setters): add ValidatorSetter (#1885)](https://github.com/alibaba/formily/commit/4e2203e7) :point_right: ( [Janry](https://github.com/Janry) )
 
@@ -1112,6 +1084,8 @@
 
 1. [feat: compile expression for array-table column title (#868)](https://github.com/alibaba/formily/commit/48fbcf0f) :point_right: ( [soulwu](https://github.com/soulwu) )
 
+1. [feat(antd/next): improve useFormTableQuery (#821)](https://github.com/alibaba/formily/commit/2de71a36) :point_right: ( [Janry](https://github.com/Janry) )
+
 1. [feat(docs): add antd TimePicker.RangePicker demo. (#811)](https://github.com/alibaba/formily/commit/fab22309) :point_right: ( [ShiCheng](https://github.com/ShiCheng) )
 
 1. [feat(antd-components): add default export (#810)](https://github.com/alibaba/formily/commit/0b4e64da) :point_right: ( [kenve](https://github.com/kenve) )
@@ -1228,6 +1202,14 @@
 
 ### :bug: Bug Fixes
 
+1. [fix(core/json-schema): fix props unexpect patch and field reactions unexpect react (#2232)](https://github.com/alibaba/formily/commit/62fbe265) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(antd/next): remove duplicated exports (#2231)](https://github.com/alibaba/formily/commit/2c8cedb1) :point_right: ( [Robin Wong](https://github.com/Robin Wong) )
+
+1. [fix(vue): fix vue2 scopedSlot and slot pass problem (#2221)](https://github.com/alibaba/formily/commit/2489182c) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [fix(antd/next): fix FormDialog typings](https://github.com/alibaba/formily/commit/4b170ca7) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 1. [fix(core): fix initialValues patch values with wrong type (#2214)](https://github.com/alibaba/formily/commit/334ff1bc) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(element): fix select label error (#2202)](https://github.com/alibaba/formily/commit/c8b513e0) :point_right: ( [Muyao](https://github.com/Muyao) )
@@ -1334,8 +1316,6 @@
 
 1. [fix(antd/next): fix Editable is not work with babel-import-plugin #1645](https://github.com/alibaba/formily/commit/cf93945d) :point_right: ( [janrywang](https://github.com/janrywang) )
 
-1. [fix(json-schema): fix findComponent return unexpected result (#1625)](https://github.com/alibaba/formily/commit/3453c69d) :point_right: ( [liuwei](https://github.com/liuwei) )
-
 1. [fix(antd/next): remove FormButtonGroup.FormItem colon #1623](https://github.com/alibaba/formily/commit/48137547) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(antd): fix DatePicker week formatting errors (#1614)](https://github.com/alibaba/formily/commit/dbdd1984) :point_right: ( [sun](https://github.com/sun) )
@@ -1346,19 +1326,17 @@
 
 1. [fix(types): fix global.d.ts](https://github.com/alibaba/formily/commit/df8561d6) :point_right: ( [janrywang](https://github.com/janrywang) )
 
-1. [fix(project): fix typings](https://github.com/alibaba/formily/commit/c8aff09b) :point_right: ( [janrywang](https://github.com/janrywang) )
-
 1. [fix(vue): add deep copy to decorator props (#1587)](https://github.com/alibaba/formily/commit/710f5e1b) :point_right: ( [Muyao](https://github.com/Muyao) )
 
 1. [fix(core): fix createForm memory leak](https://github.com/alibaba/formily/commit/5f11459b) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(project): fix ci](https://github.com/alibaba/formily/commit/61627825) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(next): fix style missing due to wrong sideEffects (#1564)](https://github.com/alibaba/formily/commit/9fb8b93e) :point_right: ( [liuwei](https://github.com/liuwei) )
 
 1. [fix: add defaultLanguage & doc: update setValidateLanguage (#1548)](https://github.com/alibaba/formily/commit/b2777527) :point_right: ( [zkylearner](https://github.com/zkylearner) )
 
 1. [fix(react): fix SchemaField missing props scope (#1543)](https://github.com/alibaba/formily/commit/2293d4b7) :point_right: ( [liuwei](https://github.com/liuwei) )
-
-1. [fix(react): fix ci](https://github.com/alibaba/formily/commit/f7fdbcd3) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(core): fix array path calculation #1533](https://github.com/alibaba/formily/commit/29249000) :point_right: ( [janrywang](https://github.com/janrywang) )
 
@@ -1387,8 +1365,6 @@
 1. [fix(antd): fix btn is too big in small mode (#1455)](https://github.com/alibaba/formily/commit/c33df277) :point_right: ( [liuwei](https://github.com/liuwei) )
 
 1. [fix(vue): fix a type error in ISchemaMarkupFieldProps (#1454)](https://github.com/alibaba/formily/commit/43abadc5) :point_right: ( [月落音阑](https://github.com/月落音阑) )
-
-1. [fix(antd/next): fix layout context](https://github.com/alibaba/formily/commit/1bb9f1a0) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(core): fix empty checker in intialFieldValue](https://github.com/alibaba/formily/commit/7db34179) :point_right: ( [janrywang](https://github.com/janrywang) )
 
@@ -1540,8 +1516,6 @@
 
 1. [fix(core): fix unmounteRemoveValue property is not work #827 (#847)](https://github.com/alibaba/formily/commit/f53d02ae) :point_right: ( [Janry](https://github.com/Janry) )
 
-1. [fix(antd/next): fix form-tab typings (#848)](https://github.com/alibaba/formily/commit/2cadf73e) :point_right: ( [Janry](https://github.com/Janry) )
-
 1. [fix(react-schema-renderer): fix x-linkages typings (#823)](https://github.com/alibaba/formily/commit/06c1a310) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(array-table): remove min-width style property (#820)](https://github.com/alibaba/formily/commit/22d03df2) :point_right: ( [Janry](https://github.com/Janry) )
@@ -1576,17 +1550,19 @@
 
 1. [fix x-index order algorithm (#724)](https://github.com/alibaba/formily/commit/17ae9ddb) :point_right: ( [JerryLyu](https://github.com/JerryLyu) )
 
+1. [fix(antd/next): fix layout can not pass FormItem attributes (#715)](https://github.com/alibaba/formily/commit/e6be51c8) :point_right: ( [Janry](https://github.com/Janry) )
+
 1. [fix(printer): fix print schema (#710)](https://github.com/alibaba/formily/commit/eb4b4e37) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix: doc typo of antd (#699)](https://github.com/alibaba/formily/commit/a10efdf9) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix(project): compat uform (#666)](https://github.com/alibaba/formily/commit/74008983) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(@formily/meet): fix pacakge config (#659)](https://github.com/alibaba/formily/commit/06837f9e) :point_right: ( [DarK-AleX-alibaba](https://github.com/DarK-AleX-alibaba) )
 
 1. [fix: upload children (#631)](https://github.com/alibaba/formily/commit/9c0095c1) :point_right: ( [JeromeYangtao](https://github.com/JeromeYangtao) )
 
 1. [fix: fix type lint (#628)](https://github.com/alibaba/formily/commit/8215d7f4) :point_right: ( [soulwu](https://github.com/soulwu) )
+
+1. [fix(antd/next): fix antd/next table arr[0] path (#624)](https://github.com/alibaba/formily/commit/fb64eae7) :point_right: ( [WingGao](https://github.com/WingGao) )
 
 1. [fix: 616 (#622)](https://github.com/alibaba/formily/commit/23ff1447) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
 
@@ -1744,6 +1720,12 @@
 
 ### :memo: Documents Changes
 
+1. [docs(vue): add more scopedSlot content tests and readme (#2226)](https://github.com/alibaba/formily/commit/ff7e790f) :point_right: ( [lirui](https://github.com/lirui) )
+
+1. [docs(project): update login-register.md](https://github.com/alibaba/formily/commit/79f948b3) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [doc: fix typo for Ant Design in docs/guide/quick-start.md (#2201)](https://github.com/alibaba/formily/commit/151f6845) :point_right: ( [vagusX](https://github.com/vagusX) )
+
 1. [docs(vue/element): add codesandbox support (#2206)](https://github.com/alibaba/formily/commit/07739bb9) :point_right: ( [Muyao](https://github.com/Muyao) )
 
 1. [docs(reactive): update toJS/markRaw docs](https://github.com/alibaba/formily/commit/77cb7b7b) :point_right: ( [janrywang](https://github.com/janrywang) )
@@ -1838,8 +1820,6 @@
 
 1. [docs(@formily/react-schema-renderer): fix docs example (#681)](https://github.com/alibaba/formily/commit/a546e6a2) :point_right: ( [朱建](https://github.com/朱建) )
 
-1. [docs(project): fix docs codesandbox config](https://github.com/alibaba/formily/commit/0c65601d) :point_right: ( [janrywang](https://github.com/janrywang) )
-
 1. [docs(examples): fix FormStep examples (#593)](https://github.com/alibaba/formily/commit/27018c6c) :point_right: ( [常泽清](https://github.com/常泽清) )
 
 1. [doc: add questions(customize action) (#289)](https://github.com/alibaba/formily/commit/baecbaab) :point_right: ( [xiaowanzi](https://github.com/xiaowanzi) )
@@ -1890,6 +1870,8 @@
 
 ### :rose: Improve code quality
 
+1. [refactor(element): refactor element slot pass way (#2236)](https://github.com/alibaba/formily/commit/da28fe7e) :point_right: ( [Muyao](https://github.com/Muyao) )
+
 1. [refactor(project): support more features for page description (#2099)](https://github.com/alibaba/formily/commit/6162ad5d) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [refactor(json-schema): use with statement for compiler](https://github.com/alibaba/formily/commit/f913b35b) :point_right: ( [janrywang](https://github.com/janrywang) )
@@ -1918,11 +1900,11 @@
 
 1. [refactor(json-schema): refactor stringify type to fix literal type is erased (#1508)](https://github.com/alibaba/formily/commit/43e79a61) :point_right: ( [liuwei](https://github.com/liuwei) )
 
-1. [refactor(project): update lerna scripts](https://github.com/alibaba/formily/commit/92ae8d74) :point_right: ( [janrywang](https://github.com/janrywang) )
-
 1. [refactor(core): modify IFormState type (#1434)](https://github.com/alibaba/formily/commit/57a7ea37) :point_right: ( [liuwei](https://github.com/liuwei) )
 
 1. [refactor(reactive): add benchmark scripts](https://github.com/alibaba/formily/commit/6954a1fb) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [refactor(project): update deps declaration](https://github.com/alibaba/formily/commit/0b846317) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [refactor: adjust the umd compilation process of the ui library (#1206)](https://github.com/alibaba/formily/commit/e3fc6ade) :point_right: ( [atzcl](https://github.com/atzcl) )
 
@@ -1934,7 +1916,7 @@
 
 1. [refactor(project): remove react-shared-components](https://github.com/alibaba/formily/commit/6f6dbed4) :point_right: ( [janrywang](https://github.com/janrywang) )
 
-1. [refactor(react): improve form-spy (#824)](https://github.com/alibaba/formily/commit/c4dc2144) :point_right: ( [Janry](https://github.com/Janry) )
+1. [refactor(devtools): update npm scripts](https://github.com/alibaba/formily/commit/c449fbbf) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [refactor(@uform/react-schema-editor): update (#606)](https://github.com/alibaba/formily/commit/179cd62a) :point_right: ( [Andy](https://github.com/Andy) )
 
@@ -1960,6 +1942,8 @@
 
 1. [refactor(test): update react-test-library==>@test-library/react](https://github.com/alibaba/formily/commit/a97ffa0b) :point_right: ( [janryWang](https://github.com/janryWang) )
 
+1. [refactor(project): merge alibaba/uform master](https://github.com/alibaba/formily/commit/b050eeaa) :point_right: ( [janryWang](https://github.com/janryWang) )
+
 1. [refactor(pkg): add ts deps](https://github.com/alibaba/formily/commit/bfdfb822) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 1. [refactor(project): move @alifd/next and antd dependencies to peerDependencies](https://github.com/alibaba/formily/commit/201a53d2) :point_right: ( [janryWang](https://github.com/janryWang) )
@@ -1967,8 +1951,6 @@
 1. [refactor(docs): fix docs version](https://github.com/alibaba/formily/commit/db71c52c) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 1. [refactor(docs): add docs packages to use npm cdnjs](https://github.com/alibaba/formily/commit/d3672aa5) :point_right: ( [janryWang](https://github.com/janryWang) )
-
-1. [refactor(ci): update .travis.yml](https://github.com/alibaba/formily/commit/9396e9d6) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 1. [refactor: monaco editor amd](https://github.com/alibaba/formily/commit/4535cbe0) :point_right: ( [cnt1992](https://github.com/cnt1992) )
 
@@ -1978,13 +1960,19 @@
 
 1. [refactor(gitignore): remove lib](https://github.com/alibaba/formily/commit/8677e38d) :point_right: ( [janryWang](https://github.com/janryWang) )
 
+1. [refactor(ci): update lerna.json](https://github.com/alibaba/formily/commit/7574c035) :point_right: ( [janryWang](https://github.com/janryWang) )
+
 1. [refactor(project): LESENCE.md ==> LICENSE.md](https://github.com/alibaba/formily/commit/1968d1f3) :point_right: ( [janryWang](https://github.com/janryWang) )
+
+1. [refactor(project): add test scripts It’s almost done](https://github.com/alibaba/formily/commit/e8a90213) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 ### :rocket: Improve Performance
 
+1. [perf(antd/next): improve FormItem render performance (#2237)](https://github.com/alibaba/formily/commit/64445d09) :point_right: ( [Janry](https://github.com/Janry) )
+
 1. [perf(path): use Map replace LRUMap](https://github.com/alibaba/formily/commit/1141e580) :point_right: ( [janrywang](https://github.com/janrywang) )
 
-1. [perf(schema): improve performance](https://github.com/alibaba/formily/commit/184884ca) :point_right: ( [janrywang](https://github.com/janrywang) )
+1. [perf(reactive): improve toJS performace](https://github.com/alibaba/formily/commit/01922f5d) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [perf(core): fix nested path update performance (#722)](https://github.com/alibaba/formily/commit/130feeae) :point_right: ( [Janry](https://github.com/Janry) )
 
@@ -2018,6 +2006,8 @@
 
 1. [test(json-schema): add some tests](https://github.com/alibaba/formily/commit/6813974d) :point_right: ( [janrywang](https://github.com/janrywang) )
 
+1. [test(react): fix typings](https://github.com/alibaba/formily/commit/322e1fd7) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 1. [test(core): improve core tests](https://github.com/alibaba/formily/commit/c643d8bb) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [test(@uform/react): improve field and virtualField test cases (#438)](https://github.com/alibaba/formily/commit/853e051f) :point_right: ( [dahuang](https://github.com/dahuang) )
@@ -2030,11 +2020,13 @@
 
 ### :blush: Other Changes
 
-1. [chore(workflow): update ci actions](https://github.com/alibaba/formily/commit/aba1e3f0) :point_right: ( [janrywang](https://github.com/janrywang) )
+1. [chore: update ci.yml](https://github.com/alibaba/formily/commit/4845ddfe) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [chore(deps-dev): bump semver-regex from 2.0.0 to 3.1.3 (#2209)](https://github.com/alibaba/formily/commit/94a6ffcc) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
 
 1. [chore(desingbale): move designable-antd/next to designable repo](https://github.com/alibaba/formily/commit/84327d2d) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(workflow): fix actions](https://github.com/alibaba/formily/commit/12dacdcc) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [chore(designable): lock version](https://github.com/alibaba/formily/commit/b61ad907) :point_right: ( [janrywang](https://github.com/janrywang) )
 
@@ -2074,9 +2066,11 @@
 
 1. [chore(scripts): remove mapCoverage.js](https://github.com/alibaba/formily/commit/3b3c3134) :point_right: ( [janrywang](https://github.com/janrywang) )
 
+1. [chore(workflow): Update check-pr-title.yml (#1490)](https://github.com/alibaba/formily/commit/9243908d) :point_right: ( [xrkffgg](https://github.com/xrkffgg) )
+
 1. [chore(workflow): rename main.yml ==>commitlint.yml](https://github.com/alibaba/formily/commit/45734661) :point_right: ( [Janry](https://github.com/Janry) )
 
-1. [chore(actions): add commitlint action](https://github.com/alibaba/formily/commit/1c8847ec) :point_right: ( [Janry](https://github.com/Janry) )
+1. [chore(actions): update commit checker action](https://github.com/alibaba/formily/commit/573b60fe) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [chore(pkg): add preversion/version lerna scripts hook](https://github.com/alibaba/formily/commit/d933f1fe) :point_right: ( [janrywang](https://github.com/janrywang) )
 
