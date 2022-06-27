@@ -198,7 +198,7 @@ export const batchScopeEnd = () => {
   const prevUntrackCount = UntrackCount.value
   BatchScope.value = false
   UntrackCount.value = 0
-  PendingScopeReactions.forEachDelete((reaction) => {
+  PendingScopeReactions.batchDelete((reaction) => {
     if (isFn(reaction._scheduler)) {
       reaction._scheduler(reaction)
     } else {
@@ -223,7 +223,7 @@ export const isScopeBatching = () => BatchScope.value
 export const isUntracking = () => UntrackCount.value > 0
 
 export const executePendingReactions = () => {
-  PendingReactions.forEachDelete((reaction) => {
+  PendingReactions.batchDelete((reaction) => {
     if (isFn(reaction._scheduler)) {
       reaction._scheduler(reaction)
     } else {
@@ -233,7 +233,7 @@ export const executePendingReactions = () => {
 }
 
 export const executeBatchEndpoints = () => {
-  BatchEndpoints.forEachDelete((callback) => {
+  BatchEndpoints.batchDelete((callback) => {
     callback()
   })
 }

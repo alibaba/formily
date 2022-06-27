@@ -32,7 +32,7 @@ test('ArraySet', () => {
   const handler1 = jest.fn()
   set.add(11)
   set.add(22)
-  set.forEachDelete(handler1)
+  set.batchDelete(handler1)
   expect(handler1).toBeCalledTimes(2)
   expect(handler1).nthCalledWith(1, 11)
   expect(handler1).nthCalledWith(2, 22)

@@ -89,5 +89,5 @@ test('shared scheduler with multi tracker(mock react strict mode)', () => {
   obs.value = 123
 
   expect(scheduler1).toBeCalledTimes(1)
-  expect(scheduler2).toBeCalledTimes(1)
+  expect(scheduler2).toBeCalledTimes(0)
 })

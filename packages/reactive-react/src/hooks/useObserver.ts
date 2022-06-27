@@ -15,7 +15,7 @@ export const useObserver = <T extends () => any>(
   options?: IObserverOptions
 ): ReturnType<T> => {
   const forceUpdate = useForceUpdate()
-  const unMountRef = React.useRef(false)
+  const mountedRef = React.useRef(false)
   const trackerRef = React.useRef<Tracker>(null)
   const gcRef = React.useRef<GarbageCollector>()
   const [objectRetainedByReact] = React.useState(
@@ -23,6 +23,7 @@ export const useObserver = <T extends () => any>(
   )
   if (!trackerRef.current) {
     trackerRef.current = new Tracker(() => {
+      if (!mountedRef.current) return
       if (typeof options?.scheduler === 'function') {
         options.scheduler(forceUpdate)
       } else {
@@ -42,16 +43,17 @@ export const useObserver = <T extends () => any>(
   }
 
   React.useEffect(() => {
-    unMountRef.current = false
+    mountedRef.current = true
     gcRef.current.close()
+    const dispose = () => {
+      if (trackerRef.current && !mountedRef.current) {
+        trackerRef.current.dispose()
+        trackerRef.current = null
+      }
+    }
     return () => {
-      unMountRef.current = true
-      immediate(() => {
-        if (trackerRef.current && unMountRef.current) {
-          trackerRef.current.dispose()
-          trackerRef.current = null
-        }
-      })
+      mountedRef.current = false
+      immediate(dispose)
     }
   }, [])
 
