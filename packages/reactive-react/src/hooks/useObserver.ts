@@ -23,7 +23,6 @@ export const useObserver = <T extends () => any>(
   )
   if (!trackerRef.current) {
     trackerRef.current = new Tracker(() => {
-      if (!mountedRef.current) return
       if (typeof options?.scheduler === 'function') {
         options.scheduler(forceUpdate)
       } else {
@@ -43,19 +42,18 @@ export const useObserver = <T extends () => any>(
   }
 
   React.useEffect(() => {
-    mountedRef.current = true
-    gcRef.current.close()
     const dispose = () => {
       if (trackerRef.current && !mountedRef.current) {
         trackerRef.current.dispose()
         trackerRef.current = null
       }
     }
+    mountedRef.current = true
+    gcRef.current.close()
     return () => {
       mountedRef.current = false
       immediate(dispose)
     }
   }, [])
-
   return trackerRef.current.track(view)
 }

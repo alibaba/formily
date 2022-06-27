@@ -24,11 +24,10 @@ export class ArraySet<T> {
   }
 
   delete(item: T) {
-    const eachIndex = this.forEachIndex
     const findIndex = this.value.indexOf(item)
     if (findIndex > -1) {
       this.value.splice(findIndex, 1)
-      if (findIndex <= eachIndex) {
+      if (findIndex <= this.forEachIndex) {
         this.forEachIndex -= 1
       }
     }
