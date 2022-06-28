@@ -710,14 +710,13 @@ export const triggerFormInitialValuesChange = (
   form: Form,
   change: DataChange
 ) => {
-  const path = change.path
   if (Array.isArray(change.object) && change.key === 'length') return
   if (
     contains(form.initialValues, change.object) ||
     form.initialValues === change.value
   ) {
     if (change.type === 'add' || change.type === 'set') {
-      patchFormValues(form, path.slice(1), change.value)
+      patchFormValues(form, change.path.slice(1), change.value)
     }
     if (form.initialized) {
       form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
