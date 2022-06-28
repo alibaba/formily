@@ -207,6 +207,10 @@ Reference https://fusion.design/pc/component/basic/date-picker
 
 Reference https://fusion.design/pc/component/basic/time-picker
 
+### PreviewText.NumberPicker
+
+Reference https://fusion.design/pc/component/basic/number-picker
+
 ### PreviewText.Placeholder
 
 | Property name | Type   | Description         | Default value |

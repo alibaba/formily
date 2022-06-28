@@ -3,6 +3,7 @@ import { isArr, toArr, isValid } from '@formily/shared'
 import { Field } from '@formily/core'
 import { observer, useField } from '@formily/react'
 import { InputProps } from 'antd/lib/input'
+import { InputNumberProps } from 'antd/lib/input-number'
 import { SelectProps } from 'antd/lib/select'
 import { TreeSelectProps } from 'antd/lib/tree-select'
 import { CascaderProps } from 'antd/lib/cascader'
@@ -83,6 +84,28 @@ const Input: React.FC<React.PropsWithChildren<InputProps>> = (props) => {
       {props.prefix}
       {usePlaceholder(props.value)}
       {props.suffix}
+      {props.addonAfter}
+    </Space>
+  )
+}
+
+const NumberPicker: React.FC<React.PropsWithChildren<InputNumberProps>> = (
+  props
+) => {
+  const prefixCls = usePrefixCls('form-text', props)
+  return (
+    <Space className={cls(prefixCls, props.className)} style={props.style}>
+      {props.addonBefore}
+      {props.prefix}
+      {usePlaceholder(
+        props.formatter
+          ? props.formatter(String(props.value), {
+              userTyping: false,
+              input: '',
+            })
+          : props.value
+      )}
+      {props['suffix']}
       {props.addonAfter}
     </Space>
   )
@@ -317,6 +340,7 @@ Text.TimePicker = TimePicker
 Text.TimeRangePicker = TimeRangePicker
 Text.Placeholder = Placeholder
 Text.usePlaceholder = usePlaceholder
+Text.NumberPicker = NumberPicker
 
 export const PreviewText = Text
 

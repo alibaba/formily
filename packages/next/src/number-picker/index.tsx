@@ -5,7 +5,7 @@ import { mapSize, mapStatus } from '../__builtins__'
 export const NumberPicker = connect(
   InputNumber,
   mapProps(mapSize, mapStatus),
-  mapReadPretty(PreviewText.Input)
+  mapReadPretty(PreviewText.NumberPicker)
 )
 
 export default NumberPicker
