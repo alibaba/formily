@@ -207,6 +207,10 @@ export default () => {
 
 参考 https://fusion.design/pc/component/basic/time-picker
 
+### PreviewText.NumberPicker
+
+参考 https://fusion.design/pc/component/basic/number-picker
+
 ### PreviewText.Placeholder
 
 | 属性名 | 类型   | 描述       | 默认值 |

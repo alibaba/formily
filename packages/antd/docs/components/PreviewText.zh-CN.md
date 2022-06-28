@@ -238,6 +238,10 @@ export default () => {
 
 参考 https://ant.design/components/time-picker-cn/
 
+### PreviewText.NumberPicker
+
+参考 https://ant.design/components/input-number-cn/
+
 ### PreviewText.Placeholder
 
 | 属性名 | 类型   | 描述       | 默认值 |
