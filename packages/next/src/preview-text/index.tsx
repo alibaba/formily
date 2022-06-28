@@ -96,7 +96,7 @@ const NumberPicker: React.FC<React.PropsWithChildren<NumberPickerProps>> = (
 const Select: React.FC<React.PropsWithChildren<SelectProps>> = observer(
   (props) => {
     const field = useField<Field>()
-    const prefixCls = usePrefixCls('form-text', props)
+    const prefixCls = usePrefixCls('form-preview', props)
     const dataSource: any[] = field?.dataSource?.length
       ? field.dataSource
       : props?.dataSource?.length
@@ -151,7 +151,7 @@ const TreeSelect: React.FC<React.PropsWithChildren<TreeSelectProps>> = observer(
   (props) => {
     const field = useField<Field>()
     const placeholder = usePlaceholder()
-    const prefixCls = usePrefixCls('form-text', props)
+    const prefixCls = usePrefixCls('form-preview', props)
     const dataSource = field?.dataSource?.length
       ? field.dataSource
       : props?.dataSource?.length
@@ -212,7 +212,7 @@ const Cascader: React.FC<React.PropsWithChildren<CascaderProps>> = observer(
   (props) => {
     const field = useField<Field>()
     const placeholder = usePlaceholder()
-    const prefixCls = usePrefixCls('form-text', props)
+    const prefixCls = usePrefixCls('form-preview', props)
     const dataSource: any[] = field?.dataSource?.length
       ? field.dataSource
       : props?.dataSource?.length
@@ -237,7 +237,7 @@ const DatePicker: React.FC<React.PropsWithChildren<DatePickerProps>> = (
   props
 ) => {
   const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
@@ -249,7 +249,7 @@ const DateRangePicker: React.FC<
   React.PropsWithChildren<DateRangePickerProps>
 > = (props) => {
   const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
@@ -261,7 +261,7 @@ const TimePicker: React.FC<React.PropsWithChildren<TimePickerProps>> = (
   props
 ) => {
   const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
@@ -273,7 +273,7 @@ const TimePicker2: React.FC<React.PropsWithChildren<TimePicker2Props>> = (
   props
 ) => {
   const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
@@ -285,7 +285,7 @@ const TimeRangePicker2: React.FC<
   React.PropsWithChildren<TimeRangePicker2Props>
 > = (props) => {
   const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
@@ -294,7 +294,7 @@ const TimeRangePicker2: React.FC<
 }
 
 const Text = (props: React.PropsWithChildren<any>) => {
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
 
   return (
     <div className={cls(prefixCls, props.className)} style={props.style}>
