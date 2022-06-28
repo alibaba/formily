@@ -1,19 +1,23 @@
 import { RawNode, ProxyRaw } from './environment'
-import { ObservablePath, PropertyKey, IOperation } from './types'
+import { PropertyKey, IOperation } from './types'
 export class DataChange {
-  path: ObservablePath
+  node: DataNode
   key: PropertyKey
   object: object
   type: string
   value: any
   oldValue: any
   constructor(operation: IOperation, node: DataNode) {
+    this.node = node
     this.key = operation.key
     this.type = operation.type
     this.object = operation.target
     this.value = operation.value
     this.oldValue = operation.oldValue
-    this.path = node.path.concat(operation.key)
+  }
+
+  get path() {
+    return this.node.path.concat(this.key)
   }
 }
 export class DataNode {
