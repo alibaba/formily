@@ -59,9 +59,10 @@ const useFormItemLayout = (props: IFormItemProps) => {
     ...props,
     layout: layoutType,
     colon: props.colon ?? layout.colon,
-    labelAlign: layoutType
-      ? props.labelAlign ?? 'left'
-      : props.labelAlign ?? layout.labelAlign ?? 'right',
+    labelAlign:
+      layoutType === 'vertical'
+        ? props.labelAlign ?? 'left'
+        : props.labelAlign ?? layout.labelAlign ?? 'right',
     labelWrap: props.labelWrap ?? layout.labelWrap,
     labelWidth: props.labelWidth ?? layout.labelWidth,
     wrapperWidth: props.wrapperWidth ?? layout.wrapperWidth,
