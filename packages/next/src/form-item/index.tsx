@@ -54,14 +54,14 @@ type ComposeFormItem = React.FC<React.PropsWithChildren<IFormItemProps>> & {
 
 const useFormItemLayout = (props: IFormItemProps) => {
   const layout = useFormLayout()
+  const layoutType = props.layout ?? layout.layout ?? 'horizontal'
   return {
     ...props,
-    layout: props.layout ?? layout.layout ?? 'horizontal',
+    layout: layoutType,
     colon: props.colon ?? layout.colon,
-    labelAlign:
-      layout.layout === 'vertical'
-        ? props.labelAlign ?? layout.labelAlign ?? 'left'
-        : props.labelAlign ?? layout.labelAlign ?? 'right',
+    labelAlign: layoutType
+      ? props.labelAlign ?? 'left'
+      : props.labelAlign ?? layout.labelAlign ?? 'right',
     labelWrap: props.labelWrap ?? layout.labelWrap,
     labelWidth: props.labelWidth ?? layout.labelWidth,
     wrapperWidth: props.wrapperWidth ?? layout.wrapperWidth,
