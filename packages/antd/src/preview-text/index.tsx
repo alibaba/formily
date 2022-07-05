@@ -6,7 +6,7 @@ import { InputProps } from 'antd/lib/input'
 import { InputNumberProps } from 'antd/lib/input-number'
 import { SelectProps } from 'antd/lib/select'
 import { TreeSelectProps } from 'antd/lib/tree-select'
-import { CascaderProps } from 'antd/lib/cascader'
+import { CascaderProps, DefaultOptionType } from 'antd/lib/cascader'
 import {
   DatePickerProps,
   RangePickerProps as DateRangePickerProps,
@@ -239,18 +239,43 @@ const Cascader: React.FC<React.PropsWithChildren<CascaderProps<any>>> =
       : props?.options?.length
       ? props.options
       : []
+    const findSelectedItem = (
+      items: DefaultOptionType[],
+      val: string | number
+    ) => {
+      return items.find((item) => item.value == val)
+    }
+    const findSelectedItems = (
+      sources: DefaultOptionType[],
+      selectedValues: Array<string[] | number[]>
+    ): Array<any[]> => {
+      return selectedValues.map((value) => {
+        const result: Array<DefaultOptionType> = []
+        let items = sources
+        value.forEach((val) => {
+          const selectedItem = findSelectedItem(items, val)
+          result.push({
+            label: selectedItem?.label ?? '',
+            value: selectedItem?.value,
+          })
+          items = selectedItem?.children ?? []
+        })
+        return result
+      })
+    }
     const getSelected = () => {
       const val = toArr(props.value)
-      return props.multiple
-        ? val.map((item) => item[item.length - 1])
-        : val.slice(val.length - 1)
+      // unified conversion to multi selection mode
+      return props.multiple ? val : [val]
     }
     const getLabels = () => {
       const selected = getSelected()
-      const labels = getValueByValue(dataSource, selected)
-        ?.filter((item) => isValid(item))
-        ?.map((item) => item?.whole?.join('/'))
-        .join(', ')
+      const values = findSelectedItems(dataSource, selected)
+      const labels = values
+        .map((val: Array<DefaultOptionType>) => {
+          return val.map((item) => item.label).join('/')
+        })
+        .join(' ')
       return labels || placeholder
     }
     return (
