@@ -20,6 +20,7 @@ import {
   UpOutlinedIcon,
   MenuOutlinedIcon,
   IconProps,
+  CopyOutlinedIcon,
 } from '../__builtins__'
 import cls from 'classnames'
 
@@ -43,6 +44,11 @@ export interface IArrayBaseItemProps {
 export type ArrayBaseMixins = {
   Addition?: React.FC<React.PropsWithChildren<IArrayBaseAdditionProps>>
   Remove?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
+  Copy?: React.FC<
+    React.PropsWithChildren<
+      IArrayBaseAdditionProps & IconProps & { index?: number }
+    >
+  >
   MoveUp?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
   MoveDown?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
   SortHandle?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
@@ -224,6 +230,41 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
   )
 })
 
+ArrayBase.Copy = React.forwardRef((props, ref) => {
+  const index = useIndex(props.index)
+  const self = useField()
+  const array = useArray()
+  const prefixCls = usePrefixCls('formily-array-base')
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
+  return (
+    <CopyOutlinedIcon
+      {...props}
+      className={cls(
+        `${prefixCls}-copy`,
+        self?.disabled ? `${prefixCls}-copy-disabled` : '',
+        props.className
+      )}
+      ref={ref}
+      onClick={(e) => {
+        if (self?.disabled) return
+        e.stopPropagation()
+        const value = clone(array?.field?.value[index])
+        if (props.method === 'unshift') {
+          array.field?.unshift?.(value)
+          array.props?.onAdd?.(0)
+        } else {
+          array.field?.push?.(value)
+          array.props?.onAdd?.(array?.field?.value?.length - 1)
+        }
+        if (props.onClick) {
+          props.onClick(e)
+        }
+      }}
+    />
+  )
+})
+
 ArrayBase.MoveDown = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
   const self = useField()
@@ -289,6 +330,7 @@ ArrayBase.mixin = (target: any) => {
   target.Index = ArrayBase.Index
   target.SortHandle = ArrayBase.SortHandle
   target.Addition = ArrayBase.Addition
+  target.Copy = ArrayBase.Copy
   target.Remove = ArrayBase.Remove
   target.MoveDown = ArrayBase.MoveDown
   target.MoveUp = ArrayBase.MoveUp
