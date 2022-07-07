@@ -6,6 +6,7 @@ import {
   UpOutlined,
   PlusOutlined,
   MenuOutlined,
+  CopyOutlined,
 } from '@ant-design/icons'
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from 'antd/lib/button'
@@ -42,6 +43,7 @@ export interface IArrayBaseItemProps {
 
 export type ArrayBaseMixins = {
   Addition?: React.FC<React.PropsWithChildren<IArrayBaseAdditionProps>>
+  Copy?: React.FC<React.PropsWithChildren<AntdIconProps & { index?: number }>>
   Remove?: React.FC<React.PropsWithChildren<AntdIconProps & { index?: number }>>
   MoveUp?: React.FC<React.PropsWithChildren<AntdIconProps & { index?: number }>>
   MoveDown?: React.FC<
@@ -199,6 +201,42 @@ ArrayBase.Addition = (props) => {
   )
 }
 
+ArrayBase.Copy = React.forwardRef((props, ref) => {
+  const self = useField()
+  const array = useArray()
+  const index = useIndex(props.index)
+  const prefixCls = usePrefixCls('formily-array-base')
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
+  return (
+    <CopyOutlined
+      {...props}
+      className={cls(
+        `${prefixCls}-copy`,
+        self?.disabled ? `${prefixCls}-copy-disabled` : '',
+        props.className
+      )}
+      ref={ref}
+      onClick={(e) => {
+        if (self?.disabled) return
+        e.stopPropagation()
+        if (array.props?.disabled) return
+        const value = clone(array?.field?.value[index])
+        if (props.method === 'unshift') {
+          array.field?.unshift?.(value)
+          array.props?.onAdd?.(0)
+        } else {
+          array.field?.push?.(value)
+          array.props?.onAdd?.(array?.field?.value?.length - 1)
+        }
+        if (props.onClick) {
+          props.onClick(e)
+        }
+      }}
+    />
+  )
+})
+
 ArrayBase.Remove = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
   const self = useField()
@@ -293,6 +331,7 @@ ArrayBase.mixin = (target: any) => {
   target.Index = ArrayBase.Index
   target.SortHandle = ArrayBase.SortHandle
   target.Addition = ArrayBase.Addition
+  target.Copy = ArrayBase.Copy
   target.Remove = ArrayBase.Remove
   target.MoveDown = ArrayBase.MoveDown
   target.MoveUp = ArrayBase.MoveUp

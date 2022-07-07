@@ -61,6 +61,10 @@ export default () => {
               x-decorator="FormItem"
               x-component="ArrayItems.Remove"
             />
+            <SchemaField.Void
+              x-decorator="FormItem"
+              x-component="ArrayItems.Copy"
+            />
           </SchemaField.Void>
           <SchemaField.Void
             x-component="ArrayItems.Addition"
@@ -729,6 +733,21 @@ Extended attributes
 | title         | ReactText            | Copywriting   |               |
 | method        | `'push' \|'unshift'` | add method    | `'push'`      |
 | defaultValue  | `any`                | Default value |               |
+
+Other references https://ant.design/components/button-cn/
+
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
+
+### ArrayItems.Copy
+
+> Copy button
+
+Extended attributes
+
+| Property name | Type                 | Description | Default value |
+| ------------- | -------------------- | ----------- | ------------- |
+| title         | ReactText            | Copywriting |               |
+| method        | `'push' \|'unshift'` | Copy method | `'push'`      |
 
 Other references https://ant.design/components/button-cn/
 
