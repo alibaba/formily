@@ -99,7 +99,7 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
               <ArrayBase.Item
                 key={index}
                 index={index}
-                record={() => dataSource[index]}
+                record={() => field.value?.[index]}
               >
                 <SortableItem key={`item-${index}`} index={index}>
                   <div className={`${prefixCls}-item-inner`}>

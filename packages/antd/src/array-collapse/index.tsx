@@ -140,7 +140,10 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
                 address: `${path}.**`,
               })
               return (
-                <ArrayBase.Item index={index} record={() => dataSource[index]}>
+                <ArrayBase.Item
+                  index={index}
+                  record={() => field.value?.[index]}
+                >
                   <RecursionField
                     schema={items}
                     name={index}

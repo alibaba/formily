@@ -195,7 +195,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
                 <ArrayBase.Item
                   index={index}
                   key={index}
-                  record={() => dataSource[index]}
+                  record={() => field.value?.[index]}
                 >
                   {content}
                 </ArrayBase.Item>
