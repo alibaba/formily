@@ -120,7 +120,7 @@ const useArrayTableSources = () => {
 }
 
 const useArrayTableColumns = (
-  dataSource: any[],
+  field: ArrayField,
   sources: ObservableColumnSource[]
 ): TableProps['columns'] => {
   return sources.reduce((buf, { name, columnProps, schema, display }, key) => {
@@ -131,12 +131,12 @@ const useArrayTableColumns = (
       key,
       dataIndex: name,
       cell: (value: any, _: number, record: any) => {
-        const index = dataSource.indexOf(record)
+        const index = field.value?.indexOf(record)
         const children = (
           <ArrayBase.Item
             key={index}
             index={index}
-            record={() => dataSource[index]}
+            record={() => field.value?.[index]}
           >
             <RecursionField schema={schema} name={index} onlyRenderProperties />
           </ArrayBase.Item>
@@ -299,7 +299,7 @@ export const ArrayTable: ComposedArrayTable = observer(
     const prefixCls = usePrefixCls('formily-array-table')
     const dataSource = Array.isArray(field.value) ? field.value.slice() : []
     const sources = useArrayTableSources()
-    const columns = useArrayTableColumns(dataSource, sources)
+    const columns = useArrayTableColumns(field, sources)
     const pagination = isBool(props.pagination) ? {} : props.pagination
     const addition = useAddition()
 

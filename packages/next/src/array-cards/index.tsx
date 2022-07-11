@@ -159,7 +159,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
         <ArrayBase.Item
           key={index}
           index={index}
-          record={() => dataSource[index]}
+          record={() => field.value?.[index]}
         >
           <Card
             contentHeight="auto"
