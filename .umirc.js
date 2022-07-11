@@ -69,6 +69,10 @@ export default {
             path: 'https://semi.formilyjs.org',
           },
           {
+            title: '@formily/tdesign-react',
+            path: 'https://tdesign-react.formilyjs.org/',
+          },
+          {
             title: 'aliyun teamix',
             path: 'https://formily.dg.aliyun-inc.com/',
           },
@@ -170,6 +174,10 @@ export default {
           {
             title: '@formily/semi',
             path: 'https://semi.formilyjs.org',
+          },
+          {
+            title: '@formily/tdesign-react',
+            path: 'https://tdesign-react.formilyjs.org/',
           },
           {
             title: 'aliyun teamix',
