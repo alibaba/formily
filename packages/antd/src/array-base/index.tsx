@@ -61,6 +61,7 @@ export type ArrayBaseMixins = {
 export interface IArrayBaseProps {
   disabled?: boolean
   onAdd?: (index: number) => void
+  onCopy?: (index: number) => void
   onRemove?: (index: number) => void
   onMoveDown?: (index: number) => void
   onMoveUp?: (index: number) => void
@@ -222,13 +223,9 @@ ArrayBase.Copy = React.forwardRef((props, ref) => {
         e.stopPropagation()
         if (array.props?.disabled) return
         const value = clone(array?.field?.value[index])
-        if (props.method === 'unshift') {
-          array.field?.unshift?.(value)
-          array.props?.onAdd?.(0)
-        } else {
-          array.field?.push?.(value)
-          array.props?.onAdd?.(array?.field?.value?.length - 1)
-        }
+        const distIndex = index + 1
+        array.field?.insert?.(distIndex, value)
+        array.props?.onCopy?.(distIndex)
         if (props.onClick) {
           props.onClick(e)
         }
