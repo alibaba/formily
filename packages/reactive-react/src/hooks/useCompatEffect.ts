@@ -1,12 +1,11 @@
 import { useEffect, useRef, EffectCallback, DependencyList } from 'react'
 import { immediate } from '../shared'
 
-const shallowEqual = (target: any, source: any) => {
-  const typeA = typeof target
-  const typeB = typeof source
-  if (typeA !== typeB) return false
-  const arrA = Array.isArray(target)
-  const arrB = Array.isArray(source)
+const isArr = Array.isArray
+
+const isEqualDeps = (target: any, source: any) => {
+  const arrA = isArr(target)
+  const arrB = isArr(source)
   if (arrA !== arrB) return false
   if (arrA) {
     if (target.length !== source.length) return false
@@ -26,7 +25,7 @@ export const useCompatEffect = (
     const dispose = effect()
     return () => {
       mountedRef.current = false
-      if (!shallowEqual(depsRef.current, deps)) {
+      if (!isEqualDeps(depsRef.current, deps)) {
         if (dispose) dispose()
         return
       }
