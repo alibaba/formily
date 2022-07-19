@@ -131,7 +131,7 @@ test('ReactiveField', () => {
   render(<ReactiveField field={null}>{() => <div></div>}</ReactiveField>)
 })
 
-test('useAttach', () => {
+test('useAttach basic', async () => {
   const form = createForm()
   const MyComponent = (props: any) => {
     return (
@@ -143,8 +143,10 @@ test('useAttach', () => {
   const { rerender } = render(<MyComponent name="aa" />)
   expect(form.query('aa').take().mounted).toBeTruthy()
   rerender(<MyComponent name="bb" />)
-  expect(form.query('aa').take().mounted).toBeFalsy()
-  expect(form.query('bb').take().mounted).toBeTruthy()
+  await waitFor(() => {
+    expect(form.query('aa').take().mounted).toBeFalsy()
+    expect(form.query('bb').take().mounted).toBeTruthy()
+  })
 })
 
 test('useAttach with array field', async () => {

@@ -1,6 +1,6 @@
 import React, { forwardRef, memo, Fragment } from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
-import { useObserver } from './hooks'
+import { useObserver } from './hooks/useObserver'
 import { IObserverOptions, IObserverProps, ReactFC } from './types'
 
 export function observer<
