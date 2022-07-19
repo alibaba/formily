@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.1.11(2022-07-19)
+
+### :bug: Bug Fixes
+
+1. [fix(react): fix useAttach not work with react18 strict mode (#3284)](https://github.com/alibaba/formily/commit/9df806b5) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix: doc (#3280)](https://github.com/alibaba/formily/commit/8569c0fe) :point_right: ( [Creabine](https://github.com/Creabine) )
+
+1. [fix(antd): use Select fieldNames (#3275)](https://github.com/alibaba/formily/commit/edf7a9f9) :point_right: ( [yiyunwan](https://github.com/yiyunwan) )
+
+### :blush: Other Changes
+
+1. [chore(deps): bump moment from 2.29.3 to 2.29.4 (#3267)](https://github.com/alibaba/formily/commit/88df0daa) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
+
 ## v2.1.10(2022-07-11)
 
 ### :tada: Enhancements
@@ -910,16 +924,6 @@
 
 ## v2.0.0-rc.14(2021-10-11)
 
-### :bug: Bug Fixes
-
-1. [fix(core): fix validate lifecycle wrong trigger in skip digest (#2279)](https://github.com/alibaba/formily/commit/1ac87fb4) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(reactive): fix reaction force untrack will effect to setState (#2278)](https://github.com/alibaba/formily/commit/17b9315e) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(validator): getValidatorLocale Maximum call stack size exceeded (#2273)](https://github.com/alibaba/formily/commit/200253e0) :point_right: ( [Suel](https://github.com/Suel) )
-
-## v2.0.0-rc.13(2021-10-05)
-
 ### :tada: Enhancements
 
 1. [feat(next/antd): change ArrayBase.Addition disabled UI (#2251)](https://github.com/alibaba/formily/commit/bfd832af) :point_right: ( [Lyca](https://github.com/Lyca) )
@@ -1053,8 +1057,6 @@
 1. [feat(core): add more effects](https://github.com/alibaba/formily/commit/5b42226d) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat(core): support ArrayBase component](https://github.com/alibaba/formily/commit/aa184f71) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [feat(validator): fix url pattern](https://github.com/alibaba/formily/commit/259334c8) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat(styles): support prefixCls](https://github.com/alibaba/formily/commit/fe53ac42) :point_right: ( [janrywang](https://github.com/janrywang) )
 
@@ -1206,9 +1208,13 @@
 
 ### :bug: Bug Fixes
 
-1. [fix(reactive): fix batch api can not throw error (#2268)](https://github.com/alibaba/formily/commit/07227ad2) :point_right: ( [Janry](https://github.com/Janry) )
+1. [fix(core): fix validate lifecycle wrong trigger in skip digest (#2279)](https://github.com/alibaba/formily/commit/1ac87fb4) :point_right: ( [Janry](https://github.com/Janry) )
 
-1. [fix(core): fix validate skip (#2265)](https://github.com/alibaba/formily/commit/4c1cfeda) :point_right: ( [Janry](https://github.com/Janry) )
+1. [fix(reactive): fix reaction force untrack will effect to setState (#2278)](https://github.com/alibaba/formily/commit/17b9315e) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(validator): getValidatorLocale Maximum call stack size exceeded (#2273)](https://github.com/alibaba/formily/commit/200253e0) :point_right: ( [Suel](https://github.com/Suel) )
+
+1. [fix(reactive): fix batch api can not throw error (#2268)](https://github.com/alibaba/formily/commit/07227ad2) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(vue): fix the problem that the component class name will be overwritten rather than merged (#2260)](https://github.com/alibaba/formily/commit/73053737) :point_right: ( [月落音阑](https://github.com/月落音阑) )
 
@@ -1237,6 +1243,8 @@
 1. [fix(designable): fix Uncaught SyntaxError (#1997) (#2089)](https://github.com/alibaba/formily/commit/b56b5b28) :point_right: ( [youshao](https://github.com/youshao) )
 
 1. [fix(reactive-react): fix observer 2nd generic type (#2071)](https://github.com/alibaba/formily/commit/4b18a6ba) :point_right: ( [Yanlin Jiang](https://github.com/Yanlin Jiang) )
+
+1. [fix(core): unmounted field skip validation (#2066)](https://github.com/alibaba/formily/commit/5739fdad) :point_right: ( [null](https://github.com/null) )
 
 1. [fix(core): fix add effects memo leak in form umount (#2050)](https://github.com/alibaba/formily/commit/f753ba12) :point_right: ( [Janry](https://github.com/Janry) )
 
@@ -1366,6 +1374,8 @@
 
 1. [fix(core): fix reactive query #1494](https://github.com/alibaba/formily/commit/a0ca5b2b) :point_right: ( [janrywang](https://github.com/janrywang) )
 
+1. [fix(validator): fix typo](https://github.com/alibaba/formily/commit/b1a83d2b) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 1. [fix(path): fix realative path for sibling in array (#1492)](https://github.com/alibaba/formily/commit/860264d6) :point_right: ( [JustDs](https://github.com/JustDs) )
 
 1. [fix(antd/next): fix gridSpan calculate algorithm (#1440)](https://github.com/alibaba/formily/commit/3b1f1cfa) :point_right: ( [Nokecy](https://github.com/Nokecy) )
@@ -1479,6 +1489,8 @@
 1. [fix(core): use form batch to sync errors in array state exchanging](https://github.com/alibaba/formily/commit/0e4880fb) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(editor): remove import lodash/fp](https://github.com/alibaba/formily/commit/a105cff3) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(core): fix form ref values (#952)](https://github.com/alibaba/formily/commit/777596b7) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(schema): compat eva expression actions (#951)](https://github.com/alibaba/formily/commit/aed0369b) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
 
@@ -1679,8 +1691,6 @@
 1. [fix(@uform/utils): fix setIn with number key can not auto create array](https://github.com/alibaba/formily/commit/48aa6d57) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 1. [fix(@uform/utils): Fix the exception of setIn when undefiend value is assigned undefined property](https://github.com/alibaba/formily/commit/7cb63161) :point_right: ( [janryWang](https://github.com/janryWang) )
-
-1. [fix(@uform/core/validator): fix #125 #128 #129](https://github.com/alibaba/formily/commit/c33966f9) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 1. [fix: antd select should not have max-width by default (#112)](https://github.com/alibaba/formily/commit/b4a494a1) :point_right: ( [Kevin Tan](https://github.com/Kevin Tan) )
 
