@@ -6,7 +6,6 @@ type RenderChildren = {
   [key in string]?: (...args: any[]) => (VNode | string)[]
 }
 
-// TODO: need to compatible with vue2 & vue3
 type Tag = any
 type VNodeData = Record<string, any>
 type VNode = any
