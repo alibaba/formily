@@ -2,6 +2,12 @@ import { Path } from '../'
 
 const { getIn, setIn } = Path
 
+test('test getIn null parent', () => {
+  const value = { aa: null }
+  expect(getIn(value, 'aa')).toEqual(null)
+  expect(getIn(value, 'aa.bb.cc')).toEqual(undefined)
+})
+
 test('test getIn and setIn', () => {
   const value = { a: { b: { c: 2, d: 333 } } }
   expect(getIn(value, 'a.b.c')).toEqual(2)
