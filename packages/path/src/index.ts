@@ -37,12 +37,7 @@ const getIn = (segments: Segments, source: any) => {
     const index = segments[i]
     const rules = getDestructor(index as string)
     if (!rules) {
-      if (!isValid(source)) {
-        if (i !== segments.length - 1) {
-          return source
-        }
-        break
-      }
+      if (!isValid(source)) return
       source = source[index]
     } else {
       source = getInByDestructor(source, rules, { setIn, getIn })

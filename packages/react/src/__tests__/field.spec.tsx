@@ -318,7 +318,6 @@ test('fields unmount and validate', async () => {
     try {
       await form.validate()
     } catch {}
-
     expect(form.invalid).toBeTruthy()
 
     form.query('parent').take((field) => {
