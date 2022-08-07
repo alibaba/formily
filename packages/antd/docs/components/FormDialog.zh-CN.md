@@ -34,7 +34,7 @@ export default () => {
       <FormDialog.Portal id={PortalId}>
         <Button
           onClick={() => {
-            FormDialog('弹窗表单', PortalId, (form) => {
+            const dialog = FormDialog('弹窗表单', PortalId, (form) => {
               console.log(useContext(Context))
               return (
                 <FormLayout labelCol={6} wrapperCol={10}>
@@ -69,13 +69,19 @@ export default () => {
                     />
                   </SchemaField>
                   <FormDialog.Footer>
-                    <span style={{ marginLeft: 4 }}>
-                      扩展文案：{form.values.aaa}
+                    <span
+                      style={{ marginLeft: 4 }}
+                      onClick={() => {
+                        dialog.close()
+                      }}
+                    >
+                      扩展文案：{form.values.aaa}(点击关闭弹窗)
                     </span>
                   </FormDialog.Footer>
                 </FormLayout>
               )
             })
+            dialog
               .forOpen((payload, next) => {
                 setTimeout(() => {
                   next({
@@ -164,16 +170,25 @@ export default () => {
     <FormDialog.Portal>
       <Button
         onClick={() => {
-          FormDialog('弹窗表单', () => {
+          const dialog = FormDialog('弹窗表单', () => {
             return (
               <FormLayout labelCol={6} wrapperCol={10}>
                 <SchemaField schema={schema} />
                 <FormDialog.Footer>
-                  <span style={{ marginLeft: 4 }}>扩展文案</span>
+                  <span
+                    onClick={() => {
+                      dialog.close()
+                    }}
+                    style={{ marginLeft: 4 }}
+                  >
+                    扩展文案
+                  </span>
+                  (点击关闭弹窗)
                 </FormDialog.Footer>
               </FormLayout>
             )
           })
+          dialog
             .forOpen((payload, next) => {
               setTimeout(() => {
                 next({
@@ -218,7 +233,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDialog('弹窗表单', () => {
+        const dialog = FormDialog('弹窗表单', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <Field
@@ -250,11 +265,20 @@ export default () => {
                 component={[Input]}
               />
               <FormDialog.Footer>
-                <span style={{ marginLeft: 4 }}>扩展文案</span>
+                <span
+                  onClick={() => {
+                    dialog.close()
+                  }}
+                  style={{ marginLeft: 4 }}
+                >
+                  扩展文案
+                </span>
+                (点击关闭弹窗)
               </FormDialog.Footer>
             </FormLayout>
           )
         })
+        dialog
           .forOpen((payload, next) => {
             setTimeout(() => {
               next({
