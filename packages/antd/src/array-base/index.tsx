@@ -107,8 +107,8 @@ const getSchemaDefaultValue = (schema: Schema) => {
 const getDefaultValue = (defaultValue: any, schema: Schema) => {
   if (isValid(defaultValue)) return clone(defaultValue)
   if (Array.isArray(schema?.items))
-    return getSchemaDefaultValue(schema.items[0])
-  return getSchemaDefaultValue(schema.items)
+    return getSchemaDefaultValue(schema?.items[0])
+  return getSchemaDefaultValue(schema?.items)
 }
 
 export const ArrayBase: ComposedArrayBase = (props) => {
