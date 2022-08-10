@@ -20244,10 +20244,10 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-vue-demi@^0.9.0:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.9.1.tgz#25d6e1ebd4d4010757ff3571e2bf6a1d7bf3de82"
-  integrity sha512-7s1lufRD2l369eFWPjgLvhqCRk0XzGWJsQc7K4q+0mZtixyGIvsK1Cg88P4NcaRIEiBuuN4q1NN4SZKFKwQswA==
+vue-demi@^0.13.6:
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.13.6.tgz#f9433cbd75e68a970dec066647f4ba6c08ced48f"
+  integrity sha512-02NYpxgyGE2kKGegRPYlNQSL1UWfA/+JqvzhGCOYjhfbLWXU5QQX0+9pAm/R2sCOPKr5NBxVIab7fvFU0B1RxQ==
 
 vue-eslint-parser@^7.1.1, vue-eslint-parser@^7.10.0:
   version "7.11.0"
@@ -20438,8 +20438,10 @@ watchpack@^1.7.4:
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha512-9P3MWk6SrKjHsGkLT2KHXdQ/9SNkyoJbabxnKOoJepsvJjJG8uYTR3yTPxPQvNDI3w4Nz1xnE0TLHK4RIVe/MQ==
   dependencies:
+    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"
