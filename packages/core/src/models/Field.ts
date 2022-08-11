@@ -348,31 +348,11 @@ export class Field<
   }
 
   set value(value: ValueType) {
-    if (this.destroyed) return
-    if (!this.initialized) {
-      if (this.display === 'none') {
-        this.caches.value = value
-        return
-      }
-      value = getValidFieldDefaultValue(value, this.initialValue)
-      if (!allowAssignDefaultValue(this.value, value) && !this.designable) {
-        return
-      }
-    }
-    this.form.setValuesIn(this.path, value)
+    this.setValue(value)
   }
 
   set initialValue(initialValue: ValueType) {
-    if (this.destroyed) return
-    if (!this.initialized) {
-      if (
-        !allowAssignDefaultValue(this.initialValue, initialValue) &&
-        !this.designable
-      ) {
-        return
-      }
-    }
-    this.form.setInitialValuesIn(this.path, initialValue)
+    this.setInitialValue(initialValue)
   }
 
   set selfErrors(messages: FeedbackMessage) {
@@ -432,11 +412,31 @@ export class Field<
   }
 
   setValue = (value?: ValueType) => {
-    this.value = value
+    if (this.destroyed) return
+    if (!this.initialized) {
+      if (this.display === 'none') {
+        this.caches.value = value
+        return
+      }
+      value = getValidFieldDefaultValue(value, this.initialValue)
+      if (!allowAssignDefaultValue(this.value, value) && !this.designable) {
+        return
+      }
+    }
+    this.form.setValuesIn(this.path, value)
   }
 
   setInitialValue = (initialValue?: ValueType) => {
-    this.initialValue = initialValue
+    if (this.destroyed) return
+    if (!this.initialized) {
+      if (
+        !allowAssignDefaultValue(this.initialValue, initialValue) &&
+        !this.designable
+      ) {
+        return
+      }
+    }
+    this.form.setInitialValuesIn(this.path, initialValue)
   }
 
   setLoading = (loading?: boolean) => {
