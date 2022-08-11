@@ -533,7 +533,9 @@ test('nest array remove', async () => {
   expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
   await metrics.remove(1)
   expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
-  expect(form.initialValues.metrics?.[1]?.content?.[0]?.attr).toBeUndefined()
+  expect(
+    form.initialValues.metrics?.[1]?.content?.[0]?.attr
+  ).not.toBeUndefined()
 })
 
 test('incomplete insertion of array elements', async () => {
@@ -768,4 +770,68 @@ test('array field patch values', async () => {
     })
   )
   expect(form.values).toEqual({ a: [{ c: 'A' }, { c: 'A' }] })
+})
+
+test('array remove with initialValues', async () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        array: [{ a: 1 }, { a: 2 }],
+      },
+    })
+  )
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '1',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'a',
+      basePath: 'array.0',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'a',
+      basePath: 'array.1',
+    })
+  )
+  expect(form.values).toEqual({ array: [{ a: 1 }, { a: 2 }] })
+  await array.remove(1)
+  expect(form.values).toEqual({ array: [{ a: 1 }] })
+  expect(form.initialValues).toEqual({ array: [{ a: 1 }, { a: 2 }] })
+  await array.reset()
+  attach(
+    form.createObjectField({
+      name: '1',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'a',
+      basePath: 'array.0',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'a',
+      basePath: 'array.1',
+    })
+  )
+  expect(form.values).toEqual({ array: [{ a: 1 }, { a: 2 }] })
+  expect(form.initialValues).toEqual({ array: [{ a: 1 }, { a: 2 }] })
 })
