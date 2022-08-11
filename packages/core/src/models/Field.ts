@@ -125,11 +125,8 @@ export class Field<
     this.validator = this.props.validator
     this.required = this.props.required
     this.content = this.props.content
-    this.value = getValidFieldDefaultValue(
-      this.props.value,
-      this.props.initialValue
-    )
     this.initialValue = this.props.initialValue
+    this.value = this.props.value
     this.data = this.props.data
     this.decorator = toArr(this.props.decorator)
     this.component = toArr(this.props.component)
@@ -357,6 +354,7 @@ export class Field<
         this.caches.value = value
         return
       }
+      value = getValidFieldDefaultValue(value, this.initialValue)
       if (!allowAssignDefaultValue(this.value, value) && !this.designable) {
         return
       }

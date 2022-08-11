@@ -170,11 +170,11 @@ export const patchFieldStates = (
 export const destroy = (
   target: Record<string, GeneralField>,
   address: string,
-  removeValue = true
+  forceClear = true
 ) => {
   const field = target[address]
   field?.dispose()
-  if (isDataField(field) && removeValue) {
+  if (isDataField(field) && forceClear) {
     const form = field.form
     const path = field.path
     form.deleteValuesIn(path)
@@ -417,9 +417,6 @@ export const spliceArrayState = (
           })
         }
         if (isInsertNode(identifier) || isDeleteNode(identifier)) {
-          if (isDataField(field)) {
-            form.deleteInitialValuesIn(field.path)
-          }
           fieldPatches.push({ type: 'remove', address: identifier })
         }
       }
