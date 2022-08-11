@@ -28,7 +28,7 @@ export const formatMomentValue = (
       if (isEmpty(_format)) {
         return date
       }
-      return moment(date).format(_format)
+      return moment(date, _format).format(_format)
     } else {
       if (isFn(format)) {
         return format(date)
@@ -36,7 +36,7 @@ export const formatMomentValue = (
       if (isEmpty(format)) {
         return date
       }
-      return moment(date).format(format)
+      return moment(date, format).format(format)
     }
   }
   if (isArr(value)) {
