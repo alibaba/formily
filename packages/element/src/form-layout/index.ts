@@ -6,7 +6,7 @@ import {
   Ref,
   ref,
   watch,
-} from '@vue/composition-api'
+} from 'vue-demi'
 import { h } from '@formily/vue'
 import { stylePrefix } from '../__builtins__/configs'
 import { useResponsiveFormLayout } from './useResponsiveFormLayout'

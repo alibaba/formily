@@ -2,7 +2,7 @@
 
 ### Requirement
 
-vue^2.6.0 + @vue/composition-api^1.0.0-beta.1
+vue^2.6.0
 
 ### Install
 

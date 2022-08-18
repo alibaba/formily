@@ -8,7 +8,7 @@ import {
   ref,
   onBeforeUnmount,
   PropType,
-} from '@vue/composition-api'
+} from 'vue-demi'
 import {
   Fragment,
   useField,

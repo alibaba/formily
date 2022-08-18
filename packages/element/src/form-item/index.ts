@@ -6,7 +6,7 @@ import {
   onBeforeUnmount,
   watch,
   provide,
-} from '@vue/composition-api'
+} from 'vue-demi'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps, h } from '@formily/vue'
 import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
