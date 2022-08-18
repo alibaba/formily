@@ -1,4 +1,4 @@
-import { defineComponent, computed, toRef, Ref } from '@vue/composition-api'
+import { defineComponent, computed, toRef, Ref } from 'vue-demi'
 import {
   createContext,
   resolveComponent,

@@ -1,4 +1,4 @@
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue-demi'
 import { Card, Empty, Row } from 'element-ui'
 import type { Card as CardProps } from 'element-ui'
 import { ArrayField } from '@formily/core'

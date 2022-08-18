@@ -20,7 +20,7 @@ vue2:
 
 ```bash
 $ npm install --save element-ui
-$ npm install --save @formily/core @formily/vue @vue/composition-api @formily/element
+$ npm install --save @formily/core @formily/vue @formily/element
 ```
 
 main.js 中添加 element 样式

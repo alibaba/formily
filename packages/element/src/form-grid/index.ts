@@ -7,7 +7,7 @@ import {
   Ref,
   computed,
   watchEffect,
-} from '@vue/composition-api'
+} from 'vue-demi'
 import { h } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
 import { markRaw } from '@formily/reactive'
@@ -15,8 +15,8 @@ import { Grid, IGridOptions } from '@formily/grid'
 import { stylePrefix } from '../__builtins__/configs'
 import { composeExport } from '../__builtins__/shared'
 import { useFormLayout } from '../form-layout'
-import { inject } from '@vue/composition-api'
-import { PropType } from '@vue/composition-api'
+import { inject } from 'vue-demi'
+import { PropType } from 'vue-demi'
 
 export interface IFormGridProps extends IGridOptions {
   grid?: Grid<HTMLElement>

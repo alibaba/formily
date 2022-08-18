@@ -1,11 +1,4 @@
-import {
-  computed,
-  defineComponent,
-  ref,
-  Ref,
-  provide,
-  inject,
-} from '@vue/composition-api'
+import { computed, defineComponent, ref, Ref, provide, inject } from 'vue-demi'
 import {
   GeneralField,
   IVoidFieldFactoryProps,

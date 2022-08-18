@@ -1,4 +1,4 @@
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue-demi'
 import { ArrayField } from '@formily/core'
 import { useField, useFieldSchema, RecursionField, h } from '@formily/vue'
 import { observer } from '@formily/reactive-vue'
