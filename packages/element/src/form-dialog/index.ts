@@ -22,7 +22,7 @@ import {
   loading,
 } from '../__builtins__/shared'
 import { stylePrefix } from '../__builtins__/configs'
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue-demi'
 import { Portal, PortalTarget } from 'portal-vue'
 
 type FormDialogContentProps = { form: Form }

@@ -75,7 +75,7 @@ export function createCodeSandBox(codeStr) {
           devDependencies: {
             '@vue/cli-plugin-babel': '~4.5.0',
             '@vue/cli-service': '~4.5.0',
-            '@vue/composition-api': 'latest',
+            'vue-demi': 'latest',
             'vue-template-compiler': '^2.6.11',
             sass: '^1.34.1',
             'sass-loader': '^8.0.2',

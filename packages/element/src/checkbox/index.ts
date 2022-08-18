@@ -1,5 +1,5 @@
 import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
-import { defineComponent, PropType } from '@vue/composition-api'
+import { defineComponent, PropType } from 'vue-demi'
 import {
   composeExport,
   transformComponent,

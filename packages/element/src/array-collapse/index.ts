@@ -1,4 +1,4 @@
-import { defineComponent, ref, watchEffect, Ref } from '@vue/composition-api'
+import { defineComponent, ref, watchEffect, Ref } from 'vue-demi'
 import { Card, Collapse, CollapseItem, Empty, Row, Badge } from 'element-ui'
 import { ArrayField } from '@formily/core'
 import type {

@@ -1,4 +1,4 @@
-import { defineComponent, ref, onBeforeUnmount } from '@vue/composition-api'
+import { defineComponent, ref, onBeforeUnmount } from 'vue-demi'
 import { observer } from '@formily/reactive-vue'
 import { reaction } from '@formily/reactive'
 import { isVoidField, Field } from '@formily/core'
