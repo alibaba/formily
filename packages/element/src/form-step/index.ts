@@ -1,19 +1,19 @@
-import { defineComponent, PropType } from '@vue/composition-api'
+import { Form, VoidField } from '@formily/core'
+import { Schema, SchemaKey } from '@formily/json-schema'
 import { action, model, observable } from '@formily/reactive'
-import { VoidField, Form } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 import {
+  Fragment,
   h,
+  RecursionField,
   useField,
   useFieldSchema,
-  RecursionField,
-  Fragment,
 } from '@formily/vue'
-import { Schema, SchemaKey } from '@formily/json-schema'
-import { Steps, Step } from 'element-ui'
+import { Step, Steps } from 'element-ui'
+import { defineComponent, PropType } from 'vue-demi'
 import { stylePrefix } from '../__builtins__/configs'
 
-import type { Steps as StepsProps, Step as StepProps } from 'element-ui'
+import type { Step as StepProps, Steps as StepsProps } from 'element-ui'
 import { composeExport } from '../__builtins__/shared'
 
 export interface IFormStep {

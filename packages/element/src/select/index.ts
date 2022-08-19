@@ -1,12 +1,12 @@
-import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
-import { defineComponent } from '@vue/composition-api'
+import { connect, h, mapProps, mapReadPretty } from '@formily/vue'
+import { defineComponent } from 'vue-demi'
 import { PreviewText } from '../preview-text'
 
 import type {
-  Select as ElSelectProps,
   Option as ElOptionProps,
+  Select as ElSelectProps,
 } from 'element-ui'
-import { Select as ElSelect, Option as ElOption } from 'element-ui'
+import { Option as ElOption, Select as ElSelect } from 'element-ui'
 import { resolveComponent } from '../__builtins__'
 
 export type SelectProps = ElSelectProps & {

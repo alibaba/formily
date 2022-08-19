@@ -1,29 +1,29 @@
-import { h, FormProvider, Fragment } from '@formily/vue'
+import { createForm, Form, IFormProps } from '@formily/core'
 import { toJS } from '@formily/reactive'
 import { observer } from '@formily/reactive-vue'
-import { createForm, Form, IFormProps } from '@formily/core'
 import {
-  isNum,
-  isStr,
+  applyMiddleware,
+  IMiddleware,
   isBool,
   isFn,
-  IMiddleware,
-  applyMiddleware,
+  isNum,
+  isStr,
 } from '@formily/shared'
-import { Drawer, Button } from 'element-ui'
-import type { Drawer as DrawerProps, Button as ButtonProps } from 'element-ui'
+import { FormProvider, Fragment, h } from '@formily/vue'
+import type { Button as ButtonProps, Drawer as DrawerProps } from 'element-ui'
+import { Button, Drawer } from 'element-ui'
 import { t } from 'element-ui/src/locale'
+import { Portal, PortalTarget } from 'portal-vue'
 import Vue, { Component, VNode } from 'vue'
+import { defineComponent } from 'vue-demi'
+import { stylePrefix } from '../__builtins__/configs'
 import {
-  isValidElement,
-  resolveComponent,
   createPortalProvider,
   getProtalContext,
+  isValidElement,
   loading,
+  resolveComponent,
 } from '../__builtins__/shared'
-import { stylePrefix } from '../__builtins__/configs'
-import { defineComponent } from '@vue/composition-api'
-import { Portal, PortalTarget } from 'portal-vue'
 
 type FormDrawerContentProps = { form: Form }
 

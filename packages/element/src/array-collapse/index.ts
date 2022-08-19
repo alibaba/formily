@@ -1,21 +1,21 @@
-import { defineComponent, ref, watchEffect, Ref } from '@vue/composition-api'
-import { Card, Collapse, CollapseItem, Empty, Row, Badge } from 'element-ui'
 import { ArrayField } from '@formily/core'
+import { ISchema } from '@formily/json-schema'
+import { observer } from '@formily/reactive-vue'
+import {
+  Fragment,
+  h,
+  RecursionField,
+  useField,
+  useFieldSchema,
+} from '@formily/vue'
 import type {
   Collapse as CollapseProps,
   CollapseItem as CollapseItemProps,
 } from 'element-ui'
-import {
-  useField,
-  useFieldSchema,
-  RecursionField,
-  h,
-  Fragment,
-} from '@formily/vue'
-import { observer } from '@formily/reactive-vue'
-import { ISchema } from '@formily/json-schema'
-import { stylePrefix } from '../__builtins__/configs'
+import { Badge, Card, Collapse, CollapseItem, Empty, Row } from 'element-ui'
+import { defineComponent, ref, Ref, watchEffect } from 'vue-demi'
 import { ArrayBase } from '../array-base'
+import { stylePrefix } from '../__builtins__/configs'
 import { composeExport } from '../__builtins__/shared'
 
 export interface IArrayCollapseProps extends CollapseProps {

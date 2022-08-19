@@ -54,12 +54,18 @@
     "@formily/shared": "2.2.0",
     "@formily/vue": "2.2.0",
     "portal-vue": "^2.1.7",
-    "vue-slicksort": "^1.2.0"
+    "vue-slicksort": "^1.2.0",
+    "vue-demi": "^0.13.6"
   },
   "peerDependencies": {
     "@vue/composition-api": "^1.0.0-beta.1",
     "element-ui": "^2.14.0",
     "vue": "^2.6.0"
+  },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public"
