@@ -1,21 +1,21 @@
-import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
-import { defineComponent, PropType } from '@vue/composition-api'
-import {
-  composeExport,
-  transformComponent,
-  resolveComponent,
-  SlotTypes,
-} from '../__builtins__/shared'
+import { connect, h, mapProps, mapReadPretty } from '@formily/vue'
 import type {
   Checkbox as _ElCheckboxProps,
   CheckboxGroup as ElCheckboxGroupProps,
 } from 'element-ui'
 import {
   Checkbox as ElCheckbox,
-  CheckboxGroup as ElCheckboxGroup,
   CheckboxButton as ElCheckboxButton,
+  CheckboxGroup as ElCheckboxGroup,
 } from 'element-ui'
+import { defineComponent, PropType } from 'vue-demi'
 import { PreviewText } from '../preview-text'
+import {
+  composeExport,
+  resolveComponent,
+  SlotTypes,
+  transformComponent,
+} from '../__builtins__/shared'
 
 type ElCheckboxProps = Omit<_ElCheckboxProps, 'value'> & {
   value: ElCheckboxProps['label']

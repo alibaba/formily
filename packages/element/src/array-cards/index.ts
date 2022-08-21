@@ -1,12 +1,12 @@
-import { defineComponent } from '@vue/composition-api'
-import { Card, Empty, Row } from 'element-ui'
-import type { Card as CardProps } from 'element-ui'
 import { ArrayField } from '@formily/core'
-import { useField, useFieldSchema, RecursionField, h } from '@formily/vue'
-import { observer } from '@formily/reactive-vue'
 import { ISchema } from '@formily/json-schema'
-import { stylePrefix } from '../__builtins__/configs'
+import { observer } from '@formily/reactive-vue'
+import { h, RecursionField, useField, useFieldSchema } from '@formily/vue'
+import type { Card as CardProps } from 'element-ui'
+import { Card, Empty, Row } from 'element-ui'
+import { defineComponent } from 'vue-demi'
 import { ArrayBase } from '../array-base'
+import { stylePrefix } from '../__builtins__/configs'
 import { composeExport } from '../__builtins__/shared'
 
 const isAdditionComponent = (schema: ISchema) => {

@@ -1,23 +1,23 @@
-import { defineComponent, computed, toRef, Ref } from '@vue/composition-api'
+import { Field } from '@formily/core'
+import { observer } from '@formily/reactive-vue'
+import { isArr, isValid } from '@formily/shared'
+import { h, useField } from '@formily/vue'
+import { Tag } from 'element-ui'
+import { formatDate } from 'element-ui/src/utils/date-util'
+import { computed, defineComponent, Ref, toRef } from 'vue-demi'
+import type { CascaderProps } from '../cascader'
+import type { DatePickerProps } from '../date-picker'
+import { InputProps } from '../input'
+import type { SelectProps } from '../select'
+import { Space } from '../space'
+import type { TimePickerProps } from '../time-picker'
+import { stylePrefix } from '../__builtins__/configs'
 import {
+  composeExport,
   createContext,
   resolveComponent,
   useContext,
-  composeExport,
 } from '../__builtins__/shared'
-import { Field } from '@formily/core'
-import { observer } from '@formily/reactive-vue'
-import { h, useField } from '@formily/vue'
-import { isArr, isValid } from '@formily/shared'
-import { stylePrefix } from '../__builtins__/configs'
-import { InputProps } from '../input'
-import type { SelectProps } from '../select'
-import type { CascaderProps } from '../cascader'
-import type { DatePickerProps } from '../date-picker'
-import type { TimePickerProps } from '../time-picker'
-import { Space } from '../space'
-import { Tag } from 'element-ui'
-import { formatDate } from 'element-ui/src/utils/date-util'
 
 const prefixCls = `${stylePrefix}-preview-text`
 const PlaceholderContext = createContext('N/A')

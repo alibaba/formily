@@ -1,14 +1,14 @@
-import { defineComponent, ref, onBeforeUnmount } from '@vue/composition-api'
-import { observer } from '@formily/reactive-vue'
+import { Field, isVoidField } from '@formily/core'
 import { reaction } from '@formily/reactive'
-import { isVoidField, Field } from '@formily/core'
+import { observer } from '@formily/reactive-vue'
 import { h, useField } from '@formily/vue'
 import { Popover } from 'element-ui'
+import { defineComponent, onBeforeUnmount, ref } from 'vue-demi'
 import { stylePrefix } from '../__builtins__/configs'
 
 import type { Popover as PopoverProps } from 'element-ui'
 import { FormBaseItem, FormItemProps } from '../form-item'
-import { composeExport } from '../__builtins__/shared'
+import { composeExport, useCompatRef } from '../__builtins__/shared'
 
 export type EditableProps = FormItemProps
 export type EditablePopoverProps = PopoverProps
@@ -42,7 +42,7 @@ const EditableInner = observer(
     name: 'FEditable',
     setup(props, { attrs, slots, refs }) {
       const fieldRef = useField<Field>()
-
+      const { elRef: innerRef, elRefBinder } = useCompatRef(refs)
       const prefixCls = `${stylePrefix}-editable`
       const setEditable = (payload: boolean) => {
         const pattern = getParentPattern(fieldRef)
@@ -82,9 +82,8 @@ const EditableInner = observer(
         }
 
         const onClick = (e: MouseEvent) => {
-          const innerRef = refs.innerRef as HTMLElement
           const target = e.target as HTMLElement
-          const close = innerRef.querySelector(`.${prefixCls}-close-btn`)
+          const close = innerRef.value.querySelector(`.${prefixCls}-close-btn`)
 
           if (target?.contains(close) || close?.contains(target)) {
             recover()
@@ -92,7 +91,7 @@ const EditableInner = observer(
             setTimeout(() => {
               setEditable(true)
               setTimeout(() => {
-                innerRef.querySelector('input')?.focus()
+                innerRef.value.querySelector('input')?.focus()
               })
             })
           }
@@ -155,7 +154,7 @@ const EditableInner = observer(
           'div',
           {
             class: prefixCls,
-            ref: 'innerRef',
+            ref: elRefBinder,
             on: {
               click: onClick,
             },

@@ -1,20 +1,23 @@
-import {
-  ref,
-  defineComponent,
-  onMounted,
-  Ref,
-  onBeforeUnmount,
-  watch,
-  provide,
-} from '@vue/composition-api'
 import { isVoidField } from '@formily/core'
-import { connect, mapProps, h } from '@formily/vue'
-import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
-import { composeExport, resolveComponent } from '../__builtins__/shared'
-import { stylePrefix } from '../__builtins__/configs'
-import { Component } from 'vue'
+import { connect, h, mapProps } from '@formily/vue'
 import { Tooltip } from 'element-ui'
 import ResizeObserver from 'resize-observer-polyfill'
+import { Component } from 'vue'
+import {
+  defineComponent,
+  onBeforeUnmount,
+  provide,
+  ref,
+  Ref,
+  watch,
+} from 'vue-demi'
+import { FormLayoutShallowContext, useFormLayout } from '../form-layout'
+import { stylePrefix } from '../__builtins__/configs'
+import {
+  composeExport,
+  resolveComponent,
+  useCompatRef,
+} from '../__builtins__/shared'
 
 export type FormItemProps = {
   className?: string
@@ -142,12 +145,8 @@ export const FormBaseItem = defineComponent<FormItemProps>({
 
     const prefixCls = `${stylePrefix}-form-item`
 
-    const containerRef = ref(null)
+    const { elRef: containerRef, elRefBinder } = useCompatRef(refs)
     const overflow = useOverflow(containerRef)
-
-    onMounted(() => {
-      containerRef.value = refs.labelContainer
-    })
 
     provide(FormLayoutShallowContext, ref(null))
 
@@ -249,7 +248,7 @@ export const FormBaseItem = defineComponent<FormItemProps>({
           'div',
           {
             class: `${prefixCls}-label-content`,
-            ref: 'labelContainer',
+            ref: elRefBinder,
           },
           {
             default: () => [
