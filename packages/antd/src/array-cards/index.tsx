@@ -21,25 +21,30 @@ const isAdditionComponent = (schema: ISchema) => {
 }
 
 const isIndexComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('Index') > -1
+  return schema['x-component']?.indexOf?.('Index') > -1
 }
 
 const isRemoveComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('Remove') > -1
+  return schema['x-component']?.indexOf?.('Remove') > -1
+}
+
+const isCopyComponent = (schema: ISchema) => {
+  return schema['x-component']?.indexOf?.('Copy') > -1
 }
 
 const isMoveUpComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('MoveUp') > -1
+  return schema['x-component']?.indexOf?.('MoveUp') > -1
 }
 
 const isMoveDownComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('MoveDown') > -1
+  return schema['x-component']?.indexOf?.('MoveDown') > -1
 }
 
 const isOperationComponent = (schema: ISchema) => {
   return (
     isAdditionComponent(schema) ||
     isRemoveComponent(schema) ||
+    isCopyComponent(schema) ||
     isMoveDownComponent(schema) ||
     isMoveUpComponent(schema)
   )
@@ -98,7 +103,11 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
         />
       )
       return (
-        <ArrayBase.Item key={index} index={index} record={item}>
+        <ArrayBase.Item
+          key={index}
+          index={index}
+          record={() => field.value?.[index]}
+        >
           <Card
             {...props}
             onChange={() => {}}

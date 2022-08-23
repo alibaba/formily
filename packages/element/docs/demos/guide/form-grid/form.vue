@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, onUnmounted } from '@vue/composition-api'
+import { defineComponent, ref, onUnmounted } from 'vue-demi'
 import { createForm } from '@formily/core'
 import {
   createSchemaField,

@@ -103,7 +103,10 @@ const SchemaField = createSchemaField({
 
 const useAsyncDataSource = (
   pattern: FormPathPattern,
-  service: (field: Field) => Promise<{ label: string; value: any }[]>
+  service: (param: {
+    keyword: string
+    field: Field
+  }) => Promise<{ label: string; value: any }[]>
 ) => {
   const keyword = observable.ref('')
 

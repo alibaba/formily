@@ -13,12 +13,13 @@ import ArrayField from './ArrayField'
 import Field from './Field'
 import VoidField from './VoidField'
 import { h } from '../shared/h'
-import { Fragment } from '../shared/fragment'
 
 import type { IRecursionFieldProps, DefineComponent } from '../types'
 
 const resolveEmptySlot = (slots: Record<any, (...args: any[]) => any[]>) => {
-  return Object.keys(slots).length ? h(Fragment, {}, slots) : undefined
+  return Object.keys(slots).length
+    ? h('div', { style: 'display:contents;' }, slots)
+    : undefined
 }
 
 const RecursionField = {

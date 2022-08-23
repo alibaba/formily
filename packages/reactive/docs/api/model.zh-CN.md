@@ -28,7 +28,8 @@ const obs = model({
     return this.aa + this.bb
   },
   update(aa, bb) {
-    this.cc
+    this.aa=aa
+    this.bb=bb
   },
 })
 

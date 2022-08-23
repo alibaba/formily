@@ -71,6 +71,7 @@ Create a Schema Tree based on a piece of json schema data to ensure that each sc
 | definitions          | Schema predefined                                                               | [SchemaProperties](#schemaproperties)                                              | -                                                                        |
 | $ref                 | Read the Schema from the Schema predefined and merge it into the current Schema | String                                                                             | -                                                                        |
 | x-data               | Extends Data                                                                    | Object                                                                             | `data`                                                                   |
+| x-compile-omitted    | list of attributes to ignore compiled expressions                               | string[]                                                                           | `[]`                                                                     |
 
 #### Detailed description
 

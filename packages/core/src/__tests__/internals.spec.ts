@@ -43,8 +43,11 @@ test('deserialize', () => {
 test('isHTMLInputEvent', () => {
   expect(isHTMLInputEvent({ target: { checked: true } })).toBeTruthy()
   expect(isHTMLInputEvent({ target: { value: 123 } })).toBeTruthy()
-  expect(isHTMLInputEvent({ target: { tagName: 'INPUT' } })).toBeTruthy()
+  expect(
+    isHTMLInputEvent({ target: { tagName: 'INPUT', value: null } })
+  ).toBeTruthy()
+  expect(isHTMLInputEvent({ target: { tagName: 'INPUT' } })).toBeFalsy()
   expect(isHTMLInputEvent({ target: { tagName: 'DIV' } })).toBeFalsy()
-  expect(isHTMLInputEvent({ target: {}, stopPropagation() {} })).toBeTruthy()
+  expect(isHTMLInputEvent({ target: {}, stopPropagation() {} })).toBeFalsy()
   expect(isHTMLInputEvent({})).toBeFalsy()
 })

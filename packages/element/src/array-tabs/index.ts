@@ -1,8 +1,8 @@
-import { defineComponent, ref } from '@vue/composition-api'
-import { observer } from '@formily/reactive-vue'
 import { ArrayField } from '@formily/core'
-import { h, useField, useFieldSchema, RecursionField } from '@formily/vue'
-import { Tabs, TabPane, Badge } from 'element-ui'
+import { observer } from '@formily/reactive-vue'
+import { h, RecursionField, useField, useFieldSchema } from '@formily/vue'
+import { Badge, TabPane, Tabs } from 'element-ui'
+import { defineComponent, ref } from 'vue-demi'
 import { stylePrefix } from '../__builtins__/configs'
 
 import type { Tabs as TabsProps } from 'element-ui'

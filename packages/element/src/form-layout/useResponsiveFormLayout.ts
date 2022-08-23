@@ -24,12 +24,7 @@ interface ICalculateProps {
 }
 
 interface IUseResponsiveFormLayout {
-  (
-    props: IProps,
-    refs: {
-      [key: string]: Vue | Element | Vue[] | Element[]
-    }
-  ): {
+  (props: IProps, root: Ref<Element>): {
     props: Ref<IProps>
   }
 }
@@ -79,9 +74,8 @@ const calculateProps: ICalculateProps = (target, props) => {
 
 export const useResponsiveFormLayout: IUseResponsiveFormLayout = (
   props,
-  refs
+  root
 ) => {
-  const root = ref<Element>(null)
   const { breakpoints } = props
   if (!isArr(breakpoints)) {
     return { props: ref(props) }
@@ -95,7 +89,6 @@ export const useResponsiveFormLayout: IUseResponsiveFormLayout = (
   }
 
   onMounted(() => {
-    root.value = refs.root as Element
     const observer = () => {
       updateUI()
     }

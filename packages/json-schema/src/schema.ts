@@ -178,6 +178,8 @@ export class Schema<
 
   ['x-read-pretty']?: boolean;
 
+  ['x-compile-omitted']?: string[];
+
   [key: `x-${string | number}` | symbol]: any
 
   _isJSONSchemaObject = true

@@ -3,6 +3,7 @@ import { isArr, isEmpty, isValid, toArr } from '@formily/shared'
 import { Field } from '@formily/core'
 import { useField, observer } from '@formily/react'
 import { InputProps } from '@alifd/next/lib/input'
+import { NumberPickerProps } from '@alifd/next/lib/number-picker'
 import { SelectProps } from '@alifd/next/lib/select'
 import { TreeSelectProps } from '@alifd/next/lib/tree-select'
 import { CascaderProps } from '@alifd/next/lib/cascader'
@@ -15,7 +16,11 @@ import {
   TimePickerProps as TimePicker2Props,
   RangePickerProps as TimeRangePicker2Props,
 } from '@alifd/next/types/time-picker2'
-import { Tag } from '@alifd/next'
+import {
+  Tag,
+  Input as NextInput,
+  NumberPicker as NextNumberPicker,
+} from '@alifd/next'
 import cls from 'classnames'
 import { formatMomentValue, usePrefixCls } from '../__builtins__'
 
@@ -28,73 +33,20 @@ const usePlaceholder = (value?: any) => {
   return !isEmpty(value) ? value : placeholder
 }
 
-interface IGetValueByValue {
-  (
-    array: any[],
-    inputValue: any,
-    keyMap?: { inputKey?: string; outputKey?: string; childrenKey?: string },
-    path?: any[]
-  ): any
-}
-const getValueByValue: IGetValueByValue = (
-  array,
-  inputValue,
-  keyMap,
-  path = []
-) => {
-  const {
-    inputKey = 'value',
-    outputKey = 'label',
-    childrenKey = 'children',
-  } = keyMap || {}
-  let outputValue: any
-  if (isArr(array)) {
-    if (isArr(inputValue)) {
-      outputValue = inputValue.map((v) =>
-        getValueByValue(array, v, keyMap, path)
-      )
-    } else {
-      array.forEach((obj) => {
-        if (outputValue === undefined) {
-          const currentPath = [...path, obj?.[outputKey]]
-          if (obj?.[inputKey] === inputValue) {
-            outputValue = {
-              leaf: obj?.[outputKey],
-              whole: currentPath,
-            }
-          } else if (obj?.[childrenKey]?.length) {
-            outputValue = getValueByValue(
-              obj?.[childrenKey],
-              inputValue,
-              keyMap,
-              currentPath
-            )
-          }
-        }
-      })
-    }
-    return outputValue
-  }
-  return undefined
+const Input: React.FC<React.PropsWithChildren<InputProps>> = (props) => {
+  return <NextInput {...props} isPreview />
 }
 
-const Input: React.FC<React.PropsWithChildren<InputProps>> = (props) => {
-  const prefixCls = usePrefixCls('form-text', props)
-  return (
-    <div className={cls(prefixCls, props.className)}>
-      {props.addonBefore}
-      {props.innerBefore}
-      {usePlaceholder(props.value)}
-      {props.innerAfter}
-      {props.addonAfter}
-    </div>
-  )
+const NumberPicker: React.FC<React.PropsWithChildren<NumberPickerProps>> = (
+  props
+) => {
+  return <NextNumberPicker {...props} isPreview />
 }
 
 const Select: React.FC<React.PropsWithChildren<SelectProps>> = observer(
   (props) => {
     const field = useField<Field>()
-    const prefixCls = usePrefixCls('form-text', props)
+    const prefixCls = usePrefixCls('form-preview', props)
     const dataSource: any[] = field?.dataSource?.length
       ? field.dataSource
       : props?.dataSource?.length
@@ -149,7 +101,7 @@ const TreeSelect: React.FC<React.PropsWithChildren<TreeSelectProps>> = observer(
   (props) => {
     const field = useField<Field>()
     const placeholder = usePlaceholder()
-    const prefixCls = usePrefixCls('form-text', props)
+    const prefixCls = usePrefixCls('form-preview', props)
     const dataSource = field?.dataSource?.length
       ? field.dataSource
       : props?.dataSource?.length
@@ -206,25 +158,59 @@ const TreeSelect: React.FC<React.PropsWithChildren<TreeSelectProps>> = observer(
   }
 )
 
+type SelectOptionType = {
+  value: string
+  label: string
+  children?: SelectOptionType[]
+}
+
 const Cascader: React.FC<React.PropsWithChildren<CascaderProps>> = observer(
   (props) => {
     const field = useField<Field>()
     const placeholder = usePlaceholder()
-    const prefixCls = usePrefixCls('form-text', props)
+    const prefixCls = usePrefixCls('form-preview', props)
     const dataSource: any[] = field?.dataSource?.length
       ? field.dataSource
       : props?.dataSource?.length
       ? props.dataSource
       : []
+    const findSelectedItem = (
+      items: SelectOptionType[],
+      val: string | number
+    ) => {
+      return items.find((item) => item.value == val)
+    }
+    const findSelectedItems = (
+      sources: SelectOptionType[],
+      selectedValues: Array<string[] | number[]>
+    ): Array<SelectOptionType[]> => {
+      return selectedValues.map((value) => {
+        const result: Array<SelectOptionType> = []
+        let items = sources
+        value.forEach((val) => {
+          const selectedItem = findSelectedItem(items, val)
+          result.push({
+            label: selectedItem?.label ?? '',
+            value: selectedItem?.value,
+          })
+          items = selectedItem?.children ?? []
+        })
+        return result
+      })
+    }
     const getSelected = () => {
-      return props.multiple ? toArr(props.value) : [props.value]
+      const val = toArr(props.value)
+      // unified conversion to multi selection mode
+      return props.multiple ? val : [val]
     }
     const getLabels = () => {
       const selected = getSelected()
-      const labels = getValueByValue(dataSource, selected)
-        ?.filter((item) => isValid(item))
-        ?.map((item) => item?.whole?.join('/'))
-        .join(', ')
+      const values = findSelectedItems(dataSource, selected)
+      const labels = values
+        .map((val: Array<{ value: string; label: string }>) => {
+          return val.map((item) => item.label).join('/')
+        })
+        .join(' ')
       return labels || placeholder
     }
     return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
@@ -235,7 +221,7 @@ const DatePicker: React.FC<React.PropsWithChildren<DatePickerProps>> = (
   props
 ) => {
   const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
@@ -243,22 +229,23 @@ const DatePicker: React.FC<React.PropsWithChildren<DatePickerProps>> = (
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
-const DateRangePicker: React.FC<React.PropsWithChildren<DateRangePickerProps>> =
-  (props) => {
-    const placeholder = usePlaceholder()
-    const prefixCls = usePrefixCls('form-text', props)
-    const getLabels = () => {
-      const labels = formatMomentValue(props.value, props.format, placeholder)
-      return isArr(labels) ? labels.join('~') : labels
-    }
-    return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+const DateRangePicker: React.FC<
+  React.PropsWithChildren<DateRangePickerProps>
+> = (props) => {
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-preview', props)
+  const getLabels = () => {
+    const labels = formatMomentValue(props.value, props.format, placeholder)
+    return isArr(labels) ? labels.join('~') : labels
   }
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+}
 
 const TimePicker: React.FC<React.PropsWithChildren<TimePickerProps>> = (
   props
 ) => {
   const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
@@ -270,7 +257,7 @@ const TimePicker2: React.FC<React.PropsWithChildren<TimePicker2Props>> = (
   props
 ) => {
   const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
@@ -282,7 +269,7 @@ const TimeRangePicker2: React.FC<
   React.PropsWithChildren<TimeRangePicker2Props>
 > = (props) => {
   const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
@@ -291,7 +278,7 @@ const TimeRangePicker2: React.FC<
 }
 
 const Text = (props: React.PropsWithChildren<any>) => {
-  const prefixCls = usePrefixCls('form-text', props)
+  const prefixCls = usePrefixCls('form-preview', props)
 
   return (
     <div className={cls(prefixCls, props.className)} style={props.style}>
@@ -301,6 +288,7 @@ const Text = (props: React.PropsWithChildren<any>) => {
 }
 
 Text.Input = Input
+Text.NumberPicker = NumberPicker
 Text.Select = Select
 Text.TreeSelect = TreeSelect
 Text.Cascader = Cascader

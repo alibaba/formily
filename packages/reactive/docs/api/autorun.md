@@ -104,7 +104,6 @@ import { observable, autorun } from '@formily/reactive'
 const obs1 = observable({
   aa: 0,
 })
-const fn = jest.fn()
 const dispose = autorun(() => {
   const obs2 = autorun.memo(() =>
     observable({

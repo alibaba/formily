@@ -12,7 +12,7 @@ order: 5
 
 ```ts
 interface IRecursionFieldProps {
-  schema: Schema //schema对象
+  schema: ISchema //字段schema
   name?: string //路径名称
   basePath?: FormPathPattern //基础路径
   onlyRenderProperties?: boolean //是否只渲染properties

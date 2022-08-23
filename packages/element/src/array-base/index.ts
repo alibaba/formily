@@ -1,28 +1,28 @@
+import { ArrayField } from '@formily/core'
+import { clone, isValid, uid } from '@formily/shared'
 import {
-  defineComponent,
-  provide,
-  InjectionKey,
-  Ref,
-  inject,
-  toRefs,
-  ref,
-  onBeforeUnmount,
-  PropType,
-} from '@vue/composition-api'
-import {
+  ExpressionScope,
   Fragment,
+  h,
   useField,
   useFieldSchema,
-  h,
-  ExpressionScope,
 } from '@formily/vue'
-import { isValid, uid, clone } from '@formily/shared'
-import { ArrayField } from '@formily/core'
+import {
+  defineComponent,
+  inject,
+  InjectionKey,
+  onBeforeUnmount,
+  PropType,
+  provide,
+  Ref,
+  ref,
+  toRefs,
+} from 'vue-demi'
 import { stylePrefix } from '../__builtins__/configs'
 
+import type { Schema } from '@formily/json-schema'
 import type { Button as ButtonProps } from 'element-ui'
 import { Button } from 'element-ui'
-import type { Schema } from '@formily/json-schema'
 import { HandleDirective } from 'vue-slicksort'
 import { composeExport } from '../__builtins__/shared'
 

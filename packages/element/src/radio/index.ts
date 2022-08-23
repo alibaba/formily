@@ -1,21 +1,21 @@
-import { connect, mapProps, h, mapReadPretty } from '@formily/vue'
-import { defineComponent, PropType } from '@vue/composition-api'
-import {
-  composeExport,
-  transformComponent,
-  resolveComponent,
-  SlotTypes,
-} from '../__builtins__/shared'
-import { PreviewText } from '../preview-text'
+import { connect, h, mapProps, mapReadPretty } from '@formily/vue'
 import type {
   Radio as ElRadioProps,
   RadioGroup as ElRadioGroupProps,
 } from 'element-ui'
 import {
   Radio as ElRadio,
-  RadioGroup as ElRadioGroup,
   RadioButton,
+  RadioGroup as ElRadioGroup,
 } from 'element-ui'
+import { defineComponent, PropType } from 'vue-demi'
+import { PreviewText } from '../preview-text'
+import {
+  composeExport,
+  resolveComponent,
+  SlotTypes,
+  transformComponent,
+} from '../__builtins__/shared'
 
 export type RadioGroupProps = ElRadioGroupProps & {
   value: any

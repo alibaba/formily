@@ -1,11 +1,10 @@
 @import '~@alifd/next/lib/core/index-noreset.scss';
 
-$form-text-prefix-cls: '#{$css-prefix}form-text';
+$form-preview-prefix-cls: '#{$css-prefix}form-preview';
 
-.#{$form-text-prefix-cls} {
-  font-size: 14px;
+.#{$form-preview-prefix-cls} {
   font-weight: 400;
-
+  word-break: break-all;
   .#{$css-prefix}tag {
     margin-right: 4px;
   }

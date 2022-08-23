@@ -9,7 +9,6 @@ import {
   IFieldState,
 } from '../types'
 import { createEffectHook, useEffectForm } from '../shared/effective'
-import { onFormUnmount } from './onFormEffects'
 
 function createFieldEffect<Result extends GeneralField = GeneralField>(
   type: LifeCycleTypes
@@ -110,18 +109,12 @@ export function onFieldReact(
   pattern: FormPathPattern,
   callback?: (field: GeneralField, form: Form) => void
 ) {
-  const disposers = []
   onFieldInit(pattern, (field, form) => {
-    disposers.push(
+    field.disposers.push(
       autorun(() => {
         if (isFn(callback)) callback(field, form)
       })
     )
-  })
-  onFormUnmount(() => {
-    disposers.forEach((dispose) => {
-      dispose()
-    })
   })
 }
 export function onFieldChange(
@@ -144,26 +137,18 @@ export function onFieldChange(
   } else {
     watches = watches || ['value']
   }
-  const disposers = []
   onFieldInit(pattern, (field, form) => {
     if (isFn(callback)) callback(field, form)
-    disposers.push(
-      reaction(
-        () => {
-          return toArr(watches).map((key) => {
-            return field[key]
-          })
-        },
-        () => {
-          if (isFn(callback)) callback(field, form)
-        }
-      )
+    const dispose = reaction(
+      () => {
+        return toArr(watches).map((key) => {
+          return field[key]
+        })
+      },
+      () => {
+        if (isFn(callback)) callback(field, form)
+      }
     )
-  })
-
-  onFormUnmount(() => {
-    disposers.forEach((dispose) => {
-      dispose()
-    })
+    field.disposers.push(dispose)
   })
 }

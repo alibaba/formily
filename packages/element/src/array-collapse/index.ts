@@ -1,21 +1,21 @@
-import { defineComponent, ref, watchEffect, Ref } from '@vue/composition-api'
-import { Card, Collapse, CollapseItem, Empty, Row, Badge } from 'element-ui'
 import { ArrayField } from '@formily/core'
+import { ISchema } from '@formily/json-schema'
+import { observer } from '@formily/reactive-vue'
+import {
+  Fragment,
+  h,
+  RecursionField,
+  useField,
+  useFieldSchema,
+} from '@formily/vue'
 import type {
   Collapse as CollapseProps,
   CollapseItem as CollapseItemProps,
 } from 'element-ui'
-import {
-  useField,
-  useFieldSchema,
-  RecursionField,
-  h,
-  Fragment,
-} from '@formily/vue'
-import { observer } from '@formily/reactive-vue'
-import { ISchema } from '@formily/json-schema'
-import { stylePrefix } from '../__builtins__/configs'
+import { Badge, Card, Collapse, CollapseItem, Empty, Row } from 'element-ui'
+import { defineComponent, ref, Ref, watchEffect } from 'vue-demi'
 import { ArrayBase } from '../array-base'
+import { stylePrefix } from '../__builtins__/configs'
 import { composeExport } from '../__builtins__/shared'
 
 export interface IArrayCollapseProps extends CollapseProps {
@@ -23,23 +23,23 @@ export interface IArrayCollapseProps extends CollapseProps {
 }
 
 const isAdditionComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('Addition') > -1
+  return schema['x-component']?.indexOf?.('Addition') > -1
 }
 
 const isIndexComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('Index') > -1
+  return schema['x-component']?.indexOf?.('Index') > -1
 }
 
 const isRemoveComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('Remove') > -1
+  return schema['x-component']?.indexOf?.('Remove') > -1
 }
 
 const isMoveUpComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('MoveUp') > -1
+  return schema['x-component']?.indexOf?.('MoveUp') > -1
 }
 
 const isMoveDownComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('MoveDown') > -1
+  return schema['x-component']?.indexOf?.('MoveDown') > -1
 }
 
 const isOperationComponent = (schema: ISchema) => {

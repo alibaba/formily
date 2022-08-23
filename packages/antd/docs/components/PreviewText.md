@@ -239,6 +239,10 @@ Reference https://ant.design/components/time-picker-cn/
 
 Reference https://ant.design/components/time-picker-cn/
 
+### PreviewText.NumberPicker
+
+参考 https://ant.design/components/input-number-cn/
+
 ### PreviewText.Placeholder
 
 | Property name | Type   | Description         | Default value |

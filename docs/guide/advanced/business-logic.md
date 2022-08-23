@@ -43,7 +43,7 @@ At the same time, because JSON Schema can be consumed by the configuration syste
     "dependencies": ["aa"],
     "fulfill": {
       "state": {
-        "visible": "$deps[0] == '123'"
+        "visible": "{{$deps[0] == '123'}}"
       }
     }
   }

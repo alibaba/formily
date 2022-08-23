@@ -1,7 +1,7 @@
 // https://github.com/vueComponent/ant-design-vue/blob/next/components/space/index.tsx
 
-import { defineComponent } from '@vue/composition-api'
 import { h } from '@formily/vue'
+import { defineComponent } from 'vue-demi'
 import { stylePrefix } from '../__builtins__/configs'
 
 import type { VNode } from 'vue'

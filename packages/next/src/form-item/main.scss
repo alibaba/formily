@@ -47,7 +47,6 @@
 .#{$form-item-cls}-label {
   position: relative;
   display: flex;
-
   &-content {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -76,6 +75,7 @@
 }
 
 .#{$form-item-cls}-label label {
+  cursor: text;
   color: rgba(0, 0, 0, 0.85);
 }
 

@@ -23,6 +23,12 @@ $ npm install --save element-ui
 $ npm install --save @formily/core @formily/vue @vue/composition-api @formily/element
 ```
 
+main.js 中添加 element 样式
+
+```javascript
+import 'element-ui/lib/theme-chalk/index.css'
+```
+
 ## 快速开始
 
 <dumi-previewer demoPath="index" :collapsed="false" />

@@ -151,4 +151,40 @@ function deepmerge(target: any, source: any, options?: Options) {
   }
 }
 
+export const lazyMerge = <T extends object>(target: T, source: T): T => {
+  if (!isValid(source)) return target
+  if (!isValid(target)) return source
+  if (typeof target !== 'object') return source
+  if (typeof source !== 'object') return target
+  return new Proxy(
+    {},
+    {
+      get(_, key) {
+        if (key in source) return source[key]
+        return target[key]
+      },
+      ownKeys() {
+        const keys = Object.keys(target)
+        for (let key in source) {
+          if (!(key in target)) {
+            keys.push(key)
+          }
+        }
+        return keys
+      },
+      getOwnPropertyDescriptor() {
+        return {
+          enumerable: true,
+          configurable: true,
+          writable: false,
+        }
+      },
+      has(_, key: string) {
+        if (key in source || key in target) return true
+        return false
+      },
+    }
+  ) as any
+}
+
 export const merge = deepmerge

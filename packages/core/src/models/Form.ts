@@ -294,7 +294,7 @@ export class Form<ValueType extends object = any> {
     Component extends JSXComponent
   >(
     props: IFieldFactoryProps<Decorator, Component>
-  ) => {
+  ): Field<Decorator, Component> => {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
@@ -304,7 +304,7 @@ export class Form<ValueType extends object = any> {
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
     }
-    return this.fields[identifier] as Field<Decorator, Component>
+    return this.fields[identifier] as any
   }
 
   createArrayField = <
@@ -312,7 +312,7 @@ export class Form<ValueType extends object = any> {
     Component extends JSXComponent
   >(
     props: IFieldFactoryProps<Decorator, Component>
-  ) => {
+  ): ArrayField<Decorator, Component> => {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
@@ -330,7 +330,7 @@ export class Form<ValueType extends object = any> {
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
     }
-    return this.fields[identifier] as ArrayField<Decorator, Component>
+    return this.fields[identifier] as any
   }
 
   createObjectField = <
@@ -338,7 +338,7 @@ export class Form<ValueType extends object = any> {
     Component extends JSXComponent
   >(
     props: IFieldFactoryProps<Decorator, Component>
-  ) => {
+  ): ObjectField<Decorator, Component> => {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
@@ -356,7 +356,7 @@ export class Form<ValueType extends object = any> {
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
     }
-    return this.fields[identifier] as ObjectField<Decorator, Component>
+    return this.fields[identifier] as any
   }
 
   createVoidField = <
@@ -364,7 +364,7 @@ export class Form<ValueType extends object = any> {
     Component extends JSXComponent
   >(
     props: IVoidFieldFactoryProps<Decorator, Component>
-  ) => {
+  ): VoidField<Decorator, Component> => {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
@@ -374,7 +374,7 @@ export class Form<ValueType extends object = any> {
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
     }
-    return this.fields[identifier] as VoidField<Decorator, Component>
+    return this.fields[identifier] as any
   }
 
   /** 状态操作模型 **/

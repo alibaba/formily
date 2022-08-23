@@ -5,6 +5,7 @@ import React, {
   useEffect,
   createContext,
   useContext,
+  useCallback,
 } from 'react'
 import { Table, Pagination, Space, Select, Badge } from 'antd'
 import { PaginationProps } from 'antd/lib/pagination'
@@ -121,7 +122,7 @@ const useArrayTableSources = () => {
 }
 
 const useArrayTableColumns = (
-  dataSource: any[],
+  field: ArrayField,
   sources: ObservableColumnSource[]
 ): TableProps<any>['columns'] => {
   return sources.reduce((buf, { name, columnProps, schema, display }, key) => {
@@ -132,9 +133,9 @@ const useArrayTableColumns = (
       key,
       dataIndex: name,
       render: (value: any, record: any) => {
-        const index = dataSource.indexOf(record)
+        const index = field?.value?.indexOf(record)
         const children = (
-          <ArrayBase.Item index={index} record={record}>
+          <ArrayBase.Item index={index} record={() => field?.value?.[index]}>
             <RecursionField schema={schema} name={index} onlyRenderProperties />
           </ArrayBase.Item>
         )
@@ -294,7 +295,7 @@ export const ArrayTable: ComposedArrayTable = observer(
     const prefixCls = usePrefixCls('formily-array-table')
     const dataSource = Array.isArray(field.value) ? field.value.slice() : []
     const sources = useArrayTableSources()
-    const columns = useArrayTableColumns(dataSource, sources)
+    const columns = useArrayTableColumns(field, sources)
     const pagination = isBool(props.pagination) ? {} : props.pagination
     const addition = useAddition()
     const defaultRowKey = (record: any) => {
@@ -313,6 +314,26 @@ export const ArrayTable: ComposedArrayTable = observer(
         })
       }
     }
+    const WrapperComp = useCallback(
+      (props: any) => (
+        <SortableBody
+          useDragHandle
+          lockAxis="y"
+          helperClass={`${prefixCls}-sort-helper`}
+          helperContainer={() => {
+            return ref.current?.querySelector('tbody')
+          }}
+          onSortStart={({ node }) => {
+            addTdStyles(node as HTMLElement)
+          }}
+          onSortEnd={({ oldIndex, newIndex }) => {
+            field.move(oldIndex, newIndex)
+          }}
+          {...props}
+        />
+      ),
+      []
+    )
 
     return (
       <ArrayTablePagination {...pagination} dataSource={dataSource}>
@@ -330,23 +351,7 @@ export const ArrayTable: ComposedArrayTable = observer(
                 dataSource={dataSource}
                 components={{
                   body: {
-                    wrapper: (props: any) => (
-                      <SortableBody
-                        useDragHandle
-                        lockAxis="y"
-                        helperClass={`${prefixCls}-sort-helper`}
-                        helperContainer={() => {
-                          return ref.current?.querySelector('tbody')
-                        }}
-                        onSortStart={({ node }) => {
-                          addTdStyles(node as HTMLElement)
-                        }}
-                        onSortEnd={({ oldIndex, newIndex }) => {
-                          field.move(oldIndex, newIndex)
-                        }}
-                        {...props}
-                      />
-                    ),
+                    wrapper: WrapperComp,
                     row: RowComp,
                   },
                 }}

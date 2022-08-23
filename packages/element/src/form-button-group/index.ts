@@ -1,7 +1,7 @@
 import { h } from '@formily/vue'
-import { defineComponent } from '@vue/composition-api'
-import { Space, SpaceProps } from '../space'
+import { defineComponent } from 'vue-demi'
 import { FormBaseItem } from '../form-item'
+import { Space, SpaceProps } from '../space'
 import { stylePrefix } from '../__builtins__/configs'
 
 export type FormButtonGroupProps = Omit<SpaceProps, 'align' | 'size'> & {

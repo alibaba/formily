@@ -8,7 +8,8 @@ import {
   useFieldSchema,
   Schema,
   JSXComponent,
-  ExpressionScope,
+  RecordScope,
+  RecordsScope,
 } from '@formily/react'
 import { SortableHandle } from 'react-sortable-hoc'
 import {
@@ -19,6 +20,7 @@ import {
   UpOutlinedIcon,
   MenuOutlinedIcon,
   IconProps,
+  CopyOutlinedIcon,
 } from '../__builtins__'
 import cls from 'classnames'
 
@@ -42,6 +44,11 @@ export interface IArrayBaseItemProps {
 export type ArrayBaseMixins = {
   Addition?: React.FC<React.PropsWithChildren<IArrayBaseAdditionProps>>
   Remove?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
+  Copy?: React.FC<
+    React.PropsWithChildren<
+      IArrayBaseAdditionProps & IconProps & { index?: number }
+    >
+  >
   MoveUp?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
   MoveDown?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
   SortHandle?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
@@ -53,6 +60,7 @@ export type ArrayBaseMixins = {
 
 export interface IArrayBaseProps {
   disabled?: boolean
+  onCopy?: (index: number) => void
   onAdd?: (index: number) => void
   onRemove?: (index: number) => void
   onMoveDown?: (index: number) => void
@@ -69,6 +77,8 @@ const ArrayBaseContext = createContext<IArrayBaseContext>(null)
 
 const ItemContext = createContext<IArrayBaseItemProps>(null)
 
+const takeRecord = (val: any) => (typeof val === 'function' ? val() : val)
+
 const useArray = () => {
   return useContext(ArrayBaseContext)
 }
@@ -80,7 +90,7 @@ const useIndex = (index?: number) => {
 
 const useRecord = (record?: number) => {
   const ctx = useContext(ItemContext)
-  return ctx ? ctx.record : record
+  return takeRecord(ctx ? ctx.record : record)
 }
 
 const getSchemaDefaultValue = (schema: Schema) => {
@@ -97,26 +107,31 @@ const getSchemaDefaultValue = (schema: Schema) => {
 const getDefaultValue = (defaultValue: any, schema: Schema) => {
   if (isValid(defaultValue)) return clone(defaultValue)
   if (Array.isArray(schema?.items))
-    return getSchemaDefaultValue(schema.items[0])
-  return getSchemaDefaultValue(schema.items)
+    return getSchemaDefaultValue(schema?.items[0])
+  return getSchemaDefaultValue(schema?.items)
 }
 
 export const ArrayBase: ComposedArrayBase = (props) => {
   const field = useField<ArrayField>()
   const schema = useFieldSchema()
   return (
-    <ArrayBaseContext.Provider value={{ field, schema, props }}>
-      {props.children}
-    </ArrayBaseContext.Provider>
+    <RecordsScope getRecords={() => field.value}>
+      <ArrayBaseContext.Provider value={{ field, schema, props }}>
+        {props.children}
+      </ArrayBaseContext.Provider>
+    </RecordsScope>
   )
 }
 
 ArrayBase.Item = ({ children, ...props }) => {
   return (
     <ItemContext.Provider value={props}>
-      <ExpressionScope value={{ $record: props.record, $index: props.index }}>
+      <RecordScope
+        getIndex={() => props.index}
+        getRecord={() => takeRecord(props.record)}
+      >
         {children}
-      </ExpressionScope>
+      </RecordScope>
     </ItemContext.Provider>
   )
 }
@@ -216,6 +231,37 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
   )
 })
 
+ArrayBase.Copy = React.forwardRef((props, ref) => {
+  const index = useIndex(props.index)
+  const self = useField()
+  const array = useArray()
+  const prefixCls = usePrefixCls('formily-array-base')
+  if (!array) return null
+  if (array.field?.pattern !== 'editable') return null
+  return (
+    <CopyOutlinedIcon
+      {...props}
+      className={cls(
+        `${prefixCls}-copy`,
+        self?.disabled ? `${prefixCls}-copy-disabled` : '',
+        props.className
+      )}
+      ref={ref}
+      onClick={(e) => {
+        if (self?.disabled) return
+        e.stopPropagation()
+        const value = clone(array?.field?.value[index])
+        const distIndex = index + 1
+        array.field?.insert?.(distIndex, value)
+        array.props?.onCopy?.(distIndex)
+        if (props.onClick) {
+          props.onClick(e)
+        }
+      }}
+    />
+  )
+})
+
 ArrayBase.MoveDown = React.forwardRef((props, ref) => {
   const index = useIndex(props.index)
   const self = useField()
@@ -281,6 +327,7 @@ ArrayBase.mixin = (target: any) => {
   target.Index = ArrayBase.Index
   target.SortHandle = ArrayBase.SortHandle
   target.Addition = ArrayBase.Addition
+  target.Copy = ArrayBase.Copy
   target.Remove = ArrayBase.Remove
   target.MoveDown = ArrayBase.MoveDown
   target.MoveUp = ArrayBase.MoveUp

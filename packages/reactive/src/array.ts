@@ -8,7 +8,7 @@ export const toArray = (value: any) => {
 
 export class ArraySet<T> {
   value: T[]
-  batchDeleting = false
+  forEachIndex = 0
   constructor(value: T[] = []) {
     this.value = value
   }
@@ -24,30 +24,32 @@ export class ArraySet<T> {
   }
 
   delete(item: T) {
-    if (this.batchDeleting) return //批量删除时禁止单独删除，会影响计数执行器
-    const index = this.value.indexOf(item)
-    if (index > -1) {
-      this.value.splice(index, 1)
+    const findIndex = this.value.indexOf(item)
+    if (findIndex > -1) {
+      this.value.splice(findIndex, 1)
+      if (findIndex <= this.forEachIndex) {
+        this.forEachIndex -= 1
+      }
     }
   }
 
   forEach(callback: (value: T) => void) {
     if (this.value.length === 0) return
-    for (let index = 0, len = this.value.length; index < len; index++) {
-      callback(this.value[index])
+    this.forEachIndex = 0
+    for (; this.forEachIndex < this.value.length; this.forEachIndex++) {
+      callback(this.value[this.forEachIndex])
     }
   }
 
-  forEachDelete(callback: (value: T) => void) {
+  batchDelete(callback: (value: T) => void) {
     if (this.value.length === 0) return
-    this.batchDeleting = true
-    for (let index = 0; index < this.value.length; index++) {
-      const item = this.value[index]
-      this.value.splice(index, 1)
-      callback(item)
-      index--
+    this.forEachIndex = 0
+    for (; this.forEachIndex < this.value.length; this.forEachIndex++) {
+      const value = this.value[this.forEachIndex]
+      this.value.splice(this.forEachIndex, 1)
+      this.forEachIndex--
+      callback(value)
     }
-    this.batchDeleting = false
   }
 
   clear() {

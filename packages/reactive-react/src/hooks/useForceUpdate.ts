@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
+import { useLayoutEffect } from './useLayoutEffect'
 import { useDidUpdate } from './useDidUpdate'
 
 const EMPTY_ARRAY: any[] = []
@@ -7,17 +8,20 @@ const RENDER_QUEUE = new Set<() => void>()
 
 export function useForceUpdate() {
   const [, setState] = useState([])
-  const unMountRef = useRef(false)
-
-  useEffect(() => {
-    unMountRef.current = false
+  const renderedRef = useRef(false)
+  useLayoutEffect(() => {
+    renderedRef.current = true
     return () => {
-      unMountRef.current = true
+      renderedRef.current = false
     }
   }, EMPTY_ARRAY)
 
   const update = useCallback(() => {
-    if (unMountRef.current) return
+    if (!renderedRef.current) {
+      // 针对StrictMode无法快速回收内存，只能考虑拦截第一次渲染函数的setState，
+      // 因为第一次渲染函数的setState会触发第二次渲染函数执行，从而清理掉第二次渲染函数内部的依赖
+      return
+    }
     setState([])
   }, EMPTY_ARRAY)
 

@@ -1,32 +1,32 @@
-import { defineComponent } from '@vue/composition-api'
-import { Card, Empty, Row } from 'element-ui'
-import type { Card as CardProps } from 'element-ui'
 import { ArrayField } from '@formily/core'
-import { useField, useFieldSchema, RecursionField, h } from '@formily/vue'
-import { observer } from '@formily/reactive-vue'
 import { ISchema } from '@formily/json-schema'
-import { stylePrefix } from '../__builtins__/configs'
+import { observer } from '@formily/reactive-vue'
+import { h, RecursionField, useField, useFieldSchema } from '@formily/vue'
+import type { Card as CardProps } from 'element-ui'
+import { Card, Empty, Row } from 'element-ui'
+import { defineComponent } from 'vue-demi'
 import { ArrayBase } from '../array-base'
+import { stylePrefix } from '../__builtins__/configs'
 import { composeExport } from '../__builtins__/shared'
 
 const isAdditionComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('Addition') > -1
+  return schema['x-component']?.indexOf?.('Addition') > -1
 }
 
 const isIndexComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('Index') > -1
+  return schema['x-component']?.indexOf?.('Index') > -1
 }
 
 const isRemoveComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('Remove') > -1
+  return schema['x-component']?.indexOf?.('Remove') > -1
 }
 
 const isMoveUpComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('MoveUp') > -1
+  return schema['x-component']?.indexOf?.('MoveUp') > -1
 }
 
 const isMoveDownComponent = (schema: ISchema) => {
-  return schema['x-component']?.indexOf('MoveDown') > -1
+  return schema['x-component']?.indexOf?.('MoveDown') > -1
 }
 
 const isOperationComponent = (schema: ISchema) => {

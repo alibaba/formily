@@ -28,7 +28,7 @@ export interface IFormSpyProps {
 }
 
 export type RenderPropsChildren<Payload> =
-  | ((field: Payload, form: Form) => ReactChild)
+  | ((field: Payload, form: Form) => React.ReactNode)
   | React.ReactNode
 
 export interface IFieldProps<
@@ -71,8 +71,7 @@ export interface ISchemaFieldReactFactoryOptions<
 }
 
 export interface ISchemaFieldOptionContext {
-  getComponent: (name: string) => JSXComponent
-  scope?: any
+  components: SchemaReactComponents
 }
 
 export interface ISchemaFieldProps<
@@ -97,7 +96,7 @@ export interface ISchemaFilter {
   (schema: Schema, name: SchemaKey): boolean
 }
 export interface IRecursionFieldProps {
-  schema: Schema
+  schema: ISchema
   name?: SchemaKey
   basePath?: FormPathPattern
   onlyRenderProperties?: boolean
@@ -186,6 +185,15 @@ export type ISchemaTypeFieldProps<
 
 export interface IExpressionScopeProps {
   value?: any
+}
+
+export interface IRecordScopeProps {
+  getIndex?(): number
+  getRecord(): any
+}
+
+export interface IRecordsScopeProps {
+  getRecords(): any[]
 }
 
 export type ReactChild = React.ReactElement | string | number

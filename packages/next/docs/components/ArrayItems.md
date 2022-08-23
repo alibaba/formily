@@ -61,6 +61,10 @@ export default () => {
               x-decorator="FormItem"
               x-component="ArrayItems.Remove"
             />
+            <SchemaField.Void
+              x-decorator="FormItem"
+              x-component="ArrayItems.Copy"
+            />
           </SchemaField.Void>
           <SchemaField.Void
             x-component="ArrayItems.Addition"
@@ -117,6 +121,10 @@ export default () => {
               <SchemaField.Void
                 x-decorator="FormItem"
                 x-component="ArrayItems.Remove"
+              />
+              <SchemaField.Void
+                x-decorator="FormItem"
+                x-component="ArrayItems.Copy"
               />
             </SchemaField.Void>
           </SchemaField.Object>
@@ -729,6 +737,21 @@ Extended attributes
 | title         | ReactText            | Copywriting   |               |
 | method        | `'push' \|'unshift'` | add method    | `'push'`      |
 | defaultValue  | `any`                | Default value |               |
+
+Other references https://fusion.design/pc/component/basic/button
+
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
+
+### ArrayItems.Copy
+
+> Copy button
+
+Extended attributes
+
+| Property name | Type                 | Description | Default value |
+| ------------- | -------------------- | ----------- | ------------- |
+| title         | ReactText            | Copywriting |               |
+| method        | `'push' \|'unshift'` | add method  | `'push'`      |
 
 Other references https://fusion.design/pc/component/basic/button
 

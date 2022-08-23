@@ -2221,3 +2221,59 @@ test('field destroyed can not be assign value', () => {
   expect(form.values).toEqual({})
   expect(form.initialValues).toEqual({})
 })
+
+test('onInput could pass value with target', async () => {
+  const form = attach(createForm<any>())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  await aa.onInput({
+    target: '123',
+  })
+  expect(aa.value).toEqual({ target: '123' })
+})
+
+test('field destroyed or display none should not be assign value from patch initialValues', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      display: 'none',
+    })
+  )
+
+  aa.initialValue = '123'
+
+  expect(form.values).toEqual({})
+
+  aa.display = 'visible'
+
+  expect(aa.value).toBe('123')
+  expect(form.values).toEqual({ aa: '123' })
+})
+
+test('onFieldReact with field destroyed', () => {
+  const fn = jest.fn()
+  const obs = observable<any>({ value: 123 })
+  const form = attach(
+    createForm({
+      effects() {
+        onFieldReact('aa', () => {
+          fn(obs.value)
+        })
+      },
+    })
+  )
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  obs.value = '321'
+  expect(fn).toBeCalledTimes(2)
+  aa.destroy()
+  obs.value = '111'
+  expect(fn).toBeCalledTimes(2)
+})

@@ -1,6 +1,6 @@
 {
   "name": "@formily/element",
-  "version": "2.1.2",
+  "version": "2.2.1",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -46,20 +46,26 @@
     "vuepress-plugin-typescript": "^0.3.1"
   },
   "dependencies": {
-    "@formily/core": "2.1.2",
-    "@formily/grid": "2.1.2",
-    "@formily/json-schema": "2.1.2",
-    "@formily/reactive": "2.1.2",
-    "@formily/reactive-vue": "2.1.2",
-    "@formily/shared": "2.1.2",
-    "@formily/vue": "2.1.2",
+    "@formily/core": "2.2.1",
+    "@formily/grid": "2.2.1",
+    "@formily/json-schema": "2.2.1",
+    "@formily/reactive": "2.2.1",
+    "@formily/reactive-vue": "2.2.1",
+    "@formily/shared": "2.2.1",
+    "@formily/vue": "2.2.1",
     "portal-vue": "^2.1.7",
+    "vue-demi": "^0.13.6",
     "vue-slicksort": "^1.2.0"
   },
   "peerDependencies": {
     "@vue/composition-api": "^1.0.0-beta.1",
     "element-ui": "^2.14.0",
     "vue": "^2.6.0"
+  },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public"

@@ -1,32 +1,19 @@
-import React, { Fragment, useContext, useRef, useMemo } from 'react'
+import React, { Fragment, useMemo } from 'react'
 import { isFn, isValid } from '@formily/shared'
 import { GeneralField } from '@formily/core'
 import { Schema } from '@formily/json-schema'
-import {
-  SchemaContext,
-  SchemaOptionsContext,
-  SchemaExpressionScopeContext,
-} from '../shared'
+import { SchemaContext } from '../shared'
 import { IRecursionFieldProps, ReactFC } from '../types'
-import { useField } from '../hooks'
+import { useField, useExpressionScope } from '../hooks'
 import { ObjectField } from './ObjectField'
 import { ArrayField } from './ArrayField'
 import { Field } from './Field'
 import { VoidField } from './VoidField'
 
 const useFieldProps = (schema: Schema) => {
-  const options = useContext(SchemaOptionsContext)
-  const scope = useContext(SchemaExpressionScopeContext)
-  const scopeRef = useRef<any>()
-  scopeRef.current = scope
+  const scope = useExpressionScope()
   return schema.toFieldProps({
-    ...options,
-    get scope() {
-      return {
-        ...options.scope,
-        ...scopeRef.current,
-      }
-    },
+    scope,
   }) as any
 }
 

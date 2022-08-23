@@ -3,9 +3,10 @@ import { isArr, toArr, isValid } from '@formily/shared'
 import { Field } from '@formily/core'
 import { observer, useField } from '@formily/react'
 import { InputProps } from 'antd/lib/input'
+import { InputNumberProps } from 'antd/lib/input-number'
 import { SelectProps } from 'antd/lib/select'
 import { TreeSelectProps } from 'antd/lib/tree-select'
-import { CascaderProps } from 'antd/lib/cascader'
+import { CascaderProps, DefaultOptionType } from 'antd/lib/cascader'
 import {
   DatePickerProps,
   RangePickerProps as DateRangePickerProps,
@@ -24,57 +25,6 @@ const usePlaceholder = (value?: any) => {
   return isValid(value) && value !== '' ? value : placeholder
 }
 
-interface IGetValueByValue {
-  (
-    array: any[],
-    inputValue: any,
-    keyMap?: { inputKey?: string; outputKey?: string; childrenKey?: string },
-    path?: any[]
-  ): any
-}
-
-const getValueByValue: IGetValueByValue = (
-  array,
-  inputValue,
-  keyMap,
-  path = []
-) => {
-  const {
-    inputKey = 'value',
-    outputKey = 'label',
-    childrenKey = 'children',
-  } = keyMap || {}
-  let outputValue: any
-  if (isArr(array)) {
-    if (isArr(inputValue)) {
-      outputValue = inputValue.map((v) =>
-        getValueByValue(array, v, keyMap, path)
-      )
-    } else {
-      array.forEach((obj) => {
-        if (outputValue === undefined) {
-          const currentPath = [...path, obj?.[outputKey]]
-          if (obj?.[inputKey] === inputValue) {
-            outputValue = {
-              leaf: obj?.[outputKey],
-              whole: currentPath,
-            }
-          } else if (obj?.[childrenKey]?.length) {
-            outputValue = getValueByValue(
-              obj?.[childrenKey],
-              inputValue,
-              keyMap,
-              currentPath
-            )
-          }
-        }
-      })
-    }
-    return outputValue
-  }
-  return undefined
-}
-
 const Input: React.FC<React.PropsWithChildren<InputProps>> = (props) => {
   const prefixCls = usePrefixCls('form-text', props)
   return (
@@ -83,6 +33,28 @@ const Input: React.FC<React.PropsWithChildren<InputProps>> = (props) => {
       {props.prefix}
       {usePlaceholder(props.value)}
       {props.suffix}
+      {props.addonAfter}
+    </Space>
+  )
+}
+
+const NumberPicker: React.FC<React.PropsWithChildren<InputNumberProps>> = (
+  props
+) => {
+  const prefixCls = usePrefixCls('form-text', props)
+  return (
+    <Space className={cls(prefixCls, props.className)} style={props.style}>
+      {props.addonBefore}
+      {props.prefix}
+      {usePlaceholder(
+        props.formatter
+          ? props.formatter(String(props.value), {
+              userTyping: false,
+              input: '',
+            })
+          : props.value
+      )}
+      {props['suffix']}
       {props.addonAfter}
     </Space>
   )
@@ -118,8 +90,12 @@ const Select: React.FC<React.PropsWithChildren<SelectProps<any>>> = observer(
     }
 
     const getLabel = (target: any) => {
+      const labelKey = props.fieldNames?.label || 'label'
       return (
-        dataSource?.find((item) => item.value == target?.value)?.label ||
+        dataSource?.find((item) => {
+          const valueKey = props.fieldNames?.value || 'value'
+          return item[valueKey] == target?.value
+        })?.[labelKey] ||
         target.label ||
         placeholder
       )
@@ -216,18 +192,43 @@ const Cascader: React.FC<React.PropsWithChildren<CascaderProps<any>>> =
       : props?.options?.length
       ? props.options
       : []
+    const findSelectedItem = (
+      items: DefaultOptionType[],
+      val: string | number
+    ) => {
+      return items.find((item) => item.value == val)
+    }
+    const findSelectedItems = (
+      sources: DefaultOptionType[],
+      selectedValues: Array<string[] | number[]>
+    ): Array<any[]> => {
+      return selectedValues.map((value) => {
+        const result: Array<DefaultOptionType> = []
+        let items = sources
+        value.forEach((val) => {
+          const selectedItem = findSelectedItem(items, val)
+          result.push({
+            label: selectedItem?.label ?? '',
+            value: selectedItem?.value,
+          })
+          items = selectedItem?.children ?? []
+        })
+        return result
+      })
+    }
     const getSelected = () => {
       const val = toArr(props.value)
-      return props.multiple
-        ? val.map((item) => item[item.length - 1])
-        : val.slice(val.length - 1)
+      // unified conversion to multi selection mode
+      return props.multiple ? val : [val]
     }
     const getLabels = () => {
       const selected = getSelected()
-      const labels = getValueByValue(dataSource, selected)
-        ?.filter((item) => isValid(item))
-        ?.map((item) => item?.whole?.join('/'))
-        .join(', ')
+      const values = findSelectedItems(dataSource, selected)
+      const labels = values
+        .map((val: Array<DefaultOptionType>) => {
+          return val.map((item) => item.label).join('/')
+        })
+        .join(' ')
       return labels || placeholder
     }
     return (
@@ -317,6 +318,7 @@ Text.TimePicker = TimePicker
 Text.TimeRangePicker = TimeRangePicker
 Text.Placeholder = Placeholder
 Text.usePlaceholder = usePlaceholder
+Text.NumberPicker = NumberPicker
 
 export const PreviewText = Text
 

@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { h } from '@vue/composition-api'
+import { h } from 'vue-demi'
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/vue'
 import {

@@ -51,6 +51,7 @@ export default () => {
               x-component="Input"
             />
             <SchemaField.Void x-component="ArrayCards.Remove" />
+            <SchemaField.Void x-component="ArrayCards.Copy" />
             <SchemaField.Void x-component="ArrayCards.MoveUp" />
             <SchemaField.Void x-component="ArrayCards.MoveDown" />
           </SchemaField.Void>
@@ -451,6 +452,21 @@ Extended attributes
 | title         | ReactText            | Copywriting   |               |
 | method        | `'push' \|'unshift'` | add method    | `'push'`      |
 | defaultValue  | `any`                | Default value |               |
+
+Other references https://fusion.design/pc/component/basic/button
+
+Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
+
+### ArrayCards.Copy
+
+> Copy button
+
+Extended attributes
+
+| Property name | Type                 | Description | Default value |
+| ------------- | -------------------- | ----------- | ------------- |
+| title         | ReactText            | Copywriting |               |
+| method        | `'push' \|'unshift'` | add method  | `'push'`      |
 
 Other references https://fusion.design/pc/component/basic/button
 

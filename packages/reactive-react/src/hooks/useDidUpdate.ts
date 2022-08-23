@@ -1,4 +1,5 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useRef } from 'react'
+import { useLayoutEffect } from './useLayoutEffect'
 import { immediate } from '../shared'
 
 export const useDidUpdate = (callback?: () => void) => {
