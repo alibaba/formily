@@ -91,7 +91,7 @@ const useIndex = (index?: number) => {
 
 const useRecord = (record?: number) => {
   const ctx = useContext(ItemContext)
-  return takeRecord(ctx ? ctx.record : record, ctx.index)
+  return takeRecord(ctx ? ctx.record : record, ctx?.index)
 }
 
 const getSchemaDefaultValue = (schema: Schema) => {
