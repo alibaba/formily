@@ -1,4 +1,11 @@
-import { FormPath, FormPathPattern, isValid, toArr } from '@formily/shared'
+import {
+  FormPath,
+  FormPathPattern,
+  isValid,
+  toArr,
+  each,
+  isFn,
+} from '@formily/shared'
 import {
   JSXComponent,
   LifeCycleTypes,
@@ -6,6 +13,7 @@ import {
   FieldPatternTypes,
   FieldDecorator,
   FieldComponent,
+  IFieldActions,
 } from '../types'
 import { locateNode, destroy, initFieldUpdate } from '../shared/internals'
 import { Form } from './Form'
@@ -36,6 +44,8 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
   form: Form
 
   disposers: (() => void)[] = []
+
+  actions: IFieldActions = {}
 
   locate(address: FormPathPattern) {
     this.form.fields[address.toString()] = this as any
@@ -308,5 +318,17 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
 
   match = (pattern: FormPathPattern) => {
     return FormPath.parse(pattern).matchAliasGroup(this.address, this.path)
+  }
+
+  inject = (actions: IFieldActions) => {
+    each(actions, (action, key) => {
+      if (isFn(action)) {
+        this.actions[key] = action
+      }
+    })
+  }
+
+  invoke = (name: string, ...args: any[]) => {
+    return this.actions[name]?.(...args)
   }
 }

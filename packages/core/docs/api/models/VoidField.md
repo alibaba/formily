@@ -333,6 +333,34 @@ interface match {
 
 FormPathPattern API Reference [FormPath](/api/entry/form-path#formpathpattern)
 
+### inject
+
+#### Description
+
+Inject executable methods into field models
+
+#### Signature
+
+```ts
+interface inject {
+  (actions: Record<string, (...args: any[]) => any>): void
+}
+```
+
+### invoke
+
+#### Description
+
+Invoke an executable method injected by the field model via inject
+
+#### Signature
+
+```ts
+interface invoke {
+  (name: string, ...args: any[]): any
+}
+```
+
 ## Types of
 
 <Alert>
