@@ -102,7 +102,7 @@ export const FormTab: ComposedFormTab = observer(
         className={cls(prefixCls, props.className)}
         onChange={(key) => {
           props.onChange?.(key)
-          formTab?.setActiveKey?.(key)
+          _formTab?.setActiveKey?.(key)
         }}
         lazyLoad={false}
       >
