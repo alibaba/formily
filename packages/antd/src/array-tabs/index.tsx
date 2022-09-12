@@ -64,24 +64,20 @@ export const ArrayTabs: React.FC<React.PropsWithChildren<TabsProps>> = observer(
         }}
         type="editable-card"
         onEdit={onEdit}
-      >
-        {dataSource?.map((item, index) => {
+        items={dataSource?.map((item, index) => {
           const items = Array.isArray(schema.items)
             ? schema.items[index]
             : schema.items
           const key = `tab-${index}`
-          return (
-            <Tabs.TabPane
-              key={key}
-              forceRender
-              closable={index !== 0}
-              tab={<FeedbackBadge index={index} />}
-            >
-              <RecursionField schema={items} name={index} />
-            </Tabs.TabPane>
-          )
+          return {
+            label: <FeedbackBadge index={index} />,
+            key,
+            forceRender: true,
+            closable: index !== 0,
+            children: <RecursionField schema={items} name={index} />,
+          }
         })}
-      </Tabs>
+      />
     )
   }
 )
