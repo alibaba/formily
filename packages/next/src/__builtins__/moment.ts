@@ -28,6 +28,9 @@ export const formatMomentValue = (
       if (isEmpty(_format)) {
         return date
       }
+      if (typeof date === 'number') {
+        return moment(date).format(_format)
+      }
       return moment(date, _format).format(_format)
     } else {
       if (isFn(format)) {
@@ -35,6 +38,9 @@ export const formatMomentValue = (
       }
       if (isEmpty(format)) {
         return date
+      }
+      if (typeof date === 'number') {
+        return moment(date).format(format)
       }
       return moment(date, format).format(format)
     }
