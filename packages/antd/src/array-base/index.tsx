@@ -38,7 +38,7 @@ export interface IArrayBaseContext {
 
 export interface IArrayBaseItemProps {
   index: number
-  record: any
+  record: ((index: number) => Record<string, any>) | Record<string, any>
 }
 
 export type ArrayBaseMixins = {
@@ -77,7 +77,8 @@ const ArrayBaseContext = createContext<IArrayBaseContext>(null)
 
 const ItemContext = createContext<IArrayBaseItemProps>(null)
 
-const takeRecord = (val: any) => (typeof val === 'function' ? val() : val)
+const takeRecord = (val: any, index?: number) =>
+  typeof val === 'function' ? val(index) : val
 
 const useArray = () => {
   return useContext(ArrayBaseContext)
@@ -90,7 +91,7 @@ const useIndex = (index?: number) => {
 
 const useRecord = (record?: number) => {
   const ctx = useContext(ItemContext)
-  return takeRecord(ctx ? ctx.record : record)
+  return takeRecord(ctx ? ctx.record : record, ctx?.index)
 }
 
 const getSchemaDefaultValue = (schema: Schema) => {
@@ -124,12 +125,11 @@ export const ArrayBase: ComposedArrayBase = (props) => {
 }
 
 ArrayBase.Item = ({ children, ...props }) => {
+  const index = props.index
+  const record = takeRecord(props.record, props.index)
   return (
     <ItemContext.Provider value={props}>
-      <RecordScope
-        getIndex={() => props.index}
-        getRecord={() => takeRecord(props.record)}
-      >
+      <RecordScope getIndex={() => index} getRecord={() => record}>
         {children}
       </RecordScope>
     </ItemContext.Provider>

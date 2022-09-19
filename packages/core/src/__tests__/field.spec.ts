@@ -2277,3 +2277,21 @@ test('onFieldReact with field destroyed', () => {
   obs.value = '111'
   expect(fn).toBeCalledTimes(2)
 })
+
+test('field actions', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  expect(aa.actions).toEqual({})
+  aa.inject({
+    test: () => 123,
+  })
+  expect(aa.invoke('test')).toEqual(123)
+  aa.inject({
+    test: () => 321,
+  })
+  expect(aa.invoke('test')).toEqual(321)
+})

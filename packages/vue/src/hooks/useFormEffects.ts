@@ -1,4 +1,4 @@
-import { onBeforeUnmount } from 'vue-demi'
+import { onBeforeUnmount, watchEffect } from 'vue-demi'
 import { Form } from '@formily/core'
 import { uid } from '@formily/shared'
 import { useForm } from './useForm'
@@ -6,10 +6,14 @@ import { useForm } from './useForm'
 export const useFormEffects = (effects?: (form: Form) => void): void => {
   const formRef = useForm()
 
-  const id = uid()
-  formRef.value.addEffects(id, effects)
+  const stop = watchEffect((onCleanup) => {
+    const id = uid()
+    formRef.value.addEffects(id, effects)
 
-  onBeforeUnmount(() => {
-    formRef.value.removeEffects(id)
+    onCleanup(() => {
+      formRef.value.removeEffects(id)
+    })
   })
+
+  onBeforeUnmount(() => stop())
 }

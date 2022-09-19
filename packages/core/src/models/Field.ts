@@ -78,7 +78,6 @@ export class Field<
   feedbacks: IFieldFeedback[]
   caches: IFieldCaches = {}
   requests: IFieldRequests = {}
-
   constructor(
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component, TextType, ValueType>,
