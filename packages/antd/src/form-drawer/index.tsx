@@ -100,8 +100,8 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
         formDrawer.close()
       }
     },
-    afterOpenChange: (visible: boolean) => {
-      props?.afterOpenChange?.(visible)
+    afterVisibleChange: (visible: boolean) => {
+      props?.afterVisibleChange?.(visible)
       if (visible) return
       root.unmount()
     },
@@ -111,7 +111,7 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   })
   const renderDrawer = (visible = true) => {
     return (
-      <Drawer {...drawer} open={visible}>
+      <Drawer {...drawer} visible={visible}>
         <FormProvider form={env.form}>
           <DrawerContent />
         </FormProvider>
