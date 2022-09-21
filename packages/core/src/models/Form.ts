@@ -122,6 +122,7 @@ export class Form<ValueType extends object = any> {
   protected makeObservable() {
     define(this, {
       fields: observable.shallow,
+      indexes: observable.shallow,
       initialized: observable.ref,
       validating: observable.ref,
       submitting: observable.ref,
