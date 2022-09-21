@@ -1,6 +1,6 @@
 {
   "name": "@formily/antd",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -46,7 +46,7 @@
     "@ant-design/icons": "4.x",
     "@types/react": ">=16.8.0",
     "@types/react-dom": ">=16.8.0",
-    "antd": "4.x",
+    "antd": "<=4.22.8",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "react-is": ">=16.8.0"
@@ -60,13 +60,13 @@
     }
   },
   "dependencies": {
-    "@formily/core": "2.2.4",
-    "@formily/grid": "2.2.4",
-    "@formily/json-schema": "2.2.4",
-    "@formily/react": "2.2.4",
-    "@formily/reactive": "2.2.4",
-    "@formily/reactive-react": "2.2.4",
-    "@formily/shared": "2.2.4",
+    "@formily/core": "2.2.5",
+    "@formily/grid": "2.2.5",
+    "@formily/json-schema": "2.2.5",
+    "@formily/react": "2.2.5",
+    "@formily/reactive": "2.2.5",
+    "@formily/reactive-react": "2.2.5",
+    "@formily/shared": "2.2.5",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3"

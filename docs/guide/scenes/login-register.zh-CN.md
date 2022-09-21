@@ -73,7 +73,7 @@ export default () => {
                   title="密码"
                   required
                   x-decorator="FormItem"
-                  x-component="Input"
+                  x-component="Password"
                   x-component-props={{
                     prefix: "{{icon('LockOutlined')}}",
                   }}
