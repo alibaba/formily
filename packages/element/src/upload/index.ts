@@ -1,13 +1,13 @@
 import { Field } from '@formily/core'
-import { defineComponent } from '@vue/composition-api'
-import { connect, mapProps, h, useField, Fragment } from '@formily/vue'
+import { connect, Fragment, h, mapProps, useField } from '@formily/vue'
+import { defineComponent } from 'vue-demi'
 
 import type {
   ElUpload as ElUploadProps,
   ElUploadInternalFileDetail,
 } from 'element-ui/types/upload'
 
-import { Upload as ElUpload, Button as ElButton } from 'element-ui'
+import { Button as ElButton, Upload as ElUpload } from 'element-ui'
 
 export type UploadProps = ElUploadProps & {
   textContent?: String

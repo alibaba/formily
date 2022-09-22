@@ -38,7 +38,7 @@ export interface IArrayBaseContext {
 
 export interface IArrayBaseItemProps {
   index: number
-  record: any
+  record: ((index: number) => Record<string, any>) | Record<string, any>
 }
 
 export type ArrayBaseMixins = {
@@ -61,6 +61,7 @@ export type ArrayBaseMixins = {
 export interface IArrayBaseProps {
   disabled?: boolean
   onAdd?: (index: number) => void
+  onCopy?: (index: number) => void
   onRemove?: (index: number) => void
   onMoveDown?: (index: number) => void
   onMoveUp?: (index: number) => void
@@ -76,7 +77,8 @@ const ArrayBaseContext = createContext<IArrayBaseContext>(null)
 
 const ItemContext = createContext<IArrayBaseItemProps>(null)
 
-const takeRecord = (val: any) => (typeof val === 'function' ? val() : val)
+const takeRecord = (val: any, index?: number) =>
+  typeof val === 'function' ? val(index) : val
 
 const useArray = () => {
   return useContext(ArrayBaseContext)
@@ -89,7 +91,7 @@ const useIndex = (index?: number) => {
 
 const useRecord = (record?: number) => {
   const ctx = useContext(ItemContext)
-  return takeRecord(ctx ? ctx.record : record)
+  return takeRecord(ctx ? ctx.record : record, ctx?.index)
 }
 
 const getSchemaDefaultValue = (schema: Schema) => {
@@ -106,8 +108,8 @@ const getSchemaDefaultValue = (schema: Schema) => {
 const getDefaultValue = (defaultValue: any, schema: Schema) => {
   if (isValid(defaultValue)) return clone(defaultValue)
   if (Array.isArray(schema?.items))
-    return getSchemaDefaultValue(schema.items[0])
-  return getSchemaDefaultValue(schema.items)
+    return getSchemaDefaultValue(schema?.items[0])
+  return getSchemaDefaultValue(schema?.items)
 }
 
 export const ArrayBase: ComposedArrayBase = (props) => {
@@ -123,12 +125,11 @@ export const ArrayBase: ComposedArrayBase = (props) => {
 }
 
 ArrayBase.Item = ({ children, ...props }) => {
+  const index = props.index
+  const record = takeRecord(props.record, props.index)
   return (
     <ItemContext.Provider value={props}>
-      <RecordScope
-        getIndex={() => props.index}
-        getRecord={() => takeRecord(props.record)}
-      >
+      <RecordScope getIndex={() => index} getRecord={() => record}>
         {children}
       </RecordScope>
     </ItemContext.Provider>
@@ -222,13 +223,9 @@ ArrayBase.Copy = React.forwardRef((props, ref) => {
         e.stopPropagation()
         if (array.props?.disabled) return
         const value = clone(array?.field?.value[index])
-        if (props.method === 'unshift') {
-          array.field?.unshift?.(value)
-          array.props?.onAdd?.(0)
-        } else {
-          array.field?.push?.(value)
-          array.props?.onAdd?.(array?.field?.value?.length - 1)
-        }
+        const distIndex = index + 1
+        array.field?.insert?.(distIndex, value)
+        array.props?.onCopy?.(distIndex)
         if (props.onClick) {
           props.onClick(e)
         }

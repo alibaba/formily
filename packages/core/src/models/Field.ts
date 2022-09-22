@@ -78,7 +78,6 @@ export class Field<
   feedbacks: IFieldFeedback[]
   caches: IFieldCaches = {}
   requests: IFieldRequests = {}
-
   constructor(
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component, TextType, ValueType>,
@@ -125,11 +124,8 @@ export class Field<
     this.validator = this.props.validator
     this.required = this.props.required
     this.content = this.props.content
-    this.value = getValidFieldDefaultValue(
-      this.props.value,
-      this.props.initialValue
-    )
     this.initialValue = this.props.initialValue
+    this.value = this.props.value
     this.data = this.props.data
     this.decorator = toArr(this.props.decorator)
     this.component = toArr(this.props.component)
@@ -351,30 +347,11 @@ export class Field<
   }
 
   set value(value: ValueType) {
-    if (this.destroyed) return
-    if (!this.initialized) {
-      if (this.display === 'none') {
-        this.caches.value = value
-        return
-      }
-      if (!allowAssignDefaultValue(this.value, value) && !this.designable) {
-        return
-      }
-    }
-    this.form.setValuesIn(this.path, value)
+    this.setValue(value)
   }
 
   set initialValue(initialValue: ValueType) {
-    if (this.destroyed) return
-    if (!this.initialized) {
-      if (
-        !allowAssignDefaultValue(this.initialValue, initialValue) &&
-        !this.designable
-      ) {
-        return
-      }
-    }
-    this.form.setInitialValuesIn(this.path, initialValue)
+    this.setInitialValue(initialValue)
   }
 
   set selfErrors(messages: FeedbackMessage) {
@@ -434,11 +411,31 @@ export class Field<
   }
 
   setValue = (value?: ValueType) => {
-    this.value = value
+    if (this.destroyed) return
+    if (!this.initialized) {
+      if (this.display === 'none') {
+        this.caches.value = value
+        return
+      }
+      value = getValidFieldDefaultValue(value, this.initialValue)
+      if (!allowAssignDefaultValue(this.value, value) && !this.designable) {
+        return
+      }
+    }
+    this.form.setValuesIn(this.path, value)
   }
 
   setInitialValue = (initialValue?: ValueType) => {
-    this.initialValue = initialValue
+    if (this.destroyed) return
+    if (!this.initialized) {
+      if (
+        !allowAssignDefaultValue(this.initialValue, initialValue) &&
+        !this.designable
+      ) {
+        return
+      }
+    }
+    this.form.setInitialValuesIn(this.path, initialValue)
   }
 
   setLoading = (loading?: boolean) => {

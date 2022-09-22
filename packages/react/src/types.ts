@@ -96,7 +96,7 @@ export interface ISchemaFilter {
   (schema: Schema, name: SchemaKey): boolean
 }
 export interface IRecursionFieldProps {
-  schema: Schema
+  schema: ISchema
   name?: SchemaKey
   basePath?: FormPathPattern
   onlyRenderProperties?: boolean

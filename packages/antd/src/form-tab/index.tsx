@@ -98,7 +98,7 @@ export const FormTab: ComposedFormTab = observer(
         activeKey={activeKey}
         onChange={(key) => {
           props.onChange?.(key)
-          formTab?.setActiveKey?.(key)
+          _formTab?.setActiveKey?.(key)
         }}
       >
         {tabs.map(({ props, schema, name }, key) => (

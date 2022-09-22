@@ -11,7 +11,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: aslafy-z/conventional-pr-title-action@master
+      - uses: aslafy-z/conventional-pr-title-action@v2.4.0
         with:
           preset: conventional-changelog-angular@^5.0.6
         env:

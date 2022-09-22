@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import { FormPath } from '@formily/shared'
+import { FormPath, isObj } from '@formily/shared'
 import { Treebeard, decorators } from 'react-treebeard'
 import * as filters from './filter'
-import SerachBox from './SearchBox'
+import SearchBox from './SearchBox'
 
 const createTree = (dataSource: any, cursor?: any) => {
   const tree: any = {}
@@ -182,7 +182,7 @@ const Header = (props) => {
           {node.name}
         </span>
         <span style={{ zIndex: 1, position: 'absolute', right: 12 }}>
-          {title}
+           {isObj(title) ? ((title as any).title ?? '') : title}
         </span>
         <div
           className={`highlight ${node.active ? 'active' : ''}`}
@@ -196,7 +196,7 @@ const Header = (props) => {
 const ToolBar = styled.div`
   border-bottom: 1px solid #3d424a;
   height: 20px;
-  padding: 10px 10;
+  padding: 10px 10px;
   padding: 5px;
   overflow: auto;
   position: sticky;
@@ -246,7 +246,7 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
   return (
     <div className={className}>
       <ToolBar>
-        <SerachBox onSearch={onSearch} />
+        <SearchBox onSearch={onSearch} />
       </ToolBar>
 
       <Treebeard

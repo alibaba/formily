@@ -1,14 +1,15 @@
+import { h } from '@formily/vue'
 import {
-  provide,
+  defineComponent,
   inject,
   InjectionKey,
-  defineComponent,
+  provide,
   Ref,
   ref,
   watch,
-} from '@vue/composition-api'
-import { h } from '@formily/vue'
+} from 'vue-demi'
 import { stylePrefix } from '../__builtins__/configs'
+import { useCompatRef } from '../__builtins__/shared'
 import { useResponsiveFormLayout } from './useResponsiveFormLayout'
 
 export type FormLayoutProps = {
@@ -105,7 +106,8 @@ export const FormLayout = defineComponent<FormLayoutProps>({
     gridRowGap: {},
   },
   setup(customProps, { slots, refs }) {
-    const { props } = useResponsiveFormLayout(customProps, refs)
+    const { elRef: root, elRefBinder } = useCompatRef(refs)
+    const { props } = useResponsiveFormLayout(customProps, root)
 
     const deepLayout = useFormDeepLayout()
     const newDeepLayout = ref({
@@ -146,7 +148,7 @@ export const FormLayout = defineComponent<FormLayoutProps>({
       return h(
         'div',
         {
-          ref: 'root',
+          ref: elRefBinder,
           class: classNames,
         },
         slots

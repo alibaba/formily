@@ -1,45 +1,38 @@
 import {
-  computed,
-  defineComponent,
-  ref,
-  Ref,
-  provide,
-  inject,
-} from '@vue/composition-api'
-import {
+  ArrayField,
+  FieldDisplayTypes,
   GeneralField,
   IVoidFieldFactoryProps,
-  FieldDisplayTypes,
-  ArrayField,
 } from '@formily/core'
-import {
-  useField,
-  useFieldSchema,
-  RecursionField as _RecursionField,
-  h,
-  Fragment,
-} from '@formily/vue'
+import type { Schema } from '@formily/json-schema'
 import { observer } from '@formily/reactive-vue'
 import { isArr, isBool, isFn } from '@formily/shared'
-import { ArrayBase } from '../array-base'
-import { stylePrefix } from '../__builtins__/configs'
-import { composeExport } from '../__builtins__/shared'
-import type { Schema } from '@formily/json-schema'
+import {
+  Fragment,
+  h,
+  RecursionField as _RecursionField,
+  useField,
+  useFieldSchema,
+} from '@formily/vue'
 import type {
+  Pagination as PaginationProps,
   Table as TableProps,
   TableColumn as ElColumnProps,
-  Pagination as PaginationProps,
 } from 'element-ui'
-import type { VNode, Component } from 'vue'
 import {
-  Table as ElTable,
-  TableColumn as ElTableColumn,
+  Badge,
+  Option,
   Pagination,
   Select,
-  Option,
-  Badge,
+  Table as ElTable,
+  TableColumn as ElTableColumn,
 } from 'element-ui'
+import type { Component, VNode } from 'vue'
+import { computed, defineComponent, inject, provide, ref, Ref } from 'vue-demi'
+import { ArrayBase } from '../array-base'
 import { Space } from '../space'
+import { stylePrefix } from '../__builtins__/configs'
+import { composeExport } from '../__builtins__/shared'
 
 const RecursionField = _RecursionField as unknown as Component
 

@@ -433,3 +433,7 @@ export interface IFieldStateGetter {
   ): ReturnType<Getter>
   (pattern: FieldMatchPattern): IGeneralFieldState
 }
+
+export interface IFieldActions {
+  [key: string]: (...args: any[]) => any
+}

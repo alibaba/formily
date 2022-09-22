@@ -1,5 +1,5 @@
 import { Component } from 'vue'
-import { h, toRaw } from '@vue/composition-api'
+import { h, toRaw } from 'vue-demi'
 import { SlotTypes } from '.'
 import { isVnode } from './utils'
 

@@ -90,8 +90,12 @@ const Select: React.FC<React.PropsWithChildren<SelectProps<any>>> = observer(
     }
 
     const getLabel = (target: any) => {
+      const labelKey = props.fieldNames?.label || 'label'
       return (
-        dataSource?.find((item) => item.value == target?.value)?.label ||
+        dataSource?.find((item) => {
+          const valueKey = props.fieldNames?.value || 'value'
+          return item[valueKey] == target?.value
+        })?.[labelKey] ||
         target.label ||
         placeholder
       )

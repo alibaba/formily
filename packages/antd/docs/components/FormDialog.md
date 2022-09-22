@@ -21,7 +21,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDialog('Pop-up form', () => {
+        const dialog = FormDialog('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField>
@@ -55,11 +55,19 @@ export default () => {
                 />
               </SchemaField>
               <FormDialog.Footer>
-                <span style={{ marginLeft: 4 }}>Extended copywriting</span>
+                <span
+                  onClick={() => {
+                    dialog.close()
+                  }}
+                  style={{ marginLeft: 4 }}
+                >
+                  Extended copywriting(Click me to close the form)
+                </span>
               </FormDialog.Footer>
             </FormLayout>
           )
         })
+        dialog
           .forOpen((payload, next) => {
             setTimeout(() => {
               next({
@@ -148,16 +156,24 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDialog('Pop-up form', () => {
+        const dialog = FormDialog('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField schema={schema} />
               <FormDialog.Footer>
-                <span style={{ marginLeft: 4 }}>Extended copywriting</span>
+                <span
+                  onClick={() => {
+                    dialog.close()
+                  }}
+                  style={{ marginLeft: 4 }}
+                >
+                  Extended copywriting(Click me to close the form)
+                </span>
               </FormDialog.Footer>
             </FormLayout>
           )
         })
+        dialog
           .forOpen((payload, next) => {
             setTimeout(() => {
               next({
@@ -205,7 +221,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDialog('Pop-up form', () => {
+        const dialog = FormDialog('Pop-up form', () => {
           return (
             <FormLayout labelCol={6} wrapperCol={10}>
               <Field
@@ -237,11 +253,19 @@ export default () => {
                 component={[Input]}
               />
               <FormDialog.Footer>
-                <span style={{ marginLeft: 4 }}>Extended copywriting</span>
+                <span
+                  onClick={() => {
+                    dialog.close()
+                  }}
+                  style={{ marginLeft: 4 }}
+                >
+                  Extended copywriting(Click me to close the form)
+                </span>
               </FormDialog.Footer>
             </FormLayout>
           )
         })
+        dialog
           .forOpen((payload, next) => {
             setTimeout(() => {
               next({

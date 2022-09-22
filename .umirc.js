@@ -61,6 +61,10 @@ export default {
             path: 'https://antdv.formilyjs.org',
           },
           {
+            title: '@formily/antdv-x3',
+            path: 'https://antdv-x3.formilyjs.org',
+          },
+          {
             title: '@formily/vant',
             path: 'https://vant.formilyjs.org',
           },
