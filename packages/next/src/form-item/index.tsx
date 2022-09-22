@@ -291,9 +291,9 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = (
         [`${prefixCls}-feedback-layout-${feedbackLayout}`]: !!feedbackLayout,
         [`${prefixCls}-fullness`]: !!fullness || !!inset || !!feedbackIcon,
         [`${prefixCls}-inset`]: !!inset,
-        [`${prefix}-input`]: !!inset,
+        [`${prefix}input`]: !!inset,
         [`${prefixCls}-active`]: active,
-        [`${prefix}-focus`]: active,
+        [`${prefix}focus`]: active,
         [`${prefixCls}-inset-active`]: !!inset && active,
         [`${prefixCls}-label-align-${labelAlign}`]: true,
         [`${prefixCls}-control-align-${wrapperAlign}`]: true,
@@ -333,9 +333,9 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = (
               [`${prefixCls}-control-content-component`]: true,
               [`${prefixCls}-control-content-component-has-feedback-icon`]:
                 !!feedbackIcon,
-              [`${prefix}-input`]: !!feedbackIcon,
+              [`${prefix}input`]: !!feedbackIcon,
               [`${prefixCls}-active`]: active,
-              [`${prefix}-focus`]: active,
+              [`${prefix}focus`]: active,
             })}
           >
             <FormLayoutShallowContext.Provider value={{ size }}>

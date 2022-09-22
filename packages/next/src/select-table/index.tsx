@@ -1,6 +1,13 @@
 import React, { useState, useMemo } from 'react'
-import { observer, useFieldSchema, useField, Schema } from '@formily/react'
+import {
+  observer,
+  useFieldSchema,
+  useField,
+  Schema,
+  RecursionField,
+} from '@formily/react'
 import cls from 'classnames'
+import { GeneralField, FieldDisplayTypes } from '@formily/core'
 import { isArr, isBool, isFn } from '@formily/shared'
 import { Search, Table } from '@alifd/next'
 import { TableProps, ColumnProps } from '@alifd/next/types/table'
@@ -12,6 +19,14 @@ import { useTitleAddon } from './useTitleAddon'
 import { useCheckSlackly, getIndeterminate } from './useCheckSlackly'
 import { getUISelected, getOutputData } from './utils'
 import { usePrefixCls } from '../__builtins__'
+
+interface ObservableColumnSource {
+  field: GeneralField
+  columnProps: ColumnProps
+  schema: Schema
+  display: FieldDisplayTypes
+  name: string
+}
 
 type IFilterOption = boolean | ((option: any, keyword: string) => boolean)
 
@@ -50,24 +65,69 @@ const isColumnComponent = (schema: Schema) => {
   return schema['x-component']?.indexOf('Column') > -1
 }
 
-const useColumns = () => {
+const useSources = () => {
+  const arrayField = useField()
   const schema = useFieldSchema()
-  const columns: ISelectTableColumnProps[] = []
+  const parseSources = (schema: Schema): ObservableColumnSource[] => {
+    if (isColumnComponent(schema)) {
+      if (!schema['x-component-props']?.['dataIndex'] && !schema['name'])
+        return []
+      const name = schema['x-component-props']?.['dataIndex'] || schema['name']
+      const field = arrayField.query(arrayField.address.concat(name)).take()
+      const columnProps =
+        field?.component?.[1] || schema['x-component-props'] || {}
+      const display = field?.display || schema['x-display']
+      return [
+        {
+          name,
+          display,
+          field,
+          schema,
+          columnProps: {
+            title: field?.title || columnProps.title,
+            ...columnProps,
+          },
+        },
+      ]
+    } else if (schema.properties) {
+      return schema.reduceProperties((buf, schema) => {
+        return buf.concat(parseSources(schema))
+      }, [])
+    }
+  }
+
+  const parseArrayItems = (schema: Schema['items']) => {
+    if (!schema) return []
+    const sources: ObservableColumnSource[] = []
+    const items = isArr(schema) ? schema : [schema]
+    return items.reduce((columns, schema) => {
+      const item = parseSources(schema)
+      if (item) {
+        return columns.concat(item)
+      }
+      return columns
+    }, sources)
+  }
+
   const validSchema = (
     schema?.type === 'array' && schema?.items ? schema.items : schema
   ) as Schema
 
-  validSchema?.mapProperties((schema, name) => {
-    if (isColumnComponent(schema)) {
-      const props = schema?.['x-component-props']
-      columns.push({
-        ...props,
-        title: props?.title || schema?.title,
-        dataIndex: props?.dataIndex || name,
-      })
-    }
-  })
-  return columns
+  return parseArrayItems(validSchema)
+}
+
+const useColumns = (
+  sources: ObservableColumnSource[]
+): TableProps['columns'] => {
+  return sources.reduce((buf, { name, columnProps, schema, display }, key) => {
+    if (display !== 'visible') return buf
+    if (!isColumnComponent(schema)) return buf
+    return buf.concat({
+      ...columnProps,
+      key,
+      dataIndex: name,
+    })
+  }, [])
 }
 
 const addPrimaryKey = (dataSource, rowKey, primaryKey) =>
@@ -113,7 +173,8 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
     props?.size
   )
   const primaryKey = isFn(rowKey) ? '__formily_key__' : rowKey
-  const columns = useColumns()
+  const sources = useSources()
+  const columns = useColumns(sources)
 
   // dataSource
   let dataSource = isArr(propsDataSource) ? propsDataSource : field.dataSource
@@ -313,12 +374,23 @@ export const SelectTable: ComposedSelectTable = observer((props) => {
       >
         {''}
       </Table>
+      {sources.map((column, key) => {
+        //专门用来承接对Column的状态管理
+        if (!isColumnComponent(column.schema)) return
+        return React.createElement(RecursionField, {
+          name: column.name,
+          schema: column.schema,
+          onlyRenderSelf: true,
+          key,
+        })
+      })}
     </div>
   )
 })
 
-const TableColumn: React.FC<React.PropsWithChildren<ISelectTableColumnProps>> =
-  () => <></>
+const TableColumn: React.FC<
+  React.PropsWithChildren<ISelectTableColumnProps>
+> = () => <></>
 
 SelectTable.Column = TableColumn
 
