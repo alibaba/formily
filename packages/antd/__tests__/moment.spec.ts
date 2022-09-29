@@ -30,6 +30,15 @@ test('formatMomentValue is usable', () => {
     moment(1663155911097).format('YYYY-MM-DD HH:mm:ss'),
   ])
   expect(
+    formatMomentValue('2022-09-15T09:56:26.000Z', 'YYYY-MM-DD HH:mm:ss')
+  ).toEqual('2022-09-15 17:56:26')
+  expect(
+    formatMomentValue(['2022-09-15T09:56:26.000Z'], ['YYYY-MM-DD HH:mm:ss'])
+  ).toEqual(['2022-09-15 17:56:26'])
+  expect(formatMomentValue('2022-09-15 09:56:26', 'HH:mm:ss')).toEqual(
+    '09:56:26'
+  )
+  expect(
     formatMomentValue(
       ['2021-12-21 15:47:00', '2021-12-29 15:47:00'],
       'YYYY-MM-DD'
