@@ -14,7 +14,7 @@ export function define<Target extends object = any>(
   if (isObservable(target)) return target
   if (!isSupportObservable(target)) return target
   buildDataTree(undefined, undefined, target)
-  target[ObModelSymbol] = true
+  target[ObModelSymbol] = target
   for (const key in annotations) {
     const annotation = annotations[key]
     if (isAnnotation(annotation)) {

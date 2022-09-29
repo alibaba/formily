@@ -81,7 +81,10 @@ export const markObservable = <T>(target: T): T => {
   return target
 }
 
-export const raw = <T>(target: T): T => ProxyRaw.get(target as any) || target
+export const raw = <T>(target: T): T => {
+  if (target?.[ObModelSymbol]) return target[ObModelSymbol]
+  return ProxyRaw.get(target as any) || target
+}
 
 export const toJS = <T>(values: T): T => {
   const visited = new WeakSet<any>()

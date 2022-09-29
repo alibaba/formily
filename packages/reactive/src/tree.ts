@@ -1,5 +1,5 @@
-import { ObModelSymbol, RawNode } from './environment'
-import { raw } from './externals'
+import { ObModelSymbol, ObModelNodeSymbol, RawNode } from './environment'
+import { raw as getRaw } from './externals'
 import { PropertyKey, IOperation } from './types'
 export class DataChange {
   node: DataNode
@@ -40,7 +40,7 @@ export class DataNode {
   }
 
   get targetRaw() {
-    return raw(this.target)
+    return getRaw(this.target)
   }
 
   get parent() {
@@ -66,10 +66,8 @@ export class DataNode {
   }
 }
 
-const ObModelNodeSymbol = Symbol('ObModelNodeSymbol')
-
 export const getDataNode = (raw: any) => {
-  if (raw?.[ObModelSymbol]) {
+  if (raw?.[ObModelNodeSymbol]) {
     return raw[ObModelNodeSymbol]
   }
   return RawNode.get(raw)
@@ -84,8 +82,8 @@ export const setDataNode = (raw: any, node: DataNode) => {
 }
 
 export const buildDataTree = (target: any, key: PropertyKey, value: any) => {
-  const valueRaw = raw(value)
-  const currentNode = getDataNode(valueRaw)
+  const raw = getRaw(value)
+  const currentNode = getDataNode(raw)
   if (currentNode) return currentNode
   setDataNode(raw, new DataNode(target, key, value))
 }
