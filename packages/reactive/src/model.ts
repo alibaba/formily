@@ -5,7 +5,7 @@ import { getObservableMaker } from './internals'
 import { isObservable, isAnnotation, isSupportObservable } from './externals'
 import { Annotations } from './types'
 import { action } from './action'
-import { ProxyRaw, RawProxy } from './environment'
+import { ObModelSymbol } from './environment'
 
 export function define<Target extends object = any>(
   target: Target,
@@ -14,8 +14,7 @@ export function define<Target extends object = any>(
   if (isObservable(target)) return target
   if (!isSupportObservable(target)) return target
   buildDataTree(undefined, undefined, target)
-  ProxyRaw.set(target, target)
-  RawProxy.set(target, target)
+  target[ObModelSymbol] = true
   for (const key in annotations) {
     const annotation = annotations[key]
     if (isAnnotation(annotation)) {
