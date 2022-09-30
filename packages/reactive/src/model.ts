@@ -13,8 +13,8 @@ export function define<Target extends object = any>(
 ): Target {
   if (isObservable(target)) return target
   if (!isSupportObservable(target)) return target
-  buildDataTree(undefined, undefined, target)
   target[ObModelSymbol] = target
+  buildDataTree(undefined, undefined, target)
   for (const key in annotations) {
     const annotation = annotations[key]
     if (isAnnotation(annotation)) {
