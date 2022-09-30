@@ -28,10 +28,10 @@ export const formatMomentValue = (
       if (isEmpty(_format)) {
         return date
       }
-      if (typeof date === 'number') {
-        return moment(date).format(_format)
+      if (/^(?:[01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(date)) {
+        return moment(date, _format).format(_format)
       }
-      return moment(date, _format).format(_format)
+      return moment(date).format(_format)
     } else {
       if (isFn(format)) {
         return format(date)
@@ -39,10 +39,10 @@ export const formatMomentValue = (
       if (isEmpty(format)) {
         return date
       }
-      if (typeof date === 'number') {
-        return moment(date).format(format)
+      if (/^(?:[01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(date)) {
+        return moment(date, format).format(format)
       }
-      return moment(date, format).format(format)
+      return moment(date).format(format)
     }
   }
   if (isArr(value)) {
