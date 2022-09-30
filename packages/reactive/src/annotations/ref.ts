@@ -1,4 +1,4 @@
-import { ProxyRaw, RawProxy } from '../environment'
+import { ObModelSymbol } from '../environment'
 import { createAnnotation } from '../internals'
 import { buildDataTree } from '../tree'
 import {
@@ -55,8 +55,7 @@ export const ref: IRef = createAnnotation(({ target, key, value }) => {
       get,
     })
     buildDataTree(target, key, store)
-    ProxyRaw.set(proxy, store)
-    RawProxy.set(store, proxy)
+    proxy[ObModelSymbol] = store
   }
   return proxy
 })

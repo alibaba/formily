@@ -1,4 +1,4 @@
-import { ProxyRaw, RawProxy, ReactionStack } from '../environment'
+import { ObModelSymbol, ReactionStack } from '../environment'
 import { createAnnotation } from '../internals'
 import { buildDataTree } from '../tree'
 import { isFn } from '../checkers'
@@ -25,7 +25,7 @@ const getDescriptor = Object.getOwnPropertyDescriptor
 
 const getProto = Object.getPrototypeOf
 
-const ClassDescriptorMap = new WeakMap()
+const ClassDescriptorSymbol = Symbol('ClassDescriptorSymbol')
 
 function getPropertyDescriptor(obj: any, key: PropertyKey) {
   if (!obj) return
@@ -36,11 +36,11 @@ function getPropertyDescriptorCache(obj: any, key: PropertyKey) {
   const constructor = obj.constructor
   if (constructor === Object || constructor === Array)
     return getPropertyDescriptor(obj, key)
-  const cache = ClassDescriptorMap.get(constructor) || {}
+  const cache = constructor[ClassDescriptorSymbol] || {}
   const descriptor = cache[key]
   if (descriptor) return descriptor
   const newDesc = getPropertyDescriptor(obj, key)
-  ClassDescriptorMap.set(constructor, cache)
+  constructor[ClassDescriptorSymbol] = cache
   cache[key] = newDesc
   return newDesc
 }
@@ -148,8 +148,7 @@ export const computed: IComputed = createAnnotation(
         get,
       })
       buildDataTree(target, key, store)
-      ProxyRaw.set(proxy, store)
-      RawProxy.set(store, proxy)
+      proxy[ObModelSymbol] = store
     }
     return proxy
   }

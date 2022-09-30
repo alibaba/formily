@@ -10,8 +10,9 @@ import {
 } from './checkers'
 import {
   ProxyRaw,
-  MakeObservableSymbol,
+  MakeObModelSymbol,
   DependencyCollected,
+  ObModelSymbol,
 } from './environment'
 import { getDataNode } from './tree'
 import { Annotation } from './types'
@@ -21,11 +22,11 @@ const OBSERVABLE_TYPE = Symbol('OBSERVABLE_TYPE')
 const hasOwnProperty = Object.prototype.hasOwnProperty
 
 export const isObservable = (target: any) => {
-  return ProxyRaw.has(target)
+  return ProxyRaw.has(target) || !!target?.[ObModelSymbol]
 }
 
 export const isAnnotation = (target: any): target is Annotation => {
-  return target && !!target[MakeObservableSymbol]
+  return target && !!target[MakeObModelSymbol]
 }
 
 export const isSupportObservable = (target: any) => {
@@ -80,7 +81,10 @@ export const markObservable = <T>(target: T): T => {
   return target
 }
 
-export const raw = <T>(target: T): T => ProxyRaw.get(target as any)
+export const raw = <T>(target: T): T => {
+  if (target?.[ObModelSymbol]) return target[ObModelSymbol]
+  return ProxyRaw.get(target as any) || target
+}
 
 export const toJS = <T>(values: T): T => {
   const visited = new WeakSet<any>()
@@ -119,8 +123,8 @@ export const toJS = <T>(values: T): T => {
 }
 
 export const contains = (target: any, property: any) => {
-  const targetRaw = ProxyRaw.get(target) || target
-  const propertyRaw = ProxyRaw.get(property) || property
+  const targetRaw = raw(target)
+  const propertyRaw = raw(property)
   if (targetRaw === propertyRaw) return true
   const targetNode = getDataNode(targetRaw)
   const propertyNode = getDataNode(propertyRaw)

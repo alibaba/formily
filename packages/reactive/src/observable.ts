@@ -1,5 +1,5 @@
 import * as annotations from './annotations'
-import { MakeObservableSymbol } from './environment'
+import { MakeObModelSymbol } from './environment'
 import { createObservable } from './internals'
 
 export function observable<T extends object>(target: T): T {
@@ -11,4 +11,4 @@ observable.ref = annotations.ref
 observable.deep = annotations.observable
 observable.shallow = annotations.shallow
 observable.computed = annotations.computed
-observable[MakeObservableSymbol] = annotations.observable
+observable[MakeObModelSymbol] = annotations.observable
