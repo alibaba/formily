@@ -23,6 +23,8 @@ test('formatMomentValue is usable', () => {
   )
   expect(formatMomentValue('12:11', 'HH:mm')).toBe('12:11')
   expect(formatMomentValue('12:11:11', 'HH:mm:ss')).toBe('12:11:11')
+  expect(formatMomentValue(['12:11'], ['HH:mm'])).toEqual(['12:11'])
+  expect(formatMomentValue(['12:11:11'], ['HH:mm:ss'])).toEqual(['12:11:11'])
   expect(formatMomentValue(1663155911097, 'YYYY-MM-DD HH:mm:ss')).toBe(
     moment(1663155911097).format('YYYY-MM-DD HH:mm:ss')
   )
