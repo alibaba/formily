@@ -156,8 +156,6 @@ export class Form<ValueType extends object = any> {
       deleteValuesIn: action,
       setSubmitting: action,
       setValidating: action,
-      setFormGraph: action,
-      clearFormGraph: action,
       reset: action,
       submit: action,
       validate: action,
