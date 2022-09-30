@@ -1,6 +1,6 @@
 import { IOperation } from './types'
 import { ObserverListeners } from './environment'
-import { raw } from './externals'
+import { raw as getRaw } from './externals'
 import { isFn } from './checkers'
 import { DataChange, getDataNode } from './tree'
 
@@ -10,11 +10,11 @@ export const observe = (
   deep = true
 ) => {
   const addListener = (target: any) => {
-    const targetRaw = raw(target)
-    const node = getDataNode(targetRaw)
+    const raw = getRaw(target)
+    const node = getDataNode(raw)
 
     const listener = (operation: IOperation) => {
-      const targetRaw = raw(operation.target)
+      const targetRaw = getRaw(operation.target)
       const targetNode = getDataNode(targetRaw)
       if (deep) {
         if (node.contains(targetNode)) {
