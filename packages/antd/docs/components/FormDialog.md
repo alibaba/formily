@@ -322,8 +322,11 @@ interface IFormDialog {
     ) => any
   ): any //Middleware interceptor, can intercept Dialog to open
   forConfirm(
-    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
-  ): any //Middleware interceptor, which can intercept Dialog confirmation
+    middleware: (
+      props: Form,
+      next: (props?: Form | false) => Promise<any>
+    ) => any
+  ): any //Middleware interceptor, which can intercept Dialog confirmation. Pass in false to next() to cancel loading status only, instead of close Dialog.
   forCancel(
     middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
   ): any //Middleware interceptor, can intercept Dialog to cancel

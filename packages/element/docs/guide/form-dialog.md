@@ -58,7 +58,10 @@ interface IFormDialog {
     ) => any
   ): IFormDialog
   forConfirm(
-    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
+    middleware: (
+      props: Form,
+      next: (props?: Form | false) => Promise<any>
+    ) => any
   ): IFormDialog
   forCancel(
     middleware: (props: Form, next: (props?: Form) => Promise<any>) => any

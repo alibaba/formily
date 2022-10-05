@@ -65,8 +65,8 @@ const getDialogProps = (props: any): IFormDialogProps => {
 
 export interface IFormDialog {
   forOpen(middleware: IMiddleware<IFormProps>): IFormDialog
-  forConfirm(middleware: IMiddleware<Form>): IFormDialog
-  forCancel(middleware: IMiddleware<Form>): IFormDialog
+  forConfirm(middleware: IMiddleware<IFormProps | false>): IFormDialog
+  forCancel(middleware: IMiddleware<IFormProps>): IFormDialog
   open(props?: IFormProps): Promise<any>
   close(): void
 }
@@ -348,8 +348,14 @@ export function FormDialog(
           () => {
             env.form
               .submit(async () => {
-                await applyMiddleware(env.form, env.confirmMiddlewares)
+                const result = await applyMiddleware(
+                  env.form,
+                  env.confirmMiddlewares
+                )
                 resolve(toJS(env.form.values))
+                if (result === false) {
+                  return
+                }
                 if (dialogProps.beforeClose) {
                   setTimeout(() => {
                     dialogProps.beforeClose(() => {

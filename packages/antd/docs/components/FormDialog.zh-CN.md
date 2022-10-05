@@ -331,8 +331,11 @@ interface IFormDialog {
     ) => any
   ): any //中间件拦截器，可以拦截Dialog打开
   forConfirm(
-    middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
-  ): any //中间件拦截器，可以拦截Dialog确认
+    middleware: (
+      props: Form,
+      next: (props?: Form | false) => Promise<any>
+    ) => any
+  ): any //中间件拦截器，可以拦截Dialog确认，next传入false可以仅取消提交按钮的loading状态而不关闭Dialog
   forCancel(
     middleware: (props: Form, next: (props?: Form) => Promise<any>) => any
   ): any //中间件拦截器，可以拦截Dialog取消
