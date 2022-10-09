@@ -16,7 +16,7 @@ order: 7
 type FormConsumer = React.FC<{ children: (form: Form) => React.ReactNode }>
 ```
 
-Form 参考[Form](https://core.formilyjs.org/api/models/form)
+Form 参考[Form](https://core.formilyjs.org/zh-CN/api/models/form)
 
 ## 用例
 

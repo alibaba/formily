@@ -2,7 +2,7 @@
 
 ## 描述
 
-将[Field](https://core.formilyjs.org/api/models/field)属性与组件属性映射的适配器函数，主要与 connect 函数搭配使用
+将[Field](https://core.formilyjs.org/zh-CN/api/models/field)属性与组件属性映射的适配器函数，主要与 connect 函数搭配使用
 
 ## 签名
 
