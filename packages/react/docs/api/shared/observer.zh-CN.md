@@ -8,7 +8,7 @@ observer 是一个 [HOC](https://reactjs.bootcss.com/docs/higher-order-component
 
 ### 什么时候使用
 
-当一个组件内部使用了 [observable](https://reactive.formilyjs.org/api/observable) 对象，而你希望组件响应 observable 对象的变化时。
+当一个组件内部使用了 [observable](https://reactive.formilyjs.org/zh-CN/api/observable) 对象，而你希望组件响应 observable 对象的变化时。
 
 ### API 定义
 

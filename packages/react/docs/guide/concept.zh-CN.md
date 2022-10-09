@@ -11,7 +11,7 @@
 
 ## 表单上下文
 
-从[架构图](/guide/architecture)中我们可以看到 FormProvider 是作为表单统一上下文而存在，它的地位非常重要，主要用于将@formily/core 创建出来的[Form](//core.formilyjs.org/api/models/form)实例下发到所有子组件中，不管是在内置组件还是用户扩展的组件，都能通过[useForm](/api/hooks/use-form)读取到[Form](//core.formilyjs.org/api/models/form)实例
+从[架构图](/guide/architecture)中我们可以看到 FormProvider 是作为表单统一上下文而存在，它的地位非常重要，主要用于将@formily/core 创建出来的[Form](//core.formilyjs.org/zh-CN/api/models/form)实例下发到所有子组件中，不管是在内置组件还是用户扩展的组件，都能通过[useForm](/api/hooks/use-form)读取到[Form](//core.formilyjs.org/zh-CN/api/models/form)实例
 
 ## 字段上下文
 
@@ -23,7 +23,7 @@
 
 ## 模型绑定
 
-想要理解模型绑定，需要先理解什么是[MVVM](//core.formilyjs.org/guide/mvvm)，理解了之后我们再看看这张图：
+想要理解模型绑定，需要先理解什么是[MVVM](//core.formilyjs.org/zh-CN/guide/mvvm)，理解了之后我们再看看这张图：
 
 ![](https://img.alicdn.com/imgextra/i1/O1CN01A03C191KwT1raxnDg_!!6000000001228-55-tps-2200-869.svg)
 
