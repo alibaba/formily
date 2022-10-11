@@ -5,6 +5,7 @@ $form-preview-prefix-cls: '#{$css-prefix}form-preview';
 .#{$form-preview-prefix-cls} {
   font-weight: 400;
   word-break: break-all;
+
   .#{$css-prefix}tag {
     margin-right: 4px;
   }
@@ -12,4 +13,10 @@ $form-preview-prefix-cls: '#{$css-prefix}form-preview';
   .#{$css-prefix}tag:last-child {
     margin-right: 0;
   }
+}
+
+p.#{$form-preview-prefix-cls} {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
 }
