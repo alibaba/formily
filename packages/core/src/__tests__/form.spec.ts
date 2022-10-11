@@ -1615,3 +1615,71 @@ test('form clearFormGraph not clear field values', () => {
   form.clearFormGraph('*', false)
   expect(form.values.aa).toEqual('123')
 })
+
+test('form values auto clean with visible false', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        aa: '123',
+        bb: '321',
+        cc: 'cc',
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      reactions: (field) => {
+        field.visible = form.values.aa === '1233'
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'cc',
+    })
+  )
+
+  expect(form.values).toEqual({
+    aa: '123',
+    cc: 'cc',
+  })
+})
+
+test('form values auto clean with visible false in async setInitialValues', () => {
+  const form = attach(createForm())
+  attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'bb',
+      reactions: (field) => {
+        field.visible = form.values.aa === '1233'
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'cc',
+    })
+  )
+
+  form.setInitialValues({
+    aa: '123',
+    bb: '321',
+    cc: 'cc',
+  })
+
+  expect(form.values).toEqual({
+    aa: '123',
+    cc: 'cc',
+  })
+})
