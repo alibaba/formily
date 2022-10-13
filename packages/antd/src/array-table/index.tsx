@@ -332,7 +332,7 @@ export const ArrayTable: ComposedArrayTable = observer(
           {...props}
         />
       ),
-      []
+      [field]
     )
 
     return (
