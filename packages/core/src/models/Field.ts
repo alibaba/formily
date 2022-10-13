@@ -224,8 +224,14 @@ export class Field<
         () => this.value,
         (value) => {
           this.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
-          if (isValid(value) && this.selfModified && !this.caches.inputting) {
-            validateSelf(this)
+          if (isValid(value)) {
+            if (this.selfModified && !this.caches.inputting) {
+              validateSelf(this)
+            }
+            if (!this.visible) {
+              this.caches.value = toJS(value)
+              this.form.deleteValuesIn(this.path)
+            }
           }
         }
       ),

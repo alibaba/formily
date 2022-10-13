@@ -861,7 +861,7 @@ test('setState/getState', () => {
     })
   )
   expect(aa.value).toEqual('123')
-  expect(bb.value).toEqual('123')
+  expect(bb.value).toBeUndefined()
   expect(cc.value).toEqual('123')
   form.setFieldState(form.query('cc'), (state) => {
     state.value = 'ccc'
@@ -1093,7 +1093,7 @@ test('fault tolerance', () => {
   field.setDisplay('none')
   expect(field.value).toBeUndefined()
   field.setValue(321)
-  expect(field.value).toEqual(321)
+  expect(field.value).toBeUndefined()
   field.setDisplay('visible')
   expect(field.value).toEqual(321)
   form.setDisplay(null)

@@ -986,10 +986,9 @@ export const resetSelf = batch.bound(
       if (options?.forceClear) {
         target.value = typedDefaultValue
       } else {
+        const initialValue = target.initialValue
         target.value = toJS(
-          !isUndef(target.initialValue)
-            ? target.initialValue
-            : typedDefaultValue
+          !isUndef(initialValue) ? initialValue : typedDefaultValue
         )
       }
     }
