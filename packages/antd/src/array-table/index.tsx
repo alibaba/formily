@@ -125,7 +125,9 @@ const useArrayTableColumns = (
   field: ArrayField,
   sources: ObservableColumnSource[]
 ): TableProps<any>['columns'] => {
-  return sources.reduce((buf, { name, columnProps, schema, display }, key) => {
+  return sources.reduce((buf, column, key) => {
+    if (column === undefined || column === null) return buf
+    const { name, columnProps, schema, display } = column
     if (display !== 'visible') return buf
     if (!isColumnComponent(schema)) return buf
     return buf.concat({
@@ -358,6 +360,7 @@ export const ArrayTable: ComposedArrayTable = observer(
               />
               <div style={{ marginTop: 5, marginBottom: 5 }}>{pager}</div>
               {sources.map((column, key) => {
+                if (column === undefined || column === null) return
                 //专门用来承接对Column的状态管理
                 if (!isColumnComponent(column.schema)) return
                 return React.createElement(RecursionField, {
