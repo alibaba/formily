@@ -96,8 +96,11 @@ export default (filename, targetName, ...plugins) => {
         amd: {
           id: filename,
         },
+        globals: {
+          '@formily/json-schema': 'Formily.JSONSchema',
+        },
       },
-      external: ['react', 'react-dom', 'react-is'],
+      external: ['react', 'react-dom', 'react-is', '@formily/json-schema'],
       plugins: [...presets(), ...plugins, createEnvPlugin('development')],
     },
     {
@@ -110,8 +113,11 @@ export default (filename, targetName, ...plugins) => {
         amd: {
           id: filename,
         },
+        globals: {
+          '@formily/json-schema': 'Formily.JSONSchema',
+        },
       },
-      external: ['react', 'react-dom', 'react-is'],
+      external: ['react', 'react-dom', 'react-is', '@formily/json-schema'],
       plugins: [
         ...presets(),
         terser(),
