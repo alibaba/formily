@@ -228,7 +228,7 @@ export class Field<
             if (this.selfModified && !this.caches.inputting) {
               validateSelf(this)
             }
-            if (!this.visible) {
+            if (this.display === 'none') {
               this.caches.value = toJS(value)
               this.form.deleteValuesIn(this.path)
             }

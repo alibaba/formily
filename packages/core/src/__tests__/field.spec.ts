@@ -2295,3 +2295,15 @@ test('field actions', () => {
   })
   expect(aa.invoke('test')).toEqual(321)
 })
+
+test('field hidden value', () => {
+  const form = attach(createForm())
+  attach(
+    form.createField({
+      name: 'aa',
+      hidden: true,
+      initialValue: '123',
+    })
+  )
+  expect(form.values).toEqual({ aa: '123' })
+})
