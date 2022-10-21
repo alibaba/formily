@@ -1,10 +1,4 @@
-import {
-  isValid,
-  isEmpty,
-  toArr,
-  FormPathPattern,
-  isArr,
-} from '@formily/shared'
+import { isValid, toArr, FormPathPattern, isArr } from '@formily/shared'
 import {
   ValidatorTriggerType,
   parseValidatorDescriptions,
