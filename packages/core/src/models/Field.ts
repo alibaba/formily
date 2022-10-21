@@ -245,16 +245,14 @@ export class Field<
         () => this.display,
         (display) => {
           const value = this.value
-          if (display === 'visible') {
-            if (isEmpty(value)) {
+          if (display !== 'none') {
+            if (!isValid(value)) {
               this.setValue(this.caches.value)
               this.caches.value = undefined
             }
           } else {
             this.caches.value = toJS(value) ?? toJS(this.initialValue)
-            if (display === 'none') {
-              this.form.deleteValuesIn(this.path)
-            }
+            this.form.deleteValuesIn(this.path)
           }
           if (display === 'none' || display === 'hidden') {
             this.setFeedback({
