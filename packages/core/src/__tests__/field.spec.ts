@@ -2298,7 +2298,7 @@ test('field actions', () => {
 
 test('field hidden value', () => {
   const form = attach(createForm())
-  attach(
+  const aa = attach(
     form.createField({
       name: 'aa',
       hidden: true,
@@ -2306,4 +2306,31 @@ test('field hidden value', () => {
     })
   )
   expect(form.values).toEqual({ aa: '123' })
+
+  const objectField = attach(
+    form.createObjectField({
+      name: 'object',
+      hidden: true,
+    })
+  )
+  const arrayField = attach(
+    form.createArrayField({
+      name: 'array',
+      hidden: true,
+    })
+  )
+
+  aa.setDisplay('none')
+  objectField.setDisplay('none')
+  arrayField.setDisplay('none')
+  expect(aa.value).toBeUndefined()
+  expect(objectField.value).toBeUndefined()
+  expect(arrayField.value).toBeUndefined()
+
+  aa.setDisplay('hidden')
+  objectField.setDisplay('hidden')
+  arrayField.setDisplay('hidden')
+  expect(aa.value).toEqual('123')
+  expect(objectField.value).toEqual({})
+  expect(arrayField.value).toEqual([])
 })
