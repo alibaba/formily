@@ -737,37 +737,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-写法三，相邻元素联动
-
-```json
-{
-  "type": "array",
-  "x-component": "ArrayTable",
-  "items": {
-    "type": "object",
-    "properties": {
-      "source": {
-        "type": "string",
-        "x-component": "Input",
-        "x-reactions": {
-          "target": ".target",
-          "fulfill": {
-            "state": {
-              "visible": "{{$self.value === '123'}}" //任意层次属性都支持表达式
-            }
-          }
-        }
-      },
-      "target": {
-        "type": "string",
-        "x-component": "Input"
-      }
-    }
-  }
-}
-```
-
-写法四，基于 Schema 协议联动
+写法三，基于 Schema 协议联动
 
 ```json
 {
@@ -793,7 +763,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-写法五，基于 run 语句联动
+写法四，基于 run 语句联动
 
 ```json
 {
@@ -816,7 +786,7 @@ type SchemaReactions<Field = any> =
 }
 ```
 
-写法六，基于生命周期钩子联动
+写法五，基于生命周期钩子联动
 
 ```json
 {
@@ -845,6 +815,8 @@ type SchemaReactions<Field = any> =
 
 **被动联动**
 
+写法一，标准被动联动
+
 ```json
 {
   "type": "object",
@@ -862,6 +834,36 @@ type SchemaReactions<Field = any> =
         "fulfill": {
           "schema": {
             "x-visible": "{{$deps[0] === '123'}}" //任意层次属性都支持表达式
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+写法二，相邻元素联动
+
+```json
+{
+  "type": "array",
+  "x-component": "ArrayTable",
+  "items": {
+    "type": "object",
+    "properties": {
+     "source": {
+        "type": "string",
+        "x-component": "Input"
+      },
+      "target": {
+        "type": "string",
+        "x-component": "Input",
+        "x-reactions": {
+          "dependencies": [".source"],
+          "fulfill": {
+            "schema": {
+              "x-visible": "{{$deps[0] === '123'}}"
+            }
           }
         }
       }
