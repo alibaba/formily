@@ -44,10 +44,10 @@ const registry = {
 
 const getISOCode = (language: string) => {
   let isoCode = registry.locales.language
-  const lang = lowerCase(language)
   if (registry.locales.messages[language]) {
     return language
   }
+  const lang = lowerCase(language)
   each(
     registry.locales.messages,
     (messages: IRegistryLocaleMessages, key: string) => {
@@ -69,15 +69,18 @@ export const setValidateLanguage = (lang: string) => {
 
 export const getValidateLanguage = () => registry.locales.language
 
-export const getLocaleByPath = (path: string, lang: string = registry.locales.language) => getIn(
-  registry.locales.messages,
-  `${getISOCode(lang)}.${path}`
-)
-
+export const getLocaleByPath = (
+  path: string,
+  lang: string = registry.locales.language
+) => getIn(registry.locales.messages, `${getISOCode(lang)}.${path}`)
 
 export const getValidateLocale = (path: string) => {
-  const message = getLocaleByPath(path);
-  return message || getLocaleByPath('pattern') || getLocaleByPath('pattern', defaultLanguage)
+  const message = getLocaleByPath(path)
+  return (
+    message ||
+    getLocaleByPath('pattern') ||
+    getLocaleByPath('pattern', defaultLanguage)
+  )
 }
 
 export const getValidateMessageTemplateEngine = () => registry.template
