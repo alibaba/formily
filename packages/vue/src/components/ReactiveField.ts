@@ -144,7 +144,7 @@ export default observer({
         return slots.default?.()
       }
       if (field.display !== 'visible') {
-        return h('template', {}, {})
+        return h(null, {}, {})
       }
 
       const mergedSlots = mergeSlots(field, slots, field.content)

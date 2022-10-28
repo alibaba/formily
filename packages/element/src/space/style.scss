@@ -20,4 +20,11 @@
       align-items: baseline;
     }
   }
+
+  &-item {
+    display: contents;
+    &:empty {
+      display: none;
+    }
+  }
 }

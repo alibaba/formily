@@ -64,7 +64,6 @@ export const Space = defineComponent<SpaceProps>({
       }
 
       const itemClassName = `${prefixCls}-item`
-      const marginDirection = 'marginRight' // directionConfig === 'rtl' ? 'marginLeft' : 'marginRight';
 
       const renderItems = items.map((child, i) =>
         h(
@@ -72,23 +71,22 @@ export const Space = defineComponent<SpaceProps>({
           {
             class: itemClassName,
             key: `${itemClassName}-${i}`,
-            style:
-              i === len - 1
-                ? {}
-                : {
-                    [direction === 'vertical'
-                      ? 'marginBottom'
-                      : marginDirection]:
-                      typeof size === 'string'
-                        ? `${spaceSize[size]}px`
-                        : `${size}px`,
-                  },
           },
           { default: () => [child] }
         )
       )
 
-      return h('div', { class: someSpaceClass }, { default: () => renderItems })
+      return h(
+        'div',
+        {
+          class: someSpaceClass,
+          style: {
+            gap:
+              typeof size === 'string' ? `${spaceSize[size]}px` : `${size}px`,
+          },
+        },
+        { default: () => renderItems }
+      )
     }
   },
 })
