@@ -2,6 +2,7 @@ import { autorun, batch } from '@formily/reactive'
 import { Form } from '../models'
 import { LifeCycleTypes } from '../types'
 import { createEffectHook } from '../shared/effective'
+import { isFn } from '@formily/shared'
 
 function createFormEffect(type: LifeCycleTypes) {
   return createEffectHook(
@@ -72,7 +73,7 @@ export function onFormReact(callback?: (form: Form) => void) {
   let dispose = null
   onFormInit((form) => {
     dispose = autorun(() => {
-      callback(form)
+      if (isFn(callback)) callback(form)
     })
   })
   onFormUnmount(() => {
