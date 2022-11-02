@@ -1,5 +1,5 @@
 import { Schema } from '../schema'
-import { createForm } from '@formily/core'
+import { createForm, Field } from '@formily/core'
 import { ISchema, ISchemaTransformerOptions } from '../types'
 import { isObservable } from '@formily/reactive'
 
@@ -205,6 +205,40 @@ test('userReactions with condition', () => {
   expect(mockFn).nthCalledWith(2, false)
 })
 
+test('userReactions with condition with function type', () => {
+  const mockFn = jest.fn()
+  const { field1 } = getFormAndFields(
+    {
+      'x-value': true,
+      'x-reactions': {
+        when: (field: Field) => field.value === true,
+        fulfill: {
+          run: (field: Field, { mockFn }: any) => {
+            mockFn(field.value)
+          },
+        },
+        otherwise: {
+          run: (field: Field, { mockFn }: any) => {
+            mockFn(field.value)
+          },
+        },
+      },
+    },
+    {},
+    {
+      scope: {
+        mockFn,
+      },
+    }
+  )
+
+  expect(mockFn).nthCalledWith(1, true)
+
+  field1.value = false
+
+  expect(mockFn).nthCalledWith(2, false)
+})
+
 test('userReactions with condition(wrong type)', () => {
   const field1Value = 'field1Value'
   const mockFn = jest.fn()
@@ -327,6 +361,41 @@ test('userReactions with user-defined effects', () => {
         target: 'field2',
         fulfill: {
           run: `mockFn($target.value)`,
+        },
+        effects: ['onFieldInit'],
+      },
+    },
+    {
+      'x-value': field2Value,
+    },
+    {
+      scope: {
+        mockFn,
+      },
+    }
+  )
+
+  expect(mockFn).toBeCalledTimes(1)
+  expect(mockFn).nthCalledWith(1, field2Value)
+
+  field2.value = field1Title
+  expect(mockFn).toBeCalledTimes(1)
+})
+
+test('userReactions with user-defined effects with function type', () => {
+  const field2Value = 'field2Value'
+  const field1Title = 'field1Title'
+  const mockFn = jest.fn()
+
+  const { field2 } = getFormAndFields(
+    {
+      title: field1Title,
+      'x-reactions': {
+        target: 'field2',
+        fulfill: {
+          run: (field: Field, { mockFn, $target }: any) => {
+            mockFn($target.value)
+          },
         },
         effects: ['onFieldInit'],
       },
