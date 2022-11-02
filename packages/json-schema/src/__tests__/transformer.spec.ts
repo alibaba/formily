@@ -205,7 +205,7 @@ test('userReactions with condition', () => {
   expect(mockFn).nthCalledWith(2, false)
 })
 
-test('userReactions with condition with function type', () => {
+test('userReactions with condition(function type)', () => {
   const mockFn = jest.fn()
   const { field1 } = getFormAndFields(
     {
@@ -382,7 +382,7 @@ test('userReactions with user-defined effects', () => {
   expect(mockFn).toBeCalledTimes(1)
 })
 
-test('userReactions with user-defined effects with function type', () => {
+test('userReactions with user-defined effects(function type)', () => {
   const field2Value = 'field2Value'
   const field1Title = 'field1Title'
   const mockFn = jest.fn()
