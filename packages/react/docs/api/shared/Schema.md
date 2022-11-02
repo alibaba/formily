@@ -652,20 +652,20 @@ type SchemaReactionEffect =
 type SchemaReaction<Field = any> =
   | {
       dependencies?: string[] | Record<string, string> //The list of dependent field paths can only describe dependencies in dot paths, and supports relative paths. If it is an array format, then it is also an array format when reading, if it is an object format , It is also an object format when reading, but the object format is equivalent to an alias
-      when?: string | boolean //Linkage condition
+      when?: string | boolean | ((field: Field, scope: any) => boolean) //Linkage condition
       target?: string //The field path to be operated, supports FormPathPattern path syntax, note: relative path is not supported! !
       effects?: SchemaReactionEffect[] //Independent life cycle hook in active mode
       fulfill?: {
         //To meet the conditions
         state?: IGeneralFieldState //Update state
         schema?: ISchema //Update Schema
-        run?: string //Execute statement
+        run?: string | ((field: Field, scope: any) => void) //Execute statement
       }
       otherwise?: {
         //Does not meet the conditions
         state?: IGeneralFieldState //Update state
         schema?: ISchema //Update Schema
-        run?: string //Execute statement
+        run?: string | ((field: Field, scope: any) => void) //Execute statement
       }
     }
   | ((field: Field) => void) //Can be complex linkage
@@ -851,7 +851,7 @@ Writing method two, linkage of adjacent elements
   "items": {
     "type": "object",
     "properties": {
-     "source": {
+      "source": {
         "type": "string",
         "x-component": "Input"
       },
