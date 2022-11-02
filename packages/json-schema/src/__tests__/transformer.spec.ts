@@ -1,5 +1,5 @@
 import { Schema } from '../schema'
-import { createForm } from '@formily/core'
+import { createForm, Field } from '@formily/core'
 import { ISchema, ISchemaTransformerOptions } from '../types'
 import { isObservable } from '@formily/reactive'
 
@@ -187,6 +187,40 @@ test('userReactions with condition', () => {
         },
         otherwise: {
           run: 'mockFn($self.vlaue)',
+        },
+      },
+    },
+    {},
+    {
+      scope: {
+        mockFn,
+      },
+    }
+  )
+
+  expect(mockFn).nthCalledWith(1, true)
+
+  field1.value = false
+
+  expect(mockFn).nthCalledWith(2, false)
+})
+
+test('userReactions with condition func', () => {
+  const mockFn = jest.fn()
+  const { field1 } = getFormAndFields(
+    {
+      'x-value': true,
+      'x-reactions': {
+        when: (field: Field) => field.value === true,
+        fulfill: {
+          run: (field: Field, { mockFn }: any) => {
+            mockFn(field.value)
+          },
+        },
+        otherwise: {
+          run: (field: Field, { mockFn }: any) => {
+            mockFn(field.value)
+          },
         },
       },
     },

@@ -130,6 +130,15 @@ const setSchemaFieldState = (
           })
         )()
       })
+    } else if (isFn(runner)) {
+      field.form.setFieldState(target, (state) => {
+        runner(
+          field,
+          lazyMerge(scope, {
+            $target: state,
+          })
+        )
+      })
     }
   } else {
     if (request.state) {
@@ -142,6 +151,8 @@ const setSchemaFieldState = (
     }
     if (isStr(runner) && runner) {
       shallowCompile(`{{function(){${runner}}}}`, scope)()
+    } else if (isFn(runner)) {
+      runner(field, scope)
     }
   }
 }
@@ -204,7 +215,10 @@ const getUserReactions = (
           $dependencies,
         })
         const compiledWhen = shallowCompile(when, scope)
-        const condition = when ? compiledWhen : true
+        const finalWhen = isFn(compiledWhen)
+          ? compiledWhen(field, scope)
+          : compiledWhen
+        const condition = when ? finalWhen : true
         const request = condition ? fulfill : otherwise
         const runner = condition ? fulfill?.run : otherwise?.run
         setSchemaFieldState({

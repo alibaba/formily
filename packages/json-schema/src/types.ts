@@ -74,18 +74,18 @@ export type SchemaReaction<Field = any> =
               }
           >
         | Record<string, string>
-      when?: string | boolean
+      when?: string | boolean | ((field: Field, scope: any) => boolean)
       target?: string
       effects?: (SchemaEffectTypes | (string & {}))[]
       fulfill?: {
         state?: Stringify<IGeneralFieldState>
         schema?: ISchema
-        run?: string
+        run?: string | ((field: Field, scope: any) => void)
       }
       otherwise?: {
         state?: Stringify<IGeneralFieldState>
         schema?: ISchema
-        run?: string
+        run?: string | ((field: Field, scope: any) => void)
       }
       [key: string]: any
     }
