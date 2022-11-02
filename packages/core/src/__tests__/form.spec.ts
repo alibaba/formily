@@ -930,6 +930,7 @@ test('reset', async () => {
 })
 
 test('devtools', () => {
+  // @ts-ignore
   window['__FORMILY_DEV_TOOLS_HOOK__'] = {
     inject() {},
     unmount() {},
