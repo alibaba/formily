@@ -451,7 +451,7 @@ test('async use will throw error', async () => {
           } catch (e) {
             error = e
           }
-        })
+        }, 0)
       },
     })
   )
@@ -483,7 +483,7 @@ test('effect context', async () => {
       } catch (e) {
         error2 = e
       }
-    })
+    }, 0)
   }
   attach(
     createForm({
@@ -497,7 +497,7 @@ test('effect context', async () => {
           } catch (e) {
             error = e
           }
-        })
+        }, 0)
         consumer2()
       },
     })
