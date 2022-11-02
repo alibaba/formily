@@ -112,7 +112,7 @@ export const reaction = <T>(
   const dirtyCheck = () => {
     if (isFn(realOptions.equals))
       return !realOptions.equals(value.oldValue, value.currentValue)
-    return value.oldValue !== value.currentValue
+    return !Object.is(value.oldValue, value.currentValue)
   }
 
   const fireAction = () => {

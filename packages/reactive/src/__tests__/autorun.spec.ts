@@ -126,6 +126,23 @@ test('reaction with shallow equals', () => {
   expect(handler.mock.calls[0][0]).toEqual({ bb: 123 })
 })
 
+test('reaction dirty check with NaN should be false', () => {
+  const obs: any = {
+    aa: NaN,
+  }
+  define(obs, {
+    aa: observable.ref,
+  })
+  const handler = jest.fn()
+  reaction(() => {
+    return obs.aa
+  }, handler)
+
+  obs.aa = NaN
+
+  expect(handler).toBeCalledTimes(0)
+})
+
 test('reaction with deep equals', () => {
   const obs: any = {
     aa: { bb: 123 },
