@@ -1,8 +1,8 @@
+import { isFn } from '@formily/shared'
 import { autorun, batch } from '@formily/reactive'
 import { Form } from '../models'
 import { LifeCycleTypes } from '../types'
 import { createEffectHook } from '../shared/effective'
-import { isFn } from '@formily/shared'
 
 function createFormEffect(type: LifeCycleTypes) {
   return createEffectHook(
