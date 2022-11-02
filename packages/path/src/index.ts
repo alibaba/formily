@@ -513,15 +513,12 @@ export class Path {
   }
 
   static isPathPattern(target: any): target is Pattern {
-    if (
+    return !!(
       isStr(target) ||
       isArr(target) ||
       isRegExp(target) ||
       (isFn(target) && target[isMatcher])
-    ) {
-      return true
-    }
-    return false
+    )
   }
 
   static transform<T>(
