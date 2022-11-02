@@ -66,6 +66,7 @@ module.exports = {
       resolve: {
         alias: {
           '@formily/element': path.resolve(__dirname, '../../src'),
+          vue$: 'vue/dist/vue.esm.js',
         },
       },
     }
