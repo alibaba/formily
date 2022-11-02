@@ -205,7 +205,7 @@ test('userReactions with condition', () => {
   expect(mockFn).nthCalledWith(2, false)
 })
 
-test('userReactions with condition func', () => {
+test('userReactions with condition with function type', () => {
   const mockFn = jest.fn()
   const { field1 } = getFormAndFields(
     {
@@ -361,6 +361,41 @@ test('userReactions with user-defined effects', () => {
         target: 'field2',
         fulfill: {
           run: `mockFn($target.value)`,
+        },
+        effects: ['onFieldInit'],
+      },
+    },
+    {
+      'x-value': field2Value,
+    },
+    {
+      scope: {
+        mockFn,
+      },
+    }
+  )
+
+  expect(mockFn).toBeCalledTimes(1)
+  expect(mockFn).nthCalledWith(1, field2Value)
+
+  field2.value = field1Title
+  expect(mockFn).toBeCalledTimes(1)
+})
+
+test('userReactions with user-defined effects with function type', () => {
+  const field2Value = 'field2Value'
+  const field1Title = 'field1Title'
+  const mockFn = jest.fn()
+
+  const { field2 } = getFormAndFields(
+    {
+      title: field1Title,
+      'x-reactions': {
+        target: 'field2',
+        fulfill: {
+          run: (field: Field, { mockFn, $target }: any) => {
+            mockFn($target.value)
+          },
         },
         effects: ['onFieldInit'],
       },
