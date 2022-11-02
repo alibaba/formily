@@ -1,3 +1,4 @@
+import { isFn } from '@formily/shared'
 import { autorun, batch } from '@formily/reactive'
 import { Form } from '../models'
 import { LifeCycleTypes } from '../types'
@@ -72,7 +73,7 @@ export function onFormReact(callback?: (form: Form) => void) {
   let dispose = null
   onFormInit((form) => {
     dispose = autorun(() => {
-      callback(form)
+      if (isFn(callback)) callback(form)
     })
   })
   onFormUnmount(() => {

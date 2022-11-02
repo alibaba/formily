@@ -132,6 +132,17 @@ test('onFormReact', () => {
   form.setValues({ aa: 123 })
   expect(react).toBeCalled()
   form.onUnmount()
+
+  // will not throw error
+  const form2 = attach(
+    createForm({
+      effects() {
+        onFormReact()
+      },
+    })
+  )
+
+  form2.onUnmount()
 })
 
 test('onFormReset', async () => {
