@@ -1032,10 +1032,7 @@ export const allowAssignDefaultValue = (target: any, source: any) => {
   const isValidTarget = !isUndef(target)
   const isValidSource = !isUndef(source)
   if (!isValidTarget) {
-    if (isValidSource) {
-      return true
-    }
-    return false
+    return isValidSource
   }
 
   if (typeof target === typeof source) {
@@ -1044,11 +1041,7 @@ export const allowAssignDefaultValue = (target: any, source: any) => {
   }
 
   if (isEmptyTarget) {
-    if (isEmptySource) {
-      return false
-    } else {
-      return true
-    }
+    return !isEmptySource
   }
   return false
 }
