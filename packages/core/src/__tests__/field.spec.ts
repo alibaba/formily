@@ -2334,3 +2334,15 @@ test('field hidden value', () => {
   expect(objectField.value).toEqual({})
   expect(arrayField.value).toEqual([])
 })
+
+test('field destructor path with display none', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createArrayField({
+      name: '[aa,bb]',
+    })
+  )
+  aa.setDisplay('none')
+  expect(form.values).toEqual({})
+  expect(aa.value).toEqual([])
+})

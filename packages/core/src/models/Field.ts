@@ -1,4 +1,10 @@
-import { isValid, toArr, FormPathPattern, isArr } from '@formily/shared'
+import {
+  isValid,
+  isEmpty,
+  toArr,
+  FormPathPattern,
+  isArr,
+} from '@formily/shared'
 import {
   ValidatorTriggerType,
   parseValidatorDescriptions,
@@ -47,7 +53,7 @@ import {
 } from '../shared/internals'
 import { Form } from './Form'
 import { BaseField } from './BaseField'
-import { IFormFeedback } from '..'
+import { IFormFeedback } from '../types'
 export class Field<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
@@ -222,7 +228,7 @@ export class Field<
             if (this.selfModified && !this.caches.inputting) {
               validateSelf(this)
             }
-            if (this.display === 'none') {
+            if (!isEmpty(value) && this.display === 'none') {
               this.caches.value = toJS(value)
               this.form.deleteValuesIn(this.path)
             }
