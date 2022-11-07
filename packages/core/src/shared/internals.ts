@@ -1027,15 +1027,10 @@ export const getValidFieldDefaultValue = (value: any, initialValue: any) => {
 }
 
 export const allowAssignDefaultValue = (target: any, source: any) => {
-  const isEmptyTarget = target !== null && isEmpty(target)
-  const isEmptySource = source !== null && isEmpty(source)
   const isValidTarget = !isUndef(target)
   const isValidSource = !isUndef(source)
   if (!isValidTarget) {
-    if (isValidSource) {
-      return true
-    }
-    return false
+    return isValidSource
   }
 
   if (typeof target === typeof source) {
@@ -1043,12 +1038,10 @@ export const allowAssignDefaultValue = (target: any, source: any) => {
     if (target === 0) return false
   }
 
+  const isEmptyTarget = target !== null && isEmpty(target)
+  const isEmptySource = source !== null && isEmpty(source)
   if (isEmptyTarget) {
-    if (isEmptySource) {
-      return false
-    } else {
-      return true
-    }
+    return !isEmptySource
   }
   return false
 }
