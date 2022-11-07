@@ -86,7 +86,7 @@ const useArrayTableSources = () => {
       const field = arrayField.query(arrayField.address.concat(name)).take()
       const columnProps =
         field?.component?.[1] || schema['x-component-props'] || {}
-      const display = field?.display || schema['x-display']
+      const display = field?.display || schema['x-display'] || 'visible'
       return [
         {
           name,
