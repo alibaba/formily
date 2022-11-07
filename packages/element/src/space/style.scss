@@ -20,4 +20,8 @@
       align-items: baseline;
     }
   }
+
+  &-item {
+    display: contents;
+  }
 }
