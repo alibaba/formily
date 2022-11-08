@@ -45,6 +45,10 @@ export default {
             path: 'https://antd.formilyjs.org',
           },
           {
+            title: '@formily/antd-mobile',
+            path: 'https://antd-mobile.formilyjs.org',
+          },
+          {
             title: '@formily/next',
             path: 'https://fusion.formilyjs.org',
           },
@@ -154,6 +158,10 @@ export default {
           {
             title: '@formily/antd',
             path: 'https://antd.formilyjs.org',
+          },
+          {
+            title: '@formily/antd-mobile',
+            path: 'https://antd-mobile.formilyjs.org',
           },
           {
             title: '@formily/next',
