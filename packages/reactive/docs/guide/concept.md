@@ -19,7 +19,7 @@ We mainly use the following APIs to create observable objects in @formily/reacti
 
 ## Reaction
 
-In the reactive programming model, reaction is equivalent to the subscriber of the subscribeable object. It receives a tracker function. When this function is executed, if there is a **read operation* on an attribute in the observable object inside the function. * (Dependency collection), then the current reaction will be bound to the attribute (dependency tracking), knowing that the attribute has a **write operation\*\* in other places, it will trigger the tracker function to repeat execution, using a picture Means:
+In the reactive programming model, reaction is equivalent to the subscriber of the subscribeable object. It receives a tracker function. When this function is executed, if there is a **read operation* on an attribute in the observable object inside the function. * (Dependency collection), then the current reaction will be bound to the attribute (dependency tracking), until the attribute has a **write operation\*\* in other places, it will trigger the tracker function to repeat execution, using a picture Means:
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN01DQMGUL22mFICDsKfY_!!6000000007162-2-tps-1234-614.png)
 
