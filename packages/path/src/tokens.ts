@@ -63,7 +63,6 @@ export const dbStarTok = TokenType('**', {
   expectNext(next) {
     return (
       next === dotTok ||
-      next === parenLTok ||
       next === bracketLTok ||
       next === eofTok ||
       next === commaTok ||
