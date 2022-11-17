@@ -235,7 +235,7 @@ export class Tokenizer {
     this.finishToken(nameTok, string)
   }
 
-  readIngoreString() {
+  readIgnoreString() {
     let startPos = this.state.pos,
       prevCode,
       string = ''
@@ -279,7 +279,7 @@ export class Tokenizer {
     if (this.input.length <= this.state.pos) {
       this.finishToken(eofTok)
     } else if (this.curContext() === bracketDContext) {
-      this.readIngoreString()
+      this.readIgnoreString()
     } else if (code === 123) {
       this.state.pos++
       this.finishToken(braceLTok)
