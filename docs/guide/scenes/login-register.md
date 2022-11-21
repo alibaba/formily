@@ -801,7 +801,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <Button icon={<UploadOutlined />}>上传复印件</Button>
+      <Button icon={<UploadOutlined />}>Upload a copy</Button>
     </Upload>
   )
 }
@@ -1115,7 +1115,7 @@ export default () => {
 ```tsx
 import React from 'react'
 import { createForm } from '@formily/core'
-import { Field, VoidField } from '@formily/react'
+import { Field, VoidField, ArrayField } from '@formily/react'
 import {
   Form,
   FormItem,
@@ -1128,6 +1128,9 @@ import {
   FormGrid,
   Upload,
   FormButtonGroup,
+  ArrayBase,
+  Editable,
+  FormLayout,
 } from '@formily/antd'
 import { action } from '@formily/reactive'
 import { Card, Button } from 'antd'
@@ -1335,6 +1338,81 @@ export default () => {
             decorator={[FormItem]}
             component={[IDUpload]}
           />
+          <ArrayField name="contacts" title="Contacts" decorator={[FormItem]}>
+            {(field) => (
+              <ArrayBase>
+                {field.value?.map((item, index) => (
+                  <div key={index} className="array-items-item">
+                    <Field
+                      name={`${index}`}
+                      title="Contact Informations"
+                      component={[Editable.Popover]}
+                      reactions={(field) => {
+                        field.title =
+                          field.query('.[].name').value() || field.title
+                      }}
+                    >
+                      <VoidField
+                        name="layout"
+                        component={[FormLayout, { layout: 'vertical' }]}
+                      >
+                        <Field
+                          name="name"
+                          title="Name"
+                          required
+                          decorator={[FormItem]}
+                          component={[
+                            Input,
+                            {
+                              style: {
+                                width: 300,
+                              },
+                            },
+                          ]}
+                        />
+                        <Field
+                          name="email"
+                          title="Email"
+                          required
+                          validator="email"
+                          decorator={[FormItem]}
+                          component={[
+                            Input,
+                            {
+                              style: {
+                                width: 300,
+                              },
+                            },
+                          ]}
+                        />
+                        <Field
+                          name="phone"
+                          title="Phone Number"
+                          required
+                          validator="phone"
+                          decorator={[FormItem]}
+                          component={[
+                            Input,
+                            {
+                              style: {
+                                width: 300,
+                              },
+                            },
+                          ]}
+                        />
+                      </VoidField>
+                    </Field>
+                    <FormItem.BaseItem>
+                      <ArrayBase.Remove index={index} />
+                      <ArrayBase.MoveDown index={index} />
+                      <ArrayBase.MoveUp index={index} />
+                    </FormItem.BaseItem>
+                  </div>
+                ))}
+                <ArrayBase.Addition title="Add Contact" />
+              </ArrayBase>
+            )}
+          </ArrayField>
           <FormButtonGroup.FormItem>
             <Submit block size="large">
               Sign up

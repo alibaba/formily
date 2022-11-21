@@ -465,7 +465,7 @@ interface notify<T> {
 #### 签名
 
 ```ts
-interface subscibe<T> {
+interface subscribe<T> {
   (callback: (payload: T) => void): number
 }
 ```

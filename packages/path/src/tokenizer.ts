@@ -21,7 +21,7 @@ import {
 } from './tokens'
 import { bracketDContext, Context } from './contexts'
 
-const nonASCIIwhitespace = /[\u1680\u180e\u2000-\u200a\u202f\u205f\u3000\ufeff]/
+const nonASCIIWhitespace = /[\u1680\u180e\u2000-\u200a\u202f\u205f\u3000\ufeff]/
 
 const fullCharCodeAtPos = (input: string, pos: number) => {
   if (String.fromCharCode) return input.codePointAt(pos)
@@ -158,7 +158,7 @@ export class Tokenizer {
         default:
           if (
             (ch > 8 && ch < 14) ||
-            (ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch)))
+            (ch >= 5760 && nonASCIIWhitespace.test(String.fromCharCode(ch)))
           ) {
             ++this.state.pos
           } else {
@@ -220,7 +220,7 @@ export class Tokenizer {
         }
         if (
           (code > 8 && code < 14) ||
-          (code >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(code)))
+          (code >= 5760 && nonASCIIWhitespace.test(String.fromCharCode(code)))
         ) {
           string = slice(this.input, startPos, this.state.pos)
           break
@@ -235,7 +235,7 @@ export class Tokenizer {
     this.finishToken(nameTok, string)
   }
 
-  readIngoreString() {
+  readIgnoreString() {
     let startPos = this.state.pos,
       prevCode,
       string = ''
@@ -279,7 +279,7 @@ export class Tokenizer {
     if (this.input.length <= this.state.pos) {
       this.finishToken(eofTok)
     } else if (this.curContext() === bracketDContext) {
-      this.readIngoreString()
+      this.readIgnoreString()
     } else if (code === 123) {
       this.state.pos++
       this.finishToken(braceLTok)

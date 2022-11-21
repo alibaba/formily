@@ -24,6 +24,12 @@ export class ArraySet<T> {
   }
 
   delete(item: T) {
+    const len = this.value.length
+    if (len === 0) return
+    if (len === 1 && this.value[0] === item) {
+      this.value = []
+      return
+    }
     const findIndex = this.value.indexOf(item)
     if (findIndex > -1) {
       this.value.splice(findIndex, 1)

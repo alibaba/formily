@@ -538,6 +538,21 @@ test('nest array remove', async () => {
   ).not.toBeUndefined()
 })
 
+test('indexes: nest path need exclude incomplete number', () => {
+  const form = attach(createForm())
+
+  const objPathIncludeNum = attach(
+    form.createField({
+      name: 'attr',
+      basePath: 'metrics.0.a.10.iconWidth50',
+    })
+  )
+
+  expect(objPathIncludeNum.indexes.length).toBe(2)
+  expect(objPathIncludeNum.indexes).toEqual([0, 10])
+  expect(objPathIncludeNum.index).toBe(10)
+})
+
 test('incomplete insertion of array elements', async () => {
   const form = attach(
     createForm({

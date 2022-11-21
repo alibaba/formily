@@ -737,37 +737,7 @@ Writing method two, local expression distribution linkage
 }
 ```
 
-Writing method three, linkage of adjacent elements
-
-```json
-{
-  "type": "array",
-  "x-component": "ArrayTable",
-  "items": {
-    "type": "object",
-    "properties": {
-      "source": {
-        "type": "string",
-        "x-component": "Input",
-        "x-reactions": {
-          "target": ".target",
-          "fulfill": {
-            "state": {
-              "visible": "{{$self.value === '123'}}" //Any level of attributes supports expressions
-            }
-          }
-        }
-      },
-      "target": {
-        "type": "string",
-        "x-component": "Input"
-      }
-    }
-  }
-}
-```
-
-Writing method four, based on Schema protocol linkage
+Writing method three, based on Schema protocol linkage
 
 ```json
 {
@@ -793,7 +763,7 @@ Writing method four, based on Schema protocol linkage
 }
 ```
 
-Writing method five, based on run statement linkage
+Writing method four, based on run statement linkage
 
 ```json
 {
@@ -816,7 +786,7 @@ Writing method five, based on run statement linkage
 }
 ```
 
-Writing method six, based on the linkage of life cycle hooks
+Writing method five, based on the linkage of life cycle hooks
 
 ```json
 {
@@ -845,6 +815,8 @@ Writing method six, based on the linkage of life cycle hooks
 
 **Passive linkage**
 
+Writing method one, standard passive linkage
+
 ```json
 {
   "type": "object",
@@ -862,6 +834,36 @@ Writing method six, based on the linkage of life cycle hooks
         "fulfill": {
           "schema": {
             "x-visible": "{{$deps[0] === '123'}}" //Any level of attributes supports expressions
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Writing method two, linkage of adjacent elements
+
+```json
+{
+  "type": "array",
+  "x-component": "ArrayTable",
+  "items": {
+    "type": "object",
+    "properties": {
+     "source": {
+        "type": "string",
+        "x-component": "Input"
+      },
+      "target": {
+        "type": "string",
+        "x-component": "Input",
+        "x-reactions": {
+          "dependencies": [".source"],
+          "fulfill": {
+            "schema": {
+              "x-visible": "{{$deps[0] === '123'}}"
+            }
           }
         }
       }

@@ -861,7 +861,7 @@ test('setState/getState', () => {
     })
   )
   expect(aa.value).toEqual('123')
-  expect(bb.value).toEqual('123')
+  expect(bb.value).toBeUndefined()
   expect(cc.value).toEqual('123')
   form.setFieldState(form.query('cc'), (state) => {
     state.value = 'ccc'
@@ -1093,7 +1093,7 @@ test('fault tolerance', () => {
   field.setDisplay('none')
   expect(field.value).toBeUndefined()
   field.setValue(321)
-  expect(field.value).toEqual(321)
+  expect(field.value).toBeUndefined()
   field.setDisplay('visible')
   expect(field.value).toEqual(321)
   form.setDisplay(null)
@@ -2294,4 +2294,55 @@ test('field actions', () => {
     test: () => 321,
   })
   expect(aa.invoke('test')).toEqual(321)
+})
+
+test('field hidden value', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      hidden: true,
+      initialValue: '123',
+    })
+  )
+  expect(form.values).toEqual({ aa: '123' })
+
+  const objectField = attach(
+    form.createObjectField({
+      name: 'object',
+      hidden: true,
+    })
+  )
+  const arrayField = attach(
+    form.createArrayField({
+      name: 'array',
+      hidden: true,
+    })
+  )
+
+  aa.setDisplay('none')
+  objectField.setDisplay('none')
+  arrayField.setDisplay('none')
+  expect(aa.value).toBeUndefined()
+  expect(objectField.value).toBeUndefined()
+  expect(arrayField.value).toBeUndefined()
+
+  aa.setDisplay('hidden')
+  objectField.setDisplay('hidden')
+  arrayField.setDisplay('hidden')
+  expect(aa.value).toEqual('123')
+  expect(objectField.value).toEqual({})
+  expect(arrayField.value).toEqual([])
+})
+
+test('field destructor path with display none', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createArrayField({
+      name: '[aa,bb]',
+    })
+  )
+  aa.setDisplay('none')
+  expect(form.values).toEqual({})
+  expect(aa.value).toEqual([])
 })

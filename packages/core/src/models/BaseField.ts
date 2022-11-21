@@ -53,7 +53,7 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
   }
 
   get indexes() {
-    return this.path.transform(/\d/, (...args) =>
+    return this.path.transform(/^\d+$/, (...args) =>
       args.map((index) => Number(index))
     )
   }

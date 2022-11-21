@@ -44,7 +44,6 @@ export class Matcher {
   }
 
   next(node: Node, pos: number) {
-    const isLastToken = pos === this.path.length - 1
     //  const isOverToken = pos > this.path.length
     if (node.after) {
       // if (isOverToken) {
@@ -61,6 +60,8 @@ export class Matcher {
         return !!this.take(pos)
       }
     }
+
+    const isLastToken = pos === this.path.length - 1
     if (isLastToken) {
       return !!this.take(pos)
     } else {

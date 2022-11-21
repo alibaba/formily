@@ -1,12 +1,12 @@
 import React, { createContext, useContext } from 'react'
-import { isArr, isEmpty, isValid, toArr } from '@formily/shared'
+import { isArr, isEmpty, isValid } from '@formily/shared'
 import { Field } from '@formily/core'
 import { useField, observer } from '@formily/react'
 import { InputProps } from '@alifd/next/lib/input'
 import { NumberPickerProps } from '@alifd/next/lib/number-picker'
 import { SelectProps } from '@alifd/next/lib/select'
 import { TreeSelectProps } from '@alifd/next/lib/tree-select'
-import { CascaderProps } from '@alifd/next/lib/cascader'
+import { CascaderSelectProps } from '@alifd/next/lib/cascader-select'
 import {
   DatePickerProps,
   RangePickerProps as DateRangePickerProps,
@@ -20,6 +20,7 @@ import {
   Tag,
   Input as NextInput,
   NumberPicker as NextNumberPicker,
+  CascaderSelect as NextCascader,
 } from '@alifd/next'
 import cls from 'classnames'
 import { formatMomentValue, usePrefixCls } from '../__builtins__'
@@ -158,64 +159,19 @@ const TreeSelect: React.FC<React.PropsWithChildren<TreeSelectProps>> = observer(
   }
 )
 
-type SelectOptionType = {
-  value: string
-  label: string
-  children?: SelectOptionType[]
-}
-
-const Cascader: React.FC<React.PropsWithChildren<CascaderProps>> = observer(
-  (props) => {
+const Cascader: React.FC<React.PropsWithChildren<CascaderSelectProps>> =
+  observer((props) => {
     const field = useField<Field>()
-    const placeholder = usePlaceholder()
     const prefixCls = usePrefixCls('form-preview', props)
-    const dataSource: any[] = field?.dataSource?.length
-      ? field.dataSource
-      : props?.dataSource?.length
-      ? props.dataSource
-      : []
-    const findSelectedItem = (
-      items: SelectOptionType[],
-      val: string | number
-    ) => {
-      return items.find((item) => item.value == val)
-    }
-    const findSelectedItems = (
-      sources: SelectOptionType[],
-      selectedValues: Array<string[] | number[]>
-    ): Array<SelectOptionType[]> => {
-      return selectedValues.map((value) => {
-        const result: Array<SelectOptionType> = []
-        let items = sources
-        value.forEach((val) => {
-          const selectedItem = findSelectedItem(items, val)
-          result.push({
-            label: selectedItem?.label ?? '',
-            value: selectedItem?.value,
-          })
-          items = selectedItem?.children ?? []
-        })
-        return result
-      })
-    }
-    const getSelected = () => {
-      const val = toArr(props.value)
-      // unified conversion to multi selection mode
-      return props.multiple ? val : [val]
-    }
-    const getLabels = () => {
-      const selected = getSelected()
-      const values = findSelectedItems(dataSource, selected)
-      const labels = values
-        .map((val: Array<{ value: string; label: string }>) => {
-          return val.map((item) => item.label).join('/')
-        })
-        .join(' ')
-      return labels || placeholder
-    }
-    return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
-  }
-)
+    return (
+      <NextCascader
+        {...props}
+        className={prefixCls}
+        dataSource={field.dataSource}
+        isPreview
+      />
+    )
+  })
 
 const DatePicker: React.FC<React.PropsWithChildren<DatePickerProps>> = (
   props
