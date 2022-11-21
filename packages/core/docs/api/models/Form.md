@@ -465,7 +465,7 @@ Subscribe to news
 #### Signature
 
 ```ts
-interface subscibe<T> {
+interface subscribe<T> {
   (callback: (payload: T) => void): number
 }
 ```
