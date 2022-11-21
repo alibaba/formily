@@ -38,7 +38,7 @@ In React, the whole tree rendering performance problem of the form is very obvio
 
 2.0
 
-https://formilyjs.org
+https://v2.formilyjs.org
 
 1.0
 
