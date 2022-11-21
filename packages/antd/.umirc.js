@@ -44,7 +44,7 @@ export default {
   links: [
     {
       rel: 'stylesheet',
-      href: 'https://unpkg.com/antd/dist/antd.css',
+      href: 'https://unpkg.com/antd@4.24.3/dist/antd.css',
     },
   ],
   headScripts: [
