@@ -52,7 +52,7 @@ export class Query {
     }
   }
 
-  take(): GeneralField
+  take(): GeneralField | undefined
   take<Result>(
     getter: (field: GeneralField, address: FormPath) => Result
   ): Result
