@@ -242,8 +242,7 @@ export const executeBatchEndpoints = () => {
 export const hasDepsChange = (newDeps: any[], oldDeps: any[]) => {
   if (newDeps === oldDeps) return false
   if (newDeps.length !== oldDeps.length) return true
-  if (newDeps.some((value, index) => value !== oldDeps[index])) return true
-  return false
+  return newDeps.some((value, index) => value !== oldDeps[index])
 }
 
 export const disposeEffects = (reaction: Reaction) => {

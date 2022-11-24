@@ -51,14 +51,14 @@ export const isSupportObservable = (target: any) => {
     if (isFn(target['toJS'])) {
       return false
     }
-    if (isFn(target['toJSON'])) {
-      return false
-    }
-    return true
+    return !isFn(target['toJSON'])
   }
-  if (isMap(target) || isWeakMap(target) || isSet(target) || isWeakSet(target))
-    return true
-  return false
+  return !!(
+    isMap(target) ||
+    isWeakMap(target) ||
+    isSet(target) ||
+    isWeakSet(target)
+  )
 }
 
 export const markRaw = <T>(target: T): T => {
