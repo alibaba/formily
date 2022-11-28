@@ -125,11 +125,12 @@ export const ArrayBase: ComposedArrayBase = (props) => {
 }
 
 ArrayBase.Item = ({ children, ...props }) => {
-  const index = props.index
-  const record = takeRecord(props.record, props.index)
   return (
     <ItemContext.Provider value={props}>
-      <RecordScope getIndex={() => index} getRecord={() => record}>
+      <RecordScope
+        getIndex={() => props.index}
+        getRecord={() => takeRecord(props.record, props.index)}
+      >
         {children}
       </RecordScope>
     </ItemContext.Provider>
