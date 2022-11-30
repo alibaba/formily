@@ -12,7 +12,6 @@ export const Checkbox: ComposedCheckbox = connect(
   AntdCheckbox,
   mapProps({
     value: 'checked',
-    onInput: 'onChange',
   })
 )
 
