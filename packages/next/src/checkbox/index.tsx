@@ -16,7 +16,6 @@ export const Checkbox: ComposedCheckbox = connect(
   mapProps(
     {
       value: 'checked',
-      onInput: 'onChange',
     },
     mapSize
   )
