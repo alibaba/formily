@@ -12,7 +12,6 @@ export const Radio: ComposedRadio = connect(
   AntdRadio,
   mapProps({
     value: 'checked',
-    onInput: 'onChange',
   })
 )
 
