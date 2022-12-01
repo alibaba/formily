@@ -8,6 +8,7 @@ test('momentable is usable', () => {
       moment.isMoment(item)
     )
   ).toBe(true)
+  expect(momentable(0)).toBe(0)
 })
 
 test('formatMomentValue is usable', () => {
@@ -65,4 +66,7 @@ test('formatMomentValue is usable', () => {
       ['YYYY-MM-DD', undefined]
     )
   ).toEqual(['2021-12-21', '2021-12-29 18:47:00'])
+  expect(formatMomentValue([undefined], 'YYYY-MM-DD', 'placeholder')).toEqual([
+    'placeholder',
+  ])
 })
