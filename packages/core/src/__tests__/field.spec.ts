@@ -273,6 +273,74 @@ test('setValue/setInitialValue', () => {
   expect(form.values.ddd).toEqual('222')
 })
 
+test('initialValue when value is empty array or object', () => {
+  const form = attach(
+    createForm({
+      values: {
+        aaa: [],
+        bbb: {},
+        ddd: {},
+        fff: {
+          ggg: '',
+        },
+      },
+    })
+  )
+  const aaa = attach(
+    form.createField({
+      name: 'aaa',
+      initialValue: ['aaa'],
+    })
+  )
+  const bbb = attach(
+    form.createField({
+      name: 'bbb',
+      initialValue: {
+        ccc: 'ccc',
+      },
+    })
+  )
+
+  const ddd = attach(
+    form.createObjectField({
+      name: 'ddd',
+    })
+  )
+
+  attach(
+    form.createField({
+      name: 'ddd.eee',
+      initialValue: 'eee',
+    })
+  )
+
+  const fff = attach(
+    form.createObjectField({
+      name: 'fff',
+      initialValue: {
+        ggg: 'ggg',
+      },
+    })
+  )
+
+  attach(
+    form.createField({
+      name: 'fff.hhh',
+      initialValue: 'hhh',
+    })
+  )
+
+  expect(aaa.value).toEqual([])
+  expect(bbb.value).toEqual({})
+  expect(ddd.value).toEqual({
+    eee: 'eee',
+  })
+  expect(fff.value).toEqual({
+    ggg: '',
+    hhh: 'hhh',
+  })
+})
+
 test('setLoading/setValidating', async () => {
   const form = attach(createForm())
   const field = attach(
