@@ -11,7 +11,11 @@ export const render = (element: React.ReactElement) => {
   if (globalThisPolyfill.document) {
     env.portalDOM =
       env.portalDOM || globalThisPolyfill['document'].createElement('div')
-    env.ReactDOM = env.ReactDOM || require('react-dom')
+    env.ReactDOM =
+      env.ReactDOM ||
+      globalThisPolyfill['ReactDOM'] ||
+      globalThisPolyfill['require'] ||
+      require('react-dom')
     //eslint-disable-next-line
     return env.ReactDOM.createPortal(element, env.portalDOM)
   } else {
