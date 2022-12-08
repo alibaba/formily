@@ -96,7 +96,7 @@ const Select: React.FC<React.PropsWithChildren<SelectProps<any>>> = observer(
           const valueKey = props.fieldNames?.value || 'value'
           return item[valueKey] == target?.value
         })?.[labelKey] ||
-        target.label ||
+        target?.[labelKey] ||
         placeholder
       )
     }
