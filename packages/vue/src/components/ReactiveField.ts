@@ -104,135 +104,147 @@ const createFieldInVue2 = (innerCreateField) => {
   }
 }
 
-export default observer({
-  name: 'ReactiveField',
-  props: {
-    fieldType: {
-      type: String,
-      default: 'Field',
+export default observer(
+  {
+    name: 'ReactiveField',
+    props: {
+      fieldType: {
+        type: String,
+        default: 'Field',
+      },
+      fieldProps: {
+        type: Object,
+        default: () => ({}),
+      },
     },
-    fieldProps: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  setup(props: IReactiveFieldProps, { slots }) {
-    const formRef = useForm()
-    const parentRef = useField()
-    const optionsRef = inject(SchemaOptionsSymbol, ref(null))
-    let createField = () =>
-      formRef?.value?.[`create${props.fieldType}`]?.({
-        ...props.fieldProps,
-        basePath: props.fieldProps?.basePath ?? parentRef.value?.address,
-      })
-
-    if (isVue2) {
-      createField = createFieldInVue2(createField)
-    }
-
-    const fieldRef = shallowRef(createField()) as Ref<GeneralField>
-    watch(
-      () => props.fieldProps,
-      () => (fieldRef.value = createField())
-    )
-    useAttach(fieldRef)
-    provide(FieldSymbol, fieldRef)
-    return () => {
-      const field = fieldRef.value
-      const options = optionsRef.value
-      if (!field) {
-        return slots.default?.()
-      }
-      if (field.display !== 'visible') {
-        return h('template', {}, {})
-      }
-
-      const mergedSlots = mergeSlots(field, slots, field.content)
-
-      const renderDecorator = (childNodes: any[]) => {
-        if (!field.decoratorType) {
-          return wrapFragment(childNodes)
-        }
-        const finalComponent =
-          FormPath.getIn(options?.components, field.decoratorType as string) ??
-          field.decoratorType
-        const componentAttrs = toJS(field.decorator[1]) || {}
-        const componentData = {
-          attrs: componentAttrs,
-          style: componentAttrs?.style,
-          class: componentAttrs?.class,
-        }
-        delete componentData.attrs.style
-        delete componentData.attrs.class
-
-        return h(finalComponent, componentData, {
-          default: () => childNodes,
+    setup(props: IReactiveFieldProps, { slots }) {
+      const formRef = useForm()
+      const parentRef = useField()
+      const optionsRef = inject(SchemaOptionsSymbol, ref(null))
+      let createField = () =>
+        formRef?.value?.[`create${props.fieldType}`]?.({
+          ...props.fieldProps,
+          basePath: props.fieldProps?.basePath ?? parentRef.value?.address,
         })
+
+      if (isVue2) {
+        createField = createFieldInVue2(createField)
       }
 
-      const renderComponent = () => {
-        if (!field.componentType) return wrapFragment(mergedSlots?.default?.())
+      const fieldRef = shallowRef(createField()) as Ref<GeneralField>
+      watch(
+        () => props.fieldProps,
+        () => (fieldRef.value = createField())
+      )
+      useAttach(fieldRef)
+      provide(FieldSymbol, fieldRef)
+      return () => {
+        const field = fieldRef.value
+        const options = optionsRef.value
+        if (!field) {
+          return slots.default?.()
+        }
+        if (field.display !== 'visible') {
+          return h('template', {}, {})
+        }
 
-        const component =
-          FormPath.getIn(options?.components, field.componentType as string) ??
-          field.componentType
+        const mergedSlots = mergeSlots(field, slots, field.content)
 
-        const originData = toJS(field.component[1]) || {}
-        const events = {} as Record<string, any>
-        const originChange = originData['@change'] || originData['onChange']
-        const originFocus = originData['@focus'] || originData['onFocus']
-        const originBlur = originData['@blur'] || originData['onBlur']
+        const renderDecorator = (childNodes: any[]) => {
+          if (!field.decoratorType) {
+            return wrapFragment(childNodes)
+          }
+          const finalComponent =
+            FormPath.getIn(
+              options?.components,
+              field.decoratorType as string
+            ) ?? field.decoratorType
+          const componentAttrs = toJS(field.decorator[1]) || {}
+          const componentData = {
+            attrs: componentAttrs,
+            style: componentAttrs?.style,
+            class: componentAttrs?.class,
+          }
+          delete componentData.attrs.style
+          delete componentData.attrs.class
 
-        // '@xxx' has higher priority
-        Object.keys(originData)
-          .filter((key) => key.startsWith('on'))
-          .forEach((eventKey) => {
-            const eventName = `${eventKey[2].toLowerCase()}${eventKey.slice(3)}`
-            events[eventName] = originData[eventKey]
+          return h(finalComponent, componentData, {
+            default: () => childNodes,
           })
-
-        Object.keys(originData)
-          .filter((key) => key.startsWith('@'))
-          .forEach((eventKey) => {
-            events[eventKey.slice(1)] = originData[eventKey]
-            delete originData[eventKey]
-          })
-
-        events.change = (...args: any[]) => {
-          if (!isVoidField(field)) field.onInput(...args)
-          originChange?.(...args)
-        }
-        events.focus = (...args: any[]) => {
-          if (!isVoidField(field)) field.onFocus(...args)
-          originFocus?.(...args)
-        }
-        events.blur = (...args: any[]) => {
-          if (!isVoidField(field)) field.onBlur(...args)
-          originBlur?.(...args)
         }
 
-        const componentData = {
-          attrs: {
-            disabled: !isVoidField(field)
-              ? field.pattern === 'disabled' || field.pattern === 'readPretty'
-              : undefined,
-            readOnly: !isVoidField(field)
-              ? field.pattern === 'readOnly'
-              : undefined,
-            ...originData,
-            value: !isVoidField(field) ? field.value : undefined,
-          },
-          style: originData?.style,
-          class: originData?.class,
-          on: events,
-        }
-        delete componentData.attrs.style
-        delete componentData.attrs.class
+        const renderComponent = () => {
+          if (!field.componentType)
+            return wrapFragment(mergedSlots?.default?.())
 
-        return h(component, componentData, mergedSlots)
+          const component =
+            FormPath.getIn(
+              options?.components,
+              field.componentType as string
+            ) ?? field.componentType
+
+          const originData = toJS(field.component[1]) || {}
+          const events = {} as Record<string, any>
+          const originChange = originData['@change'] || originData['onChange']
+          const originFocus = originData['@focus'] || originData['onFocus']
+          const originBlur = originData['@blur'] || originData['onBlur']
+
+          // '@xxx' has higher priority
+          Object.keys(originData)
+            .filter((key) => key.startsWith('on'))
+            .forEach((eventKey) => {
+              const eventName = `${eventKey[2].toLowerCase()}${eventKey.slice(
+                3
+              )}`
+              events[eventName] = originData[eventKey]
+            })
+
+          Object.keys(originData)
+            .filter((key) => key.startsWith('@'))
+            .forEach((eventKey) => {
+              events[eventKey.slice(1)] = originData[eventKey]
+              delete originData[eventKey]
+            })
+
+          events.change = (...args: any[]) => {
+            if (!isVoidField(field)) field.onInput(...args)
+            originChange?.(...args)
+          }
+          events.focus = (...args: any[]) => {
+            if (!isVoidField(field)) field.onFocus(...args)
+            originFocus?.(...args)
+          }
+          events.blur = (...args: any[]) => {
+            if (!isVoidField(field)) field.onBlur(...args)
+            originBlur?.(...args)
+          }
+
+          const componentData = {
+            attrs: {
+              disabled: !isVoidField(field)
+                ? field.pattern === 'disabled' || field.pattern === 'readPretty'
+                : undefined,
+              readOnly: !isVoidField(field)
+                ? field.pattern === 'readOnly'
+                : undefined,
+              ...originData,
+              value: !isVoidField(field) ? field.value : undefined,
+            },
+            style: originData?.style,
+            class: originData?.class,
+            on: events,
+          }
+          delete componentData.attrs.style
+          delete componentData.attrs.class
+
+          return h(component, componentData, mergedSlots)
+        }
+
+        return renderDecorator([renderComponent()])
       }
-
-      return renderDecorator([renderComponent()])
-    }
-  },
-} as unknown as DefineComponent<IReactiveFieldProps>)
+    },
+  } as unknown as DefineComponent<IReactiveFieldProps>,
+  {
+    scheduler: (update) => Promise.resolve().then(update),
+  }
+)
