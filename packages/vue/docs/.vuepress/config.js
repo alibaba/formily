@@ -99,6 +99,20 @@ module.exports = {
       resolve: {
         alias: {
           '@formily/vue': path.resolve(__dirname, '../../src'),
+          '@formily/json-schema': path.resolve(
+            __dirname,
+            '../../../json-schema/src'
+          ),
+          '@formily/path': path.resolve(__dirname, '../../../path/src'),
+          '@formily/reactive-vue': path.resolve(
+            __dirname,
+            '../../../reactive-vue/src'
+          ),
+          '@formily/element': path.resolve(__dirname, '../../../element/src'),
+          vue: path.resolve(
+            __dirname,
+            '../../../../node_modules/vue/dist/vue.runtime.esm.js'
+          ),
         },
       },
     }
