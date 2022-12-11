@@ -1,6 +1,6 @@
 import { inject, provide, watch, shallowRef, computed, markRaw } from 'vue-demi'
 import { GeneralField } from '@formily/core'
-import { isFn, isValid } from '@formily/shared'
+import { isFn, isValid, lazyMerge } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import {
   SchemaSymbol,
@@ -54,10 +54,7 @@ const RecursionField = {
       schema?.toFieldProps?.({
         ...optionsRef.value,
         get scope() {
-          return {
-            ...optionsRef.value.scope,
-            ...scopeRef.value,
-          }
+          return lazyMerge(optionsRef.value.scope, scopeRef.value)
         },
       })
     const fieldPropsRef = shallowRef(getPropsFromSchema(fieldSchemaRef.value))
@@ -68,9 +65,9 @@ const RecursionField = {
 
     const getBasePath = () => {
       if (props.onlyRenderProperties) {
-        return props.basePath || parentRef?.value?.address.concat(props.name)
+        return props.basePath ?? parentRef?.value?.address.concat(props.name)
       }
-      return props.basePath || parentRef?.value?.address
+      return props.basePath ?? parentRef?.value?.address
     }
 
     provide(SchemaSymbol, fieldSchemaRef)
@@ -115,7 +112,7 @@ const RecursionField = {
                 attrs: {
                   schema,
                   name,
-                  basePath: field?.address || basePath,
+                  basePath: field?.address ?? basePath,
                 },
                 slot: schema['x-slot'],
               },
