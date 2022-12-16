@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.2.15(2022-12-16)
+
+### :bug: Bug Fixes
+
+1. [fix(antd): fix array tabs waring (#3629)](https://github.com/alibaba/formily/commit/a7e80893) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(vue): keep origin SlotProps pass in ReactiveField (#3623)](https://github.com/alibaba/formily/commit/200af68e) :point_right: ( [frehkxu](https://github.com/frehkxu) )
+
+1. [fix(vue): fix view may not update when states change. (#3619)](https://github.com/alibaba/formily/commit/82ca678d) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+### :hammer_and_wrench: Update Workflow Scripts
+
+1. [build(deps): bump decode-uri-component from 0.2.0 to 0.2.2 (#3607)](https://github.com/alibaba/formily/commit/e075e4e3) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
+
 ## v2.2.14(2022-12-05)
 
 ### :bug: Bug Fixes
@@ -696,16 +710,6 @@
 
 1. [feat(next): support checkStrictly props in SelectTable (#2824)](https://github.com/alibaba/formily/commit/feba6375) :point_right: ( [Lyca](https://github.com/Lyca) )
 
-### :blush: Other Changes
-
-1. [chore(antd/next): replace useForm to useParentForm in Form component](https://github.com/alibaba/formily/commit/43a3d6b8) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [chore(antd/next): revert editable](https://github.com/alibaba/formily/commit/16a376d3) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.0.10(2022-02-13)
-
-### :tada: Enhancements
-
 1. [feat(antd/next): support 16427form scope with Form](https://github.com/alibaba/formily/commit/09a597f7) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat(react): improve expression scopes (#2778)](https://github.com/alibaba/formily/commit/25c48970) :point_right: ( [Janry](https://github.com/Janry) )
@@ -819,6 +823,8 @@
 1. [feat(core): support value change trigger validate](https://github.com/alibaba/formily/commit/0473017a) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat(core): add extra strategy for merge form value (#1448)](https://github.com/alibaba/formily/commit/0b5606d1) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+1. [feat(antd/next): remove toFieldProps](https://github.com/alibaba/formily/commit/edf078da) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat(vue): improve typings and docs(#1433)](https://github.com/alibaba/formily/commit/fc5d6650) :point_right: ( [月落音阑](https://github.com/月落音阑) )
 
@@ -1215,6 +1221,8 @@
 1. [fix(shared): fix defaults merge with null will get unexpect results #1644](https://github.com/alibaba/formily/commit/d39c426f) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(json-schema): fix findComponent return unexpected result (#1625)](https://github.com/alibaba/formily/commit/3453c69d) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+1. [fix(antd/next): remove FormButtonGroup.FormItem colon #1623](https://github.com/alibaba/formily/commit/48137547) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(antd): fix DatePicker week formatting errors (#1614)](https://github.com/alibaba/formily/commit/dbdd1984) :point_right: ( [sun](https://github.com/sun) )
 
@@ -1912,6 +1920,8 @@
 
 1. [perf(core): improve field errors/success/warnings read performance](https://github.com/alibaba/formily/commit/32eca498) :point_right: ( [janrywang](https://github.com/janrywang) )
 
+1. [perf(antd/next): improve FormItem render performance (#2237)](https://github.com/alibaba/formily/commit/64445d09) :point_right: ( [Janry](https://github.com/Janry) )
+
 1. [perf(path): use Map replace LRUMap](https://github.com/alibaba/formily/commit/1141e580) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [perf(reactive-react): improve performace with immediate](https://github.com/alibaba/formily/commit/6d6a18f4) :point_right: ( [janrywang](https://github.com/janrywang) )
@@ -1968,11 +1978,13 @@
 
 ### :blush: Other Changes
 
+1. [chore(antd/next): replace useForm to useParentForm in Form component](https://github.com/alibaba/formily/commit/43a3d6b8) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(antd/next): revert editable](https://github.com/alibaba/formily/commit/16a376d3) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 1. [chore(json-schema): improve typings](https://github.com/alibaba/formily/commit/d116d272) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore: change pr template and commit message specific link (#2742)](https://github.com/alibaba/formily/commit/129cd693) :point_right: ( [zhouxinyong](https://github.com/zhouxinyong) )
-
-1. [chore(antd/next): improve FormItem props](https://github.com/alibaba/formily/commit/4c36ed26) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(grid): improve strictAutoFit](https://github.com/alibaba/formily/commit/d485a49e) :point_right: ( [janrywang](https://github.com/janrywang) )
 
