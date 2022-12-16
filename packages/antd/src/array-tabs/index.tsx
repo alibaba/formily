@@ -14,21 +14,28 @@ interface IFeedbackBadgeProps {
   index: number
 }
 
-const FeedbackBadge: ReactFC<IFeedbackBadgeProps> = observer((props) => {
-  const field = useField<ArrayField>()
-  const tab = `${field.title || 'Untitled'} ${props.index + 1}`
-  const errors = field.errors.filter((error) =>
-    error.address.includes(`${field.address}.${props.index}`)
-  )
-  if (errors.length) {
-    return (
-      <Badge size="small" className="errors-badge" count={errors.length}>
-        {tab}
-      </Badge>
+const FeedbackBadge: ReactFC<IFeedbackBadgeProps> = observer(
+  (props) => {
+    const field = useField<ArrayField>()
+    const tab = `${field.title || 'Untitled'} ${props.index + 1}`
+    const errors = field.errors.filter((error) =>
+      error.address.includes(`${field.address}.${props.index}`)
     )
+    if (errors.length) {
+      return (
+        <Badge size="small" className="errors-badge" count={errors.length}>
+          {tab}
+        </Badge>
+      )
+    }
+    return <Fragment>{tab}</Fragment>
+  },
+  {
+    scheduler(request) {
+      requestAnimationFrame(request)
+    },
   }
-  return <Fragment>{tab}</Fragment>
-})
+)
 
 export const ArrayTabs: React.FC<React.PropsWithChildren<TabsProps>> = observer(
   (props) => {
@@ -54,7 +61,6 @@ export const ArrayTabs: React.FC<React.PropsWithChildren<TabsProps>> = observer(
         field.remove(index)
       }
     }
-
     return (
       <Tabs
         {...props}
@@ -83,6 +89,11 @@ export const ArrayTabs: React.FC<React.PropsWithChildren<TabsProps>> = observer(
         })}
       </Tabs>
     )
+  },
+  {
+    scheduler(request) {
+      requestAnimationFrame(request)
+    },
   }
 )
 
