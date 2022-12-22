@@ -206,7 +206,9 @@ export const patchFormValues = (
       return
     }
 
-    if (allowAssignDefaultValue(targetValue, source)) {
+    const ignoreObj = targetField?.displayName === 'Field'
+
+    if (allowAssignDefaultValue(targetValue, source, ignoreObj)) {
       update(path, source)
     } else {
       if (isEmpty(source)) return
@@ -1021,12 +1023,21 @@ export const getValidFormValues = (values: any) => {
   return clone(values || {})
 }
 
-export const getValidFieldDefaultValue = (value: any, initialValue: any) => {
-  if (allowAssignDefaultValue(value, initialValue)) return clone(initialValue)
+export const getValidFieldDefaultValue = (
+  value: any,
+  initialValue: any,
+  ignoreObj: boolean
+) => {
+  if (allowAssignDefaultValue(value, initialValue, ignoreObj))
+    return clone(initialValue)
   return value
 }
 
-export const allowAssignDefaultValue = (target: any, source: any) => {
+export const allowAssignDefaultValue = (
+  target: any,
+  source: any,
+  ignoreObj: boolean
+) => {
   const isValidTarget = !isUndef(target)
   const isValidSource = !isUndef(source)
   if (!isValidTarget) {
@@ -1036,8 +1047,10 @@ export const allowAssignDefaultValue = (target: any, source: any) => {
   if (typeof target === typeof source) {
     if (target === '') return false
     if (target === 0) return false
-    if (Array.isArray(target)) return false
-    if (isPlainObj(target)) return false
+    if (ignoreObj) {
+      if (Array.isArray(target)) return false
+      if (isPlainObj(target)) return false
+    }
   }
 
   const isEmptyTarget = target !== null && isEmpty(target)

@@ -1834,6 +1834,45 @@ test('reactions initialValue and value', () => {
     })
   )
   expect(form.values.aa.input).toEqual('111')
+
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      reactions: [
+        (field) => {
+          field.initialValue = [{ text: 'text' }]
+        },
+      ],
+    })
+  )
+  expect(bb.value).toEqual([{ text: 'text' }])
+  expect(bb.initialValue).toEqual([{ text: 'text' }])
+
+  const cc = attach(
+    form.createArrayField({
+      name: 'cc',
+      reactions: [
+        (field) => {
+          field.initialValue = [{ text: 'text' }]
+        },
+      ],
+    })
+  )
+  expect(cc.value).toEqual([{ text: 'text' }])
+  expect(cc.initialValue).toEqual([{ text: 'text' }])
+
+  const dd = attach(
+    form.createObjectField({
+      name: 'dd',
+      reactions: [
+        (field) => {
+          field.initialValue = { text: 'text' }
+        },
+      ],
+    })
+  )
+  expect(dd.value).toEqual({ text: 'text' })
+  expect(dd.initialValue).toEqual({ text: 'text' })
 })
 
 test('field name is length in initialize', () => {

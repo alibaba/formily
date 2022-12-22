@@ -60,8 +60,6 @@ export class Field<
   TextType = any,
   ValueType = any
 > extends BaseField<Decorator, Component, TextType> {
-  displayName = 'Field'
-
   props: IFieldProps<Decorator, Component, TextType, ValueType>
 
   loading: boolean
@@ -82,7 +80,8 @@ export class Field<
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component, TextType, ValueType>,
     form: Form,
-    designable: boolean
+    designable: boolean,
+    public displayName = 'Field'
   ) {
     super()
     this.form = form
@@ -421,8 +420,12 @@ export class Field<
         this.caches.value = value
         return
       }
-      value = getValidFieldDefaultValue(value, this.initialValue)
-      if (!allowAssignDefaultValue(this.value, value) && !this.designable) {
+      const ignoreObj = this.displayName === 'Field'
+      value = getValidFieldDefaultValue(value, this.initialValue, ignoreObj)
+      if (
+        !allowAssignDefaultValue(this.value, value, ignoreObj) &&
+        !this.designable
+      ) {
         return
       }
     }
@@ -432,8 +435,9 @@ export class Field<
   setInitialValue = (initialValue?: ValueType) => {
     if (this.destroyed) return
     if (!this.initialized) {
+      const ignoreObj = this.displayName === 'Field'
       if (
-        !allowAssignDefaultValue(this.initialValue, initialValue) &&
+        !allowAssignDefaultValue(this.initialValue, initialValue, ignoreObj) &&
         !this.designable
       ) {
         return

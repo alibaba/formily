@@ -8,7 +8,6 @@ export class ObjectField<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any
 > extends Field<Decorator, Component, any, Record<string, any>> {
-  displayName = 'ObjectField'
   private additionalProperties: string[] = []
   constructor(
     address: FormPathPattern,
@@ -16,7 +15,7 @@ export class ObjectField<
     form: Form,
     designable: boolean
   ) {
-    super(address, props, form, designable)
+    super(address, props, form, designable, 'ObjectField')
     this.makeAutoCleanable()
   }
 
