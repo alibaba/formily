@@ -160,6 +160,66 @@ test('render field', async () => {
   expect(queryByText('aa-decorator')).not.toBeNull()
 })
 
+const InputWithSlot = defineComponent({
+  props: ['value'],
+  setup(props, { attrs, listeners, slots }) {
+    const fieldRef = useField()
+    return () => {
+      const field = fieldRef.value
+      return h('div', {}, [
+        h('input', {
+          class: 'test-input',
+          attrs: {
+            ...attrs,
+            value: props.value,
+            'data-testid': field.path.toString(),
+          },
+          on: {
+            ...listeners,
+            input: listeners.change,
+          },
+        }),
+        [slots['append']?.({ path: field.path.toString() })],
+      ])
+    }
+  },
+})
+
+test('render in nesting slots with (ObjectField/ArrayField) no decorator', async () => {
+  const form = createForm()
+
+  const { getByTestId } = render(
+    defineComponent({
+      name: 'TestComponent',
+      setup() {
+        return {
+          form,
+          Normal,
+          InputWithSlot,
+          Decorator,
+        }
+      },
+      template: `<FormProvider :form="form">
+      <ObjectField name="cc" :component="['div']">
+        <Field name="mm" :decorator="[Decorator]" :component="[InputWithSlot]">
+          <template #append="{ path }">
+            <span :data-testid="'slot-prop-' +path"></span>
+          </template>
+        </Field>
+      </ObjectField>
+      <VoidField name="dd" :component="['div']">
+        <Field name="oo" :decorator="[Decorator]" :component="[InputWithSlot]" />
+      </VoidField>
+      
+    </FormProvider>`,
+    })
+  )
+
+  expect(getByTestId('oo')).not.toBeUndefined()
+  expect(getByTestId('cc.mm')).not.toBeUndefined()
+  expect(getByTestId('slot-prop-cc.mm')).not.toBeUndefined()
+})
+
 test('render field with html attrs', async () => {
   const form = createForm()
 

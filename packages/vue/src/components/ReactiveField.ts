@@ -71,8 +71,8 @@ const mergeSlots = (
   }
   const patchSlot =
     (slotName: string) =>
-    (originSlotScope: Record<string, any> = {}) =>
-      slots[slotName]?.({ field, form: field.form, ...originSlotScope }) ?? []
+    (...originArgs) =>
+      slots[slotName]?.({ field, form: field.form, ...originArgs[0] }) ?? []
 
   const patchedSlots: Record<string, (...args: any) => unknown[]> = {}
   slotNames.forEach((name) => {
