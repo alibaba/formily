@@ -1036,8 +1036,6 @@ export const allowAssignDefaultValue = (target: any, source: any) => {
   if (typeof target === typeof source) {
     if (target === '') return false
     if (target === 0) return false
-    if (Array.isArray(target)) return false
-    if (isPlainObj(target)) return false
   }
 
   const isEmptyTarget = target !== null && isEmpty(target)
