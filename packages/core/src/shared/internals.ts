@@ -1038,8 +1038,8 @@ export const allowAssignDefaultValue = (target: any, source: any) => {
     if (target === 0) return false
   }
 
-  const isEmptyTarget = target !== null && isEmpty(target)
-  const isEmptySource = source !== null && isEmpty(source)
+  const isEmptyTarget = target !== null && isEmpty(target, true)
+  const isEmptySource = source !== null && isEmpty(source, true)
   if (isEmptyTarget) {
     return !isEmptySource
   }
