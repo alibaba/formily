@@ -20,7 +20,16 @@ import { stringLength } from '../string'
 import { Subscribable } from '../subscribable'
 import { lazyMerge, merge } from '../merge'
 import { instOf } from '../instanceof'
-import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../checkers'
+import {
+  isFn,
+  isHTMLElement,
+  isNumberLike,
+  isReactElement,
+  isMap,
+  isWeakMap,
+  isWeakSet,
+  isSet,
+} from '../checkers'
 import { defaults } from '../defaults'
 import { applyMiddleware } from '../middleware'
 
@@ -529,6 +538,20 @@ describe('types', () => {
   })
   test('isHTMLElement', () => {
     expect(isHTMLElement(document.createElement('div'))).toBeTruthy()
+  })
+  test('isMap', () => {
+    expect(isMap(new Map())).toBeTruthy()
+  })
+  test('isSet', () => {
+    expect(isSet(new Set())).toBeTruthy()
+  })
+  test('isWeakMap', () => {
+    expect(isWeakMap(new WeakMap())).toBeTruthy()
+    expect(isWeakMap(new Map())).toBeFalsy()
+  })
+  test('isWeakSet', () => {
+    expect(isWeakSet(new WeakSet())).toBeTruthy()
+    expect(isWeakSet(new Set())).toBeFalsy()
   })
 })
 
