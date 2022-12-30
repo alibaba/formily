@@ -74,6 +74,11 @@ describe('mark operation', () => {
     const obs = observable<any>(markObservable(markRaw({ aa: 111 })))
     expect(isObservable(obs)).toBe(false)
   })
+
+  test('function marked as observable should NOT be observable', () => {
+    const obs = observable<any>(markObservable(() => {}))
+    expect(isObservable(obs)).toBe(false)
+  })
 })
 
 test('recursive references tojs', () => {
@@ -82,4 +87,7 @@ test('recursive references tojs', () => {
   const obs = observable<any>(obj)
   obs.obs = obs
   expect(toJS(obs)).toBeTruthy()
+
+  const arrObs = observable([{ aa: 1 }, { bb: 2 }, { cc: 3 }])
+  expect(toJS(arrObs)).toEqual([{ aa: 1 }, { bb: 2 }, { cc: 3 }])
 })
