@@ -33,6 +33,7 @@ export type RadioProps = ElRadioProps
 
 const TransformElRadioGroup = transformComponent(ElRadioGroup, {
   change: 'input',
+  uselessChange:'change'
 })
 
 const RadioGroupOption = defineComponent<RadioGroupProps>({
