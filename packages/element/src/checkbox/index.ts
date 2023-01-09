@@ -85,6 +85,7 @@ export type CheckboxGroupProps = ElCheckboxGroupProps & {
 
 const TransformElCheckboxGroup = transformComponent(ElCheckboxGroup, {
   change: 'input',
+  uselessChange: 'change'
 })
 
 const CheckboxGroupOption = defineComponent<CheckboxGroupProps>({
