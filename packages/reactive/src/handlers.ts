@@ -8,8 +8,12 @@ import { createObservable } from './internals'
 
 const wellKnownSymbols = new Set(
   Object.getOwnPropertyNames(Symbol)
-    .map((key) => Symbol[key])
-    .filter((value) => typeof value === 'symbol')
+    .reduce((buf: Symbol[], key) => {
+      if (key === 'arguments' || key === 'caller') return buf    
+      const value = Symbol[key]
+      if (typeof value === 'symbol') return buf.concat(value)
+      return buf
+    }, [])
 )
 
 const hasOwnProperty = Object.prototype.hasOwnProperty
