@@ -416,9 +416,12 @@ export class Field<
 
   setValue = (value?: ValueType) => {
     if (this.destroyed) return
+    const displayNone = this.display === 'none'
+    if (displayNone) {
+      this.caches.value = value
+    }
     if (!this.initialized) {
-      if (this.display === 'none') {
-        this.caches.value = value
+      if (displayNone) {
         return
       }
       value = getValidFieldDefaultValue(value, this.initialValue)

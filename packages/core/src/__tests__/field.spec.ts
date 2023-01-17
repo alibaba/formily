@@ -150,6 +150,20 @@ test('field display and value', () => {
   expect(objectField.value).toEqual({ value: '123' })
   expect(arrayField.value).toEqual(['123'])
   expect(valueField.value).toEqual('123')
+
+  objectField.visible = false
+  arrayField.visible = false
+  valueField.visible = false
+  objectField.setValue(undefined)
+  arrayField.setValue(undefined)
+  valueField.setValue(undefined)
+
+  objectField.visible = true
+  arrayField.visible = true
+  valueField.visible = true
+  expect(objectField.value).toBeUndefined()
+  expect(arrayField.value).toBeUndefined()
+  expect(valueField.value).toBeUndefined()
 })
 
 test('nested display/pattern', () => {
