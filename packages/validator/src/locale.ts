@@ -264,6 +264,6 @@ export default {
         multipleOf: 'The field value must be divisible by {{multipleOf}}',
         maxProperties: 'O número de propriedades de campo não pode ser maior que {{maxProperties}}',
         minProperties: 'O número de propriedades do campo não pode ser menor que {{maxProperties}}',
-        uniqueItems: 'Array de elementos único',
+        uniqueItems: 'Array deve ter elementos únicos',
     },
 }
