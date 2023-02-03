@@ -35,7 +35,7 @@ type IFormDrawerProps = Omit<DrawerProps, 'title'> & {
   okText?: string | Component | VNode | (() => VNode)
   okButtonProps?: ButtonProps
   onOpen?: () => void
-  onOpend?: () => void
+  onOpened?: () => void
   onClose?: () => void
   onClosed?: () => void
   onCancel?: () => void

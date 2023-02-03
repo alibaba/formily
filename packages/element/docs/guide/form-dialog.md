@@ -42,7 +42,7 @@ type IFormDialogProps = Omit<DialogProps, 'title'> & {
   okText?: string | Component | VNode | (() => VNode)
   okButtonProps?: ButtonProps
   onOpen?: () => void
-  onOpend?: () => void
+  onOpened?: () => void
   onClose?: () => void
   onClosed?: () => void
   onCancel?: () => void

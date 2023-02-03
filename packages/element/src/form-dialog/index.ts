@@ -39,7 +39,7 @@ type IFormDialogProps = Omit<DialogProps, 'title'> & {
   okText?: string | Component | VNode | (() => VNode)
   okButtonProps?: ButtonProps
   onOpen?: () => void
-  onOpend?: () => void
+  onOpened?: () => void
   onClose?: () => void
   onClosed?: () => void
   onCancel?: () => void
@@ -162,7 +162,7 @@ export function FormDialog(
               onClose,
               onClosed,
               onOpen,
-              onOpend,
+              onOpened,
               onOK,
               onCancel,
               title,
@@ -205,8 +205,8 @@ export function FormDialog(
                         open: () => {
                           onOpen?.()
                         },
-                        opend: () => {
-                          onOpend?.()
+                        opened: () => {
+                          onOpened?.()
                         },
                       },
                     },
