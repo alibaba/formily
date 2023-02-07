@@ -15,10 +15,12 @@ import {
 } from 'react-sortable-hoc'
 import { ISchema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
-import { ArrayBase, ArrayBaseMixins } from '../array-base'
+import { ArrayBase, ArrayBaseMixins, IArrayBaseProps } from '../array-base'
 
 type ComposedArrayItems = React.FC<
-  React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+  React.PropsWithChildren<
+    React.HTMLAttributes<HTMLDivElement> & IArrayBaseProps
+  >
 > &
   ArrayBaseMixins & {
     Item?: React.FC<
@@ -75,9 +77,16 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
   const prefixCls = usePrefixCls('formily-array-items')
   const schema = useFieldSchema()
   const addition = useAddition()
+  const { onAdd, onCopy, onRemove, onMoveDown, onMoveUp } = props
   const dataSource = Array.isArray(field.value) ? field.value : []
   return (
-    <ArrayBase>
+    <ArrayBase
+      onAdd={onAdd}
+      onCopy={onCopy}
+      onRemove={onRemove}
+      onMoveUp={onMoveUp}
+      onMoveDown={onMoveDown}
+    >
       <div
         {...props}
         onChange={() => {}}
