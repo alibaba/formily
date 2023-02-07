@@ -439,7 +439,17 @@ export default () => {
 
 ### ArrayCards
 
-Reference https://fusion.design/pc/component/basic/card
+Extended attributes
+
+| Property name | Type                      | Description     | Default value |
+| ------------- | ------------------------- | --------------- | ------------- |
+| onAdd         | `(index: number) => void` | add method      |               |
+| onRemove      | `(index: number) => void` | remove method   |               |
+| onCopy        | `(index: number) => void` | copy method     |               |
+| onMoveUp      | `(index: number) => void` | moveUp method   |               |
+| onMoveDown    | `(index: number) => void` | moveDown method |               |
+
+Other Reference https://fusion.design/pc/component/basic/card
 
 ### ArrayCards.Addition
 

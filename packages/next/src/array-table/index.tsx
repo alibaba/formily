@@ -303,20 +303,13 @@ export const ArrayTable: ComposedArrayTable = observer(
     const sources = useArrayTableSources()
     const columns = useArrayTableColumns(dataSource, field, sources)
     const pagination = isBool(props.pagination) ? {} : props.pagination
-    const { onAdd, onCopy, onRemove, onMoveDown, onMoveUp } = props
     const addition = useAddition()
 
     return (
       <ArrayTablePagination {...pagination} dataSource={dataSource}>
         {(dataSource, pager) => (
           <div ref={ref} className={prefixCls}>
-            <ArrayBase
-              onAdd={onAdd}
-              onCopy={onCopy}
-              onRemove={onRemove}
-              onMoveDown={onMoveDown}
-              onMoveUp={onMoveUp}
-            >
+            <ArrayBase {...props}>
               <Table
                 size="small"
                 {...omit(props, ['value', 'onChange', 'pagination'])}

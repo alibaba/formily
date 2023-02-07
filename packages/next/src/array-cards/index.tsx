@@ -113,7 +113,6 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
   const schema = useFieldSchema()
   const dataSource = Array.isArray(field.value) ? field.value : []
   const prefixCls = usePrefixCls('formily-array-cards', props)
-  const { onAdd, onCopy, onRemove, onMoveDown, onMoveUp } = props
   const renderItems = () => {
     return dataSource?.map((item, index) => {
       const items = Array.isArray(schema.items)
@@ -204,13 +203,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
   }
 
   return (
-    <ArrayBase
-      onAdd={onAdd}
-      onCopy={onCopy}
-      onRemove={onRemove}
-      onMoveUp={onMoveUp}
-      onMoveDown={onMoveDown}
-    >
+    <ArrayBase {...props}>
       {renderEmpty()}
       {renderItems()}
       {renderAddition()}
