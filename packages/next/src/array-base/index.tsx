@@ -3,14 +3,7 @@ import { Button } from '@alifd/next'
 import { isValid, clone } from '@formily/shared'
 import { ButtonProps } from '@alifd/next/lib/button'
 import { ArrayField } from '@formily/core'
-import {
-  useField,
-  useFieldSchema,
-  Schema,
-  JSXComponent,
-  RecordScope,
-  RecordsScope,
-} from '@formily/react'
+import { useField, useFieldSchema, Schema, JSXComponent } from '@formily/react'
 import { SortableHandle } from 'react-sortable-hoc'
 import {
   usePrefixCls,
@@ -116,25 +109,14 @@ export const ArrayBase: ComposedArrayBase = (props) => {
   const field = useField<ArrayField>()
   const schema = useFieldSchema()
   return (
-    <RecordsScope getRecords={() => field.value}>
-      <ArrayBaseContext.Provider value={{ field, schema, props }}>
-        {props.children}
-      </ArrayBaseContext.Provider>
-    </RecordsScope>
+    <ArrayBaseContext.Provider value={{ field, schema, props }}>
+      {props.children}
+    </ArrayBaseContext.Provider>
   )
 }
 
 ArrayBase.Item = ({ children, ...props }) => {
-  return (
-    <ItemContext.Provider value={props}>
-      <RecordScope
-        getIndex={() => props.index}
-        getRecord={() => takeRecord(props.record, props.index)}
-      >
-        {children}
-      </RecordScope>
-    </ItemContext.Provider>
-  )
+  return <ItemContext.Provider value={props}>{children}</ItemContext.Provider>
 }
 
 const SortHandle = SortableHandle((props: any) => {

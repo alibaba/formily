@@ -18,6 +18,7 @@ import {
 import { locateNode, destroy, initFieldUpdate } from '../shared/internals'
 import { Form } from './Form'
 import { Query } from './Query'
+import { isArrayField } from '..'
 
 export class BaseField<Decorator = any, Component = any, TextType = any> {
   title: TextType
@@ -52,14 +53,31 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
     locateNode(this as any, address)
   }
 
-  get indexes() {
+  get indexes(): number[] {
     return this.path.transform(/^\d+$/, (...args) =>
       args.map((index) => Number(index))
-    )
+    ) as number[]
   }
 
   get index() {
-    return this.indexes[this.indexes.length - 1]
+    return this.indexes[this.indexes.length - 1] ?? -1
+  }
+
+  get records() {
+    const index = this.index
+    if (index > -1) {
+      let parent: any = this.parent
+      while (parent) {
+        if (isArrayField(parent)) return parent.value
+        if (parent === this.form) return
+        parent = parent.parent
+      }
+    }
+    return
+  }
+
+  get record() {
+    return this.records?.[this.index]
   }
 
   get component() {
