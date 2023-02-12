@@ -15,10 +15,15 @@ import {
   FieldComponent,
   IFieldActions,
 } from '../types'
-import { locateNode, destroy, initFieldUpdate } from '../shared/internals'
+import {
+  locateNode,
+  destroy,
+  initFieldUpdate,
+  getArrayParent,
+  getObjectParent,
+} from '../shared/internals'
 import { Form } from './Form'
 import { Query } from './Query'
-import { isArrayField } from '..'
 
 export class BaseField<Decorator = any, Component = any, TextType = any> {
   title: TextType
@@ -64,20 +69,21 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
   }
 
   get records() {
-    const index = this.index
-    if (index > -1) {
-      let parent: any = this.parent
-      while (parent) {
-        if (isArrayField(parent)) return parent.value
-        if (parent === this.form) return
-        parent = parent.parent
-      }
-    }
-    return
+    const array = getArrayParent(this)
+    return array?.value
   }
 
   get record() {
-    return this.records?.[this.index]
+    const index = this.index
+    const array = getArrayParent(this, index)
+    if (array) {
+      return array.value?.[index]
+    }
+    const obj = getObjectParent(this)
+    if (obj) {
+      return obj.value
+    }
+    return this.form.values
   }
 
   get component() {

@@ -57,6 +57,7 @@ import {
   GlobalState,
   ReadOnlyProperties,
 } from './constants'
+import { BaseField } from '../models/BaseField'
 
 const hasOwnProperty = Object.prototype.hasOwnProperty
 
@@ -1079,4 +1080,24 @@ export const initializeEnd = () => {
   batch.endpoint(() => {
     GlobalState.initializing = false
   })
+}
+
+export const getArrayParent = (field: BaseField, index = field.index) => {
+  if (index > -1) {
+    let parent: any = field.parent
+    while (parent) {
+      if (isArrayField(parent)) return parent
+      if (parent === field.form) return
+      parent = parent.parent
+    }
+  }
+}
+
+export const getObjectParent = (field: BaseField) => {
+  let parent: any = field.parent
+  while (parent) {
+    if (isObjectField(parent)) return parent
+    if (parent === field.form) return
+    parent = parent.parent
+  }
 }
