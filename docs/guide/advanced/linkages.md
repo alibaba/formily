@@ -932,11 +932,11 @@ const SchemaField = createSchemaField({
     Select,
   },
   scope: {
-    asyncVisible(field) {
+    asyncVisible(field, target) {
       field.loading = true
       setTimeout(() => {
         field.loading = false
-        form.setFieldState('input', (state) => {
+        form.setFieldState(target, (state) => {
           //For the initial linkage, if the field cannot be found, setFieldState will push the update into the update queue until the field appears before performing the operation
           state.display = field.value
         })
@@ -961,7 +961,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           target: 'input',
-          effects: ['onFieldValueChange'],
+          effects: ['onFieldInit', 'onFieldValueChange'],
           fulfill: {
             run: 'asyncVisible($self,$target)',
           },
