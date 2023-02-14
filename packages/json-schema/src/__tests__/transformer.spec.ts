@@ -1,7 +1,6 @@
 import { Schema } from '../schema'
 import { createForm } from '@formily/core'
 import { isObservable } from '@formily/reactive'
-import { lazyMerge } from '@formily/shared'
 import { ISchema, ISchemaTransformerOptions } from '../types'
 
 const attach = <T extends { onMount: () => void }>(target: T): T => {
