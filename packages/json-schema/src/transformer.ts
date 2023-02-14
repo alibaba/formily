@@ -161,7 +161,7 @@ const getBaseScope = (
   return lazyMerge(
     {
       get $lookup() {
-        return options?.scope?.$record
+        return options?.scope?.$record ?? $values
       },
       get $records() {
         return field.records
@@ -171,7 +171,7 @@ const getBaseScope = (
         if (typeof record === 'object') {
           return lazyMerge(record, {
             get $lookup() {
-              return options?.scope?.$record
+              return options?.scope?.$record ?? $values
             },
             get $index() {
               return field.index

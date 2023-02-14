@@ -74,14 +74,14 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
   }
 
   get record() {
+    const obj = getObjectParent(this)
+    if (obj) {
+      return obj.value
+    }
     const index = this.index
     const array = getArrayParent(this, index)
     if (array) {
       return array.value?.[index]
-    }
-    const obj = getObjectParent(this)
-    if (obj) {
-      return obj.value
     }
     return this.form.values
   }
