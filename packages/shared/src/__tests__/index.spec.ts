@@ -856,6 +856,16 @@ describe('merge', () => {
     expect('x' in merge8).toBe(true)
     expect('y' in merge8).toBe(true)
     expect('z' in merge8).toBe(false)
+    const merge9Source = { a: 1 }
+    const merge9Target = { b: 2 }
+
+    const merge9 = lazyMerge<any>(merge9Target, merge9Source)
+
+    merge9.a = 2
+    merge9.b = 3
+    merge9.c = 4
+    expect(merge9Source).toEqual({ a: 2 })
+    expect(merge9Target).toEqual({ b: 3, c: 4 })
   })
 })
 
