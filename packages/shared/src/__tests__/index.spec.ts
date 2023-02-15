@@ -864,8 +864,8 @@ describe('merge', () => {
     merge9.a = 2
     merge9.b = 3
     merge9.c = 4
-    expect(merge9Source).toEqual({ a: 2 })
-    expect(merge9Target).toEqual({ b: 3, c: 4 })
+    expect(merge9Source).toEqual({ a: 2, c: 4 })
+    expect(merge9Target).toEqual({ b: 3 })
   })
 })
 
