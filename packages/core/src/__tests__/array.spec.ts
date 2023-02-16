@@ -850,3 +850,212 @@ test('array remove with initialValues', async () => {
   expect(form.values).toEqual({ array: [{ a: 1 }, { a: 2 }] })
   expect(form.initialValues).toEqual({ array: [{ a: 1 }, { a: 2 }] })
 })
+
+test('records: find array fields', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        array: [{ a: 1 }, { a: 2 }],
+      },
+    })
+  )
+
+  attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '1',
+      basePath: 'array',
+    })
+  )
+  const field0 = attach(
+    form.createField({
+      name: 'a',
+      basePath: 'array.0',
+    })
+  )
+  const field1 = attach(
+    form.createField({
+      name: 'a',
+      basePath: 'array.1',
+    })
+  )
+
+  expect(field0.records.length).toBe(2)
+  expect(field0.record).toEqual({ a: 1 })
+  expect(field1.record).toEqual({ a: 2 })
+})
+
+test('record: find array nest field record', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        array: [{ a: { b: { c: 1, d: 1 } } }, { a: { b: { c: 2, d: 2 } } }],
+      },
+    })
+  )
+
+  attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: '1',
+      basePath: 'array',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: 'a',
+      basePath: 'array.0',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'a',
+      basePath: 'array.1',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: 'b',
+      basePath: 'array.0.a',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: 'b',
+      basePath: 'array.1.a',
+    })
+  )
+
+  const field0 = attach(
+    form.createField({
+      name: 'c',
+      basePath: 'array.0.a.b',
+    })
+  )
+
+  const field1 = attach(
+    form.createField({
+      name: 'c',
+      basePath: 'array.1.a.b',
+    })
+  )
+
+  expect(field0.records.length).toBe(2)
+  expect(field1.records.length).toBe(2)
+  expect(field1.records).toEqual([
+    { a: { b: { c: 1, d: 1 } } },
+    { a: { b: { c: 2, d: 2 } } },
+  ])
+  expect(field0.record).toEqual({ c: 1, d: 1 })
+  expect(field1.record).toEqual({ c: 2, d: 2 })
+})
+
+test('record: find array field record', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        array: [1, 2, 3],
+      },
+    })
+  )
+
+  attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+
+  const field = attach(
+    form.createField({
+      basePath: 'array',
+      name: '0',
+    })
+  )
+
+  expect(field.records.length).toBe(3)
+  expect(field.record).toEqual(1)
+})
+
+test('record: find object field record', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        a: {
+          b: {
+            c: 1,
+            d: 1,
+          },
+        },
+      },
+    })
+  )
+
+  attach(
+    form.createArrayField({
+      name: 'a',
+    })
+  )
+
+  attach(
+    form.createObjectField({
+      name: 'b',
+      basePath: 'a',
+    })
+  )
+
+  const fieldc = attach(
+    form.createObjectField({
+      name: 'c',
+      basePath: 'a.b',
+    })
+  )
+
+  expect(fieldc.records).toEqual(undefined)
+  expect(fieldc.record).toEqual({
+    c: 1,
+    d: 1,
+  })
+})
+
+test('record: find form fields', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        array: [{ a: 1 }, { a: 2 }],
+      },
+    })
+  )
+
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+
+  expect(array.record).toEqual({ array: [{ a: 1 }, { a: 2 }] })
+})

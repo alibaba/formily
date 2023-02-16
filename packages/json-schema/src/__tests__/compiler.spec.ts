@@ -59,7 +59,7 @@ test('compile', () => {
   })
   const compiledSchema = schema.compile()
   expect(compiledSchema.toJSON()).toEqual(schema.toJSON())
-  expect(compiledSchema.properties['aa']['x-component-props']).toEqual(
+  expect(compiledSchema.properties?.['aa']['x-component-props']).toEqual(
     '{{123}}'
   )
   const toJSable = {

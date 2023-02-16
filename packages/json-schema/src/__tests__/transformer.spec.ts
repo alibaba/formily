@@ -1,7 +1,12 @@
 import { Schema } from '../schema'
 import { createForm } from '@formily/core'
-import { ISchema, ISchemaTransformerOptions } from '../types'
 import { isObservable } from '@formily/reactive'
+import { ISchema, ISchemaTransformerOptions } from '../types'
+
+const attach = <T extends { onMount: () => void }>(target: T): T => {
+  target.onMount()
+  return target
+}
 
 const getFormAndFields = (
   field1SchemaProps: Omit<ISchema, 'name'> = {},
@@ -362,4 +367,90 @@ test('userReactions with function type', () => {
 
   expect(field1.componentProps).toMatchObject(componentProps)
   expect(isObservable(observable)).toBe(true)
+})
+
+test('userReactions with $lookup $record $records $index', () => {
+  const initialValues = {
+    array: [
+      { a: 1, b: 2 },
+      { a: 3, b: 4 },
+    ],
+  }
+  const form = attach(
+    createForm({
+      initialValues,
+    })
+  )
+
+  form.createArrayField({
+    name: 'array',
+  })
+  form.createObjectField({
+    name: '0',
+    basePath: 'array',
+  })
+  form.createObjectField({
+    name: '1',
+    basePath: 'array',
+  })
+
+  const field0aSchema = new Schema({
+    name: 'array.0.a',
+    'x-reactions': `{{$self.title = $record.b}}`,
+  }).toFieldProps({})
+
+  const field0bSchema = new Schema({
+    name: 'array.0.b',
+    'x-reactions': '{{$self.title = $lookup.array[0].a}}',
+  }).toFieldProps({})
+
+  const field1aSchema = new Schema({
+    name: 'array.1.a',
+    'x-reactions': '{{$self.title = $records[$index].b}}',
+  }).toFieldProps({})
+
+  const field1bSchema = new Schema({
+    name: 'array.1.b',
+    'x-reactions': `{{$self.title = $record.$lookup.array[$record.$index].a}}`,
+  }).toFieldProps({})
+
+  const field0a = attach(form.createField(field0aSchema))
+  const field0b = attach(form.createField(field0bSchema))
+  const field1a = attach(form.createField(field1aSchema))
+  const field1b = attach(form.createField(field1bSchema))
+
+  expect(field0a.title).toEqual(2)
+  expect(field0b.title).toEqual(1)
+  expect(field1a.title).toEqual(4)
+  expect(field1b.title).toEqual(3)
+})
+
+test('userReactions with primary type record', () => {
+  const initialValues = {
+    array: [1, 2, 3],
+  }
+
+  const form = attach(
+    createForm({
+      initialValues,
+    })
+  )
+
+  const field0Schema = new Schema({
+    name: 'array.0',
+    'x-reactions': `{{$self.title = $record}}`,
+  }).toFieldProps({})
+
+  const field1Schema = new Schema({
+    name: 'array.1',
+    'x-reactions': '{{$self.title = $record}}',
+  }).toFieldProps({})
+
+  form.createArrayField({
+    name: 'array',
+  })
+  const field0 = attach(form.createField(field0Schema))
+  const field1 = attach(form.createField(field1Schema))
+  expect(field0.title).toEqual(1)
+  expect(field1.title).toEqual(2)
 })
