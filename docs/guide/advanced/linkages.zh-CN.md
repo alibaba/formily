@@ -931,11 +931,11 @@ const SchemaField = createSchemaField({
     Select,
   },
   scope: {
-    asyncVisible(field) {
+    asyncVisible(field, target) {
       field.loading = true
       setTimeout(() => {
         field.loading = false
-        form.setFieldState('input', (state) => {
+        form.setFieldState(target, (state) => {
           //对于初始联动，如果字段找不到，setFieldState会将更新推入更新队列，直到字段出现再执行操作
           state.display = field.value
         })
@@ -960,7 +960,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           target: 'input',
-          effects: ['onFieldValueChange'],
+          effects: ['onFieldInit', 'onFieldValueChange'],
           fulfill: {
             run: 'asyncVisible($self,$target)',
           },
