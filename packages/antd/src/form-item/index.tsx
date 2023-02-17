@@ -42,8 +42,10 @@ export interface IFormItemProps {
   feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none' | (string & {})
   feedbackStatus?: 'error' | 'warning' | 'success' | 'pending' | (string & {})
   feedbackIcon?: React.ReactNode
+  enableOutlineFeedback?: boolean
   getPopupContainer?: (node: HTMLElement) => HTMLElement
   asterisk?: boolean
+  requiredMark?: boolean | 'optional'
   gridSpan?: number
   bordered?: boolean
 }
@@ -140,12 +142,14 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
     addonBefore,
     addonAfter,
     asterisk,
+    requiredMark = true,
     feedbackStatus,
     extra,
     feedbackText,
     fullness,
     feedbackLayout,
     feedbackIcon,
+    enableOutlineFeedback = true,
     getPopupContainer,
     inset,
     bordered = true,
@@ -226,8 +230,13 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
     const labelChildren = (
       <div className={`${prefixCls}-label-content`} ref={containerRef}>
         <span ref={contentRef}>
-          {asterisk && <span className={`${prefixCls}-asterisk`}>{'*'}</span>}
+          {asterisk && requiredMark === true && (
+            <span className={`${prefixCls}-asterisk`}>{'*'}</span>
+          )}
           <label>{label}</label>
+          {asterisk && requiredMark === 'optional' && (
+            <span className={`${prefixCls}-optional`}>（可选）</span>
+          )}
         </span>
       </div>
     )
@@ -290,7 +299,8 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
       className={cls({
         [`${prefixCls}`]: true,
         [`${prefixCls}-layout-${layout}`]: true,
-        [`${prefixCls}-${feedbackStatus}`]: !!feedbackStatus,
+        [`${prefixCls}-${feedbackStatus}`]:
+          enableOutlineFeedback && !!feedbackStatus,
         [`${prefixCls}-feedback-has-text`]: !!feedbackText,
         [`${prefixCls}-size-${size}`]: !!size,
         [`${prefixCls}-feedback-layout-${feedbackLayout}`]: !!feedbackLayout,

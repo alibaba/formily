@@ -324,6 +324,28 @@ export default () => {
             wrapperCol: 10,
           }}
         />
+        <SchemaField.String
+          title="Required mark style(hidden)"
+          x-decorator="FormItem"
+          x-component="Input"
+          required
+          x-decorator-props={{
+            requiredMark: false,
+            labelCol: 6,
+            wrapperCol: 10,
+          }}
+        />
+        <SchemaField.String
+          title="Required mark style(optional)"
+          x-decorator="FormItem"
+          x-component="Input"
+          required
+          x-decorator-props={{
+            requiredMark: 'optional',
+            labelCol: 6,
+            wrapperCol: 10,
+          }}
+        />
 
         <SchemaField.String
           title="prefix"
@@ -721,6 +743,17 @@ export default () => {
           }}
         />
 
+        <SchemaField.String
+          title="Status border style disabled(feedbackStatus=error)"
+          x-decorator="FormItem"
+          x-component="Input"
+          description="description"
+          x-decorator-props={{
+            enableOutlineFeedback: false,
+            feedbackStatus: 'error',
+          }}
+        />
+
         <SchemaField.Void
           x-component="Title"
           x-component-props={{ text: 'Layout of feedback information' }}
@@ -1058,39 +1091,41 @@ export default () => {
 
 ### FormItem
 
-| Property name     | Type                                                   | Description                                                                                                              | Default value       |
-| ----------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------- |
-| label             | ReactNode                                              | label                                                                                                                    | -                   |
-| style             | CSSProperties                                          | Style                                                                                                                    | -                   |
-| labelStyle        | CSSProperties                                          | Label style                                                                                                              | -                   |
-| wrapperStyle      | CSSProperties                                          | Component container style                                                                                                | -                   |
-| className         | string                                                 | Component style class name                                                                                               | -                   |
-| colon             | boolean                                                | colon                                                                                                                    | true                |
-| tooltip           | ReactNode                                              | Question mark prompt                                                                                                     | -                   |
-| tooltipLayout     | `"icon" \| "text"`                                     | Ask the prompt layout                                                                                                    | `"icon"`            |
-| tooltipIcon       | ReactNode                                              | Ask the prompt icon                                                                                                      | `?`                 |
-| labelAlign        | `"left"` \| `"right"`                                  | Label text alignment                                                                                                     | `"right"`           |
-| labelWrap         | boolean                                                | Label change, otherwise an ellipsis appears, hover has tooltip                                                           | false               |
-| labelWidth        | `number \| string`                                     | Label fixed width                                                                                                        | -                   |
-| wrapperWidth      | `number \| string`                                     | Content fixed width                                                                                                      | -                   |
-| labelCol          | number                                                 | The number of columns occupied by the label grid, and the number of content columns add up to 24                         | -                   |
-| wrapperCol        | number                                                 | The number of columns occupied by the content grid, and the number of label columns add up to 24                         | -                   |
-| wrapperAlign      | `"left"` \| `"right"`                                  | Content text alignment                                                                                                   | `"left"`            |
-| wrapperWrap       | boolean                                                | Change the content, otherwise an ellipsis appears, and hover has tooltip                                                 | false               |
-| fullness          | boolean                                                | fullness                                                                                                                 | false               |
-| addonBefore       | ReactNode                                              | Prefix content                                                                                                           | -                   |
-| addonAfter        | ReactNode                                              | Suffix content                                                                                                           | -                   |
-| size              | `"small"` \| `"default"` \| `"large"`                  | size                                                                                                                     | -                   |
-| inset             | boolean                                                | Is it an inline layout                                                                                                   | false               |
-| extra             | ReactNode                                              | Extended description script                                                                                              | -                   |
-| feedbackText      | ReactNode                                              | Feedback Case                                                                                                            | -                   |
-| feedbackLayout    | `"loose"` \| `"terse"` \| `"popover" \| "none"`        | Feedback layout                                                                                                          | -                   |
-| feedbackStatus    | `"error"` \| `"warning"` \| `"success"` \| `"pending"` | Feedback layout                                                                                                          | -                   |
-| feedbackIcon      | ReactNode                                              | Feedback icon                                                                                                            | -                   |
-| getPopupContainer | function(triggerNode)                                  | when `feedbackLayout` is popover， The DOM container of the tip, the default behavior is to create a div element in body | () => document.body |
-| asterisk          | boolean                                                | Asterisk reminder                                                                                                        | -                   |
-| gridSpan          | number                                                 | Grid layout occupies width                                                                                               | -                   |
-| bordered          | boolean                                                | Is there a border                                                                                                        | -                   |
+| Property name         | Type                                                   | Description                                                                                                                                   | Default value       |
+| --------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| label                 | ReactNode                                              | label                                                                                                                                         | -                   |
+| style                 | CSSProperties                                          | Style                                                                                                                                         | -                   |
+| labelStyle            | CSSProperties                                          | Label style                                                                                                                                   | -                   |
+| wrapperStyle          | CSSProperties                                          | Component container style                                                                                                                     | -                   |
+| className             | string                                                 | Component style class name                                                                                                                    | -                   |
+| colon                 | boolean                                                | colon                                                                                                                                         | true                |
+| tooltip               | ReactNode                                              | Question mark prompt                                                                                                                          | -                   |
+| tooltipLayout         | `"icon" \| "text"`                                     | Ask the prompt layout                                                                                                                         | `"icon"`            |
+| tooltipIcon           | ReactNode                                              | Ask the prompt icon                                                                                                                           | `?`                 |
+| labelAlign            | `"left"` \| `"right"`                                  | Label text alignment                                                                                                                          | `"right"`           |
+| labelWrap             | boolean                                                | Label change, otherwise an ellipsis appears, hover has tooltip                                                                                | false               |
+| labelWidth            | `number \| string`                                     | Label fixed width                                                                                                                             | -                   |
+| wrapperWidth          | `number \| string`                                     | Content fixed width                                                                                                                           | -                   |
+| labelCol              | number                                                 | The number of columns occupied by the label grid, and the number of content columns add up to 24                                              | -                   |
+| wrapperCol            | number                                                 | The number of columns occupied by the content grid, and the number of label columns add up to 24                                              | -                   |
+| wrapperAlign          | `"left"` \| `"right"`                                  | Content text alignment                                                                                                                        | `"left"`            |
+| wrapperWrap           | boolean                                                | Change the content, otherwise an ellipsis appears, and hover has tooltip                                                                      | false               |
+| fullness              | boolean                                                | fullness                                                                                                                                      | false               |
+| addonBefore           | ReactNode                                              | Prefix content                                                                                                                                | -                   |
+| addonAfter            | ReactNode                                              | Suffix content                                                                                                                                | -                   |
+| size                  | `"small"` \| `"default"` \| `"large"`                  | size                                                                                                                                          | -                   |
+| inset                 | boolean                                                | Is it an inline layout                                                                                                                        | false               |
+| extra                 | ReactNode                                              | Extended description script                                                                                                                   | -                   |
+| feedbackText          | ReactNode                                              | Feedback Case                                                                                                                                 | -                   |
+| feedbackLayout        | `"loose"` \| `"terse"` \| `"popover" \| "none"`        | Feedback layout                                                                                                                               | -                   |
+| feedbackStatus        | `"error"` \| `"warning"` \| `"success"` \| `"pending"` | Feedback layout                                                                                                                               | -                   |
+| feedbackIcon          | ReactNode                                              | Feedback icon                                                                                                                                 | -                   |
+| enableOutlineFeedback | boolean                                                | Enable the border color style of the abnormal state, it is recommended to turn off this item when there is a sub-form in the custom component | true                |
+| getPopupContainer     | function(triggerNode)                                  | when `feedbackLayout` is popover， The DOM container of the tip, the default behavior is to create a div element in body                      | () => document.body |
+| asterisk              | boolean                                                | Asterisk reminder                                                                                                                             | -                   |
+| requiredMark          | boolean \| `"optional"`                                | Required mark style. Can use required mark or optional mark                                                                                   | true                |
+| gridSpan              | number                                                 | Grid layout occupies width                                                                                                                    | -                   |
+| bordered              | boolean                                                | Is there a border                                                                                                                             | -                   |
 
 ### FormItem.BaseItem
 

@@ -324,6 +324,28 @@ export default () => {
             wrapperCol: 10,
           }}
         />
+        <SchemaField.String
+          title="必填样式-隐藏"
+          x-decorator="FormItem"
+          x-component="Input"
+          required
+          x-decorator-props={{
+            requiredMark: false,
+            labelCol: 6,
+            wrapperCol: 10,
+          }}
+        />
+        <SchemaField.String
+          title="必填样式-可选"
+          x-decorator="FormItem"
+          x-component="Input"
+          required
+          x-decorator-props={{
+            requiredMark: 'optional',
+            labelCol: 6,
+            wrapperCol: 10,
+          }}
+        />
 
         <SchemaField.String
           title="前缀"
@@ -721,6 +743,17 @@ export default () => {
           }}
         />
 
+        <SchemaField.String
+          title="禁用错误状态边框样式(feedbackStatus=error)"
+          x-decorator="FormItem"
+          x-component="Input"
+          description="description"
+          x-decorator-props={{
+            enableOutlineFeedback: false,
+            feedbackStatus: 'error',
+          }}
+        />
+
         <SchemaField.Void
           x-component="Title"
           x-component-props={{ text: '反馈信息的布局' }}
@@ -1058,39 +1091,41 @@ export default () => {
 
 ### FormItem
 
-| 属性名            | 类型                                                   | 描述                                                                | 默认值              |
-| ----------------- | ------------------------------------------------------ | ------------------------------------------------------------------- | ------------------- |
-| label             | ReactNode                                              | 标签                                                                | -                   |
-| style             | CSSProperties                                          | 样式                                                                | -                   |
-| labelStyle        | CSSProperties                                          | 标签样式                                                            | -                   |
-| wrapperStyle      | CSSProperties                                          | 组件容器样式                                                        | -                   |
-| className         | string                                                 | 组件样式类名                                                        | -                   |
-| colon             | boolean                                                | 冒号                                                                | true                |
-| tooltip           | ReactNode                                              | 问号提示                                                            | -                   |
-| tooltipLayout     | `"icon" \| "text"`                                     | 问号提示布局                                                        | `"icon"`            |
-| tooltipIcon       | ReactNode                                              | 问号提示图标                                                        | `?`                 |
-| labelAlign        | `"left"` \| `"right"`                                  | 标签文本对齐方式                                                    | `"right"`           |
-| labelWrap         | boolean                                                | 标签换⾏，否则出现省略号，hover 有 tooltip                          | false               |
-| labelWidth        | `number \| string`                                     | 标签固定宽度                                                        | -                   |
-| wrapperWidth      | `number \| string`                                     | 内容固定宽度                                                        | -                   |
-| labelCol          | number                                                 | 标签⽹格所占列数，和内容列数加起来总和为 24                         | -                   |
-| wrapperCol        | number                                                 | 内容⽹格所占列数，和标签列数加起来总和为 24                         | -                   |
-| wrapperAlign      | `"left"` \| `"right"`                                  | 内容文本对齐方式⻬                                                  | `"left"`            |
-| wrapperWrap       | boolean                                                | 内容换⾏，否则出现省略号，hover 有 tooltip                          | false               |
-| fullness          | boolean                                                | 内容撑满                                                            | false               |
-| addonBefore       | ReactNode                                              | 前缀内容                                                            | -                   |
-| addonAfter        | ReactNode                                              | 后缀内容                                                            | -                   |
-| size              | `"small"` \| `"default"` \| `"large"`                  | 尺⼨                                                                | -                   |
-| inset             | boolean                                                | 是否是内嵌布局                                                      | false               |
-| extra             | ReactNode                                              | 扩展描述⽂案                                                        | -                   |
-| feedbackText      | ReactNode                                              | 反馈⽂案                                                            | -                   |
-| feedbackLayout    | `"loose"` \| `"terse"` \| `"popover" \| "none"`        | 反馈布局                                                            | -                   |
-| feedbackStatus    | `"error"` \| `"warning"` \| `"success"` \| `"pending"` | 反馈布局                                                            | -                   |
-| feedbackIcon      | ReactNode                                              | 反馈图标                                                            | -                   |
-| getPopupContainer | function(triggerNode)                                  | 当 feedbackLayout 为 popover 时，浮层渲染父节点，默认渲染到 body 上 | () => document.body |
-| asterisk          | boolean                                                | 星号提醒                                                            | -                   |
-| gridSpan          | number                                                 | ⽹格布局占宽                                                        | -                   |
-| bordered          | boolean                                                | 是否有边框                                                          | -                   |
+| 属性名                | 类型                                                   | 描述                                                                | 默认值              |
+| --------------------- | ------------------------------------------------------ | ------------------------------------------------------------------- | ------------------- |
+| label                 | ReactNode                                              | 标签                                                                | -                   |
+| style                 | CSSProperties                                          | 样式                                                                | -                   |
+| labelStyle            | CSSProperties                                          | 标签样式                                                            | -                   |
+| wrapperStyle          | CSSProperties                                          | 组件容器样式                                                        | -                   |
+| className             | string                                                 | 组件样式类名                                                        | -                   |
+| colon                 | boolean                                                | 冒号                                                                | true                |
+| tooltip               | ReactNode                                              | 问号提示                                                            | -                   |
+| tooltipLayout         | `"icon" \| "text"`                                     | 问号提示布局                                                        | `"icon"`            |
+| tooltipIcon           | ReactNode                                              | 问号提示图标                                                        | `?`                 |
+| labelAlign            | `"left"` \| `"right"`                                  | 标签文本对齐方式                                                    | `"right"`           |
+| labelWrap             | boolean                                                | 标签换⾏，否则出现省略号，hover 有 tooltip                          | false               |
+| labelWidth            | `number \| string`                                     | 标签固定宽度                                                        | -                   |
+| wrapperWidth          | `number \| string`                                     | 内容固定宽度                                                        | -                   |
+| labelCol              | number                                                 | 标签⽹格所占列数，和内容列数加起来总和为 24                         | -                   |
+| wrapperCol            | number                                                 | 内容⽹格所占列数，和标签列数加起来总和为 24                         | -                   |
+| wrapperAlign          | `"left"` \| `"right"`                                  | 内容文本对齐方式⻬                                                  | `"left"`            |
+| wrapperWrap           | boolean                                                | 内容换⾏，否则出现省略号，hover 有 tooltip                          | false               |
+| fullness              | boolean                                                | 内容撑满                                                            | false               |
+| addonBefore           | ReactNode                                              | 前缀内容                                                            | -                   |
+| addonAfter            | ReactNode                                              | 后缀内容                                                            | -                   |
+| size                  | `"small"` \| `"default"` \| `"large"`                  | 尺⼨                                                                | -                   |
+| inset                 | boolean                                                | 是否是内嵌布局                                                      | false               |
+| extra                 | ReactNode                                              | 扩展描述⽂案                                                        | -                   |
+| feedbackText          | ReactNode                                              | 反馈⽂案                                                            | -                   |
+| feedbackLayout        | `"loose"` \| `"terse"` \| `"popover" \| "none"`        | 反馈布局                                                            | -                   |
+| feedbackStatus        | `"error"` \| `"warning"` \| `"success"` \| `"pending"` | 反馈布局                                                            | -                   |
+| feedbackIcon          | ReactNode                                              | 反馈图标                                                            | -                   |
+| enableOutlineFeedback | boolean                                                | 开启异常状态的边框颜色样式，当自定义组件内存在子表单时建议关闭此项  | true                |
+| getPopupContainer     | function(triggerNode)                                  | 当 feedbackLayout 为 popover 时，浮层渲染父节点，默认渲染到 body 上 | () => document.body |
+| asterisk              | boolean                                                | 星号提醒                                                            | -                   |
+| requiredMark          | boolean \| `"optional"`                                | 必选样式，可以切换为必选或者可选展示样式                            | true                |
+| gridSpan              | number                                                 | ⽹格布局占宽                                                        | -                   |
+| bordered              | boolean                                                | 是否有边框                                                          | -                   |
 
 ### FormItem.BaseItem
 

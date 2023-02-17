@@ -8,6 +8,7 @@ export interface IFormLayoutProps {
   className?: string
   style?: React.CSSProperties
   colon?: boolean
+  requiredMark?: boolean | 'optional'
   labelAlign?: 'right' | 'left' | ('right' | 'left')[]
   wrapperAlign?: 'right' | 'left' | ('right' | 'left')[]
   labelWrap?: boolean
