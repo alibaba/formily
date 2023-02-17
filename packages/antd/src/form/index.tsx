@@ -31,23 +31,21 @@ export const Form: React.FC<React.PropsWithChildren<FormProps>> = ({
 }) => {
   const top = useParentForm()
   const renderContent = (form: FormType | ObjectField) => (
-    <RecordScope getRecord={() => (isForm(form) ? form.values : form.value)}>
-      <PreviewText.Placeholder value={previewTextPlaceholder}>
-        <FormLayout {...props}>
-          {React.createElement(
-            component,
-            {
-              onSubmit(e: React.FormEvent) {
-                e?.stopPropagation?.()
-                e?.preventDefault?.()
-                form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
-              },
+    <PreviewText.Placeholder value={previewTextPlaceholder}>
+      <FormLayout {...props}>
+        {React.createElement(
+          component,
+          {
+            onSubmit(e: React.FormEvent) {
+              e?.stopPropagation?.()
+              e?.preventDefault?.()
+              form.submit(onAutoSubmit).catch(onAutoSubmitFailed)
             },
-            props.children
-          )}
-        </FormLayout>
-      </PreviewText.Placeholder>
-    </RecordScope>
+          },
+          props.children
+        )}
+      </FormLayout>
+    </PreviewText.Placeholder>
   )
   if (form)
     return <FormProvider form={form}>{renderContent(form)}</FormProvider>
