@@ -1,5 +1,21 @@
 # Changelog
 
+## v2.2.19(2023-02-17)
+
+### :tada: Enhancements
+
+1. [feat(core): support record api (#3711)](https://github.com/alibaba/formily/commit/d4bb96c4) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :bug: Bug Fixes
+
+1. [fix(antd/next): remove RecordScope (#3726)](https://github.com/alibaba/formily/commit/29c347a0) :point_right: ( [zeqing](https://github.com/zeqing) )
+
+### :memo: Documents Changes
+
+1. [docs(linkage): change the controlled is display when initialized & dynamic controlled field (#3717)](https://github.com/alibaba/formily/commit/75d36d29) :point_right: ( [xbsheng](https://github.com/xbsheng) )
+
+1. [docs(core): change the default value of the hidden parameter of createForm function (#3707)](https://github.com/alibaba/formily/commit/5f95cdf1) :point_right: ( [xbsheng](https://github.com/xbsheng) )
+
 ## v2.2.18(2023-02-07)
 
 ### :bug: Bug Fixes
@@ -642,26 +658,6 @@
 
 1. [feat(vue): improve performance of mapProps (#2909)](https://github.com/alibaba/formily/commit/5ca0456a) :point_right: ( [月落音阑](https://github.com/月落音阑) )
 
-### :bug: Bug Fixes
-
-1. [fix(grid): fix grid mutation observer infinite loop (#2925)](https://github.com/alibaba/formily/commit/72534b43) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(validator): fix unexpect validate with empty format (#2926)](https://github.com/alibaba/formily/commit/7da26285) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(next/antd): fix label overflow invalid in FormGrid (#2910)](https://github.com/alibaba/formily/commit/485702cd) :point_right: ( [Lyca](https://github.com/Lyca) )
-
-1. [fix(vue): fix error when designable is true (#2908)](https://github.com/alibaba/formily/commit/398fac96) :point_right: ( [月落音阑](https://github.com/月落音阑) )
-
-### :rocket: Improve Performance
-
-1. [perf(reactive-vue): optimize vue3 tracker performance consumption of multiple instances (#2911)](https://github.com/alibaba/formily/commit/83e6a35c) :point_right: ( [e_the](https://github.com/e_the) )
-
-## v2.0.14(2022-03-06)
-
-### :tada: Enhancements
-
-1. [feat(next/antd): support dataSource disabled props in SelectTable (#2902)](https://github.com/alibaba/formily/commit/a3722441) :point_right: ( [Lyca](https://github.com/Lyca) )
-
 1. [feat(vue): support x-slot (#2892)](https://github.com/alibaba/formily/commit/9e268aa8) :point_right: ( [月落音阑](https://github.com/月落音阑) )
 
 1. [feat: add Component Ecology: semi (#2883)](https://github.com/alibaba/formily/commit/3fae57e2) :point_right: ( [programmerwy](https://github.com/programmerwy) )
@@ -670,11 +666,17 @@
 
 1. [feat(json-schema): support read scope in x-reactions (#2864)](https://github.com/alibaba/formily/commit/25c12648) :point_right: ( [Janry](https://github.com/Janry) )
 
+1. [feat(next/antd): add options param in SelectTable onChange props (#2842)](https://github.com/alibaba/formily/commit/89d8026b) :point_right: ( [Lyca](https://github.com/Lyca) )
+
 1. [feat(antd/next): use full text matcha for SelectTable nd remove filterOptionProp](https://github.com/alibaba/formily/commit/127e0c7f) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [feat(next): support checkStrictly props in SelectTable (#2824)](https://github.com/alibaba/formily/commit/feba6375) :point_right: ( [Lyca](https://github.com/Lyca) )
 
 1. [feat(antd/next): support 16427form scope with Form](https://github.com/alibaba/formily/commit/09a597f7) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat(core): support index/indexes properties (#2769)](https://github.com/alibaba/formily/commit/36143ef0) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [feat(next/antd): support disabled props from field in ArrayBase.Addition (#2746)](https://github.com/alibaba/formily/commit/29624ca5) :point_right: ( [Lyca](https://github.com/Lyca) )
 
 1. [feat(next/antd/vue): add useResponsiveFormLayout fault tolerance and FormItem useOverflow update (#2707)](https://github.com/alibaba/formily/commit/98a544ac) :point_right: ( [Lyca](https://github.com/Lyca) )
 
@@ -701,8 +703,6 @@
 1. [feat(element): support useRecord for ArrayBase (#2313)](https://github.com/alibaba/formily/commit/74594663) :point_right: ( [Muyao](https://github.com/Muyao) )
 
 1. [feat(next): fix FormDialog footerActions/okProps/cancelProps (#2312)](https://github.com/alibaba/formily/commit/e2fe6734) :point_right: ( [Lyca](https://github.com/Lyca) )
-
-1. [feat(next/antd): change ArrayBase.Addition disabled UI (#2251)](https://github.com/alibaba/formily/commit/bfd832af) :point_right: ( [Lyca](https://github.com/Lyca) )
 
 1. [feat(react): fix schema x-component-props children invalid (#2160)](https://github.com/alibaba/formily/commit/7dc9d9ff) :point_right: ( [Lyca](https://github.com/Lyca) )
 
@@ -972,6 +972,8 @@
 
 1. [feat(fix): add builder-next package and fix builder bugs. fix(docs): update playground link and fix some bugs](https://github.com/alibaba/formily/commit/71e6af8a) :point_right: ( [cnt1992](https://github.com/cnt1992) )
 
+1. [feat(@uform/validator): add default validate message](https://github.com/alibaba/formily/commit/04f263cb) :point_right: ( [janryWang](https://github.com/janryWang) )
+
 1. [feat(@uform/next/antd): support mapTextComponent and mapStyledProps](https://github.com/alibaba/formily/commit/b0f7134d) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 1. [feat(utils): export path destruct string parse methods.](https://github.com/alibaba/formily/commit/1bded6c3) :point_right: ( [janryWang](https://github.com/janryWang) )
@@ -979,6 +981,14 @@
 1. [feat(fix): fix style](https://github.com/alibaba/formily/commit/7841970d) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 ### :bug: Bug Fixes
+
+1. [fix(grid): fix grid mutation observer infinite loop (#2925)](https://github.com/alibaba/formily/commit/72534b43) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(validator): fix unexpect validate with empty format (#2926)](https://github.com/alibaba/formily/commit/7da26285) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(next/antd): fix label overflow invalid in FormGrid (#2910)](https://github.com/alibaba/formily/commit/485702cd) :point_right: ( [Lyca](https://github.com/Lyca) )
+
+1. [fix(vue): fix error when designable is true (#2908)](https://github.com/alibaba/formily/commit/398fac96) :point_right: ( [月落音阑](https://github.com/月落音阑) )
 
 1. [fix(core): fix empty string or number can not rewrite default value (#2906)](https://github.com/alibaba/formily/commit/b6c3e311) :point_right: ( [Janry](https://github.com/Janry) )
 
@@ -1005,8 +1015,6 @@
 1. [fix(shared): fix merge empty object is not work (#2841)](https://github.com/alibaba/formily/commit/28a58530) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(path): fix nested group match is not work (#2818)](https://github.com/alibaba/formily/commit/cad37dae) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(antd/next): fix SelectTable rowSelection bug (#2815)](https://github.com/alibaba/formily/commit/babc5c23) :point_right: ( [Lyca](https://github.com/Lyca) )
 
 1. [fix(vue): add component name in connect (#2810)](https://github.com/alibaba/formily/commit/5a695c06) :point_right: ( [zhouxinyong](https://github.com/zhouxinyong) )
 
@@ -1061,8 +1069,6 @@
 1. [fix(grid): fix calc origin columns (#2468)](https://github.com/alibaba/formily/commit/1a9e37b4) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix: fix validator notify error message of Antd Upload Item (#2433)](https://github.com/alibaba/formily/commit/8e4a6a98) :point_right: ( [jazzjia](https://github.com/jazzjia) )
-
-1. [fix(grid): fix grid can not observe data-grid-span (#2418)](https://github.com/alibaba/formily/commit/91e070bd) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(grid): fix build by removing build:global (#2417)](https://github.com/alibaba/formily/commit/0d78006d) :point_right: ( [Deng Ruoqi](https://github.com/Deng Ruoqi) )
 
@@ -1284,7 +1290,7 @@
 
 1. [fix: use form.setValuesIn instead of field.removeProperty (#1160)](https://github.com/alibaba/formily/commit/f5fc7e61) :point_right: ( [soulwu](https://github.com/soulwu) )
 
-1. [fix(form-grid): add mutation observer](https://github.com/alibaba/formily/commit/35dd3fd8) :point_right: ( [janrywang](https://github.com/janrywang) )
+1. [fix(form-grid): improve performace](https://github.com/alibaba/formily/commit/f1b7afd2) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(core): fix observable componentProps](https://github.com/alibaba/formily/commit/dfe2e213) :point_right: ( [janrywang](https://github.com/janrywang) )
 
@@ -1503,8 +1509,6 @@
 1. [fix(@uform/core): add scheduler backward compat (#251)](https://github.com/alibaba/formily/commit/ed948348) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix FormTextBox margin value (#237)](https://github.com/alibaba/formily/commit/6148e332) :point_right: ( [合木](https://github.com/合木) )
-
-1. [fix(@uform/validator): Fix validate threshold check (#235)](https://github.com/alibaba/formily/commit/3ca7c086) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(@uform/core): fix value can't be remove in onFieldChange subscriber (#233)](https://github.com/alibaba/formily/commit/3896efb6) :point_right: ( [Janry](https://github.com/Janry) )
 
@@ -1766,6 +1770,8 @@
 
 1. [refactor(vue): switch type files for vue2/vue3 in postinstall (#2640)](https://github.com/alibaba/formily/commit/6015b7c8) :point_right: ( [月落音阑](https://github.com/月落音阑) )
 
+1. [refactor(grid): use data-grid-span for base grid span](https://github.com/alibaba/formily/commit/712aba94) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 1. [refactor(core): revert field unmount to skip validate (#2379)](https://github.com/alibaba/formily/commit/8a016794) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [refactor(element): redesign form-grid and improve form-layout (#2337)](https://github.com/alibaba/formily/commit/9e468fae) :point_right: ( [Muyao](https://github.com/Muyao) )
@@ -1874,7 +1880,11 @@
 
 ### :rocket: Improve Performance
 
+1. [perf(reactive-vue): optimize vue3 tracker performance consumption of multiple instances (#2911)](https://github.com/alibaba/formily/commit/83e6a35c) :point_right: ( [e_the](https://github.com/e_the) )
+
 1. [perf(antd/next): improve ArrayTable performance](https://github.com/alibaba/formily/commit/2c982289) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [perf: improve total performance 20% (#2589)](https://github.com/alibaba/formily/commit/2d981385) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [perf(core): improve field errors/success/warnings read performance](https://github.com/alibaba/formily/commit/32eca498) :point_right: ( [janrywang](https://github.com/janrywang) )
 
@@ -1882,7 +1892,7 @@
 
 1. [perf(reactive-react): improve performace with immediate](https://github.com/alibaba/formily/commit/6d6a18f4) :point_right: ( [janrywang](https://github.com/janrywang) )
 
-1. [perf(validator): improve validate perf (#950)](https://github.com/alibaba/formily/commit/0162788b) :point_right: ( [Janry](https://github.com/Janry) )
+1. [perf(core): improve validate perf (#755)](https://github.com/alibaba/formily/commit/3ea64169) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [perf(core): fix nested path update performance (#722)](https://github.com/alibaba/formily/commit/130feeae) :point_right: ( [Janry](https://github.com/Janry) )
 
@@ -1926,8 +1936,6 @@
 
 1. [test(core): improve core tests](https://github.com/alibaba/formily/commit/c643d8bb) :point_right: ( [janrywang](https://github.com/janrywang) )
 
-1. [test(validator): add some validator tests](https://github.com/alibaba/formily/commit/7b00f61b) :point_right: ( [janrywang](https://github.com/janrywang) )
-
 1. [test(@uform/react): improve field and virtualField test cases (#438)](https://github.com/alibaba/formily/commit/853e051f) :point_right: ( [dahuang](https://github.com/dahuang) )
 
 1. [test(@uform/utils): add setIn testcase](https://github.com/alibaba/formily/commit/67a82e67) :point_right: ( [janryWang](https://github.com/janryWang) )
@@ -1940,8 +1948,6 @@
 
 1. [chore(deps): bump url-parse from 1.5.7 to 1.5.10 (#2871)](https://github.com/alibaba/formily/commit/78b5caa6) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
 
-1. [chore: improve performance (#2868)](https://github.com/alibaba/formily/commit/0fd17eac) :point_right: ( [Janry](https://github.com/Janry) )
-
 1. [chore(antd/next): replace useForm to useParentForm in Form component](https://github.com/alibaba/formily/commit/43a3d6b8) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(antd/next): revert editable](https://github.com/alibaba/formily/commit/16a376d3) :point_right: ( [janrywang](https://github.com/janrywang) )
@@ -1953,6 +1959,8 @@
 1. [chore(grid): improve strictAutoFit](https://github.com/alibaba/formily/commit/d485a49e) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(next): export ExtendTableProps](https://github.com/alibaba/formily/commit/ad82905b) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore: improve code style (#2579)](https://github.com/alibaba/formily/commit/4a083bad) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [chore: add dingtalk notification for release](https://github.com/alibaba/formily/commit/35a18c48) :point_right: ( [janrywang](https://github.com/janrywang) )
 
@@ -1970,11 +1978,9 @@
 
 1. [chore: remove build global scripts (#2474)](https://github.com/alibaba/formily/commit/4cb7e9f9) :point_right: ( [Janry](https://github.com/Janry) )
 
-1. [chore: improve project jest configs (#2473)](https://github.com/alibaba/formily/commit/0682f6c5) :point_right: ( [Janry](https://github.com/Janry) )
-
 1. [chore: update workflow](https://github.com/alibaba/formily/commit/e84a4769) :point_right: ( [janrywang](https://github.com/janrywang) )
 
-1. [chore: improve validator context (#2439)](https://github.com/alibaba/formily/commit/f3f2989e) :point_right: ( [Janry](https://github.com/Janry) )
+1. [chore(core): improve getFormGraph/setFormGraph performance](https://github.com/alibaba/formily/commit/fb217f2a) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(grid): update readme](https://github.com/alibaba/formily/commit/9738292c) :point_right: ( [janrywang](https://github.com/janrywang) )
 
@@ -1991,6 +1997,8 @@
 1. [chore(docs): add antd-formily-boost link](https://github.com/alibaba/formily/commit/4fb9ff8d) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(ts): map @formily/\* to src folder during development (#1917)](https://github.com/alibaba/formily/commit/65259a06) :point_right: ( [JuFeng Zhang](https://github.com/JuFeng Zhang) )
+
+1. [chore(validator): improve validator (#1918)](https://github.com/alibaba/formily/commit/b1681bff) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [chore(flow): add release.yml](https://github.com/alibaba/formily/commit/301a89c1) :point_right: ( [janrywang](https://github.com/janrywang) )
 
