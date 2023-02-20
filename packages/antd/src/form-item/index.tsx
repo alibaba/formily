@@ -234,7 +234,7 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
             <span className={`${prefixCls}-asterisk`}>{'*'}</span>
           )}
           <label>{label}</label>
-          {asterisk && requiredMark === 'optional' && (
+          {!asterisk && requiredMark === 'optional' && (
             <span className={`${prefixCls}-optional`}>（可选）</span>
           )}
         </span>

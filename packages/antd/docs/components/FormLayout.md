@@ -158,30 +158,31 @@ export default () => (
 
 ## API
 
-| Property name  | Type                                                                                   | Description                           | Default value |
-| -------------- | -------------------------------------------------------------------------------------- | ------------------------------------- | ------------- |
-| style          | CSSProperties                                                                          | Style                                 | -             |
-| className      | string                                                                                 | class name                            | -             |
-| colon          | boolean                                                                                | Is there a colon                      | true          |
-| labelAlign     | `'right' \| 'left' \| ('right' \| 'left')[]`                                           | Label content alignment               | -             |
-| wrapperAlign   | `'right' \| 'left' \| ('right' \| 'left')[]`                                           | Component container content alignment | -             |
-| labelWrap      | boolean                                                                                | Wrap label content                    | false         |
-| labelWidth     | number                                                                                 | Label width (px)                      | -             |
-| wrapperWidth   | number                                                                                 | Component container width (px)        | -             |
-| wrapperWrap    | boolean                                                                                | Component container wrap              | false         |
-| labelCol       | `number \| number[]`                                                                   | Label width (24 column)               | -             |
-| wrapperCol     | `number \| number[]`                                                                   | Component container width (24 column) | -             |
-| fullness       | boolean                                                                                | Component container width 100%        | false         |
-| size           | `'small' \|'default' \|'large'`                                                        | component size                        | default       |
-| layout         | `'vertical' \| 'horizontal' \| 'inline' \| ('vertical' \| 'horizontal' \| 'inline')[]` | layout mode                           | horizontal    |
-| direction      | `'rtl' \|'ltr'`                                                                        | direction (not supported yet)         | ltr           |
-| inset          | boolean                                                                                | Inline layout                         | false         |
-| shallow        | boolean                                                                                | shallow context transfer              | true          |
-| feedbackLayout | `'loose' \|'terse' \|'popover' \|'none'`                                               | feedback layout                       | true          |
-| tooltipLayout  | `"icon" \| "text"`                                                                     | Ask the prompt layout                 | `"icon"`      |
-| tooltipIcon    | ReactNode                                                                              | Ask the prompt icon                   | -             |
-| bordered       | boolean                                                                                | Is there a border                     | true          |
-| breakpoints    | number[]                                                                               | Container size breakpoints            | -             |
-| gridColumnGap  | number                                                                                 | Grid Column Gap                       | 8             |
-| gridRowGap     | number                                                                                 | Grid Row Gap                          | 4             |
-| spaceGap       | number                                                                                 | Space Gap                             | 8             |
+| Property name  | Type                                                                                   | Description                                                 | Default value |
+| -------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ------------- |
+| style          | CSSProperties                                                                          | Style                                                       | -             |
+| className      | string                                                                                 | class name                                                  | -             |
+| colon          | boolean                                                                                | Is there a colon                                            | true          |
+| requiredMark   | boolean \| `"optional"`                                                                | Required mark style. Can use required mark or optional mark | true          |
+| labelAlign     | `'right' \| 'left' \| ('right' \| 'left')[]`                                           | Label content alignment                                     | -             |
+| wrapperAlign   | `'right' \| 'left' \| ('right' \| 'left')[]`                                           | Component container content alignment                       | -             |
+| labelWrap      | boolean                                                                                | Wrap label content                                          | false         |
+| labelWidth     | number                                                                                 | Label width (px)                                            | -             |
+| wrapperWidth   | number                                                                                 | Component container width (px)                              | -             |
+| wrapperWrap    | boolean                                                                                | Component container wrap                                    | false         |
+| labelCol       | `number \| number[]`                                                                   | Label width (24 column)                                     | -             |
+| wrapperCol     | `number \| number[]`                                                                   | Component container width (24 column)                       | -             |
+| fullness       | boolean                                                                                | Component container width 100%                              | false         |
+| size           | `'small' \|'default' \|'large'`                                                        | component size                                              | default       |
+| layout         | `'vertical' \| 'horizontal' \| 'inline' \| ('vertical' \| 'horizontal' \| 'inline')[]` | layout mode                                                 | horizontal    |
+| direction      | `'rtl' \|'ltr'`                                                                        | direction (not supported yet)                               | ltr           |
+| inset          | boolean                                                                                | Inline layout                                               | false         |
+| shallow        | boolean                                                                                | shallow context transfer                                    | true          |
+| feedbackLayout | `'loose' \|'terse' \|'popover' \|'none'`                                               | feedback layout                                             | true          |
+| tooltipLayout  | `"icon" \| "text"`                                                                     | Ask the prompt layout                                       | `"icon"`      |
+| tooltipIcon    | ReactNode                                                                              | Ask the prompt icon                                         | -             |
+| bordered       | boolean                                                                                | Is there a border                                           | true          |
+| breakpoints    | number[]                                                                               | Container size breakpoints                                  | -             |
+| gridColumnGap  | number                                                                                 | Grid Column Gap                                             | 8             |
+| gridRowGap     | number                                                                                 | Grid Row Gap                                                | 4             |
+| spaceGap       | number                                                                                 | Space Gap                                                   | 8             |

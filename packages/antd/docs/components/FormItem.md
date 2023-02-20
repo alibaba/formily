@@ -324,28 +324,6 @@ export default () => {
             wrapperCol: 10,
           }}
         />
-        <SchemaField.String
-          title="Required mark style(hidden)"
-          x-decorator="FormItem"
-          x-component="Input"
-          required
-          x-decorator-props={{
-            requiredMark: false,
-            labelCol: 6,
-            wrapperCol: 10,
-          }}
-        />
-        <SchemaField.String
-          title="Required mark style(optional)"
-          x-decorator="FormItem"
-          x-component="Input"
-          required
-          x-decorator-props={{
-            requiredMark: 'optional',
-            labelCol: 6,
-            wrapperCol: 10,
-          }}
-        />
 
         <SchemaField.String
           title="prefix"
@@ -392,6 +370,61 @@ export default () => {
         />
       </SchemaField>
     </FormProvider>
+  )
+}
+```
+
+## Required style
+
+```tsx
+import React, { useState } from 'react'
+import { Input, FormItem, FormLayout } from '@formily/antd'
+import { Radio } from 'antd'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+    FormItem,
+  },
+})
+
+const form = createForm()
+
+export default () => {
+  const [requiredMark, setRequiredMark] = useState(true)
+  return (
+    <div>
+      <p>
+        Required Mark：
+        <Radio.Group
+          value={requiredMark}
+          onChange={(e) => setRequiredMark(e.target.value)}
+        >
+          <Radio.Button value="optional">optional</Radio.Button>
+          <Radio.Button value={true}>true</Radio.Button>
+          <Radio.Button value={false}>false</Radio.Button>
+        </Radio.Group>
+      </p>
+      <FormProvider form={form}>
+        <FormLayout requiredMark={requiredMark}>
+          <SchemaField>
+            <SchemaField.String
+              title="I am Required"
+              required
+              x-decorator="FormItem"
+              x-component="Input"
+            />
+            <SchemaField.String
+              title="I am Optional"
+              x-decorator="FormItem"
+              x-component="Input"
+            />
+          </SchemaField>
+        </FormLayout>
+      </FormProvider>
+    </div>
   )
 }
 ```
@@ -1123,7 +1156,6 @@ export default () => {
 | enableOutlineFeedback | boolean                                                | Enable the border color style of the abnormal state, it is recommended to turn off this item when there is a sub-form in the custom component | true                |
 | getPopupContainer     | function(triggerNode)                                  | when `feedbackLayout` is popover， The DOM container of the tip, the default behavior is to create a div element in body                      | () => document.body |
 | asterisk              | boolean                                                | Asterisk reminder                                                                                                                             | -                   |
-| requiredMark          | boolean \| `"optional"`                                | Required mark style. Can use required mark or optional mark                                                                                   | true                |
 | gridSpan              | number                                                 | Grid layout occupies width                                                                                                                    | -                   |
 | bordered              | boolean                                                | Is there a border                                                                                                                             | -                   |
 

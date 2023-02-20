@@ -324,28 +324,6 @@ export default () => {
             wrapperCol: 10,
           }}
         />
-        <SchemaField.String
-          title="必填样式-隐藏"
-          x-decorator="FormItem"
-          x-component="Input"
-          required
-          x-decorator-props={{
-            requiredMark: false,
-            labelCol: 6,
-            wrapperCol: 10,
-          }}
-        />
-        <SchemaField.String
-          title="必填样式-可选"
-          x-decorator="FormItem"
-          x-component="Input"
-          required
-          x-decorator-props={{
-            requiredMark: 'optional',
-            labelCol: 6,
-            wrapperCol: 10,
-          }}
-        />
 
         <SchemaField.String
           title="前缀"
@@ -392,6 +370,61 @@ export default () => {
         />
       </SchemaField>
     </FormProvider>
+  )
+}
+```
+
+## 必填样式
+
+```tsx
+import React, { useState } from 'react'
+import { Input, FormItem, FormLayout } from '@formily/antd'
+import { Radio } from 'antd'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+    FormItem,
+  },
+})
+
+const form = createForm()
+
+export default () => {
+  const [requiredMark, setRequiredMark] = useState(true)
+  return (
+    <div>
+      <p>
+        Required Mark：
+        <Radio.Group
+          value={requiredMark}
+          onChange={(e) => setRequiredMark(e.target.value)}
+        >
+          <Radio.Button value="optional">optional</Radio.Button>
+          <Radio.Button value={true}>true</Radio.Button>
+          <Radio.Button value={false}>false</Radio.Button>
+        </Radio.Group>
+      </p>
+      <FormProvider form={form}>
+        <FormLayout requiredMark={requiredMark}>
+          <SchemaField>
+            <SchemaField.String
+              title="我是必填项"
+              required
+              x-decorator="FormItem"
+              x-component="Input"
+            />
+            <SchemaField.String
+              title="我是选填项"
+              x-decorator="FormItem"
+              x-component="Input"
+            />
+          </SchemaField>
+        </FormLayout>
+      </FormProvider>
+    </div>
   )
 }
 ```
@@ -1123,7 +1156,6 @@ export default () => {
 | enableOutlineFeedback | boolean                                                | 开启异常状态的边框颜色样式，当自定义组件内存在子表单时建议关闭此项  | true                |
 | getPopupContainer     | function(triggerNode)                                  | 当 feedbackLayout 为 popover 时，浮层渲染父节点，默认渲染到 body 上 | () => document.body |
 | asterisk              | boolean                                                | 星号提醒                                                            | -                   |
-| requiredMark          | boolean \| `"optional"`                                | 必选样式，可以切换为必选或者可选展示样式                            | true                |
 | gridSpan              | number                                                 | ⽹格布局占宽                                                        | -                   |
 | bordered              | boolean                                                | 是否有边框                                                          | -                   |
 
