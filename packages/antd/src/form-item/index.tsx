@@ -45,7 +45,6 @@ export interface IFormItemProps {
   enableOutlineFeedback?: boolean
   getPopupContainer?: (node: HTMLElement) => HTMLElement
   asterisk?: boolean
-  requiredMark?: boolean | 'optional'
   gridSpan?: number
   bordered?: boolean
 }
@@ -76,6 +75,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
     size: props.size ?? layout.size,
     inset: props.inset ?? layout.inset,
     asterisk: props.asterisk,
+    requiredMark: layout.requiredMark,
     bordered: props.bordered ?? layout.bordered,
     feedbackIcon: props.feedbackIcon,
     feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
