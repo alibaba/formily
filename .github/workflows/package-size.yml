@@ -11,3 +11,6 @@ jobs:
       - uses: preactjs/compressed-size-action@v2
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
+      - name: Setup tmate session
+        if: $
+        uses: mxschmitt/action-tmate@v3
