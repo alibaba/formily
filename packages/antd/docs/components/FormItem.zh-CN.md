@@ -379,7 +379,8 @@ export default () => {
 ```tsx
 import React, { useState } from 'react'
 import { Input, FormItem, FormLayout } from '@formily/antd'
-import { Radio } from 'antd'
+import { Radio, ConfigProvider } from 'antd'
+import zhCN from 'antd/es/locale/zh_CN'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -395,7 +396,7 @@ const form = createForm()
 export default () => {
   const [requiredMark, setRequiredMark] = useState(true)
   return (
-    <div>
+    <ConfigProvider locale={zhCN}>
       <p>
         Required Mark：
         <Radio.Group
@@ -424,7 +425,7 @@ export default () => {
           </SchemaField>
         </FormLayout>
       </FormProvider>
-    </div>
+    </ConfigProvider>
   )
 }
 ```
