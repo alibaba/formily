@@ -5,8 +5,8 @@ import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
 import { Tooltip, Popover } from 'antd'
-import { useLocaleReceiver } from 'antd/es/locale-provider/LocaleReceiver'
-import defaultLocale from 'antd/es/locale/default'
+import { useLocaleReceiver } from 'antd/lib/locale-provider/LocaleReceiver'
+import defaultLocale from 'antd/lib/locale/default'
 import {
   QuestionCircleOutlined,
   CloseCircleOutlined,
@@ -238,7 +238,9 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
           )}
           <label>{label}</label>
           {!asterisk && requiredMark === 'optional' && (
-            <span className={`${prefixCls}-optional`}>{formLocale?.optional || defaultLocale.Form?.optional}</span>
+            <span className={`${prefixCls}-optional`}>
+              {formLocale?.optional || defaultLocale.Form?.optional}
+            </span>
           )}
         </span>
       </div>
