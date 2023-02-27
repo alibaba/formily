@@ -1096,6 +1096,7 @@ export const getArrayParent = (field: BaseField, index = field.index) => {
 export const getObjectParent = (field: BaseField) => {
   let parent: any = field.parent
   while (parent) {
+    if (isArrayField(parent)) return
     if (isObjectField(parent)) return parent
     if (parent === field.form) return
     parent = parent.parent
