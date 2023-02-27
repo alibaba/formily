@@ -1,16 +1,6 @@
 import React from 'react'
-import {
-  Form as FormType,
-  ObjectField,
-  IFormFeedback,
-  isForm,
-} from '@formily/core'
-import {
-  useParentForm,
-  FormProvider,
-  JSXComponent,
-  RecordScope,
-} from '@formily/react'
+import { Form as FormType, ObjectField, IFormFeedback } from '@formily/core'
+import { useParentForm, FormProvider, JSXComponent } from '@formily/react'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
 import { PreviewText } from '../preview-text'
 export interface FormProps extends IFormLayoutProps {
