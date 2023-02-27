@@ -5,6 +5,8 @@ import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
 import { Tooltip, Popover } from 'antd'
+import { useLocaleReceiver } from 'antd/es/locale-provider/LocaleReceiver'
+import defaultLocale from 'antd/es/locale/default'
 import {
   QuestionCircleOutlined,
   CloseCircleOutlined,
@@ -42,6 +44,7 @@ export interface IFormItemProps {
   feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none' | (string & {})
   feedbackStatus?: 'error' | 'warning' | 'success' | 'pending' | (string & {})
   feedbackIcon?: React.ReactNode
+  enableOutlineFeedback?: boolean
   getPopupContainer?: (node: HTMLElement) => HTMLElement
   asterisk?: boolean
   gridSpan?: number
@@ -74,6 +77,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
     size: props.size ?? layout.size,
     inset: props.inset ?? layout.inset,
     asterisk: props.asterisk,
+    requiredMark: layout.requiredMark,
     bordered: props.bordered ?? layout.bordered,
     feedbackIcon: props.feedbackIcon,
     feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
@@ -128,6 +132,7 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
 }) => {
   const [active, setActive] = useState(false)
   const formLayout = useFormItemLayout(props)
+  const [formLocale] = useLocaleReceiver('Form')
   const { containerRef, contentRef, overflow } = useOverflow<
     HTMLDivElement,
     HTMLSpanElement
@@ -140,12 +145,14 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
     addonBefore,
     addonAfter,
     asterisk,
+    requiredMark = true,
     feedbackStatus,
     extra,
     feedbackText,
     fullness,
     feedbackLayout,
     feedbackIcon,
+    enableOutlineFeedback = true,
     getPopupContainer,
     inset,
     bordered = true,
@@ -226,8 +233,13 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
     const labelChildren = (
       <div className={`${prefixCls}-label-content`} ref={containerRef}>
         <span ref={contentRef}>
-          {asterisk && <span className={`${prefixCls}-asterisk`}>{'*'}</span>}
+          {asterisk && requiredMark === true && (
+            <span className={`${prefixCls}-asterisk`}>{'*'}</span>
+          )}
           <label>{label}</label>
+          {!asterisk && requiredMark === 'optional' && (
+            <span className={`${prefixCls}-optional`}>{formLocale?.optional || defaultLocale.Form?.optional}</span>
+          )}
         </span>
       </div>
     )
@@ -290,7 +302,8 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
       className={cls({
         [`${prefixCls}`]: true,
         [`${prefixCls}-layout-${layout}`]: true,
-        [`${prefixCls}-${feedbackStatus}`]: !!feedbackStatus,
+        [`${prefixCls}-${feedbackStatus}`]:
+          enableOutlineFeedback && !!feedbackStatus,
         [`${prefixCls}-feedback-has-text`]: !!feedbackText,
         [`${prefixCls}-size-${size}`]: !!size,
         [`${prefixCls}-feedback-layout-${feedbackLayout}`]: !!feedbackLayout,
