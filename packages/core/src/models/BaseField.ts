@@ -15,7 +15,13 @@ import {
   FieldComponent,
   IFieldActions,
 } from '../types'
-import { locateNode, destroy, initFieldUpdate } from '../shared/internals'
+import {
+  locateNode,
+  destroy,
+  initFieldUpdate,
+  getArrayParent,
+  getObjectParent,
+} from '../shared/internals'
 import { Form } from './Form'
 import { Query } from './Query'
 
@@ -52,14 +58,32 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
     locateNode(this as any, address)
   }
 
-  get indexes() {
+  get indexes(): number[] {
     return this.path.transform(/^\d+$/, (...args) =>
       args.map((index) => Number(index))
-    )
+    ) as number[]
   }
 
   get index() {
-    return this.indexes[this.indexes.length - 1]
+    return this.indexes[this.indexes.length - 1] ?? -1
+  }
+
+  get records() {
+    const array = getArrayParent(this)
+    return array?.value
+  }
+
+  get record() {
+    const obj = getObjectParent(this)
+    if (obj) {
+      return obj.value
+    }
+    const index = this.index
+    const array = getArrayParent(this, index)
+    if (array) {
+      return array.value?.[index]
+    }
+    return this.form.values
   }
 
   get component() {

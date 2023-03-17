@@ -203,6 +203,7 @@ test('max/maxItems/maxLength/minItems/minLength/min/maximum/exclusiveMaximum/min
   hasError(await validate({ aa: 1, bb: 2, cc: 3 }, { maxProperties: 2 }))
   noError(await validate({ aa: 1, cc: 3 }, { maxProperties: 2 }))
   hasError(await validate({ aa: 1 }, { minProperties: 2 }))
+  noError(await validate({ aa: 1, bb: 2, cc: 3 }, { minProperties: 2 }))
   noError(await validate({ aa: 1, cc: 3 }, { maxProperties: 2 }))
 })
 

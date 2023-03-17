@@ -39,7 +39,7 @@ type IFormDrawerProps = Omit<DrawerProps, 'title'> & {
   okText?: string | Component | VNode | (() => VNode)
   okButtonProps?: ButtonProps
   onOpen?: () => void
-  onOpend?: () => void
+  onOpened?: () => void
   onClose?: () => void
   onClosed?: () => void
   onCancel?: () => void
@@ -161,7 +161,7 @@ export function FormDrawer(
             onClose,
             onClosed,
             onOpen,
-            onOpend,
+            onOpened,
             onOK,
             onCancel,
             title,
@@ -204,8 +204,8 @@ export function FormDrawer(
                       open: () => {
                         onOpen?.()
                       },
-                      opend: () => {
-                        onOpend?.()
+                      opened: () => {
+                        onOpened?.()
                       },
                     },
                   },

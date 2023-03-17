@@ -8,11 +8,16 @@ const RENDER_QUEUE = new Set<() => void>()
 
 export function useForceUpdate() {
   const [, setState] = useState([])
-  const renderedRef = useRef(false)
+  const firstRenderedRef = useRef(false)
+  const needUpdateRef = useRef(false)
   useLayoutEffect(() => {
-    renderedRef.current = true
+    firstRenderedRef.current = true
+    if (needUpdateRef.current) {
+      setState([])
+      needUpdateRef.current = false
+    }
     return () => {
-      renderedRef.current = false
+      firstRenderedRef.current = false
     }
   }, EMPTY_ARRAY)
 
@@ -21,9 +26,13 @@ export function useForceUpdate() {
   }, EMPTY_ARRAY)
 
   const scheduler = useCallback(() => {
-    // 针对StrictMode无法快速回收内存，只能考虑拦截第一次渲染函数的setState，
-    // 因为第一次渲染函数的setState会触发第二次渲染函数执行，从而清理掉第二次渲染函数内部的依赖
-    if (RENDER_COUNT.value === 0 || renderedRef.current) {
+    if (!firstRenderedRef.current) {
+      // 针对StrictMode无法快速回收内存，只能考虑拦截第一次渲染函数的setState，
+      // 因为第一次渲染函数的setState会触发第二次渲染函数执行，从而清理掉第二次渲染函数内部的依赖
+      needUpdateRef.current = true
+      return
+    }
+    if (RENDER_COUNT.value === 0) {
       update()
     } else {
       RENDER_QUEUE.add(update)

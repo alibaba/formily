@@ -11,9 +11,11 @@ import {
 import cls from 'classnames'
 import { ISchema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
-import { ArrayBase, ArrayBaseMixins } from '../array-base'
+import { ArrayBase, ArrayBaseMixins, IArrayBaseProps } from '../array-base'
 
-type ComposedArrayCards = React.FC<React.PropsWithChildren<CardProps>> &
+type ComposedArrayCards = React.FC<
+  React.PropsWithChildren<CardProps & IArrayBaseProps>
+> &
   ArrayBaseMixins
 
 const isAdditionComponent = (schema: ISchema) => {
@@ -55,6 +57,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
   const schema = useFieldSchema()
   const dataSource = Array.isArray(field.value) ? field.value : []
   const prefixCls = usePrefixCls('formily-array-cards', props)
+  const { onAdd, onCopy, onRemove, onMoveDown, onMoveUp } = props
 
   if (!schema) throw new Error('can not found schema object')
 
@@ -146,7 +149,13 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
   }
 
   return (
-    <ArrayBase>
+    <ArrayBase
+      onAdd={onAdd}
+      onCopy={onCopy}
+      onRemove={onRemove}
+      onMoveUp={onMoveUp}
+      onMoveDown={onMoveDown}
+    >
       {renderEmpty()}
       {renderItems()}
       {renderAddition()}

@@ -126,25 +126,14 @@ export const ArrayBase: ComposedArrayBase = (props) => {
   const field = useField<ArrayField>()
   const schema = useFieldSchema()
   return (
-    <RecordsScope getRecords={() => field.value}>
-      <ArrayBaseContext.Provider value={{ field, schema, props }}>
-        {props.children}
-      </ArrayBaseContext.Provider>
-    </RecordsScope>
+    <ArrayBaseContext.Provider value={{ field, schema, props }}>
+      {props.children}
+    </ArrayBaseContext.Provider>
   )
 }
 
 ArrayBase.Item = ({ children, ...props }) => {
-  return (
-    <ItemContext.Provider value={props}>
-      <RecordScope
-        getIndex={() => props.index}
-        getRecord={() => takeRecord(props.record, props.index)}
-      >
-        {children}
-      </RecordScope>
-    </ItemContext.Provider>
-  )
+  return <ItemContext.Provider value={props}>{children}</ItemContext.Provider>
 }
 
 const SortHandle = SortableHandle((props: any) => {

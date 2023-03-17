@@ -671,7 +671,17 @@ export default () => {
 
 > 表格组件
 
-参考 https://fusion.design/pc/component/basic/table
+扩展属性
+
+| 属性名     | 类型                      | 描述         | 默认值 |
+| ---------- | ------------------------- | ------------ | ------ |
+| onAdd      | `(index: number) => void` | 增加方法     |        |
+| onRemove   | `(index: number) => void` | 删除方法     |        |
+| onCopy     | `(index: number) => void` | 复制方法     |        |
+| onMoveUp   | `(index: number) => void` | 向上移动方法 |        |
+| onMoveDown | `(index: number) => void` | 向下移动方法 |        |
+
+其余参考 https://fusion.design/pc/component/basic/table
 
 ### ArrayTable.Column
 

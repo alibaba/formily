@@ -8,6 +8,7 @@ test('momentable is usable', () => {
       moment.isMoment(item)
     )
   ).toBe(true)
+  expect(momentable(0)).toBe(0)
 })
 
 test('formatMomentValue is usable', () => {

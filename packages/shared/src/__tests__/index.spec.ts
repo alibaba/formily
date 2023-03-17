@@ -20,7 +20,16 @@ import { stringLength } from '../string'
 import { Subscribable } from '../subscribable'
 import { lazyMerge, merge } from '../merge'
 import { instOf } from '../instanceof'
-import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../checkers'
+import {
+  isFn,
+  isHTMLElement,
+  isNumberLike,
+  isReactElement,
+  isMap,
+  isWeakMap,
+  isWeakSet,
+  isSet,
+} from '../checkers'
 import { defaults } from '../defaults'
 import { applyMiddleware } from '../middleware'
 
@@ -530,6 +539,20 @@ describe('types', () => {
   test('isHTMLElement', () => {
     expect(isHTMLElement(document.createElement('div'))).toBeTruthy()
   })
+  test('isMap', () => {
+    expect(isMap(new Map())).toBeTruthy()
+  })
+  test('isSet', () => {
+    expect(isSet(new Set())).toBeTruthy()
+  })
+  test('isWeakMap', () => {
+    expect(isWeakMap(new WeakMap())).toBeTruthy()
+    expect(isWeakMap(new Map())).toBeFalsy()
+  })
+  test('isWeakSet', () => {
+    expect(isWeakSet(new WeakSet())).toBeTruthy()
+    expect(isWeakSet(new Set())).toBeFalsy()
+  })
 })
 
 describe('merge', () => {
@@ -833,6 +856,16 @@ describe('merge', () => {
     expect('x' in merge8).toBe(true)
     expect('y' in merge8).toBe(true)
     expect('z' in merge8).toBe(false)
+    const merge9Source = { a: 1 }
+    const merge9Target = { b: 2 }
+
+    const merge9 = lazyMerge<any>(merge9Target, merge9Source)
+
+    merge9.a = 2
+    merge9.b = 3
+    merge9.c = 4
+    expect(merge9Source).toEqual({ a: 2, c: 4 })
+    expect(merge9Target).toEqual({ b: 3 })
   })
 })
 

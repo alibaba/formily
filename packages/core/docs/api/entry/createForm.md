@@ -24,7 +24,7 @@ interface createForm {
 | initialValues | Form default values                                        | Object                                                   | `{}`          |
 | pattern       | Form interaction mode                                      | `"editable" \| "disabled" \| "readOnly" \| "readPretty"` | `"editable"`  |
 | display       | The form is visible and hidden                             | `"visible" \| "hidden" \| "none"`                        | `"visible`    |
-| hidden        | UI hidden                                                  | Boolean                                                  | `true`        |
+| hidden        | UI hidden                                                  | Boolean                                                  | `false`       |
 | visible       | show/hide (data hiding)                                    | Boolean                                                  | `true`        |
 | editable      | Editable                                                   | Boolean                                                  | `true`        |
 | disabled      | Whether to disable                                         | Boolean                                                  | `false`       |
