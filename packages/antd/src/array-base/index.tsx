@@ -10,14 +10,7 @@ import {
 } from '@ant-design/icons'
 import { ButtonProps } from 'antd/lib/button'
 import { ArrayField } from '@formily/core'
-import {
-  useField,
-  useFieldSchema,
-  Schema,
-  JSXComponent,
-  RecordScope,
-  RecordsScope,
-} from '@formily/react'
+import { useField, useFieldSchema, Schema, JSXComponent } from '@formily/react'
 import { isValid, clone, isUndef } from '@formily/shared'
 import { SortableHandle } from 'react-sortable-hoc'
 import { usePrefixCls } from '../__builtins__'
