@@ -206,7 +206,7 @@ ArrayBase.Addition = (props) => {
           props.onClick(e)
         }
       }}
-      icon={isUndef(props.icon) ? <PlusOutlined /> : null}
+      icon={isUndef(props.icon) ? <PlusOutlined /> : props.icon}
     >
       {props.title || self.title}
     </Button>
@@ -222,7 +222,7 @@ ArrayBase.Copy = React.forwardRef((props, ref) => {
   if (array.field?.pattern !== 'editable') return null
   return (
     <Button
-      type="link"
+      type="text"
       {...props}
       disabled={self?.disabled}
       className={cls(
@@ -243,7 +243,7 @@ ArrayBase.Copy = React.forwardRef((props, ref) => {
           props.onClick(e)
         }
       }}
-      icon={isUndef(props.icon) ? <CopyOutlined /> : null}
+      icon={isUndef(props.icon) ? <CopyOutlined /> : props.icon}
     >
       {props.title || self.title}
     </Button>
@@ -259,7 +259,7 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
   if (array.field?.pattern !== 'editable') return null
   return (
     <Button
-      type="link"
+      type="text"
       {...props}
       disabled={self?.disabled}
       className={cls(
@@ -277,7 +277,7 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
           props.onClick(e)
         }
       }}
-      icon={isUndef(props.icon) ? <DeleteOutlined /> : null}
+      icon={isUndef(props.icon) ? <DeleteOutlined /> : props.icon}
     >
       {props.title || self.title}
     </Button>
@@ -293,7 +293,7 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
   if (array.field?.pattern !== 'editable') return null
   return (
     <Button
-      type="link"
+      type="text"
       {...props}
       disabled={self?.disabled}
       className={cls(
@@ -311,7 +311,7 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
           props.onClick(e)
         }
       }}
-      icon={isUndef(props.icon) ? <DownOutlined /> : null}
+      icon={isUndef(props.icon) ? <DownOutlined /> : props.icon}
     >
       {props.title || self.title}
     </Button>
@@ -327,7 +327,7 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
   if (array.field?.pattern !== 'editable') return null
   return (
     <Button
-      type="link"
+      type="text"
       {...props}
       disabled={self?.disabled}
       className={cls(
@@ -345,7 +345,7 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
           props.onClick(e)
         }
       }}
-      icon={isUndef(props.icon) ? <UpOutlined /> : null}
+      icon={isUndef(props.icon) ? <UpOutlined /> : props.icon}
     >
       {props.title || self.title}
     </Button>

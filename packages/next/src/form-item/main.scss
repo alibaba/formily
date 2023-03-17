@@ -355,7 +355,7 @@
   > .#{$form-item-cls}-control {
     > .#{$form-item-cls}-control-content {
       > .#{$form-item-cls}-control-content-component {
-        > *:first-child:not(.#{$css-prefix}switch):not(.#{$css-prefix}icon):not(.#{$css-prefix}formily-icon):not(.anticon) {
+        > *:first-child:not(.#{$css-prefix}switch):not(.#{$css-prefix}icon):not(.#{$css-prefix}formily-icon):not(.anticon):not(.#{$css-prefix}btn-text) {
           width: 100%;
         }
       }

@@ -19,6 +19,10 @@ $array-base-prefix-cls: '#{$css-prefix}formily-array-base';
       color: $color-text1-1;
     }
   }
+
+  .#{$css-prefix}formily-icon {
+    font-size: 16px;
+  }
 }
 
 .#{$array-base-prefix-cls}-addition {
@@ -41,6 +45,10 @@ $array-base-prefix-cls: '#{$css-prefix}formily-array-base';
       color: $color-text1-1;
     }
   }
+
+  .#{$css-prefix}formily-icon {
+    font-size: 16px;
+  }
 }
 
 .#{$array-base-prefix-cls}-move-up {
@@ -58,6 +66,10 @@ $array-base-prefix-cls: '#{$css-prefix}formily-array-base';
     &:hover {
       color: $color-text1-1;
     }
+  }
+
+  .#{$css-prefix}formily-icon {
+    font-size: 16px;
   }
 }
 
