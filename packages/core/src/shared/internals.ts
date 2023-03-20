@@ -158,7 +158,7 @@ export const patchFieldStates = (
       if (payload) {
         target[address] = payload
         if (target[oldAddress] === payload) {
-          delete target[oldAddress]
+          target[oldAddress] = undefined
         }
       }
       if (address && payload) {
