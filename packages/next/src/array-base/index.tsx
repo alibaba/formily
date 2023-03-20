@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react'
 import { Button } from '@alifd/next'
-import { isValid, clone } from '@formily/shared'
+import { isValid, isUndef, clone } from '@formily/shared'
 import { ButtonProps } from '@alifd/next/lib/button'
 import { ArrayField } from '@formily/core'
 import { useField, useFieldSchema, Schema, JSXComponent } from '@formily/react'
@@ -12,7 +12,6 @@ import {
   DownOutlinedIcon,
   UpOutlinedIcon,
   MenuOutlinedIcon,
-  IconProps,
   CopyOutlinedIcon,
 } from '../__builtins__'
 import cls from 'classnames'
@@ -21,6 +20,14 @@ export interface IArrayBaseAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
   defaultValue?: any
+  icon?: React.ReactNode
+}
+
+export interface IArrayBaseOperationProps extends ButtonProps {
+  title?: string
+  index?: number
+  ref?: React.Ref<Button>
+  icon?: React.ReactNode
 }
 
 export interface IArrayBaseContext {
@@ -36,15 +43,23 @@ export interface IArrayBaseItemProps {
 
 export type ArrayBaseMixins = {
   Addition?: React.FC<React.PropsWithChildren<IArrayBaseAdditionProps>>
-  Remove?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
+  Remove?: React.FC<
+    React.PropsWithChildren<IArrayBaseOperationProps & { index?: number }>
+  >
   Copy?: React.FC<
     React.PropsWithChildren<
-      IArrayBaseAdditionProps & IconProps & { index?: number }
+      IArrayBaseAdditionProps & IArrayBaseOperationProps & { index?: number }
     >
   >
-  MoveUp?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
-  MoveDown?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
-  SortHandle?: React.FC<React.PropsWithChildren<IconProps & { index?: number }>>
+  MoveUp?: React.FC<
+    React.PropsWithChildren<IArrayBaseOperationProps & { index?: number }>
+  >
+  MoveDown?: React.FC<
+    React.PropsWithChildren<IArrayBaseOperationProps & { index?: number }>
+  >
+  SortHandle?: React.FC<
+    React.PropsWithChildren<IArrayBaseOperationProps & { index?: number }>
+  >
   Index?: React.FC
   useArray?: () => IArrayBaseContext
   useIndex?: (index?: number) => number
@@ -179,7 +194,7 @@ ArrayBase.Addition = (props) => {
         }
       }}
     >
-      <PlusOutlinedIcon />
+      {isUndef(props.icon) ? <PlusOutlinedIcon /> : props.icon}
       {props.title || self.title}
     </Button>
   )
@@ -193,8 +208,10 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
   if (!array) return null
   if (array.field?.pattern !== 'editable') return null
   return (
-    <DeleteOutlinedIcon
+    <Button
+      text
       {...props}
+      disabled={self?.disabled}
       className={cls(
         `${prefixCls}-remove`,
         self?.disabled ? `${prefixCls}-remove-disabled` : '',
@@ -210,7 +227,10 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
           props.onClick(e)
         }
       }}
-    />
+    >
+      {isUndef(props.icon) ? <DeleteOutlinedIcon /> : props.icon}
+      {props.title || self.title}
+    </Button>
   )
 })
 
@@ -222,8 +242,10 @@ ArrayBase.Copy = React.forwardRef((props, ref) => {
   if (!array) return null
   if (array.field?.pattern !== 'editable') return null
   return (
-    <CopyOutlinedIcon
+    <Button
+      text
       {...props}
+      disabled={self?.disabled}
       className={cls(
         `${prefixCls}-copy`,
         self?.disabled ? `${prefixCls}-copy-disabled` : '',
@@ -233,6 +255,7 @@ ArrayBase.Copy = React.forwardRef((props, ref) => {
       onClick={(e) => {
         if (self?.disabled) return
         e.stopPropagation()
+        if (array.props?.disabled) return
         const value = clone(array?.field?.value[index])
         const distIndex = index + 1
         array.field?.insert?.(distIndex, value)
@@ -241,7 +264,10 @@ ArrayBase.Copy = React.forwardRef((props, ref) => {
           props.onClick(e)
         }
       }}
-    />
+    >
+      {isUndef(props.icon) ? <CopyOutlinedIcon /> : props.icon}
+      {props.title || self.title}
+    </Button>
   )
 })
 
@@ -253,8 +279,10 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
   if (!array) return null
   if (array.field?.pattern !== 'editable') return null
   return (
-    <DownOutlinedIcon
+    <Button
+      text
       {...props}
+      disabled={self?.disabled}
       className={cls(
         `${prefixCls}-move-down`,
         self?.disabled ? `${prefixCls}-move-down-disabled` : '',
@@ -270,7 +298,10 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
           props.onClick(e)
         }
       }}
-    />
+    >
+      {isUndef(props.icon) ? <DownOutlinedIcon /> : props.icon}
+      {props.title || self.title}
+    </Button>
   )
 })
 
@@ -282,8 +313,10 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
   if (!array) return null
   if (array.field?.pattern !== 'editable') return null
   return (
-    <UpOutlinedIcon
+    <Button
+      text
       {...props}
+      disabled={self?.disabled}
       className={cls(
         `${prefixCls}-move-up`,
         self?.disabled ? `${prefixCls}-move-up-disabled` : '',
@@ -299,7 +332,10 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
           props.onClick(e)
         }
       }}
-    />
+    >
+      {isUndef(props.icon) ? <UpOutlinedIcon /> : props.icon}
+      {props.title || self.title}
+    </Button>
   )
 })
 
