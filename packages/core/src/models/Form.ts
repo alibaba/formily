@@ -604,7 +604,7 @@ export class Form<ValueType extends object = any> {
     return batchValidate(this, pattern)
   }
 
-  submit = <T>(onSubmit?: (values: any) => Promise<T> | void): Promise<T> => {
+  submit = <T>(onSubmit?: (values: ValueType) => Promise<T> | void): Promise<T> => {
     return batchSubmit(this, onSubmit)
   }
 
