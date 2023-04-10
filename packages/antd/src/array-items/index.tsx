@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { ArrayField } from '@formily/core'
 import {
   useField,
@@ -74,6 +74,7 @@ const useAddition = () => {
 export const ArrayItems: ComposedArrayItems = observer((props) => {
   const field = useField<ArrayField>()
   const prefixCls = usePrefixCls('formily-array-items')
+  const ref = useRef<HTMLDivElement>(null)
   const schema = useFieldSchema()
   const addition = useAddition()
   const dataSource = Array.isArray(field.value) ? field.value : []
@@ -89,6 +90,7 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
     >
       <div
         {...props}
+        ref={ref}
         onChange={() => {}}
         className={cls(prefixCls, props.className)}
       >
@@ -96,6 +98,9 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
           useDragHandle
           lockAxis="y"
           helperClass={`${prefixCls}-sort-helper`}
+          helperContainer={() =>
+            ref.current?.querySelector(`${prefixCls}-list`)
+          }
           onSortEnd={({ oldIndex, newIndex }) => {
             field.move(oldIndex, newIndex)
           }}
