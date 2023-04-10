@@ -246,7 +246,7 @@ export class Field<
         (display) => {
           const value = this.value
           if (display !== 'none') {
-            if (!isValid(value)) {
+            if (value === undefined && this.caches.value !== undefined) {
               this.setValue(this.caches.value)
               this.caches.value = undefined
             }
