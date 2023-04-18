@@ -186,6 +186,11 @@ const schema = {
     string_array: {
       type: 'array',
       'x-component': 'ArrayCollapse',
+      'x-component-props': {
+        onAdd: (index: number) => {
+          console.log('Adding ' + index + ' item')
+        },
+      },
       maxItems: 3,
       'x-decorator': 'FormItem',
       items: {
