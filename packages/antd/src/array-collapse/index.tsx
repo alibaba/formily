@@ -210,7 +210,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer((props) => {
   return (
     <ArrayBase
       onAdd={(index) => {
-        onAdd(index)
+        onAdd?.(index)
         setActiveKeys(insertActiveKeys(activeKeys, index))
       }}
       onCopy={onCopy}
