@@ -45,6 +45,7 @@ export interface IFormItemProps {
   enableOutlineFeedback?: boolean
   getPopupContainer?: (node: HTMLElement) => HTMLElement
   asterisk?: boolean
+  optionalMarkHidden?: boolean
   gridSpan?: number
   bordered?: boolean
 }
@@ -76,6 +77,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
     inset: props.inset ?? layout.inset,
     asterisk: props.asterisk,
     requiredMark: layout.requiredMark,
+    optionalMarkHidden: props.optionalMarkHidden,
     bordered: props.bordered ?? layout.bordered,
     feedbackIcon: props.feedbackIcon,
     feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
@@ -144,6 +146,7 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
     addonAfter,
     asterisk,
     requiredMark = true,
+    optionalMarkHidden = false,
     feedbackStatus,
     extra,
     feedbackText,
@@ -235,7 +238,7 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
             <span className={`${prefixCls}-asterisk`}>{'*'}</span>
           )}
           <label>{label}</label>
-          {!asterisk && requiredMark === 'optional' && (
+          {!asterisk && requiredMark === 'optional' && !optionalMarkHidden && (
             <span className={`${prefixCls}-optional`}>
               {locale?.Form?.optional}
             </span>
@@ -429,6 +432,8 @@ export const FormItem: ComposeFormItem = connect(
       feedbackStatus: takeFeedbackStatus(),
       feedbackText: takeMessage(),
       asterisk: takeAsterisk(),
+      optionalMarkHidden:
+        field.pattern === 'readPretty' && !('asterisk' in props),
       extra: props.extra || field.description,
     }
   })

@@ -422,6 +422,27 @@ export default () => {
               x-decorator="FormItem"
               x-component="Input"
             />
+            <SchemaField.String
+              default="字段不可编辑时，始终隐藏必填/选填标识"
+              x-editable={false}
+              x-decorator="FormItem"
+              x-component="Input"
+            />
+            <SchemaField.String
+              title="我是必填项"
+              required
+              default="不可编辑"
+              x-editable={false}
+              x-decorator="FormItem"
+              x-component="Input"
+            />
+            <SchemaField.String
+              title="我是选填项"
+              default="不可编辑"
+              x-editable={false}
+              x-decorator="FormItem"
+              x-component="Input"
+            />
           </SchemaField>
         </FormLayout>
       </FormProvider>
