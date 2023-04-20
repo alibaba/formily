@@ -421,6 +421,27 @@ export default () => {
               x-decorator="FormItem"
               x-component="Input"
             />
+            <SchemaField.String
+              default="When the field is not editable, always hide the required/optional flag"
+              x-editable={false}
+              x-decorator="FormItem"
+              x-component="Input"
+            />
+            <SchemaField.String
+              title="I am Required"
+              required
+              default="Not editable"
+              x-editable={false}
+              x-decorator="FormItem"
+              x-component="Input"
+            />
+            <SchemaField.String
+              title="I am Optional"
+              default="Not editable"
+              x-editable={false}
+              x-decorator="FormItem"
+              x-component="Input"
+            />
           </SchemaField>
         </FormLayout>
       </FormProvider>
