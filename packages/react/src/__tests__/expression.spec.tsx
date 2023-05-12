@@ -1,7 +1,13 @@
 import React from 'react'
 import { render, waitFor } from '@testing-library/react'
 import { createForm } from '@formily/core'
-import { FormProvider, ExpressionScope, createSchemaField, useField } from '..'
+import {
+  FormProvider,
+  ExpressionScope,
+  createSchemaField,
+  useField,
+  Field,
+} from '..'
 
 test('expression scope', async () => {
   const Container = (props) => {
@@ -72,4 +78,34 @@ test('x-compile-omitted', async () => {
   await waitFor(() => {
     expect(queryByTestId('input')?.textContent).toBe('{{fake}}123321extra')
   })
+})
+
+test('field hidden & visible', async () => {
+  const form = createForm({ initialValues: { empty: null } })
+  const { findByTestId } = render(
+    <FormProvider form={form}>
+      <div data-testid="testid">
+        <Field name="empty" component={['input']} />
+      </div>
+    </FormProvider>
+  )
+  await findByTestId('testid')
+  //
+  expect(form.fields.empty.hidden).toBe(false)
+  expect(form.fields.empty.value).toBe(null)
+  form.fields.empty.hidden = true
+  expect(form.fields.empty.hidden).toBe(true)
+  expect(form.fields.empty.value).toBe(null)
+  form.fields.empty.hidden = false
+  expect(form.fields.empty.hidden).toBe(false)
+  expect(form.fields.empty.value).toBe(null)
+  //
+  expect(form.fields.empty.visible).toBe(true)
+  expect(form.fields.empty.value).toBe(null)
+  form.fields.empty.visible = false
+  expect(form.fields.empty.visible).toBe(false)
+  expect(form.fields.empty.value).toBe(undefined)
+  form.fields.empty.visible = true
+  expect(form.fields.empty.visible).toBe(true)
+  expect(form.fields.empty.value).toBe(null)
 })
