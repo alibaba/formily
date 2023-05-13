@@ -11,6 +11,7 @@ const env: Env = {
   createPortal: globalThisPolyfill?.['ReactDOM']?.createPortal,
 }
 
+/* istanbul ignore next */
 const loadCreatePortal = () => {
   if (!env.createPortal) {
     try {
