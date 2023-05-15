@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.2.24(2023-05-15)
+
+### :bug: Bug Fixes
+
+1. [fix: require react dom #3704 (#3818)](https://github.com/alibaba/formily/commit/c3d028d6) :point_right: ( [gwsbhqt](https://github.com/gwsbhqt) )
+
+### :blush: Other Changes
+
+1. [chore: update json-schema's peerDependencies (#3817)](https://github.com/alibaba/formily/commit/4050621f) :point_right: ( [严浩](https://github.com/严浩) )
+
 ## v2.2.23(2023-05-05)
 
 ### :bug: Bug Fixes
@@ -602,18 +612,6 @@
 
 ## v2.0.20(2022-04-24)
 
-### :bug: Bug Fixes
-
-1. [fix(path): fix range all match is not expect (#3067)](https://github.com/alibaba/formily/commit/04e753f5) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(core): fix array child reactions invalid with remove (#3063)](https://github.com/alibaba/formily/commit/34e9420b) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :blush: Other Changes
-
-1. [chore(deps): bump async from 2.6.3 to 2.6.4 (#3054)](https://github.com/alibaba/formily/commit/82cd80a5) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
-
-## v2.0.19(2022-04-19)
-
 ### :tada: Enhancements
 
 1. [feat(antd/next): add style generator (#3053)](https://github.com/alibaba/formily/commit/fddd591a) :point_right: ( [Janry](https://github.com/Janry) )
@@ -944,6 +942,10 @@
 
 ### :bug: Bug Fixes
 
+1. [fix(path): fix range all match is not expect (#3067)](https://github.com/alibaba/formily/commit/04e753f5) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(core): fix array child reactions invalid with remove (#3063)](https://github.com/alibaba/formily/commit/34e9420b) :point_right: ( [Janry](https://github.com/Janry) )
+
 1. [fix(element): fix FormDialog/FormDrawer promise status error (#3049)](https://github.com/alibaba/formily/commit/d1700cee) :point_right: ( [Muyao](https://github.com/Muyao) )
 
 1. [fix(next): fix date time picker value format (#3044)](https://github.com/alibaba/formily/commit/cee97228) :point_right: ( [Eric Zhang](https://github.com/Eric Zhang) )
@@ -971,8 +973,6 @@
 1. [fix(antd): StepPane & createFormStep should not be optional property (#2979)](https://github.com/alibaba/formily/commit/1c6970c5) :point_right: ( [戣蓦](https://github.com/戣蓦) )
 
 1. [fix(next): fix array table warning style (#2973)](https://github.com/alibaba/formily/commit/3cb3ec7f) :point_right: ( [王大白](https://github.com/王大白) )
-
-1. [fix(core): fix array field remove with memory leak (#2963)](https://github.com/alibaba/formily/commit/1658ae36) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(core): fix initialValue=null and reset null invalid bug (#2951)](https://github.com/alibaba/formily/commit/221d39fb) :point_right: ( [frehkxu](https://github.com/frehkxu) )
 
@@ -1007,8 +1007,6 @@
 1. [fix(core): fix relative match can not skip void field (#2850)](https://github.com/alibaba/formily/commit/e7c99843) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(shared): fix merge empty object is not work (#2841)](https://github.com/alibaba/formily/commit/28a58530) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(path): fix nested group match is not work (#2818)](https://github.com/alibaba/formily/commit/cad37dae) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(vue): add component name in connect (#2810)](https://github.com/alibaba/formily/commit/5a695c06) :point_right: ( [zhouxinyong](https://github.com/zhouxinyong) )
 
@@ -1100,6 +1098,10 @@
 
 1. [fix(antd/next): fix props.prefix is not work for FormGrid/FormLayout (#2151)](https://github.com/alibaba/formily/commit/bcdac582) :point_right: ( [Janry](https://github.com/Janry) )
 
+1. [fix(core): fix array unshift with incomplete elements (#2150)](https://github.com/alibaba/formily/commit/64633714) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(path): fix path match destructor (#2148)](https://github.com/alibaba/formily/commit/f621d989) :point_right: ( [Janry](https://github.com/Janry) )
+
 1. [fix(next/antd/vue): fix Switch type & add classname to ArrayItems.Index (#2093)](https://github.com/alibaba/formily/commit/9f875692) :point_right: ( [Lyca](https://github.com/Lyca) )
 
 1. [fix(designable): fix Uncaught SyntaxError (#1997) (#2089)](https://github.com/alibaba/formily/commit/b56b5b28) :point_right: ( [youshao](https://github.com/youshao) )
@@ -1152,6 +1154,8 @@
 
 1. [fix(core): fix object field's children auto clean but they are not additionalProperty (#1840)](https://github.com/alibaba/formily/commit/dd313646) :point_right: ( [Janry](https://github.com/Janry) )
 
+1. [fix(core): fix ArrayField operation will trigger memo leak (#1831)](https://github.com/alibaba/formily/commit/021c155a) :point_right: ( [Janry](https://github.com/Janry) )
+
 1. [fix(path): fix segments match (#1826)](https://github.com/alibaba/formily/commit/6e541dcb) :point_right: ( [砂糖梨子](https://github.com/砂糖梨子) )
 
 1. [fix(antd/next): form-grid and layout props optional with default value (#1809)](https://github.com/alibaba/formily/commit/2738e418) :point_right: ( [gwsbhqt](https://github.com/gwsbhqt) )
@@ -1191,6 +1195,8 @@
 1. [fix(project): fix typings](https://github.com/alibaba/formily/commit/c8aff09b) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(vue): add deep copy to decorator props (#1587)](https://github.com/alibaba/formily/commit/710f5e1b) :point_right: ( [Muyao](https://github.com/Muyao) )
+
+1. [fix(core): fix createForm memory leak](https://github.com/alibaba/formily/commit/5f11459b) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(next): fix style missing due to wrong sideEffects (#1564)](https://github.com/alibaba/formily/commit/9fb8b93e) :point_right: ( [liuwei](https://github.com/liuwei) )
 
@@ -1339,8 +1345,6 @@
 1. [fix(react): fix ArrayTable index and FormSpy (#904)](https://github.com/alibaba/formily/commit/944891f7) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(layout): inset mode comflict with labelAlign top (#903)](https://github.com/alibaba/formily/commit/9906a0ce) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix(core): fix rules normalize](https://github.com/alibaba/formily/commit/5b66de63) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(core): fix array list mutators (#888)](https://github.com/alibaba/formily/commit/50f4e9e5) :point_right: ( [Janry](https://github.com/Janry) )
 
@@ -1519,8 +1523,6 @@
 1. [fix(@uform/utils): Fix the exception of setIn when undefiend value is assigned undefined property](https://github.com/alibaba/formily/commit/7cb63161) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 1. [fix(@uform/core): Fix value synchronization of field state](https://github.com/alibaba/formily/commit/38dc0aa6) :point_right: ( [janryWang](https://github.com/janryWang) )
-
-1. [fix(@uform/react): add memory leak guard](https://github.com/alibaba/formily/commit/3b1833ad) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 1. [fix: antd select should not have max-width by default (#112)](https://github.com/alibaba/formily/commit/b4a494a1) :point_right: ( [Kevin Tan](https://github.com/Kevin Tan) )
 
@@ -1930,7 +1932,7 @@
 
 ### :blush: Other Changes
 
-1. [chore(deps): bump moment from 2.29.1 to 2.29.2 (#3033)](https://github.com/alibaba/formily/commit/c26e011c) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
+1. [chore(deps): bump async from 2.6.3 to 2.6.4 (#3054)](https://github.com/alibaba/formily/commit/82cd80a5) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
 
 1. [chore(deps): bump url-parse from 1.5.7 to 1.5.10 (#2871)](https://github.com/alibaba/formily/commit/78b5caa6) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
 
