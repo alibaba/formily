@@ -1,5 +1,5 @@
 import { isVue2, markRaw, defineComponent, getCurrentInstance } from 'vue-demi'
-import { isFn, isStr, FormPath, each } from '@formily/shared'
+import { isFn, isStr, FormPath, each, isValid } from '@formily/shared'
 import { isVoidField, GeneralField } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 
@@ -24,11 +24,13 @@ export function mapProps<T extends VueComponent = VueComponent>(
         each(mapper, (to, extract) => {
           const extractValue = FormPath.getIn(field, extract)
           const targetValue = isStr(to) ? to : extract
+          const originalValue = FormPath.getIn(props, targetValue)
           if (extract === 'value') {
             if (to !== extract) {
               delete props['value']
             }
           }
+          if (isValid(originalValue) && !isValid(extractValue)) return
           FormPath.setIn(props, targetValue, extractValue)
         })
       }
