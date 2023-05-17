@@ -89,7 +89,7 @@ export type SchemaReaction<Field = any> =
       }
       [key: string]: any
     }
-  | ((field: Field, scope: any) => void)
+  | ((field: Field, scope: IScopeContext) => void)
 
 export type SchemaReactions<Field = any> =
   | SchemaReaction<Field>
@@ -134,16 +134,20 @@ export interface ISchemaFieldUpdateRequest {
   run?: string
 }
 
+export interface IScopeContext {
+  [key: string]: any
+}
+
 export interface IFieldStateSetterOptions {
   field: GeneralField
   target?: FormPathPattern
   request: ISchemaFieldUpdateRequest
   runner?: string
-  scope?: any
+  scope?: IScopeContext
 }
 
 export interface ISchemaTransformerOptions {
-  scope?: any
+  scope?: IScopeContext
 }
 
 export type Stringify<P extends { [key: string]: any }> = {
