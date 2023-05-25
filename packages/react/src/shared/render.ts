@@ -1,4 +1,4 @@
-import React, { type ReactNode, type ReactPortal } from 'react'
+import React, { ReactNode, ReactPortal } from 'react'
 import { globalThisPolyfill } from '@formily/shared'
 
 interface Env {
