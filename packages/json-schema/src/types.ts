@@ -154,7 +154,7 @@ export type Stringify<P extends { [key: string]: any }> = {
   /**
    * Use `string & {}` instead of string to keep Literal Type for ISchema#component and ISchema#decorator
    */
-  [key in keyof P]?: P[key] | string
+  [key in keyof P]?: P[key] | (string & {})
 }
 
 export type ISchema<
