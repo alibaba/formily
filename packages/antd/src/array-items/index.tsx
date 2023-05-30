@@ -99,7 +99,7 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
           lockAxis="y"
           helperClass={`${prefixCls}-sort-helper`}
           helperContainer={() =>
-            ref.current?.querySelector(`${prefixCls}-list`)
+            ref.current?.querySelector(`.${prefixCls}-list`)
           }
           onSortEnd={({ oldIndex, newIndex }) => {
             field.move(oldIndex, newIndex)
