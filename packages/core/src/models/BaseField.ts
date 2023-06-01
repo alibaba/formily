@@ -68,6 +68,22 @@ export class BaseField<Decorator = any, Component = any, TextType = any> {
     return this.indexes[this.indexes.length - 1] ?? -1
   }
 
+  get key() {
+    return this.path.slice(this.path.length - 1)?.[0]?.toString()
+  }
+
+  get lookup() {
+    const obj = getObjectParent(this)
+    if (obj) {
+      return obj.value
+    }
+    const array = getArrayParent(this)
+    if (array) {
+      return array.value
+    }
+    return this.form.values
+  }
+
   get records() {
     const array = getArrayParent(this)
     return array?.value
