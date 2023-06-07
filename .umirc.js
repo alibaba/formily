@@ -140,15 +140,15 @@ export default {
         children: [
           {
             title: '@formily/reactive',
-            path: 'https://reactive.formilyjs.org',
+            path: 'https://reactive.formilyjs.org/zh-CN',
           },
           {
             title: '@formily/core',
-            path: 'https://core.formilyjs.org',
+            path: 'https://core.formilyjs.org/zh-CN',
           },
           {
             title: '@formily/react',
-            path: 'https://react.formilyjs.org',
+            path: 'https://react.formilyjs.org/zh-CN',
           },
           {
             title: '@formily/vue',
@@ -161,19 +161,19 @@ export default {
         children: [
           {
             title: '@formily/antd',
-            path: 'https://antd.formilyjs.org',
+            path: 'https://antd.formilyjs.org/zh-CN',
           },
           {
             title: '@formily/antd-v5',
-            path: 'https://antd5.formilyjs.org',
+            path: 'https://antd5.formilyjs.org/zh-CN',
           },
           {
             title: '@formily/antd-mobile',
-            path: 'https://antd-mobile.formilyjs.org',
+            path: 'https://antd-mobile.formilyjs.org/zh-CN',
           },
           {
             title: '@formily/next',
-            path: 'https://fusion.formilyjs.org',
+            path: 'https://fusion.formilyjs.org/zh-CN',
           },
           {
             title: '@formily/element',
@@ -197,11 +197,11 @@ export default {
           },
           {
             title: '@formily/tdesign-react',
-            path: 'https://tdesign-react.formilyjs.org/',
+            path: 'https://tdesign-react.formilyjs.org',
           },
           {
             title: 'aliyun teamix',
-            path: 'https://formily.dg.aliyun-inc.com/',
+            path: 'https://formily.dg.aliyun-inc.com',
           },
           {
             title: 'antd-formily-boost',
