@@ -7,6 +7,16 @@ export default {
     '//img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg',
   hash: true,
   outputPath: './doc-site',
+  // local dev only
+  resolve: {
+    '@formily/core': '../core/src',
+    '@formily/grid': '../grid/src',
+    '@formily/json-schema': '../json-schema/src',
+    '@formily/react': '../react/src',
+    '@formily/reactive': '../reactive/src',
+    '@formily/reactive-react': '../reactive-react/src',
+    '@formily/shared': '../shared/src',
+  },
   navs: {
     'en-US': [
       {
