@@ -17,12 +17,7 @@ export const Open = (
   const click = loading ? noop : open
 
   return field.display !== 'visible' ? null : (
-    <Button
-      size="small"
-      type="normal"
-      {...field.componentProps?.openButton}
-      onClick={click}
-    >
+    <Button type="normal" {...field.componentProps?.openButton} onClick={click}>
       {field?.title}
     </Button>
   )

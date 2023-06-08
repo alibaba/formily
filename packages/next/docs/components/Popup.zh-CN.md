@@ -629,12 +629,18 @@ export interface IPopupActions<Record = any, Data = any> {
 
 ### Popup.Dialog
 
+> 模态框弹窗
+
 参考 https://fusion.design/pc/component/dialog/
 
 ### Popup.Drawer
 
+> 抽屉弹窗
+
 参考 https://fusion.design/pc/component/drawer/
 
 ### Popup.Balloon
+
+> 气泡弹窗
 
 参考 https://fusion.design/pc/component/balloon/
