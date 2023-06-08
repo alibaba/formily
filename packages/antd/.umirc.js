@@ -11,16 +11,16 @@ export default {
     ['en-US', 'English'],
     ['zh-CN', '中文'],
   ],
-  // local dev only
-  resolve: {
-    '@formily/core': '../core/src',
-    '@formily/grid': '../grid/src',
-    '@formily/json-schema': '../json-schema/src',
-    '@formily/react': '../react/src',
-    '@formily/reactive': '../reactive/src',
-    '@formily/reactive-react': '../reactive-react/src',
-    '@formily/shared': '../shared/src',
-  },
+  // // local dev only
+  // resolve: {
+  //   '@formily/core': '../core/src',
+  //   '@formily/grid': '../grid/src',
+  //   '@formily/json-schema': '../json-schema/src',
+  //   '@formily/react': '../react/src',
+  //   '@formily/reactive': '../reactive/src',
+  //   '@formily/reactive-react': '../reactive-react/src',
+  //   '@formily/shared': '../shared/src',
+  // },
   navs: {
     'zh-CN': [
       {

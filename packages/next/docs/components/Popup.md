@@ -1,13 +1,13 @@
 # Popup
 
-> The pop-up window series is to solve the problem of editing the sub-form template code of the common Popover/Popconfirm/Dialog/Drawer pop-up window, which is more commonly used for row operations with tables.
+> The pop-up window series is to solve the problem of editing the sub-form template code of the common Popover/Balloon/Dialog/Drawer pop-up window, which is more commonly used for row operations with tables.
 >
 > Note: This component is only applicable to Schema scenarios
 
-## Why not [FormDialog] (https://antd.formilyjs.org/zh-CN/components/form-dialog#formdialog-1)/[FormDrawer] (https://antd.formilyjs.org/zh-CN/components/form-drawer#formdrawer-1)?
+## Why not [FormDialog](https://fusion.formilyjs.org/zh-CN/components/form-dialog#formdialog-1)/[FormDrawer](https://fusion.formilyjs.org/zh-CN/components/form-drawer#formdrawer-1)?
 
 - Both are method calls and cannot be described with json so FormDialog/FormDrawer is suitable for more flexible scenarios;
-- In addition, 'FormDialog/FormDrawer' internally uses [document.body.appendChild] (https://github.com/alibaba/formily/blob/formily_next/packages/antd/src/form-drawer/index.tsx#L122) to create a new dom node out of thin air to host the form, which is separated from the root node, so it needs to be patched with [Portals] (https://zh-hans.reactjs.org/docs/portals.html), may encounter some strange problems
+- In addition, 'FormDialog/FormDrawer' internally uses [document.body.appendChild](https://github.com/alibaba/formily/blob/formily_next/packages/next/src/form-drawer/index.tsx#L125) to create a new dom node out of thin air to host the form, which is separated from the root node, so it needs to be patched with [Portals](https://zh-hans.reactjs.org/docs/portals.html), may encounter some strange problems
 - The purpose is to reduce the processing of template code, which does not need to be as flexible as programming, and live to say that flexibility is converted to processing in'actions';
 
 So for common pop-up form processing logic, try to summarize it into three fixed actions
@@ -360,12 +360,12 @@ export default () => {
                 />
               </SchemaField.Void>
               <SchemaField.Void
-                title="Popup Popconfirm"
+                title="Popup Balloon"
                 x-component="Popup.Balloon"
                 x-component-props={{
                   actions: '{{actions.balloon}}',
                   showCancel: false,
-                  title: "I'm Popup Popconfirm",
+                  title: "I'm Popup Balloon",
                 }}
               >
                 <SchemaField.String
@@ -526,7 +526,7 @@ const schema = {
                     'x-component': 'Popup.Dialog',
                     'x-component-props': {
                       actions: '{{actions.dialog}}',
-                      title: "I'm Popup Popconfirm",
+                      title: "I'm Popup Balloon",
                       openButton: {
                         type: 'primary',
                       },
@@ -541,12 +541,12 @@ const schema = {
                   },
                   popupconfirm: {
                     type: 'void',
-                    title: 'Popup Popconfirm',
+                    title: 'Popup Balloon',
                     'x-component': 'Popup.Balloon',
                     'x-component-props': {
                       actions: '{{actions.balloon}}',
                       showCancel: false,
-                      title: "I'm Popup Popconfirm",
+                      title: "I'm Popup Balloon",
                     },
                     properties: {
                       a1: {

@@ -180,7 +180,11 @@ export const usePopup = () => {
         }}
       >
         {field.componentProps.showCancel !== false ? (
-          <Button loading={loading} onClick={reset}>
+          <Button
+            style={{ marginRight: '16px' }}
+            loading={loading}
+            onClick={reset}
+          >
             {field.componentProps.cancelText || '取消'}
           </Button>
         ) : null}

@@ -8,15 +8,15 @@ export default {
   hash: true,
   outputPath: './doc-site',
   // local dev only
-  resolve: {
-    '@formily/core': '../core/src',
-    '@formily/grid': '../grid/src',
-    '@formily/json-schema': '../json-schema/src',
-    '@formily/react': '../react/src',
-    '@formily/reactive': '../reactive/src',
-    '@formily/reactive-react': '../reactive-react/src',
-    '@formily/shared': '../shared/src',
-  },
+  // resolve: {
+  //   '@formily/core': '../core/src',
+  //   '@formily/grid': '../grid/src',
+  //   '@formily/json-schema': '../json-schema/src',
+  //   '@formily/react': '../react/src',
+  //   '@formily/reactive': '../reactive/src',
+  //   '@formily/reactive-react': '../reactive-react/src',
+  //   '@formily/shared': '../shared/src',
+  // },
   navs: {
     'en-US': [
       {

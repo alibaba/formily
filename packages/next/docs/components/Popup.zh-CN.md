@@ -1,6 +1,6 @@
 # Popup
 
-> 弹窗系列, 是为了解决常见的 Popover/Popconfirm/Modal/Drawer 弹窗编辑子表单模板代码的问题, 更常用于与表格的行操作
+> 弹窗系列, 是为了解决常见的 Popover/Balloon/Modal/Drawer 弹窗编辑子表单模板代码的问题, 更常用于与表格的行操作
 >
 > 注意：该组件只适用于 Schema 场景
 
@@ -522,11 +522,11 @@ const schema = {
                   },
                   popupdialog: {
                     type: 'void',
-                    title: 'Popup Modal',
+                    title: 'Popup Dialog',
                     'x-component': 'Popup.Dialog',
                     'x-component-props': {
                       actions: '{{actions.dialog}}',
-                      title: "I'm Popup Popconfirm",
+                      title: "I'm Popup Dialog",
                       openButton: {
                         type: 'primary',
                       },
@@ -541,12 +541,12 @@ const schema = {
                   },
                   popupconfirm: {
                     type: 'void',
-                    title: 'Popup Popconfirm',
+                    title: 'Popup Balloon',
                     'x-component': 'Popup.Balloon',
                     'x-component-props': {
                       actions: '{{actions.balloon}}',
                       showCancel: false,
-                      title: "I'm Popup Popconfirm",
+                      title: "I'm Popup Balloon",
                     },
                     properties: {
                       a1: {

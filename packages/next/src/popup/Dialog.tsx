@@ -12,7 +12,10 @@ export const Dialog = (
   return (
     <>
       <NextDialog
-        width={'68.88%'}
+        closeMode={['close', 'esc', 'mask']}
+        style={{
+          width: '68.88%',
+        }}
         {...props}
         afterClose={() => {
           props?.afterClose?.()
