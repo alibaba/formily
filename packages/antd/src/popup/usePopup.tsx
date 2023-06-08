@@ -82,7 +82,7 @@ export const usePopup = () => {
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const open = useCallback(async () => {
+  const open = useCallback(() => {
     if (field.disabled) return
     if (loading) return
 
@@ -104,7 +104,7 @@ export const usePopup = () => {
       })
   }, [field, loading, methods])
 
-  const reset = useCallback(async () => {
+  const reset = useCallback(() => {
     if (field.disabled) return
     if (loading || !visible) return
 
@@ -126,7 +126,7 @@ export const usePopup = () => {
       })
   }, [field, loading, methods, visible])
 
-  const submit = useCallback(async () => {
+  const submit = useCallback(() => {
     if (field.disabled) return
     if (loading || !visible) return
 
