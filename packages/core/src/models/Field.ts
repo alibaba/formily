@@ -459,12 +459,19 @@ export class Field<
   getState: IModelGetter<IFieldState> = createStateGetter(this)
 
   onInput = async (...args: any[]) => {
+    const isHTMLInputEventFromSelf = (args: any[]) =>
+      isHTMLInputEvent(args[0])
+        ? args[0]?.target === args[0]?.currentTarget
+        : true
     const getValues = (args: any[]) => {
       if (args[0]?.target) {
         if (!isHTMLInputEvent(args[0])) return args
       }
       return getValuesFromEvent(args)
     }
+
+    if (!isHTMLInputEventFromSelf(args)) return
+
     const values = getValues(args)
     const value = values[0]
     this.caches.inputting = true
