@@ -2346,3 +2346,19 @@ test('field destructor path with display none', () => {
   expect(form.values).toEqual({})
   expect(aa.value).toEqual([])
 })
+
+test('onInput should ignore HTMLInputEvent propagation', async () => {
+  const form = attach(createForm<any>())
+  const mockHTMLInput = { value: '321' }
+  const mockDomEvent = { target: mockHTMLInput, currentTarget: mockHTMLInput }
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  await aa.onInput(mockDomEvent)
+  expect(aa.value).toEqual('321')
+
+  await aa.onInput({ target: { value: '2' }, currentTarget: { value: '4' } })
+  expect(aa.value).toEqual('321')
+})
