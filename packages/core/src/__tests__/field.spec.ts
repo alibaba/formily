@@ -2361,4 +2361,8 @@ test('onInput should ignore HTMLInputEvent propagation', async () => {
 
   await aa.onInput({ target: { value: '2' }, currentTarget: { value: '4' } })
   expect(aa.value).toEqual('321')
+
+  // currentTarget is undefined, skip ignore
+  await aa.onInput({ target: { value: '123' } })
+  expect(aa.value).toEqual('123')
 })
