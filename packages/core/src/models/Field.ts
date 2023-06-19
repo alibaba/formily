@@ -460,7 +460,7 @@ export class Field<
 
   onInput = async (...args: any[]) => {
     const isHTMLInputEventFromSelf = (args: any[]) =>
-      isHTMLInputEvent(args[0])
+      isHTMLInputEvent(args[0]) && 'currentTarget' in args[0]
         ? args[0]?.target === args[0]?.currentTarget
         : true
     const getValues = (args: any[]) => {
