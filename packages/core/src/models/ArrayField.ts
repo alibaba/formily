@@ -1,4 +1,4 @@
-import { isArr } from '@formily/shared'
+import { isArr, move } from '@formily/shared'
 import { action, reaction } from '@formily/reactive'
 import {
   spliceArrayState,
@@ -68,6 +68,9 @@ export class ArrayField<
       if (!isArr(this.value)) {
         this.value = []
       }
+      if (items.length === 0) {
+        return
+      }
       spliceArrayState(this, {
         startIndex: index,
         insertCount: items.length,
@@ -115,9 +118,7 @@ export class ArrayField<
     if (!isArr(this.value)) return
     if (fromIndex === toIndex) return
     return action(() => {
-      const fromItem = this.value[fromIndex]
-      this.value.splice(fromIndex, 1)
-      this.value.splice(toIndex, 0, fromItem)
+      move(this.value, fromIndex, toIndex)
       exchangeArrayState(this, {
         fromIndex,
         toIndex,
