@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.2.26(2023-06-21)
+
+### :bug: Bug Fixes
+
+1. [fix(core): onInput not ignore when currentTarget is undefined (#3862)](https://github.com/alibaba/formily/commit/1e490616) :point_right: ( [frehkxu](https://github.com/frehkxu) )
+
+### :construction: Add/Update Test Cases
+
+1. [test(core): improve array test case (#3861)](https://github.com/alibaba/formily/commit/44f08106) :point_right: ( [{ Chao }](https://github.com/{ Chao }) )
+
 ## v2.2.25(2023-06-16)
 
 ### :tada: Enhancements
@@ -588,20 +598,6 @@
 
 ## v2.1.1(2022-05-09)
 
-### :bug: Bug Fixes
-
-1. [fix(core): fix field reactions still trigger when destroyed (#3103)](https://github.com/alibaba/formily/commit/23b06db5) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(react): update react peerDependencies (#3096)](https://github.com/alibaba/formily/commit/6e939d82) :point_right: ( [蜘蛛侠](https://github.com/蜘蛛侠) )
-
-1. [fix(react): fix markup field is not work with strict-mode (#3088)](https://github.com/alibaba/formily/commit/431c3db8) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :blush: Other Changes
-
-1. [chore: add carbon ad tag](https://github.com/alibaba/formily/commit/679efc54) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.1.0(2022-05-03)
-
 ### :tada: Enhancements
 
 1. [feat: support react18 types (#3087)](https://github.com/alibaba/formily/commit/e4917f97) :point_right: ( [Janry](https://github.com/Janry) )
@@ -934,6 +930,12 @@
 
 ### :bug: Bug Fixes
 
+1. [fix(core): fix field reactions still trigger when destroyed (#3103)](https://github.com/alibaba/formily/commit/23b06db5) :point_right: ( [Janry](https://github.com/Janry) )
+
+1. [fix(react): update react peerDependencies (#3096)](https://github.com/alibaba/formily/commit/6e939d82) :point_right: ( [蜘蛛侠](https://github.com/蜘蛛侠) )
+
+1. [fix(react): fix markup field is not work with strict-mode (#3088)](https://github.com/alibaba/formily/commit/431c3db8) :point_right: ( [Janry](https://github.com/Janry) )
+
 1. [fix: fix rollup.base.js externals antd name (#3084)](https://github.com/alibaba/formily/commit/a4029fbe) :point_right: ( [ickeep](https://github.com/ickeep) )
 
 1. [fix(next): fix FormDrawer demo error (#3080)](https://github.com/alibaba/formily/commit/79d94774) :point_right: ( [Lyca](https://github.com/Lyca) )
@@ -1156,8 +1158,6 @@
 
 1. [fix(core): fix object field's children auto clean but they are not additionalProperty (#1840)](https://github.com/alibaba/formily/commit/dd313646) :point_right: ( [Janry](https://github.com/Janry) )
 
-1. [fix(core): fix ArrayField operation will trigger memo leak (#1831)](https://github.com/alibaba/formily/commit/021c155a) :point_right: ( [Janry](https://github.com/Janry) )
-
 1. [fix(path): fix segments match (#1826)](https://github.com/alibaba/formily/commit/6e541dcb) :point_right: ( [砂糖梨子](https://github.com/砂糖梨子) )
 
 1. [fix(antd/next): form-grid and layout props optional with default value (#1809)](https://github.com/alibaba/formily/commit/2738e418) :point_right: ( [gwsbhqt](https://github.com/gwsbhqt) )
@@ -1171,8 +1171,6 @@
 1. [fix(core): fix array value changed but not auto clean node (#1742)](https://github.com/alibaba/formily/commit/83b5f4bf) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(vue): fix vue typing (#1730)](https://github.com/alibaba/formily/commit/b51a2198) :point_right: ( [Muyao](https://github.com/Muyao) )
-
-1. [fix(react): fix x-content is not work with array type (#1719)](https://github.com/alibaba/formily/commit/2cd60d32) :point_right: ( [Janry](https://github.com/Janry) )
 
 1. [fix(reactive): fix Tracker memo leak in StrictMode (#1715)](https://github.com/alibaba/formily/commit/e9f23c39) :point_right: ( [Janry](https://github.com/Janry) )
 
@@ -1213,8 +1211,6 @@
 1. [fix(vue): remove empty default slots of fields (#1517)](https://github.com/alibaba/formily/commit/00a80b4b) :point_right: ( [月落音阑](https://github.com/月落音阑) )
 
 1. [fix(antd): fix ArrayCollapse collapsed and expanded errors (#1510)](https://github.com/alibaba/formily/commit/12275cf0) :point_right: ( [Lind](https://github.com/Lind) )
-
-1. [fix(core): remove @types/react peerDependencies](https://github.com/alibaba/formily/commit/2ad43225) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [fix(react): fix ReactComponentPropsByPathValue type return error result (#1507)](https://github.com/alibaba/formily/commit/fb7654eb) :point_right: ( [liuwei](https://github.com/liuwei) )
 
@@ -1941,6 +1937,8 @@
 1. [test(project): add large test cases](https://github.com/alibaba/formily/commit/68fd2e1c) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 ### :blush: Other Changes
+
+1. [chore: add carbon ad tag](https://github.com/alibaba/formily/commit/679efc54) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(deps): bump cross-fetch from 3.1.4 to 3.1.5 (#3083)](https://github.com/alibaba/formily/commit/0ff3368c) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
 
