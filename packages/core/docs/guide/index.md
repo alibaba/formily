@@ -25,7 +25,7 @@ The problems in these directions can actually be solved as domain-level problems
 
 ## Smart tips
 
-Because formily is a complete Typescript project, users can develop on VSCode to get the maximum intelligent prompt experience
+Because formily is a complete Typescript project, users can develop on VSCode or WebStorm to get the maximum intelligent prompt experience
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01yiREHk1X95KJPPz1c_!!6000000002880-2-tps-2014-868.png)
 
