@@ -851,7 +851,7 @@ type SchemaReactions<Field = any> =
   "items": {
     "type": "object",
     "properties": {
-     "source": {
+      "source": {
         "type": "string",
         "x-component": "Input"
       },
@@ -960,6 +960,18 @@ type SchemaReactions<Field = any> =
 ### $form
 
 代表当前 Form 实例，可以在普通属性表达式中使用，也能在 x-reactions 中使用
+
+### $observable
+
+用于创建响应式对象，使用方式与 observable 一致
+
+### $memo
+
+用于创建持久引用数据，使用方式与 autorun.memo 一致
+
+### $effect
+
+用于响应 autorun 第一次执行的下一个微任务时机与响应 autorun 的 dispose，使用方式与 autorun.effect 一致
 
 ### $dependencies
 
