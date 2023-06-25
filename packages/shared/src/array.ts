@@ -279,3 +279,35 @@ export function includes(val: any, searchElement: any, revert?: boolean) {
   if (isStr(val)) return val.includes(searchElement)
   return some(val, (item) => item === searchElement, revert)
 }
+
+export function move<T extends any>(
+  array: T[],
+  fromIndex: number,
+  toIndex: number
+) {
+  if (fromIndex === toIndex) return array
+
+  if (
+    toIndex < 0 ||
+    fromIndex < 0 ||
+    toIndex > array.length - 1 ||
+    fromIndex > array.length - 1
+  ) {
+    return array
+  }
+
+  if (fromIndex < toIndex) {
+    const fromItem = array[fromIndex]
+    for (let index = fromIndex; index < toIndex; index++) {
+      array[index] = array[index + 1]
+    }
+    array[toIndex] = fromItem
+  } else {
+    const fromItem = array[fromIndex]
+    for (let index = fromIndex; index > toIndex; index--) {
+      array[index] = array[index - 1]
+    }
+    array[toIndex] = fromItem
+  }
+  return array
+}

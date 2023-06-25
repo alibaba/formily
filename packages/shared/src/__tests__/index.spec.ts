@@ -4,6 +4,7 @@ import { isEqual } from '../compare'
 import {
   toArr,
   every,
+  move,
   some,
   findIndex,
   find,
@@ -957,4 +958,26 @@ test('applyMiddleware with error', async () => {
   } catch (e) {
     expect(e).toEqual('this is error')
   }
+})
+
+test('move', () => {
+  const array1 = [1]
+  move(array1, 1, 0)
+  expect(array1).toEqual([1])
+  move(array1, 0, 1)
+  expect(array1).toEqual([1])
+  move(array1, -1, 1)
+  expect(array1).toEqual([1])
+  move(array1, 0, 3)
+  expect(array1).toEqual([1])
+
+  const array2 = [0, 1, 2]
+  move(array2, 0, 2)
+  expect(array2).toEqual([1, 2, 0])
+  move(array2, 1, 1)
+  expect(array2).toEqual([1, 2, 0])
+
+  const array3 = [0, 1, 2, 3]
+  move(array3, 3, 1)
+  expect(array3).toEqual([0, 3, 1, 2])
 })
