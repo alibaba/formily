@@ -35,6 +35,7 @@ interface ObservableColumnSource {
 }
 interface IArrayTablePaginationProps extends PaginationProps {
   dataSource?: any[]
+  showPagination?: boolean
   children?: (
     dataSource: any[],
     pagination: React.ReactNode
@@ -55,6 +56,7 @@ type ComposedArrayTable = React.FC<
 interface PaginationAction {
   totalPage?: number
   pageSize?: number
+  showPagination?: boolean
   changePage?: (page: number) => void
 }
 
@@ -223,6 +225,7 @@ const usePagination = () => {
 const ArrayTablePagination: ReactFC<IArrayTablePaginationProps> = (props) => {
   const [current, setCurrent] = useState(1)
   const prefixCls = usePrefixCls('formily-array-table')
+  const showPagination = props.showPagination ?? true
   const pageSize = props.pageSize || 10
   const size = props.size || 'default'
   const dataSource = props.dataSource || []
@@ -248,7 +251,7 @@ const ArrayTablePagination: ReactFC<IArrayTablePaginationProps> = (props) => {
   }, [totalPage, current])
 
   const renderPagination = () => {
-    if (totalPage <= 1) return
+    if (totalPage <= 1 || !showPagination) return
     return (
       <div className={`${prefixCls}-pagination`}>
         <Space>
@@ -276,10 +279,17 @@ const ArrayTablePagination: ReactFC<IArrayTablePaginationProps> = (props) => {
   return (
     <Fragment>
       <PaginationContext.Provider
-        value={{ totalPage, pageSize, changePage: handleChange }}
+        value={{
+          totalPage,
+          pageSize,
+          changePage: handleChange,
+          showPagination,
+        }}
       >
         {props.children?.(
-          dataSource?.slice(startIndex, endIndex + 1),
+          showPagination
+            ? dataSource?.slice(startIndex, endIndex + 1)
+            : dataSource,
           renderPagination()
         )}
       </PaginationContext.Provider>
@@ -298,7 +308,11 @@ export const ArrayTable: ComposedArrayTable = observer((props) => {
   const dataSource = Array.isArray(field.value) ? field.value.slice() : []
   const sources = useArrayTableSources()
   const columns = useArrayTableColumns(dataSource, field, sources)
-  const pagination = isBool(props.pagination) ? {} : props.pagination
+  const pagination = isBool(props.pagination)
+    ? {
+        showPagination: props.pagination,
+      }
+    : props.pagination
   const addition = useAddition()
   const { onAdd, onCopy, onRemove, onMoveDown, onMoveUp } = props
   const defaultRowKey = (record: any) => {
@@ -393,14 +407,23 @@ ArrayBase.mixin(ArrayTable)
 
 const Addition: ArrayBaseMixins['Addition'] = (props) => {
   const array = ArrayBase.useArray()
-  const { totalPage = 0, pageSize = 10, changePage } = usePagination()
+  const {
+    totalPage = 0,
+    pageSize = 10,
+    changePage,
+    showPagination,
+  } = usePagination()
   return (
     <ArrayBase.Addition
       {...props}
       onClick={(e) => {
         // 如果添加数据后将超过当前页，则自动切换到下一页
         const total = array?.field?.value.length || 0
-        if (total === totalPage * pageSize + 1 && isFn(changePage)) {
+        if (
+          showPagination &&
+          total === totalPage * pageSize + 1 &&
+          isFn(changePage)
+        ) {
           changePage(totalPage + 1)
         }
         props.onClick?.(e)
