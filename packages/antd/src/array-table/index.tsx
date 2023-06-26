@@ -309,9 +309,7 @@ export const ArrayTable: ComposedArrayTable = observer((props) => {
   const sources = useArrayTableSources()
   const columns = useArrayTableColumns(dataSource, field, sources)
   const pagination = isBool(props.pagination)
-    ? {
-        showPagination: props.pagination,
-      }
+    ? { showPagination: props.pagination }
     : props.pagination
   const addition = useAddition()
   const { onAdd, onCopy, onRemove, onMoveDown, onMoveUp } = props
