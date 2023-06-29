@@ -12,7 +12,6 @@ import { PaginationProps } from 'antd/lib/pagination'
 import { TableProps, ColumnProps } from 'antd/lib/table'
 import { SelectProps } from 'antd/lib/select'
 import cls from 'classnames'
-import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import { GeneralField, FieldDisplayTypes, ArrayField } from '@formily/core'
 import {
   useField,
@@ -23,7 +22,11 @@ import {
 } from '@formily/react'
 import { isArr, isBool, isFn } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
-import { usePrefixCls } from '../__builtins__'
+import {
+  usePrefixCls,
+  SortableContainer,
+  SortableElement,
+} from '../__builtins__'
 import { ArrayBase, ArrayBaseMixins, IArrayBaseProps } from '../array-base'
 
 interface ObservableColumnSource {
@@ -38,7 +41,10 @@ interface IArrayTablePaginationProps extends PaginationProps {
   showPagination?: boolean
   children?: (
     dataSource: any[],
-    pagination: React.ReactNode
+    pagination: React.ReactNode,
+    options: {
+      startIndex: number
+    }
   ) => React.ReactElement
 }
 
@@ -290,15 +296,25 @@ const ArrayTablePagination: ReactFC<IArrayTablePaginationProps> = (props) => {
           showPagination
             ? dataSource?.slice(startIndex, endIndex + 1)
             : dataSource,
-          renderPagination()
+          renderPagination(),
+          { startIndex }
         )}
       </PaginationContext.Provider>
     </Fragment>
   )
 }
 
-const RowComp = (props: any) => {
-  return <SortableRow index={props['data-row-key'] || 0} {...props} />
+const RowComp: ReactFC<React.HTMLAttributes<HTMLTableRowElement>> = (props) => {
+  const prefixCls = usePrefixCls('formily-array-table')
+  const index = props['data-row-key'] || 0
+  return (
+    <SortableRow
+      lockAxis="y"
+      {...props}
+      index={index}
+      className={cls(props.className, `${prefixCls}-row-${index + 1}`)}
+    />
+  )
 }
 
 export const ArrayTable: ComposedArrayTable = observer((props) => {
@@ -316,42 +332,44 @@ export const ArrayTable: ComposedArrayTable = observer((props) => {
   const defaultRowKey = (record: any) => {
     return dataSource.indexOf(record)
   }
-  const addTdStyles = (node: HTMLElement) => {
+  const addTdStyles = (id: number) => {
+    const node = ref.current?.querySelector(`.${prefixCls}-row-${id}`)
     const helper = document.body.querySelector(`.${prefixCls}-sort-helper`)
-    if (helper) {
-      const tds = node.querySelectorAll('td')
-      requestAnimationFrame(() => {
-        helper.querySelectorAll('td').forEach((td, index) => {
-          if (tds[index]) {
-            td.style.width = getComputedStyle(tds[index]).width
-          }
-        })
+    if (!helper) return
+    const tds = node?.querySelectorAll('td')
+    if (!tds) return
+    requestAnimationFrame(() => {
+      helper.querySelectorAll('td').forEach((td, index) => {
+        if (tds[index]) {
+          td.style.width = getComputedStyle(tds[index]).width
+        }
       })
-    }
+    })
   }
-  const WrapperComp = useCallback(
-    (props: any) => (
-      <SortableBody
-        useDragHandle
-        lockAxis="y"
-        helperClass={`${prefixCls}-sort-helper`}
-        helperContainer={() => {
-          return ref.current?.querySelector('tbody')
-        }}
-        onSortStart={({ node }) => {
-          addTdStyles(node as HTMLElement)
-        }}
-        onSortEnd={({ oldIndex, newIndex }) => {
-          field.move(oldIndex, newIndex)
-        }}
-        {...props}
-      />
-    ),
+  const getWrapperComp = useCallback(
+    (dataSource: any[], start: number) => (props: any) =>
+      (
+        <SortableBody
+          {...props}
+          start={start}
+          list={dataSource.slice()}
+          accessibility={{
+            container: ref.current || undefined,
+          }}
+          onSortStart={(event) => {
+            addTdStyles(event.active.id as number)
+          }}
+          onSortEnd={({ oldIndex, newIndex }) => {
+            field.move(oldIndex, newIndex)
+          }}
+          className={cls(`${prefixCls}-sort-helper`, props.className)}
+        />
+      ),
     [field]
   )
   return (
     <ArrayTablePagination {...pagination} dataSource={dataSource}>
-      {(dataSource, pager) => (
+      {(dataSource, pager, { startIndex }) => (
         <div ref={ref} className={prefixCls}>
           <ArrayBase
             onAdd={onAdd}
@@ -371,7 +389,7 @@ export const ArrayTable: ComposedArrayTable = observer((props) => {
               dataSource={dataSource}
               components={{
                 body: {
-                  wrapper: WrapperComp,
+                  wrapper: getWrapperComp(dataSource, startIndex),
                   row: RowComp,
                 },
               }}

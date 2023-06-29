@@ -5,17 +5,14 @@ import {
   observer,
   useFieldSchema,
   RecursionField,
-  ReactFC,
 } from '@formily/react'
 import cls from 'classnames'
+import { ISchema } from '@formily/json-schema'
 import {
+  usePrefixCls,
   SortableContainer,
   SortableElement,
-  SortableContainerProps,
-  SortableElementProps,
-} from 'react-sortable-hoc'
-import { ISchema } from '@formily/json-schema'
-import { usePrefixCls } from '../__builtins__'
+} from '../__builtins__'
 import { ArrayBase, ArrayBaseMixins, IArrayBaseProps } from '../array-base'
 
 type ComposedArrayItems = React.FC<
@@ -31,9 +28,7 @@ type ComposedArrayItems = React.FC<
     >
   }
 
-const SortableItem: ReactFC<
-  React.HTMLAttributes<HTMLDivElement> & SortableElementProps
-> = SortableElement(
+const SortableItem = SortableElement(
   (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => {
     const prefixCls = usePrefixCls('formily-array-items')
     return (
@@ -42,11 +37,9 @@ const SortableItem: ReactFC<
       </div>
     )
   }
-) as any
+)
 
-const SortableList: ReactFC<
-  React.HTMLAttributes<HTMLDivElement> & SortableContainerProps
-> = SortableContainer(
+const SortableList = SortableContainer(
   (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => {
     const prefixCls = usePrefixCls('formily-array-items')
     return (
@@ -55,7 +48,7 @@ const SortableList: ReactFC<
       </div>
     )
   }
-) as any
+)
 
 const isAdditionComponent = (schema: ISchema) => {
   return schema['x-component']?.indexOf('Addition') > -1
@@ -95,12 +88,8 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
         className={cls(prefixCls, props.className)}
       >
         <SortableList
-          useDragHandle
-          lockAxis="y"
-          helperClass={`${prefixCls}-sort-helper`}
-          helperContainer={() =>
-            ref.current?.querySelector(`.${prefixCls}-list`)
-          }
+          list={dataSource.slice()}
+          className={`${prefixCls}-sort-helper`}
           onSortEnd={({ oldIndex, newIndex }) => {
             field.move(oldIndex, newIndex)
           }}
@@ -115,7 +104,7 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
                 index={index}
                 record={() => field.value?.[index]}
               >
-                <SortableItem key={`item-${index}`} index={index}>
+                <SortableItem key={`item-${index}`} lockAxis="y" index={index}>
                   <div className={`${prefixCls}-item-inner`}>
                     <RecursionField schema={items} name={index} />
                   </div>

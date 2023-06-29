@@ -12,8 +12,7 @@ import { ButtonProps } from 'antd/lib/button'
 import { ArrayField } from '@formily/core'
 import { useField, useFieldSchema, Schema, JSXComponent } from '@formily/react'
 import { isValid, clone, isUndef } from '@formily/shared'
-import { SortableHandle } from 'react-sortable-hoc'
-import { usePrefixCls } from '../__builtins__'
+import { usePrefixCls, SortableHandle } from '../__builtins__'
 import cls from 'classnames'
 
 export interface IArrayBaseAdditionProps extends ButtonProps {

@@ -851,7 +851,7 @@ Writing method two, linkage of adjacent elements
   "items": {
     "type": "object",
     "properties": {
-     "source": {
+      "source": {
         "type": "string",
         "x-component": "Input"
       },
@@ -960,6 +960,18 @@ Represents the top-level form data, which can be used in ordinary attribute expr
 ### $form
 
 Represents the current Form instance, which can be used in ordinary attribute expressions, and can also be used in x-reactions
+
+### $observable
+
+It is used to create reactive objects in the same way as observable
+
+### $memo
+
+Used to create persistent reference data in the same way as autorun.memo
+
+### $effect
+
+The timing of the next microtask in response to autorun's first execution and the dispose in response to autorun are used in the same way as autorun.effect
 
 ### $dependencies
 
