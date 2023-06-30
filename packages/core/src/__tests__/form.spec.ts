@@ -313,7 +313,6 @@ test('query', () => {
     })
   )
   expect(form.query('object').take()).not.toBeUndefined()
-  expect(form.query('object').take()).not.toBeUndefined()
   expect(form.query('object.void').take()).not.toBeUndefined()
   expect(form.query('object.void.normal').take()).not.toBeUndefined()
   expect(form.query('object.normal').take()).not.toBeUndefined()
