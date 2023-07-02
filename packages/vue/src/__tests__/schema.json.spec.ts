@@ -1,7 +1,7 @@
-import { createForm } from '@formily/core'
+import { createForm, Field } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 import { Schema } from '@formily/json-schema'
-import { render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import Vue, { FunctionalComponentOptions } from 'vue'
 import {
@@ -46,10 +46,32 @@ const Input2: FunctionalComponentOptions = {
   },
 }
 
+const FormItem: FunctionalComponentOptions = {
+  functional: true,
+  render(h, { props, slots, data }) {
+    return h(
+      'div',
+      {
+        ...data,
+        style: {
+          width: '300px',
+          height: '30px',
+          background: 'yellow',
+        },
+        attrs: {
+          'data-testid': 'formitem',
+          ...data.attrs,
+        },
+      },
+      [props.label || 'unknown ', slots().default]
+    )
+  },
+}
+
 const ArrayItems = observer(
   defineComponent({
     setup() {
-      const fieldRef = useField()
+      const fieldRef = useField<Field>()
       const schemaRef = useFieldSchema()
 
       return () => {
@@ -1257,5 +1279,59 @@ describe('schema controlled', () => {
       expect(queryByTestId('input')).toBeNull()
       expect(queryByTestId('array-items')).toBeVisible()
     })
+  })
+})
+
+describe('x-decorator', () => {
+  test('x-decorator-props', async () => {
+    const form = createForm()
+    const { SchemaField } = createSchemaField({
+      components: {
+        Input,
+        FormItem,
+      },
+    })
+
+    const atBlurFn = jest.fn()
+    const onClickFn = jest.fn()
+    const atClickFn = jest.fn()
+    const { queryByTestId, getByText } = render({
+      components: { SchemaField },
+      data() {
+        return {
+          form,
+          schema: new Schema({
+            type: 'string',
+            'x-component': 'Input',
+            'x-component-props': {
+              '@blur': function atBlur() {
+                atBlurFn()
+              },
+            },
+            'x-decorator': 'FormItem',
+            'x-decorator-props': {
+              label: 'Label ',
+              onClick: function onClick() {
+                onClickFn()
+              },
+              '@click': function atClick() {
+                atClickFn()
+              },
+            },
+          }),
+        }
+      },
+      template: `
+        <FormProvider :form="form">
+          <SchemaField
+            name="string"
+            :schema="schema"
+          />
+        </FormProvider>`,
+    })
+    expect(queryByTestId('formitem')).toBeVisible()
+    await fireEvent.click(getByText('Label'))
+    expect(atClickFn).toBeCalledTimes(1)
+    expect(onClickFn).toBeCalledTimes(0)
   })
 })
