@@ -300,7 +300,7 @@ test('filter trigger type(unmatch)', async () => {
   })
 })
 
-test('filter trigger type(match first validte)', async () => {
+test('filter trigger type(match first validate)', async () => {
   expect(
     await validate(
       '',
@@ -323,7 +323,7 @@ test('filter trigger type(match first validte)', async () => {
   })
 })
 
-test('filter trigger type(match multi validte)', async () => {
+test('filter trigger type(match multi validate)', async () => {
   expect(
     await validate(
       '',
