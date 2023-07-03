@@ -469,6 +469,29 @@ test('validator template with format', async () => {
   )
 })
 
+test('validator template with format and scope', async () => {
+  registerValidateMessageTemplateEngine((message) => {
+    if (typeof message !== 'string') return message
+    return message.replace(/\<\<\s*([\w.]+)\s*\>\>/g, (_, $0) => {
+      return { aa: 123 }[$0]
+    })
+  })
+
+  const result = await validate(
+    '',
+    (value, rules, ctx, format) => {
+      return `<<aa>>=123&${format('<<aa>>{{name}}')}`
+    },
+    {
+      context: {
+        name: 'scopeName',
+      },
+    }
+  )
+
+  expect(result.error[0]).toEqual('123=123&123scopeName')
+})
+
 test('validator order with format', async () => {
   hasError(
     await validate('', [
