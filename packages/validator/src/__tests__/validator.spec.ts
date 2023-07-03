@@ -78,6 +78,28 @@ test('multi validate', async () => {
   })
 })
 
+test('message scope', async () => {
+  const results = await validate(
+    '',
+    {
+      required: true,
+      validator() {
+        return 'validate error {{name}}'
+      },
+    },
+    {
+      context: {
+        name: 'scopeName',
+      },
+    }
+  )
+  expect(results).toEqual({
+    error: ['The field value is required', 'validate error scopeName'],
+    success: [],
+    warning: [],
+  })
+})
+
 test('first validate', async () => {
   const results = await validate(
     '',
