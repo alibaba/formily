@@ -7,7 +7,7 @@ export const render = (
   rules: IValidatorRules
 ): IValidateResult => {
   const { message } = result
-  if (isStr(result.message)) {
+  if (isStr(message)) {
     const template = getValidateMessageTemplateEngine()
     if (isFn(template)) {
       result.message = template(message, rules)
