@@ -78,6 +78,28 @@ test('multi validate', async () => {
   })
 })
 
+test('message scope', async () => {
+  const results = await validate(
+    '',
+    {
+      required: true,
+      validator() {
+        return 'validate error {{name}}'
+      },
+    },
+    {
+      context: {
+        name: 'scopeName',
+      },
+    }
+  )
+  expect(results).toEqual({
+    error: ['The field value is required', 'validate error scopeName'],
+    success: [],
+    warning: [],
+  })
+})
+
 test('first validate', async () => {
   const results = await validate(
     '',
@@ -467,6 +489,29 @@ test('validator template with format', async () => {
     }),
     '123=123&123'
   )
+})
+
+test('validator template with format and scope', async () => {
+  registerValidateMessageTemplateEngine((message) => {
+    if (typeof message !== 'string') return message
+    return message.replace(/\<\<\s*([\w.]+)\s*\>\>/g, (_, $0) => {
+      return { aa: 123 }[$0]
+    })
+  })
+
+  const result = await validate(
+    '',
+    (value, rules, ctx, format) => {
+      return `<<aa>>=123&${format('<<aa>>{{name}}')}`
+    },
+    {
+      context: {
+        name: 'scopeName',
+      },
+    }
+  )
+
+  expect(result.error[0]).toEqual('123=123&123scopeName')
 })
 
 test('validator order with format', async () => {
