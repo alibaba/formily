@@ -39,6 +39,7 @@ import {
   IFormFeedback,
   LifeCycleTypes,
   FieldMatchPattern,
+  FieldFeedbackTypes,
 } from '../types'
 import {
   isArrayField,
@@ -312,13 +313,13 @@ export const validateToFeedbacks = async (
   })
 
   batch(() => {
-    each(results, (messages, type) => {
+    each(results, (messages, type: FieldFeedbackTypes) => {
       field.setFeedback({
         triggerType,
         type,
         code: pascalCase(`validate-${type}`),
         messages: messages,
-      } as any)
+      })
     })
   })
   return results

@@ -50,9 +50,9 @@ export class Graph {
       } else {
         const field = form.fields[address]
         if (field) {
-          field.setState(state as any)
+          field.setState(state)
         } else {
-          createField(address, state).setState(state as any)
+          createField(address, state).setState(state)
         }
       }
     })
