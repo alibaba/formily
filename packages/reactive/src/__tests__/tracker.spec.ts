@@ -1,4 +1,4 @@
-import { Tracker, observable } from '../'
+import { Tracker, observable, autorun } from '../'
 import expect from 'expect'
 
 test('base tracker', () => {
@@ -17,6 +17,13 @@ test('base tracker', () => {
   expect(fn).nthCalledWith(1, undefined)
   expect(fn).nthCalledWith(2, 123)
   tracker.dispose()
+})
+
+test('track argument is not a function', () => {
+  const scheduler = () => {}
+  const tracker = new Tracker(scheduler)
+
+  tracker.track({})
 })
 
 test('nested tracker', () => {
