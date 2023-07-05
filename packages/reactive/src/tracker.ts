@@ -15,16 +15,19 @@ export class Tracker {
     name = 'TrackerReaction'
   ) {
     this.track._scheduler = (callback) => {
-      if (this.track._boundary === 0) this.dispose()
+      if (this.track._boundary.size === 0) this.dispose()
       if (isFn(callback)) scheduler(callback)
     }
     this.track._name = name
-    this.track._boundary = 0
+    this.track._boundary = new Map()
   }
 
   track: Reaction = (tracker: Reaction) => {
     if (!isFn(tracker)) return this.results
-    if (this.track._boundary > 0) return
+
+    const updateKey = tracker._boundary.get(tracker._updateTarget)
+    if (updateKey && updateKey === tracker._updateKey) return
+
     if (ReactionStack.indexOf(this.track) === -1) {
       releaseBindingReactions(this.track)
       try {
@@ -33,9 +36,11 @@ export class Tracker {
         this.results = tracker()
       } finally {
         ReactionStack.pop()
-        this.track._boundary++
+        if (tracker._updateKey) {
+          tracker._boundary.set(tracker._updateTarget, tracker._updateKey)
+        }
         batchEnd()
-        this.track._boundary = 0
+        this.track._boundary.clear()
       }
     }
     return this.results
