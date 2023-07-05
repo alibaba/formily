@@ -1,7 +1,6 @@
 import { observable, reaction, autorun } from '../'
 import { batch } from '../batch'
 import { define } from '../model'
-import expect from 'expect'
 
 const sleep = (duration = 100) =>
   new Promise((resolve) => setTimeout(resolve, duration))
