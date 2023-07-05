@@ -1,4 +1,5 @@
 import { Tracker, observable } from '../'
+import expect from 'expect'
 
 test('base tracker', () => {
   const obs = observable<any>({})
@@ -90,4 +91,51 @@ test('shared scheduler with multi tracker(mock react strict mode)', () => {
 
   expect(scheduler1).toBeCalledTimes(1)
   expect(scheduler2).toBeCalledTimes(0)
+})
+
+test('multiple source update', () => {
+  const obs = observable<any>({})
+
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+
+  const view1 = () => {
+    const A = obs.A
+    const B = obs.B
+    if (A !== undefined && B !== undefined) {
+      obs.C = A / B
+      fn1()
+    }
+  }
+  const scheduler1 = () => {
+    tracker1.track(view1)
+  }
+
+  const tracker1 = new Tracker(scheduler1)
+
+  const view2 = () => {
+    const C = obs.C
+    const B = obs.B
+    if (C !== undefined && B !== undefined) {
+      obs.D = C * B
+      fn2()
+    }
+  }
+  const scheduler2 = () => {
+    tracker2.track(view2)
+  }
+
+  const tracker2 = new Tracker(scheduler2)
+
+  tracker1.track(view1)
+  tracker2.track(view2)
+
+  obs.A = 1
+  obs.B = 2
+
+  expect(fn1).toBeCalledTimes(1)
+  expect(fn2).toBeCalledTimes(1)
+
+  tracker1.dispose()
+  tracker2.dispose()
 })
