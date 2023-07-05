@@ -1,5 +1,4 @@
-import { Tracker, observable, autorun } from '../'
-import expect from 'expect'
+import { Tracker, observable } from '../'
 
 test('base tracker', () => {
   const obs = observable<any>({})
