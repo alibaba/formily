@@ -1,6 +1,7 @@
 import { observable, reaction, autorun } from '../'
 import { batch } from '../batch'
 import { define } from '../model'
+import expect from 'expect'
 
 const sleep = (duration = 100) =>
   new Promise((resolve) => setTimeout(resolve, duration))
@@ -740,4 +741,52 @@ test('reaction recollect dependencies', () => {
   expect(trigger1).toBeCalledTimes(1)
   expect(fn2).toBeCalledTimes(2)
   expect(trigger2).toBeCalledTimes(2)
+})
+
+test('multiple source update', () => {
+  const obs = observable<any>({})
+
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+
+  autorun(() => {
+    const A = obs.A
+    const B = obs.B
+    if (A !== undefined && B !== undefined) {
+      obs.C = A / B
+      fn1()
+    }
+  })
+
+  autorun(() => {
+    const C = obs.C
+    const B = obs.B
+    if (C !== undefined && B !== undefined) {
+      obs.D = C * B
+      fn2()
+    }
+  })
+
+  obs.A = 1
+  obs.B = 2
+
+  expect(fn1).toBeCalledTimes(1)
+  expect(fn2).toBeCalledTimes(1)
+})
+
+test('same source in nest update', () => {
+  const obs = observable<any>({})
+
+  const fn1 = jest.fn()
+
+  autorun(() => {
+    const B = obs.B
+    obs.B = 'B'
+    fn1()
+    return B
+  })
+
+  obs.B = 'B2'
+
+  expect(fn1).toBeCalledTimes(2)
 })
