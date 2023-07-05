@@ -25,6 +25,12 @@ test('autorun', () => {
   expect(handler).toBeCalledTimes(2)
 })
 
+test('autorun first argument is not a function', () => {
+  autorun({} as any)
+  autorun(1 as any)
+  autorun('1' as any)
+})
+
 test('reaction', () => {
   const obs = observable({
     aa: {
