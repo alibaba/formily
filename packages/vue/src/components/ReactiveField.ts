@@ -1,6 +1,6 @@
 import { inject, provide, Ref, ref, shallowRef, watch, isVue2 } from 'vue-demi'
 import { GeneralField, isVoidField } from '@formily/core'
-import { FormPath } from '@formily/shared'
+import { each, FormPath } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
 import { toJS, reaction } from '@formily/reactive'
 import { SchemaOptionsSymbol, FieldSymbol, h, Fragment } from '../shared'
@@ -160,10 +160,28 @@ export default observer({
           FormPath.getIn(options?.components, field.decoratorType as string) ??
           field.decoratorType
         const componentAttrs = toJS(field.decorator[1]) || {}
+
+        const events: Record<string, any> = {}
+        each(componentAttrs, (value, eventKey) => {
+          const onEvent = eventKey.startsWith('on')
+          const atEvent = eventKey.startsWith('@')
+          if (!onEvent && !atEvent) return
+          if (onEvent) {
+            const eventName = `${eventKey[2].toLowerCase()}${eventKey.slice(3)}`
+            // '@xxx' has higher priority
+            events[eventName] = events[eventName] || value
+          } else if (atEvent) {
+            const eventName = eventKey.slice(1)
+            events[eventName] = value
+            delete componentAttrs[eventKey]
+          }
+        })
+
         const componentData = {
           attrs: componentAttrs,
           style: componentAttrs?.style,
           class: componentAttrs?.class,
+          on: events,
         }
         delete componentData.attrs.style
         delete componentData.attrs.class
@@ -186,20 +204,20 @@ export default observer({
         const originFocus = originData['@focus'] || originData['onFocus']
         const originBlur = originData['@blur'] || originData['onBlur']
 
-        // '@xxx' has higher priority
-        Object.keys(originData)
-          .filter((key) => key.startsWith('on'))
-          .forEach((eventKey) => {
+        each(originData, (value, eventKey) => {
+          const onEvent = eventKey.startsWith('on')
+          const atEvent = eventKey.startsWith('@')
+          if (!onEvent && !atEvent) return
+          if (onEvent) {
             const eventName = `${eventKey[2].toLowerCase()}${eventKey.slice(3)}`
-            events[eventName] = originData[eventKey]
-          })
-
-        Object.keys(originData)
-          .filter((key) => key.startsWith('@'))
-          .forEach((eventKey) => {
-            events[eventKey.slice(1)] = originData[eventKey]
+            // '@xxx' has higher priority
+            events[eventName] = events[eventName] || value
+          } else if (atEvent) {
+            const eventName = eventKey.slice(1)
+            events[eventName] = value
             delete originData[eventKey]
-          })
+          }
+        })
 
         events.change = (...args: any[]) => {
           if (!isVoidField(field)) field.onInput(...args)
