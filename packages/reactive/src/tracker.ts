@@ -26,7 +26,7 @@ export class Tracker {
     if (!isFn(tracker)) return this.results
 
     const updateKey = this.track._boundary.get(this.track._updateTarget)
-    if (updateKey && updateKey === this.track._updateKey) return
+    if (updateKey && updateKey.has(this.track._updateKey)) return
 
     if (ReactionStack.indexOf(this.track) === -1) {
       releaseBindingReactions(this.track)
@@ -36,14 +36,20 @@ export class Tracker {
         this.results = tracker()
       } finally {
         ReactionStack.pop()
+
         if (this.track._updateKey) {
-          this.track._boundary.set(
-            this.track._updateTarget,
-            this.track._updateKey
-          )
+          const keys =
+            this.track._boundary.get(this.track._updateTarget) || new Set([])
+          keys.add(this.track._updateKey)
+          this.track._boundary.set(this.track._updateTarget, keys)
         }
+
         batchEnd()
-        this.track._boundary.clear()
+
+        const keys = this.track._boundary.get(this.track._updateTarget)
+        if (keys) {
+          keys.delete(this.track._updateKey)
+        }
       }
     }
     return this.results
