@@ -145,3 +145,50 @@ test('multiple source update', () => {
   tracker1.dispose()
   tracker2.dispose()
 })
+
+test('repeat execute autorun cause by deep indirect dependency', () => {
+  const obs: any = observable({ aa: 1, bb: 1, cc: 1 })
+
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+  const fn3 = jest.fn()
+
+  const view1 = () => {
+    fn1((obs.aa = obs.bb + obs.cc))
+  }
+  const scheduler1 = () => {
+    tracker1.track(view1)
+  }
+
+  const tracker1 = new Tracker(scheduler1)
+
+  const view2 = () => {
+    fn2((obs.bb = obs.aa + obs.cc))
+  }
+  const scheduler2 = () => {
+    tracker2.track(view2)
+  }
+
+  const tracker2 = new Tracker(scheduler2)
+
+  const view3 = () => {
+    fn3((obs.cc = obs.aa + obs.bb))
+  }
+  const scheduler3 = () => {
+    tracker3.track(view3)
+  }
+
+  const tracker3 = new Tracker(scheduler3)
+
+  tracker1.track(view1)
+  tracker2.track(view2)
+  tracker3.track(view3)
+
+  expect(fn1).toBeCalledTimes(4)
+  expect(fn2).toBeCalledTimes(4)
+  expect(fn3).toBeCalledTimes(3)
+
+  tracker1.dispose()
+  tracker2.dispose()
+  tracker3.dispose()
+})
