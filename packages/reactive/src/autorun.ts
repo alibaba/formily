@@ -21,7 +21,7 @@ export const autorun = (tracker: Reaction, name = 'AutoRun') => {
     if (!isFn(tracker)) return
 
     const updateKey = reaction._boundary.get(reaction._updateTarget)
-    if (updateKey && updateKey === reaction._updateKey) return
+    if (updateKey && updateKey.has(reaction._updateKey)) return
 
     if (ReactionStack.indexOf(reaction) === -1) {
       releaseBindingReactions(reaction)
@@ -31,11 +31,21 @@ export const autorun = (tracker: Reaction, name = 'AutoRun') => {
         tracker()
       } finally {
         ReactionStack.pop()
+
         if (reaction._updateKey) {
-          reaction._boundary.set(reaction._updateTarget, reaction._updateKey)
+          const keys =
+            reaction._boundary.get(reaction._updateTarget) || new Set([])
+          keys.add(reaction._updateKey)
+          reaction._boundary.set(reaction._updateTarget, keys)
         }
+
         batchEnd()
-        reaction._boundary.clear()
+
+        const keys = reaction._boundary.get(reaction._updateTarget)
+        if (keys) {
+          keys.delete(reaction._updateKey)
+        }
+
         reaction._memos.cursor = 0
         reaction._effects.cursor = 0
       }
