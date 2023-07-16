@@ -61,7 +61,7 @@ export type Dispose = () => void
 export type Effect = () => void | Dispose
 
 export type Reaction = ((...args: any[]) => any) & {
-  _boundary?: Map<any, any>
+  _boundary?: Map<any, Set<any>>
   _name?: string
   _isComputed?: boolean
   _dirty?: boolean
