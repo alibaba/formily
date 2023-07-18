@@ -37,10 +37,11 @@ export class Tracker {
       } finally {
         ReactionStack.pop()
 
-        if (this.track._updateKey) {
+        const key = this.track._updateKey
+        if (key) {
           const keys =
             this.track._boundary.get(this.track._updateTarget) || new Set([])
-          keys.add(this.track._updateKey)
+          keys.add(key)
           this.track._boundary.set(this.track._updateTarget, keys)
         }
 
@@ -48,7 +49,7 @@ export class Tracker {
 
         const keys = this.track._boundary.get(this.track._updateTarget)
         if (keys) {
-          keys.delete(this.track._updateKey)
+          keys.delete(key)
         }
       }
     }

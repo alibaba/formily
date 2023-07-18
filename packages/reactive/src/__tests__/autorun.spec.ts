@@ -809,3 +809,31 @@ test('repeat execute autorun cause by deep indirect dependency', () => {
   expect(fn2).toBeCalledTimes(4)
   expect(fn3).toBeCalledTimes(3)
 })
+
+test('batch execute autorun cause by deep indirect dependency', () => {
+  const obs: any = observable({ aa: 1, bb: 1, cc: 1 })
+  const fn = jest.fn()
+  const fn2 = jest.fn()
+  const fn3 = jest.fn()
+  autorun(() => fn((obs.aa = obs.bb + obs.cc)))
+  autorun(() => fn2((obs.bb = obs.aa + obs.cc)))
+  autorun(() => fn3((obs.cc = obs.aa + obs.bb)))
+
+  expect(fn).toBeCalledTimes(4)
+  expect(fn2).toBeCalledTimes(4)
+  expect(fn3).toBeCalledTimes(3)
+
+  fn.mockClear()
+  fn2.mockClear()
+  fn3.mockClear()
+
+  batch(() => {
+    obs.aa = 100
+    obs.bb = 100
+    obs.cc = 100
+  })
+
+  expect(fn).toBeCalledTimes(2)
+  expect(fn2).toBeCalledTimes(2)
+  expect(fn3).toBeCalledTimes(2)
+})

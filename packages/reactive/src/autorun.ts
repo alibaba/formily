@@ -32,10 +32,11 @@ export const autorun = (tracker: Reaction, name = 'AutoRun') => {
       } finally {
         ReactionStack.pop()
 
-        if (reaction._updateKey) {
+        const key = reaction._updateKey
+        if (key) {
           const keys =
             reaction._boundary.get(reaction._updateTarget) || new Set([])
-          keys.add(reaction._updateKey)
+          keys.add(key)
           reaction._boundary.set(reaction._updateTarget, keys)
         }
 
@@ -43,7 +44,7 @@ export const autorun = (tracker: Reaction, name = 'AutoRun') => {
 
         const keys = reaction._boundary.get(reaction._updateTarget)
         if (keys) {
-          keys.delete(reaction._updateKey)
+          keys.delete(key)
         }
 
         reaction._memos.cursor = 0
