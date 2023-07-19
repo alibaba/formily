@@ -99,7 +99,7 @@ export function SortableElement<T extends React.HTMLAttributes<HTMLElement>>(
         }px, 0)`,
         transition: `${transform ? 'all 200ms ease' : ''}`,
       }
-      const dragStyle = {
+      const dragStyle: React.CSSProperties = {
         transition,
         opacity: '0.8',
         transform: `translate3d(${transform?.x || 0}px, ${

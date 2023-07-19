@@ -30,6 +30,10 @@
 .@{array-base-prefix-cls}-sort-handle {
   cursor: move;
   color: #888 !important;
+  // overrid iconfont.less .anticon[tabindex] cursor
+  &.anticon[tabindex] {
+    cursor: move;
+  }
 }
 
 .@{array-base-prefix-cls}-addition {
