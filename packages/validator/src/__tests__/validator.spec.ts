@@ -382,6 +382,12 @@ test('validate formats(phone)', async () => {
   noError(await validate('15934567899', 'phone'))
 })
 
+test('validate formats(money)', async () => {
+  noError(await validate('$12', 'money'))
+  hasError(await validate('$12.', 'money'))
+  noError(await validate('$12.3', 'money'))
+})
+
 test('validate custom validator', async () => {
   hasError(await validate('123', { custom: true }))
   noError(await validate('', { custom: true }))
