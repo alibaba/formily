@@ -837,3 +837,23 @@ test('batch execute autorun cause by deep indirect dependency', () => {
   expect(fn2).toBeCalledTimes(2)
   expect(fn3).toBeCalledTimes(2)
 })
+
+test('multiple update should trigger only one', () => {
+  const obs = observable({ aa: 1, bb: 1 })
+
+  autorun(() => {
+    obs.aa = obs.bb + 1
+    obs.bb = obs.aa + 1
+  })
+
+  expect(obs.aa).toBe(2)
+  expect(obs.bb).toBe(3)
+
+  autorun(() => {
+    obs.aa = obs.bb + 1
+    obs.bb = obs.aa + 1
+  })
+
+  expect(obs.aa).toBe(6)
+  expect(obs.bb).toBe(7)
+})
