@@ -33,16 +33,16 @@ export const autorun = (tracker: Reaction, name = 'AutoRun') => {
         ReactionStack.pop()
 
         const key = reaction._updateKey
+        const target = reaction._updateTarget
         if (key) {
-          const keys =
-            reaction._boundary.get(reaction._updateTarget) || new Set([])
+          const keys = reaction._boundary.get(target) || new Set([])
           keys.add(key)
-          reaction._boundary.set(reaction._updateTarget, keys)
+          reaction._boundary.set(target, keys)
         }
 
         batchEnd()
 
-        const keys = reaction._boundary.get(reaction._updateTarget)
+        const keys = reaction._boundary.get(target)
         if (keys) {
           keys.delete(key)
         }

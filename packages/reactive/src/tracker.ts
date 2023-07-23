@@ -38,16 +38,16 @@ export class Tracker {
         ReactionStack.pop()
 
         const key = this.track._updateKey
+        const target = this.track._updateTarget
         if (key) {
-          const keys =
-            this.track._boundary.get(this.track._updateTarget) || new Set([])
+          const keys = this.track._boundary.get(target) || new Set([])
           keys.add(key)
-          this.track._boundary.set(this.track._updateTarget, keys)
+          this.track._boundary.set(target, keys)
         }
 
         batchEnd()
 
-        const keys = this.track._boundary.get(this.track._updateTarget)
+        const keys = this.track._boundary.get(target)
         if (keys) {
           keys.delete(key)
         }
