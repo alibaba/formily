@@ -234,7 +234,7 @@ const getUserReactions = (
         const compiledWhen = shallowCompile(when, scope)
         const condition = when ? compiledWhen : true
         const request = condition ? fulfill : otherwise
-        const runner = condition ? fulfill?.run : otherwise?.run
+        const runner = request?.run
         setSchemaFieldState({
           field,
           target,
