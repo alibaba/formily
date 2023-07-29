@@ -67,7 +67,6 @@ test('baseReaction with scopes', () => {
     }
   )
 
-  // expect(fn).toBeCalledTimes(1)
   expect(field1.title).toBe(scopeTitle)
   expect(field2.description).toBe(scopeDescription)
 })
