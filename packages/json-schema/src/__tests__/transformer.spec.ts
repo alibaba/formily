@@ -190,7 +190,7 @@ test('userReactions with condition', () => {
           run: 'mockFn($self.value)',
         },
         otherwise: {
-          run: 'mockFn($self.vlaue)',
+          run: 'mockFn($self.value)',
         },
       },
     },
