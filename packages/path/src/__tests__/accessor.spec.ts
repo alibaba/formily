@@ -444,6 +444,7 @@ test('path methods', () => {
   path.forEach((p) => (key += p + '_'))
   expect(key).toEqual('a_b_c_')
   expect(path.map((p) => p)).toEqual(['a', 'b', 'c'])
+  expect(path.reduce((str, p) => str + p, '')).toEqual('abc')
   expect(path.parent().segments).toEqual(['a', 'b'])
 
   expect(() => Path.parse('*').includes('*')).toThrowError()
