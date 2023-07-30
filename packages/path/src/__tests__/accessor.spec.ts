@@ -276,6 +276,32 @@ test('existIn with a.b.c', () => {
   expect(Path.existIn({ a: [{}] }, 'a.0')).toEqual(true)
 })
 
+test('existIn with start Path', () => {
+  expect(Path.existIn({ a: [{}] }, 'a.0', Path.parse('a'))).toEqual(false)
+  expect(Path.existIn({ a: [{}] }, 'b.a.0', Path.parse('b'))).toEqual(true)
+})
+
+test('deleteIn', () => {
+  expect(
+    Path.deleteIn({ a: { b: { c: { ooo: 123, ccc: 234 } } } }, 'a.b.c.ccc')
+  ).toEqual({ a: { b: { c: { ooo: 123 } } } })
+
+  expect(
+    Path.deleteIn({ a: { b: { c: { ooo: 123, ccc: 234 } } } }, null)
+  ).toEqual({ a: { b: { c: { ooo: 123, ccc: 234 } } } })
+
+  expect(
+    Path.deleteIn({ a: { b: { c: { ooo: 123, ccc: 234 } } } }, [])
+  ).toEqual({ a: { b: { c: { ooo: 123, ccc: 234 } } } })
+
+  expect(Path.deleteIn({ a: { b: { c: 'c' } } }, 'a.b.c.ccc')).toEqual({
+    a: { b: { c: 'c' } },
+  })
+
+  expect(Path.deleteIn({ a: 1, b: 2 }, '{ a }')).toEqual({ b: 2 })
+  expect(Path.deleteIn([1, 2], '[0]')).toEqual([undefined, 2])
+})
+
 test('complex destructing', () => {
   expect(
     Path.setIn(
