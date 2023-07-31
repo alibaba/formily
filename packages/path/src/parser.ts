@@ -339,6 +339,7 @@ export class Parser extends Tokenizer {
       }
       this.next()
     }
+    // never reach
     return nodes
   }
 
@@ -455,8 +456,10 @@ export class Parser extends Tokenizer {
           }
           break loop
         case commaTok:
+          // never reach
           throw this.unexpect()
         case eofTok:
+          // never reach
           break loop
         default:
           if (!start) {

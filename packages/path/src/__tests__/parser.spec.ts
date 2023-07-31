@@ -77,6 +77,60 @@ test('relative', () => {
   expect(parser7.data.segments).toEqual(['aa', '1', '[aa]'])
 })
 
+test('calculate', () => {
+  const parser0 = new Parser('..[+].dd.bb', new Path(['aa', '1', 'cc']))
+  parser0.parse()
+  expect(parser0.data.segments).toEqual(['aa', '2', 'dd', 'bb'])
+
+  const parser = new Parser('..[ -1 ].dd.bb', new Path(['aa', '1', 'cc']))
+  parser.parse()
+  expect(parser.data.segments).toEqual(['aa', '0', 'dd', 'bb'])
+
+  // TODO support
+  // const parser2 = new Parser('..[ *2 ].dd.bb', new Path(['aa', '2', 'cc']))
+  // parser2.parse()
+  // expect(parser2.data.segments).toEqual(['aa', '4', 'dd', 'bb'])
+
+  const parser3 = new Parser('..[ /2 ].dd.bb', new Path(['aa', '2', 'cc']))
+  parser3.parse()
+  expect(parser3.data.segments).toEqual(['aa', '1', 'dd', 'bb'])
+
+  const parser4 = new Parser('..[ +1 ].dd.bb', new Path(['aa', 'a', 'cc']))
+  parser4.parse()
+  expect(parser4.data.segments).toEqual(['aa', 'a1', 'dd', 'bb'])
+
+  const parser5 = new Parser('..[ -1 ].dd.bb', new Path(['aa', 'a', 'cc']))
+  parser5.parse()
+  expect(parser5.data.segments).toEqual(['aa', 'NaN', 'dd', 'bb'])
+
+  // TODO support
+  // const parser6 = new Parser('..[ *1 ].dd.bb', new Path(['aa', 'a', 'cc']))
+  // parser6.parse()
+  // expect(parser6.data.segments).toEqual(['aa', 'NaN', 'dd', 'bb'])
+
+  const parser7 = new Parser('..[ /1 ].dd.bb', new Path(['aa', 'a', 'cc']))
+  parser7.parse()
+  expect(parser7.data.segments).toEqual(['aa', 'NaN', 'dd', 'bb'])
+
+  const parser8 = new Parser('..[1].dd.bb', new Path(['aa', '1', 'cc']))
+  parser8.parse()
+  expect(parser8.data.segments).toEqual(['aa', '2', 'dd', 'bb'])
+})
+
+test('parser unexpected', () => {
+  const parser = new Parser('array[]')
+  expect(() => parser.parse()).toThrowError()
+
+  const parser2 = new Parser('array[0.')
+  expect(() => parser2.parse()).toThrowError()
+
+  const parser3 = new Parser('.[+]', new Path('*.1.cc'))
+  expect(() => parser3.parse()).toThrowError()
+
+  const parser4 = new Parser('[:,4]')
+  expect(() => parser4.parse()).toThrowError()
+})
+
 batchTest({
   '*': {
     type: 'WildcardOperator',
