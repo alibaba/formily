@@ -115,6 +115,9 @@ test('calculate', () => {
   const parser8 = new Parser('..[1].dd.bb', new Path(['aa', '1', 'cc']))
   parser8.parse()
   expect(parser8.data.segments).toEqual(['aa', '2', 'dd', 'bb'])
+  const parser9 = new Parser('')
+  parser9.next()
+  expect(parser9.parseObjectProperties()).toEqual([])
 })
 
 test('parser unexpected', () => {

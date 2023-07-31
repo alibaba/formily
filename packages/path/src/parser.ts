@@ -339,7 +339,6 @@ export class Parser extends Tokenizer {
       }
       this.next()
     }
-    // never reach
     return nodes
   }
 
