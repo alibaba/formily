@@ -180,6 +180,24 @@ test('tokenizer', () => {
   parser8.state.pos++
   parser8.parse()
   expect(parser8.data.segments).toEqual(['name'])
+
+  const parser9 = new Parser(`[a,{b}]`)
+  parser9.parse()
+  expect(parser9.data.segments).toEqual(['[a,{b}]'])
+
+  const parser10 = new Parser(`*(a.b.c.*(aa,bb))`)
+  parser10.parse()
+  expect(parser10.data.segments).toEqual([])
+
+  const parser11 = new Parser(`{a,[b,{c}]. }`)
+  expect(() => parser11.parse()).toThrowError()
+
+  const parser12 = new Parser(`*(a.*[1:3])`)
+  parser12.parse()
+  expect(parser12.data.segments).toEqual([])
+
+  const parser13 = new Parser(`*(a.*[1:3]])`)
+  expect(() => parser13.parse()).toThrowError()
 })
 
 batchTest({
