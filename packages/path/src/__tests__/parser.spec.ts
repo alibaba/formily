@@ -131,6 +131,54 @@ test('parser unexpected', () => {
   expect(() => parser4.parse()).toThrowError()
 })
 
+test('tokenizer', () => {
+  const originFromCharCode = String.fromCharCode
+  String.fromCharCode = null
+
+  const parser = new Parser('aa.bb')
+  parser.parse()
+  expect(parser.data.segments).toEqual(['aa', 'bb'])
+
+  const parser2 = new Parser('array.0.[aa,bb]')
+  parser2.parse()
+  expect(parser2.data.segments).toEqual(['array', '0', '[aa,bb]'])
+
+  String.fromCharCode = originFromCharCode
+
+  const char13 = String.fromCharCode(13)
+  const parser3 = new Parser(`${char13} aa.bb`)
+  parser3.parse()
+
+  const char11 = String.fromCharCode(11)
+  const parser4 = new Parser(`${char11} aa.bb`)
+  parser4.parse()
+
+  const parser5 = new Parser('')
+  parser5.next()
+  parser5.parse()
+  expect(parser5.data.segments).toEqual([])
+
+  const char10 = String.fromCharCode(10)
+  const parser6 = new Parser(`{
+                c${char13}${char10}: kk,
+                d : mm
+          }`)
+  parser6.parse()
+  expect(parser6.data.segments).toEqual(['{c:kk,d:mm}'])
+
+  const parser7 = new Parser(`{
+                c${char13}${char11}: kk,
+                d : mm
+          }`)
+  parser7.parse()
+  expect(parser7.data.segments).toEqual(['{c:kk,d:mm}'])
+
+  const parser8 = new Parser(`\\name`)
+  parser8.state.pos++
+  parser8.parse()
+  expect(parser8.data.segments).toEqual(['name'])
+})
+
 batchTest({
   '*': {
     type: 'WildcardOperator',
