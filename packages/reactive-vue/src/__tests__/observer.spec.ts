@@ -4,6 +4,8 @@ import { CreateElement } from 'vue'
 import CompositionAPI, { defineComponent, h } from '@vue/composition-api'
 import { observer } from '../'
 import collectData from '../observer/collectData'
+import { observer as observerInVue2 } from '../observer/observerInVue2'
+import expect from 'expect'
 
 test('observer: component', async () => {
   const model = observable<any>({
@@ -179,5 +181,18 @@ test('collectData', async () => {
   expect(fn1).toBeCalledTimes(2)
 
   target.value++
-  expect(fn1).toBeCalledTimes(1)
+  expect(fn2).toBeCalledTimes(1)
+})
+
+test('observerInVue2', () => {
+  const componentObj = {
+    data() {
+      return {}
+    },
+  }
+
+  Object.setPrototypeOf(componentObj, {})
+
+  const ExtendedComponent1 = observerInVue2(componentObj)
+  expect(ExtendedComponent1.name).toEqual('<component>')
 })
