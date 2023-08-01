@@ -185,17 +185,22 @@ test('collectData', async () => {
 })
 
 test('observerInVue2', () => {
-  const componentObj = {
-    data() {
+  const componentObj = Object.create(null)
+
+  componentObj.data = () => {
+    return {}
+  }
+
+  const ExtendedComponent1 = observerInVue2(componentObj)
+  expect(ExtendedComponent1.name).toEqual('<component>')
+
+  function Component() {}
+  Component.options = {
+    data: () => {
       return {}
     },
   }
 
-  Object.setPrototypeOf(componentObj, {})
-
-  // @ts-ignore
-  componentObj.constructor.name = ''
-
-  const ExtendedComponent1 = observerInVue2(componentObj)
-  expect(ExtendedComponent1.name).toEqual('<component>')
+  const ExtendedComponent2 = observerInVue2(Component, { name: 'abc' })
+  expect(ExtendedComponent2.name).toEqual('abc')
 })
