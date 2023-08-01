@@ -1,8 +1,9 @@
-import { observer } from '../'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import { observable } from '@formily/reactive'
+import { observable, autorun } from '@formily/reactive'
 import { CreateElement } from 'vue'
 import CompositionAPI, { defineComponent, h } from '@vue/composition-api'
+import { observer } from '../'
+import collectData from '../observer/collectData'
 
 test('observer: component', async () => {
   const model = observable<any>({
@@ -148,4 +149,35 @@ test('observer: stop tracking if watcher is destroyed', async () => {
   model.age++
   wrapper.destroy()
   expect(count).toEqual(1) // 不触发 reactiveRender
+})
+
+test('collectData', async () => {
+  const model = observable<any>({
+    age: 10,
+    name: 'test',
+  })
+
+  const target = {
+    value: 1,
+  }
+
+  const data = collectData(
+    {},
+    {
+      model,
+      target,
+    }
+  )
+
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+
+  autorun(() => fn1(model.age))
+  autorun(() => fn2(data.target.value))
+
+  model.age++
+  expect(fn1).toBeCalledTimes(2)
+
+  target.value++
+  expect(fn1).toBeCalledTimes(1)
 })

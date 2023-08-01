@@ -21,7 +21,6 @@ export default function collectData(vm: any, data?: any) {
           get() {
             return value
           },
-          set() {},
         })
       } else {
         result[field] = value
