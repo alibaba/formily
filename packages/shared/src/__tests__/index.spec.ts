@@ -359,6 +359,7 @@ describe('clone and compare', () => {
     expect(clone(set) === set).toBeTruthy()
     const date = new Date()
     expect(clone(date) === date).toBeTruthy()
+    // @ts-ignore
     const file = new File([''], 'filename')
     expect(clone(file) === file).toBeTruthy()
     const url = new URL('https://test.com')
@@ -449,6 +450,7 @@ describe('isEmpty', () => {
 
     // val - objects
     expect(
+      // @ts-ignore
       isEmpty(new File(['foo'], 'filename.txt', { type: 'text/plain' }))
     ).toBeFalsy()
     expect(isEmpty(new Map())).toBeTruthy()
@@ -538,6 +540,7 @@ describe('types', () => {
     expect(isReactElement({ $$typeof: true, _owner: true })).toBeTruthy()
   })
   test('isHTMLElement', () => {
+    // @ts-ignore
     expect(isHTMLElement(document.createElement('div'))).toBeTruthy()
   })
   test('isMap', () => {
