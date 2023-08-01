@@ -374,6 +374,39 @@ describe('clone and compare', () => {
     expect(shallowClone({ aa: 123 })).toEqual({ aa: 123 })
     expect(shallowClone([123])).toEqual([123])
     expect(shallowClone(/\d+/)).toEqual(/\d+/)
+    expect(shallowClone({ _isAMomentObject: true })).toEqual({
+      _isAMomentObject: true,
+    })
+    expect(
+      shallowClone({
+        _isJSONSchemaObject: true,
+      })
+    ).toEqual({
+      _isJSONSchemaObject: true,
+    })
+    expect(
+      shallowClone({
+        $$typeof: true,
+        _owner: true,
+      })
+    ).toEqual({
+      $$typeof: true,
+      _owner: true,
+    })
+    expect(
+      shallowClone({
+        toJS() {
+          return 123
+        },
+      }).toJS()
+    ).toEqual(123)
+    expect(
+      shallowClone({
+        toJSON() {
+          return 123
+        },
+      }).toJSON()
+    ).toEqual(123)
   })
 })
 

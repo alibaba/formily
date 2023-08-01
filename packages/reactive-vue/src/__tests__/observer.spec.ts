@@ -193,6 +193,9 @@ test('observerInVue2', () => {
 
   Object.setPrototypeOf(componentObj, {})
 
+  // @ts-ignore
+  componentObj.constructor.name = ''
+
   const ExtendedComponent1 = observerInVue2(componentObj)
   expect(ExtendedComponent1.name).toEqual('<component>')
 })
