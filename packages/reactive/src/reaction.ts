@@ -81,6 +81,7 @@ const runReactions = (target: any, key: PropertyKey) => {
     } else if (isBatching()) {
       PendingReactions.add(reaction)
     } else {
+      // never reach
       if (isFn(reaction._scheduler)) {
         reaction._scheduler(reaction)
       } else {
