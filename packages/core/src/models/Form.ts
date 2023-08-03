@@ -382,6 +382,7 @@ export class Form<ValueType extends object = any> {
     if (!isPlainObj(values)) return
     if (strategy === 'merge' || strategy === 'deepMerge') {
       merge(this.values, values, {
+        // never reach
         arrayMerge: (target, source) => source,
         assign: true,
       })
@@ -399,6 +400,7 @@ export class Form<ValueType extends object = any> {
     if (!isPlainObj(initialValues)) return
     if (strategy === 'merge' || strategy === 'deepMerge') {
       merge(this.initialValues, initialValues, {
+        // never reach
         arrayMerge: (target, source) => source,
         assign: true,
       })
@@ -604,7 +606,9 @@ export class Form<ValueType extends object = any> {
     return batchValidate(this, pattern)
   }
 
-  submit = <T>(onSubmit?: (values: ValueType) => Promise<T> | void): Promise<T> => {
+  submit = <T>(
+    onSubmit?: (values: ValueType) => Promise<T> | void
+  ): Promise<T> => {
     return batchSubmit(this, onSubmit)
   }
 

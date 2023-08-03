@@ -979,6 +979,13 @@ test('record: find array nest field record', () => {
     })
   )
 
+  const field2 = attach(
+    form.createField({
+      name: 'cc',
+      basePath: 'array.1.a.b.c',
+    })
+  )
+
   expect(field0.records.length).toBe(2)
   expect(field1.records.length).toBe(2)
   expect(field1.records).toEqual([
@@ -987,6 +994,7 @@ test('record: find array nest field record', () => {
   ])
   expect(field0.record).toEqual({ c: 1, d: 1 })
   expect(field1.record).toEqual({ c: 2, d: 2 })
+  expect(field2.record).toEqual({ c: 2, d: 2 })
 })
 
 test('record: find array field record', () => {
