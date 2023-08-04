@@ -67,7 +67,6 @@ test('baseReaction with scopes', () => {
     }
   )
 
-  // expect(fn).toBeCalledTimes(1)
   expect(field1.title).toBe(scopeTitle)
   expect(field2.description).toBe(scopeDescription)
 })
@@ -191,7 +190,7 @@ test('userReactions with condition', () => {
           run: 'mockFn($self.value)',
         },
         otherwise: {
-          run: 'mockFn($self.vlaue)',
+          run: 'mockFn($self.value)',
         },
       },
     },
