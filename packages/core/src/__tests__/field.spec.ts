@@ -2366,3 +2366,39 @@ test('onInput should ignore HTMLInputEvent propagation', async () => {
   await aa.onInput({ target: { value: '123' } })
   expect(aa.value).toEqual('123')
 })
+
+test('onFocus and onBlur with invalid target value', async () => {
+  const form = attach(createForm<any>())
+  const field = attach(
+    form.createField({
+      name: 'aa',
+      validateFirst: true,
+      value: '111',
+      validator: [
+        {
+          triggerType: 'onFocus',
+          format: 'date',
+        },
+        {
+          triggerType: 'onBlur',
+          format: 'url',
+        },
+      ],
+    })
+  )
+
+  await field.onFocus({ target: {} })
+  expect(field.selfErrors).toEqual([])
+  await field.onBlur({ target: {} })
+  expect(field.selfErrors).toEqual([])
+
+  await field.onFocus()
+  expect(field.selfErrors).toEqual([
+    'The field value is not a valid date format',
+  ])
+  await field.onBlur()
+  expect(field.selfErrors).toEqual([
+    'The field value is not a valid date format',
+    'The field value is a invalid url',
+  ])
+})

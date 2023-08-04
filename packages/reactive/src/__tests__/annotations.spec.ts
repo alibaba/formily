@@ -3,6 +3,7 @@ import { autorun, reaction } from '../autorun'
 import { observe } from '../observe'
 import { isObservable } from '../externals'
 import { untracked } from '../untracked'
+import { getObservableMaker } from '../internals'
 
 test('observable annotation', () => {
   const obs = observable<any>({
@@ -18,6 +19,19 @@ test('observable annotation', () => {
   obs.aa.bb = 333
   expect(handler).toBeCalledTimes(2)
   expect(handler1).toBeCalledTimes(2)
+
+  const handler2 = jest.fn()
+  const handler3 = jest.fn()
+  const obsAnno = getObservableMaker(observable)({ value: obs })
+
+  observe(obsAnno, handler2)
+  reaction(() => {
+    handler3(obsAnno.aa)
+  })
+  obsAnno.aa = { bb: { cc: 123 } }
+  obsAnno.aa.bb = 333
+  expect(handler2).toBeCalledTimes(2)
+  expect(handler3).toBeCalledTimes(2)
 })
 
 test('shallow annotation', () => {

@@ -35,6 +35,7 @@ const createCollectionProxy = (target: any, shallow?: boolean) => {
 const createShallowProxy = (target: any) => {
   if (isNormalType(target)) return createNormalProxy(target, true)
   if (isCollectionType(target)) return createCollectionProxy(target, true)
+  // never reach
   return target
 }
 
@@ -65,6 +66,7 @@ export const createObservable = (
   if (shallow) return createShallowProxy(value)
   if (isNormalType(value)) return createNormalProxy(value)
   if (isCollectionType(value)) return createCollectionProxy(value)
+  // never reach
   return value
 }
 

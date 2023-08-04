@@ -327,4 +327,39 @@ describe('Map', () => {
     expect(handler).toBeCalledTimes(2)
     expect(handler).lastCalledWith(1)
   })
+
+  test('observer object', () => {
+    const handler = jest.fn()
+    const map = observable(new Map<string, Record<string, any>>([]))
+    map.set('key', {})
+    map.set('key2', observable({}))
+    autorun(() => {
+      const [obs1, obs2] = [...map.values()]
+
+      handler(obs1.aa, obs2.aa)
+    })
+
+    expect(handler).toBeCalledTimes(1)
+    const obs1 = map.get('key')
+    const obs2 = map.get('key2')
+    obs1.aa = '123'
+    obs2.aa = '234'
+    expect(handler).toBeCalledTimes(3)
+  })
+
+  test('shallow', () => {
+    const handler = jest.fn()
+    const map = observable.shallow(new Map<string, Record<string, any>>([]))
+    map.set('key', {})
+    autorun(() => {
+      const [obs] = [...map.values()]
+
+      handler(obs.aa)
+    })
+
+    expect(handler).toBeCalledTimes(1)
+    const obs = map.get('key')
+    obs.aa = '123'
+    expect(handler).toBeCalledTimes(1)
+  })
 })

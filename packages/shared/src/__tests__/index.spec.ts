@@ -359,6 +359,7 @@ describe('clone and compare', () => {
     expect(clone(set) === set).toBeTruthy()
     const date = new Date()
     expect(clone(date) === date).toBeTruthy()
+    // @ts-ignore
     const file = new File([''], 'filename')
     expect(clone(file) === file).toBeTruthy()
     const url = new URL('https://test.com')
@@ -373,6 +374,40 @@ describe('clone and compare', () => {
     expect(shallowClone({ aa: 123 })).toEqual({ aa: 123 })
     expect(shallowClone([123])).toEqual([123])
     expect(shallowClone(/\d+/)).toEqual(/\d+/)
+    expect(shallowClone({ _isAMomentObject: true })).toEqual({
+      _isAMomentObject: true,
+    })
+    expect(
+      shallowClone({
+        _isJSONSchemaObject: true,
+      })
+    ).toEqual({
+      _isJSONSchemaObject: true,
+    })
+    expect(
+      shallowClone({
+        $$typeof: true,
+        _owner: true,
+      })
+    ).toEqual({
+      $$typeof: true,
+      _owner: true,
+    })
+    expect(
+      shallowClone({
+        toJS() {
+          return 123
+        },
+      }).toJS()
+    ).toEqual(123)
+    expect(
+      shallowClone({
+        toJSON() {
+          return 123
+        },
+      }).toJSON()
+    ).toEqual(123)
+    expect(shallowClone(1)).toEqual(1)
   })
 })
 
@@ -448,9 +483,11 @@ describe('isEmpty', () => {
     expect(isEmpty(new Error('some error'))).toBeFalsy()
 
     // val - objects
-    expect(
-      isEmpty(new File(['foo'], 'filename.txt', { type: 'text/plain' }))
-    ).toBeFalsy()
+    // @ts-ignore
+    const file = new File(['foo'], 'filename.txt', { type: 'text/plain' })
+    // The toString and Object.prototype.toString of the File in the Jest environment are inconsistent
+    file.toString = Object.prototype.toString
+    expect(isEmpty(file)).toBeFalsy()
     expect(isEmpty(new Map())).toBeTruthy()
     expect(isEmpty(new Map().set('key', 'val'))).toBeFalsy()
     expect(isEmpty(new Set())).toBeTruthy()
@@ -458,7 +495,7 @@ describe('isEmpty', () => {
     expect(isEmpty({ key: 'val' })).toBeFalsy()
     expect(isEmpty({})).toBeTruthy()
 
-    expect(isEmpty(Symbol()))
+    expect(isEmpty(Symbol())).toBeFalsy()
   })
 })
 
@@ -538,6 +575,7 @@ describe('types', () => {
     expect(isReactElement({ $$typeof: true, _owner: true })).toBeTruthy()
   })
   test('isHTMLElement', () => {
+    // @ts-ignore
     expect(isHTMLElement(document.createElement('div'))).toBeTruthy()
   })
   test('isMap', () => {
@@ -797,6 +835,15 @@ describe('merge', () => {
       [symbol]: 123,
       aa: 321,
     })
+
+    const getOwnPropertySymbols = Object.getOwnPropertySymbols
+    Object.getOwnPropertySymbols = null
+    const mergedObject = merge({ [symbol]: 123 }, { aa: 321 })
+    Object.getOwnPropertySymbols = getOwnPropertySymbols
+
+    expect(mergedObject).toEqual({
+      aa: 321,
+    })
   })
   test('merge unmatch', () => {
     expect(merge({ aa: 123 }, [111])).toEqual([111])
@@ -877,6 +924,7 @@ describe('globalThis', () => {
 describe('instanceof', () => {
   test('instOf', () => {
     expect(instOf(123, 123)).toBeFalsy()
+    expect(instOf('123', '123')).toBeFalsy()
   })
 })
 
@@ -920,6 +968,14 @@ test('defaults', () => {
     ee: { value: 555 },
     mm: { value: 123 },
   })
+
+  expect(defaults([1, 2, 3], [0, undefined])).toEqual([0, 2, 3])
+
+  const defaultDate = new RegExp('')
+  // @ts-ignore
+  defaultDate._name = 'name'
+  const date2 = new RegExp('')
+  expect(defaults(defaultDate, date2)._name).toEqual('name')
 })
 
 test('applyMiddleware', async () => {

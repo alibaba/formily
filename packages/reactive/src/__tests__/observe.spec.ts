@@ -145,3 +145,7 @@ test('observe dynamic tree', () => {
   tree.children.aa = 123
   expect(handler).toBeCalledTimes(1)
 })
+
+test('invalid target', () => {
+  expect(() => observe(function () {})).toThrowError()
+})

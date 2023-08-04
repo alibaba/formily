@@ -276,6 +276,40 @@ test('existIn with a.b.c', () => {
   expect(Path.existIn({ a: [{}] }, 'a.0')).toEqual(true)
 })
 
+test('existIn with start Path', () => {
+  expect(Path.existIn({ a: [{}] }, 'a.0', Path.parse('a'))).toEqual(false)
+  expect(Path.existIn({ a: [{}] }, 'b.a.0', Path.parse('b'))).toEqual(true)
+})
+
+test('deleteIn', () => {
+  expect(
+    Path.deleteIn({ a: { b: { c: { ooo: 123, ccc: 234 } } } }, 'a.b.c.ccc')
+  ).toEqual({ a: { b: { c: { ooo: 123 } } } })
+
+  expect(
+    Path.deleteIn({ a: { b: { c: { ooo: 123, ccc: 234 } } } }, null)
+  ).toEqual({ a: { b: { c: { ooo: 123, ccc: 234 } } } })
+
+  expect(
+    Path.deleteIn({ a: { b: { c: { ooo: 123, ccc: 234 } } } }, [])
+  ).toEqual({ a: { b: { c: { ooo: 123, ccc: 234 } } } })
+
+  expect(Path.deleteIn({ a: { b: { c: 'c' } } }, 'a.b.c.ccc')).toEqual({
+    a: { b: { c: 'c' } },
+  })
+
+  expect(Path.deleteIn({ a: 1, b: 2 }, '{ a }')).toEqual({ b: 2 })
+  expect(Path.deleteIn([1, 2], '[0]')).toEqual([undefined, 2])
+})
+
+test('ensureIn', () => {
+  expect(Path.parse('a.b').ensureIn({}, 'default')).toEqual('default')
+  expect(Path.parse('a.b').ensureIn({ a: { b: 'value' } }, 'default')).toEqual(
+    'value'
+  )
+  expect(Path.ensureIn({}, 'a.b.c', 'default')).toEqual('default')
+})
+
 test('complex destructing', () => {
   expect(
     Path.setIn(
@@ -358,4 +392,88 @@ test('test setIn with invalid value', () => {
   expect(getIn(value, 'array.2.undef')).toBeNull()
   expect(getIn(value, 'nil')).toBeUndefined()
   expect(getIn(value, 'undef')).toBeNull()
+})
+
+test('path arguments', () => {
+  const path = new Path('a.b.c')
+  expect(new Path(path).segments).toEqual(['a', 'b', 'c'])
+
+  const matchPath = Path.match('a.b.c')
+  expect(new Path(matchPath).segments).toEqual(['a', 'b', 'c'])
+
+  expect(new Path(undefined).segments).toEqual([])
+})
+
+test('path methods', () => {
+  const path = Path.parse('a.b.c')
+
+  expect(path.concat(Path.parse('d.e')).segments).toEqual([
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+  ])
+
+  expect(Path.parse(['a', 'b', 'c']).toString()).toEqual('a.b.c')
+  expect(Path.parse(['a', 'b', 'c']).length).toEqual(3)
+
+  const matchPath = Path.parse('*')
+  const regexPath = Path.parse(/.+/)
+  expect(() => matchPath.concat('a')).toThrowError()
+  expect(() => regexPath.concat('a')).toThrowError()
+  expect(() => matchPath.slice()).toThrowError()
+  expect(() => regexPath.slice()).toThrowError()
+  expect(() => matchPath.pop()).toThrowError()
+  expect(() => regexPath.pop()).toThrowError()
+  expect(() => matchPath.splice(0, 1)).toThrowError()
+  expect(() => regexPath.splice(0, 1)).toThrowError()
+  expect(() => matchPath.forEach(() => {})).toThrowError()
+  expect(() => regexPath.forEach(() => {})).toThrowError()
+  expect(() => matchPath.map(() => {})).toThrowError()
+  expect(() => regexPath.map(() => {})).toThrowError()
+  expect(() => matchPath.reduce((p) => p, '')).toThrowError()
+  expect(() => regexPath.reduce((p) => p, '')).toThrowError()
+
+  expect(path.slice().segments).toEqual(['a', 'b', 'c'])
+  expect(path.push('d').segments).toEqual(['a', 'b', 'c', 'd'])
+  expect(path.pop().segments).toEqual(['a', 'b'])
+  expect(path.splice(0, 1).segments).toEqual(['b', 'c'])
+
+  let key = ''
+  path.forEach((p) => (key += p + '_'))
+  expect(key).toEqual('a_b_c_')
+  expect(path.map((p) => p)).toEqual(['a', 'b', 'c'])
+  expect(path.reduce((str, p) => str + p, '')).toEqual('abc')
+  expect(path.parent().segments).toEqual(['a', 'b'])
+
+  expect(() => Path.parse('*').includes('*')).toThrowError()
+  expect(() => Path.parse('*').includes('*')).toThrowError()
+  expect(() => Path.parse('a.b').includes('*')).toThrowError()
+  expect(Path.parse('*').includes('a.b')).toBeTruthy()
+  expect(Path.parse('a.b').includes('a.b')).toBeTruthy()
+  expect(Path.parse('a.b').includes('a.c')).toBeFalsy()
+  expect(Path.parse('a.b').includes('a.b.c')).toBeFalsy()
+
+  expect(Path.parse('a.b.c').transform(/[a-z]/, (...result) => result)).toEqual(
+    ['a', 'b', 'c']
+  )
+  expect(Path.parse('a.b.c').transform(/[a-b]/, (...result) => result)).toEqual(
+    ['a', 'b']
+  )
+  expect(Path.parse('a.b.c').transform('', null)).toEqual('')
+  expect(() => Path.parse('*').transform('', () => {})).toThrowError()
+  expect(Path.transform('a.b.c', /[a-z]/, (...result) => result)).toEqual([
+    'a',
+    'b',
+    'c',
+  ])
+
+  expect(Path.parse('a.b.c').match('*')).toBeTruthy()
+  expect(() => Path.parse('*').match('*')).toThrowError()
+  expect(Path.match('*')('a.b.c')).toBeTruthy()
+  expect(Path.match('a.b')('a.b.c')).toBeFalsy()
+
+  const matcher = Path.match('a.b.c')
+  expect(Path.parse(matcher).segments).toEqual(['a', 'b', 'c'])
 })

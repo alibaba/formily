@@ -174,6 +174,7 @@ export const bracketLTok = TokenType('[', {
       prev === dotTok ||
       prev === nameTok ||
       prev === parenLTok ||
+      // never reach
       prev == commaTok
     )
   },
