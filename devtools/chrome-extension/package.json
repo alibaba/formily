@@ -1,6 +1,6 @@
 {
   "name": "@formily/chrome-extension",
-  "version": "2.2.27",
+  "version": "2.2.28",
   "private": true,
   "license": "MIT",
   "repository": {
@@ -21,8 +21,8 @@
     "start": "webpack-dev-server --config config/webpack.dev.ts"
   },
   "dependencies": {
-    "@formily/core": "2.2.27",
-    "@formily/shared": "2.2.27",
+    "@formily/core": "2.2.28",
+    "@formily/shared": "2.2.28",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-json-view": "^1.19.1",
