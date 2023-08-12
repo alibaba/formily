@@ -400,9 +400,10 @@ export class Path {
     if (this.isMatchPattern) {
       throw new Error(`${this.entire} cannot be transformed`)
     }
-    const args = this.segments.reduce((buf, key) => {
-      return new RegExp(regexp).test(key as string) ? buf.concat(key) : buf
-    }, [])
+    const reg = new RegExp(regexp)
+    const args = this.segments.filter((key) =>
+      reg.test(key as string)
+    ) as string[]
     return callback(...args)
   }
 
