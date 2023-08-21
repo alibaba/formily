@@ -629,8 +629,9 @@ type SchemaEnum<Message> = Array<
 
 #### Description
 
-Schema linkage protocol, if the reaction object contains target, it represents active linkage mode, otherwise it represents passive linkage mode
-If you want to achieve more complex linkage, you can pass in the reaction responder function through the scope for processing
+Schema linkage protocol, if the reaction object contains target, it represents active linkage mode, otherwise it represents passive linkage mode  
+If you want to achieve more complex linkage, you can pass in the reaction responder function through the scope for processing  
+FormPathPattern path syntax documentation is [here](https://core.formilyjs.org/api/entry/form-path#formpathpattern)
 
 #### Signature
 
@@ -651,7 +652,18 @@ type SchemaReactionEffect =
 
 type SchemaReaction<Field = any> =
   | {
-      dependencies?: string[] | Record<string, string> //The list of dependent field paths can only describe dependencies in dot paths, and supports relative paths. If it is an array format, then it is also an array format when reading, if it is an object format , It is also an object format when reading, but the object format is equivalent to an alias
+      dependencies?: //The list of dependent field paths can only describe dependencies in dot paths, and supports relative paths
+      | Array<
+            | string //If it is an array contains string format, then it is also an array format when reading
+            | {
+                //If it is an array contains object format, then it is an object format when reading, but the name field is equivalent to an alias
+                name?: string
+                type?: string
+                source?: string
+                property?: string
+              }
+          >
+        | Record<string, string> //If it is an object format, It is also an object format when reading, but the key for object is equivalent to an alias
       when?: string | boolean //Linkage condition
       target?: string //The field path to be operated, supports FormPathPattern path syntax, note: relative path is not supported! !
       effects?: SchemaReactionEffect[] //Independent life cycle hook in active mode
