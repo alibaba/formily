@@ -21,14 +21,15 @@ const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/
 const Registry = {
   silent: false,
   compile(expression: string, scope = {}) {
+    expression = expression.replaceAll(/(\$\w+)/g, '$root.$1');
     if (Registry.silent) {
       try {
-        return new Function('$root', `with($root) { return (${expression}); }`)(
+        return new Function('$root', `return (${expression});`)(
           scope
         )
       } catch {}
     } else {
-      return new Function('$root', `with($root) { return (${expression}); }`)(
+      return new Function('$root', `return (${expression});`)(
         scope
       )
     }
