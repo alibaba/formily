@@ -306,6 +306,7 @@ export function FormDialog(
         parent: getProtalContext(id as string | symbol),
       })
       env.instance.$mount(env.root)
+      env.root = env.instance.$el
     }
 
     env.instance.visible = visible
