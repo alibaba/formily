@@ -15,6 +15,7 @@ interface IRecursionFieldProps {
   schema: ISchema //字段schema
   name?: string //路径名称
   basePath?: FormPathPattern //基础路径
+  propsRecursion?: boolean //是否递归传递 mapProperties 和 filterProperties
   onlyRenderProperties?: boolean //是否只渲染properties
   onlyRenderSelf?: boolean //是否只渲染自身，不渲染properties
   mapProperties?: (schema: Schema, name: string) => Schema //schema properties映射器，主要用于改写schema
