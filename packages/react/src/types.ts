@@ -99,6 +99,7 @@ export interface IRecursionFieldProps {
   schema: ISchema
   name?: SchemaKey
   basePath?: FormPathPattern
+  propsRecursion?: boolean
   onlyRenderProperties?: boolean
   onlyRenderSelf?: boolean
   mapProperties?: ISchemaMapper

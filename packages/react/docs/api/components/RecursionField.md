@@ -15,6 +15,7 @@ interface IRecursionFieldProps {
   schema: ISchema //Field schema
   name?: string //Path name
   basePath?: FormPathPattern //base path
+  propsRecursion?: boolean //Whether to recursiveliy pass mapProperties and filterProperties
   onlyRenderProperties?: boolean //Whether to only render properties
   onlyRenderSelf?: boolean //Whether to only render itself without rendering properties
   mapProperties?: (schema: Schema, name: string) => Schema //schema properties mapper, mainly used to rewrite the schema
