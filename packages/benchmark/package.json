@@ -23,7 +23,7 @@
     "file-loader": "^5.0.2",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^1.6.0",
-    "postcss": "^7.0.0",
+    "postcss": "^8.4.31",
     "postcss-less": "^4.0.0",
     "postcss-loader": "^3.x",
     "raw-loader": "^4.0.0",
