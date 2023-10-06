@@ -247,7 +247,9 @@ export function FormDialog(
                                 h(
                                   Button,
                                   {
-                                    attrs: cancelButtonProps,
+                                    attrs: {
+                                      ...cancelButtonProps
+                                    },
                                     on: {
                                       click: (e) => {
                                         onCancel?.(e)
