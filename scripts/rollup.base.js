@@ -30,6 +30,7 @@ const presets = () => {
     '@formily/json-schema': 'Formily.JSONSchema',
     '@formily/react': 'Formily.React',
     '@formily/vue': 'Formily.Vue',
+    'vue-demi': 'VueDemi'
   }
   return [
     typescript({
