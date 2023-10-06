@@ -24,6 +24,7 @@ export interface IFormItemProps {
   tooltipLayout?: 'icon' | 'text'
   labelStyle?: React.CSSProperties
   labelAlign?: 'left' | 'right'
+  labelFor?: string
   labelWrap?: boolean
   labelWidth?: number | string
   wrapperWidth?: number | string
@@ -238,6 +239,7 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
             <span className={`${prefixCls}-asterisk`}>{'*'}</span>
           )}
           <label>{label}</label>
+          <label htmlFor={props.labelFor}>{label}</label>
           {!asterisk && requiredMark === 'optional' && !optionalMarkHidden && (
             <span className={`${prefixCls}-optional`}>
               {locale?.Form?.optional}
