@@ -147,9 +147,9 @@ export type IFieldUpdate = {
 }
 
 export interface IFormRequests {
-  validate?: NodeJS.Timeout
-  submit?: NodeJS.Timeout
-  loading?: NodeJS.Timeout
+  validate?: number
+  submit?: number
+  loading?: number
   updates?: IFieldUpdate[]
   updateIndexes?: Record<string, number>
 }
@@ -276,9 +276,9 @@ export interface IVoidFieldFactoryProps<
 }
 
 export interface IFieldRequests {
-  validate?: NodeJS.Timeout
-  submit?: NodeJS.Timeout
-  loading?: NodeJS.Timeout
+  validate?: number
+  submit?: number
+  loading?: number
   batch?: () => void
 }
 
