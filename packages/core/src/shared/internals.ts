@@ -152,19 +152,30 @@ export const patchFieldStates = (
   target: Record<string, GeneralField>,
   patches: INodePatch<GeneralField>[]
 ) => {
+  const shouldClear: Record<string, boolean> = {}
   patches.forEach(({ type, address, oldAddress, payload }) => {
     if (type === 'remove') {
       destroy(target, address, false)
     } else if (type === 'update') {
       if (payload) {
+        if(shouldClear[address]){
+          delete shouldClear[address]
+        }
         target[address] = payload
         if (target[oldAddress] === payload) {
           target[oldAddress] = undefined
+          shouldClear[oldAddress] = true
         }
       }
       if (address && payload) {
         locateNode(payload, address)
       }
+    }
+  })
+  
+  Object.keys(shouldClear).forEach((key)=> {
+    if(target[key] === undefined){
+      delete target[key]
     }
   })
 }
