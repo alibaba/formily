@@ -13,10 +13,10 @@ jobs:
     if: contains(github.event.head_commit.message, 'chore(versions)') == false
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node_version }}
+      - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: 16
 
       - run: yarn -v
       - run: yarn --ignore-engines
