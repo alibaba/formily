@@ -306,30 +306,34 @@ test('fields unmount and validate', async () => {
     }
     return <div data-testid="unmounted"></div>
   })
-  act(async () => {
-    const MyComponent = () => {
-      return (
-        <FormProvider form={form}>
-          <Field name="parent" component={[Parent]} />
-        </FormProvider>
-      )
-    }
-    render(<MyComponent />)
-    try {
-      await form.validate()
-    } catch {}
-    expect(form.invalid).toBeTruthy()
 
-    form.query('parent').take((field) => {
-      field.setState((state) => {
-        state.value.type = 'unmounted'
-      })
-    })
+  const MyComponent = () => {
+    return (
+      <FormProvider form={form}>
+        <Field name="parent" component={[Parent]} />
+      </FormProvider>
+    )
+  }
+  render(<MyComponent />)
 
-    await waitFor(() => {
-      expect(fn.mock.calls.length).toBe(1)
-    })
+  try {
     await form.validate()
-    expect(form.invalid).toBeFalsy()
+  } catch {}
+
+  expect(form.invalid).toBeTruthy()
+
+  form.query('parent').take((field) => {
+    field.setState((state) => {
+      state.value.type = 'unmounted'
+    })
   })
+
+  await waitFor(() => {
+    expect(fn.mock.calls.length).toBe(1)
+  })
+
+  try {
+    await form.validate()
+  } catch {}
+  expect(form.invalid).toBeTruthy()
 })

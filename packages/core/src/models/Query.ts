@@ -45,6 +45,10 @@ export class Query {
       }
     } else {
       each(this.form.fields, (field, address) => {
+        if (!field) {
+          delete this.form.fields[address]
+          return
+        }
         if (field.match(this.pattern)) {
           this.addresses.push(address)
         }
