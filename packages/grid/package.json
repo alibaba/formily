@@ -27,7 +27,7 @@
     "build:umd": "rollup --config"
   },
   "peerDependencies": {
-    "typescript": "^4.1.0"
+    "typescript": "4.x || 5.x"
   },
   "dependencies": {
     "@formily/reactive": "2.2.29",
