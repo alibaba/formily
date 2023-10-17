@@ -46,8 +46,6 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@mapbox/hast-util-to-jsx": "~1.0.0",
-    "yargs": "^16.x",
-    "commander": "^6.x",
     "ttypescript": "1.5.15"
   },
   "devDependencies": {
