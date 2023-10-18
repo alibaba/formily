@@ -1713,3 +1713,11 @@ test('form initial values ref should not changed with setInitialValues', () => {
   })
   expect(form.initialValues === values).toBeTruthy()
 })
+
+test('form query undefined query should not throw error', () => {
+  const form = attach(createForm())
+
+  ;(form.fields as any)['a'] = undefined
+  expect(() => form.query('*').take()).not.toThrowError()
+  expect(Object.keys(form.fields)).toEqual([])
+})
