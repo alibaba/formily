@@ -227,7 +227,6 @@ export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = (
           {asterisk && (
             <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>
           )}
-          <label>{label}</label>
           <label htmlFor={props.labelFor}>{label}</label>
         </span>
       </div>
