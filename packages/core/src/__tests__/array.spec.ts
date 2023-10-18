@@ -200,6 +200,47 @@ test('array field move up/down then fields move', () => {
   expect(form.fields['array.3.value']).toBe(line3)
 })
 
+// 重现 issues #3932 , 补全 PR #3992 测试用例
+test('lazy array field query each', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+
+  const init = Array.from({ length: 6 }).map((_, i) => ({ value: i }))
+  array.setValue(init)
+
+  // page1: 0, 1
+  // page2: 2, 3 untouch
+  // page3: 4, 5
+  init.forEach((item) => {
+    const len = item.value
+    //2, 3
+    if (len >= 2 && len <= 3) {
+    } else {
+      // 0, 1, 4, 5
+      attach(
+        form.createField({
+          name: 'value',
+          basePath: 'array.' + len,
+        })
+      )
+    }
+  })
+
+  array.insert(1, { value: '11' })
+  expect(() => form.query('*').take()).not.toThrowError()
+  expect(Object.keys(form.fields)).toEqual([
+    'array',
+    'array.0.value',
+    'array.5.value',
+    'array.2.value',
+    'array.6.value',
+  ])
+})
+
 test('void children', () => {
   const form = attach(createForm())
   const array = attach(
