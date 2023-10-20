@@ -1,5 +1,5 @@
 import React, { Fragment, useMemo } from 'react'
-import { isFn, isValid } from '@formily/shared'
+import { isBool, isFn, isValid } from '@formily/shared'
 import { GeneralField } from '@formily/core'
 import { Schema } from '@formily/json-schema'
 import { SchemaContext } from '../shared'
@@ -48,6 +48,19 @@ export const RecursionField: ReactFC<IRecursionFieldProps> = (props) => {
             if (props.filterProperties(schema, name) === false) {
               return null
             }
+          }
+          if (isBool(props.propsRecursion) && props.propsRecursion) {
+            return (
+              <RecursionField
+                propsRecursion={true}
+                filterProperties={props.filterProperties}
+                mapProperties={props.mapProperties}
+                schema={schema}
+                key={`${index}-${name}`}
+                name={name}
+                basePath={base}
+              />
+            )
           }
           return (
             <RecursionField
