@@ -580,6 +580,8 @@ Other references https://ant.design/components/button-cn/
 
 Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
+Note: You can disable default behavior with `onClick={e => e.preventDefault()}` in props.
+
 ### ArrayCollapse.Remove
 
 > Delete button
@@ -591,6 +593,8 @@ Note: The title attribute can receive the title mapping in the Field model, that
 Other references https://ant.design/components/icon-cn/
 
 Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
+
+Note: You can disable default behavior with `onClick={e => e.preventDefault()}` in props.
 
 ### ArrayCollapse.MoveDown
 
@@ -604,6 +608,8 @@ Other references https://ant.design/components/icon-cn/
 
 Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
+Note: You can disable default behavior with `onClick={e => e.preventDefault()}` in props.
+
 ### ArrayCollapse.MoveUp
 
 > Move up button
@@ -615,6 +621,8 @@ Note: The title attribute can receive the title mapping in the Field model, that
 Other references https://ant.design/components/icon-cn/
 
 Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
+
+Note: You can disable default behavior with `onClick={e => e.preventDefault()}` in props.
 
 ### ArrayCollapse.Index
 

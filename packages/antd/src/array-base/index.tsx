@@ -1,19 +1,19 @@
-import React, { createContext, useContext } from 'react'
-import { Button } from 'antd'
 import {
+  CopyOutlined,
   DeleteOutlined,
   DownOutlined,
-  UpOutlined,
-  PlusOutlined,
   MenuOutlined,
-  CopyOutlined,
+  PlusOutlined,
+  UpOutlined,
 } from '@ant-design/icons'
-import { ButtonProps } from 'antd/lib/button'
 import { ArrayField } from '@formily/core'
-import { useField, useFieldSchema, Schema, JSXComponent } from '@formily/react'
-import { isValid, clone, isUndef } from '@formily/shared'
-import { usePrefixCls, SortableHandle } from '../__builtins__'
+import { JSXComponent, Schema, useField, useFieldSchema } from '@formily/react'
+import { clone, isUndef, isValid } from '@formily/shared'
+import { Button } from 'antd'
+import { ButtonProps } from 'antd/lib/button'
 import cls from 'classnames'
+import React, { createContext, useContext } from 'react'
+import { SortableHandle, usePrefixCls } from '../__builtins__'
 
 export interface IArrayBaseAdditionProps extends ButtonProps {
   title?: string
@@ -175,6 +175,10 @@ ArrayBase.Addition = (props) => {
       className={cls(`${prefixCls}-addition`, props.className)}
       onClick={(e) => {
         if (array.props?.disabled) return
+        if (props.onClick) {
+          props.onClick(e)
+          if (e.defaultPrevented) return
+        }
         const defaultValue = getDefaultValue(props.defaultValue, array.schema)
         if (props.method === 'unshift') {
           array.field?.unshift?.(defaultValue)
@@ -182,9 +186,6 @@ ArrayBase.Addition = (props) => {
         } else {
           array.field?.push?.(defaultValue)
           array.props?.onAdd?.(array?.field?.value?.length - 1)
-        }
-        if (props.onClick) {
-          props.onClick(e)
         }
       }}
       icon={isUndef(props.icon) ? <PlusOutlined /> : props.icon}
@@ -216,13 +217,14 @@ ArrayBase.Copy = React.forwardRef((props, ref) => {
         if (self?.disabled) return
         e.stopPropagation()
         if (array.props?.disabled) return
+        if (props.onClick) {
+          props.onClick(e)
+          if (e.defaultPrevented) return
+        }
         const value = clone(array?.field?.value[index])
         const distIndex = index + 1
         array.field?.insert?.(distIndex, value)
         array.props?.onCopy?.(distIndex)
-        if (props.onClick) {
-          props.onClick(e)
-        }
       }}
       icon={isUndef(props.icon) ? <CopyOutlined /> : props.icon}
     >
@@ -252,11 +254,12 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
       onClick={(e) => {
         if (self?.disabled) return
         e.stopPropagation()
-        array.field?.remove?.(index)
-        array.props?.onRemove?.(index)
         if (props.onClick) {
           props.onClick(e)
+          if (e.defaultPrevented) return
         }
+        array.field?.remove?.(index)
+        array.props?.onRemove?.(index)
       }}
       icon={isUndef(props.icon) ? <DeleteOutlined /> : props.icon}
     >
@@ -286,11 +289,12 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
       onClick={(e) => {
         if (self?.disabled) return
         e.stopPropagation()
-        array.field?.moveDown?.(index)
-        array.props?.onMoveDown?.(index)
         if (props.onClick) {
           props.onClick(e)
+          if (e.defaultPrevented) return
         }
+        array.field?.moveDown?.(index)
+        array.props?.onMoveDown?.(index)
       }}
       icon={isUndef(props.icon) ? <DownOutlined /> : props.icon}
     >
@@ -320,11 +324,12 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
       onClick={(e) => {
         if (self?.disabled) return
         e.stopPropagation()
-        array?.field?.moveUp(index)
-        array?.props?.onMoveUp?.(index)
         if (props.onClick) {
           props.onClick(e)
+          if (e.defaultPrevented) return
         }
+        array?.field?.moveUp(index)
+        array?.props?.onMoveUp?.(index)
       }}
       icon={isUndef(props.icon) ? <UpOutlined /> : props.icon}
     >
