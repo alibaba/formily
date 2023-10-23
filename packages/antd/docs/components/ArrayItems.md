@@ -748,6 +748,8 @@ Other references https://ant.design/components/button-cn/
 
 Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
+Note: You can disable default behavior with `onClick={e => e.preventDefault()}` in props.
+
 ### ArrayItems.Copy
 
 > Copy button
@@ -763,6 +765,8 @@ Other references https://ant.design/components/button-cn/
 
 Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
+Note: You can disable default behavior with `onClick={e => e.preventDefault()}` in props.
+
 ### ArrayItems.Remove
 
 > Delete button
@@ -774,6 +778,8 @@ Note: The title attribute can receive the title mapping in the Field model, that
 Other references https://ant.design/components/icon-cn/
 
 Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
+
+Note: You can disable default behavior with `onClick={e => e.preventDefault()}` in props.
 
 ### ArrayItems.MoveDown
 
@@ -787,6 +793,8 @@ Other references https://ant.design/components/icon-cn/
 
 Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
 
+Note: You can disable default behavior with `onClick={e => e.preventDefault()}` in props.
+
 ### ArrayItems.MoveUp
 
 > Move up button
@@ -798,6 +806,8 @@ Note: The title attribute can receive the title mapping in the Field model, that
 Other references https://ant.design/components/icon-cn/
 
 Note: The title attribute can receive the title mapping in the Field model, that is, uploading the title in the Field is also effective
+
+Note: You can disable default behavior with `onClick={e => e.preventDefault()}` in props.
 
 ### ArrayItems.Index
 

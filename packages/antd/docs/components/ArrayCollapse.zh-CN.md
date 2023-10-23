@@ -585,6 +585,8 @@ export default () => {
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
+注意：使用`onClick={e => e.preventDefault()}`可禁用默认行为。
+
 ### ArrayCollapse.Remove
 
 > 删除按钮
@@ -596,6 +598,8 @@ export default () => {
 其余参考 https://ant.design/components/icon-cn/
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
+
+注意：使用`onClick={e => e.preventDefault()}`可禁用默认行为。
 
 ### ArrayCollapse.MoveDown
 
@@ -609,6 +613,8 @@ export default () => {
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
+注意：使用`onClick={e => e.preventDefault()}`可禁用默认行为。
+
 ### ArrayCollapse.MoveUp
 
 > 上移按钮
@@ -620,6 +626,8 @@ export default () => {
 其余参考 https://ant.design/components/icon-cn/
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
+
+注意：使用`onClick={e => e.preventDefault()}`可禁用默认行为。
 
 ### ArrayCollapse.Index
 
