@@ -1054,3 +1054,86 @@ test('records scope', async () => {
     expect(queryByTestId('text')?.textContent).toBe('3')
   })
 })
+
+test('propsRecursion as true', () => {
+  const form = createForm()
+  const CustomObject: React.FC = () => {
+    const schema = useFieldSchema()
+    return (
+      <div data-testid="object">
+        <RecursionField
+          schema={schema}
+          propsRecursion={true}
+          filterProperties={(schema) => {
+            if (schema['x-component'] === 'Input') {
+              return false
+            }
+            return true
+          }}
+        />
+      </div>
+    )
+  }
+
+  const SchemaField = createSchemaField({
+    components: {
+      Input,
+      CustomObject,
+    },
+  })
+  const { queryAllByTestId } = render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.Object x-component="CustomObject">
+          <SchemaField.String x-component="Input" />
+          <SchemaField.Object>
+            <SchemaField.String x-component="Input" />
+          </SchemaField.Object>
+        </SchemaField.Object>
+      </SchemaField>
+    </FormProvider>
+  )
+  expect(queryAllByTestId('input').length).toEqual(0)
+  expect(queryAllByTestId('object').length).toEqual(1)
+})
+
+test('propsRecursion as empty', () => {
+  const form = createForm()
+  const CustomObject: React.FC = () => {
+    const schema = useFieldSchema()
+    return (
+      <div data-testid="object">
+        <RecursionField
+          schema={schema}
+          filterProperties={(schema) => {
+            if (schema['x-component'] === 'Input') {
+              return false
+            }
+            return true
+          }}
+        />
+      </div>
+    )
+  }
+
+  const SchemaField = createSchemaField({
+    components: {
+      Input,
+      CustomObject,
+    },
+  })
+  const { queryAllByTestId } = render(
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.Object x-component="CustomObject">
+          <SchemaField.String x-component="Input" />
+          <SchemaField.Object>
+            <SchemaField.String x-component="Input" />
+          </SchemaField.Object>
+        </SchemaField.Object>
+      </SchemaField>
+    </FormProvider>
+  )
+  expect(queryAllByTestId('input').length).toEqual(1)
+  expect(queryAllByTestId('object').length).toEqual(1)
+})
