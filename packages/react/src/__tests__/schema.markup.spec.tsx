@@ -351,8 +351,8 @@ describe('recursion field', () => {
           <RecursionField
             schema={schema}
             filterProperties={(schema) => {
-              if (schema['x-component'] === 'Input') return
-              return true
+              if (schema['x-component'] === 'Input') return true
+              return false
             }}
           />
         </div>
