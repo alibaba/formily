@@ -3,6 +3,7 @@ import { Form } from '../models'
 import { IFormProps } from '../types'
 import {
   getValidateLocaleIOSCode,
+  getLocaleByPath,
   setValidateLanguage,
   registerValidateFormats,
   registerValidateLocale,
@@ -55,6 +56,7 @@ export {
   isVoidField,
   isVoidFieldState,
   getValidateLocaleIOSCode,
+  getLocaleByPath,
   setValidateLanguage,
   registerValidateFormats,
   registerValidateLocale,
