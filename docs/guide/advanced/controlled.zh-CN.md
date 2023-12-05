@@ -307,7 +307,7 @@ const DYNAMIC_INJECT_SCHEMA = {
   },
 }
 
-export default observer(() => {
+const App = observer(() => {
   const oldTypeRef = useRef()
   const form = useMemo(() => createForm(), [])
   const currentType = form.values.type
@@ -340,6 +340,8 @@ export default observer(() => {
     </Form>
   )
 })
+
+export default App
 ```
 
 ## Schema 片段联动(自定义组件)
@@ -429,7 +431,7 @@ const DYNAMIC_INJECT_SCHEMA = {
   },
 }
 
-export default observer(() => {
+const App = observer(() => {
   const form = useMemo(() => createForm(), [])
   const schema = {
     type: 'object',
@@ -457,6 +459,8 @@ export default observer(() => {
     </Form>
   )
 })
+
+export default App
 ```
 
 ## 字段级受控
