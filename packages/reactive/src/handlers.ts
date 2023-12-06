@@ -5,15 +5,15 @@ import {
 import { ProxyRaw, RawProxy } from './environment'
 import { isObservable, isSupportObservable } from './externals'
 import { createObservable } from './internals'
+import { isArr } from './checkers'
 
 const wellKnownSymbols = new Set(
-  Object.getOwnPropertyNames(Symbol)
-    .reduce((buf: Symbol[], key) => {
-      if (key === 'arguments' || key === 'caller') return buf    
-      const value = Symbol[key]
-      if (typeof value === 'symbol') return buf.concat(value)
-      return buf
-    }, [])
+  Object.getOwnPropertyNames(Symbol).reduce((buf: Symbol[], key) => {
+    if (key === 'arguments' || key === 'caller') return buf
+    const value = Symbol[key]
+    if (typeof value === 'symbol') return buf.concat(value)
+    return buf
+  }, [])
 )
 
 const hasOwnProperty = Object.prototype.hasOwnProperty
@@ -201,6 +201,11 @@ export const baseHandlers: ProxyHandler<any> = {
     return keys
   },
   set(target, key, value, receiver) {
+    // vue2中有对数组原型重写，因此需去除此处proxy
+    if (key === '__proto__' && isArr(target)) {
+      target[key] = value
+      return true
+    }
     const hadKey = hasOwnProperty.call(target, key)
     const newValue = createObservable(target, key, value)
     const oldValue = target[key]
