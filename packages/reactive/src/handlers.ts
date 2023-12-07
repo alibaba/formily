@@ -5,7 +5,6 @@ import {
 import { ProxyRaw, RawProxy } from './environment'
 import { isObservable, isSupportObservable } from './externals'
 import { createObservable } from './internals'
-import { isArr } from './checkers'
 
 const wellKnownSymbols = new Set(
   Object.getOwnPropertyNames(Symbol).reduce((buf: Symbol[], key) => {
@@ -202,7 +201,7 @@ export const baseHandlers: ProxyHandler<any> = {
   },
   set(target, key, value, receiver) {
     // vue2中有对数组原型重写，因此需去除此处proxy
-    if (key === '__proto__' && isArr(target)) {
+    if (key === '__proto__') {
       target[key] = value
       return true
     }

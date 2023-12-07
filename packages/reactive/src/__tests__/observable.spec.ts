@@ -31,3 +31,17 @@ test('observable contains', () => {
   expect(contains(obj, obj.arr)).toBe(true)
   expect(contains(obj, arr)).toBe(true)
 })
+
+test('observable __proto__', () => {
+  const observableArr = observable([] as any[])
+  // @ts-ignore
+  observableArr.__proto__ = Object.create(Array.prototype)
+  observableArr[0] = {}
+  expect(observableArr).toEqual([{}])
+
+  const observableObj = observable({} as any)
+  // @ts-ignore
+  observableObj.__proto__ = Object.create(Object.prototype)
+  observableObj.aa = {}
+  expect(observableObj).toEqual({ aa: {} })
+})
