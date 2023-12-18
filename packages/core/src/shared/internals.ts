@@ -176,11 +176,17 @@ export const destroy = (
 ) => {
   const field = target[address]
   field?.dispose()
-  if (isDataField(field) && forceClear) {
+  if (isDataField(field)) {
     const form = field.form
     const path = field.path
-    form.deleteValuesIn(path)
-    form.deleteInitialValuesIn(path)
+    if (forceClear) {
+      form.deleteValuesIn(path)
+    }
+    // 在 schema 上有定义 initialValue (JSX prop name: default)
+    const shouldClearInitial = forceClear || !isUndef(field.props.initialValue);
+    if (shouldClearInitial) {
+      form.deleteInitialValuesIn(path)
+    }
   }
   delete target[address]
 }
