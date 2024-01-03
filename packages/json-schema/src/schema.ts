@@ -222,6 +222,7 @@ export class Schema<
     >
   ) => {
     this.properties = this.properties || {}
+    if (this.properties[key]) return this.properties[key]
     this.properties[key] = new Schema(schema, this)
     this.properties[key].name = key
     return this.properties[key]
@@ -266,6 +267,7 @@ export class Schema<
   ) => {
     if (!schema) return
     this.patternProperties = this.patternProperties || {}
+    if (this.patternProperties[key]) return this.patternProperties[key]
     this.patternProperties[key] = new Schema(schema, this)
     this.patternProperties[key].name = key
     return this.patternProperties[key]
