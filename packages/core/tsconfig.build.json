@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./lib",
+    "paths": {
+      "@formily/*": ["packages/*", "devtools/*"]
+    },
+    "declaration": true,
+    "types": []
+  }
+}

@@ -1,0 +1,32 @@
+@import '../__builtins__/styles/common.scss';
+
+$array-base-prefix-cls: '#{$formily-prefix}-array-base';
+
+.#{$array-base-prefix-cls}-addition {
+  transition: $--all-transition;
+}
+
+.#{$array-base-prefix-cls}-remove {
+  i {
+    font-size: $--font-size-base;
+  }
+}
+
+.#{$array-base-prefix-cls}-move-down {
+  i {
+    font-size: $--font-size-base;
+  }
+}
+
+.#{$array-base-prefix-cls}-move-up {
+  i {
+    font-size: $--font-size-base;
+  }
+}
+
+.#{$array-base-prefix-cls}-sort-handle {
+  i {
+    font-size: $--font-size-base;
+    cursor: move;
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "projectName": "formily",
+  "projectOwner": "alibaba",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "janryWang",
+      "name": "Janry",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4060976?v=4",
+      "profile": "https://github.com/janryWang",
+      "contributions": [
+        "design"
+      ]
+    },
+    {
+      "login": "cnt1992",
+      "name": "SkyCai",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/3118988?v=4",
+      "profile": "http://cnt1992.github.io",
+      "contributions": [
+        "design"
+      ]
+    },
+    {
+      "login": "yujiangshui",
+      "name": "Harry Yu",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2942913?v=4",
+      "profile": "https://www.linkedin.com/in/harry-yu-0a931a69/",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "zsirfs",
+      "name": "zsir",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/22249411?v=4",
+      "profile": "https://www.luoyangfu.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "monkindey",
+      "name": "Kiho · Cham",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6913898?v=4",
+      "profile": "http://www.monkindey.xyz/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "whj1995",
+      "name": "Hongjiang Wu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/22634735?v=4",
+      "profile": "http://whj1995.xyz",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "anyuxuan",
+      "name": "合木",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/24931869?v=4",
+      "profile": "https://github.com/anyuxuan",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Azath0th",
+      "name": "Chen YuBen",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/18497361?v=4",
+      "profile": "https://github.com/Azath0th",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "HarrisFeng",
+      "name": "Harris Feng",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7928957?v=4",
+      "profile": "https://github.com/HarrisFeng",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}

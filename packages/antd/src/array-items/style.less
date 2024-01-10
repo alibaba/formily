@@ -1,0 +1,64 @@
+@root-entry-name: 'default';
+@import (reference) '~antd/es/style/themes/index.less';
+
+@array-items-prefix-cls: ~'@{ant-prefix}-formily-array-items';
+
+.@{array-items-prefix-cls}-item-inner {
+  visibility: visible;
+}
+
+// fix https://github.com/alibaba/formily/issues/2891
+.@{array-items-prefix-cls}-item {
+  z-index: 100000;
+}
+
+.@{array-items-prefix-cls}-card {
+  display: flex;
+  border: 1px solid @border-color-split;
+  margin-bottom: 10px;
+  padding: 3px 6px;
+  background: @card-background;
+  justify-content: space-between;
+  color: @text-color;
+
+  .@{ant-prefix}-formily-item:not(.@{ant-prefix}-formily-item-feedback-layout-popover) {
+    margin-bottom: 0 !important;
+
+    .@{ant-prefix}-formily-item-help {
+      position: absolute;
+      font-size: 12px;
+      top: 100%;
+      background: @card-background;
+      width: 100%;
+      margin-top: 3px;
+      padding: 3px;
+      z-index: 1;
+      border-radius: 3px;
+      box-shadow: 0 0 10px @border-color-split;
+    }
+  }
+}
+
+.@{array-items-prefix-cls}-divide {
+  display: flex;
+  border-bottom: 1px solid @border-color-split;
+  padding: 10px 0;
+  justify-content: space-between;
+
+  .@{ant-prefix}-formily-item:not(.@{ant-prefix}-formily-item-feedback-layout-popover) {
+    margin-bottom: 0 !important;
+
+    .@{ant-prefix}-formily-item-help {
+      position: absolute;
+      font-size: 12px;
+      top: 100%;
+      background: @card-background;
+      width: 100%;
+      margin-top: 3px;
+      padding: 3px;
+      z-index: 1;
+      border-radius: 3px;
+      box-shadow: 0 0 10px @border-color-split;
+    }
+  }
+}

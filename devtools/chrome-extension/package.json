@@ -1,0 +1,35 @@
+{
+  "name": "@formily/chrome-extension",
+  "version": "2.3.1",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "types": "esm/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "scripts": {
+    "build:devtools": "webpack-cli --config config/webpack.prod.ts",
+    "build:zip": "rimraf package.zip && zip -r package.zip package",
+    "start": "webpack-dev-server --config config/webpack.dev.ts"
+  },
+  "dependencies": {
+    "@formily/core": "2.3.1",
+    "@formily/shared": "2.3.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-json-view": "^1.19.1",
+    "react-treebeard": "^3.2.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "2c44ae410a73f02735c63c6430e021a50e21f3ec"
+}

@@ -1,0 +1,25 @@
+.qrcode-group {
+  display: flex;
+  justify-content: center;
+  .qrcode {
+    width: 400px;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &-title {
+      font-size: 20px;
+      position: relative;
+
+      &-content {
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        white-space: nowrap;
+        transform: translateX(-50%);
+      }
+    }
+  }
+}

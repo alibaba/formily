@@ -1,0 +1,7 @@
+@import '~@alifd/next/lib/core/index-noreset.scss';
+
+$upload-prefix-cls: '#{$css-prefix}upload';
+
+.#{$upload-prefix-cls}-list {
+  margin-top: 4px;
+}

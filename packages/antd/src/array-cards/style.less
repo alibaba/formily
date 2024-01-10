@@ -1,0 +1,15 @@
+@root-entry-name: 'default';
+@import (reference) '~antd/es/style/themes/index.less';
+
+@array-base-prefix-cls: ~'@{ant-prefix}-formily-array-base';
+@array-cards-prefix-cls: ~'@{ant-prefix}-formily-array-cards';
+
+.@{array-cards-prefix-cls}-item {
+  margin-bottom: 10px !important;
+}
+
+.ant-card-extra {
+  .@{array-base-prefix-cls}-copy {
+    margin-left: 6px;
+  }
+}

@@ -1,0 +1,413 @@
+@import '~@alifd/next/lib/core/index-noreset.scss';
+@import './scss/variable.scss';
+@import './grid.scss';
+@import './animation.scss';
+
+.#{$form-item-cls} {
+  display: flex;
+  margin-bottom: $form-item-m-margin-b + 2;
+  position: relative;
+  line-height: $form-element-medium-height;
+  font-size: $form-element-medium-font-size;
+
+  &-layout-vertical {
+    display: block;
+  }
+
+  &-label-content {
+    min-height: $form-element-medium-height;
+  }
+
+  &-control-content-component {
+    line-height: $form-element-medium-height;
+  }
+
+  &-inset {
+    padding: 0 8px;
+    border: 1px solid $input-border-color;
+    border-radius: $form-element-medium-corner;
+    width: 100%;
+
+    .#{$css-prefix}input {
+      border: none !important;
+      box-shadow: none !important;
+      outline: none;
+    }
+  }
+
+  &-bordered-none:not(.#{$form-item-cls}-inset) {
+    .#{$css-prefix}input {
+      border: none !important;
+      box-shadow: none !important;
+      outline: none;
+    }
+  }
+}
+
+.#{$form-item-cls}-label {
+  position: relative;
+  display: flex;
+  &-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &-tooltip {
+    cursor: help;
+
+    .#{$form-item-cls}-colon {
+      display: flex;
+    }
+
+    * {
+      cursor: help;
+    }
+
+    &-colon {
+      cursor: help;
+    }
+
+    label {
+      border-bottom: 1px dashed currentColor;
+    }
+  }
+}
+
+.#{$form-item-cls}-label label {
+  cursor: text;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.#{$form-item-cls}-label-align-left {
+  > .#{$form-item-cls}-label {
+    justify-content: flex-start;
+  }
+}
+
+.#{$form-item-cls}-label-align-right {
+  > .#{$form-item-cls}-label {
+    justify-content: flex-end;
+  }
+}
+
+.#{$form-item-cls}-label-wrap {
+  .#{$form-item-cls}-label {
+    label {
+      white-space: pre-line;
+      word-break: break-all;
+    }
+  }
+}
+
+.#{$form-item-cls}-feedback-layout-terse {
+  margin-bottom: 8px;
+
+  &.#{$form-item-cls}-feedback-has-text:not(.#{$form-item-cls}-inset) {
+    margin-bottom: 0;
+  }
+}
+
+.#{$form-item-cls}-feedback-layout-loose {
+  margin-bottom: $form-item-m-margin-b + 4;
+
+  &.#{$form-item-cls}-feedback-has-text:not(.#{$form-item-cls}-inset) {
+    margin-bottom: 0;
+  }
+}
+
+.#{$form-item-cls}-feedback-layout-none {
+  margin-bottom: 0px;
+
+  &.#{$form-item-cls}-feedback-has-text:not(.#{$form-item-cls}-inset) {
+    margin-bottom: 0;
+  }
+}
+
+.#{$form-item-cls}-control {
+  flex: 1;
+  max-width: 100%;
+
+  .#{$form-item-cls}-control-content {
+    display: flex;
+
+    .#{$form-item-cls}-control-content-component {
+      width: 100%;
+      min-height: $form-element-medium-height;
+      line-height: $form-element-medium-height;
+
+      &-has-feedback-icon {
+        flex: 1;
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        .#{$css-prefix}input {
+          height: 100%;
+          border: none !important;
+          box-shadow: none !important;
+          outline: none;
+
+          .#{$css-prefix}input-control {
+            margin-right: 0;
+            padding-right: 0;
+
+            .#{$css-prefix}icon {
+              display: none;
+            }
+
+            .#{$css-prefix}input-hint-wrap {
+              .#{$css-prefix}icon {
+                display: block;
+              }
+            }
+          }
+        }
+      }
+
+      .#{$css-prefix}range {
+        height: 100%;
+        padding-left: 2px;
+      }
+
+      .#{$css-prefix}transfer {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .#{$form-item-cls}-addon-before {
+      margin-right: 8px;
+      display: inline-flex;
+      align-items: center;
+      min-height: $form-element-medium-height;
+      flex-shrink: 0;
+    }
+
+    .#{$form-item-cls}-addon-after {
+      margin-left: 8px;
+      display: inline-flex;
+      align-items: center;
+      min-height: $form-element-medium-height;
+      flex-shrink: 0;
+    }
+  }
+}
+
+.#{$form-item-cls}-size-small {
+  font-size: $form-element-small-font-size;
+  line-height: $form-element-small-height;
+
+  .#{$form-item-cls}-label-content {
+    min-height: $form-element-small-height;
+  }
+
+  .#{$form-item-cls}-control-content {
+    .#{$form-item-cls}-control-content-component {
+      line-height: $form-element-small-height;
+      min-height: $form-element-small-height;
+    }
+
+    .#{$form-item-cls}-addon-before {
+      min-height: $form-element-small-height;
+    }
+
+    .#{$form-item-cls}-addon-after {
+      min-height: $form-element-small-height;
+    }
+  }
+
+  &-inset {
+    border-radius: $form-element-small-corner;
+  }
+
+  &.#{$form-item-cls}-feedback-layout-terse {
+    margin-bottom: 8px;
+
+    &.#{$form-item-cls}-feedback-has-text:not(.#{$form-item-cls}-inset) {
+      margin-bottom: 0;
+    }
+  }
+
+  &.#{$form-item-cls}-feedback-layout-loose {
+    margin-bottom: $form-item-s-margin-b + 8;
+
+    &.#{$form-item-cls}-feedback-has-text:not(.#{$form-item-cls}-inset) {
+      margin-bottom: 0;
+    }
+  }
+
+  .#{$form-item-cls}-help,
+  .#{$form-item-cls}-extra {
+    min-height: $form-element-small-font-size + 2;
+  }
+
+  .#{$form-item-cls}-control-content {
+    min-height: $form-element-small-height;
+  }
+
+  .#{$form-item-cls}-label > label {
+    height: $form-element-small-height;
+  }
+}
+
+.#{$form-item-cls}-size-large {
+  font-size: $form-element-large-font-size;
+  line-height: $form-element-large-height;
+
+  .#{$form-item-cls}-label-content {
+    min-height: $form-element-large-height;
+  }
+
+  .#{$form-item-cls}-control-content {
+    .#{$form-item-cls}-control-content-component {
+      line-height: $form-element-large-height;
+      min-height: $form-element-large-height;
+    }
+
+    .#{$form-item-cls}-addon-before {
+      min-height: $form-element-large-height;
+    }
+
+    .#{$form-item-cls}-addon-after {
+      min-height: $form-element-large-height;
+    }
+  }
+
+  &-inset {
+    border-radius: $form-element-large-corner;
+  }
+
+  .#{$form-item-cls}-help,
+  .#{$form-item-cls}-extra {
+    min-height: $form-element-large-font-size + 2;
+  }
+
+  &.#{$form-item-cls}-feedback-layout-loose {
+    margin-bottom: $form-item-l-margin-b;
+
+    &.#{$form-item-cls}-feedback-has-text:not(.#{$form-item-cls}-inset) {
+      margin-bottom: 0;
+    }
+  }
+
+  .#{$form-item-cls}-control-content {
+    min-height: $form-element-large-height;
+  }
+
+  .#{$form-item-cls}-label > label {
+    height: $form-element-large-height;
+  }
+}
+
+.#{$form-item-cls}-feedback-layout-popover {
+  margin-bottom: 8px;
+}
+
+.#{$form-item-cls}-label-tooltip-icon {
+  margin-left: 4px;
+  color: #00000073;
+  cursor: pointer;
+  max-height: $form-element-medium-height;
+}
+
+.#{$form-item-cls}-control-align-left {
+  .#{$form-item-cls}-control-content {
+    justify-content: flex-start;
+  }
+}
+
+.#{$form-item-cls}-control-align-right {
+  .#{$form-item-cls}-control-content {
+    justify-content: flex-end;
+  }
+}
+
+.#{$form-item-cls}-control-wrap {
+  .#{$form-item-cls}-control {
+    white-space: pre-line;
+  }
+}
+
+.#{$form-item-cls}-asterisk {
+  color: $form-error-color;
+  margin-right: 4px;
+  display: inline-block;
+  font-family: SimSun, sans-serif;
+}
+
+.#{$form-item-cls}-colon {
+  margin-left: 2px;
+  margin-right: 8px;
+}
+
+.#{$form-item-cls}-help,
+.#{$form-item-cls}-extra {
+  clear: both;
+  line-height: $form-item-m-margin-b + 4;
+  min-height: $form-item-m-margin-b;
+  color: rgba(0, 0, 0, 0.45);
+  transition: color 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+  padding-top: 0px;
+}
+
+.#{$form-item-cls}-fullness {
+  > .#{$form-item-cls}-control {
+    > .#{$form-item-cls}-control-content {
+      > .#{$form-item-cls}-control-content-component {
+        > *:first-child:not(.#{$css-prefix}switch):not(.#{$css-prefix}icon):not(.#{$css-prefix}formily-icon):not(.anticon):not(.#{$css-prefix}btn-text) {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.#{$form-item-cls}-control-content-component-has-feedback-icon {
+  border-radius: 2px;
+  border: 1px solid $input-border-color;
+  transition: all 0.3s;
+  touch-action: manipulation;
+  outline: none;
+  padding-right: 8px;
+
+  .#{$css-prefix}input {
+    border: none !important;
+  }
+
+  .#{$css-prefix}range-picker-trigger {
+    border: none !important;
+  }
+
+  .#{$form-item-cls}-feedback-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: -2px;
+    padding-left: 2px;
+
+    .anticon {
+      display: inline-block;
+      color: inherit;
+      font-style: normal;
+      font-size: $form-element-medium-font-size;
+      line-height: 0;
+      text-align: center;
+      text-transform: none;
+      vertical-align: -0.125em;
+      text-rendering: optimizeLegibility;
+    }
+  }
+}
+
+.#{$form-item-cls}-error-help {
+  color: $form-error-color;
+}
+
+.#{$form-item-cls}-warning-help {
+  color: $form-warning-color;
+}
+
+.#{$form-item-cls}-success-help {
+  color: $form-success-color;
+}

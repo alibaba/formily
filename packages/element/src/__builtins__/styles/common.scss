@@ -1,0 +1,15 @@
+$formily-prefix: 'formily-element';
+$namespace: 'el';
+@import '~element-ui/packages/theme-chalk/src/common/var.scss';
+
+@mixin active {
+  border-color: $--color-primary;
+  outline: 0;
+  border-right-width: $--border-width-base !important;
+}
+
+@mixin hover {
+  border-color: $--border-color-hover;
+  outline: 0;
+  border-right-width: $--border-width-base !important;
+}

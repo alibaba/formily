@@ -1,0 +1,87 @@
+@root-entry-name: 'default';
+@import (reference) '~antd/es/style/themes/index.less';
+
+@array-base-prefix-cls: ~'@{ant-prefix}-formily-array-base';
+
+.@{array-base-prefix-cls}-remove,
+.@{array-base-prefix-cls}-copy {
+  transition: all 0.25s ease-in-out;
+  color: @text-color;
+  font-size: 14px;
+  margin-left: 6px;
+  padding: 0;
+  border: none;
+  width: auto;
+  height: auto;
+
+  &:hover {
+    color: @primary-5;
+  }
+
+  &-disabled {
+    color: @disabled-color;
+    cursor: not-allowed !important;
+    &:hover {
+      color: @disabled-color;
+    }
+  }
+}
+
+.@{array-base-prefix-cls}-sort-handle {
+  cursor: move;
+  color: #888 !important;
+  // overrid iconfont.less .anticon[tabindex] cursor
+  &.anticon[tabindex] {
+    cursor: move;
+  }
+}
+
+.@{array-base-prefix-cls}-addition {
+  transition: all 0.25s ease-in-out;
+}
+
+.@{array-base-prefix-cls}-move-down {
+  transition: all 0.25s ease-in-out;
+  color: @text-color;
+  font-size: 14px;
+  margin-left: 6px;
+  padding: 0;
+  border: none;
+  width: auto;
+  height: auto;
+
+  &:hover {
+    color: @primary-5;
+  }
+
+  &-disabled {
+    color: @disabled-color;
+    cursor: not-allowed !important;
+    &:hover {
+      color: @disabled-color;
+    }
+  }
+}
+
+.@{array-base-prefix-cls}-move-up {
+  transition: all 0.25s ease-in-out;
+  color: @text-color;
+  font-size: 14px;
+  margin-left: 6px;
+  padding: 0;
+  border: none;
+  width: auto;
+  height: auto;
+
+  &:hover {
+    color: @primary-5;
+  }
+
+  &-disabled {
+    color: @disabled-color;
+    cursor: not-allowed !important;
+    &:hover {
+      color: @disabled-color;
+    }
+  }
+}

@@ -1,0 +1,30 @@
+.contri-list {
+  display: flex;
+  flex-wrap: wrap;
+
+  .contri-user {
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    height: 120px;
+    align-items: center;
+    justify-content: center;
+
+    &-avatar {
+      display: block;
+      width: 60px;
+      height: 60px;
+      border-radius: 60px;
+      overflow: hidden;
+      transition: all 0.15s ease-in-out;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    &-info {
+      text-align: center;
+    }
+  }
+}

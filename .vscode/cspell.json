@@ -1,0 +1,27 @@
+{
+  "version": "0.1",
+  "language": "en",
+  "ignoreWords": [
+    "autorun",
+    "mutators",
+    "Formily",
+    "formily",
+    "untrack",
+    "untracker",
+    "untracked",
+    "Untracking",
+    "Unmount",
+    "octokit",
+    "repos",
+    "alibaba",
+    "Lifecycles",
+    "antd",
+    "Antd",
+    "alifd",
+    "Mixins",
+    "builtins",
+    "cascader",
+    "Cascader",
+    "middlewares"
+  ]
+}

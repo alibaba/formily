@@ -1,0 +1,21 @@
+@import '../__builtins__/styles/common.scss';
+
+.#{$formily-prefix}-form-drawer {
+  .el-drawer__body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-body {
+    flex: 1;
+    overflow: auto;
+    padding: $--dialog-padding-primary;
+  }
+
+  &-footer {
+    padding: $--dialog-padding-primary;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}

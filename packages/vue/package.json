@@ -1,0 +1,71 @@
+{
+  "name": "@formily/vue",
+  "version": "2.3.1",
+  "license": "MIT",
+  "main": "lib",
+  "module": "esm",
+  "umd:main": "dist/formily.vue.umd.production.js",
+  "unpkg": "dist/formily.vue.umd.production.js",
+  "jsdelivr": "dist/formily.vue.umd.production.js",
+  "jsnext:main": "esm",
+  "types": "type-artefacts/cur/index.d.ts",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "scripts": {
+    "postinstall": "node ./scripts/postinstall.js",
+    "start": "vuepress dev docs",
+    "build": "rimraf -rf lib esm dist type-artefacts && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:types",
+    "build:cjs": "tsc --project tsconfig.build.json",
+    "build:esm": "tsc --project tsconfig.build.json --module es2015 --outDir esm",
+    "build:umd": "rollup --config",
+    "build:types": "npm run build:types-vue2 && npm run build:types-vue3 && rimraf type-artefacts/**/*.js type-artefacts/**/**/*.js",
+    "build:types-vue2": "tsc --project tsconfig.types.json --outDir type-artefacts/v2",
+    "build:types-vue3": "npx vue-demi-switch 3 vue3 && tsc --project tsconfig.types.json --outDir type-artefacts/v3 && tsc --project tsconfig.types.json --outDir type-artefacts/cur && npx vue-demi-switch 2",
+    "build:docs": "vuepress build docs"
+  },
+  "bin": {
+    "formily-vue-fix": "bin/formily-vue-fix.js",
+    "formily-vue-switch": "bin/formily-vue-switch.js"
+  },
+  "devDependencies": {
+    "@ant-design/icons": "^2.1.1",
+    "@ant-design/icons-vue": "^2.0.0",
+    "@vue/composition-api": "^1.0.0-rc.7",
+    "@vuepress-dumi/vuepress-plugin-dumi-previewer": "0.3.3",
+    "@vuepress-dumi/vuepress-theme-dumi": "0.3.3",
+    "@vuepress/plugin-back-to-top": "^1.8.2",
+    "@vuepress/plugin-medium-zoom": "^1.8.2",
+    "ant-design-vue": "^1.7.3",
+    "codesandbox": "^2.2.3",
+    "core-js": "^2.4.0",
+    "vue": "^2.6.12",
+    "vue3": "npm:vue@3",
+    "vuepress": "^1.8.2",
+    "vuepress-plugin-typescript": "^0.3.1"
+  },
+  "dependencies": {
+    "@formily/core": "2.3.1",
+    "@formily/json-schema": "2.3.1",
+    "@formily/reactive": "2.3.1",
+    "@formily/reactive-vue": "2.3.1",
+    "@formily/shared": "2.3.1",
+    "@formily/validator": "2.3.1",
+    "fs-extra": "^10.0.0",
+    "vue-demi": "^0.13.6",
+    "vue-frag": "^1.1.4"
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "^1.0.0-beta.1",
+    "vue": "^2.6.0 || >=3.0.0-rc.0"
+  },
+  "peerDependenciesMeta": {
+    "@vue/composition-api": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "ac79c196ae9324889aca5e0501146f9b37b04283"
+}

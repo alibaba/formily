@@ -1,0 +1,79 @@
+{
+  "name": "@formily/antd",
+  "version": "2.3.1",
+  "license": "MIT",
+  "main": "lib",
+  "module": "esm",
+  "umd:main": "dist/formily.antd.umd.production.js",
+  "unpkg": "dist/formily.antd.umd.production.js",
+  "jsdelivr": "dist/formily.antd.umd.production.js",
+  "jsnext:main": "esm",
+  "sideEffects": [
+    "dist/*",
+    "esm/*.js",
+    "lib/*.js",
+    "src/*.ts",
+    "*.less",
+    "**/*/style.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "types": "esm/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "scripts": {
+    "start": "dumi dev",
+    "build": "rimraf -rf lib esm dist && npm run create:style && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:style",
+    "create:style": "ts-node create-style",
+    "build:style": "ts-node build-style",
+    "build:cjs": "tsc --project tsconfig.build.json",
+    "build:esm": "tsc --project tsconfig.build.json --module es2015 --outDir esm",
+    "build:umd": "rollup --config",
+    "build:docs": "dumi build"
+  },
+  "devDependencies": {
+    "@umijs/plugin-sass": "^1.1.1",
+    "dumi": "^1.1.0-rc.8"
+  },
+  "peerDependencies": {
+    "@ant-design/icons": "4.x",
+    "@types/react": ">=16.8.0",
+    "@types/react-dom": ">=16.8.0",
+    "antd": "<=4.22.8",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "react-is": ">=16.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.0.0",
+    "@dnd-kit/sortable": "^7.0.0",
+    "@formily/core": "2.3.1",
+    "@formily/grid": "2.3.1",
+    "@formily/json-schema": "2.3.1",
+    "@formily/react": "2.3.1",
+    "@formily/reactive": "2.3.1",
+    "@formily/reactive-react": "2.3.1",
+    "@formily/shared": "2.3.1",
+    "classnames": "^2.2.6",
+    "react-sticky-box": "^0.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "ac79c196ae9324889aca5e0501146f9b37b04283"
+}

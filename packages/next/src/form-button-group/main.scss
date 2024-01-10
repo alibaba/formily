@@ -1,0 +1,17 @@
+@import '~@alifd/next/lib/core/index-noreset.scss';
+
+$btn-group-prefix-cls: '#{$css-prefix}formily-button-group';
+
+.#{$btn-group-prefix-cls}-sticky {
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  z-index: 999;
+
+  &-inner {
+    display: flex;
+
+    .#{$css-prefix}formily-item {
+      flex: 2;
+    }
+  }
+}
