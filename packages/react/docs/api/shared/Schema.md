@@ -326,7 +326,7 @@ interface toJSON {
 
 #### Description
 
-Convert the current Schema object into a Formily field model attribute, refer to the mapping relationship [attribute](#attribute)
+Convert the current Schema object into a Formily field model attribute, refer to the mapping relationship [attribute](#attributes)
 
 #### Signature
 
@@ -561,7 +561,7 @@ Schema.enablePolyfills(['1.0'])
 
 #### Description
 
-ISchema is a normal JSON data, and at the same time it is JSON data following the Schema [Attribute](#Attribute) specification
+ISchema is a normal JSON data, and at the same time it is JSON data following the Schema [Attribute](#attributes) specification
 
 ### SchemaTypes
 
