@@ -266,6 +266,62 @@ test('patchSchemaCompile demand initialized', () => {
     dataSource: [22],
   })
 })
+
+test('patchSchemaCompile x-compile-omitted', () => {
+  const targetState = {
+    title: '',
+    validator: [],
+  }
+  patchSchemaCompile(
+    targetState as any,
+    {
+      title: '132',
+      'x-validator': [
+        {
+          remoteCheckUniq: '{{field.value}}',
+        },
+      ],
+      version: '1.2.3',
+    },
+    {
+      field: {
+        value: 888,
+      },
+    }
+  )
+  expect(targetState).toEqual({
+    title: '132',
+    validator: [{ remoteCheckUniq: 888 }],
+  })
+
+  const targetOmitState = {
+    title: '',
+    validator: [],
+  }
+  patchSchemaCompile(
+    targetOmitState as any,
+    {
+      title: '132',
+      'x-compile-omitted': ['x-validator'],
+      'x-validator': [
+        {
+          remoteCheckUniq: '{{field.value}}',
+        },
+      ],
+      version: '1.2.3',
+    },
+    {
+      field: {
+        value: 888,
+      },
+    }
+  )
+  expect(targetOmitState).toEqual({
+    title: '132',
+    validator: [{ remoteCheckUniq: '{{field.value}}' }],
+  })
+})
+
 test('registerCompiler', () => {
   registerCompiler(() => {
     return 'compiled'
