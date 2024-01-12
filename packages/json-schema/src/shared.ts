@@ -101,7 +101,11 @@ export const traverseSchema = (
   visitor: (value: any, path: any[], omitCompile?: boolean) => void
 ) => {
   if (schema['x-validator'] !== undefined) {
-    visitor(schema['x-validator'], ['x-validator'])
+    visitor(
+      schema['x-validator'],
+      ['x-validator'],
+      schema['x-compile-omitted']?.includes('x-validator')
+    )
   }
   const seenObjects = []
   const root = schema
