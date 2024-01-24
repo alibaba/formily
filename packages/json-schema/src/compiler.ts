@@ -124,9 +124,11 @@ export const patchSchemaCompile = (
     })
     if (compiled === undefined) return
     if (demand) {
-      if (collected || !targetState.initialized) {
-        patchStateFormSchema(targetState, path, compiled)
-      }
+      untracked(() => {
+        if (collected || !targetState.initialized) {
+          patchStateFormSchema(targetState, path, compiled)
+        }
+      })
     } else {
       patchStateFormSchema(targetState, path, compiled)
     }
