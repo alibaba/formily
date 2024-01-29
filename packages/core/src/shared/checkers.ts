@@ -1,5 +1,5 @@
 import { isFn } from '@formily/shared'
-import { DataField } from '..'
+import { DataField, JSXComponent } from '..'
 import {
   Form,
   Field,
@@ -20,27 +20,48 @@ export const isForm = (node: any): node is Form => {
   return node instanceof Form
 }
 
-export const isField = (node: any): node is Field => {
-  return node instanceof Field
-}
-
 export const isGeneralField = (node: any): node is GeneralField => {
   return node instanceof Field || node instanceof VoidField
 }
 
-export const isArrayField = (node: any): node is ArrayField => {
+export const isField = <
+  Decorator extends JSXComponent = any,
+  Component extends JSXComponent = any,
+  TextType = any,
+  ValueType = any
+>(
+  node: any
+): node is Field<Decorator, Component, TextType, ValueType> => {
+  return node instanceof Field
+}
+
+export const isArrayField = <
+  Decorator extends JSXComponent = any,
+  Component extends JSXComponent = any
+>(
+  node: any
+): node is ArrayField<Decorator, Component> => {
   return node instanceof ArrayField
 }
 
-export const isObjectField = (node: any): node is ObjectField => {
+export const isObjectField = <
+  Decorator extends JSXComponent = any,
+  Component extends JSXComponent = any
+>(
+  node: any
+): node is ObjectField<Decorator, Component> => {
   return node instanceof ObjectField
 }
 
-export const isVoidField = (node: any): node is VoidField => {
+export const isVoidField = <Decorator = any, Component = any, TextType = any>(
+  node: any
+): node is VoidField<Decorator, Component, TextType> => {
   return node instanceof VoidField
 }
 
-export const isFormState = (state: any): state is IFormState => {
+export const isFormState = <T extends Record<any, any> = any>(
+  state: any
+): state is IFormState<T> => {
   if (isFn(state?.initialize)) return false
   return state?.displayName === 'Form'
 }
