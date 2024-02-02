@@ -54,7 +54,7 @@
     "@formily/shared": "2.3.1",
     "@formily/vue": "2.3.1",
     "portal-vue": "^2.1.7",
-    "vue-demi": "^0.13.6",
+    "vue-demi": ">=0.13.6",
     "vue-slicksort": "^1.2.0"
   },
   "peerDependencies": {
