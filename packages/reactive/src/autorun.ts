@@ -19,7 +19,10 @@ interface IValue {
 export const autorun = (tracker: Reaction, name = 'AutoRun') => {
   const reaction: Reaction = () => {
     if (!isFn(tracker)) return
-    if (reaction._boundary > 0) return
+
+    const updateKey = reaction._boundary.get(reaction._updateTarget)
+    if (updateKey && updateKey.has(reaction._updateKey)) return
+
     if (ReactionStack.indexOf(reaction) === -1) {
       releaseBindingReactions(reaction)
       try {
@@ -28,9 +31,22 @@ export const autorun = (tracker: Reaction, name = 'AutoRun') => {
         tracker()
       } finally {
         ReactionStack.pop()
-        reaction._boundary++
+
+        const key = reaction._updateKey
+        const target = reaction._updateTarget
+        if (key) {
+          const keys = reaction._boundary.get(target) || new Set([])
+          keys.add(key)
+          reaction._boundary.set(target, keys)
+        }
+
         batchEnd()
-        reaction._boundary = 0
+
+        const keys = reaction._boundary.get(target)
+        if (keys) {
+          keys.delete(key)
+        }
+
         reaction._memos.cursor = 0
         reaction._effects.cursor = 0
       }
@@ -46,10 +62,12 @@ export const autorun = (tracker: Reaction, name = 'AutoRun') => {
       cursor: 0,
     }
   }
-  reaction._boundary = 0
+
+  reaction._boundary = new Map()
   reaction._name = name
   cleanRefs()
   reaction()
+
   return () => {
     disposeBindingReactions(reaction)
     disposeEffects(reaction)

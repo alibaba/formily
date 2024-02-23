@@ -1,4 +1,4 @@
-import { Tracker, observable } from '../'
+import { Tracker, observable, batch } from '../'
 
 test('base tracker', () => {
   const obs = observable<any>({})
@@ -16,6 +16,13 @@ test('base tracker', () => {
   expect(fn).nthCalledWith(1, undefined)
   expect(fn).nthCalledWith(2, 123)
   tracker.dispose()
+})
+
+test('track argument is not a function', () => {
+  const scheduler = () => {}
+  const tracker = new Tracker(scheduler)
+
+  tracker.track({})
 })
 
 test('nested tracker', () => {
@@ -90,4 +97,155 @@ test('shared scheduler with multi tracker(mock react strict mode)', () => {
 
   expect(scheduler1).toBeCalledTimes(1)
   expect(scheduler2).toBeCalledTimes(0)
+})
+
+test('multiple source update', () => {
+  const obs = observable<any>({})
+
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+
+  const view1 = () => {
+    const A = obs.A
+    const B = obs.B
+    if (A !== undefined && B !== undefined) {
+      obs.C = A / B
+      fn1()
+    }
+  }
+  const scheduler1 = () => {
+    tracker1.track(view1)
+  }
+
+  const tracker1 = new Tracker(scheduler1)
+
+  const view2 = () => {
+    const C = obs.C
+    const B = obs.B
+    if (C !== undefined && B !== undefined) {
+      obs.D = C * B
+      fn2()
+    }
+  }
+  const scheduler2 = () => {
+    tracker2.track(view2)
+  }
+
+  const tracker2 = new Tracker(scheduler2)
+
+  tracker1.track(view1)
+  tracker2.track(view2)
+
+  obs.A = 1
+  obs.B = 2
+
+  expect(fn1).toBeCalledTimes(1)
+  expect(fn2).toBeCalledTimes(1)
+
+  tracker1.dispose()
+  tracker2.dispose()
+})
+
+test('repeat execute tracker cause by deep indirect dependency', () => {
+  const obs: any = observable({ aa: 1, bb: 1, cc: 1 })
+
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+  const fn3 = jest.fn()
+
+  const view1 = () => {
+    fn1((obs.aa = obs.bb + obs.cc))
+  }
+  const scheduler1 = () => {
+    tracker1.track(view1)
+  }
+
+  const tracker1 = new Tracker(scheduler1)
+
+  const view2 = () => {
+    fn2((obs.bb = obs.aa + obs.cc))
+  }
+  const scheduler2 = () => {
+    tracker2.track(view2)
+  }
+
+  const tracker2 = new Tracker(scheduler2)
+
+  const view3 = () => {
+    fn3((obs.cc = obs.aa + obs.bb))
+  }
+  const scheduler3 = () => {
+    tracker3.track(view3)
+  }
+
+  const tracker3 = new Tracker(scheduler3)
+
+  tracker1.track(view1)
+  tracker2.track(view2)
+  tracker3.track(view3)
+
+  expect(fn1).toBeCalledTimes(4)
+  expect(fn2).toBeCalledTimes(4)
+  expect(fn3).toBeCalledTimes(3)
+
+  tracker1.dispose()
+  tracker2.dispose()
+  tracker3.dispose()
+})
+
+test('batch execute tracker cause by deep indirect dependency', () => {
+  const obs: any = observable({ aa: 1, bb: 1, cc: 1 })
+
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+  const fn3 = jest.fn()
+
+  const view1 = () => {
+    fn1((obs.aa = obs.bb + obs.cc))
+  }
+  const scheduler1 = () => {
+    tracker1.track(view1)
+  }
+
+  const tracker1 = new Tracker(scheduler1)
+
+  const view2 = () => {
+    fn2((obs.bb = obs.aa + obs.cc))
+  }
+  const scheduler2 = () => {
+    tracker2.track(view2)
+  }
+
+  const tracker2 = new Tracker(scheduler2)
+
+  const view3 = () => {
+    fn3((obs.cc = obs.aa + obs.bb))
+  }
+  const scheduler3 = () => {
+    tracker3.track(view3)
+  }
+
+  const tracker3 = new Tracker(scheduler3)
+
+  tracker1.track(view1)
+  tracker2.track(view2)
+  tracker3.track(view3)
+
+  expect(fn1).toBeCalledTimes(4)
+  expect(fn2).toBeCalledTimes(4)
+  expect(fn3).toBeCalledTimes(3)
+
+  fn1.mockClear()
+  fn2.mockClear()
+  fn3.mockClear()
+
+  batch(() => {
+    obs.aa = 100
+    obs.bb = 100
+    obs.cc = 100
+  })
+
+  expect(fn1).toBeCalledTimes(2)
+  expect(fn2).toBeCalledTimes(2)
+  expect(fn3).toBeCalledTimes(2)
 })
