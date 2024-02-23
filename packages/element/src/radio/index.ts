@@ -26,7 +26,7 @@ export type RadioGroupProps = ElRadioGroupProps & {
       })
     | string
   )[]
-  optionType: 'defalt' | 'button'
+  optionType: 'default' | 'button'
 }
 
 export type RadioProps = ElRadioProps
