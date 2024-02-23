@@ -514,6 +514,7 @@ test('array field remove memo leak', async () => {
   expect(initialValuesChange).toBeCalledTimes(0)
 })
 
+// add sandbox https://codesandbox.io/p/devbox/lingering-violet-jwr565
 test('nest array remove', async () => {
   const form = attach(createForm())
 
@@ -588,9 +589,81 @@ test('nest array remove', async () => {
   expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
   await metrics.remove(1)
   expect(form.fields['metrics.0.content.0.attr']).not.toBeUndefined()
+  // TODO!! 测试不通过
   expect(
     form.initialValues.metrics?.[1]?.content?.[0]?.attr
   ).not.toBeUndefined()
+})
+
+test('nest array remove for #4024', () => {
+  const form = attach(createForm())
+  const arr1 = attach(
+    form.createArrayField({
+      name: 'aa',
+      initialValue: [{}],
+    })
+  )
+
+  attach(
+    form.createArrayField({
+      name: 'bb',
+      basePath: 'aa.0',
+      initialValue: [{}],
+    })
+  )
+
+  attach(
+    form.createField({
+      name: 'cc',
+      basePath: 'aa.0.bb.0',
+      initialValue: true,
+    })
+  )
+
+  expect(form.initialValues).toEqual({
+    aa: [{ bb: [{ cc: true }] }],
+  })
+
+  // 模拟两次 antd/ArrayBase.Addation 点击
+  attach(
+    form.createField({
+      name: 'cc',
+      basePath: 'aa.0.bb.1',
+      initialValue: true,
+    })
+  )
+  attach(
+    form.createField({
+      name: 'cc',
+      basePath: 'aa.0.bb.2',
+      initialValue: true,
+    })
+  )
+  // 符合 formily DevTools 表现
+  expect(form.initialValues).toEqual({
+    aa: [{ bb: [{ cc: true }, { cc: true }, { cc: true }] }],
+  })
+  // 模拟 antd/ArrayBase.Remove 点击
+  arr1.remove(0)
+
+  // 模拟一次外部数组点击 antd/ArrayBase.Addation 点击
+  attach(
+    form.createArrayField({
+      name: 'bb',
+      basePath: 'aa.0',
+      initialValue: [{}],
+    })
+  )
+  attach(
+    form.createField({
+      name: 'cc',
+      basePath: 'aa.0.bb.0',
+      initialValue: true,
+    })
+  )
+  expect(form.initialValues).toEqual({
+    aa: [{ bb: [{ cc: true }] }],
+  })
 })
 
 test('indexes: nest path need exclude incomplete number', () => {
