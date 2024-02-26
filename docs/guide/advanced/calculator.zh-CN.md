@@ -139,7 +139,7 @@ export default () => {
           x-pattern="readPretty"
           x-reactions={{
             dependencies: ['.projects'],
-            when: '{{$deps.length > 0}}',
+            when: '{{$deps[0].length > 0}}',
             fulfill: {
               state: {
                 value:
@@ -338,7 +338,7 @@ const schema = {
       'x-pattern': 'readPretty',
       'x-reactions': {
         dependencies: ['.projects'],
-        when: '{{$deps.length > 0}}',
+        when: '{{$deps[0].length > 0}}',
         fulfill: {
           state: {
             value:
