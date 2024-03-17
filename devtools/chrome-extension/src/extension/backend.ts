@@ -49,7 +49,14 @@ const send = ({
       source: '@formily-devtools-inject-script',
       type,
       id,
-      graph: form && JSON.stringify(graph),
+      graph:
+        form &&
+        JSON.stringify(graph, (key, value) => {
+          if (typeof value === 'symbol') {
+            return value.toString()
+          }
+          return value
+        }),
     },
     '*'
   )
