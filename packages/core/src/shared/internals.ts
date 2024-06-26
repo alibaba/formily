@@ -903,7 +903,9 @@ export const batchValidate = async (
       LifeCycleTypes.ON_FORM_VALIDATE_FAILED,
       LifeCycleTypes.ON_FIELD_VALIDATE_FAILED
     )
-    throw target.errors
+    if (target.errors.some((item) => FormPath.parse(pattern).match(item.path))) {
+      throw target.errors
+    }
   }
   notify(
     target,
