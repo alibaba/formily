@@ -48,19 +48,21 @@ $array-table-prefix-cls: '#{$css-prefix}formily-array-table';
             color: $form-warning-color;
           }
 
-          min-width: 30px;
-          position: absolute;
-          font-size: 12px;
-          top: 100%;
-          width: 100%;
-          z-index: 1;
-          border-radius: 3px;
-          background-color: #fff;
-          border: 1px solid #eee;
-          padding: 6px 8px;
-          margin-top: 6px;
-          transform: translateY(0);
-          opacity: 1;
+          & {
+            min-width: 30px;
+            position: absolute;
+            font-size: 12px;
+            top: 100%;
+            width: 100%;
+            z-index: 1;
+            border-radius: 3px;
+            background-color: #fff;
+            border: 1px solid #eee;
+            padding: 6px 8px;
+            margin-top: 6px;
+            transform: translateY(0);
+            opacity: 1;
+          }
           &:after {
             content: ' ';
             background-color: #fff;
