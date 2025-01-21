@@ -67,11 +67,6 @@ const Select = observer(
       const fieldRef = useField<Field>()
       const field = fieldRef.value
       const props = attrs as unknown as SelectProps
-      const dataSource: any[] = field?.dataSource?.length
-        ? field.dataSource
-        : props?.options?.length
-        ? props.options
-        : []
       const placeholder = usePlaceholder()
       const getSelected = () => {
         const value = props.value
@@ -86,6 +81,11 @@ const Select = observer(
 
       const getLabels = () => {
         const selected = getSelected()
+        const dataSource: any[] = field?.dataSource?.length
+          ? field.dataSource
+          : props?.options?.length
+          ? props.options
+          : []
         if (!selected.length) {
           return h(
             Tag,
