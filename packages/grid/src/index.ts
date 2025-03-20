@@ -440,7 +440,12 @@ export class Grid<Container extends HTMLElement> {
         }
       })
       const mutationObserver = new ChildListMutationObserver(digest)
-      const resizeObserver = new ResizeObserver(digest)
+      const smoothDigest = () => {
+        requestAnimationFrame(() => {
+          digest()
+        })
+      }
+      const resizeObserver = new ResizeObserver(smoothDigest)
       const dispose = reaction(() => ({ ...this.options }), digest)
       resizeObserver.observe(this.container)
       mutationObserver.observe(this.container, {
