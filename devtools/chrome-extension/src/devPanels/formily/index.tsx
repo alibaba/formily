@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import ReactDOM from 'react-dom'
-import App from '../app'
+import { createRoot } from 'react-dom/client'
+
+import { App } from './app'
 
 const backgroundPageConnection = chrome.runtime.connect({
   name: '@formily-devtools-panel-script',
@@ -46,4 +47,5 @@ const Devtools = () => {
   return <App dataSource={state} />
 }
 
-ReactDOM.render(<Devtools />, document.getElementById('root'))
+const root = createRoot(document.getElementById('root'))
+root.render(<Devtools />)

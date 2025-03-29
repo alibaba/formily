@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
+
 import { LeftPanel } from './components/LeftPanel'
 import { RightPanel } from './components/RightPanel'
-import styled from 'styled-components'
 
-export default styled(({ className, dataSource }) => {
+export const App = ({ dataSource }) => {
   const [selected, select] = useState({
     current: 0,
     key: '',
   })
   return (
-    <div className={className}>
+    <div className="app">
       <LeftPanel
         dataSource={dataSource}
         onSelect={(info) => {
@@ -35,14 +35,4 @@ export default styled(({ className, dataSource }) => {
       />
     </div>
   )
-})`
-  display: flex;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  overflow: hidden;
-  color: #36d4c7;
-  background: #282c34;
-`
+}

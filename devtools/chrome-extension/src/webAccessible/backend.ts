@@ -97,25 +97,33 @@ const HOOK = {
       form,
     })
     let timer = null
-    const task = () => {
-      globalThis.requestIdleCallback((deadline: IIdleDeadline) => {
-        if (this.store[id]) {
-          if (deadline.timeRemaining() < 16) {
-            task()
-          } else {
-            send({
-              type: 'update',
-              id,
-              form,
-            })
-          }
-        }
+    const idleCallback = (deadline: IIdleDeadline) => {
+      const busy = deadline.timeRemaining() === 0
+      if (busy) {
+        globalThis.requestIdleCallback(idleCallback)
+        return
+      }
+
+      const registered = this.store[id]
+
+      if (!registered) {
+        return
+      }
+
+      send({
+        type: 'update',
+        id,
+        form,
       })
     }
+    const emit = () => {
+      globalThis.requestIdleCallback(idleCallback)
+    }
+
     form.subscribe(() => {
       if (!this.hasOpenDevtools) return
       clearTimeout(timer)
-      timer = setTimeout(task, 300)
+      timer = setTimeout(emit, 300)
     })
   },
   update() {

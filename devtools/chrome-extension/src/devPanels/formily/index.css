@@ -1,0 +1,126 @@
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #101114;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #494e5f;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.app {
+  display: flex;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  color: #36d4c7;
+  background: #282c34;
+}
+
+.fieldTree {
+  position: relative;
+  overflow: auto;
+  height: calc(100% - 40px);
+  user-select: none;
+}
+
+.fieldTreeHighlight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: -100%;
+  height: 100%;
+  z-index: 0;
+  &.active {
+    background: #3d424a;
+  }
+}
+.fieldTreeNodeHeader:hover .fieldTreeHighlight {
+  background: #3d424a;
+}
+
+.filedTreeToolBar {
+  border-bottom: 1px solid #3d424a;
+  height: 20px;
+  padding: 10px 10px;
+  padding: 5px;
+  overflow: auto;
+  position: sticky;
+  top: 0;
+  background: #282c34;
+  z-index: 100;
+}
+
+.leftPanel {
+  width: 50%;
+  min-width: 50%;
+}
+
+.rightPanel {
+  border-left: 1px solid #3d424a;
+  flex-grow: 2;
+  overflow: auto;
+  padding: 10px;
+}
+
+.rightPanel .react-json-view {
+  background: none !important;
+  font-size: 12px !important;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.searchBoxInputAddon {
+  padding: 0 5px;
+}
+.searchBoxFormControl {
+  width: 50%;
+  border: none;
+  background: transparent;
+  color: white;
+  outline: none;
+}
+
+.tabs {
+  height: 36px;
+  border-bottom: 1px solid #3d424a;
+  display: flex;
+  line-height: 36px;
+  width: 100%;
+  overflow: scroll;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+.tabs .tabItem {
+  cursor: pointer;
+  transition: 0.15s all ease-in-out;
+  border-right: 1px solid #3d424a;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.tabs .tabItem:hover {
+  background: #1d1f25;
+}
+
+.tabs .tabItem.active {
+  background: #1d1f25;
+}

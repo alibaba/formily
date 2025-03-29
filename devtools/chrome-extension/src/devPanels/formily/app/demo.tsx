@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './index'
+
+import { App } from './index'
+
 const dataSource = [
   {
     '': {

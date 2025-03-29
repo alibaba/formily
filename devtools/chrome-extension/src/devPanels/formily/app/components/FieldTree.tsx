@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
-import styled from 'styled-components'
 import { FormPath, isObj } from '@formily/shared'
-import { Treebeard, decorators } from 'react-treebeard'
+import React, { useEffect, useRef, useState } from 'react'
+import { decorators, Treebeard } from 'react-treebeard'
+
 import * as filters from './filter'
 import SearchBox from './SearchBox'
 
@@ -159,7 +159,7 @@ const Header = (props) => {
   const title = node.data?.title ? node.data.title : ''
   return (
     <div
-      className="node-header"
+      className="fieldTreeNodeHeader"
       style={style.base}
       onClick={() => {
         node.toggled = false
@@ -182,10 +182,10 @@ const Header = (props) => {
           {node.name}
         </span>
         <span style={{ zIndex: 1, position: 'absolute', right: 12 }}>
-           {isObj(title) ? ((title as any).title ?? '') : title}
+          {isObj(title) ? (title as any).title ?? '' : title}
         </span>
         <div
-          className={`highlight ${node.active ? 'active' : ''}`}
+          className={`fieldTreeHighlight ${node.active ? 'active' : ''}`}
           style={{ transition: '.15s all ease-in' }}
         ></div>
       </div>
@@ -193,19 +193,11 @@ const Header = (props) => {
   )
 }
 
-const ToolBar = styled.div`
-  border-bottom: 1px solid #3d424a;
-  height: 20px;
-  padding: 10px 10px;
-  padding: 5px;
-  overflow: auto;
-  position: sticky;
-  top: 0;
-  background: #282c34;
-  z-index: 100;
-`
+const ToolBar = ({ children }) => {
+  return <div className="fieldTreeToolBar">{children}</div>
+}
 
-export const FieldTree = styled(({ className, dataSource, onSelect }) => {
+export const FieldTree = ({ dataSource, onSelect }) => {
   const allDataRef = useRef(createTree(dataSource))
   const cursor = useRef(allDataRef.current)
   const [keyword, setKeyword] = useState('')
@@ -244,7 +236,7 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
   }, [dataSource])
 
   return (
-    <div className={className}>
+    <div className="fieldTree">
       <ToolBar>
         <SearchBox onSearch={onSearch} />
       </ToolBar>
@@ -260,23 +252,4 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
       />
     </div>
   )
-})`
-  position: relative;
-  overflow: auto;
-  height: calc(100% - 40px);
-  user-select: none;
-  .highlight {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: -100%;
-    height: 100%;
-    z-index: 0;
-    &.active {
-      background: #3d424a;
-    }
-  }
-  .node-header:hover .highlight {
-    background: #3d424a;
-  }
-`
+}

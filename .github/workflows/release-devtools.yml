@@ -1,0 +1,62 @@
+name: Release Devtools
+on:
+  workflow_dispatch:
+    inputs:
+      remote_debug:
+        description: 'Enable remote debug session?'
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DEVTOOLS_ZIP_PATH: devtools/chrome-extension/build/chrome-mv3-prod.zip
+      DEVTOOLS_ARTIFACT_NAME: formily-devtools
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Start debug session (when enabled)
+        if: ${{ inputs.remote_debug }}
+        uses: lhotari/action-upterm@v1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+          cache: yarn
+
+      - name: Verify environment
+        run: |
+          node --version
+          yarn -v
+
+      - name: Maintain debug session (when enabled)
+        run: |
+          sleep 3600
+        if: ${{ inputs.remote_debug }}
+
+      - name: Install dependencies
+        run: |
+          yarn install --ignore-engines
+
+      - name: Build packages
+        run: |
+          yarn build
+        env:
+          # avoid core dump, see: https://github.com/parcel-bundler/parcel/issues/10081
+          PARCEL_WORKER_BACKEND: process
+
+      - name: Validate artifact
+        run: test -f ${{ env.DEVTOOLS_ZIP_PATH }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.DEVTOOLS_ARTIFACT_NAME }}
+          path: ${{ env.DEVTOOLS_ZIP_PATH }}

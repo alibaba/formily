@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Tabs } from './Tabs'
-import { FieldTree } from './FieldTree'
-import styled from 'styled-components'
 
-export const LeftPanel = styled(({ className, dataSource, onSelect }) => {
+import { FieldTree } from './FieldTree'
+import { Tabs } from './Tabs'
+
+export const LeftPanel = ({ dataSource, onSelect }) => {
   const [current, setCurrent] = useState(0)
   return (
-    <div className={className}>
+    <div className="leftPanel">
       <Tabs
         dataSource={dataSource}
         current={current}
@@ -31,7 +31,4 @@ export const LeftPanel = styled(({ className, dataSource, onSelect }) => {
       />
     </div>
   )
-})`
-  width: 50%;
-  min-width: 50%;
-`
+}

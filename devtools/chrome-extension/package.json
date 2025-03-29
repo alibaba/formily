@@ -1,35 +1,58 @@
 {
   "name": "@formily/chrome-extension",
-  "version": "2.3.2",
+  "version": "3.0.0",
+  "displayName": "Formily DevTools",
+  "description": "Formily DevTools for debugging application's state changes.",
   "private": true,
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/formily.git"
   },
-  "types": "esm/index.d.ts",
   "bugs": {
     "url": "https://github.com/alibaba/formily/issues"
   },
   "homepage": "https://github.com/alibaba/formily#readme",
-  "engines": {
-    "npm": ">=3.0.0"
-  },
   "scripts": {
-    "build:devtools": "webpack-cli --config config/webpack.prod.ts",
-    "build:zip": "rimraf package.zip && zip -r package.zip package",
-    "start": "webpack-dev-server --config config/webpack.dev.ts"
+    "cleanup": "rm -rf .plasmo build",
+    "dev": "yarn run build:backend && yarn run cleanup && yarn run dev:plasmo",
+    "dev:plasmo": "plasmo dev",
+    "build": "yarn run build:backend && yarn run cleanup && yarn run build:plasmo",
+    "build:backend": "tsc src/webAccessible/backend.ts --outFile assets/backend.js",
+    "build:plasmo": "plasmo build --zip",
+    "package": "plasmo package"
   },
   "dependencies": {
-    "@formily/core": "2.3.2",
     "@formily/shared": "2.3.2",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "plasmo": "0.90.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-json-view": "^1.19.1",
     "react-treebeard": "^3.2.4"
   },
-  "publishConfig": {
-    "access": "public"
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "4.1.1",
+    "@types/chrome": "0.0.258",
+    "@types/node": "20.11.5",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
+    "prettier": "3.2.4",
+    "typescript": "5.3.3"
   },
-  "gitHead": "2c44ae410a73f02735c63c6430e021a50e21f3ec"
+  "manifest": {
+    "homepage_url": "https://formilyjs.org/",
+    "host_permissions": [
+      "<all_urls>"
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "~assets/backend.js"
+        ],
+        "matches": [
+          "<all_urls>"
+        ]
+      }
+    ]
+  }
 }

@@ -1,26 +1,11 @@
 import React from 'react'
-import styled from 'styled-components'
 
-const SerachBox = styled.div`
-  display: flex;
-  align-items: center;
-  height: 100%;
-  .input-addon {
-    padding: 0 5px;
-  }
-  .form-control {
-    width: 50%;
-    border: none;
-    background: transparent;
-    color: white;
-    outline: none;
-  }
-`
+const SearchBox = ({ children }) => <div className="searchBox">{children}</div>
 
 const SearchIcon = () => {
   return (
     <svg
-      t="1592193216787"
+      // t="1592193216787"
       className="icon"
       viewBox="0 0 1024 1024"
       version="1.1"
@@ -42,16 +27,16 @@ const SearchIcon = () => {
 
 export default ({ onSearch }) => {
   return (
-    <SerachBox>
-      <div className="input-addon">
+    <SearchBox>
+      <div className="searchBoxInputAddon">
         <SearchIcon />
       </div>
       <input
-        className="form-control"
+        className="searchBoxFormControl"
         onChange={onSearch}
         placeholder="Search the field..."
         type="text"
       />
-    </SerachBox>
+    </SearchBox>
   )
 }
