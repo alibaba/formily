@@ -1,11 +1,11 @@
 {
-  "version": "0.1.13",
+  "version": "0.1.14",
   "name": "Formily DevTools",
   "short_name": "Formily DevTools",
   "description": "Formily DevTools for debugging application's state changes.",
   "homepage_url": "https://github.com/alibaba/formily",
-  "manifest_version": 2,
-  "page_action": {
+  "manifest_version": 3,
+  "action": {
     "default_icon": "img/logo/scalable.png",
     "default_title": "Formily DevTools",
     "default_popup": "popup.html"
@@ -23,7 +23,7 @@
     "devtools-remote": {
       "description": "Remote DevTools"
     },
-    "_execute_page_action": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Ctrl+Shift+E"
       }
@@ -35,24 +35,31 @@
     "128": "img/logo/128x128.png"
   },
   "background": {
-    "scripts": ["js/background.bundle.js"],
-    "persistent": false
+    "service_worker": "js/background.bundle.js",
+    "type": "module"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "exclude_globs": ["https://www.google*"],
+      "exclude_matches": ["*://www.google.com/*"],
       "js": ["js/content.bundle.js", "js/inject.bundle.js"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
   "devtools_page": "devtools.html",
-  "web_accessible_resources": ["js/backend.bundle.js"],
+  "web_accessible_resources": [
+    {
+      "resources": ["js/backend.bundle.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "externally_connectable": {
     "ids": ["*"]
   },
-  "permissions": ["file:///*", "http://*/*", "https://*/*"],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; style-src * 'unsafe-inline'; img-src 'self' data:;",
+  "host_permissions": ["file://*/*", "http://*/*", "https://*/*"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+  },
   "update_url": "https://clients2.google.com/service/update2/crx"
 }

@@ -1,5 +1,5 @@
 import React, { Fragment, useMemo } from 'react'
-import { isBool, isFn, isValid } from '@formily/shared'
+import { FormPath, isBool, isFn, isValid } from '@formily/shared'
 import { GeneralField } from '@formily/core'
 import { Schema } from '@formily/json-schema'
 import { SchemaContext } from '../shared'
@@ -9,6 +9,8 @@ import { ObjectField } from './ObjectField'
 import { ArrayField } from './ArrayField'
 import { Field } from './Field'
 import { VoidField } from './VoidField'
+import { ExpressionScope } from './ExpressionScope'
+import { observable } from '@formily/reactive'
 
 const useFieldProps = (schema: Schema) => {
   const scope = useExpressionScope()
@@ -29,6 +31,29 @@ export const RecursionField: ReactFC<IRecursionFieldProps> = (props) => {
   const basePath = useBasePath(props)
   const fieldSchema = useMemo(() => new Schema(props.schema), [props.schema])
   const fieldProps = useFieldProps(fieldSchema)
+
+  const renderSlots = (innerSchema, key) => {
+    const slot = innerSchema['x-slot-node']
+    const { target, isRenderProp } = slot
+    if (isRenderProp) {
+      const args = observable({ $slotArgs: [] })
+      FormPath.setIn(fieldSchema.properties, target, (..._args: any) => {
+        args.$slotArgs = _args
+        return (
+          <ExpressionScope value={args}>
+            <RecursionField schema={innerSchema} name={key} />
+          </ExpressionScope>
+        )
+      })
+    } else {
+      FormPath.setIn(
+        fieldSchema.properties,
+        target,
+        <RecursionField schema={innerSchema} name={key} />
+      )
+    }
+  }
+
   const renderProperties = (field?: GeneralField) => {
     if (props.onlyRenderSelf) return
     const properties = Schema.getOrderProperties(fieldSchema)
@@ -38,6 +63,11 @@ export const RecursionField: ReactFC<IRecursionFieldProps> = (props) => {
         {properties.map(({ schema: item, key: name }, index) => {
           const base = field?.address || basePath
           let schema: Schema = item
+          if (schema['x-slot-node']) {
+            renderSlots(schema, name)
+            return null
+          }
+
           if (isFn(props.mapProperties)) {
             const mapped = props.mapProperties(item, name)
             if (mapped) {

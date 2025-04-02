@@ -1,8 +1,10 @@
-let connections = {}
+// background.ts - Manifest V3版本
+const connections = {}
 
-chrome.runtime.onConnect.addListener(function (port: any) {
+// 处理扩展程序的连接请求
+chrome.runtime.onConnect.addListener(function (port) {
   if (port.name === '@formily-devtools-panel-script') {
-    const extensionListener = function (message: any) {
+    const extensionListener = function (message) {
       // 原始的连接事件不包含开发者工具网页的标签页标识符，
       // 所以我们需要显式发送它。
       if (message.name == 'init') {
@@ -15,9 +17,9 @@ chrome.runtime.onConnect.addListener(function (port: any) {
     // 监听开发者工具网页发来的消息
     port.onMessage.addListener(extensionListener)
 
-    port.onDisconnect.addListener(function (port: any) {
+    port.onDisconnect.addListener(function (disconnectedPort) {
       port.onMessage.removeListener(extensionListener)
-      let tabs = Object.keys(connections)
+      const tabs = Object.keys(connections)
       for (let i = 0, len = tabs.length; i < len; i++) {
         if (connections[tabs[i]] == port) {
           delete connections[tabs[i]]
@@ -28,19 +30,14 @@ chrome.runtime.onConnect.addListener(function (port: any) {
   }
 })
 
-// 从内容脚本接收消息，并转发至当前
-// 标签页对应的开发者工具网页
-chrome.runtime.onMessage.addListener(function (request: any, sender: any) {
+// 从内容脚本接收消息，并转发至当前标签页对应的开发者工具网页
+chrome.runtime.onMessage.addListener(function (request, sender) {
   // 来自内容脚本的消息应该已经设置 sender.tab
   if (sender.tab) {
-    let tabId = sender.tab.id
-    if (tabId in connections) {
+    const tabId = sender.tab.id
+    if (tabId && tabId in connections) {
       connections[tabId].postMessage(request)
-    } else {
-      console.info('连接列表中找不到该标签页。')
     }
-  } else {
-    console.info('sender.tab 未定义。')
   }
   return true
 })

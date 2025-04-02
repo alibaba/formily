@@ -278,7 +278,7 @@ export default {
   links: [
     {
       rel: 'stylesheet',
-      href: 'https://unpkg.com/antd@4.x/dist/antd.css',
+      href: 'https://esm.sh/antd@4.x/dist/antd.css',
     },
   ],
   styles: [

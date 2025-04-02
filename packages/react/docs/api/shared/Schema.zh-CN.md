@@ -72,6 +72,7 @@ class Schema {
 | $ref                 | 从 Schema 预定义中读取 Schema 并合并至当前 Schema | String                                                                                   | -                                                                              |
 | x-data               | 扩展属性                                          | Object                                                                                   | `data`                                                                         |
 | x-compile-omitted    | 忽略编译表达式的属性列表                          | string[]                                                                                 | `[]`                                                                           |
+| x-slot-node          | Slot 节点标记                                     | [Slot](#slot)                                                                            | -                                                                              |
 
 #### 详细说明
 
@@ -957,6 +958,83 @@ type SchemaReactions<Field = any> =
 }
 ```
 
+### Slot
+
+#### 描述
+
+标记该节点为 Slot 节点，会在常规渲染流程中被跳过  
+通过 `target` 指定此节点渲染的目标属性，必须为同级兄弟节点属性  
+可以通过 `isRenderProp` 来指定该节点以 renderProp 函数形式传入  
+当`isRenderProp`为`true`时，在 Slot 中可以通过`$slotArgs`访问到 renderProp 函数入参参数列表
+
+#### 签名
+
+```ts
+type Slot = {
+  //Slot目标，指定此节点渲染的目标属性，必须为同级兄弟节点属性
+  target: string // 'some-sibling-node.x-component-props.xxx' 或 'some-sibling-node.x-decorator-props.xxx'
+  //Slot是否为render prop
+  isRenderProp?: boolean
+}
+```
+
+#### 用例
+
+**ReactNode Prop**  
+参考 [SchemaField](https://react.formilyjs.org/zh-CN/api/components/schema-field#json-schema-reactnode-prop-%E7%94%A8%E4%BE%8B-x-slot-node)
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "search_icon": {
+      "x-slot-node": {
+        "target": "button.x-component-props.icon" //指定将search_icon节点作为slot渲染到Button组件的icon prop中
+      },
+      "x-component": "SearchOutlined",
+      "x-component-props": {
+        "data-testid": "icon"
+      }
+    },
+    "button": {
+      "type": "string",
+      "x-component": "Button",
+      "x-component-props": {
+        "data-testid": "button"
+      }
+    }
+  }
+}
+```
+
+**RenderProp**  
+参考 [SchemaField](https://react.formilyjs.org/zh-CN/api/components/schema-field#json-schema-render-prop-%E7%94%A8%E4%BE%8B-x-slot-node--isrenderprop)
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "dollar_icon": {
+      "x-slot-node": {
+        "target": "rate.x-component-props.character", //指定将dollar_icon节点作为slot渲染到Rate组件的character prop中
+        "isRenderProp": true //character prop接受一个renderProp函数，指定Slot作为renderProp传入，接管评分图标渲染
+      },
+      "x-component": "DollarOutlined",
+      "x-component-props": {
+        "data-testid": "icon",
+        "rotate": "{{$slotArgs[0].value * 45}}", //当isRenderProp为true时，在Slot中可以通过$slotArgs访问到renderProp函数入参参数列表
+        "style": {
+          "fontSize": "50px"
+        }
+      }
+    },
+    "rate": {
+      "x-component": "Rate"
+    }
+  }
+}
+```
+
 ## 内置表达式作用域
 
 内置表达式作用域主要用于在表达式中实现各种联动关系
@@ -996,3 +1074,7 @@ type SchemaReactions<Field = any> =
 ### $target
 
 只能在 x-reactions 中的表达式消费，代表主动模式的 target 字段
+
+### $slotArgs
+
+只能在 Slot 节点中消费。当为 render prop slot 时，可以通过$slotArgs 获取渲染函数入参数组

@@ -40,7 +40,7 @@ export default {
   links: [
     {
       rel: 'stylesheet',
-      href: 'https://unpkg.com/@alifd/next/dist/next-noreset.css',
+      href: 'https://esm.sh/@alifd/next/dist/next-noreset.css',
     },
   ],
   headScripts: [

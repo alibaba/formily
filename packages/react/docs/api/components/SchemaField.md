@@ -139,3 +139,124 @@ export default () => (
   </FormProvider>
 )
 ```
+
+## JSON Schema ReactNode Prop Use Case （x-slot-node）
+
+Reference [Slot](https://react.formilyjs.org/api/shared/schema#slot)
+
+```tsx
+import React from 'react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+import { Input, Tag } from 'antd'
+import { CheckCircleTwoTone, CloseCircleOutlined } from '@ant-design/icons'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+    CheckCircleTwoTone,
+    CloseCircleOutlined,
+  },
+})
+
+export default () => (
+  <FormProvider form={form}>
+    <SchemaField
+      components={{
+        Tag,
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          tag: {
+            'x-slot-node': {
+              target: 'input.x-component-props.prefix',
+            },
+            'x-component': 'Tag',
+            'x-component-props': {
+              children: 'www.',
+            },
+          },
+          tag2: {
+            'x-slot-node': {
+              target: 'input.x-component-props.suffix',
+            },
+            'x-component': 'Tag',
+            'x-component-props': {
+              children: '.com',
+            },
+          },
+          icon: {
+            'x-slot-node': {
+              target: 'input.x-component-props.addonAfter',
+            },
+            'x-component':
+              '{{$form.values.input?.length > 5 ? "CheckCircleTwoTone" : "CloseCircleOutlined"}}',
+          },
+          input: {
+            type: 'string',
+            'x-component': 'Input',
+            'x-component-props': {},
+          },
+        },
+      }}
+    ></SchemaField>
+  </FormProvider>
+)
+```
+
+## JSON Schema Render Prop Use Case （x-slot-node & isRenderProp）
+
+Reference [Slot](https://react.formilyjs.org/api/shared/schema#slot)
+
+```tsx
+import React from 'react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+import { Rate } from 'antd'
+import { DollarOutlined } from '@ant-design/icons'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    DollarOutlined,
+  },
+})
+
+export default () => (
+  <FormProvider form={form}>
+    <SchemaField
+      components={{
+        Rate,
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          icon: {
+            'x-slot-node': {
+              target: 'rate.x-component-props.character',
+              isRenderProp: true,
+            },
+            'x-component': 'DollarOutlined',
+            'x-component-props': {
+              rotate: '{{ $slotArgs[0].value * 45 }}',
+              style: {
+                fontSize: '50px',
+              },
+            },
+          },
+          rate: {
+            'x-component': 'Rate',
+            'x-component-props': {
+              defaultValue: 3,
+            },
+          },
+        },
+      }}
+    ></SchemaField>
+  </FormProvider>
+)
+```

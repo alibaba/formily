@@ -1,6 +1,6 @@
 {
   "name": "@formily/antd",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -62,13 +62,13 @@
   "dependencies": {
     "@dnd-kit/core": "^6.0.0",
     "@dnd-kit/sortable": "^7.0.0",
-    "@formily/core": "2.3.2",
-    "@formily/grid": "2.3.2",
-    "@formily/json-schema": "2.3.2",
-    "@formily/react": "2.3.2",
-    "@formily/reactive": "2.3.2",
-    "@formily/reactive-react": "2.3.2",
-    "@formily/shared": "2.3.2",
+    "@formily/core": "2.3.3",
+    "@formily/grid": "2.3.3",
+    "@formily/json-schema": "2.3.3",
+    "@formily/react": "2.3.3",
+    "@formily/reactive": "2.3.3",
+    "@formily/reactive-react": "2.3.3",
+    "@formily/shared": "2.3.3",
     "classnames": "^2.2.6",
     "react-sticky-box": "^0.9.3"
   },

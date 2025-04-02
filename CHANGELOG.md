@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.3.3(2025-03-31)
+
+### :tada: Enhancements
+
+1. [feat: slot (#4259)](https://github.com/alibaba/formily/commit/123d536b) :point_right: ( [NiceTooo](https://github.com/NiceTooo) )
+
+1. [feat(core): 支持用户配置 validate 在哪些 pattern & display 下生效 (#4211)](https://github.com/alibaba/formily/commit/39fdb681) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+### :bug: Bug Fixes
+
+1. [fix(antd): fix antd/next render error at React 19 (#4262)](https://github.com/alibaba/formily/commit/a0f3169a) :point_right: ( [ChaoGPT](https://github.com/ChaoGPT) )
+
+1. [fix: array-table/main.scss mixed-decls Deprecation warning on sass@1.77.7 + (#4195)](https://github.com/alibaba/formily/commit/d60f12db) :point_right: ( [Godpu](https://github.com/Godpu) )
+
 ## v2.3.2(2024-07-18)
 
 ### :tada: Enhancements
@@ -640,12 +654,6 @@
 
 ## v2.1.8(2022-06-28)
 
-### :blush: Other Changes
-
-1. [chore(reactive): improve strict mode update strategy](https://github.com/alibaba/formily/commit/c3002bde) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-## v2.1.7(2022-06-27)
-
 ### :tada: Enhancements
 
 1. [feat(react): improve formily scope standard specification (#3212)](https://github.com/alibaba/formily/commit/0811c87d) :point_right: ( [Janry](https://github.com/Janry) )
@@ -786,7 +794,7 @@
 
 1. [feat(.md): Form => FormLayout (#1427)](https://github.com/alibaba/formily/commit/2501e72f) :point_right: ( [Lyca](https://github.com/Lyca) )
 
-1. [feat(next): improve form-item styles](https://github.com/alibaba/formily/commit/315c3141) :point_right: ( [janrywang](https://github.com/janrywang) )
+1. [feat(next): improve styles](https://github.com/alibaba/formily/commit/bce90958) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat: url regexp support /?a=1 and ?a=1 (#1374)](https://github.com/alibaba/formily/commit/4fed6246) :point_right: ( [No.96](https://github.com/No.96) )
 
@@ -835,8 +843,6 @@
 1. [feat(react): connect add hoistNonReactStatics](https://github.com/alibaba/formily/commit/9b68f1ef) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat(core): add more effects](https://github.com/alibaba/formily/commit/5b42226d) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [feat(project): improve code](https://github.com/alibaba/formily/commit/756ccb7d) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat: update alignment (#1060)](https://github.com/alibaba/formily/commit/fadb3f7d) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
 
@@ -948,8 +954,6 @@
 
 1. [feat(docs): support deconstruction (#179)](https://github.com/alibaba/formily/commit/b114c9e7) :point_right: ( [Janry](https://github.com/Janry) )
 
-1. [feat(@uform/types): improve types (#168)](https://github.com/alibaba/formily/commit/0e6fd69c) :point_right: ( [Janry](https://github.com/Janry) )
-
 1. [feat(@uform/core): Improve noValidate reset logic](https://github.com/alibaba/formily/commit/efaa75a8) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [feat: update the api docs using typescript (#149)](https://github.com/alibaba/formily/commit/5a9ea5a2) :point_right: ( [Kevin Tan](https://github.com/Kevin Tan) )
@@ -962,6 +966,8 @@
 
 1. [feat(refactor): perfect test suites and add builder demo in docs (#100)](https://github.com/alibaba/formily/commit/ada8ba9f) :point_right: ( [SkyCai](https://github.com/SkyCai) )
 
+1. [feat(@uform/types): update validator type description](https://github.com/alibaba/formily/commit/6763583a) :point_right: ( [janryWang](https://github.com/janryWang) )
+
 1. [feat(@uform/utils): support ts, but build scripts is not work](https://github.com/alibaba/formily/commit/8e452149) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 1. [feat(@uform/next): add disabled when loading](https://github.com/alibaba/formily/commit/1b1d70db) :point_right: ( [monkindey](https://github.com/monkindey) )
@@ -971,8 +977,6 @@
 1. [feat(packages): some the antd component and the react component](https://github.com/alibaba/formily/commit/c663abc0) :point_right: ( [zsirfs](https://github.com/zsirfs) )
 
 1. [feat(fix): add builder-next package and fix builder bugs. fix(docs): update playground link and fix some bugs](https://github.com/alibaba/formily/commit/71e6af8a) :point_right: ( [cnt1992](https://github.com/cnt1992) )
-
-1. [feat(@uform/validator): add default validate message](https://github.com/alibaba/formily/commit/04f263cb) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 1. [feat(@uform/next/antd): support mapTextComponent and mapStyledProps](https://github.com/alibaba/formily/commit/b0f7134d) :point_right: ( [janryWang](https://github.com/janryWang) )
 
@@ -1720,8 +1724,6 @@
 
 1. [docs(site): add serverless functions](https://github.com/alibaba/formily/commit/d872ea4c) :point_right: ( [janrywang](https://github.com/janrywang) )
 
-1. [docs(reactive): improve home page styles](https://github.com/alibaba/formily/commit/799f4226) :point_right: ( [janrywang](https://github.com/janrywang) )
-
 1. [docs(site): update fragment linkage case](https://github.com/alibaba/formily/commit/7e5e2625) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [docs(main): add schema fragment controlled case (#1852)](https://github.com/alibaba/formily/commit/2212486b) :point_right: ( [Janry](https://github.com/Janry) )
@@ -2023,6 +2025,8 @@
 1. [test(project): add large test cases](https://github.com/alibaba/formily/commit/68fd2e1c) :point_right: ( [janryWang](https://github.com/janryWang) )
 
 ### :blush: Other Changes
+
+1. [chore(reactive): improve strict mode update strategy](https://github.com/alibaba/formily/commit/c3002bde) :point_right: ( [janrywang](https://github.com/janrywang) )
 
 1. [chore(deps-dev): bump semver-regex from 3.1.3 to 3.1.4 (#3166)](https://github.com/alibaba/formily/commit/ca97cae3) :point_right: ( [dependabot[bot]](https://github.com/dependabot[bot]) )
 

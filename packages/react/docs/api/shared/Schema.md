@@ -72,6 +72,7 @@ Create a Schema Tree based on a piece of json schema data to ensure that each sc
 | $ref                 | Read the Schema from the Schema predefined and merge it into the current Schema | String                                                                             | -                                                                        |
 | x-data               | Extends Data                                                                    | Object                                                                             | `data`                                                                   |
 | x-compile-omitted    | list of attributes to ignore compiled expressions                               | string[]                                                                           | `[]`                                                                     |
+| x-slot-node          | Slot node mark                                                                  | [Slot](#slot)                                                                      | -                                                                        |
 
 #### Detailed description
 
@@ -957,6 +958,83 @@ Writing method two, operating the Schema protocol
 }
 ```
 
+### Slot
+
+#### Description
+
+Mark this node as a Slot node, which will be skipped in the normal rendering process.  
+Use `target` to specify the target property for rendering this node, which must be a sibling property at the same level.  
+You can use `isRenderProp` to specify that this node is passed in the form of the renderProp function.  
+When `isRenderProp` is `true`, the renderProp function’s argument list can be accessed within the Slot through `$slotArgs`.
+
+#### Signature
+
+```ts
+type Slot = {
+  //Slot target: Specify the target property for rendering this node, which must be a sibling property at the same level.
+  target: string // 'some-sibling-node.x-component-props.xxx' or 'some-sibling-node.x-decorator-props.xxx'
+  //whether it is a renderProp Slot
+  isRenderProp?: boolean
+}
+```
+
+#### Example
+
+**ReactNode Prop**  
+Reference [SchemaField](https://react.formilyjs.org/api/components/schema-field#json-schema-reactnode-prop-use-case-x-slot-node)
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "search_icon": {
+      "x-slot-node": {
+        "target": "button.x-component-props.icon" //Specify to render the search_icon node as a slot into the icon prop of the Button component.
+      },
+      "x-component": "SearchOutlined",
+      "x-component-props": {
+        "data-testid": "icon"
+      }
+    },
+    "button": {
+      "type": "string",
+      "x-component": "Button",
+      "x-component-props": {
+        "data-testid": "button"
+      }
+    }
+  }
+}
+```
+
+**RenderProp**  
+Reference [SchemaField](https://react.formilyjs.org/api/components/schema-field#json-schema-render-prop-use-case-x-slot-node--isrenderprop)
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "dollar_icon": {
+      "x-slot-node": {
+        "target": "rate.x-component-props.character", //Specify to render the dollar_icon node as a slot into the character prop of the Rate component.
+        "isRenderProp": true //The character prop accepts a renderProp function. Specify the Slot as a renderProp to take control of the rendering of the rating icons.
+      },
+      "x-component": "DollarOutlined",
+      "x-component-props": {
+        "data-testid": "icon",
+        "rotate": "{{$slotArgs[0].value * 45}}", //When isRenderProp is true, the renderProp function’s argument list can be accessed within the Slot through $slotArgs.
+        "style": {
+          "fontSize": "50px"
+        }
+      }
+    },
+    "rate": {
+      "x-component": "Rate"
+    }
+  }
+}
+```
+
 ## Built-in expression scope
 
 Built-in expression scope is mainly used to realize various linkage relationships in expressions
@@ -996,3 +1074,7 @@ It can only be consumed by expressions in x-reactions, corresponding to the depe
 ### $target
 
 Can only be consumed in expressions in x-reactions, representing the target field of active mode
+
+### $slotArgs
+
+Can only be consumed in slot node. When slot used as render prop, $slotArgs can access render function arguments array

@@ -1,6 +1,6 @@
 {
   "name": "@formily/chrome-extension",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "private": true,
   "license": "MIT",
   "repository": {
@@ -16,13 +16,13 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build:devtools": "webpack-cli --config config/webpack.prod.ts",
+    "build:devtools": "cross-env NODE_OPTIONS=--openssl-legacy-provider webpack-cli --config config/webpack.prod.ts",
     "build:zip": "rimraf package.zip && zip -r package.zip package",
-    "start": "webpack-dev-server --config config/webpack.dev.ts"
+    "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider webpack-dev-server --config config/webpack.dev.ts"
   },
   "dependencies": {
-    "@formily/core": "2.3.2",
-    "@formily/shared": "2.3.2",
+    "@formily/core": "2.3.3",
+    "@formily/shared": "2.3.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-json-view": "^1.19.1",

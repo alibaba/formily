@@ -6,6 +6,7 @@ import {
   SchemaTypes,
   SchemaKey,
   ISchemaTransformerOptions,
+  Slot,
 } from './types'
 import { IFieldFactoryProps } from '@formily/core'
 import { map, each, isFn, instOf, FormPath, isStr } from '@formily/shared'
@@ -179,6 +180,8 @@ export class Schema<
   ['x-read-pretty']?: boolean;
 
   ['x-compile-omitted']?: string[];
+
+  ['x-slot-node']?: Slot;
 
   [key: `x-${string | number}` | symbol]: any
 

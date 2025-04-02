@@ -5,10 +5,14 @@ const getEntry = (src) => {
   return [path.resolve(__dirname, '../src/extension/', src)]
 }
 
-fs.copy(
-  path.resolve(__dirname, '../assets'),
-  path.resolve(__dirname, '../package')
-)
+// 先确保删除package目录，再创建新的
+const packageDir = path.resolve(__dirname, '../package')
+if (fs.existsSync(packageDir)) {
+  fs.removeSync(packageDir)
+}
+fs.ensureDirSync(packageDir)
+
+fs.copy(path.resolve(__dirname, '../assets'), packageDir)
 
 fs.copy(
   path.resolve(__dirname, '../src/extension/manifest.json'),

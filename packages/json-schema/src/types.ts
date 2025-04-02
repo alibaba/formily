@@ -150,6 +150,11 @@ export interface ISchemaTransformerOptions {
   scope?: IScopeContext
 }
 
+export type Slot = {
+  target: string
+  isRenderProp?: boolean
+}
+
 export type Stringify<P extends { [key: string]: any }> = {
   /**
    * Use `string & {}` instead of string to keep Literal Type for ISchema#component and ISchema#decorator
