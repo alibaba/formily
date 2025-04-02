@@ -440,6 +440,7 @@ export class Grid<Container extends HTMLElement> {
         }
       })
       const mutationObserver = new ChildListMutationObserver(digest)
+      // add requestAnimationFrame to smooth digest
       const smoothDigest = () => {
         requestAnimationFrame(() => {
           digest()
