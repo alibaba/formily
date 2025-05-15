@@ -55,7 +55,7 @@ const RULES: IRegistryRules = {
     return ''
   },
   required(value, rule) {
-    if (rule.required === false) return ''
+    if (rule.required !== true) return ''
     return isValidateEmpty(value) ? rule.message : ''
   },
   max(value, rule) {
