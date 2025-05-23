@@ -31,6 +31,6 @@
 
 ## 状态可观测
 
-安装 [FormilyDevtools](https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN) 可以实时观测模型状态变化，排查问题
+安装 [FormilyDevtools](https://chromewebstore.google.com/detail/formily-devtools-v3/kphglbjhgkdodnghokdhdcideadpmkha?hl=zh-CN) 可以实时观测模型状态变化，排查问题
 
 ![](//img.alicdn.com/imgextra/i4/O1CN01DSci5h1rAGfRafpXw_!!6000000005590-2-tps-2882-1642.png)

@@ -48,7 +48,7 @@ $ npm install --save @formily/core
 > 2. Verification capability, verification internationalization capability
 > 3. Value Management Ability
 > 4. Linkage management capabilities
-> 5. Development tool debugging capabilities, [download Formily Devtools](https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN)
+> 5. Development tool debugging capabilities, [download Formily Devtools](https://chromewebstore.google.com/detail/formily-devtools-v3/kphglbjhgkdodnghokdhdcideadpmkha?hl=zh-CN)
 
 ```tsx
 /**

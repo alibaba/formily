@@ -31,6 +31,6 @@ Because formily is a complete Typescript project, users can develop on VSCode or
 
 ## Status observable
 
-Install [FormilyDevtools](https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN) to observe the model status changes in real time and troubleshoot problems
+Install [FormilyDevtools](https://chromewebstore.google.com/detail/formily-devtools-v3/kphglbjhgkdodnghokdhdcideadpmkha?hl=zh-CN) to observe the model status changes in real time and troubleshoot problems
 
 ![](//img.alicdn.com/imgextra/i4/O1CN01DSci5h1rAGfRafpXw_!!6000000005590-2-tps-2882-1642.png)
