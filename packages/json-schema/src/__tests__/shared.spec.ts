@@ -1,10 +1,17 @@
 import { isNoNeedCompileObject, createDataSource } from '../shared'
 import { observable } from '@formily/reactive'
 import { Schema } from '../schema'
+import React from 'react'
 
 test('isNoNeedCompileObject', () => {
+  function Test() {
+    return null
+  }
   expect(isNoNeedCompileObject({})).toBeFalsy()
   expect(isNoNeedCompileObject({ $$typeof: null, _owner: null })).toBeTruthy()
+  expect(
+    isNoNeedCompileObject(React.createElement(Test, {}, null))
+  ).toBeTruthy()
   expect(isNoNeedCompileObject({ _isAMomentObject: true })).toBeTruthy()
   expect(
     isNoNeedCompileObject({ [Symbol.for('__REVA_ACTIONS')]: true })
