@@ -1,8 +1,20 @@
 import { isNoNeedCompileObject, createDataSource } from '../shared'
 import { observable } from '@formily/reactive'
 import { Schema } from '../schema'
+import { createElement } from 'react'
 
 test('isNoNeedCompileObject', () => {
+  expect(
+    isNoNeedCompileObject(
+      createElement(
+        function Test() {
+          return null
+        },
+        {},
+        null
+      )
+    )
+  ).toBeTruthy()
   expect(isNoNeedCompileObject({})).toBeFalsy()
   expect(isNoNeedCompileObject({ $$typeof: null, _owner: null })).toBeTruthy()
   expect(isNoNeedCompileObject({ _isAMomentObject: true })).toBeTruthy()

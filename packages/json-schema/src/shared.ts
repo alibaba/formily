@@ -1,7 +1,16 @@
-import { isFn, each, isPlainObj, isArr, toArr, FormPath } from '@formily/shared'
+import {
+  isFn,
+  each,
+  isPlainObj,
+  isArr,
+  toArr,
+  FormPath,
+  isReactElement,
+} from '@formily/shared'
 import { isObservable, untracked } from '@formily/reactive'
 import { Schema } from './schema'
 import { ISchema } from './types'
+import { isValidElement } from 'react'
 
 const REVA_ACTIONS_KEY = Symbol.for('__REVA_ACTIONS')
 
@@ -150,7 +159,7 @@ export const traverseSchema = (
 }
 
 export const isNoNeedCompileObject = (source: any) => {
-  if ('$$typeof' in source && '_owner' in source) {
+  if (isReactElement(source) || isValidElement(source)) {
     return true
   }
   if (source['_isAMomentObject']) {
