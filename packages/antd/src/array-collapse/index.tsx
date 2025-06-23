@@ -42,6 +42,10 @@ const isRemoveComponent = (schema: ISchema) => {
   return schema['x-component']?.indexOf?.('Remove') > -1
 }
 
+const isCopyComponent = (schema: ISchema) => {
+  return schema['x-component']?.indexOf?.('Copy') > -1
+}
+
 const isMoveUpComponent = (schema: ISchema) => {
   return schema['x-component']?.indexOf?.('MoveUp') > -1
 }
@@ -54,6 +58,7 @@ const isOperationComponent = (schema: ISchema) => {
   return (
     isAdditionComponent(schema) ||
     isRemoveComponent(schema) ||
+    isCopyComponent(schema) ||
     isMoveDownComponent(schema) ||
     isMoveUpComponent(schema)
   )
