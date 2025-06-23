@@ -271,11 +271,17 @@ test('patchSchemaCompile x-compile-omitted', () => {
   const targetState = {
     title: '',
     validator: [],
+    componentProps: {
+      aa: 0,
+    },
   }
   patchSchemaCompile(
     targetState as any,
     {
       title: '132',
+      'x-component-props': {
+        aa: '{{field.value}}',
+      },
       'x-validator': [
         {
           remoteCheckUniq: '{{field.value}}',
@@ -292,17 +298,28 @@ test('patchSchemaCompile x-compile-omitted', () => {
   expect(targetState).toEqual({
     title: '132',
     validator: [{ remoteCheckUniq: 888 }],
+    componentProps: {
+      aa: 888,
+    },
   })
 
   const targetOmitState = {
     title: '',
     validator: [],
+    componentProps: {
+      aa: 0,
+      bb: 0,
+    },
   }
   patchSchemaCompile(
     targetOmitState as any,
     {
       title: '132',
-      'x-compile-omitted': ['x-validator'],
+      'x-compile-omitted': ['x-validator', 'x-component-props.aa'],
+      'x-component-props': {
+        aa: '{{field.value}}',
+        bb: '{{field.value}}',
+      },
       'x-validator': [
         {
           remoteCheckUniq: '{{field.value}}',
@@ -318,6 +335,10 @@ test('patchSchemaCompile x-compile-omitted', () => {
   )
   expect(targetOmitState).toEqual({
     title: '132',
+    componentProps: {
+      aa: '{{field.value}}',
+      bb: 888,
+    },
     validator: [{ remoteCheckUniq: '{{field.value}}' }],
   })
 })

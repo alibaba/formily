@@ -119,7 +119,10 @@ export const traverseSchema = (
       return
     if (String(path[0]).indexOf('x-') == -1 && isFn(target)) return
     if (SchemaNestedMap[path[0]]) return
-    if (schema['x-compile-omitted']?.indexOf(path[0]) > -1) {
+    if (
+      schema['x-compile-omitted']?.indexOf(path[0]) > -1 ||
+      schema['x-compile-omitted']?.indexOf(path.join('.')) > -1
+    ) {
       visitor(target, path, true)
       return
     }
