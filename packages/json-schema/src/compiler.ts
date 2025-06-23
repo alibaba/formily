@@ -21,16 +21,24 @@ const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/
 const Registry = {
   silent: false,
   compile(expression: string, scope = {}) {
+    // 检查如果 scope 前缀都有 $ ，生成的 function 可以不使用 with 操作符
+    const prefixed = Object.keys(scope).every((key) => key.startsWith('$'))
+    if (prefixed) {
+      expression = expression.replaceAll(/(\$\w+)/g, '$root.$1')
+    }
+    expression = prefixed
+      ? expression.replaceAll(/(\$\w+)/g, '$root.$1')
+      : expression
+    const funBody = prefixed
+      ? `return (${expression});`
+      : `with($root){ return (${expression});}`
+
     if (Registry.silent) {
       try {
-        return new Function('$root', `with($root) { return (${expression}); }`)(
-          scope
-        )
+        return new Function('$root', funBody)(scope)
       } catch {}
     } else {
-      return new Function('$root', `with($root) { return (${expression}); }`)(
-        scope
-      )
+      return new Function('$root', funBody)(scope)
     }
   },
 }
