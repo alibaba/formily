@@ -79,6 +79,7 @@ export type Reaction = ((...args: any[]) => any) & {
     queue: IEffectQueueItem[]
     cursor: number
   }
+  _pending?: boolean
 }
 
 export type ReactionsMap = Map<PropertyKey, ArraySet<Reaction>>

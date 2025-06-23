@@ -4,14 +4,16 @@ import { IOperation, ReactionsMap, Reaction, PropertyKey } from './types'
 import {
   ReactionStack,
   PendingScopeReactions,
-  BatchEndpoints,
   DependencyCollected,
   RawReactionsMap,
-  PendingReactions,
+  PendingReactionsRef,
   BatchCount,
   UntrackCount,
   BatchScope,
   ObserverListeners,
+  PendingReactions,
+  BatchEndpoints,
+  createPendingReactions,
 } from './environment'
 
 const ITERATION_KEY = Symbol('iteration key')
@@ -79,7 +81,11 @@ const runReactions = (target: any, key: PropertyKey) => {
     } else if (isScopeBatching()) {
       PendingScopeReactions.add(reaction)
     } else if (isBatching()) {
-      PendingReactions.add(reaction)
+      if (!reaction._pending) {
+        reaction._pending = true
+        ;(PendingReactionsRef.value =
+          PendingReactionsRef.value || createPendingReactions()).add(reaction)
+      }
     } else {
       // never reach
       if (isFn(reaction._scheduler)) {
@@ -153,7 +159,8 @@ export const releaseBindingReactions = (reaction: Reaction) => {
       reactions.delete(reaction)
     })
   })
-  PendingReactions.delete(reaction)
+  reaction._pending = false
+  PendingReactionsRef.value?.delete(reaction)
   PendingScopeReactions.delete(reaction)
   delete reaction._reactionsSet
 }
@@ -225,13 +232,19 @@ export const isScopeBatching = () => BatchScope.value
 export const isUntracking = () => UntrackCount.value > 0
 
 export const executePendingReactions = () => {
-  PendingReactions.batchDelete((reaction) => {
-    if (isFn(reaction._scheduler)) {
-      reaction._scheduler(reaction)
-    } else {
-      reaction()
-    }
-  })
+  while (PendingReactionsRef.value) {
+    const PendingReactions = PendingReactionsRef.value
+    PendingReactionsRef.value = null
+    PendingReactions.batchDelete((reaction) => {
+      if (!reaction._pending) return
+      reaction._pending = false
+      if (isFn(reaction._scheduler)) {
+        reaction._scheduler(reaction)
+      } else {
+        reaction()
+      }
+    })
+  }
 }
 
 export const executeBatchEndpoints = () => {

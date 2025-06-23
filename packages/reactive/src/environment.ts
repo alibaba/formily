@@ -8,12 +8,19 @@ export const RawShallowProxy = new WeakMap()
 export const RawNode = new WeakMap<object, DataNode>()
 export const RawReactionsMap = new WeakMap<object, ReactionsMap>()
 
+export type PendingReactions = ArraySet<Reaction>
+
+export const createPendingReactions = (): PendingReactions =>
+  new ArraySet<Reaction>()
+
 export const ReactionStack: Reaction[] = []
 export const BatchCount = { value: 0 }
 export const UntrackCount = { value: 0 }
 export const BatchScope = { value: false }
 export const DependencyCollected = { value: false }
-export const PendingReactions = new ArraySet<Reaction>()
+export const PendingReactionsRef: { value: PendingReactions | null } = {
+  value: null,
+}
 export const PendingScopeReactions = new ArraySet<Reaction>()
 export const BatchEndpoints = new ArraySet<() => void>()
 export const ObserverListeners = new ArraySet<ObservableListener>()

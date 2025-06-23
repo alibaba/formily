@@ -741,3 +741,24 @@ test('reaction recollect dependencies', () => {
   expect(fn2).toBeCalledTimes(2)
   expect(trigger2).toBeCalledTimes(2)
 })
+
+test('accurate boundary', () => {
+  const obs = observable<any>({
+    a: '',
+    b: '',
+    c: '',
+  })
+
+  autorun(() => {
+    obs.c = obs.a + obs.b
+  })
+
+  autorun(() => {
+    obs.b = obs.a
+  })
+
+  obs.a = 'a'
+  expect(obs.a).toBe('a')
+  expect(obs.b).toBe('a')
+  expect(obs.c).toBe('aa')
+})
