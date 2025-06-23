@@ -39,7 +39,7 @@
     "ant-design-vue": "^1.7.3",
     "codesandbox": "^2.2.3",
     "core-js": "^2.4.0",
-    "vue": "^2.6.12",
+    "vue": "^3.0.0",
     "vue3": "npm:vue@3",
     "vuepress": "^1.8.2",
     "vuepress-plugin-typescript": "^0.3.1"

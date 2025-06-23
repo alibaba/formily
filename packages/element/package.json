@@ -41,7 +41,7 @@
     "sass": "^1.34.1",
     "ts-import-plugin": "^2.0.0",
     "ttypescript": "^1.5.15",
-    "vue": "^2.6.0",
+    "vue": "^3.0.0",
     "vuepress": "^1.8.2",
     "vuepress-plugin-typescript": "^0.3.1"
   },
@@ -60,7 +60,7 @@
   "peerDependencies": {
     "@vue/composition-api": "^1.0.0-beta.1",
     "element-ui": "^2.14.0",
-    "vue": "^2.6.0"
+    "vue": "^3.0.0"
   },
   "peerDependenciesMeta": {
     "@vue/composition-api": {
