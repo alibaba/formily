@@ -74,6 +74,8 @@ const runReactions = (target: any, key: PropertyKey) => {
   UntrackCount.value = 0
   for (let i = 0, len = reactions.length; i < len; i++) {
     const reaction = reactions[i]
+    reaction._updateTarget = target
+    reaction._updateKey = key
     if (reaction._isComputed) {
       reaction._scheduler(reaction)
     } else if (isScopeBatching()) {
