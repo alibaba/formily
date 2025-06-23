@@ -48,7 +48,7 @@ $ npm install --save @formily/core
 > 2. 校验能力、校验国际化能力
 > 3. 值管理能力
 > 4. 联动管理能力
-> 5. 开发工具调试能力，[下载 Formily Devtools](https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN)
+> 5. 开发工具调试能力，[下载 Formily Devtools](https://chromewebstore.google.com/detail/formily-devtools-v3/kphglbjhgkdodnghokdhdcideadpmkha?hl=zh-CN)
 
 ```tsx
 /**

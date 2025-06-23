@@ -107,7 +107,7 @@ export default {
           },
           {
             title: 'Chrome Extension',
-            path: 'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
+            path: 'https://chromewebstore.google.com/detail/formily-devtools-v3/kphglbjhgkdodnghokdhdcideadpmkha?hl=zh-CN',
           },
         ],
       },
@@ -222,7 +222,7 @@ export default {
           },
           {
             title: 'Chrome扩展',
-            path: 'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
+            path: 'https://chromewebstore.google.com/detail/formily-devtools-v3/kphglbjhgkdodnghokdhdcideadpmkha?hl=zh-CN',
           },
         ],
       },
