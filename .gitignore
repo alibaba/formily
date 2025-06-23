@@ -27,3 +27,4 @@ doc-site
 .lerna-changelog
 .history
 .lint-report.log
+llm-*.md
