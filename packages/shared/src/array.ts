@@ -309,5 +309,8 @@ export function move<T extends any>(
     }
     array[toIndex] = fromItem
   }
+  const arrLen = array.length
+  array.length = arrLen + 1
+  array.length = arrLen
   return array
 }
