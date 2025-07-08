@@ -59,7 +59,13 @@ type ComposeFormItem = React.FC<React.PropsWithChildren<IFormItemProps>> & {
 const isTooltipProps = (
   tooltip: React.ReactNode | React.ComponentProps<typeof Tooltip>
 ): tooltip is React.ComponentProps<typeof Tooltip> => {
-  return !isElement(tooltip)
+  return !!(
+    tooltip &&
+    typeof tooltip === 'object' &&
+    !isElement(tooltip) &&
+    !Array.isArray(tooltip) &&
+    ('title' in tooltip || 'children' in tooltip || 'placement' in tooltip)
+  )
 }
 
 const useFormItemLayout = (props: IFormItemProps) => {
