@@ -207,7 +207,12 @@ export const baseHandlers: ProxyHandler<any> = {
     }
     const hadKey = hasOwnProperty.call(target, key)
     const newValue = createObservable(target, key, value)
-    const oldValue = target[key]
+
+    // If the old value has already generated an observable result,
+    // directly use observableResult compapre to value to avoid unnecessary reactions
+    const observableResult = RawProxy.get(target[key])
+    const oldValue = observableResult ? observableResult : target[key]
+
     target[key] = newValue // use Reflect.set is too slow
     if (!hadKey) {
       runReactionsFromTargetKey({
