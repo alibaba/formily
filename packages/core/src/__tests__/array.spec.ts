@@ -1122,3 +1122,43 @@ test('record: find form fields', () => {
 
   expect(array.record).toEqual({ array: [{ a: 1 }, { a: 2 }] })
 })
+
+test('array field splice array state should not destory unexpected field', () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        array: [{ a: 1 }, { a: 2 }, { a: 3 }],
+      },
+    })
+  )
+
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: '1',
+      basePath: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: '2',
+      basePath: 'array',
+    })
+  )
+
+  array.remove(0)
+
+  array.remove(0)
+
+  expect(Object.keys(form.fields)).toEqual(['array', 'array.0'])
+})
