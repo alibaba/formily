@@ -5,7 +5,7 @@ import {
   deserialize,
   isHTMLInputEvent,
 } from '../shared/internals'
-import { createForm } from '../'
+import { createForm, onFieldValueChange } from '../'
 import { attach } from './shared'
 
 test('getValuesFromEvent', () => {
@@ -108,4 +108,32 @@ test('isHTMLInputEvent', () => {
   expect(isHTMLInputEvent({ target: { tagName: 'DIV' } })).toBeFalsy()
   expect(isHTMLInputEvent({ target: {}, stopPropagation() {} })).toBeFalsy()
   expect(isHTMLInputEvent({})).toBeFalsy()
+})
+
+test('reset when field display is none should be keep value', () => {
+  const valueChange = jest.fn()
+  const form = attach(
+    createForm({
+      initialValues: {
+        input: '123',
+      },
+      effects: () => {
+        onFieldValueChange('input', valueChange)
+      },
+    })
+  )
+  attach(
+    form.createField({
+      name: 'input',
+    })
+  )
+  expect(form.values.input).toEqual('123')
+  form.fields['input'].setDisplay('none')
+  expect(form.values.input).toBeUndefined()
+  expect(valueChange).toBeCalledTimes(1)
+  form.reset()
+  form.reset()
+  form.fields['input'].setDisplay('visible')
+  expect(form.values.input).toEqual('123')
+  expect(valueChange).toBeCalledTimes(2)
 })
