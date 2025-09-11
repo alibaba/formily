@@ -152,9 +152,19 @@ export const patchFieldStates = (
   target: Record<string, GeneralField>,
   patches: INodePatch<GeneralField>[]
 ) => {
-  patches.forEach(({ type, address, oldAddress, payload }) => {
+  patches.forEach(({ type, address, oldAddress, payload, oldPayload }) => {
     if (type === 'remove') {
-      destroy(target, address, false)
+      if (payload) {
+        // When a payload is passed, the node should be deleted. However, the address may still be used.
+        // To avoid affecting the address order, set address to undefined.
+        destroyField(payload, false)
+        if (target[address] === payload) {
+          target[address] = undefined
+        }
+      } else {
+        // If only the address is passed without the payload, it means that the address is no longer used, so remove the address directly
+        delete target[address]
+      }
     } else if (type === 'update') {
       if (payload) {
         target[address] = payload
@@ -163,10 +173,25 @@ export const patchFieldStates = (
         }
       }
       if (address && payload) {
-        locateNode(payload, address)
+        if (oldPayload) {
+          payload.address = oldPayload.address
+          payload.path = oldPayload.path
+        } else {
+          locateNode(payload, address)
+        }
       }
     }
   })
+}
+
+export const destroyField = (field: GeneralField, forceClear = true) => {
+  field.dispose()
+  if (isDataField(field) && forceClear) {
+    const form = field.form
+    const path = field.path
+    form.deleteValuesIn(path)
+    form.deleteInitialValuesIn(path)
+  }
 }
 
 export const destroy = (
@@ -175,12 +200,8 @@ export const destroy = (
   forceClear = true
 ) => {
   const field = target[address]
-  field?.dispose()
-  if (isDataField(field) && forceClear) {
-    const form = field.form
-    const path = field.path
-    form.deleteValuesIn(path)
-    form.deleteInitialValuesIn(path)
+  if (field) {
+    destroyField(field, forceClear)
   }
   delete target[address]
 }
@@ -383,19 +404,27 @@ export const spliceArrayState = (
     return index >= startIndex && index < startIndex + insertCount
   }
   const isDeleteNode = (identifier: string) => {
+    const afterStr = identifier.substring(addrLength)
+    const number = afterStr.match(NumberIndexReg)?.[1]
+    if (number === undefined) return false
+    const index = Number(number)
+    return index >= startIndex && index < startIndex + deleteCount
+  }
+
+  const isNeedCleanupNode = (identifier: string) => {
     const preStr = identifier.substring(0, addrLength)
     const afterStr = identifier.substring(addrLength)
     const number = afterStr.match(NumberIndexReg)?.[1]
     if (number === undefined) return false
     const index = Number(number)
     return (
-      (index > startIndex &&
-        !fields[
-          `${preStr}${afterStr.replace(/^\.\d+/, `.${index + deleteCount}`)}`
-        ]) ||
-      index === startIndex
+      index >= startIndex &&
+      !fields[
+        `${preStr}${afterStr.replace(/^\.\d+/, `.${index + deleteCount}`)}`
+      ]
     )
   }
+
   const moveIndex = (identifier: string) => {
     if (offset === 0) return identifier
     const preStr = identifier.substring(0, addrLength)
@@ -416,10 +445,36 @@ export const spliceArrayState = (
             address: newIdentifier,
             oldAddress: identifier,
             payload: field,
+            oldPayload: fields[newIdentifier]
+              ? {
+                  address: fields[newIdentifier].address,
+                  path: fields[newIdentifier].path,
+                }
+              : undefined,
           })
-        }
-        if (isInsertNode(identifier) || isDeleteNode(identifier)) {
-          fieldPatches.push({ type: 'remove', address: identifier })
+          if (isNeedCleanupNode(identifier)) {
+            fieldPatches.push({
+              type: 'remove',
+              address: identifier,
+            })
+          }
+        } else if (isInsertNode(identifier)) {
+          fieldPatches.push({
+            type: 'remove',
+            address: identifier,
+          })
+        } else if (isDeleteNode(identifier)) {
+          fieldPatches.push({
+            type: 'remove',
+            address: identifier,
+            payload: field,
+          })
+          if (isNeedCleanupNode(identifier)) {
+            fieldPatches.push({
+              type: 'remove',
+              address: identifier,
+            })
+          }
         }
       }
     })

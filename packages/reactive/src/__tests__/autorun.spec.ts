@@ -741,3 +741,223 @@ test('reaction recollect dependencies', () => {
   expect(fn2).toBeCalledTimes(2)
   expect(trigger2).toBeCalledTimes(2)
 })
+
+test('avoid unnecessary reaction', () => {
+  const obs = observable<any>({
+    aa: { v: 1 },
+  })
+  const fn1 = jest.fn()
+
+  reaction(() => {
+    fn1()
+    return obs.aa.v
+  })
+
+  obs.aa = obs.aa
+
+  expect(fn1).toBeCalledTimes(1)
+})
+
+test('avoid missing reaction', () => {
+  const obs = observable<any>({
+    res: 0,
+  })
+
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+
+  let value
+  autorun(() => {
+    fn1()
+    value = obs.res
+  })
+
+  autorun(() => {
+    fn2()
+    obs.res
+    if (obs.res !== 0) obs.res = obs.res + 1
+  })
+
+  expect(value).toBe(0)
+
+  obs.res = 1
+
+  expect(value).toBe(2)
+
+  expect(fn1).toBeCalledTimes(3)
+  expect(fn2).toBeCalledTimes(2)
+})
+
+test('avoid reaction twice', () => {
+  const obs = observable<any>({
+    res: 0,
+  })
+
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+
+  let value
+  autorun(() => {
+    fn1()
+    obs.res
+    if (obs.res !== 0) obs.res = obs.res + 1
+  })
+
+  autorun(() => {
+    fn2()
+    value = obs.res
+  })
+
+  expect(value).toBe(0)
+
+  obs.res = 1
+
+  expect(value).toBe(2)
+  expect(fn1).toBeCalledTimes(2)
+  expect(fn2).toBeCalledTimes(2)
+})
+
+test('computed reaction', () => {
+  const obs = observable<any>({
+    aa: 1,
+    bb: 1,
+  })
+
+  const computed = observable.computed(() => {
+    return obs.aa + obs.bb
+  })
+
+  autorun(() => {
+    if (obs.bb === 3) {
+      obs.aa = 3
+    }
+  })
+
+  batch(() => {
+    obs.aa = 2 // 会触发 computed 发生变化
+
+    obs.bb = 3
+  })
+
+  expect(computed.value).toBe(6)
+})
+
+test('accurate boundary', () => {
+  const obs = observable<any>({
+    a: '',
+    b: '',
+    c: '',
+  })
+
+  autorun(() => {
+    obs.c = obs.a + obs.b
+  })
+
+  autorun(() => {
+    obs.b = obs.a
+  })
+
+  obs.a = 'a'
+  expect(obs.a).toBe('a')
+  expect(obs.b).toBe('a')
+  expect(obs.c).toBe('aa')
+})
+
+test('multiple source update', () => {
+  const obs = observable<any>({})
+
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+
+  autorun(() => {
+    const A = obs.A
+    const B = obs.B
+    if (A !== undefined && B !== undefined) {
+      obs.C = A / B
+      fn1()
+    }
+  })
+
+  autorun(() => {
+    const C = obs.C
+    const B = obs.B
+    if (C !== undefined && B !== undefined) {
+      obs.D = C * B
+      fn2()
+    }
+  })
+
+  obs.A = 1
+  obs.B = 2
+
+  expect(fn1).toBeCalledTimes(1)
+  expect(fn2).toBeCalledTimes(1)
+})
+
+test('same source in nest update', () => {
+  const obs = observable<any>({})
+
+  const fn1 = jest.fn()
+
+  autorun(() => {
+    const B = obs.B
+    obs.B = 'B'
+    fn1()
+    return B
+  })
+
+  obs.B = 'B2'
+
+  expect(fn1).toBeCalledTimes(2)
+})
+
+test('batch execute autorun cause by deep indirect dependency', () => {
+  const obs: any = observable({ aa: 1, bb: 1, cc: 1 })
+  const fn = jest.fn()
+  const fn2 = jest.fn()
+  const fn3 = jest.fn()
+
+  autorun(() => fn((obs.aa = obs.bb + obs.cc)))
+  autorun(() => fn2((obs.bb = obs.aa + obs.cc)))
+  autorun(() => fn3((obs.cc = obs.aa + obs.bb)))
+
+  // 嵌套写法重复调用没意义，只需要确保最新被触发的 reaction 执行，已过时的 reaction 可以忽略
+  // 比如 fn3 执行，触发 fn 和 fn2，fn 执行又触发 fn2，之前触发的 fn2 是过时的，忽略处理，fn2 只执行一次
+  expect(fn).toBeCalledTimes(3)
+  expect(fn2).toBeCalledTimes(2)
+  expect(fn3).toBeCalledTimes(1)
+
+  fn.mockClear()
+  fn2.mockClear()
+  fn3.mockClear()
+
+  batch(() => {
+    obs.aa = 100
+    obs.bb = 100
+    obs.cc = 100
+  })
+
+  expect(fn).toBeCalledTimes(1)
+  expect(fn2).toBeCalledTimes(1)
+  expect(fn3).toBeCalledTimes(1)
+})
+
+test('multiple update should trigger only one', () => {
+  const obs = observable({ aa: 1, bb: 1 })
+
+  autorun(() => {
+    obs.aa = obs.bb + 1
+    obs.bb = obs.aa + 1
+  })
+
+  expect(obs.aa).toBe(2)
+  expect(obs.bb).toBe(3)
+
+  autorun(() => {
+    obs.aa = obs.bb + 1
+    obs.bb = obs.aa + 1
+  })
+
+  expect(obs.aa).toBe(6)
+  expect(obs.bb).toBe(7)
+})

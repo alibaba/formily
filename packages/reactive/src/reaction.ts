@@ -1,5 +1,6 @@
 import { isFn } from './checkers'
 import { ArraySet } from './array'
+import { ReactionsArraySet } from './reactions-array-set'
 import { IOperation, ReactionsMap, Reaction, PropertyKey } from './types'
 import {
   ReactionStack,
@@ -12,6 +13,9 @@ import {
   UntrackCount,
   BatchScope,
   ObserverListeners,
+  PendingComputedReactions,
+  PendingScopeComputedReactions,
+  BatchIdRef,
 } from './environment'
 
 const ITERATION_KEY = Symbol('iteration key')
@@ -26,42 +30,41 @@ const addRawReactionsMap = (
     const reactions = reactionsMap.get(key)
     if (reactions) {
       reactions.add(reaction)
+      return reactions
     } else {
-      reactionsMap.set(key, new ArraySet([reaction]))
+      reactionsMap.set(key, new ReactionsArraySet([reaction]))
+      return reactionsMap.get(key)
     }
-    return reactionsMap
   } else {
     const reactionsMap: ReactionsMap = new Map([
-      [key, new ArraySet([reaction])],
+      [key, new ReactionsArraySet([reaction])],
     ])
     RawReactionsMap.set(target, reactionsMap)
-    return reactionsMap
+    return reactionsMap.get(key)
   }
 }
 
-const addReactionsMapToReaction = (
+const addReactionsSetToReaction = (
   reaction: Reaction,
-  reactionsMap: ReactionsMap
+  reactionsSet: ReactionsArraySet<Reaction>
 ) => {
   const bindSet = reaction._reactionsSet
   if (bindSet) {
-    bindSet.add(reactionsMap)
+    bindSet.add(reactionsSet)
   } else {
-    reaction._reactionsSet = new ArraySet([reactionsMap])
+    reaction._reactionsSet = new ArraySet([reactionsSet])
   }
   return bindSet
 }
 
-const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
+export const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
   const reactionsMap = RawReactionsMap.get(target)
   const reactions = []
   if (reactionsMap) {
     const map = reactionsMap.get(key)
     if (map) {
       map.forEach((reaction) => {
-        if (reactions.indexOf(reaction) === -1) {
-          reactions.push(reaction)
-        }
+        reactions.push(reaction)
       })
     }
   }
@@ -75,7 +78,14 @@ const runReactions = (target: any, key: PropertyKey) => {
   for (let i = 0, len = reactions.length; i < len; i++) {
     const reaction = reactions[i]
     if (reaction._isComputed) {
-      reaction._scheduler(reaction)
+      reaction._dirty = true
+      if (isScopeBatching()) {
+        PendingScopeComputedReactions.add(reaction)
+      } else if (isBatching()) {
+        PendingComputedReactions.add(reaction)
+      } else {
+        reaction._scheduler(reaction)
+      }
     } else if (isScopeBatching()) {
       PendingScopeReactions.add(reaction)
     } else if (isBatching()) {
@@ -107,7 +117,7 @@ export const bindTargetKeyWithCurrentReaction = (operation: IOperation) => {
   if (isUntracking()) return
   if (current) {
     DependencyCollected.value = true
-    addReactionsMapToReaction(current, addRawReactionsMap(target, key, current))
+    addReactionsSetToReaction(current, addRawReactionsMap(target, key, current))
   }
 }
 
@@ -148,13 +158,11 @@ export const hasRunningReaction = () => {
 }
 
 export const releaseBindingReactions = (reaction: Reaction) => {
-  reaction._reactionsSet?.forEach((reactionsMap) => {
-    reactionsMap.forEach((reactions) => {
-      reactions.delete(reaction)
-    })
-  })
-  PendingReactions.delete(reaction)
-  PendingScopeReactions.delete(reaction)
+  // delete outdated reaction by _reactionId
+  if (typeof reaction._reactionId !== 'number') {
+    reaction._reactionId = 0
+  } else reaction._reactionId++
+
   delete reaction._reactionsSet
 }
 
@@ -173,6 +181,11 @@ export const suspendComputedReactions = (current: Reaction) => {
 
 export const disposeBindingReactions = (reaction: Reaction) => {
   reaction._disposed = true
+
+  reaction._reactionsSet?.forEach((reactionsSet) => {
+    reactionsSet.delete(reaction)
+  })
+
   releaseBindingReactions(reaction)
   suspendComputedReactions(reaction)
 }
@@ -182,13 +195,18 @@ export const batchStart = () => {
 }
 
 export const batchEnd = () => {
-  BatchCount.value--
-  if (BatchCount.value === 0) {
+  if (BatchCount.value === 1) {
     const prevUntrackCount = UntrackCount.value
     UntrackCount.value = 0
+    executePendingComputedReactions()
+
+    BatchCount.value--
+
     executePendingReactions()
     executeBatchEndpoints()
     UntrackCount.value = prevUntrackCount
+  } else {
+    BatchCount.value--
   }
 }
 
@@ -198,15 +216,16 @@ export const batchScopeStart = () => {
 
 export const batchScopeEnd = () => {
   const prevUntrackCount = UntrackCount.value
-  BatchScope.value = false
   UntrackCount.value = 0
-  PendingScopeReactions.batchDelete((reaction) => {
+
+  PendingScopeComputedReactions.batchDelete((reaction) => {
     if (isFn(reaction._scheduler)) {
       reaction._scheduler(reaction)
-    } else {
-      reaction()
     }
   })
+
+  BatchScope.value = false
+  executePendingScopeReactions()
   UntrackCount.value = prevUntrackCount
 }
 
@@ -224,12 +243,38 @@ export const isScopeBatching = () => BatchScope.value
 
 export const isUntracking = () => UntrackCount.value > 0
 
-export const executePendingReactions = () => {
-  PendingReactions.batchDelete((reaction) => {
+export const executePendingComputedReactions = () => {
+  PendingComputedReactions.batchDelete((reaction) => {
     if (isFn(reaction._scheduler)) {
       reaction._scheduler(reaction)
-    } else {
-      reaction()
+    }
+  })
+}
+
+export const executePendingReactions = () => {
+  const batchId = BatchIdRef.current++
+  PendingReactions.batchDelete((reaction) => {
+    if (batchId > (reaction._batchId || 0)) {
+      reaction._batchId = batchId
+      if (isFn(reaction._scheduler)) {
+        reaction._scheduler(reaction)
+      } else {
+        reaction()
+      }
+    }
+  })
+}
+
+export const executePendingScopeReactions = () => {
+  const batchId = BatchIdRef.current++
+  PendingScopeReactions.batchDelete((reaction) => {
+    if (batchId > (reaction._batchId || 0)) {
+      reaction._batchId = batchId
+      if (isFn(reaction._scheduler)) {
+        reaction._scheduler(reaction)
+      } else {
+        reaction()
+      }
     }
   })
 }

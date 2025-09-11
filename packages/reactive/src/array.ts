@@ -49,12 +49,15 @@ export class ArraySet<T> {
 
   batchDelete(callback: (value: T) => void) {
     if (this.value.length === 0) return
-    this.forEachIndex = 0
-    for (; this.forEachIndex < this.value.length; this.forEachIndex++) {
-      const value = this.value[this.forEachIndex]
-      this.value.splice(this.forEachIndex, 1)
-      this.forEachIndex--
-      callback(value)
+
+    const batchList = this.value.splice(0, this.value.length)
+
+    for (let i = 0; i < batchList.length; i++) {
+      callback(batchList[i])
+    }
+
+    if (this.value.length > 0) {
+      this.batchDelete(callback)
     }
   }
 

@@ -160,6 +160,7 @@ export class Field<
       componentProps: observable,
       validator: observable.shallow,
       data: observable.shallow,
+      parent: observable.computed,
       component: observable.computed,
       decorator: observable.computed,
       errors: observable.computed,

@@ -1,5 +1,6 @@
 import { ObservableListener, Reaction, ReactionsMap } from './types'
 import { ArraySet } from './array'
+import { ReactionsArraySet } from './reactions-array-set'
 import { DataNode } from './tree'
 
 export const ProxyRaw = new WeakMap()
@@ -11,10 +12,13 @@ export const RawReactionsMap = new WeakMap<object, ReactionsMap>()
 export const ReactionStack: Reaction[] = []
 export const BatchCount = { value: 0 }
 export const UntrackCount = { value: 0 }
+export const BatchIdRef = { current: 1 }
 export const BatchScope = { value: false }
 export const DependencyCollected = { value: false }
-export const PendingReactions = new ArraySet<Reaction>()
-export const PendingScopeReactions = new ArraySet<Reaction>()
+export const PendingReactions = new ReactionsArraySet<Reaction>()
+export const PendingScopeReactions = new ReactionsArraySet<Reaction>()
+export const PendingComputedReactions = new ReactionsArraySet<Reaction>()
+export const PendingScopeComputedReactions = new ReactionsArraySet<Reaction>()
 export const BatchEndpoints = new ArraySet<() => void>()
 export const ObserverListeners = new ArraySet<ObservableListener>()
 export const MakeObModelSymbol = Symbol('MakeObModelSymbol')

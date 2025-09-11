@@ -1,4 +1,9 @@
-import { ObModelSymbol, ReactionStack } from '../environment'
+import {
+  ObModelSymbol,
+  PendingComputedReactions,
+  PendingScopeComputedReactions,
+  ReactionStack,
+} from '../environment'
 import { createAnnotation } from '../internals'
 import { buildDataTree } from '../tree'
 import { isFn } from '../checkers'
@@ -11,7 +16,9 @@ import {
   batchStart,
   batchEnd,
   releaseBindingReactions,
+  getReactionsFromTargetKey,
 } from '../reaction'
+import { Reaction } from '../types'
 
 interface IValue<T = any> {
   value?: T
@@ -67,6 +74,13 @@ function getPrototypeDescriptor(
   return {}
 }
 
+const isAllComputedDeps = (reaction: Reaction) => {
+  if (!reaction._isComputed) return false
+  const deps = getReactionsFromTargetKey(reaction._context, reaction._property)
+  if (!deps.length) return true
+  return deps.every((dep) => isAllComputedDeps(dep))
+}
+
 export const computed: IComputed = createAnnotation(
   ({ target, key, value }) => {
     const store: IValue = {}
@@ -91,17 +105,50 @@ export const computed: IComputed = createAnnotation(
         }
       }
     }
+
     reaction._name = 'ComputedReaction'
     reaction._scheduler = () => {
-      reaction._dirty = true
-      runReactionsFromTargetKey({
-        target: context,
-        key: property,
-        value: store.value,
-        type: 'set',
-      })
+      if (!reaction._dirty) {
+        runReactionsFromTargetKey({
+          target: context,
+          key: property,
+          value: store.value,
+          type: 'set',
+        })
+        return
+      }
+
+      const deps = getReactionsFromTargetKey(context, property)
+
+      if (!deps.length) return
+
+      if (deps.every((dep) => isAllComputedDeps(dep))) {
+        // all deps are computed reactions, so should dirty the upstream computed reactions
+        runReactionsFromTargetKey({
+          target: context,
+          key: property,
+          value: store.value,
+          type: 'set',
+        })
+        return
+      }
+
+      const currentValue = store.value
+      reaction()
+      reaction._dirty = false
+      const newValue = store.value
+      if (newValue !== currentValue) {
+        runReactionsFromTargetKey({
+          target: context,
+          key: property,
+          value: store.value,
+          type: 'set',
+        })
+      }
     }
+
     reaction._isComputed = true
+    // is need to re calculate
     reaction._dirty = true
     reaction._context = context
     reaction._property = property
@@ -113,18 +160,26 @@ export const computed: IComputed = createAnnotation(
       if (!isUntracking()) {
         //如果允许untracked过程中收集依赖，那么永远不会存在绑定，因为_dirty已经设置为false
         if (reaction._dirty) {
+          // if the value is used in batch function, it will directly execute and set dirty to false
+          const currentValue = store.value
           reaction()
           reaction._dirty = false
+          const newValue = store.value
+          if (newValue !== currentValue) {
+            // if the value is changed, it should be scheduled
+            PendingComputedReactions.update(reaction)
+            PendingScopeComputedReactions.update(reaction)
+          }
         }
-      } else {
-        compute()
+        bindTargetKeyWithCurrentReaction({
+          target: context,
+          key: property,
+          type: 'get',
+        })
+        return store.value
       }
-      bindTargetKeyWithCurrentReaction({
-        target: context,
-        key: property,
-        type: 'get',
-      })
-      return store.value
+
+      return descriptor.get?.call(context)
     }
 
     function set(value: any) {

@@ -80,6 +80,7 @@ export class VoidField<
       data: observable.shallow,
       decoratorProps: observable,
       componentProps: observable,
+      parent: observable.computed,
       display: observable.computed,
       pattern: observable.computed,
       hidden: observable.computed,
