@@ -97,7 +97,7 @@ const ArrayItems = observer((props) => {
     <div>
       {props.value?.map((item, index) => {
         return (
-          <div key={index} style={{ marginBottom: 10 }}>
+          <div key={field.getIndexKey(index)} style={{ marginBottom: 10 }}>
             <Space>
               <RecursionField schema={schema.items} name={index} />
               <Button

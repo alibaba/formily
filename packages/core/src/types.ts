@@ -111,6 +111,7 @@ export interface INodePatch<T> {
   address: string
   oldAddress?: string
   payload?: T
+  oldPayload?: Partial<T>
 }
 
 export interface IHeartProps<Context> {

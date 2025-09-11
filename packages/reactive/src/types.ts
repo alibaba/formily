@@ -1,4 +1,5 @@
 import { ArraySet } from './array'
+import { ReactionsArraySet } from './reactions-array-set'
 
 export * from './tree'
 
@@ -69,7 +70,8 @@ export type Reaction = ((...args: any[]) => any) & {
   _disposed?: boolean
   _property?: PropertyKey
   _computesSet?: ArraySet<Reaction>
-  _reactionsSet?: ArraySet<ReactionsMap>
+  _reactionsSet?: ArraySet<ReactionsArraySet<Reaction>>
+  _reactionId?: number
   _scheduler?: (reaction: Reaction) => void
   _memos?: {
     queue: IMemoQueueItem[]
@@ -81,7 +83,7 @@ export type Reaction = ((...args: any[]) => any) & {
   }
 }
 
-export type ReactionsMap = Map<PropertyKey, ArraySet<Reaction>>
+export type ReactionsMap = Map<PropertyKey, ReactionsArraySet<Reaction>>
 
 export interface IReactionOptions<T> {
   name?: string

@@ -741,3 +741,19 @@ test('reaction recollect dependencies', () => {
   expect(fn2).toBeCalledTimes(2)
   expect(trigger2).toBeCalledTimes(2)
 })
+
+test('avoid unnecessary reaction', () => {
+  const obs = observable<any>({
+    aa: { v: 1 },
+  })
+  const fn1 = jest.fn()
+
+  reaction(() => {
+    fn1()
+    return obs.aa.v
+  })
+
+  obs.aa = obs.aa
+
+  expect(fn1).toBeCalledTimes(1)
+})

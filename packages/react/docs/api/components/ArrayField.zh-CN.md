@@ -40,7 +40,10 @@ const ArrayComponent = observer(() => {
     <>
       <div>
         {field.value?.map((item, index) => (
-          <div key={index} style={{ display: 'flex-block', marginBottom: 10 }}>
+          <div
+            key={field.getIndexKey(index)}
+            style={{ display: 'flex-block', marginBottom: 10 }}
+          >
             <Space>
               <Field name={index} component={[Input]} />
               <Button
@@ -105,7 +108,7 @@ export default () => (
             <div>
               {field.value?.map((item, index) => (
                 <div
-                  key={index}
+                  key={field.getIndexKey(index)}
                   style={{ display: 'flex-block', marginBottom: 10 }}
                 >
                   <Space>

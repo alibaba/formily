@@ -9,11 +9,22 @@ import { Field } from './Field'
 import { Form } from './Form'
 import { JSXComponent, IFieldProps, FormPathPattern } from '../types'
 
+const uniqueIdRef = { current: 0 }
+
+const getUniqueId = () => {
+  return uniqueIdRef.current++
+}
+
+const createIndexKey = () => {
+  return `_$id_${getUniqueId()}_`
+}
+
 export class ArrayField<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any
 > extends Field<Decorator, Component, any, any[]> {
   displayName = 'ArrayField'
+  indexKeys: Array<string> = []
 
   constructor(
     address: FormPathPattern,
@@ -22,6 +33,7 @@ export class ArrayField<
     designable: boolean
   ) {
     super(address, props, form, designable)
+    this.indexKeys = []
     this.makeAutoCleanable()
   }
 
@@ -32,20 +44,37 @@ export class ArrayField<
         (newLength, oldLength) => {
           if (oldLength && !newLength) {
             cleanupArrayChildren(this, 0)
+            this.indexKeys = []
           } else if (newLength < oldLength) {
             cleanupArrayChildren(this, newLength)
+            this.indexKeys = this.indexKeys.slice(0, newLength)
           }
         }
       )
     )
   }
 
+  getIndexKey(index: number) {
+    if (!this.indexKeys[index]) {
+      const newKey = createIndexKey()
+      this.indexKeys[index] = newKey
+      return newKey
+    }
+    return this.indexKeys[index]
+  }
+
+  getCurrentKeyIndex(key: string) {
+    return this.indexKeys.indexOf(key)
+  }
+
   push = (...items: any[]) => {
     return action(() => {
       if (!isArr(this.value)) {
         this.value = []
+        this.indexKeys = []
       }
       this.value.push(...items)
+      this.indexKeys.push(...items.map(createIndexKey))
       return this.onInput(this.value)
     })
   }
@@ -59,6 +88,7 @@ export class ArrayField<
         deleteCount: 1,
       })
       this.value.pop()
+      this.indexKeys.pop()
       return this.onInput(this.value)
     })
   }
@@ -67,6 +97,7 @@ export class ArrayField<
     return action(() => {
       if (!isArr(this.value)) {
         this.value = []
+        this.indexKeys = []
       }
       if (items.length === 0) {
         return
@@ -76,6 +107,7 @@ export class ArrayField<
         insertCount: items.length,
       })
       this.value.splice(index, 0, ...items)
+      this.indexKeys.splice(index, 0, ...items.map(createIndexKey))
       return this.onInput(this.value)
     })
   }
@@ -88,6 +120,7 @@ export class ArrayField<
         deleteCount: 1,
       })
       this.value.splice(index, 1)
+      this.indexKeys.splice(index, 1)
       return this.onInput(this.value)
     })
   }
@@ -95,7 +128,12 @@ export class ArrayField<
   shift = () => {
     if (!isArr(this.value)) return
     return action(() => {
+      spliceArrayState(this, {
+        startIndex: 0,
+        deleteCount: 1,
+      })
       this.value.shift()
+      this.indexKeys.shift()
       return this.onInput(this.value)
     })
   }
@@ -110,6 +148,7 @@ export class ArrayField<
         insertCount: items.length,
       })
       this.value.unshift(...items)
+      this.indexKeys.unshift(...items.map(createIndexKey))
       return this.onInput(this.value)
     })
   }
@@ -119,6 +158,7 @@ export class ArrayField<
     if (fromIndex === toIndex) return
     return action(() => {
       move(this.value, fromIndex, toIndex)
+      move(this.indexKeys, fromIndex, toIndex)
       exchangeArrayState(this, {
         fromIndex,
         toIndex,
