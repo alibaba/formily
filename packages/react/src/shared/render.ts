@@ -24,7 +24,7 @@ const loadCreatePortal = () => {
       // @ts-ignore
       import('react-dom')
         .then((module) => (env.createPortal ??= module?.createPortal))
-        .catch()
+        .catch(() => {})
     } catch {}
   }
 }
