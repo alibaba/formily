@@ -4,6 +4,7 @@ import './QrCode.less'
 export interface IQrCodeProps {
   title?: React.ReactNode
   link?: string
+  alt?: string
 }
 
 export const QrCode: React.FC<React.PropsWithChildren<IQrCodeProps>> = (
@@ -15,7 +16,7 @@ export const QrCode: React.FC<React.PropsWithChildren<IQrCodeProps>> = (
         <div className="qrcode-title-content">{props.title}</div>
       </div>
       <div className="qrcode-content">
-        <img src={props.link} />
+        <img src={props.link} alt={props.alt} />
       </div>
     </div>
   )
