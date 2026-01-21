@@ -13,11 +13,17 @@ export const shallowClone = (values: any) => {
     if (values['_isAMomentObject']) {
       return values
     }
+    if (values['$isDayjsObject']) {
+      return values
+    }
     if (values['_isJSONSchemaObject']) {
       return values
     }
     if (isFn(values['toJS'])) {
       return values
+    }
+    if (isFn(values['clone'])) {
+      return values['clone']()
     }
     if (isFn(values['toJSON'])) {
       return values
@@ -48,11 +54,19 @@ export const clone = (values: any) => {
     if (values['_isAMomentObject']) {
       return values
     }
+
+    if (values['$isDayjsObject']) {
+      return values
+    }
+
     if (values['_isJSONSchemaObject']) {
       return values
     }
     if (isFn(values['toJS'])) {
       return values['toJS']()
+    }
+    if (isFn(values['clone'])) {
+      return values['clone']()
     }
     if (isFn(values['toJSON'])) {
       return values['toJSON']()
