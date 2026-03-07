@@ -1,4 +1,5 @@
 import moment from 'moment'
+import dayjs from 'dayjs'
 import { Map as ImmutableMap } from 'immutable'
 import { isEqual } from '../compare'
 import {
@@ -374,6 +375,8 @@ describe('clone and compare', () => {
     expect(clone(regexp) === regexp).toBeTruthy()
     const promise = Promise.resolve(1)
     expect(clone(promise) === promise).toBeTruthy()
+    const day = dayjs()
+    expect(clone(day).toISOString() === day.toISOString()).toBeTruthy()
   })
 
   test('shallowClone', () => {
